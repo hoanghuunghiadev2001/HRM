@@ -58,7 +58,9 @@ export default function request() {
   const [modalNeedApproved, setModalNeedApproved] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState(0);
   const [page, setPage] = useState(0);
-  const [requests, setRequests] = useState<RequestLeave[]>([]);
+  const [requestsNeedApprove, setRequestsNeedApprove] = useState<
+    RequestLeave[]
+  >([]);
 
   const getApiAllRequestsApproved = async () => {
     try {
@@ -85,7 +87,7 @@ export default function request() {
         if (!res.ok) throw new Error(`Error: ${res.status}`);
 
         const data = await res.json();
-        setRequests(data);
+        setRequestsNeedApprove(data);
       } catch (err: any) {
         console.log(err.message || "Unknown error");
       } finally {
@@ -127,7 +129,7 @@ export default function request() {
       width: "80px",
     },
     {
-      title: "Name",
+      title: "Tên NV",
       dataIndex: "name",
       key: "name",
       render: (text) => <a>{text}</a>,
@@ -179,6 +181,7 @@ export default function request() {
       <ModalNeedApproved
         onClose={() => setModalNeedApproved(false)}
         open={modalNeedApproved}
+        allRequestsApproved={requestsNeedApprove}
       />
       <ModalDetailLeave
         infoRequetLeave={infoRequetLeave}
@@ -204,7 +207,9 @@ export default function request() {
             Phê duyệt
           </button>
           <div className="h-8 right-[-10px] top-[-8px] flex justify-center items-center w-8 rounded-[50%] bg-red-600 text-white font-semibold absolute">
-            {requests.length > 99 ? "99+" : requests.length}
+            {requestsNeedApprove.length > 99
+              ? "99+"
+              : requestsNeedApprove.length}
           </div>
         </div>
         <Table<DataType>
