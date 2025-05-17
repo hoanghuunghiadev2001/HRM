@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Drawer } from "antd";
 
-interface modalNeedApprovedProps {
+interface ModalNeedApprovedProps {
   open: boolean;
   onClose: () => void;
 }
-const modalNeedApproved = ({ onClose, open }: modalNeedApprovedProps) => {
+const ModalNeedApproved = ({ onClose, open }: ModalNeedApprovedProps) => {
   return (
     <>
       <Drawer
@@ -23,4 +23,4 @@ const modalNeedApproved = ({ onClose, open }: modalNeedApprovedProps) => {
   );
 };
 
-export default modalNeedApproved;
+export default ModalNeedApproved;

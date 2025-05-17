@@ -74,6 +74,7 @@ export default function ClientDashboard({
   ];
 
   const handleClick: MenuProps["onClick"] = (e) => {
+    setLoading(true);
     router.push(e.key);
   };
 
@@ -90,7 +91,14 @@ export default function ClientDashboard({
   };
 
   useEffect(() => {
-    fetchUser();
+    const fetchData = async () => {
+      try {
+        await fetchUser(); // nếu cần thì setUser() từ đây
+      } catch (err) {
+        console.error("Failed to fetch user", err);
+      }
+    };
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -101,6 +109,10 @@ export default function ClientDashboard({
       router.replace("/login"); // Chuyển sang trang login
     }
   }, [router]);
+
+  useEffect(() => {
+    setLoading(false);
+  }, [pathname]); // pathname thay đổi thì tắt loading
 
   return (
     <>

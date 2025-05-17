@@ -17,6 +17,7 @@ import ModalDetailLeave from "@/components/modalDetailLeave";
 import { Plus } from "lucide-react";
 import ModalCreateNewRequest from "@/components/modalCreateNewRequest";
 import { createStyles, FullToken } from "antd-style";
+import ModalNeedApproved from "@/components/modalNeedApproved";
 
 interface DataType {
   key: string;
@@ -54,7 +55,7 @@ export default function request() {
   const [loading, setLoading] = useState<boolean>(false);
   const [modalDetailLeave, setModalDetailLeave] = useState<boolean>(false);
   const [infoRequetLeave, setInfoRequestLeave] = useState<RequestLeave>();
-  const [createRequest, setCreateRequest] = useState<boolean>(false);
+  const [modalNeedApproved, setModalNeedApproved] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState(0);
   const [page, setPage] = useState(0);
   const [requests, setRequests] = useState<RequestLeave[]>([]);
@@ -166,52 +167,6 @@ export default function request() {
     setModalDetailLeave(true);
   };
 
-  //Tạo đơn mới
-
-  const CreateRequestLeave = async (
-    employeeId: string,
-    leaveType: string,
-    startDateTime: string,
-    endDateTime: string,
-    reason: string,
-    totalHours: string
-  ) => {
-    const payload = {
-      employeeId,
-      leaveType,
-      startDateTime,
-      endDateTime,
-      reason,
-      totalHours,
-    };
-    try {
-      setLoading(true);
-      const res = await fetch("/api/leave/create-requests", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        message.error(data.message || "Gửi đơn nghỉ thất bại");
-        setLoading(false);
-      } else {
-        message.success("Gửi đơn nghỉ thành công");
-        setCreateRequest(false);
-        getApiAllRequestsApproved();
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error("Lỗi gửi đơn:", error);
-      message.error("Lỗi gửi đơn nghỉ");
-      setLoading(false);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     getApiAllRequestsApproved();
     getApiAllRequestsNeed();
@@ -221,10 +176,9 @@ export default function request() {
 
   return (
     <div>
-      <ModalCreateNewRequest
-        onClose={() => setCreateRequest(false)}
-        open={createRequest}
-        createRequestLeave={CreateRequestLeave}
+      <ModalNeedApproved
+        onClose={() => setModalNeedApproved(false)}
+        open={modalNeedApproved}
       />
       <ModalDetailLeave
         infoRequetLeave={infoRequetLeave}
@@ -243,7 +197,9 @@ export default function request() {
         <div className="flex justify-end mb-3 relative">
           <button
             className="flex mt-4  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
-            onClick={getApiAllRequestsApproved}
+            onClick={() => {
+              setModalNeedApproved(true);
+            }}
           >
             Phê duyệt
           </button>
