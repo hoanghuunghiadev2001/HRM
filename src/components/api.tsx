@@ -77,6 +77,7 @@ export interface RequestLeave {
   status: string;
   createdAt: string;
   employee: Employee;
+  approvedBy: string
 }
 
 export interface WorkInfo {
@@ -199,5 +200,27 @@ export async function fetchLeaveRequests(filters: LeaveFilters = {}) {
   if (!res.ok) {
     throw new Error("Lỗi khi gọi API lấy danh sách nghỉ phép");
   }
+  return await res.json();
+}
+
+
+export async function approveLeaveRequest(
+  id: number | string,
+  status: string,
+  approvedBy: string
+) {
+  const res = await fetch("/api/leave/approve", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ leaveRequestId: id, status, approvedBy }),
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "Lỗi khi phê duyệt đơn");
+  }
+
   return await res.json();
 }

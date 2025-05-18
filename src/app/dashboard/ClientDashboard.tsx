@@ -42,6 +42,9 @@ export default function ClientDashboard({
   const [collapsed, setCollapsed] = useState(false);
   const [loading, setLoading] = useState(false);
   const localUser = getUserFromLocalStorage();
+  const [isMounted, setIsMounted] = useState(false);
+
+
   const toggleCollapsed = () => setCollapsed(!collapsed);
 
   const items: MenuItem[] = [
@@ -49,31 +52,35 @@ export default function ClientDashboard({
     { key: "/dashboard/request", icon: <FileText />, label: "Phiếu yêu cầu" },
     ...(isAdmin
       ? [
-          {
-            key: "/dashboard/allRequests",
-            icon: <FileStack />,
-            label: "DS yêu cầu",
-          },
-          {
-            key: "/dashboard/employees",
-            icon: <UsersRound />,
-            label: "Quản lý nhân sự",
-          },
-          {
-            key: "/dashboard/attendance",
-            icon: <Fingerprint />,
-            label: "Chấm công",
-          },
-          {
-            key: "/dashboard/report",
-            icon: <ClipboardPlus />,
-            label: "Báo cáo",
-          },
-        ]
+        {
+          key: "/dashboard/allRequests",
+          icon: <FileStack />,
+          label: "DS yêu cầu",
+        },
+        {
+          key: "/dashboard/employees",
+          icon: <UsersRound />,
+          label: "Quản lý nhân sự",
+        },
+        {
+          key: "/dashboard/attendance",
+          icon: <Fingerprint />,
+          label: "Chấm công",
+        },
+        {
+          key: "/dashboard/report",
+          icon: <ClipboardPlus />,
+          label: "Báo cáo",
+        },
+      ]
       : []),
   ];
 
   const handleClick: MenuProps["onClick"] = (e) => {
+
+    if (pathname === e.key) {
+      return
+    }
     setLoading(true);
     router.push(e.key);
   };
@@ -114,6 +121,10 @@ export default function ClientDashboard({
     setLoading(false);
   }, [pathname]); // pathname thay đổi thì tắt loading
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   return (
     <>
       <ModalLoading isOpen={loading} />
@@ -140,21 +151,24 @@ export default function ClientDashboard({
             <p className="text-2xl font-bold text-white">TOYOTA BÌNH DƯƠNG</p>
           </div>
           <div className="flex items-center gap-3">
-            <p className="text-base font-semibold text-white">
-              Hi!, {localUser?.name}
-            </p>
-            <img
-              src={localUser?.avatar}
-              alt="avatar"
-              className="h-9 w-9 border-2 border-[#c4c4c4] rounded-full"
-            />
+            {isMounted && (
+              <p className="text-base font-semibold text-white">
+                Hi!, {localUser?.name}
+              </p>
+            )}
+            {isMounted && (
+              <img
+                src={localUser?.avatar}
+                alt="avatar"
+                className="h-9 w-9 border-2 border-[#c4c4c4] rounded-full"
+              />
+            )}
           </div>
         </div>
         <div className="w-full h-[calc(100vh-60px)] flex">
           <div
-            className={`${
-              collapsed ? "w-[80px]" : "w-[250px]"
-            } border-r flex-shrink-0 border-[#999999] h-full flex flex-col justify-between transition-all duration-300 ease-in-out`}
+            className={`${collapsed ? "w-[80px]" : "w-[250px]"
+              } border-r flex-shrink-0 border-[#999999] h-full flex flex-col justify-between transition-all duration-300 ease-in-out`}
           >
             <div className="h-full bg-[#aa0404]">
               <Menu
@@ -167,15 +181,13 @@ export default function ClientDashboard({
               />
             </div>
             <div
-              className={`h-10 flex gap-2 items-center p-4 border-t border-[#999999] cursor-pointer  ${
-                collapsed ? "justify-center" : "justify-between"
-              } bg-[#aa0404] transition-all duration-300 ease-in-out`}
+              className={`h-10 flex gap-2 items-center p-4 border-t border-[#999999] cursor-pointer  ${collapsed ? "justify-center" : "justify-between"
+                } bg-[#aa0404] transition-all duration-300 ease-in-out`}
               onClick={handleLogout}
             >
               <p
-                className={`${
-                  collapsed ? "hidden" : ""
-                } font-semibold text-white transition-all duration-300 ease-in-out`}
+                className={`${collapsed ? "hidden" : ""
+                  } font-semibold text-white transition-all duration-300 ease-in-out`}
               >
                 Đăng xuất
               </p>

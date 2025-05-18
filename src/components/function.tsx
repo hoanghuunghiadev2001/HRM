@@ -14,19 +14,18 @@ interface StatusLeaveProps {
 export const StatusLeave = ({ status }: StatusLeaveProps) => {
   return (
     <div
-      className={`px-4 py-1 rounded-xl w-fit font-medium  ${
-        status === "pending"
-          ? "bg-[#a5cbe4] text-[#1181c8]"
-          : status === "approved"
+      className={`px-4 py-1 rounded-xl w-fit font-medium  ${status === "pending"
+        ? "bg-[#a5cbe4] text-[#1181c8]"
+        : status === "approved"
           ? "text-[#0b5705] bg-[#c9fab4]"
           : "bg-[#ffc0c2] text-[#eb2128]"
-      }`}
+        }`}
     >
       {status === "pending"
         ? "Đang chờ"
         : status === "approved"
-        ? "Chấp nhận"
-        : "Từ chối"}
+          ? "Chấp nhận"
+          : "Từ chối"}
     </div>
   );
 };
@@ -48,6 +47,7 @@ interface NumericInputProps {
   style: React.CSSProperties;
   value: string;
   onChange: (value: string) => void;
+  disable?: boolean
 }
 const formatNumber = (value: number) => new Intl.NumberFormat().format(value);
 export const NumericInput = (props: NumericInputProps) => {
@@ -91,6 +91,7 @@ export const NumericInput = (props: NumericInputProps) => {
         onBlur={handleBlur}
         placeholder=""
         maxLength={16}
+        disabled={props.disable}
       />
     </Tooltip>
   );

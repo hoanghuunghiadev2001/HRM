@@ -5,6 +5,8 @@ import ClientDashboard from "./ClientDashboard";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
+
+
 export default async function DashboardLayout({
   children,
 }: {

@@ -98,11 +98,25 @@ const ModalDetailLeave = ({
             />
           </div>
 
-          <div className="flex gap-2 mt-2">
-            <p className="font-bold text-[#242424] flex flex-shrink-0 gap-2 items-center">
-              Trạng thái
-            </p>
-            <StatusLeave status={infoRequetLeave?.status ?? "pending"} />
+        </div>
+        <div>
+          <p className="text-xl font-bold">Kết quả:</p>
+          <div className="px-4 ">
+            <div className="flex gap-2 mt-2 mb-2 ">
+              <p className="font-bold text-[#242424] flex flex-shrink-0 gap-2 items-center">
+                Trạng thái
+              </p>
+              <StatusLeave status={infoRequetLeave?.status ?? "pending"} />
+            </div>
+            {infoRequetLeave?.approvedBy ? (
+              <InfoPersonal
+                titleValue="Người phê duyệt"
+                value={
+                  infoRequetLeave?.approvedBy
+                }
+              />
+            ) : ''}
+
           </div>
         </div>
       </div>

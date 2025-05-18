@@ -215,7 +215,7 @@ export default function request() {
           className={styles.customTable}
           columns={columns}
           dataSource={formatted ?? []}
-          pagination={{ pageSize: 6 }}
+          pagination={{ pageSize: 12 }}
           scroll={{ y: "calc(100vh - 305px)" }}
         />
       </div>

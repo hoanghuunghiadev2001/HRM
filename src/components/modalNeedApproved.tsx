@@ -3,11 +3,13 @@ import { Drawer, Space, Table, TableProps } from "antd";
 import { createStyles, FullToken } from "antd-style";
 import { formatDateTime, StatusLeave } from "./function";
 import { RequestLeave } from "./api";
+import ModalApproveRequest from "./modalApproveRequest";
 
 interface ModalNeedApprovedProps {
   open: boolean;
   onClose: () => void;
   allRequestsApproved: RequestLeave[];
+  putApprovedRequest: (id: number | string, statusRequest: string) => void
 }
 interface DataType {
   key: string;
@@ -43,7 +45,10 @@ const ModalNeedApproved = ({
   onClose,
   open,
   allRequestsApproved,
+  putApprovedRequest
 }: ModalNeedApprovedProps) => {
+  const [approvedRequest, setApproveRequest] = useState(false)
+  const [requestApprove, setRequestApprove] = useState<RequestLeave>()
   const { styles } = useStyle();
 
   const formatted: DataType[] =
@@ -52,6 +57,7 @@ const ModalNeedApproved = ({
       id: item.id,
       MSNV: item.employee.employeeCode,
       name: item.employee.name,
+      department: item.employee.workInfo.department,
       startDate: formatDateTime(item.startDate),
       endDate: formatDateTime(item.endDate),
       totalHours: item.totalHours.toString(),
@@ -78,9 +84,14 @@ const ModalNeedApproved = ({
       render: (text) => <a>{text}</a>,
     },
     {
+      title: "Phòng ban",
+      dataIndex: "department",
+      key: "department",
+    },
+    {
       title: "Ngày nghỉ",
       dataIndex: "startDate",
-      key: "age",
+      key: "startDate",
     },
     {
       title: "Loại phép",
@@ -92,27 +103,44 @@ const ModalNeedApproved = ({
       key: "action",
       width: "100px",
       render: (_, record) => (
-        <Space size="middle">
+        <Space size="middle" onClick={() => handleOpenRequest(record.MSNV)}>
           <a>Phê duyệt</a>
         </Space>
       ),
     },
   ];
 
+  const handleOpenRequest = (msnv: string) => {
+    const requests = allRequestsApproved.find(emp => emp.employee.employeeCode === msnv);
+    setRequestApprove(requests)
+    setApproveRequest(true)
+  }
+
+  const handlePutApprovedRequest = (id: number | string, stautsRequest: string) => {
+    try {
+      putApprovedRequest(id, stautsRequest)
+      setApproveRequest(false)
+    } catch (err) {
+      console.error("Lỗi:", err);
+    }
+  }
+
   return (
     <>
       <Drawer
-        title={<p>Phê duyệ</p>}
+        title={<p className="text-2xl">Phê duyệt</p>}
         placement="right"
-        size={"large"}
+        // size={"large"}
         onClose={onClose}
+        width={1000}
         open={open}
       >
+        <ModalApproveRequest onClose={() => { setApproveRequest(false) }} open={approvedRequest} requestApprove={requestApprove} putApprovedRequest={handlePutApprovedRequest} />
         <Table<DataType>
           className={styles.customTable}
           columns={columns}
           dataSource={formatted ?? []}
-          pagination={{ pageSize: 6 }}
+          pagination={{ pageSize: 12 }}
           scroll={{ y: "calc(100vh - 225px)" }}
         />
       </Drawer>

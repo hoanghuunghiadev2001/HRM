@@ -2,10 +2,11 @@
 import { useEffect, useState } from "react";
 
 import React from "react";
-import { message, Space, Table, Tag } from "antd";
+import { message, Pagination, Space, Table, Tag } from "antd";
 import type { TableProps } from "antd";
 import {
   AllRequests,
+  approveLeaveRequest,
   fetchLeaveRequests,
   getUserFromLocalStorage,
   ListRequestLeave,
@@ -56,15 +57,17 @@ export default function request() {
   const [modalDetailLeave, setModalDetailLeave] = useState<boolean>(false);
   const [infoRequetLeave, setInfoRequestLeave] = useState<RequestLeave>();
   const [modalNeedApproved, setModalNeedApproved] = useState<boolean>(false);
-  const [pageSize, setPageSize] = useState(0);
-  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [pageTable, setPageTable] = useState(1);
+  const [totalTable, setTotalTable] = useState()
   const [requestsNeedApprove, setRequestsNeedApprove] = useState<
     RequestLeave[]
   >([]);
+  const localUser = getUserFromLocalStorage();
 
-  const getApiAllRequestsApproved = async () => {
+  const getApiAllRequestsApproved = async (page: number, pageSize: number) => {
     try {
-      const data = await fetchLeaveRequests({
+      const res = await fetchLeaveRequests({
         page: page,
         pageSize: pageSize,
         name: "",
@@ -72,8 +75,8 @@ export default function request() {
         department: "",
         status: "",
       });
-      console.log("Kết quả:", data);
-      setAllRequestsApproved(data);
+      setAllRequestsApproved(res);
+      setTotalTable(res.total)
     } catch (err) {
       console.error("Lỗi:", err);
     }
@@ -98,6 +101,8 @@ export default function request() {
     fetchPendingRequests();
   };
 
+
+
   const { styles } = useStyle();
 
   //format và đưa dữ liệu ra table
@@ -112,9 +117,9 @@ export default function request() {
       totalHours: item.totalHours.toString(),
       leaveType: item.leaveType,
       status: item.status,
+      approvedBy: item.approvedBy
     })) || [];
 
-  console.log(allRequestsApproved?.data);
 
   const columns: TableProps<DataType>["columns"] = [
     {
@@ -122,6 +127,9 @@ export default function request() {
       dataIndex: "key",
       rowScope: "row",
       width: "60px",
+      render: (_, record) => (
+        <p >{_}</p>
+      ),
     },
     {
       title: "MSNV",
@@ -150,6 +158,13 @@ export default function request() {
       key: "status",
       render: (status) => <StatusLeave status={status} />,
     },
+
+    {
+      title: "Người phê duyệt",
+      dataIndex: "approvedBy",
+      key: "approvedBy",
+    },
+
     {
       title: "Chi tiết",
       key: "action",
@@ -169,10 +184,37 @@ export default function request() {
     setModalDetailLeave(true);
   };
 
+  // chức năng phê duyệt đơn xin nghỉ
+  const putApprovedRequest = async (id: number | string, statusRequest: string) => {
+    try {
+      await approveLeaveRequest(id, statusRequest, localUser.name);
+      await getApiAllRequestsApproved(pageTable, pageSize);
+      await getApiAllRequestsNeed();
+    } catch (err) {
+      console.error("Lỗi:", err);
+    }
+  };
+
+  const onPageChange = (page: number, pageSizeEnter?: number) => {
+    console.log(page);
+
+    if (pageSizeEnter) {
+      setPageSize(pageSizeEnter);
+      getApiAllRequestsApproved(page, pageSizeEnter)
+    } else {
+      setPageTable(page);
+      getApiAllRequestsApproved(page, pageSize)
+    }
+  };
+
   useEffect(() => {
-    getApiAllRequestsApproved();
+    getApiAllRequestsApproved(pageTable, pageSize);
     getApiAllRequestsNeed();
   }, []);
+
+  useEffect(() => {
+    console.log(pageTable);
+  }, [pageTable])
 
   //style table scroll
 
@@ -182,6 +224,7 @@ export default function request() {
         onClose={() => setModalNeedApproved(false)}
         open={modalNeedApproved}
         allRequestsApproved={requestsNeedApprove}
+        putApprovedRequest={putApprovedRequest}
       />
       <ModalDetailLeave
         infoRequetLeave={infoRequetLeave}
@@ -216,8 +259,18 @@ export default function request() {
           className={styles.customTable}
           columns={columns}
           dataSource={formatted ?? []}
-          pagination={{ pageSize: 6 }}
-          scroll={{ y: "calc(100vh - 305px)" }}
+          scroll={{ y: "calc(100vh - 330px)" }}
+          pagination={false}
+        />
+        <Pagination
+          align="center"
+          // current={pageTable}
+          pageSize={pageSize}
+          total={totalTable}
+          onChange={onPageChange}
+          showSizeChanger
+          onShowSizeChange={onPageChange}
+          className="!mt-3"
         />
       </div>
     </div>

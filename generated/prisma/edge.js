@@ -273,7 +273,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\ANG\\Desktop\\NGHIA\\HRM\\hrm-project\\generated\\prisma",
+      "value": "C:\\Users\\ithuu\\OneDrive\\Máy tính\\code\\HRM\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -287,7 +287,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\ANG\\Desktop\\NGHIA\\HRM\\hrm-project\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\ithuu\\OneDrive\\Máy tính\\code\\HRM\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
