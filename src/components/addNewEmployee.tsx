@@ -349,6 +349,7 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                   rules={[{ required: true }]}
                 >
                   <DatePicker
+                    format="DD/MM/YYYY"
                     disabledDate={(current) => {
                       return current && current > maxDate;
                     }}
@@ -374,6 +375,7 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                   rules={[{ required: true }]}
                 >
                   <DatePicker
+                    format="DD/MM/YYYY"
                     disabledDate={(current) => {
                       return current && current > maxDate;
                     }}
@@ -468,10 +470,16 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                   <Input />
                 </Form.Item>
                 <Form.Item name="joinedTBD" label="Ngày vào TBD">
-                  <DatePicker />
+                  <DatePicker
+                    format="DD/MM/YYYY"
+                    disabledDate={(current) => {
+                      return current && current > maxDate;
+                    }}
+                  />
                 </Form.Item>
                 <Form.Item name="joinedTeSCC" label="Ngày vào TeSCC">
                   <DatePicker
+                    format="DD/MM/YYYY"
                     disabledDate={(current) => {
                       return current && current > maxDate;
                     }}
@@ -479,6 +487,7 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                 </Form.Item>
                 <Form.Item name="seniorityStart" label="Ngày tính TN">
                   <DatePicker
+                    format="DD/MM/YYYY"
                     onChange={handleDateChange}
                     disabledDate={(current) => {
                       return current && current > maxDate;
@@ -508,7 +517,7 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                   <Input />
                 </Form.Item>
                 <Form.Item name="contractEndDate" label="Ngày hết hạn HĐ">
-                  <DatePicker />
+                  <DatePicker format="DD/MM/YYYY" />
                 </Form.Item>
               </div>
               <div className="mb-2 mt-4">
@@ -578,13 +587,13 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                   ></Select>
                 </Form.Item>
                 <Form.Item name="resignedDate" label="Ngày nghỉ">
-                  <DatePicker />
+                  <DatePicker format="DD/MM/YYYY" />
                 </Form.Item>
                 <Form.Item name="documentsChecked" label="Kiểm tra hồ sơ">
                   <Input />
                 </Form.Item>
                 <Form.Item name="updatedAt" label="Thời gian cập nhật">
-                  <DatePicker />
+                  <DatePicker format="DD/MM/YYYY" />
                 </Form.Item>
                 <Form.Item name="VCB" label="Ngân hàng VCB">
                   <Input />
