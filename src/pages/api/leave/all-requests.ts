@@ -10,17 +10,67 @@ export default async function handler(
   }
 
   try {
-    const { page = "1", pageSize = "10" } = req.query;
+    const {
+      page = "1",
+      pageSize = "10",
+      role,
+      department,
+      employeeCode,
+      name,
+      status,
+    } = req.query;
 
     const pageNum = parseInt(page as string, 10);
     const sizeNum = parseInt(pageSize as string, 10);
 
-    const processedRequests = await prisma.leaveRequest.findMany({
-      where: {
-        OR: [{ status: "approved" }, { status: "rejected" }],
+    // Điều kiện lọc cơ bản
+    const baseWhere: any = {
+      status: {
+        in: ["approved", "rejected"],
       },
+      employee: {
+        workInfo: {},
+      },
+    };
+
+    // Lọc theo trạng thái (nếu có)
+    if (status) {
+      baseWhere.status = status;
+    }
+
+    // Lọc theo mã số nhân viên
+    // Lọc theo mã số nhân viên
+    if (employeeCode) {
+      baseWhere.employee.employeeCode = {
+        contains: employeeCode as string,
+        // mode: "insensitive",  không dùng ở nested relation
+      };
+    }
+
+    // Lọc theo tên nhân viên
+    if (name) {
+      baseWhere.employee.name = {
+        contains: name as string,
+        // mode: "insensitive",  không dùng ở nested relation
+      };
+    }
+
+    // Lọc theo phòng ban
+    if (role === "MANAGER" && department) {
+      console.log("1:" + role);
+
+      console.log("2:" + department);
+      // Nếu là manager, chỉ được xem phòng ban của mình
+      baseWhere.employee.workInfo.department = department;
+    } else if (role === "ADMIN" && department) {
+      // Nếu là admin và truyền department, lọc theo đó
+      baseWhere.employee.workInfo.department = department;
+    }
+
+    const processedRequests = await prisma.leaveRequest.findMany({
+      where: baseWhere,
       orderBy: {
-        createdAt: "desc",
+        approvedAt: "desc", // Sắp xếp theo thời điểm duyệt gần nhất
       },
       skip: (pageNum - 1) * sizeNum,
       take: sizeNum,
@@ -42,9 +92,7 @@ export default async function handler(
     });
 
     const total = await prisma.leaveRequest.count({
-      where: {
-        OR: [{ status: "approved" }, { status: "rejected" }],
-      },
+      where: baseWhere,
     });
 
     return res.status(200).json({

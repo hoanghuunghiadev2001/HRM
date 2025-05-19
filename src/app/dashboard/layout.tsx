@@ -2,10 +2,9 @@
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import ClientDashboard from "./ClientDashboard";
+import { redirect } from "next/navigation";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
-
-
 
 export default async function DashboardLayout({
   children,
@@ -14,15 +13,15 @@ export default async function DashboardLayout({
 }) {
   const cookieStore = cookies();
   const token = (await cookieStore).get("token")?.value;
-
-  let isAdmin = false;
+  let isAdmin = "";
 
   if (token) {
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as { role: string };
-      isAdmin = decoded.role === "ADMIN";
+      isAdmin = decoded.role;
     } catch (err) {
       // Nếu token sai hoặc hết hạn, có thể xử lý redirect bằng middleware
+      redirect("/login");
     }
   }
 

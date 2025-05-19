@@ -16,6 +16,8 @@ import type { TableProps } from "antd";
 import {
   AllRequests,
   approveLeaveRequest,
+  EmployeesSumary,
+  fetchEmployeeSummary,
   fetchLeaveRequests,
   getApiAllRequestsNeedApprove,
   getUserFromLocalStorage,
@@ -25,21 +27,21 @@ import {
 import ModalLoading from "@/components/modalLoading";
 import { formatDateTime, StatusLeave } from "@/components/function";
 import ModalDetailLeave from "@/components/modalDetailLeave";
-import { Plus } from "lucide-react";
+import { Plus, PlusIcon } from "lucide-react";
 import ModalCreateNewRequest from "@/components/modalCreateNewRequest";
 import { createStyles, FullToken } from "antd-style";
 import ModalNeedApproved from "@/components/modalNeedApproved";
+import ModalAddNewEmployee from "@/components/addNewEmployee";
 
 interface DataType {
   key: string;
-  id: number;
+  id: string;
   MSNV: string;
   name: string;
-  startDate: string;
-  endDate: string;
-  totalHours: string;
-  leaveType: string;
-  status: string;
+  department: string;
+  position: string;
+  gender: string;
+  avatar: string;
 }
 
 const useStyle = createStyles((utils) => {
@@ -61,12 +63,10 @@ const useStyle = createStyles((utils) => {
     `,
   };
 });
-export default function request() {
-  const [allRequestsApproved, setAllRequestsApproved] = useState<AllRequests>();
+export default function EmployeesPage() {
+  const [employeesSumary, setEmployeesSumary] = useState<EmployeesSumary[]>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [modalDetailLeave, setModalDetailLeave] = useState<boolean>(false);
-  const [infoRequetLeave, setInfoRequestLeave] = useState<RequestLeave>();
-  const [modalNeedApproved, setModalNeedApproved] = useState<boolean>(false);
+  const [modalAddEmployee, setModalAddEmployee] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState(10);
   const [pageTable, setPageTable] = useState(1);
   const [totalTable, setTotalTable] = useState();
@@ -79,53 +79,25 @@ export default function request() {
   const [filterMSNV, setFilterMSNV] = useState("");
   const [filterDepartment, setDepartment] = useState("");
 
-  const getApiAllRequestsApproved = async (page: number, pageSize: number) => {
+  const getEmployeeSumary = async (page: number, pageSize: number) => {
+    setLoading(true);
     try {
-      const res = await fetchLeaveRequests({
-        // page: page,
-        // pageSize: pageSize,
-        // name: filterName,
-        // employeeCode: filterMSNV,
-        // department: "IT",
-        // status: "",
-
-        page: page,
-        pageSize: pageSize,
+      const res = await fetchEmployeeSummary({
         role: localUser.role,
         department:
           localUser.role === "ADMIN"
             ? filterDepartment
             : localUser.workInfo.department,
-        employeeCode: filterMSNV,
         name: filterName,
-
-        status: "",
+        employeeCode: filterMSNV,
+        page: page,
+        pageSize: pageSize,
       });
-      setAllRequestsApproved(res);
+      setEmployeesSumary(res.data);
       setTotalTable(res.total);
-    } catch (err) {
-      console.error("Lỗi:", err);
-    }
-  };
-
-  const getApiAllRequestsNeed = async () => {
-    setLoading(true);
-    try {
-      const res = await getApiAllRequestsNeedApprove({
-        role: localUser.role,
-        department:
-          localUser.role === "ADMIN" ? "" : localUser.workInfo.department,
-        name: "",
-        employeeCode: "",
-      });
-
-      const data = await res;
-
-      setRequestsNeedApprove(data);
       setLoading(false);
     } catch (err) {
       console.error("Lỗi:", err);
-    } finally {
       setLoading(false);
     }
   };
@@ -134,17 +106,15 @@ export default function request() {
 
   //format và đưa dữ liệu ra table
   const formatted: DataType[] =
-    allRequestsApproved?.data?.map((item, index) => ({
+    employeesSumary?.map((item, index) => ({
       key: (index + 1).toString(),
       id: item.id,
-      MSNV: item.employee.employeeCode,
-      name: item.employee.name,
-      startDate: formatDateTime(item.startDate),
-      endDate: formatDateTime(item.endDate),
-      totalHours: item.totalHours.toString(),
-      leaveType: item.leaveType,
-      status: item.status,
-      approvedBy: item.approvedBy,
+      MSNV: item.employeeCode,
+      name: item.name,
+      department: item.workInfo.department,
+      position: item.workInfo.position,
+      gender: item.gender,
+      avatar: item.avatar,
     })) || [];
 
   const columns: TableProps<DataType>["columns"] = [
@@ -164,103 +134,72 @@ export default function request() {
       title: "Tên NV",
       dataIndex: "name",
       key: "name",
-      render: (text) => <a>{text}</a>,
+      render: (_, record) => (
+        <div className="flex gap-2 items-center">
+          <img
+            src={record.avatar}
+            alt=""
+            className="h-8 w-8 border-1 border-[#999999] rounded-[50%]"
+          />
+          <a className="">{record.name}</a>
+        </div>
+      ),
     },
     {
-      title: "Ngày nghỉ",
-      dataIndex: "startDate",
-      key: "age",
+      title: "Bộ phận",
+      dataIndex: "department",
+      key: "department",
     },
     {
-      title: "Loại phép",
-      dataIndex: "leaveType",
-      key: "leaveType",
+      title: "Chức vụ",
+      dataIndex: "position",
+      key: "position",
     },
     {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      render: (status) => <StatusLeave status={status} />,
+      title: "Giới tính",
+      dataIndex: "gender",
+      key: "gender",
+      render: (text) => (text === "MALE" ? "Nam" : "Nữ"),
     },
-
-    {
-      title: "Người phê duyệt",
-      dataIndex: "approvedBy",
-      key: "approvedBy",
-    },
-
     {
       title: "Chi tiết",
       key: "action",
       width: "80px",
       render: (_, record) => (
         <Space size="middle">
-          <a onClick={() => DetailRequetsLeave(record.id)}>chi tiết</a>
+          {/* <a onClick={() => DetailRequetsLeave(record.id)}>chi tiết</a> */}
         </Space>
       ),
     },
   ];
 
-  //xem chi tiết đơn xin nghỉ
-  const DetailRequetsLeave = (id: number) => {
-    const item = allRequestsApproved?.data?.find((item) => item.id === id);
-    setInfoRequestLeave(item);
-    setModalDetailLeave(true);
-  };
-
-  // chức năng phê duyệt đơn xin nghỉ
-  const putApprovedRequest = async (
-    id: number | string,
-    statusRequest: string
-  ) => {
-    setLoading(true);
-    try {
-      await approveLeaveRequest(id, statusRequest, localUser.name);
-      await getApiAllRequestsApproved(pageTable, pageSize);
-      await getApiAllRequestsNeed();
-      setLoading(false);
-    } catch (err) {
-      console.error("Lỗi:", err);
-      setLoading(false);
-    }
-  };
-
   const onPageChange = (page: number, pageSizeEnter?: number) => {
     if (pageSizeEnter) {
       setPageSize(pageSizeEnter);
-      getApiAllRequestsApproved(page, pageSizeEnter);
+      getEmployeeSumary(page, pageSizeEnter);
     } else {
       setPageTable(page);
-      getApiAllRequestsApproved(page, pageSize);
+      getEmployeeSumary(page, pageSize);
     }
   };
 
   useEffect(() => {
-    getApiAllRequestsApproved(pageTable, pageSize);
-    getApiAllRequestsNeed();
+    getEmployeeSumary(pageTable, pageSize);
   }, []);
 
   //style table scroll
 
   return (
     <div>
-      <ModalNeedApproved
-        onClose={() => setModalNeedApproved(false)}
-        open={modalNeedApproved}
-        allRequestsApproved={requestsNeedApprove}
-        putApprovedRequest={putApprovedRequest}
-      />
-      <ModalDetailLeave
-        infoRequetLeave={infoRequetLeave}
-        onClose={() => setModalDetailLeave(false)}
-        open={modalDetailLeave}
-        title="Chi Tiết Đơn Xin Phép"
+      <ModalAddNewEmployee
+        onClose={() => setModalAddEmployee(false)}
+        open={modalAddEmployee}
       />
       <ModalLoading isOpen={loading} />
 
       <div className="w-full">
         <p className="font-bold  text-2xl text-[#4a4a6a]">
-          Danh sách phiếu yêu cầu:
+          Danh sách nhân viên:
         </p>
       </div>
       <div className="w-full">
@@ -268,15 +207,11 @@ export default function request() {
           <button
             className="flex mt-4 relative  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
             onClick={() => {
-              setModalNeedApproved(true);
+              setModalAddEmployee(true);
             }}
           >
-            Phê duyệt
-            <div className="h-8 right-[-15px] top-[-20px] flex justify-center items-center w-8 rounded-[50%] bg-red-600 text-white font-semibold absolute">
-              {requestsNeedApprove.length > 99
-                ? "99+"
-                : requestsNeedApprove.length}
-            </div>
+            <PlusIcon />
+            Thêm nhân sự
           </button>
         </div>
         <div className="flex items-center gap-4 mb-4 w-full">
@@ -327,7 +262,7 @@ export default function request() {
           </div>
           <button
             className="flex  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
-            onClick={() => getApiAllRequestsApproved(pageTable, pageSize)}
+            onClick={() => getEmployeeSumary(pageTable, pageSize)}
           >
             Tìm kiếm
           </button>

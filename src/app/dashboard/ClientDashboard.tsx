@@ -13,7 +13,7 @@ import {
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Button, Menu } from "antd";
 import type { MenuProps } from "antd";
-import { usePathname, useRouter } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import ModalLoading from "@/components/modalLoading";
 import {
   fetchUser,
@@ -33,7 +33,7 @@ export default function ClientDashboard({
   isAdmin,
   children,
 }: {
-  isAdmin: boolean;
+  isAdmin: string;
   children: React.ReactNode;
 }) {
   const router = useRouter();
@@ -44,53 +44,55 @@ export default function ClientDashboard({
   const localUser = getUserFromLocalStorage();
   const [isMounted, setIsMounted] = useState(false);
 
-
   const toggleCollapsed = () => setCollapsed(!collapsed);
 
   const items: MenuItem[] = [
     { key: "/dashboard", icon: <UserRoundPen />, label: "Hồ sơ" },
     { key: "/dashboard/request", icon: <FileText />, label: "Phiếu yêu cầu" },
-    ...(isAdmin
+    ...(isAdmin === "ADMIN" || isAdmin === "MANAGER"
       ? [
-        {
-          key: "/dashboard/allRequests",
-          icon: <FileStack />,
-          label: "DS yêu cầu",
-        },
-        {
-          key: "/dashboard/employees",
-          icon: <UsersRound />,
-          label: "Quản lý nhân sự",
-        },
-        {
-          key: "/dashboard/attendance",
-          icon: <Fingerprint />,
-          label: "Chấm công",
-        },
-        {
-          key: "/dashboard/report",
-          icon: <ClipboardPlus />,
-          label: "Báo cáo",
-        },
-      ]
+          {
+            key: "/dashboard/allRequests",
+            icon: <FileStack />,
+            label: "DS yêu cầu",
+          },
+          {
+            key: "/dashboard/employees",
+            icon: <UsersRound />,
+            label: "Quản lý nhân sự",
+          },
+          {
+            key: "/dashboard/attendance",
+            icon: <Fingerprint />,
+            label: "Chấm công",
+          },
+        ]
+      : []),
+    ...(isAdmin === "ADMIN"
+      ? [
+          {
+            key: "/dashboard/report",
+            icon: <ClipboardPlus />,
+            label: "Báo cáo",
+          },
+        ]
       : []),
   ];
 
   const handleClick: MenuProps["onClick"] = (e) => {
-
     if (pathname === e.key) {
-      return
+      return;
     }
     setLoading(true);
-    router.push(e.key);
+    redirect(e.key);
   };
 
   const handleLogout = async () => {
     setLoading(true);
     const res = await fetch("/api/auth/logout");
     if (res.ok) {
-      router.push("/login");
-      localStorage.removeItem("user");
+      await localStorage.removeItem("user");
+      redirect("/login");
       setLoading(false);
     } else {
       setLoading(false);
@@ -98,11 +100,14 @@ export default function ClientDashboard({
   };
 
   useEffect(() => {
+    setLoading(true);
     const fetchData = async () => {
       try {
         await fetchUser(); // nếu cần thì setUser() từ đây
+        setLoading(false);
       } catch (err) {
         console.error("Failed to fetch user", err);
+        setLoading(false);
       }
     };
     fetchData();
@@ -122,6 +127,8 @@ export default function ClientDashboard({
   }, [pathname]); // pathname thay đổi thì tắt loading
 
   useEffect(() => {
+    console.log(localUser);
+
     setIsMounted(true);
   }, []);
 
@@ -160,15 +167,16 @@ export default function ClientDashboard({
               <img
                 src={localUser?.avatar}
                 alt="avatar"
-                className="h-9 w-9 border-2 border-[#c4c4c4] rounded-full"
+                className="h-9 w-9 border-2 border-[#c4c4c4] rounded-full object-cover"
               />
             )}
           </div>
         </div>
         <div className="w-full h-[calc(100vh-60px)] flex">
           <div
-            className={`${collapsed ? "w-[80px]" : "w-[250px]"
-              } border-r flex-shrink-0 border-[#999999] h-full flex flex-col justify-between transition-all duration-300 ease-in-out`}
+            className={`${
+              collapsed ? "w-[80px]" : "w-[250px]"
+            } border-r flex-shrink-0 border-[#999999] h-full flex flex-col justify-between transition-all duration-300 ease-in-out`}
           >
             <div className="h-full bg-[#aa0404]">
               <Menu
@@ -181,13 +189,15 @@ export default function ClientDashboard({
               />
             </div>
             <div
-              className={`h-10 flex gap-2 items-center p-4 border-t border-[#999999] cursor-pointer  ${collapsed ? "justify-center" : "justify-between"
-                } bg-[#aa0404] transition-all duration-300 ease-in-out`}
+              className={`h-10 flex gap-2 items-center p-4 border-t border-[#999999] cursor-pointer  ${
+                collapsed ? "justify-center" : "justify-between"
+              } bg-[#aa0404] transition-all duration-300 ease-in-out`}
               onClick={handleLogout}
             >
               <p
-                className={`${collapsed ? "hidden" : ""
-                  } font-semibold text-white transition-all duration-300 ease-in-out`}
+                className={`${
+                  collapsed ? "hidden" : ""
+                } font-semibold text-white transition-all duration-300 ease-in-out`}
               >
                 Đăng xuất
               </p>

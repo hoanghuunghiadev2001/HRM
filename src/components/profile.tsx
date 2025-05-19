@@ -391,11 +391,7 @@ const Profile = ({ dataProfile, updateProfile }: ProfileProps) => {
           />
           <InfoPersonal
             titleValue="Đã kiểm tra hồ sơ"
-            value={
-              dataProfile?.otherInfo.documentsChecked
-                ? "Đã kiểm tra"
-                : "Chưa kiểm tra"
-            }
+            value={dataProfile?.otherInfo.documentsChecked}
           />
           <InfoPersonal
             titleValue="Thời gian cập nhật"

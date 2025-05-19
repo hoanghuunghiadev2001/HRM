@@ -117,15 +117,9 @@ export default async function handler(
           seniorityStart: parseDateNullable(workInfo.seniorityStart),
           seniority: workInfo.seniority ?? null,
           contractNumber: workInfo.contractNumber,
-          contractDate: parseDateRequired(
-            workInfo.contractDate,
-            "contractDate"
-          ),
+          contractDate: workInfo.contractDate,
           contractType: workInfo.contractType,
-          contractEndDate: parseDateRequired(
-            workInfo.contractEndDate,
-            "contractEndDate"
-          ),
+          contractEndDate: workInfo.contractEndDate,
         }
       : undefined;
 
@@ -160,9 +154,9 @@ export default async function handler(
     const otherInfoData = otherInfo
       ? {
           workStatus: otherInfo.workStatus,
-          resignedDate: parseDateNullable(otherInfo.resignedDate),
-          documentsChecked: otherInfo.documentsChecked ?? false,
-          updatedAt: parseDateNullable(otherInfo.updatedAt),
+          resignedDate: otherInfo.resignedDate,
+          documentsChecked: otherInfo.documentsChecked ?? "",
+          updatedAt: otherInfo.resignedDate,
           VCB: otherInfo.VCB ?? null,
           MTCV: otherInfo.MTCV ?? null,
           PNJ: otherInfo.PNJ ?? null,

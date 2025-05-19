@@ -2719,15 +2719,15 @@ export namespace Prisma {
     id: number
     department: string
     position: string
-    specialization: string
+    specialization: string | null
     joinedTBD: Date | null
     joinedTeSCC: Date | null
     seniorityStart: Date | null
     seniority: number | null
-    contractNumber: string
-    contractDate: Date
-    contractType: string
-    contractEndDate: Date
+    contractNumber: string | null
+    contractDate: Date | null
+    contractType: string | null
+    contractEndDate: Date | null
     employeeId: number
     _count: WorkInfoCountAggregateOutputType | null
     _avg: WorkInfoAvgAggregateOutputType | null
@@ -2799,15 +2799,15 @@ export namespace Prisma {
       id: number
       department: string
       position: string
-      specialization: string
+      specialization: string | null
       joinedTBD: Date | null
       joinedTeSCC: Date | null
       seniorityStart: Date | null
       seniority: number | null
-      contractNumber: string
-      contractDate: Date
-      contractType: string
-      contractEndDate: Date
+      contractNumber: string | null
+      contractDate: Date | null
+      contractType: string | null
+      contractEndDate: Date | null
       employeeId: number
     }, ExtArgs["result"]["workInfo"]>
     composites: {}
@@ -3567,14 +3567,12 @@ export namespace Prisma {
 
   export type PersonalInfoAvgAggregateOutputType = {
     id: number | null
-    insuranceNumber: number | null
     insuranceSalary: number | null
     employeeId: number | null
   }
 
   export type PersonalInfoSumAggregateOutputType = {
     id: number | null
-    insuranceNumber: number | null
     insuranceSalary: number | null
     employeeId: number | null
   }
@@ -3590,7 +3588,7 @@ export namespace Prisma {
     drivingLicense: string | null
     toyotaCertificate: string | null
     taxCode: string | null
-    insuranceNumber: number | null
+    insuranceNumber: string | null
     insuranceSalary: number | null
     employeeId: number | null
   }
@@ -3606,7 +3604,7 @@ export namespace Prisma {
     drivingLicense: string | null
     toyotaCertificate: string | null
     taxCode: string | null
-    insuranceNumber: number | null
+    insuranceNumber: string | null
     insuranceSalary: number | null
     employeeId: number | null
   }
@@ -3631,14 +3629,12 @@ export namespace Prisma {
 
   export type PersonalInfoAvgAggregateInputType = {
     id?: true
-    insuranceNumber?: true
     insuranceSalary?: true
     employeeId?: true
   }
 
   export type PersonalInfoSumAggregateInputType = {
     id?: true
-    insuranceNumber?: true
     insuranceSalary?: true
     employeeId?: true
   }
@@ -3780,17 +3776,17 @@ export namespace Prisma {
 
   export type PersonalInfoGroupByOutputType = {
     id: number
-    identityNumber: string
-    issueDate: Date
-    issuePlace: string
-    hometown: string
-    idAddress: string
+    identityNumber: string | null
+    issueDate: Date | null
+    issuePlace: string | null
+    hometown: string | null
+    idAddress: string | null
     education: string | null
     drivingLicense: string | null
     toyotaCertificate: string | null
-    taxCode: string
-    insuranceNumber: number
-    insuranceSalary: number
+    taxCode: string | null
+    insuranceNumber: string | null
+    insuranceSalary: number | null
     employeeId: number
     _count: PersonalInfoCountAggregateOutputType | null
     _avg: PersonalInfoAvgAggregateOutputType | null
@@ -3860,17 +3856,17 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      identityNumber: string
-      issueDate: Date
-      issuePlace: string
-      hometown: string
-      idAddress: string
+      identityNumber: string | null
+      issueDate: Date | null
+      issuePlace: string | null
+      hometown: string | null
+      idAddress: string | null
       education: string | null
       drivingLicense: string | null
       toyotaCertificate: string | null
-      taxCode: string
-      insuranceNumber: number
-      insuranceSalary: number
+      taxCode: string | null
+      insuranceNumber: string | null
+      insuranceSalary: number | null
       employeeId: number
     }, ExtArgs["result"]["personalInfo"]>
     composites: {}
@@ -4252,7 +4248,7 @@ export namespace Prisma {
     readonly drivingLicense: FieldRef<"PersonalInfo", 'String'>
     readonly toyotaCertificate: FieldRef<"PersonalInfo", 'String'>
     readonly taxCode: FieldRef<"PersonalInfo", 'String'>
-    readonly insuranceNumber: FieldRef<"PersonalInfo", 'Int'>
+    readonly insuranceNumber: FieldRef<"PersonalInfo", 'String'>
     readonly insuranceSalary: FieldRef<"PersonalInfo", 'Int'>
     readonly employeeId: FieldRef<"PersonalInfo", 'Int'>
   }
@@ -4793,8 +4789,8 @@ export namespace Prisma {
 
   export type ContactInfoGroupByOutputType = {
     id: number
-    phoneNumber: string
-    relativePhone: string
+    phoneNumber: string | null
+    relativePhone: string | null
     companyPhone: string | null
     email: string | null
     employeeId: number
@@ -4852,8 +4848,8 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      phoneNumber: string
-      relativePhone: string
+      phoneNumber: string | null
+      relativePhone: string | null
       companyPhone: string | null
       email: string | null
       employeeId: number
@@ -5620,11 +5616,11 @@ export namespace Prisma {
     id: number | null
     workStatus: $Enums.WorkStatus | null
     resignedDate: Date | null
-    documentsChecked: boolean | null
+    documentsChecked: string | null
     updatedAt: Date | null
     VCB: string | null
-    MTCV: boolean | null
-    PNJ: boolean | null
+    MTCV: string | null
+    PNJ: string | null
     employeeId: number | null
   }
 
@@ -5632,11 +5628,11 @@ export namespace Prisma {
     id: number | null
     workStatus: $Enums.WorkStatus | null
     resignedDate: Date | null
-    documentsChecked: boolean | null
+    documentsChecked: string | null
     updatedAt: Date | null
     VCB: string | null
-    MTCV: boolean | null
-    PNJ: boolean | null
+    MTCV: string | null
+    PNJ: string | null
     employeeId: number | null
   }
 
@@ -5791,11 +5787,11 @@ export namespace Prisma {
     id: number
     workStatus: $Enums.WorkStatus
     resignedDate: Date | null
-    documentsChecked: boolean
+    documentsChecked: string | null
     updatedAt: Date | null
     VCB: string | null
-    MTCV: boolean | null
-    PNJ: boolean | null
+    MTCV: string | null
+    PNJ: string | null
     employeeId: number
     _count: OtherInfoCountAggregateOutputType | null
     _avg: OtherInfoAvgAggregateOutputType | null
@@ -5859,11 +5855,11 @@ export namespace Prisma {
       id: number
       workStatus: $Enums.WorkStatus
       resignedDate: Date | null
-      documentsChecked: boolean
+      documentsChecked: string | null
       updatedAt: Date | null
       VCB: string | null
-      MTCV: boolean | null
-      PNJ: boolean | null
+      MTCV: string | null
+      PNJ: string | null
       employeeId: number
     }, ExtArgs["result"]["otherInfo"]>
     composites: {}
@@ -6238,11 +6234,11 @@ export namespace Prisma {
     readonly id: FieldRef<"OtherInfo", 'Int'>
     readonly workStatus: FieldRef<"OtherInfo", 'WorkStatus'>
     readonly resignedDate: FieldRef<"OtherInfo", 'DateTime'>
-    readonly documentsChecked: FieldRef<"OtherInfo", 'Boolean'>
+    readonly documentsChecked: FieldRef<"OtherInfo", 'String'>
     readonly updatedAt: FieldRef<"OtherInfo", 'DateTime'>
     readonly VCB: FieldRef<"OtherInfo", 'String'>
-    readonly MTCV: FieldRef<"OtherInfo", 'Boolean'>
-    readonly PNJ: FieldRef<"OtherInfo", 'Boolean'>
+    readonly MTCV: FieldRef<"OtherInfo", 'String'>
+    readonly PNJ: FieldRef<"OtherInfo", 'String'>
     readonly employeeId: FieldRef<"OtherInfo", 'Int'>
   }
     
@@ -6639,6 +6635,7 @@ export namespace Prisma {
     reason: string | null
     status: $Enums.LeaveStatus | null
     approvedBy: string | null
+    approvedAt: Date | null
     createdAt: Date | null
   }
 
@@ -6652,6 +6649,7 @@ export namespace Prisma {
     reason: string | null
     status: $Enums.LeaveStatus | null
     approvedBy: string | null
+    approvedAt: Date | null
     createdAt: Date | null
   }
 
@@ -6665,6 +6663,7 @@ export namespace Prisma {
     reason: number
     status: number
     approvedBy: number
+    approvedAt: number
     createdAt: number
     _all: number
   }
@@ -6692,6 +6691,7 @@ export namespace Prisma {
     reason?: true
     status?: true
     approvedBy?: true
+    approvedAt?: true
     createdAt?: true
   }
 
@@ -6705,6 +6705,7 @@ export namespace Prisma {
     reason?: true
     status?: true
     approvedBy?: true
+    approvedAt?: true
     createdAt?: true
   }
 
@@ -6718,6 +6719,7 @@ export namespace Prisma {
     reason?: true
     status?: true
     approvedBy?: true
+    approvedAt?: true
     createdAt?: true
     _all?: true
   }
@@ -6818,6 +6820,7 @@ export namespace Prisma {
     reason: string | null
     status: $Enums.LeaveStatus
     approvedBy: string | null
+    approvedAt: Date | null
     createdAt: Date
     _count: LeaveRequestCountAggregateOutputType | null
     _avg: LeaveRequestAvgAggregateOutputType | null
@@ -6850,6 +6853,7 @@ export namespace Prisma {
     reason?: boolean
     status?: boolean
     approvedBy?: boolean
+    approvedAt?: boolean
     createdAt?: boolean
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["leaveRequest"]>
@@ -6866,10 +6870,11 @@ export namespace Prisma {
     reason?: boolean
     status?: boolean
     approvedBy?: boolean
+    approvedAt?: boolean
     createdAt?: boolean
   }
 
-  export type LeaveRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "leaveType" | "startDate" | "endDate" | "totalHours" | "reason" | "status" | "approvedBy" | "createdAt", ExtArgs["result"]["leaveRequest"]>
+  export type LeaveRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "leaveType" | "startDate" | "endDate" | "totalHours" | "reason" | "status" | "approvedBy" | "approvedAt" | "createdAt", ExtArgs["result"]["leaveRequest"]>
   export type LeaveRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
   }
@@ -6889,6 +6894,7 @@ export namespace Prisma {
       reason: string | null
       status: $Enums.LeaveStatus
       approvedBy: string | null
+      approvedAt: Date | null
       createdAt: Date
     }, ExtArgs["result"]["leaveRequest"]>
     composites: {}
@@ -7269,6 +7275,7 @@ export namespace Prisma {
     readonly reason: FieldRef<"LeaveRequest", 'String'>
     readonly status: FieldRef<"LeaveRequest", 'LeaveStatus'>
     readonly approvedBy: FieldRef<"LeaveRequest", 'String'>
+    readonly approvedAt: FieldRef<"LeaveRequest", 'DateTime'>
     readonly createdAt: FieldRef<"LeaveRequest", 'DateTime'>
   }
     
@@ -7734,6 +7741,7 @@ export namespace Prisma {
     reason: 'reason',
     status: 'status',
     approvedBy: 'approvedBy',
+    approvedAt: 'approvedAt',
     createdAt: 'createdAt'
   };
 
@@ -7785,7 +7793,8 @@ export namespace Prisma {
     education: 'education',
     drivingLicense: 'drivingLicense',
     toyotaCertificate: 'toyotaCertificate',
-    taxCode: 'taxCode'
+    taxCode: 'taxCode',
+    insuranceNumber: 'insuranceNumber'
   };
 
   export type PersonalInfoOrderByRelevanceFieldEnum = (typeof PersonalInfoOrderByRelevanceFieldEnum)[keyof typeof PersonalInfoOrderByRelevanceFieldEnum]
@@ -7802,7 +7811,10 @@ export namespace Prisma {
 
 
   export const OtherInfoOrderByRelevanceFieldEnum: {
-    VCB: 'VCB'
+    documentsChecked: 'documentsChecked',
+    VCB: 'VCB',
+    MTCV: 'MTCV',
+    PNJ: 'PNJ'
   };
 
   export type OtherInfoOrderByRelevanceFieldEnum = (typeof OtherInfoOrderByRelevanceFieldEnum)[keyof typeof OtherInfoOrderByRelevanceFieldEnum]
@@ -7860,13 +7872,6 @@ export namespace Prisma {
    * Reference to a field of type 'WorkStatus'
    */
   export type EnumWorkStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WorkStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -7986,15 +7991,15 @@ export namespace Prisma {
     id?: IntFilter<"WorkInfo"> | number
     department?: StringFilter<"WorkInfo"> | string
     position?: StringFilter<"WorkInfo"> | string
-    specialization?: StringFilter<"WorkInfo"> | string
+    specialization?: StringNullableFilter<"WorkInfo"> | string | null
     joinedTBD?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
     joinedTeSCC?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
     seniorityStart?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
     seniority?: IntNullableFilter<"WorkInfo"> | number | null
-    contractNumber?: StringFilter<"WorkInfo"> | string
-    contractDate?: DateTimeFilter<"WorkInfo"> | Date | string
-    contractType?: StringFilter<"WorkInfo"> | string
-    contractEndDate?: DateTimeFilter<"WorkInfo"> | Date | string
+    contractNumber?: StringNullableFilter<"WorkInfo"> | string | null
+    contractDate?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
+    contractType?: StringNullableFilter<"WorkInfo"> | string | null
+    contractEndDate?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
     employeeId?: IntFilter<"WorkInfo"> | number
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
   }
@@ -8003,15 +8008,15 @@ export namespace Prisma {
     id?: SortOrder
     department?: SortOrder
     position?: SortOrder
-    specialization?: SortOrder
+    specialization?: SortOrderInput | SortOrder
     joinedTBD?: SortOrderInput | SortOrder
     joinedTeSCC?: SortOrderInput | SortOrder
     seniorityStart?: SortOrderInput | SortOrder
     seniority?: SortOrderInput | SortOrder
-    contractNumber?: SortOrder
-    contractDate?: SortOrder
-    contractType?: SortOrder
-    contractEndDate?: SortOrder
+    contractNumber?: SortOrderInput | SortOrder
+    contractDate?: SortOrderInput | SortOrder
+    contractType?: SortOrderInput | SortOrder
+    contractEndDate?: SortOrderInput | SortOrder
     employeeId?: SortOrder
     employee?: EmployeeOrderByWithRelationInput
     _relevance?: WorkInfoOrderByRelevanceInput
@@ -8025,15 +8030,15 @@ export namespace Prisma {
     NOT?: WorkInfoWhereInput | WorkInfoWhereInput[]
     department?: StringFilter<"WorkInfo"> | string
     position?: StringFilter<"WorkInfo"> | string
-    specialization?: StringFilter<"WorkInfo"> | string
+    specialization?: StringNullableFilter<"WorkInfo"> | string | null
     joinedTBD?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
     joinedTeSCC?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
     seniorityStart?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
     seniority?: IntNullableFilter<"WorkInfo"> | number | null
-    contractNumber?: StringFilter<"WorkInfo"> | string
-    contractDate?: DateTimeFilter<"WorkInfo"> | Date | string
-    contractType?: StringFilter<"WorkInfo"> | string
-    contractEndDate?: DateTimeFilter<"WorkInfo"> | Date | string
+    contractNumber?: StringNullableFilter<"WorkInfo"> | string | null
+    contractDate?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
+    contractType?: StringNullableFilter<"WorkInfo"> | string | null
+    contractEndDate?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
   }, "id" | "employeeId">
 
@@ -8041,15 +8046,15 @@ export namespace Prisma {
     id?: SortOrder
     department?: SortOrder
     position?: SortOrder
-    specialization?: SortOrder
+    specialization?: SortOrderInput | SortOrder
     joinedTBD?: SortOrderInput | SortOrder
     joinedTeSCC?: SortOrderInput | SortOrder
     seniorityStart?: SortOrderInput | SortOrder
     seniority?: SortOrderInput | SortOrder
-    contractNumber?: SortOrder
-    contractDate?: SortOrder
-    contractType?: SortOrder
-    contractEndDate?: SortOrder
+    contractNumber?: SortOrderInput | SortOrder
+    contractDate?: SortOrderInput | SortOrder
+    contractType?: SortOrderInput | SortOrder
+    contractEndDate?: SortOrderInput | SortOrder
     employeeId?: SortOrder
     _count?: WorkInfoCountOrderByAggregateInput
     _avg?: WorkInfoAvgOrderByAggregateInput
@@ -8065,15 +8070,15 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"WorkInfo"> | number
     department?: StringWithAggregatesFilter<"WorkInfo"> | string
     position?: StringWithAggregatesFilter<"WorkInfo"> | string
-    specialization?: StringWithAggregatesFilter<"WorkInfo"> | string
+    specialization?: StringNullableWithAggregatesFilter<"WorkInfo"> | string | null
     joinedTBD?: DateTimeNullableWithAggregatesFilter<"WorkInfo"> | Date | string | null
     joinedTeSCC?: DateTimeNullableWithAggregatesFilter<"WorkInfo"> | Date | string | null
     seniorityStart?: DateTimeNullableWithAggregatesFilter<"WorkInfo"> | Date | string | null
     seniority?: IntNullableWithAggregatesFilter<"WorkInfo"> | number | null
-    contractNumber?: StringWithAggregatesFilter<"WorkInfo"> | string
-    contractDate?: DateTimeWithAggregatesFilter<"WorkInfo"> | Date | string
-    contractType?: StringWithAggregatesFilter<"WorkInfo"> | string
-    contractEndDate?: DateTimeWithAggregatesFilter<"WorkInfo"> | Date | string
+    contractNumber?: StringNullableWithAggregatesFilter<"WorkInfo"> | string | null
+    contractDate?: DateTimeNullableWithAggregatesFilter<"WorkInfo"> | Date | string | null
+    contractType?: StringNullableWithAggregatesFilter<"WorkInfo"> | string | null
+    contractEndDate?: DateTimeNullableWithAggregatesFilter<"WorkInfo"> | Date | string | null
     employeeId?: IntWithAggregatesFilter<"WorkInfo"> | number
   }
 
@@ -8082,34 +8087,34 @@ export namespace Prisma {
     OR?: PersonalInfoWhereInput[]
     NOT?: PersonalInfoWhereInput | PersonalInfoWhereInput[]
     id?: IntFilter<"PersonalInfo"> | number
-    identityNumber?: StringFilter<"PersonalInfo"> | string
-    issueDate?: DateTimeFilter<"PersonalInfo"> | Date | string
-    issuePlace?: StringFilter<"PersonalInfo"> | string
-    hometown?: StringFilter<"PersonalInfo"> | string
-    idAddress?: StringFilter<"PersonalInfo"> | string
+    identityNumber?: StringNullableFilter<"PersonalInfo"> | string | null
+    issueDate?: DateTimeNullableFilter<"PersonalInfo"> | Date | string | null
+    issuePlace?: StringNullableFilter<"PersonalInfo"> | string | null
+    hometown?: StringNullableFilter<"PersonalInfo"> | string | null
+    idAddress?: StringNullableFilter<"PersonalInfo"> | string | null
     education?: StringNullableFilter<"PersonalInfo"> | string | null
     drivingLicense?: StringNullableFilter<"PersonalInfo"> | string | null
     toyotaCertificate?: StringNullableFilter<"PersonalInfo"> | string | null
-    taxCode?: StringFilter<"PersonalInfo"> | string
-    insuranceNumber?: IntFilter<"PersonalInfo"> | number
-    insuranceSalary?: IntFilter<"PersonalInfo"> | number
+    taxCode?: StringNullableFilter<"PersonalInfo"> | string | null
+    insuranceNumber?: StringNullableFilter<"PersonalInfo"> | string | null
+    insuranceSalary?: IntNullableFilter<"PersonalInfo"> | number | null
     employeeId?: IntFilter<"PersonalInfo"> | number
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
   }
 
   export type PersonalInfoOrderByWithRelationInput = {
     id?: SortOrder
-    identityNumber?: SortOrder
-    issueDate?: SortOrder
-    issuePlace?: SortOrder
-    hometown?: SortOrder
-    idAddress?: SortOrder
+    identityNumber?: SortOrderInput | SortOrder
+    issueDate?: SortOrderInput | SortOrder
+    issuePlace?: SortOrderInput | SortOrder
+    hometown?: SortOrderInput | SortOrder
+    idAddress?: SortOrderInput | SortOrder
     education?: SortOrderInput | SortOrder
     drivingLicense?: SortOrderInput | SortOrder
     toyotaCertificate?: SortOrderInput | SortOrder
-    taxCode?: SortOrder
-    insuranceNumber?: SortOrder
-    insuranceSalary?: SortOrder
+    taxCode?: SortOrderInput | SortOrder
+    insuranceNumber?: SortOrderInput | SortOrder
+    insuranceSalary?: SortOrderInput | SortOrder
     employeeId?: SortOrder
     employee?: EmployeeOrderByWithRelationInput
     _relevance?: PersonalInfoOrderByRelevanceInput
@@ -8121,33 +8126,33 @@ export namespace Prisma {
     AND?: PersonalInfoWhereInput | PersonalInfoWhereInput[]
     OR?: PersonalInfoWhereInput[]
     NOT?: PersonalInfoWhereInput | PersonalInfoWhereInput[]
-    identityNumber?: StringFilter<"PersonalInfo"> | string
-    issueDate?: DateTimeFilter<"PersonalInfo"> | Date | string
-    issuePlace?: StringFilter<"PersonalInfo"> | string
-    hometown?: StringFilter<"PersonalInfo"> | string
-    idAddress?: StringFilter<"PersonalInfo"> | string
+    identityNumber?: StringNullableFilter<"PersonalInfo"> | string | null
+    issueDate?: DateTimeNullableFilter<"PersonalInfo"> | Date | string | null
+    issuePlace?: StringNullableFilter<"PersonalInfo"> | string | null
+    hometown?: StringNullableFilter<"PersonalInfo"> | string | null
+    idAddress?: StringNullableFilter<"PersonalInfo"> | string | null
     education?: StringNullableFilter<"PersonalInfo"> | string | null
     drivingLicense?: StringNullableFilter<"PersonalInfo"> | string | null
     toyotaCertificate?: StringNullableFilter<"PersonalInfo"> | string | null
-    taxCode?: StringFilter<"PersonalInfo"> | string
-    insuranceNumber?: IntFilter<"PersonalInfo"> | number
-    insuranceSalary?: IntFilter<"PersonalInfo"> | number
+    taxCode?: StringNullableFilter<"PersonalInfo"> | string | null
+    insuranceNumber?: StringNullableFilter<"PersonalInfo"> | string | null
+    insuranceSalary?: IntNullableFilter<"PersonalInfo"> | number | null
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
   }, "id" | "employeeId">
 
   export type PersonalInfoOrderByWithAggregationInput = {
     id?: SortOrder
-    identityNumber?: SortOrder
-    issueDate?: SortOrder
-    issuePlace?: SortOrder
-    hometown?: SortOrder
-    idAddress?: SortOrder
+    identityNumber?: SortOrderInput | SortOrder
+    issueDate?: SortOrderInput | SortOrder
+    issuePlace?: SortOrderInput | SortOrder
+    hometown?: SortOrderInput | SortOrder
+    idAddress?: SortOrderInput | SortOrder
     education?: SortOrderInput | SortOrder
     drivingLicense?: SortOrderInput | SortOrder
     toyotaCertificate?: SortOrderInput | SortOrder
-    taxCode?: SortOrder
-    insuranceNumber?: SortOrder
-    insuranceSalary?: SortOrder
+    taxCode?: SortOrderInput | SortOrder
+    insuranceNumber?: SortOrderInput | SortOrder
+    insuranceSalary?: SortOrderInput | SortOrder
     employeeId?: SortOrder
     _count?: PersonalInfoCountOrderByAggregateInput
     _avg?: PersonalInfoAvgOrderByAggregateInput
@@ -8161,17 +8166,17 @@ export namespace Prisma {
     OR?: PersonalInfoScalarWhereWithAggregatesInput[]
     NOT?: PersonalInfoScalarWhereWithAggregatesInput | PersonalInfoScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"PersonalInfo"> | number
-    identityNumber?: StringWithAggregatesFilter<"PersonalInfo"> | string
-    issueDate?: DateTimeWithAggregatesFilter<"PersonalInfo"> | Date | string
-    issuePlace?: StringWithAggregatesFilter<"PersonalInfo"> | string
-    hometown?: StringWithAggregatesFilter<"PersonalInfo"> | string
-    idAddress?: StringWithAggregatesFilter<"PersonalInfo"> | string
+    identityNumber?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
+    issueDate?: DateTimeNullableWithAggregatesFilter<"PersonalInfo"> | Date | string | null
+    issuePlace?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
+    hometown?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
+    idAddress?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
     education?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
     drivingLicense?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
     toyotaCertificate?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
-    taxCode?: StringWithAggregatesFilter<"PersonalInfo"> | string
-    insuranceNumber?: IntWithAggregatesFilter<"PersonalInfo"> | number
-    insuranceSalary?: IntWithAggregatesFilter<"PersonalInfo"> | number
+    taxCode?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
+    insuranceNumber?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
+    insuranceSalary?: IntNullableWithAggregatesFilter<"PersonalInfo"> | number | null
     employeeId?: IntWithAggregatesFilter<"PersonalInfo"> | number
   }
 
@@ -8180,8 +8185,8 @@ export namespace Prisma {
     OR?: ContactInfoWhereInput[]
     NOT?: ContactInfoWhereInput | ContactInfoWhereInput[]
     id?: IntFilter<"ContactInfo"> | number
-    phoneNumber?: StringFilter<"ContactInfo"> | string
-    relativePhone?: StringFilter<"ContactInfo"> | string
+    phoneNumber?: StringNullableFilter<"ContactInfo"> | string | null
+    relativePhone?: StringNullableFilter<"ContactInfo"> | string | null
     companyPhone?: StringNullableFilter<"ContactInfo"> | string | null
     email?: StringNullableFilter<"ContactInfo"> | string | null
     employeeId?: IntFilter<"ContactInfo"> | number
@@ -8190,8 +8195,8 @@ export namespace Prisma {
 
   export type ContactInfoOrderByWithRelationInput = {
     id?: SortOrder
-    phoneNumber?: SortOrder
-    relativePhone?: SortOrder
+    phoneNumber?: SortOrderInput | SortOrder
+    relativePhone?: SortOrderInput | SortOrder
     companyPhone?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     employeeId?: SortOrder
@@ -8205,8 +8210,8 @@ export namespace Prisma {
     AND?: ContactInfoWhereInput | ContactInfoWhereInput[]
     OR?: ContactInfoWhereInput[]
     NOT?: ContactInfoWhereInput | ContactInfoWhereInput[]
-    phoneNumber?: StringFilter<"ContactInfo"> | string
-    relativePhone?: StringFilter<"ContactInfo"> | string
+    phoneNumber?: StringNullableFilter<"ContactInfo"> | string | null
+    relativePhone?: StringNullableFilter<"ContactInfo"> | string | null
     companyPhone?: StringNullableFilter<"ContactInfo"> | string | null
     email?: StringNullableFilter<"ContactInfo"> | string | null
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
@@ -8214,8 +8219,8 @@ export namespace Prisma {
 
   export type ContactInfoOrderByWithAggregationInput = {
     id?: SortOrder
-    phoneNumber?: SortOrder
-    relativePhone?: SortOrder
+    phoneNumber?: SortOrderInput | SortOrder
+    relativePhone?: SortOrderInput | SortOrder
     companyPhone?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     employeeId?: SortOrder
@@ -8231,8 +8236,8 @@ export namespace Prisma {
     OR?: ContactInfoScalarWhereWithAggregatesInput[]
     NOT?: ContactInfoScalarWhereWithAggregatesInput | ContactInfoScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"ContactInfo"> | number
-    phoneNumber?: StringWithAggregatesFilter<"ContactInfo"> | string
-    relativePhone?: StringWithAggregatesFilter<"ContactInfo"> | string
+    phoneNumber?: StringNullableWithAggregatesFilter<"ContactInfo"> | string | null
+    relativePhone?: StringNullableWithAggregatesFilter<"ContactInfo"> | string | null
     companyPhone?: StringNullableWithAggregatesFilter<"ContactInfo"> | string | null
     email?: StringNullableWithAggregatesFilter<"ContactInfo"> | string | null
     employeeId?: IntWithAggregatesFilter<"ContactInfo"> | number
@@ -8245,11 +8250,11 @@ export namespace Prisma {
     id?: IntFilter<"OtherInfo"> | number
     workStatus?: EnumWorkStatusFilter<"OtherInfo"> | $Enums.WorkStatus
     resignedDate?: DateTimeNullableFilter<"OtherInfo"> | Date | string | null
-    documentsChecked?: BoolFilter<"OtherInfo"> | boolean
+    documentsChecked?: StringNullableFilter<"OtherInfo"> | string | null
     updatedAt?: DateTimeNullableFilter<"OtherInfo"> | Date | string | null
     VCB?: StringNullableFilter<"OtherInfo"> | string | null
-    MTCV?: BoolNullableFilter<"OtherInfo"> | boolean | null
-    PNJ?: BoolNullableFilter<"OtherInfo"> | boolean | null
+    MTCV?: StringNullableFilter<"OtherInfo"> | string | null
+    PNJ?: StringNullableFilter<"OtherInfo"> | string | null
     employeeId?: IntFilter<"OtherInfo"> | number
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
   }
@@ -8258,7 +8263,7 @@ export namespace Prisma {
     id?: SortOrder
     workStatus?: SortOrder
     resignedDate?: SortOrderInput | SortOrder
-    documentsChecked?: SortOrder
+    documentsChecked?: SortOrderInput | SortOrder
     updatedAt?: SortOrderInput | SortOrder
     VCB?: SortOrderInput | SortOrder
     MTCV?: SortOrderInput | SortOrder
@@ -8276,11 +8281,11 @@ export namespace Prisma {
     NOT?: OtherInfoWhereInput | OtherInfoWhereInput[]
     workStatus?: EnumWorkStatusFilter<"OtherInfo"> | $Enums.WorkStatus
     resignedDate?: DateTimeNullableFilter<"OtherInfo"> | Date | string | null
-    documentsChecked?: BoolFilter<"OtherInfo"> | boolean
+    documentsChecked?: StringNullableFilter<"OtherInfo"> | string | null
     updatedAt?: DateTimeNullableFilter<"OtherInfo"> | Date | string | null
     VCB?: StringNullableFilter<"OtherInfo"> | string | null
-    MTCV?: BoolNullableFilter<"OtherInfo"> | boolean | null
-    PNJ?: BoolNullableFilter<"OtherInfo"> | boolean | null
+    MTCV?: StringNullableFilter<"OtherInfo"> | string | null
+    PNJ?: StringNullableFilter<"OtherInfo"> | string | null
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
   }, "id" | "employeeId">
 
@@ -8288,7 +8293,7 @@ export namespace Prisma {
     id?: SortOrder
     workStatus?: SortOrder
     resignedDate?: SortOrderInput | SortOrder
-    documentsChecked?: SortOrder
+    documentsChecked?: SortOrderInput | SortOrder
     updatedAt?: SortOrderInput | SortOrder
     VCB?: SortOrderInput | SortOrder
     MTCV?: SortOrderInput | SortOrder
@@ -8308,11 +8313,11 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"OtherInfo"> | number
     workStatus?: EnumWorkStatusWithAggregatesFilter<"OtherInfo"> | $Enums.WorkStatus
     resignedDate?: DateTimeNullableWithAggregatesFilter<"OtherInfo"> | Date | string | null
-    documentsChecked?: BoolWithAggregatesFilter<"OtherInfo"> | boolean
+    documentsChecked?: StringNullableWithAggregatesFilter<"OtherInfo"> | string | null
     updatedAt?: DateTimeNullableWithAggregatesFilter<"OtherInfo"> | Date | string | null
     VCB?: StringNullableWithAggregatesFilter<"OtherInfo"> | string | null
-    MTCV?: BoolNullableWithAggregatesFilter<"OtherInfo"> | boolean | null
-    PNJ?: BoolNullableWithAggregatesFilter<"OtherInfo"> | boolean | null
+    MTCV?: StringNullableWithAggregatesFilter<"OtherInfo"> | string | null
+    PNJ?: StringNullableWithAggregatesFilter<"OtherInfo"> | string | null
     employeeId?: IntWithAggregatesFilter<"OtherInfo"> | number
   }
 
@@ -8329,6 +8334,7 @@ export namespace Prisma {
     reason?: StringNullableFilter<"LeaveRequest"> | string | null
     status?: EnumLeaveStatusFilter<"LeaveRequest"> | $Enums.LeaveStatus
     approvedBy?: StringNullableFilter<"LeaveRequest"> | string | null
+    approvedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
   }
@@ -8343,6 +8349,7 @@ export namespace Prisma {
     reason?: SortOrderInput | SortOrder
     status?: SortOrder
     approvedBy?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     employee?: EmployeeOrderByWithRelationInput
     _relevance?: LeaveRequestOrderByRelevanceInput
@@ -8361,6 +8368,7 @@ export namespace Prisma {
     reason?: StringNullableFilter<"LeaveRequest"> | string | null
     status?: EnumLeaveStatusFilter<"LeaveRequest"> | $Enums.LeaveStatus
     approvedBy?: StringNullableFilter<"LeaveRequest"> | string | null
+    approvedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
   }, "id">
@@ -8375,6 +8383,7 @@ export namespace Prisma {
     reason?: SortOrderInput | SortOrder
     status?: SortOrder
     approvedBy?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: LeaveRequestCountOrderByAggregateInput
     _avg?: LeaveRequestAvgOrderByAggregateInput
@@ -8396,6 +8405,7 @@ export namespace Prisma {
     reason?: StringNullableWithAggregatesFilter<"LeaveRequest"> | string | null
     status?: EnumLeaveStatusWithAggregatesFilter<"LeaveRequest"> | $Enums.LeaveStatus
     approvedBy?: StringNullableWithAggregatesFilter<"LeaveRequest"> | string | null
+    approvedAt?: DateTimeNullableWithAggregatesFilter<"LeaveRequest"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"LeaveRequest"> | Date | string
   }
 
@@ -8496,15 +8506,15 @@ export namespace Prisma {
   export type WorkInfoCreateInput = {
     department: string
     position: string
-    specialization: string
+    specialization?: string | null
     joinedTBD?: Date | string | null
     joinedTeSCC?: Date | string | null
     seniorityStart?: Date | string | null
     seniority?: number | null
-    contractNumber: string
-    contractDate: Date | string
-    contractType: string
-    contractEndDate: Date | string
+    contractNumber?: string | null
+    contractDate?: Date | string | null
+    contractType?: string | null
+    contractEndDate?: Date | string | null
     employee: EmployeeCreateNestedOneWithoutWorkInfoInput
   }
 
@@ -8512,30 +8522,30 @@ export namespace Prisma {
     id?: number
     department: string
     position: string
-    specialization: string
+    specialization?: string | null
     joinedTBD?: Date | string | null
     joinedTeSCC?: Date | string | null
     seniorityStart?: Date | string | null
     seniority?: number | null
-    contractNumber: string
-    contractDate: Date | string
-    contractType: string
-    contractEndDate: Date | string
+    contractNumber?: string | null
+    contractDate?: Date | string | null
+    contractType?: string | null
+    contractEndDate?: Date | string | null
     employeeId: number
   }
 
   export type WorkInfoUpdateInput = {
     department?: StringFieldUpdateOperationsInput | string
     position?: StringFieldUpdateOperationsInput | string
-    specialization?: StringFieldUpdateOperationsInput | string
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
     joinedTBD?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     joinedTeSCC?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniorityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniority?: NullableIntFieldUpdateOperationsInput | number | null
-    contractNumber?: StringFieldUpdateOperationsInput | string
-    contractDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    contractType?: StringFieldUpdateOperationsInput | string
-    contractEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    contractNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contractType?: NullableStringFieldUpdateOperationsInput | string | null
+    contractEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     employee?: EmployeeUpdateOneRequiredWithoutWorkInfoNestedInput
   }
 
@@ -8543,15 +8553,15 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     department?: StringFieldUpdateOperationsInput | string
     position?: StringFieldUpdateOperationsInput | string
-    specialization?: StringFieldUpdateOperationsInput | string
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
     joinedTBD?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     joinedTeSCC?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniorityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniority?: NullableIntFieldUpdateOperationsInput | number | null
-    contractNumber?: StringFieldUpdateOperationsInput | string
-    contractDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    contractType?: StringFieldUpdateOperationsInput | string
-    contractEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    contractNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contractType?: NullableStringFieldUpdateOperationsInput | string | null
+    contractEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     employeeId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -8559,159 +8569,159 @@ export namespace Prisma {
     id?: number
     department: string
     position: string
-    specialization: string
+    specialization?: string | null
     joinedTBD?: Date | string | null
     joinedTeSCC?: Date | string | null
     seniorityStart?: Date | string | null
     seniority?: number | null
-    contractNumber: string
-    contractDate: Date | string
-    contractType: string
-    contractEndDate: Date | string
+    contractNumber?: string | null
+    contractDate?: Date | string | null
+    contractType?: string | null
+    contractEndDate?: Date | string | null
     employeeId: number
   }
 
   export type WorkInfoUpdateManyMutationInput = {
     department?: StringFieldUpdateOperationsInput | string
     position?: StringFieldUpdateOperationsInput | string
-    specialization?: StringFieldUpdateOperationsInput | string
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
     joinedTBD?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     joinedTeSCC?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniorityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniority?: NullableIntFieldUpdateOperationsInput | number | null
-    contractNumber?: StringFieldUpdateOperationsInput | string
-    contractDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    contractType?: StringFieldUpdateOperationsInput | string
-    contractEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    contractNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contractType?: NullableStringFieldUpdateOperationsInput | string | null
+    contractEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type WorkInfoUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     department?: StringFieldUpdateOperationsInput | string
     position?: StringFieldUpdateOperationsInput | string
-    specialization?: StringFieldUpdateOperationsInput | string
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
     joinedTBD?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     joinedTeSCC?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniorityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniority?: NullableIntFieldUpdateOperationsInput | number | null
-    contractNumber?: StringFieldUpdateOperationsInput | string
-    contractDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    contractType?: StringFieldUpdateOperationsInput | string
-    contractEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    contractNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contractType?: NullableStringFieldUpdateOperationsInput | string | null
+    contractEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     employeeId?: IntFieldUpdateOperationsInput | number
   }
 
   export type PersonalInfoCreateInput = {
-    identityNumber: string
-    issueDate: Date | string
-    issuePlace: string
-    hometown: string
-    idAddress: string
+    identityNumber?: string | null
+    issueDate?: Date | string | null
+    issuePlace?: string | null
+    hometown?: string | null
+    idAddress?: string | null
     education?: string | null
     drivingLicense?: string | null
     toyotaCertificate?: string | null
-    taxCode: string
-    insuranceNumber: number
-    insuranceSalary: number
+    taxCode?: string | null
+    insuranceNumber?: string | null
+    insuranceSalary?: number | null
     employee: EmployeeCreateNestedOneWithoutPersonalInfoInput
   }
 
   export type PersonalInfoUncheckedCreateInput = {
     id?: number
-    identityNumber: string
-    issueDate: Date | string
-    issuePlace: string
-    hometown: string
-    idAddress: string
+    identityNumber?: string | null
+    issueDate?: Date | string | null
+    issuePlace?: string | null
+    hometown?: string | null
+    idAddress?: string | null
     education?: string | null
     drivingLicense?: string | null
     toyotaCertificate?: string | null
-    taxCode: string
-    insuranceNumber: number
-    insuranceSalary: number
+    taxCode?: string | null
+    insuranceNumber?: string | null
+    insuranceSalary?: number | null
     employeeId: number
   }
 
   export type PersonalInfoUpdateInput = {
-    identityNumber?: StringFieldUpdateOperationsInput | string
-    issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    issuePlace?: StringFieldUpdateOperationsInput | string
-    hometown?: StringFieldUpdateOperationsInput | string
-    idAddress?: StringFieldUpdateOperationsInput | string
+    identityNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    issuePlace?: NullableStringFieldUpdateOperationsInput | string | null
+    hometown?: NullableStringFieldUpdateOperationsInput | string | null
+    idAddress?: NullableStringFieldUpdateOperationsInput | string | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     drivingLicense?: NullableStringFieldUpdateOperationsInput | string | null
     toyotaCertificate?: NullableStringFieldUpdateOperationsInput | string | null
-    taxCode?: StringFieldUpdateOperationsInput | string
-    insuranceNumber?: IntFieldUpdateOperationsInput | number
-    insuranceSalary?: IntFieldUpdateOperationsInput | number
+    taxCode?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceSalary?: NullableIntFieldUpdateOperationsInput | number | null
     employee?: EmployeeUpdateOneRequiredWithoutPersonalInfoNestedInput
   }
 
   export type PersonalInfoUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    identityNumber?: StringFieldUpdateOperationsInput | string
-    issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    issuePlace?: StringFieldUpdateOperationsInput | string
-    hometown?: StringFieldUpdateOperationsInput | string
-    idAddress?: StringFieldUpdateOperationsInput | string
+    identityNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    issuePlace?: NullableStringFieldUpdateOperationsInput | string | null
+    hometown?: NullableStringFieldUpdateOperationsInput | string | null
+    idAddress?: NullableStringFieldUpdateOperationsInput | string | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     drivingLicense?: NullableStringFieldUpdateOperationsInput | string | null
     toyotaCertificate?: NullableStringFieldUpdateOperationsInput | string | null
-    taxCode?: StringFieldUpdateOperationsInput | string
-    insuranceNumber?: IntFieldUpdateOperationsInput | number
-    insuranceSalary?: IntFieldUpdateOperationsInput | number
+    taxCode?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceSalary?: NullableIntFieldUpdateOperationsInput | number | null
     employeeId?: IntFieldUpdateOperationsInput | number
   }
 
   export type PersonalInfoCreateManyInput = {
     id?: number
-    identityNumber: string
-    issueDate: Date | string
-    issuePlace: string
-    hometown: string
-    idAddress: string
+    identityNumber?: string | null
+    issueDate?: Date | string | null
+    issuePlace?: string | null
+    hometown?: string | null
+    idAddress?: string | null
     education?: string | null
     drivingLicense?: string | null
     toyotaCertificate?: string | null
-    taxCode: string
-    insuranceNumber: number
-    insuranceSalary: number
+    taxCode?: string | null
+    insuranceNumber?: string | null
+    insuranceSalary?: number | null
     employeeId: number
   }
 
   export type PersonalInfoUpdateManyMutationInput = {
-    identityNumber?: StringFieldUpdateOperationsInput | string
-    issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    issuePlace?: StringFieldUpdateOperationsInput | string
-    hometown?: StringFieldUpdateOperationsInput | string
-    idAddress?: StringFieldUpdateOperationsInput | string
+    identityNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    issuePlace?: NullableStringFieldUpdateOperationsInput | string | null
+    hometown?: NullableStringFieldUpdateOperationsInput | string | null
+    idAddress?: NullableStringFieldUpdateOperationsInput | string | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     drivingLicense?: NullableStringFieldUpdateOperationsInput | string | null
     toyotaCertificate?: NullableStringFieldUpdateOperationsInput | string | null
-    taxCode?: StringFieldUpdateOperationsInput | string
-    insuranceNumber?: IntFieldUpdateOperationsInput | number
-    insuranceSalary?: IntFieldUpdateOperationsInput | number
+    taxCode?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceSalary?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type PersonalInfoUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    identityNumber?: StringFieldUpdateOperationsInput | string
-    issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    issuePlace?: StringFieldUpdateOperationsInput | string
-    hometown?: StringFieldUpdateOperationsInput | string
-    idAddress?: StringFieldUpdateOperationsInput | string
+    identityNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    issuePlace?: NullableStringFieldUpdateOperationsInput | string | null
+    hometown?: NullableStringFieldUpdateOperationsInput | string | null
+    idAddress?: NullableStringFieldUpdateOperationsInput | string | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     drivingLicense?: NullableStringFieldUpdateOperationsInput | string | null
     toyotaCertificate?: NullableStringFieldUpdateOperationsInput | string | null
-    taxCode?: StringFieldUpdateOperationsInput | string
-    insuranceNumber?: IntFieldUpdateOperationsInput | number
-    insuranceSalary?: IntFieldUpdateOperationsInput | number
+    taxCode?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceSalary?: NullableIntFieldUpdateOperationsInput | number | null
     employeeId?: IntFieldUpdateOperationsInput | number
   }
 
   export type ContactInfoCreateInput = {
-    phoneNumber: string
-    relativePhone: string
+    phoneNumber?: string | null
+    relativePhone?: string | null
     companyPhone?: string | null
     email?: string | null
     employee: EmployeeCreateNestedOneWithoutContactInfoInput
@@ -8719,16 +8729,16 @@ export namespace Prisma {
 
   export type ContactInfoUncheckedCreateInput = {
     id?: number
-    phoneNumber: string
-    relativePhone: string
+    phoneNumber?: string | null
+    relativePhone?: string | null
     companyPhone?: string | null
     email?: string | null
     employeeId: number
   }
 
   export type ContactInfoUpdateInput = {
-    phoneNumber?: StringFieldUpdateOperationsInput | string
-    relativePhone?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    relativePhone?: NullableStringFieldUpdateOperationsInput | string | null
     companyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: EmployeeUpdateOneRequiredWithoutContactInfoNestedInput
@@ -8736,8 +8746,8 @@ export namespace Prisma {
 
   export type ContactInfoUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    phoneNumber?: StringFieldUpdateOperationsInput | string
-    relativePhone?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    relativePhone?: NullableStringFieldUpdateOperationsInput | string | null
     companyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: IntFieldUpdateOperationsInput | number
@@ -8745,24 +8755,24 @@ export namespace Prisma {
 
   export type ContactInfoCreateManyInput = {
     id?: number
-    phoneNumber: string
-    relativePhone: string
+    phoneNumber?: string | null
+    relativePhone?: string | null
     companyPhone?: string | null
     email?: string | null
     employeeId: number
   }
 
   export type ContactInfoUpdateManyMutationInput = {
-    phoneNumber?: StringFieldUpdateOperationsInput | string
-    relativePhone?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    relativePhone?: NullableStringFieldUpdateOperationsInput | string | null
     companyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ContactInfoUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    phoneNumber?: StringFieldUpdateOperationsInput | string
-    relativePhone?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    relativePhone?: NullableStringFieldUpdateOperationsInput | string | null
     companyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: IntFieldUpdateOperationsInput | number
@@ -8771,11 +8781,11 @@ export namespace Prisma {
   export type OtherInfoCreateInput = {
     workStatus?: $Enums.WorkStatus
     resignedDate?: Date | string | null
-    documentsChecked: boolean
+    documentsChecked?: string | null
     updatedAt?: Date | string | null
     VCB?: string | null
-    MTCV?: boolean | null
-    PNJ?: boolean | null
+    MTCV?: string | null
+    PNJ?: string | null
     employee: EmployeeCreateNestedOneWithoutOtherInfoInput
   }
 
@@ -8783,22 +8793,22 @@ export namespace Prisma {
     id?: number
     workStatus?: $Enums.WorkStatus
     resignedDate?: Date | string | null
-    documentsChecked: boolean
+    documentsChecked?: string | null
     updatedAt?: Date | string | null
     VCB?: string | null
-    MTCV?: boolean | null
-    PNJ?: boolean | null
+    MTCV?: string | null
+    PNJ?: string | null
     employeeId: number
   }
 
   export type OtherInfoUpdateInput = {
     workStatus?: EnumWorkStatusFieldUpdateOperationsInput | $Enums.WorkStatus
     resignedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    documentsChecked?: BoolFieldUpdateOperationsInput | boolean
+    documentsChecked?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     VCB?: NullableStringFieldUpdateOperationsInput | string | null
-    MTCV?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    PNJ?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    MTCV?: NullableStringFieldUpdateOperationsInput | string | null
+    PNJ?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: EmployeeUpdateOneRequiredWithoutOtherInfoNestedInput
   }
 
@@ -8806,11 +8816,11 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     workStatus?: EnumWorkStatusFieldUpdateOperationsInput | $Enums.WorkStatus
     resignedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    documentsChecked?: BoolFieldUpdateOperationsInput | boolean
+    documentsChecked?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     VCB?: NullableStringFieldUpdateOperationsInput | string | null
-    MTCV?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    PNJ?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    MTCV?: NullableStringFieldUpdateOperationsInput | string | null
+    PNJ?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -8818,33 +8828,33 @@ export namespace Prisma {
     id?: number
     workStatus?: $Enums.WorkStatus
     resignedDate?: Date | string | null
-    documentsChecked: boolean
+    documentsChecked?: string | null
     updatedAt?: Date | string | null
     VCB?: string | null
-    MTCV?: boolean | null
-    PNJ?: boolean | null
+    MTCV?: string | null
+    PNJ?: string | null
     employeeId: number
   }
 
   export type OtherInfoUpdateManyMutationInput = {
     workStatus?: EnumWorkStatusFieldUpdateOperationsInput | $Enums.WorkStatus
     resignedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    documentsChecked?: BoolFieldUpdateOperationsInput | boolean
+    documentsChecked?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     VCB?: NullableStringFieldUpdateOperationsInput | string | null
-    MTCV?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    PNJ?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    MTCV?: NullableStringFieldUpdateOperationsInput | string | null
+    PNJ?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OtherInfoUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     workStatus?: EnumWorkStatusFieldUpdateOperationsInput | $Enums.WorkStatus
     resignedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    documentsChecked?: BoolFieldUpdateOperationsInput | boolean
+    documentsChecked?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     VCB?: NullableStringFieldUpdateOperationsInput | string | null
-    MTCV?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    PNJ?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    MTCV?: NullableStringFieldUpdateOperationsInput | string | null
+    PNJ?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -8856,6 +8866,7 @@ export namespace Prisma {
     reason?: string | null
     status?: $Enums.LeaveStatus
     approvedBy?: string | null
+    approvedAt?: Date | string | null
     createdAt?: Date | string
     employee: EmployeeCreateNestedOneWithoutLeaveRequestInput
   }
@@ -8870,6 +8881,7 @@ export namespace Prisma {
     reason?: string | null
     status?: $Enums.LeaveStatus
     approvedBy?: string | null
+    approvedAt?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -8881,6 +8893,7 @@ export namespace Prisma {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     employee?: EmployeeUpdateOneRequiredWithoutLeaveRequestNestedInput
   }
@@ -8895,6 +8908,7 @@ export namespace Prisma {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -8908,6 +8922,7 @@ export namespace Prisma {
     reason?: string | null
     status?: $Enums.LeaveStatus
     approvedBy?: string | null
+    approvedAt?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -8919,6 +8934,7 @@ export namespace Prisma {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -8932,6 +8948,7 @@ export namespace Prisma {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -9316,7 +9333,6 @@ export namespace Prisma {
 
   export type PersonalInfoAvgOrderByAggregateInput = {
     id?: SortOrder
-    insuranceNumber?: SortOrder
     insuranceSalary?: SortOrder
     employeeId?: SortOrder
   }
@@ -9355,7 +9371,6 @@ export namespace Prisma {
 
   export type PersonalInfoSumOrderByAggregateInput = {
     id?: SortOrder
-    insuranceNumber?: SortOrder
     insuranceSalary?: SortOrder
     employeeId?: SortOrder
   }
@@ -9408,16 +9423,6 @@ export namespace Prisma {
     in?: $Enums.WorkStatus[]
     notIn?: $Enums.WorkStatus[]
     not?: NestedEnumWorkStatusFilter<$PrismaModel> | $Enums.WorkStatus
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type BoolNullableFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
-    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
   export type OtherInfoOrderByRelevanceInput = {
@@ -9482,22 +9487,6 @@ export namespace Prisma {
     _max?: NestedEnumWorkStatusFilter<$PrismaModel>
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
-    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedBoolNullableFilter<$PrismaModel>
-    _max?: NestedBoolNullableFilter<$PrismaModel>
-  }
-
   export type EnumLeaveTypeEnumFilter<$PrismaModel = never> = {
     equals?: $Enums.LeaveTypeEnum | EnumLeaveTypeEnumFieldRefInput<$PrismaModel>
     in?: $Enums.LeaveTypeEnum[]
@@ -9539,6 +9528,7 @@ export namespace Prisma {
     reason?: SortOrder
     status?: SortOrder
     approvedBy?: SortOrder
+    approvedAt?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -9558,6 +9548,7 @@ export namespace Prisma {
     reason?: SortOrder
     status?: SortOrder
     approvedBy?: SortOrder
+    approvedAt?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -9571,6 +9562,7 @@ export namespace Prisma {
     reason?: SortOrder
     status?: SortOrder
     approvedBy?: SortOrder
+    approvedAt?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -9878,14 +9870,6 @@ export namespace Prisma {
     set?: $Enums.WorkStatus
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type NullableBoolFieldUpdateOperationsInput = {
-    set?: boolean | null
-  }
-
   export type EmployeeUpdateOneRequiredWithoutOtherInfoNestedInput = {
     create?: XOR<EmployeeCreateWithoutOtherInfoInput, EmployeeUncheckedCreateWithoutOtherInfoInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutOtherInfoInput
@@ -10157,16 +10141,6 @@ export namespace Prisma {
     not?: NestedEnumWorkStatusFilter<$PrismaModel> | $Enums.WorkStatus
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedBoolNullableFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
-    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
-  }
-
   export type NestedEnumWorkStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.WorkStatus | EnumWorkStatusFieldRefInput<$PrismaModel>
     in?: $Enums.WorkStatus[]
@@ -10175,22 +10149,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumWorkStatusFilter<$PrismaModel>
     _max?: NestedEnumWorkStatusFilter<$PrismaModel>
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
-    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedBoolNullableFilter<$PrismaModel>
-    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumLeaveTypeEnumFilter<$PrismaModel = never> = {
@@ -10246,30 +10204,30 @@ export namespace Prisma {
   export type WorkInfoCreateWithoutEmployeeInput = {
     department: string
     position: string
-    specialization: string
+    specialization?: string | null
     joinedTBD?: Date | string | null
     joinedTeSCC?: Date | string | null
     seniorityStart?: Date | string | null
     seniority?: number | null
-    contractNumber: string
-    contractDate: Date | string
-    contractType: string
-    contractEndDate: Date | string
+    contractNumber?: string | null
+    contractDate?: Date | string | null
+    contractType?: string | null
+    contractEndDate?: Date | string | null
   }
 
   export type WorkInfoUncheckedCreateWithoutEmployeeInput = {
     id?: number
     department: string
     position: string
-    specialization: string
+    specialization?: string | null
     joinedTBD?: Date | string | null
     joinedTeSCC?: Date | string | null
     seniorityStart?: Date | string | null
     seniority?: number | null
-    contractNumber: string
-    contractDate: Date | string
-    contractType: string
-    contractEndDate: Date | string
+    contractNumber?: string | null
+    contractDate?: Date | string | null
+    contractType?: string | null
+    contractEndDate?: Date | string | null
   }
 
   export type WorkInfoCreateOrConnectWithoutEmployeeInput = {
@@ -10278,32 +10236,32 @@ export namespace Prisma {
   }
 
   export type PersonalInfoCreateWithoutEmployeeInput = {
-    identityNumber: string
-    issueDate: Date | string
-    issuePlace: string
-    hometown: string
-    idAddress: string
+    identityNumber?: string | null
+    issueDate?: Date | string | null
+    issuePlace?: string | null
+    hometown?: string | null
+    idAddress?: string | null
     education?: string | null
     drivingLicense?: string | null
     toyotaCertificate?: string | null
-    taxCode: string
-    insuranceNumber: number
-    insuranceSalary: number
+    taxCode?: string | null
+    insuranceNumber?: string | null
+    insuranceSalary?: number | null
   }
 
   export type PersonalInfoUncheckedCreateWithoutEmployeeInput = {
     id?: number
-    identityNumber: string
-    issueDate: Date | string
-    issuePlace: string
-    hometown: string
-    idAddress: string
+    identityNumber?: string | null
+    issueDate?: Date | string | null
+    issuePlace?: string | null
+    hometown?: string | null
+    idAddress?: string | null
     education?: string | null
     drivingLicense?: string | null
     toyotaCertificate?: string | null
-    taxCode: string
-    insuranceNumber: number
-    insuranceSalary: number
+    taxCode?: string | null
+    insuranceNumber?: string | null
+    insuranceSalary?: number | null
   }
 
   export type PersonalInfoCreateOrConnectWithoutEmployeeInput = {
@@ -10312,16 +10270,16 @@ export namespace Prisma {
   }
 
   export type ContactInfoCreateWithoutEmployeeInput = {
-    phoneNumber: string
-    relativePhone: string
+    phoneNumber?: string | null
+    relativePhone?: string | null
     companyPhone?: string | null
     email?: string | null
   }
 
   export type ContactInfoUncheckedCreateWithoutEmployeeInput = {
     id?: number
-    phoneNumber: string
-    relativePhone: string
+    phoneNumber?: string | null
+    relativePhone?: string | null
     companyPhone?: string | null
     email?: string | null
   }
@@ -10334,22 +10292,22 @@ export namespace Prisma {
   export type OtherInfoCreateWithoutEmployeeInput = {
     workStatus?: $Enums.WorkStatus
     resignedDate?: Date | string | null
-    documentsChecked: boolean
+    documentsChecked?: string | null
     updatedAt?: Date | string | null
     VCB?: string | null
-    MTCV?: boolean | null
-    PNJ?: boolean | null
+    MTCV?: string | null
+    PNJ?: string | null
   }
 
   export type OtherInfoUncheckedCreateWithoutEmployeeInput = {
     id?: number
     workStatus?: $Enums.WorkStatus
     resignedDate?: Date | string | null
-    documentsChecked: boolean
+    documentsChecked?: string | null
     updatedAt?: Date | string | null
     VCB?: string | null
-    MTCV?: boolean | null
-    PNJ?: boolean | null
+    MTCV?: string | null
+    PNJ?: string | null
   }
 
   export type OtherInfoCreateOrConnectWithoutEmployeeInput = {
@@ -10365,6 +10323,7 @@ export namespace Prisma {
     reason?: string | null
     status?: $Enums.LeaveStatus
     approvedBy?: string | null
+    approvedAt?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -10377,6 +10336,7 @@ export namespace Prisma {
     reason?: string | null
     status?: $Enums.LeaveStatus
     approvedBy?: string | null
+    approvedAt?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -10404,30 +10364,30 @@ export namespace Prisma {
   export type WorkInfoUpdateWithoutEmployeeInput = {
     department?: StringFieldUpdateOperationsInput | string
     position?: StringFieldUpdateOperationsInput | string
-    specialization?: StringFieldUpdateOperationsInput | string
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
     joinedTBD?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     joinedTeSCC?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniorityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniority?: NullableIntFieldUpdateOperationsInput | number | null
-    contractNumber?: StringFieldUpdateOperationsInput | string
-    contractDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    contractType?: StringFieldUpdateOperationsInput | string
-    contractEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    contractNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contractType?: NullableStringFieldUpdateOperationsInput | string | null
+    contractEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type WorkInfoUncheckedUpdateWithoutEmployeeInput = {
     id?: IntFieldUpdateOperationsInput | number
     department?: StringFieldUpdateOperationsInput | string
     position?: StringFieldUpdateOperationsInput | string
-    specialization?: StringFieldUpdateOperationsInput | string
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
     joinedTBD?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     joinedTeSCC?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniorityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniority?: NullableIntFieldUpdateOperationsInput | number | null
-    contractNumber?: StringFieldUpdateOperationsInput | string
-    contractDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    contractType?: StringFieldUpdateOperationsInput | string
-    contractEndDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    contractNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contractType?: NullableStringFieldUpdateOperationsInput | string | null
+    contractEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type PersonalInfoUpsertWithoutEmployeeInput = {
@@ -10442,32 +10402,32 @@ export namespace Prisma {
   }
 
   export type PersonalInfoUpdateWithoutEmployeeInput = {
-    identityNumber?: StringFieldUpdateOperationsInput | string
-    issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    issuePlace?: StringFieldUpdateOperationsInput | string
-    hometown?: StringFieldUpdateOperationsInput | string
-    idAddress?: StringFieldUpdateOperationsInput | string
+    identityNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    issuePlace?: NullableStringFieldUpdateOperationsInput | string | null
+    hometown?: NullableStringFieldUpdateOperationsInput | string | null
+    idAddress?: NullableStringFieldUpdateOperationsInput | string | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     drivingLicense?: NullableStringFieldUpdateOperationsInput | string | null
     toyotaCertificate?: NullableStringFieldUpdateOperationsInput | string | null
-    taxCode?: StringFieldUpdateOperationsInput | string
-    insuranceNumber?: IntFieldUpdateOperationsInput | number
-    insuranceSalary?: IntFieldUpdateOperationsInput | number
+    taxCode?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceSalary?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type PersonalInfoUncheckedUpdateWithoutEmployeeInput = {
     id?: IntFieldUpdateOperationsInput | number
-    identityNumber?: StringFieldUpdateOperationsInput | string
-    issueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    issuePlace?: StringFieldUpdateOperationsInput | string
-    hometown?: StringFieldUpdateOperationsInput | string
-    idAddress?: StringFieldUpdateOperationsInput | string
+    identityNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    issuePlace?: NullableStringFieldUpdateOperationsInput | string | null
+    hometown?: NullableStringFieldUpdateOperationsInput | string | null
+    idAddress?: NullableStringFieldUpdateOperationsInput | string | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     drivingLicense?: NullableStringFieldUpdateOperationsInput | string | null
     toyotaCertificate?: NullableStringFieldUpdateOperationsInput | string | null
-    taxCode?: StringFieldUpdateOperationsInput | string
-    insuranceNumber?: IntFieldUpdateOperationsInput | number
-    insuranceSalary?: IntFieldUpdateOperationsInput | number
+    taxCode?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    insuranceSalary?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ContactInfoUpsertWithoutEmployeeInput = {
@@ -10482,16 +10442,16 @@ export namespace Prisma {
   }
 
   export type ContactInfoUpdateWithoutEmployeeInput = {
-    phoneNumber?: StringFieldUpdateOperationsInput | string
-    relativePhone?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    relativePhone?: NullableStringFieldUpdateOperationsInput | string | null
     companyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ContactInfoUncheckedUpdateWithoutEmployeeInput = {
     id?: IntFieldUpdateOperationsInput | number
-    phoneNumber?: StringFieldUpdateOperationsInput | string
-    relativePhone?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    relativePhone?: NullableStringFieldUpdateOperationsInput | string | null
     companyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -10510,22 +10470,22 @@ export namespace Prisma {
   export type OtherInfoUpdateWithoutEmployeeInput = {
     workStatus?: EnumWorkStatusFieldUpdateOperationsInput | $Enums.WorkStatus
     resignedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    documentsChecked?: BoolFieldUpdateOperationsInput | boolean
+    documentsChecked?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     VCB?: NullableStringFieldUpdateOperationsInput | string | null
-    MTCV?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    PNJ?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    MTCV?: NullableStringFieldUpdateOperationsInput | string | null
+    PNJ?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OtherInfoUncheckedUpdateWithoutEmployeeInput = {
     id?: IntFieldUpdateOperationsInput | number
     workStatus?: EnumWorkStatusFieldUpdateOperationsInput | $Enums.WorkStatus
     resignedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    documentsChecked?: BoolFieldUpdateOperationsInput | boolean
+    documentsChecked?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     VCB?: NullableStringFieldUpdateOperationsInput | string | null
-    MTCV?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    PNJ?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    MTCV?: NullableStringFieldUpdateOperationsInput | string | null
+    PNJ?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type LeaveRequestUpsertWithWhereUniqueWithoutEmployeeInput = {
@@ -10557,6 +10517,7 @@ export namespace Prisma {
     reason?: StringNullableFilter<"LeaveRequest"> | string | null
     status?: EnumLeaveStatusFilter<"LeaveRequest"> | $Enums.LeaveStatus
     approvedBy?: StringNullableFilter<"LeaveRequest"> | string | null
+    approvedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
   }
 
@@ -10939,6 +10900,7 @@ export namespace Prisma {
     reason?: string | null
     status?: $Enums.LeaveStatus
     approvedBy?: string | null
+    approvedAt?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -10950,6 +10912,7 @@ export namespace Prisma {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10962,6 +10925,7 @@ export namespace Prisma {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10974,6 +10938,7 @@ export namespace Prisma {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

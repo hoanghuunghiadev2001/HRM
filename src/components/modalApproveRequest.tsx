@@ -6,18 +6,17 @@ import TextArea from "antd/es/input/TextArea";
 import { NumericInput } from "./function";
 import ModalLoading from "./modalLoading";
 
-
 interface ModalApproveRequestProps {
   open: boolean;
   onClose: () => void;
   requestApprove?: RequestLeave;
-  putApprovedRequest: (id: number | string, statusRequest: string) => void
+  putApprovedRequest: (id: number | string, statusRequest: string) => void;
 }
 const ModalApproveRequest = ({
   onClose,
   open,
   requestApprove,
-  putApprovedRequest
+  putApprovedRequest,
 }: ModalApproveRequestProps) => {
   const localUser = getUserFromLocalStorage();
 
@@ -42,47 +41,45 @@ const ModalApproveRequest = ({
     return currentDate && currentDate.isBefore(dayjs().startOf("day"));
   };
 
-  const handleCreateNewRequest = () => {
-    setLoading(true);
-    if (
-      !localUser?.id ||
-      !typeLeave ||
-      !timeStart ||
-      !timeEnd ||
-      !totalHours ||
-      !reason
-    ) {
-      setLoading(false);
-      setMessErr("Vui lòng điền đầy đủ thông tin");
-      return;
-    }
-  };
-
   useEffect(() => {
     setLoading(false);
   }, [open]);
 
-  const dates: Dayjs[] = [dayjs(requestApprove?.startDate ?? '2025-05-20T10:00:00.000Z'), dayjs(requestApprove?.endDate ?? '2025-05-20T10:10:00.000Z')];
+  const dates: Dayjs[] = [
+    dayjs(requestApprove?.startDate ?? "2025-05-20T10:00:00.000Z"),
+    dayjs(requestApprove?.endDate ?? "2025-05-20T10:10:00.000Z"),
+  ];
 
   const rangeValue: [Dayjs, Dayjs] = [dates[0], dates[1]]; // ép kiểu rõ ràng
-
-
 
   return (
     <>
       <Modal
         style={{ top: 20 }}
         title={
-          <p className="text-2xl font-bold text-center">Phê duyệt phiếu yêu cầu</p>
+          <p className="text-2xl font-bold text-center">
+            Phê duyệt phiếu yêu cầu
+          </p>
         }
         // loading={loading}
         open={open}
         onClose={onClose}
         footer={[
-          <Button key="reject" onClick={() => putApprovedRequest(requestApprove?.id ?? '', 'rejected')}>
+          <Button
+            key="reject"
+            onClick={() =>
+              putApprovedRequest(requestApprove?.id ?? "", "rejected")
+            }
+          >
             Từ chối
           </Button>,
-          <Button key="approve" type="primary" onClick={() => putApprovedRequest(requestApprove?.id ?? '', 'approved')}>
+          <Button
+            key="approve"
+            type="primary"
+            onClick={() =>
+              putApprovedRequest(requestApprove?.id ?? "", "approved")
+            }
+          >
             Chấp nhận
           </Button>,
         ]}
@@ -141,7 +138,6 @@ const ModalApproveRequest = ({
               style={{ width: 60 }}
               value={String(requestApprove?.totalHours)}
               onChange={setTotalHours}
-
             />
           </div>
         </div>

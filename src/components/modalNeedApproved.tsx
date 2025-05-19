@@ -4,12 +4,13 @@ import { createStyles, FullToken } from "antd-style";
 import { formatDateTime, StatusLeave } from "./function";
 import { RequestLeave } from "./api";
 import ModalApproveRequest from "./modalApproveRequest";
+import ModalLoading from "./modalLoading";
 
 interface ModalNeedApprovedProps {
   open: boolean;
   onClose: () => void;
   allRequestsApproved: RequestLeave[];
-  putApprovedRequest: (id: number | string, statusRequest: string) => void
+  putApprovedRequest: (id: number | string, statusRequest: string) => void;
 }
 interface DataType {
   key: string;
@@ -45,10 +46,11 @@ const ModalNeedApproved = ({
   onClose,
   open,
   allRequestsApproved,
-  putApprovedRequest
+  putApprovedRequest,
 }: ModalNeedApprovedProps) => {
-  const [approvedRequest, setApproveRequest] = useState(false)
-  const [requestApprove, setRequestApprove] = useState<RequestLeave>()
+  const [approvedRequest, setApproveRequest] = useState(false);
+  const [requestApprove, setRequestApprove] = useState<RequestLeave>();
+  const [loading, setLoading] = useState<boolean>(false);
   const { styles } = useStyle();
 
   const formatted: DataType[] =
@@ -111,19 +113,27 @@ const ModalNeedApproved = ({
   ];
 
   const handleOpenRequest = (msnv: string) => {
-    const requests = allRequestsApproved.find(emp => emp.employee.employeeCode === msnv);
-    setRequestApprove(requests)
-    setApproveRequest(true)
-  }
+    const requests = allRequestsApproved.find(
+      (emp) => emp.employee.employeeCode === msnv
+    );
+    setRequestApprove(requests);
+    setApproveRequest(true);
+  };
 
-  const handlePutApprovedRequest = (id: number | string, stautsRequest: string) => {
+  const handlePutApprovedRequest = (
+    id: number | string,
+    stautsRequest: string
+  ) => {
+    setLoading(true);
     try {
-      putApprovedRequest(id, stautsRequest)
-      setApproveRequest(false)
+      putApprovedRequest(id, stautsRequest);
+      setApproveRequest(false);
+      setLoading(false);
     } catch (err) {
       console.error("Lỗi:", err);
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <>
@@ -135,7 +145,15 @@ const ModalNeedApproved = ({
         width={1000}
         open={open}
       >
-        <ModalApproveRequest onClose={() => { setApproveRequest(false) }} open={approvedRequest} requestApprove={requestApprove} putApprovedRequest={handlePutApprovedRequest} />
+        <ModalLoading isOpen={loading} />
+        <ModalApproveRequest
+          onClose={() => {
+            setApproveRequest(false);
+          }}
+          open={approvedRequest}
+          requestApprove={requestApprove}
+          putApprovedRequest={handlePutApprovedRequest}
+        />
         <Table<DataType>
           className={styles.customTable}
           columns={columns}

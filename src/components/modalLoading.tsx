@@ -20,6 +20,7 @@ const ModalLoading = ({ isOpen }: ModalLoadingProps) => {
       className="!bg-transparent modal-loading z-50"
       centered
       open={isOpen}
+      zIndex={9999999}
     >
       <div className="flex justify-center items-center ">
         <div className="rounded-2xl overflow-hidden">

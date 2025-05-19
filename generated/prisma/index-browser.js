@@ -194,6 +194,7 @@ exports.Prisma.LeaveRequestScalarFieldEnum = {
   reason: 'reason',
   status: 'status',
   approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
   createdAt: 'createdAt'
 };
 
@@ -230,7 +231,8 @@ exports.Prisma.PersonalInfoOrderByRelevanceFieldEnum = {
   education: 'education',
   drivingLicense: 'drivingLicense',
   toyotaCertificate: 'toyotaCertificate',
-  taxCode: 'taxCode'
+  taxCode: 'taxCode',
+  insuranceNumber: 'insuranceNumber'
 };
 
 exports.Prisma.ContactInfoOrderByRelevanceFieldEnum = {
@@ -241,7 +243,10 @@ exports.Prisma.ContactInfoOrderByRelevanceFieldEnum = {
 };
 
 exports.Prisma.OtherInfoOrderByRelevanceFieldEnum = {
-  VCB: 'VCB'
+  documentsChecked: 'documentsChecked',
+  VCB: 'VCB',
+  MTCV: 'MTCV',
+  PNJ: 'PNJ'
 };
 
 exports.Prisma.LeaveRequestOrderByRelevanceFieldEnum = {

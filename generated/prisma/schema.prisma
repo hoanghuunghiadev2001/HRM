@@ -71,33 +71,33 @@ model WorkInfo {
   id              Int       @id @default(autoincrement())
   department      String // Bộ phận
   position        String // Chức vụ
-  specialization  String // Ngành
+  specialization  String? // Ngành
   joinedTBD       DateTime? // Ngày vào TBD
   joinedTeSCC     DateTime? // Ngày vào TeSCC
   seniorityStart  DateTime? // Ngày tính thâm niên
   seniority       Int? // Thâm niên
-  contractNumber  String // Số hợp đồng
-  contractDate    DateTime // Ngày ký hợp đồng
-  contractType    String // Loại hợp đồng
-  contractEndDate DateTime // Ngày hết hạn
+  contractNumber  String? // Số hợp đồng
+  contractDate    DateTime? // Ngày ký hợp đồng
+  contractType    String? // Loại hợp đồng
+  contractEndDate DateTime? // Ngày hết hạn
 
   employeeId Int      @unique
   employee   Employee @relation(fields: [employeeId], references: [id], map: "WorkInfo_employee_fkey")
 }
 
 model PersonalInfo {
-  id                Int      @id @default(autoincrement())
-  identityNumber    String // Số CMND
-  issueDate         DateTime // Ngày cấp
-  issuePlace        String // Nơi cấp
-  hometown          String // Nguyên quán
-  idAddress         String // Địa chỉ theo CMND
+  id                Int       @id @default(autoincrement())
+  identityNumber    String? // Số CMND
+  issueDate         DateTime? // Ngày cấp
+  issuePlace        String? // Nơi cấp
+  hometown          String? // Nguyên quán
+  idAddress         String? // Địa chỉ theo CMND
   education         String? // Trình độ
   drivingLicense    String? // Giấy phép lái xe
   toyotaCertificate String? // Chứng chỉ Toyota
-  taxCode           String // Mã số thuế
-  insuranceNumber   Int // Số sổ BH
-  insuranceSalary   Int // Lương đóng BH
+  taxCode           String? // Mã số thuế
+  insuranceNumber   String? // Số sổ BH
+  insuranceSalary   Int? // Lương đóng BH
 
   employeeId Int      @unique
   employee   Employee @relation(fields: [employeeId], references: [id], map: "PersonalInfo_employee_fkey")
@@ -105,8 +105,8 @@ model PersonalInfo {
 
 model ContactInfo {
   id            Int     @id @default(autoincrement())
-  phoneNumber   String // Số điện thoại
-  relativePhone String // Số điện thoại người thân
+  phoneNumber   String? // Số điện thoại
+  relativePhone String? // Số điện thoại người thân
   companyPhone  String? // Điện thoại công ty
   email         String? // Email
 
@@ -118,11 +118,11 @@ model OtherInfo {
   id               Int        @id @default(autoincrement())
   workStatus       WorkStatus @default(OFFICIAL) // Trạng thái làm việc
   resignedDate     DateTime? // Ngày nghỉ
-  documentsChecked Boolean // Đã kiểm tra hồ sơ
+  documentsChecked String? // Đã kiểm tra hồ sơ
   updatedAt        DateTime? // Thời gian cập nhật
   VCB              String? // Ngân hàng VCB
-  MTCV             Boolean? // MTCV (nếu có thể là hệ thống nội bộ)
-  PNJ              Boolean? // PNJ (tuỳ chỉnh)
+  MTCV             String? // MTCV (nếu có thể là hệ thống nội bộ)
+  PNJ              String? // PNJ (tuỳ chỉnh)
 
   employeeId Int      @unique
   employee   Employee @relation(fields: [employeeId], references: [id], map: "OtherInfo_employee_fkey")
@@ -138,6 +138,7 @@ model LeaveRequest {
   reason     String? // Lý do nghỉ (có thể null)
   status     LeaveStatus   @default(pending) // trạng thái nghỉ việc
   approvedBy String? // Người phê duyệt (có thể null)
+  approvedAt DateTime? // Thời điểm đơn được duyệt (approved/rejected)
 
   // Quan hệ với nhân viên
   employee  Employee @relation(fields: [employeeId], references: [id])

@@ -24,6 +24,7 @@ export default async function handler(
         name: true,
         avatar: true,
         employeeCode: true,
+        role: true,
         workInfo: {
           select: {
             department: true,
