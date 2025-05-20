@@ -172,6 +172,7 @@ export const fetchUser = async () => {
 
       // ✅ Lưu user vào localStorage
       localStorage.setItem("user", JSON.stringify(data));
+      return data;
     } else {
       console.error("Không lấy được dữ liệu user");
     }
@@ -183,33 +184,35 @@ export const fetchUser = async () => {
   return () => controller.abort();
 };
 
-export const getUserFromLocalStorage = () => {
-  if (typeof window === "undefined") {
-    // Chạy trên server, không có localStorage
-    return null;
-  }
+// export const getUserFromLocalStorage = () => {
+//   if (typeof window === "undefined") {
+//     // Chạy trên server, không có localStorage
+//     return null;
+//   }
 
+//   try {
+//     const storedUser = localStorage.getItem("user");
+//     if (!storedUser) return null;
+//     console.log(storedUser);
+
+//     return JSON.parse(storedUser);
+//   } catch {
+//     return null;
+//   }
+// };
+
+export const getUserFromLocalStorage = () => {
+  if (typeof window === "undefined") return null; // chỉ chạy trên trình duyệt
   try {
     const storedUser = localStorage.getItem("user");
     if (!storedUser) return null;
 
     return JSON.parse(storedUser);
-  } catch {
+  } catch (error) {
+    console.error("Lỗi khi lấy user từ localStorage:", error);
     return null;
   }
 };
-
-// export const getUserFromLocalStorage = () => {
-//   try {
-//     const storedUser = localStorage.getItem("user");
-//     if (!storedUser) return null;
-
-//     return JSON.parse(storedUser);
-//   } catch (error) {
-//     console.error("Lỗi khi lấy user từ localStorage:", error);
-//     return null;
-//   }
-// };
 
 export interface AllRequests {
   data: RequestsLeave[];

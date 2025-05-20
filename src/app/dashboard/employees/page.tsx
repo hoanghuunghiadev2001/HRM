@@ -32,6 +32,9 @@ import ModalCreateNewRequest from "@/components/modalCreateNewRequest";
 import { createStyles, FullToken } from "antd-style";
 import ModalNeedApproved from "@/components/modalNeedApproved";
 import ModalAddNewEmployee from "@/components/addNewEmployee";
+import { fetchEmployeeByCode, updateEmployee } from "@/lib/api";
+import { InfoEmployee } from "@/lib/interface";
+import ModalEditEmployee from "@/components/modalEditEmployee";
 
 interface DataType {
   key: string;
@@ -70,10 +73,9 @@ export default function EmployeesPage() {
   const [pageSize, setPageSize] = useState(10);
   const [pageTable, setPageTable] = useState(1);
   const [totalTable, setTotalTable] = useState();
-  const [requestsNeedApprove, setRequestsNeedApprove] = useState<
-    RequestLeave[]
-  >([]);
+  const [infoEmployee, setInfoEmployee] = useState<InfoEmployee>();
   const localUser = getUserFromLocalStorage();
+  const [modalEditEmployee, setModalEditEmployee] = useState<boolean>(false);
 
   const [filterName, setFilterName] = useState("");
   const [filterMSNV, setFilterMSNV] = useState("");
@@ -137,9 +139,12 @@ export default function EmployeesPage() {
       render: (_, record) => (
         <div className="flex gap-2 items-center">
           <img
-            src={record.avatar}
+            src={record.avatar ? record.avatar : "/storage/avt-default.png"}
             alt=""
-            className="h-8 w-8 border-1 border-[#999999] rounded-[50%]"
+            className="h-8 w-8 border-1 border-[#999999] rounded-[50%] flex-shrink-0"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/storage/avt-default.png";
+            }}
           />
           <a className="">{record.name}</a>
         </div>
@@ -167,7 +172,13 @@ export default function EmployeesPage() {
       width: "80px",
       render: (_, record) => (
         <Space size="middle">
-          {/* <a onClick={() => DetailRequetsLeave(record.id)}>chi tiết</a> */}
+          <a
+            onClick={() => {
+              getInforEmployee(record.MSNV);
+            }}
+          >
+            chi tiết
+          </a>
         </Space>
       ),
     },
@@ -183,14 +194,49 @@ export default function EmployeesPage() {
     }
   };
 
+  //Xem thông tin nhân viên api
+  const getInforEmployee = async (employeeCode: string) => {
+    setLoading(true);
+    const res = await fetchEmployeeByCode(employeeCode);
+    if (res.status === 1) {
+      setInfoEmployee(res.data);
+      setModalEditEmployee(true);
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateEmployee = async (
+    employeeCode: string,
+    infoEmployee: any
+  ) => {
+    setLoading(true);
+    const res = await updateEmployee(employeeCode, infoEmployee);
+    if (res.status === 1) {
+      getEmployeeSumary(pageTable, pageSize);
+      setModalEditEmployee(false);
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getEmployeeSumary(pageTable, pageSize);
   }, []);
 
-  //style table scroll
-
   return (
     <div>
+      <ModalLoading isOpen={loading} />
+      <ModalEditEmployee
+        handleUpdateEmployee={handleUpdateEmployee}
+        employeeInfo={infoEmployee}
+        onClose={() => {
+          setModalEditEmployee(false);
+        }}
+        open={modalEditEmployee}
+      />
       <ModalAddNewEmployee
         onClose={() => setModalAddEmployee(false)}
         open={modalAddEmployee}

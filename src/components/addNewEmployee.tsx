@@ -48,21 +48,6 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
 
   const [form] = Form.useForm();
 
-  const onGenderChange = (value: string) => {
-    switch (value) {
-      case "male":
-        form.setFieldsValue({ note: "Hi, man!" });
-        break;
-      case "female":
-        form.setFieldsValue({ note: "Hi, lady!" });
-        break;
-      case "other":
-        form.setFieldsValue({ note: "Hi there!" });
-        break;
-      default:
-    }
-  };
-
   useEffect(() => {
     form.resetFields();
   }, [open]);
@@ -79,7 +64,7 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
         birthDate: formData.birthDate,
         password: "123456",
         role: formData.role,
-        avatarBase64: imageUrl ?? null,
+        avatar: imageUrl ?? null,
 
         workInfo: {
           department: formData.department,
@@ -143,13 +128,11 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
         throw new Error(result.message || "Thêm nhân viên thất bại");
       }
       setLoading(false);
-
-      console.log("✅ Nhân viên được tạo:", result);
       onClose();
       return result;
     } catch (error) {
       setLoading(false);
-      console.error("❌ Lỗi gửi dữ liệu:", error);
+      console.error(" Lỗi gửi dữ liệu:", error);
       throw error;
     }
   };
@@ -318,11 +301,7 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                   label="Giới tính"
                   rules={[{ required: true }]}
                 >
-                  <Select
-                    placeholder="Giới tính"
-                    onChange={onGenderChange}
-                    allowClear
-                  >
+                  <Select placeholder="Giới tính" allowClear>
                     <Option value="MALE">Nam</Option>
                     <Option value="FEMALE">Nữ</Option>
                   </Select>
@@ -332,12 +311,7 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                   label="Vài trò"
                   rules={[{ required: true }]}
                 >
-                  <Select
-                    placeholder="Vài trò"
-                    onChange={onGenderChange}
-                    allowClear
-                    defaultValue={"USER"}
-                  >
+                  <Select placeholder="Vài trò" allowClear>
                     <Option value="ADMIN">ADMIN</Option>
                     <Option value="MANAGER">MANAGER</Option>
                     <Option value="USER">USER</Option>
@@ -349,6 +323,8 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                   rules={[{ required: true }]}
                 >
                   <DatePicker
+                    placeholder="Chọn ngày"
+                    className="w-full"
                     format="DD/MM/YYYY"
                     disabledDate={(current) => {
                       return current && current > maxDate;
@@ -375,6 +351,8 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                   rules={[{ required: true }]}
                 >
                   <DatePicker
+                    placeholder="Chọn ngày"
+                    className="w-full"
                     format="DD/MM/YYYY"
                     disabledDate={(current) => {
                       return current && current > maxDate;
@@ -447,7 +425,6 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                 >
                   <Select
                     placeholder="Bộ phận"
-                    onChange={onGenderChange}
                     allowClear
                     options={[
                       { value: "KD", label: "KD" },
@@ -471,6 +448,8 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                 </Form.Item>
                 <Form.Item name="joinedTBD" label="Ngày vào TBD">
                   <DatePicker
+                    placeholder="Chọn ngày"
+                    className="w-full"
                     format="DD/MM/YYYY"
                     disabledDate={(current) => {
                       return current && current > maxDate;
@@ -479,6 +458,8 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                 </Form.Item>
                 <Form.Item name="joinedTeSCC" label="Ngày vào TeSCC">
                   <DatePicker
+                    placeholder="Chọn ngày"
+                    className="w-full"
                     format="DD/MM/YYYY"
                     disabledDate={(current) => {
                       return current && current > maxDate;
@@ -487,6 +468,8 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                 </Form.Item>
                 <Form.Item name="seniorityStart" label="Ngày tính TN">
                   <DatePicker
+                    placeholder="Chọn ngày"
+                    className="w-full"
                     format="DD/MM/YYYY"
                     onChange={handleDateChange}
                     disabledDate={(current) => {
@@ -517,7 +500,11 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                   <Input />
                 </Form.Item>
                 <Form.Item name="contractEndDate" label="Ngày hết hạn HĐ">
-                  <DatePicker format="DD/MM/YYYY" />
+                  <DatePicker
+                    placeholder="Chọn ngày"
+                    className="w-full"
+                    format="DD/MM/YYYY"
+                  />
                 </Form.Item>
               </div>
               <div className="mb-2 mt-4">
@@ -527,7 +514,6 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                 <Form.Item name="education" label="Trình độ">
                   <Select
                     placeholder="Trình độ"
-                    onChange={onGenderChange}
                     allowClear
                     options={[
                       { value: "TH", label: "Tiểu học" },
@@ -577,7 +563,6 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                 >
                   <Select
                     placeholder="Bộ phận"
-                    onChange={onGenderChange}
                     allowClear
                     options={[
                       { value: "OFFICIAL", label: "Chính thức" },
@@ -587,13 +572,21 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                   ></Select>
                 </Form.Item>
                 <Form.Item name="resignedDate" label="Ngày nghỉ">
-                  <DatePicker format="DD/MM/YYYY" />
+                  <DatePicker
+                    placeholder="Chọn ngày"
+                    className="w-full"
+                    format="DD/MM/YYYY"
+                  />
                 </Form.Item>
                 <Form.Item name="documentsChecked" label="Kiểm tra hồ sơ">
                   <Input />
                 </Form.Item>
                 <Form.Item name="updatedAt" label="Thời gian cập nhật">
-                  <DatePicker format="DD/MM/YYYY" />
+                  <DatePicker
+                    placeholder="Chọn ngày"
+                    className="w-full"
+                    format="DD/MM/YYYY"
+                  />
                 </Form.Item>
                 <Form.Item name="VCB" label="Ngân hàng VCB">
                   <Input />
@@ -618,9 +611,15 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                   </Button>
                 </Space>
               </Form.Item> */}
-              <Form.Item label={null}>
-                <Button type="primary" htmlType="submit">
-                  Submit
+              <Form.Item
+                label={null}
+                className="w-full flex justify-center mt-4"
+              >
+                <Button
+                  htmlType="submit"
+                  className="flex mt-4 relative  gap-2 items-center !h-10 !px-4 rounded-lg !bg-gradient-to-r from-[#c72929] to-[#350000] !text-lg cursor-pointer !text-white !font-semibold"
+                >
+                  Thêm nhân sự
                 </Button>
               </Form.Item>
             </Form>

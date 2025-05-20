@@ -156,7 +156,7 @@ const Profile = ({ dataProfile, updateProfile }: ProfileProps) => {
         >
           {imageUrl ? (
             <img
-              src={"data:image/jpeg;base64," + imageUrl}
+              src={imageUrl ? imageUrl : "/storage/avt-default.png"}
               alt="avatar"
               style={{ width: "145px" }}
               className="rounded-[50%] h-[145px] object-cover"

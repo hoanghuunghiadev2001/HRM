@@ -15,11 +15,9 @@ import { Button, Menu } from "antd";
 import type { MenuProps } from "antd";
 import { redirect, usePathname, useRouter } from "next/navigation";
 import ModalLoading from "@/components/modalLoading";
-import {
-  fetchUser,
-  getUserFromLocalStorage,
-  ProfileInfo,
-} from "@/components/api";
+import { getUserFromLocalStorage, ProfileInfo } from "@/components/api";
+import { useMutation } from "@tanstack/react-query";
+import { logoutApi } from "@/lib/api";
 
 interface User {
   name: string;
@@ -41,8 +39,6 @@ export default function ClientDashboard({
   const [user, setUser] = useState<User | null>(null);
   const [collapsed, setCollapsed] = useState(false);
   const [loading, setLoading] = useState(false);
-  const localUser = getUserFromLocalStorage();
-  const [isMounted, setIsMounted] = useState(false);
 
   const toggleCollapsed = () => setCollapsed(!collapsed);
 
@@ -84,53 +80,59 @@ export default function ClientDashboard({
       return;
     }
     setLoading(true);
-    redirect(e.key);
+    router.push(e.key);
+  };
+  const mutation = useMutation<
+    { success: boolean; message?: string },
+    Error,
+    void
+  >({
+    mutationFn: logoutApi,
+    onSuccess: () => {
+      // alert("Bạn đã đăng xuất thành công!");
+      router.push("/login");
+      setLoading(false);
+    },
+    onError: (error) => {
+      alert("Lỗi đăng xuất: " + (error?.message || ""));
+      setLoading(false);
+    },
+  });
+  const handleLogout = () => {
+    setLoading(true);
+    mutation.mutate();
   };
 
-  const handleLogout = async () => {
-    setLoading(true);
-    const res = await fetch("/api/auth/logout");
-    if (res.ok) {
-      await localStorage.removeItem("user");
-      redirect("/login");
-      setLoading(false);
-    } else {
-      setLoading(false);
-    }
-  };
+  const fetchUser = async () => {
+    const controller = new AbortController();
 
-  useEffect(() => {
-    setLoading(true);
-    const fetchData = async () => {
-      try {
-        await fetchUser(); // nếu cần thì setUser() từ đây
-        setLoading(false);
-      } catch (err) {
-        console.error("Failed to fetch user", err);
-        setLoading(false);
+    try {
+      const res = await fetch("/api/me", { signal: controller.signal });
+      if (res.ok) {
+        const data = await res.json();
+
+        // ✅ Lưu user vào localStorage
+        localStorage.setItem("user", JSON.stringify(data));
+        setUser(data);
+      } else {
+        console.error("Không lấy được dữ liệu user");
       }
-    };
-    fetchData();
-  }, []);
+    } catch (error) {
+      console.error("Lỗi khi gọi API /api/me:", error);
+    } finally {
+    }
+
+    return () => controller.abort();
+  };
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
-
-    if (!user || !token) {
-      router.replace("/login"); // Chuyển sang trang login
-    }
-  }, [router]);
+    setLoading(true);
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     setLoading(false);
   }, [pathname]); // pathname thay đổi thì tắt loading
-
-  useEffect(() => {
-    console.log(localUser);
-
-    setIsMounted(true);
-  }, []);
 
   return (
     <>
@@ -158,18 +160,18 @@ export default function ClientDashboard({
             <p className="text-2xl font-bold text-white">TOYOTA BÌNH DƯƠNG</p>
           </div>
           <div className="flex items-center gap-3">
-            {isMounted && (
-              <p className="text-base font-semibold text-white">
-                Hi!, {localUser?.name}
-              </p>
-            )}
-            {isMounted && (
-              <img
-                src={localUser?.avatar}
-                alt="avatar"
-                className="h-9 w-9 border-2 border-[#c4c4c4] rounded-full object-cover"
-              />
-            )}
+            <p className="text-base font-semibold text-white">
+              Hi!, {user?.name}
+            </p>
+
+            <img
+              src={user?.avatar ? user?.avatar : "/storage/avt-default.png"}
+              alt="avatar"
+              className="h-9 w-9 border-2 border-[#c4c4c4] rounded-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "/storage/avt-default.png";
+              }}
+            />
           </div>
         </div>
         <div className="w-full h-[calc(100vh-60px)] flex">

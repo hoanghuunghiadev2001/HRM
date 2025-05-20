@@ -61,7 +61,7 @@ const useStyle = createStyles((utils) => {
     `,
   };
 });
-export default function request() {
+export default function AllRequestPage() {
   const [allRequestsApproved, setAllRequestsApproved] = useState<AllRequests>();
   const [loading, setLoading] = useState<boolean>(false);
   const [modalDetailLeave, setModalDetailLeave] = useState<boolean>(false);

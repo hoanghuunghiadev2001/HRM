@@ -33,9 +33,16 @@ const ModalDetailLeave = ({
         <p className="text-xl font-bold">Thông tin:</p>
         <div className="flex justify-center mt-2">
           <img
-            src={infoRequetLeave?.employee.avatar}
+            src={
+              infoRequetLeave?.employee.avatar
+                ? infoRequetLeave?.employee.avatar
+                : "/storage/avt-default.png"
+            }
             alt=""
             className="h-[100px] w-[100px] rounded-[50%] object-cover"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/storage/avt-default.png";
+            }}
           />
         </div>
         <div className="pl-4 mt-2">
@@ -97,7 +104,6 @@ const ModalDetailLeave = ({
               value={infoRequetLeave?.reason}
             />
           </div>
-
         </div>
         <div>
           <p className="text-xl font-bold">Kết quả:</p>
@@ -111,12 +117,11 @@ const ModalDetailLeave = ({
             {infoRequetLeave?.approvedBy ? (
               <InfoPersonal
                 titleValue="Người phê duyệt"
-                value={
-                  infoRequetLeave?.approvedBy
-                }
+                value={infoRequetLeave?.approvedBy}
               />
-            ) : ''}
-
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>

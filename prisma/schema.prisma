@@ -65,6 +65,8 @@ model Employee {
   otherInfo    OtherInfo?    @relation()
 
   LeaveRequest LeaveRequest[]
+
+  Attendance Attendance[]
 }
 
 model WorkInfo {
@@ -143,4 +145,16 @@ model LeaveRequest {
   // Quan hệ với nhân viên
   employee  Employee @relation(fields: [employeeId], references: [id])
   createdAt DateTime @default(now()) // <- cần có dòng này
+}
+
+model Attendance {
+  id           Int       @id @default(autoincrement())
+  employeeId   Int
+  date         DateTime
+  checkInTime  DateTime? // giờ vào, có thể null
+  checkOutTime DateTime? // giờ ra, có thể null
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@index([employeeId, date])
 }

@@ -198,6 +198,14 @@ exports.Prisma.LeaveRequestScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.AttendanceScalarFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  date: 'date',
+  checkInTime: 'checkInTime',
+  checkOutTime: 'checkOutTime'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -293,7 +301,8 @@ exports.Prisma.ModelName = {
   PersonalInfo: 'PersonalInfo',
   ContactInfo: 'ContactInfo',
   OtherInfo: 'OtherInfo',
-  LeaveRequest: 'LeaveRequest'
+  LeaveRequest: 'LeaveRequest',
+  Attendance: 'Attendance'
 };
 
 /**
