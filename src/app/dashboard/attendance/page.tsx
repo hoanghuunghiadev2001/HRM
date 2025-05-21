@@ -75,6 +75,8 @@ export default function AttendancePage() {
   const localUser = getUserFromLocalStorage();
   const [filterName, setFilterName] = useState("");
   const [filterMSNV, setFilterMSNV] = useState("");
+  const [filterDepartment, setFilterDepartment] = useState("");
+
   const [timeStart, setTimeStart] = useState("");
   const [timeEnd, setTimeEnd] = useState("");
   const [listAttendance, setListAttendance] = useState<AttendanceResponse>();
@@ -143,11 +145,16 @@ export default function AttendancePage() {
     pageTable: number,
     pageSize: number
   ) => {
+    console.log(localUser.workInfo.department);
+
     setLoading(true);
     const res = await fetchAttendances({
       msnv: filterMSNV,
       name: filterName,
-      deparment: localUser.role === "ADMIN" ? "" : localUser.deparment,
+      department:
+        localUser.role === "ADMIN"
+          ? filterDepartment
+          : localUser.workInfo.department,
       fromDate: timeStart,
       toDate: timeEnd,
       page: pageTable,
@@ -250,8 +257,8 @@ export default function AttendancePage() {
         </p>
       </div>
       <div className="w-full">
-        <div className="flex items-center gap-4 mb-4 w-full mt-4">
-          <p className="font-bold  text-2xl text-[#4a4a6a]">Lọc:</p>
+        <p className="font-bold  text-xl text-[#4a4a6a]">Tìm kiếm:</p>
+        <div className="flex items-center gap-4 mb-4 w-full mt-2 px-4">
           <div className="flex gap-2 items-center">
             <Form.Item label={<p className="font-bold text-[#242424]">MSNV</p>}>
               <Input
@@ -288,6 +295,33 @@ export default function AttendancePage() {
               />
             </Form.Item>
           </div>
+          {localUser?.role === "ADMIN" ? (
+            <div className="!flex gap-2 items-center ">
+              <Form.Item
+                label={<p className="font-bold text-[#242424]">Bộ phận</p>}
+              >
+                <Select
+                  onChange={(e) => setFilterDepartment(e)}
+                  style={{ width: "100px" }}
+                  placeholder={"Bộ phận"}
+                  allowClear
+                  options={[
+                    { value: "KD", label: "KD" },
+                    { value: "SCC", label: "SCC" },
+                    { value: "ĐS", label: "ĐS" },
+                    { value: "HC", label: "HC" },
+                    { value: "CV", label: "CV" },
+                    { value: "PT", label: "PT" },
+                    { value: "KT", label: "KT" },
+                    { value: "IT", label: "IT" },
+                    { value: "CS", label: "CS" },
+                  ]}
+                />
+              </Form.Item>
+            </div>
+          ) : (
+            ""
+          )}
           <button
             className="flex flex-shrink-0 gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
             onClick={() => {

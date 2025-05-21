@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error("Login error:", err);
     return NextResponse.json(
-      { message: "Internal server error" },
+      { message: "Không thể kết nối server" },
       { status: 500 }
     );
   }

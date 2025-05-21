@@ -116,6 +116,7 @@ export default function ClientDashboard({
         setUser(data);
       } else {
         console.error("Không lấy được dữ liệu user");
+        window.location.href = "./login";
       }
     } catch (error) {
       console.error("Lỗi khi gọi API /api/me:", error);
@@ -127,11 +128,11 @@ export default function ClientDashboard({
 
   useEffect(() => {
     setLoading(true);
-    fetchUser();
   }, []);
 
   useEffect(() => {
     setLoading(false);
+    fetchUser();
   }, [pathname]); // pathname thay đổi thì tắt loading
 
   return (
@@ -167,7 +168,7 @@ export default function ClientDashboard({
             <img
               src={user?.avatar ? user?.avatar : "/storage/avt-default.png"}
               alt="avatar"
-              className="h-9 w-9 border-2 border-[#c4c4c4] rounded-full object-cover"
+              className="h-9 w-9 border-2 bg-white border-[#c4c4c4] rounded-full object-cover"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = "/storage/avt-default.png";
               }}

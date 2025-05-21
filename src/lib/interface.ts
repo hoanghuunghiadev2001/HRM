@@ -103,7 +103,7 @@ export interface AttendanceResponse {
 export interface UseAttendanceParams {
   msnv?: string;
   name?: string;
-  deparment?: string;
+  department?: string;
   fromDate?: string; // yyyy-mm-dd
   toDate?: string; // yyyy-mm-dd
   page?: number;
