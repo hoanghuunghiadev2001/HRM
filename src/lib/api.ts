@@ -53,7 +53,7 @@ export const fetchAttendances = async (params: UseAttendanceParams) => {
 
 export async function getEmployeeAddAttendance(params: employeeAddAttendance) {
   try {
-    const res = await axiosClient.get<InfoEmployee>(`/employees`, {
+    const res = await axiosClient.get<InfoEmployee>(`/addAttendance`, {
       params,
     });
     return { status: 1, data: res.data };
