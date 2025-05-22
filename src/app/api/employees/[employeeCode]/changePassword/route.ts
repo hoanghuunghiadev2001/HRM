@@ -1,14 +1,11 @@
-// /app/api/employees/[employeeCode]/changePassword/route.ts
+// app/api/employees/[employeeCode]/changePassword/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyToken } from "@/lib/auth";
 import bcrypt from "bcrypt";
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { employeeCode: string } }
-) {
-  const token = req.cookies.get("token")?.value;
+export async function PATCH(request: NextRequest) {
+  const token = request.cookies.get("token")?.value;
   if (!token) {
     return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
   }
@@ -18,8 +15,10 @@ export async function PATCH(
     return NextResponse.json({ message: "Không có quyền" }, { status: 403 });
   }
 
-  const { employeeCode } = params;
-  const { newPassword } = await req.json();
+  const url = new URL(request.url);
+  const employeeCode = url.pathname.split("/").at(-2); // hoặc dùng regex nếu cần chắc chắn hơn
+
+  const { newPassword } = await request.json();
 
   if (!newPassword || typeof newPassword !== "string") {
     return NextResponse.json(
