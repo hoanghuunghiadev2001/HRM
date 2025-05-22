@@ -24,7 +24,7 @@ function calculateSeniorityDetail(
   return `${years} năm ${months} tháng`;
 }
 
-export function formatDate(date: Date | null | undefined): string | null {
+function formatDate(date: Date | null | undefined): string | null {
   if (!date) return null;
   const d = new Date(date);
   const day = String(d.getDate()).padStart(2, "0");

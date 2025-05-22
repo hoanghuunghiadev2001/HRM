@@ -1,12 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/lib/auth";
-import { formatDate } from "../page/route";
 import { prisma } from "@/lib/prisma";
 
 function getEmployeeCodeFromUrl(urlString: string) {
   const url = new URL(urlString);
   const segments = url.pathname.split("/");
   return segments[segments.length - 1];
+}
+
+function formatDate(date: Date | null | undefined): string | null {
+  if (!date) return null;
+  const d = new Date(date);
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = d.getFullYear();
+  return `${day}/${month}/${year}`;
 }
 
 export async function GET(req: NextRequest) {
