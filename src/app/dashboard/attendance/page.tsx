@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
 
@@ -29,7 +30,6 @@ interface DataType {
 
 const useStyle = createStyles((utils) => {
   const { css, token } = utils;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const antCls = (token as any).antCls || ".ant"; // fallback nếu token.antCls không tồn tại
 
   return {
