@@ -109,3 +109,8 @@ export interface UseAttendanceParams {
   page?: number;
   pageSize?: number;
 }
+
+export interface employeeAddAttendance {
+  employeeCode: string;
+  timeScan: string;
+}

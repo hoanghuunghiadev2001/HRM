@@ -1,6 +1,7 @@
 import { axiosClient } from "./axiosClient";
 import {
   AttendanceResponse,
+  employeeAddAttendance,
   InfoEmployee,
   UseAttendanceParams,
 } from "./interface";
@@ -49,6 +50,18 @@ export const fetchAttendances = async (params: UseAttendanceParams) => {
     return { status: 0 };
   }
 };
+
+export async function getEmployeeAddAttendance(params: employeeAddAttendance) {
+  try {
+    const res = await axiosClient.get<InfoEmployee>(`/employees`, {
+      params,
+    });
+    return { status: 1, data: res.data };
+  } catch (error) {
+    console.error("Lỗi khi lấy nhân viên:", error);
+    return { status: 0 };
+  }
+}
 
 // const fetchUser = async () => {
 //   const controller = new AbortController();
