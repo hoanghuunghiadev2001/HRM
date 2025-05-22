@@ -35,11 +35,22 @@ const ModalCreateNewRequest = ({
   const [reason, setReason] = useState("");
   const [messErr, setMessErr] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [timeStartObj, setTimeStartObj] = useState<dayjs.Dayjs | null>(null);
+  const [timeEndObj, setTimeEndObj] = useState<dayjs.Dayjs | null>(null);
 
   const onChange = (value: any, dateString: any) => {
-    setTimeStart(dateString[0]);
-    setTimeEnd(dateString[1]);
+    if (dateString) {
+      setTimeStartObj(dateString[0]);
+      setTimeEndObj(dateString[1]);
+      setTimeStart(dateString[0].format("DD/MM/YYYY HH:mm:ss")); // để hiển thị
+      setTimeEnd(dateString[1].format("DD/MM/YYYY HH:mm:ss")); // để hiển thị
+    }
   };
+
+  // const onChange = (value: any, dateString: any) => {
+  //   setTimeStart(dateString[0]);
+  //   setTimeEnd(dateString[1]);
+  // };
 
   const disabledDate = (currentDate: dayjs.Dayjs) => {
     // Không cho chọn ngày trước hôm nay (chỉ chọn hôm nay trở đi)
@@ -51,8 +62,8 @@ const ModalCreateNewRequest = ({
     if (
       !localUser?.id ||
       !typeLeave ||
-      !timeStart ||
-      !timeEnd ||
+      !timeStartObj ||
+      !timeEndObj ||
       !totalHours ||
       !reason
     ) {
@@ -63,8 +74,8 @@ const ModalCreateNewRequest = ({
     createRequestLeave(
       localUser?.id,
       typeLeave,
-      dayjs(timeStart, "DD/MM/YYYY HH:mm:ss").toDate().toISOString(),
-      dayjs(timeEnd, "DD/MM/YYYY HH:mm:ss").toDate().toISOString(),
+      timeStartObj!.toISOString(), // dấu "!" nói với TS là: tôi chắc chắn biến này không null
+      timeEndObj!.toISOString(),
       reason,
       totalHours
     );
@@ -156,7 +167,15 @@ const ModalCreateNewRequest = ({
               ],
             }}
             format="DD/MM/YYYY HH:mm:ss"
-            onChange={onChange}
+            onChange={(dates) => {
+              if (dates && dates[0] && dates[1]) {
+                setTimeStartObj(dates[0]);
+                setTimeEndObj(dates[1]);
+              } else {
+                setTimeStartObj(null);
+                setTimeEndObj(null);
+              }
+            }}
           />
         </div>
         <div>

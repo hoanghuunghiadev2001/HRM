@@ -6,6 +6,13 @@ import TextArea from "antd/es/input/TextArea";
 import { NumericInput } from "./function";
 import ModalLoading from "./modalLoading";
 
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+// Kích hoạt plugin
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 interface ModalApproveRequestProps {
   open: boolean;
   onClose: () => void;
@@ -45,12 +52,10 @@ const ModalApproveRequest = ({
     setLoading(false);
   }, [open]);
 
-  const dates: Dayjs[] = [
-    dayjs(requestApprove?.startDate ?? "2025-05-20T10:00:00.000Z"),
-    dayjs(requestApprove?.endDate ?? "2025-05-20T10:10:00.000Z"),
+  const rangeValue: [dayjs.Dayjs, dayjs.Dayjs] = [
+    dayjs.utc(requestApprove?.startDate).tz("Asia/Ho_Chi_Minh"),
+    dayjs.utc(requestApprove?.endDate).tz("Asia/Ho_Chi_Minh"),
   ];
-
-  const rangeValue: [Dayjs, Dayjs] = [dates[0], dates[1]]; // ép kiểu rõ ràng
 
   return (
     <>
@@ -63,7 +68,9 @@ const ModalApproveRequest = ({
         }
         // loading={loading}
         open={open}
+        closable={{ "aria-label": "Close Button" }}
         onClose={onClose}
+        onCancel={onClose}
         footer={[
           <Button
             key="reject"

@@ -116,7 +116,7 @@ export default function ClientDashboard({
         setUser(data);
       } else {
         console.error("Không lấy được dữ liệu user");
-        window.location.href = "./login";
+        window.location.href = "/login";
       }
     } catch (error) {
       console.error("Lỗi khi gọi API /api/me:", error);

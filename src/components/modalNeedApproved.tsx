@@ -5,6 +5,9 @@ import { formatDateTime, StatusLeave } from "./function";
 import { RequestLeave } from "./api";
 import ModalApproveRequest from "./modalApproveRequest";
 import ModalLoading from "./modalLoading";
+import dayjs, { Dayjs } from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 interface ModalNeedApprovedProps {
   open: boolean;
@@ -17,8 +20,8 @@ interface DataType {
   id: number;
   MSNV: string;
   name: string;
-  startDate: string;
-  endDate: string;
+  startDate: any;
+  endDate: any;
   totalHours: string;
   leaveType: string;
   status: string;
@@ -53,6 +56,12 @@ const ModalNeedApproved = ({
   const [loading, setLoading] = useState<boolean>(false);
   const { styles } = useStyle();
 
+  console.log(
+    dayjs("2025-05-21 17:00:00.000")
+      .tz("Asia/Ho_Chi_Minh")
+      .format("hh:mm DD/MM/YYYY")
+  );
+
   const formatted: DataType[] =
     allRequestsApproved?.map((item, index) => ({
       key: (index + 1).toString(),
@@ -60,8 +69,14 @@ const ModalNeedApproved = ({
       MSNV: item.employee.employeeCode,
       name: item.employee.name,
       department: item.employee.workInfo.department,
-      startDate: formatDateTime(item.startDate),
-      endDate: formatDateTime(item.endDate),
+      startDate: dayjs
+        .utc(item?.startDate)
+        .tz("Asia/Ho_Chi_Minh")
+        .format("DD/MM/YYYY HH:mm"),
+      endDate: dayjs
+        .utc(item?.endDate)
+        .tz("Asia/Ho_Chi_Minh")
+        .format("DD/MM/YYYY HH:mm"),
       totalHours: item.totalHours.toString(),
       leaveType: item.leaveType,
       status: item.status,

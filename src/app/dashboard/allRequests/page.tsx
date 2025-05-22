@@ -29,6 +29,13 @@ import { Plus } from "lucide-react";
 import ModalCreateNewRequest from "@/components/modalCreateNewRequest";
 import { createStyles, FullToken } from "antd-style";
 import ModalNeedApproved from "@/components/modalNeedApproved";
+import dayjs, { Dayjs } from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+// Extend plugin
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface DataType {
   key: string;
@@ -139,8 +146,14 @@ export default function AllRequestPage() {
       id: item.id,
       MSNV: item.employee.employeeCode,
       name: item.employee.name,
-      startDate: formatDateTime(item.startDate),
-      endDate: formatDateTime(item.endDate),
+      startDate: dayjs
+        .utc(item?.startDate)
+        .tz("Asia/Ho_Chi_Minh")
+        .format("DD/MM/YYYY HH:mm"),
+      endDate: dayjs
+        .utc(item?.endDate)
+        .tz("Asia/Ho_Chi_Minh")
+        .format("DD/MM/YYYY HH:mm"),
       totalHours: item.totalHours.toString(),
       leaveType: item.leaveType,
       status: item.status,

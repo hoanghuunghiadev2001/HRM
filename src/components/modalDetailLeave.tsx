@@ -4,6 +4,13 @@ import { formatDateTime, StatusLeave } from "./function";
 // import { InfoPersonal } from "@/app/dashboard/page";
 import TextArea from "antd/es/input/TextArea";
 import { InfoPersonal } from "@/app/dashboard/page";
+import dayjs, { Dayjs } from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+// Extend plugin
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface modalDetailLeaveProps {
   open: boolean;
@@ -73,21 +80,17 @@ const ModalDetailLeave = ({
           />
           <InfoPersonal
             titleValue="Bắt đầu"
-            value={
-              formatDateTime(infoRequetLeave?.startDate ?? "").split(" ")[0] +
-              "," +
-              " Ngày " +
-              formatDateTime(infoRequetLeave?.startDate ?? "").split(" ")[1]
-            }
+            value={dayjs
+              .utc(infoRequetLeave?.startDate)
+              .tz("Asia/Ho_Chi_Minh")
+              .format("HH:mm giờ, ngày DD/MM/YYYY")}
           />
           <InfoPersonal
             titleValue="kết thúc"
-            value={
-              formatDateTime(infoRequetLeave?.endDate ?? "").split(" ")[0] +
-              "," +
-              " Ngày " +
-              formatDateTime(infoRequetLeave?.endDate ?? "").split(" ")[1]
-            }
+            value={dayjs
+              .utc(infoRequetLeave?.endDate)
+              .tz("Asia/Ho_Chi_Minh")
+              .format(" HH:mm giờ, ngày DD/MM/YYYY")}
           />
           <InfoPersonal
             titleValue="Tổng thời gian"
