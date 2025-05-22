@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import React from "react";
-import { Form, Input, Pagination, Select, Space, Table } from "antd";
+import { Dropdown, Form, Input, Modal, Pagination, Select, Table } from "antd";
 import type { TableProps } from "antd";
 import {
   EmployeesSumary,
@@ -11,13 +11,20 @@ import {
   getUserFromLocalStorage,
 } from "@/components/api";
 import ModalLoading from "@/components/modalLoading";
-import { PlusIcon } from "lucide-react";
+import { ListCollapse, PlusIcon } from "lucide-react";
 import { createStyles } from "antd-style";
 import ModalAddNewEmployee from "@/components/addNewEmployee";
-import { fetchEmployeeByCode, updateEmployee } from "@/lib/api";
+import {
+  changeEmployeePassword,
+  fetchEmployeeByCode,
+  updateEmployee,
+} from "@/lib/api";
 import { InfoEmployee } from "@/lib/interface";
 import ModalEditEmployee from "@/components/modalEditEmployee";
 import Image from "next/image";
+import { MenuProps } from "antd/lib";
+import { InfoCircleOutlined, LockOutlined } from "@ant-design/icons";
+import ModalChangePassEmployee from "@/components/modalChangePassEmployee";
 
 interface DataType {
   key: string;
@@ -59,10 +66,16 @@ export default function EmployeesPage() {
   const [infoEmployee, setInfoEmployee] = useState<InfoEmployee>();
   const localUser = getUserFromLocalStorage();
   const [modalEditEmployee, setModalEditEmployee] = useState<boolean>(false);
+  const [modalChangePassEmployee, setModalChangePassEmployee] =
+    useState<boolean>(false);
+  const [employeeCodeChoose, setEmployeeCodeChoose] = useState("");
+  const [modal, contextHolder] = Modal.useModal();
 
   const [filterName, setFilterName] = useState("");
   const [filterMSNV, setFilterMSNV] = useState("");
   const [filterDepartment, setDepartment] = useState("");
+
+  const [form] = Form.useForm();
 
   const getEmployeeSumary = async (page: number, pageSize: number) => {
     setLoading(true);
@@ -124,7 +137,7 @@ export default function EmployeesPage() {
           <Image
             src={record.avatar ? record.avatar : "/storage/avt-default.png"}
             alt=""
-            className="h-8 w-8 border-1 border-[#999999] rounded-[50%] flex-shrink-0"
+            className="h-8 w-8 border-1 border-[#999999] rounded-[50%] flex-shrink-0 object-cover"
             onError={(e) => {
               (e.target as HTMLImageElement).src = "/storage/avt-default.png";
             }}
@@ -152,20 +165,42 @@ export default function EmployeesPage() {
       render: (text) => (text === "MALE" ? "Nam" : "Nữ"),
     },
     {
-      title: "Chi tiết",
+      title: "Tùy chọn",
       key: "action",
-      width: "80px",
-      render: (_, record) => (
-        <Space size="middle">
-          <a
-            onClick={() => {
-              getInforEmployee(record.MSNV);
-            }}
-          >
-            chi tiết
-          </a>
-        </Space>
-      ),
+      width: "100px",
+      render: (_, record) => {
+        // Tạo items menu với callback có thể dùng record
+        const items: MenuProps["items"] = [
+          {
+            key: "1",
+            label: "Đổi mật khẩu",
+            icon: <LockOutlined />,
+            onClick: () => {
+              // Ví dụ: bạn dùng record để mở modal đổi mật khẩu của nhân viên này
+              console.log("Mở modal đổi mật khẩu cho MSNV:", record.MSNV);
+              setEmployeeCodeChoose(record.MSNV);
+              setModalChangePassEmployee(true);
+            },
+          },
+          {
+            key: "2",
+            label: "Chi tiết",
+            icon: <InfoCircleOutlined />,
+            onClick: () => getInforEmployee(record.MSNV), // Giả sử bạn tạo state để lưu nhân viên đang thao tác,
+          },
+        ];
+
+        return (
+          <Dropdown menu={{ items }}>
+            <div
+              className="flex items-center gap-3 cursor-pointer justify-center"
+              onClick={(e) => e.preventDefault()}
+            >
+              <ListCollapse className="text-blue-500" />
+            </div>
+          </Dropdown>
+        );
+      },
     },
   ];
 
@@ -207,6 +242,50 @@ export default function EmployeesPage() {
     }
   };
 
+  const countDown = () => {
+    let secondsToGo = 3;
+
+    const instance = modal.success({
+      title: "Đổi mật khẩu thành công",
+    });
+
+    const timer = setInterval(() => {
+      secondsToGo -= 1;
+    }, 1000);
+
+    setTimeout(() => {
+      clearInterval(timer);
+      instance.destroy();
+    }, secondsToGo * 1000);
+  };
+
+  //Đổi mật khẩu cho nhân viên
+  const handleChangePassword = async (newPassword: string) => {
+    setLoading(true);
+    const result = await changeEmployeePassword(
+      employeeCodeChoose,
+      newPassword
+    );
+
+    if (result.status === 1) {
+      setLoading(false);
+      setModalChangePassEmployee(false);
+      countDown();
+    } else {
+      setLoading(false);
+      form.setFields([
+        {
+          name: "newPassword",
+          errors: ["Không thành công"],
+        },
+        {
+          name: "renewPassword",
+          errors: ["Không thành công"],
+        },
+      ]);
+    }
+  };
+
   useEffect(() => {
     getEmployeeSumary(pageTable, pageSize);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -214,6 +293,11 @@ export default function EmployeesPage() {
 
   return (
     <div>
+      <ModalChangePassEmployee
+        handleChangPass={handleChangePassword}
+        onClose={() => setModalChangePassEmployee(false)}
+        open={modalChangePassEmployee}
+      />
       <ModalLoading isOpen={loading} />
       <ModalEditEmployee
         handleUpdateEmployee={handleUpdateEmployee}
@@ -228,7 +312,7 @@ export default function EmployeesPage() {
         open={modalAddEmployee}
       />
       <ModalLoading isOpen={loading} />
-
+      {contextHolder}
       <div className="w-full">
         <p className="font-bold  text-2xl text-[#4a4a6a]">
           Danh sách nhân viên:

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DatePicker, Form, Modal, Select } from "antd";
 import { getUserFromLocalStorage } from "./api";
 import dayjs from "dayjs";
@@ -28,7 +28,7 @@ const ModalCreateNewRequest = ({
 
   // state push api
   const [totalHours, setTotalHours] = useState("");
-  const [typeLeave, setTypeLeave] = useState("");
+  const [typeLeave, setTypeLeave] = useState("PN");
   const [reason, setReason] = useState("");
   const [messErr, setMessErr] = useState("");
   const [timeStartObj, setTimeStartObj] = useState<dayjs.Dayjs | null>(null);
@@ -65,6 +65,15 @@ const ModalCreateNewRequest = ({
       totalHours
     );
   };
+
+  useEffect(() => {
+    setTotalHours("");
+    setTypeLeave("PN");
+    setMessErr("");
+    setReason("");
+    setTimeStartObj(null);
+    setTimeEndObj(null);
+  }, [open]);
 
   return (
     <>

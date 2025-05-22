@@ -114,3 +114,13 @@ export interface employeeAddAttendance {
   employeeCode: string;
   timeScan: string;
 }
+
+export interface interfaceChangePassword {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface ChangePasswordEmployeeParams {
+  employeeCode: string;
+  newPassword: string;
+}

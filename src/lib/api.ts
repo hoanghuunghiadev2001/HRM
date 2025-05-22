@@ -3,6 +3,7 @@ import {
   AttendanceResponse,
   employeeAddAttendance,
   InfoEmployee,
+  interfaceChangePassword,
   UseAttendanceParams,
 } from "./interface";
 
@@ -60,6 +61,37 @@ export async function getEmployeeAddAttendance(params: employeeAddAttendance) {
   } catch (error) {
     console.error("Lỗi khi lấy nhân viên:", error);
     return { status: 0 };
+  }
+}
+
+export async function postchangePassword(params: interfaceChangePassword) {
+  try {
+    const res = await axiosClient.post("/employees/changePassword", params);
+    return { status: 1, data: res.data };
+  } catch (error) {
+    console.error("Lỗi khi đổi mật khẩu:", error);
+    return { status: 0, message: error || "Lỗi hệ thống" };
+  }
+}
+
+export async function changeEmployeePassword(
+  employeeCode: string,
+  newPassword: string
+) {
+  try {
+    const res = await axiosClient.patch(
+      `/employees/${employeeCode}/changePassword`,
+      {
+        newPassword,
+      }
+    );
+    return { status: 1, data: res.data };
+  } catch (error) {
+    console.error("Lỗi khi đổi mật khẩu:", error);
+    return {
+      status: 0,
+      message: error || "Lỗi hệ thống",
+    };
   }
 }
 
