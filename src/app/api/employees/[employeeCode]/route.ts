@@ -138,7 +138,16 @@ export async function PATCH(req: NextRequest) {
     }
 
     const body = await req.json();
-
+    await prisma.employee.update({
+      where: { id: employee.id },
+      data: {
+        avatar: body.avatar,
+        name: body.name,
+        birthDate: body.birthDate,
+        role: body.role,
+        gender: body.gender,
+      },
+    });
     if (body.workInfo) {
       await prisma.workInfo.update({
         where: { employeeId: employee.id },
