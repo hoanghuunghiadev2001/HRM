@@ -30,7 +30,6 @@ export default function AttendanceReportPage() {
   const [dateRange, setDateRange] = useState("month");
   const [department, setDepartment] = useState("all");
   const [groupBy, setGroupBy] = useState("day");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [reportData, setReportData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 

@@ -239,6 +239,7 @@ export default function AllRequestPage() {
   useEffect(() => {
     getApiAllRequestsApproved(pageTable, pageSize);
     getApiAllRequestsNeed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   //style table scroll

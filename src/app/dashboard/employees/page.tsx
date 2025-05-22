@@ -194,7 +194,6 @@ export default function EmployeesPage() {
 
   const handleUpdateEmployee = async (
     employeeCode: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     infoEmployee: any
   ) => {
     setLoading(true);
@@ -210,6 +209,7 @@ export default function EmployeesPage() {
 
   useEffect(() => {
     getEmployeeSumary(pageTable, pageSize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

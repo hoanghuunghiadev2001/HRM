@@ -41,6 +41,7 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
 
   useEffect(() => {
     form.resetFields();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   const onFinish = async (formData: any) => {

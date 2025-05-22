@@ -3,11 +3,14 @@ import { verifyToken } from "@/lib/auth";
 import { formatDate } from "../page/route";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { employeeCode: string } }
-) {
-  const { employeeCode } = params;
+type Context = {
+  params: {
+    employeeCode: string;
+  };
+};
+
+export async function GET(req: NextRequest, context: Context) {
+  const { employeeCode } = context.params;
 
   // 1. Lấy token từ cookie
   const token = req.cookies.get("token")?.value;
@@ -109,11 +112,8 @@ export async function GET(
   }
 }
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { employeeCode: string } }
-) {
-  const { employeeCode } = params;
+export async function PATCH(req: NextRequest, context: Context) {
+  const { employeeCode } = context.params;
   const token = req.cookies.get("token")?.value;
 
   if (!token) {
@@ -224,7 +224,7 @@ export async function PATCH(
             ? new Date(body.otherInfo.resignedDate)
             : undefined,
           documentsChecked: body.otherInfo.documentsChecked,
-          updatedAt: new Date(), // Luôn cập nhật thời gian
+          updatedAt: new Date(),
           VCB: body.otherInfo.VCB,
           MTCV: body.otherInfo.MTCV,
           PNJ: body.otherInfo.PNJ,

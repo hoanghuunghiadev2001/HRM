@@ -187,6 +187,7 @@ export default function AttendancePage() {
 
   useEffect(() => {
     handleFetchAttendances(pageTable, pageSize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   //style table scroll
@@ -222,7 +223,6 @@ export default function AttendancePage() {
       totalHours: item.totalHours,
     })) || [];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const changeDate = (value: any, dateString: any) => {
     setTimeStart(dateString[0]);
     setTimeEnd(dateString[1]);
