@@ -34,7 +34,7 @@ interface InfoPersonalProps {
   onChangeValue?: (value: string | number) => void;
 }
 
-export const InfoPersonal = ({
+const InfoPersonal = ({
   titleValue,
   value,
   canChange,
