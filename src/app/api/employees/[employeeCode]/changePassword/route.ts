@@ -14,7 +14,7 @@ export async function PATCH(
   }
 
   const user = verifyToken(token);
-  if (!user || user.role !== "ADMIN") {
+  if (!user || user.role === "USER") {
     return NextResponse.json({ message: "Không có quyền" }, { status: 403 });
   }
 
