@@ -3,11 +3,11 @@ import { RequestLeave } from "./api";
 import { StatusLeave } from "./function";
 // import { InfoPersonal } from "@/app/dashboard/page";
 import TextArea from "antd/es/input/TextArea";
-import { InfoPersonal } from "@/app/dashboard/page";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import Image from "next/image";
+import InfoPersonal from "./infoPersonal";
 
 // Extend plugin
 dayjs.extend(utc);
