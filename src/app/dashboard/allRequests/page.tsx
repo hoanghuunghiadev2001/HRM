@@ -274,7 +274,11 @@ export default function AllRequestPage() {
             }}
           >
             Phê duyệt
-            <div className="h-8 right-[-15px] top-[-20px] flex justify-center items-center w-8 rounded-[50%] bg-red-600 text-white font-semibold absolute">
+            <div
+              className={`h-8 right-[-15px] top-[-20px] flex justify-center items-center w-8 rounded-[50%] bg-red-600 text-white font-semibold absolute ${
+                requestsNeedApprove.length < 1 ? "hidden" : ""
+              }`}
+            >
               {requestsNeedApprove.length > 99
                 ? "99+"
                 : requestsNeedApprove.length}
