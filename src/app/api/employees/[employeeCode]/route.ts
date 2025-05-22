@@ -3,25 +3,21 @@ import { verifyToken } from "@/lib/auth";
 import { formatDate } from "../page/route";
 import { prisma } from "@/lib/prisma";
 
-type Context = {
-  params: {
-    employeeCode: string;
-  };
-};
+function getEmployeeCodeFromUrl(urlString: string) {
+  const url = new URL(urlString);
+  const segments = url.pathname.split("/");
+  return segments[segments.length - 1];
+}
 
-export async function GET(req: NextRequest, context: Context) {
-  const { employeeCode } = context.params;
+export async function GET(req: NextRequest) {
+  const employeeCode = getEmployeeCodeFromUrl(req.url);
 
-  // 1. Lấy token từ cookie
   const token = req.cookies.get("token")?.value;
-
   if (!token) {
     return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
   }
 
-  // 2. Xác thực token
   const user = verifyToken(token);
-
   if (!user) {
     return NextResponse.json(
       { message: "Token không hợp lệ" },
@@ -29,7 +25,6 @@ export async function GET(req: NextRequest, context: Context) {
     );
   }
 
-  // 3. Phân quyền (chỉ ADMIN hoặc MANAGER được xem)
   if (user.role !== "ADMIN" && user.role !== "MANAGER") {
     return NextResponse.json(
       { message: "Không có quyền truy cập" },
@@ -37,7 +32,6 @@ export async function GET(req: NextRequest, context: Context) {
     );
   }
 
-  // 4. Lấy thông tin nhân viên và định dạng
   try {
     const employee = await prisma.employee.findUnique({
       where: { employeeCode },
@@ -60,7 +54,6 @@ export async function GET(req: NextRequest, context: Context) {
     const formattedEmployee = {
       ...employee,
       birthDate: formatDate(employee.birthDate),
-
       workInfo: employee.workInfo
         ? {
             ...employee.workInfo,
@@ -71,16 +64,13 @@ export async function GET(req: NextRequest, context: Context) {
             contractEndDate: formatDate(employee.workInfo.contractEndDate),
           }
         : null,
-
       personalInfo: employee.personalInfo
         ? {
             ...employee.personalInfo,
             issueDate: formatDate(employee.personalInfo.issueDate),
           }
         : null,
-
       contactInfo: employee.contactInfo ?? null,
-
       otherInfo: employee.otherInfo
         ? {
             ...employee.otherInfo,
@@ -88,21 +78,13 @@ export async function GET(req: NextRequest, context: Context) {
             updatedAt: formatDate(employee.otherInfo.updatedAt),
           }
         : null,
-
-      LeaveRequest: employee.LeaveRequest?.map(
-        (leave: {
-          startDate: Date | null | undefined;
-          endDate: Date | null | undefined;
-          approvedAt: Date | null | undefined;
-          createdAt: Date | null | undefined;
-        }) => ({
-          ...leave,
-          startDate: formatDate(leave.startDate),
-          endDate: formatDate(leave.endDate),
-          approvedAt: formatDate(leave.approvedAt),
-          createdAt: formatDate(leave.createdAt),
-        })
-      ),
+      LeaveRequest: employee.LeaveRequest?.map((leave) => ({
+        ...leave,
+        startDate: formatDate(leave.startDate),
+        endDate: formatDate(leave.endDate),
+        approvedAt: formatDate(leave.approvedAt),
+        createdAt: formatDate(leave.createdAt),
+      })),
     };
 
     return NextResponse.json(formattedEmployee);
@@ -112,8 +94,8 @@ export async function GET(req: NextRequest, context: Context) {
   }
 }
 
-export async function PATCH(req: NextRequest, context: Context) {
-  const { employeeCode } = context.params;
+export async function PATCH(req: NextRequest) {
+  const employeeCode = getEmployeeCodeFromUrl(req.url);
   const token = req.cookies.get("token")?.value;
 
   if (!token) {
@@ -127,8 +109,6 @@ export async function PATCH(req: NextRequest, context: Context) {
       { status: 401 }
     );
   }
-
-  const body = await req.json();
 
   try {
     const employee = await prisma.employee.findUnique({
@@ -149,7 +129,8 @@ export async function PATCH(req: NextRequest, context: Context) {
       );
     }
 
-    // Cập nhật WorkInfo nếu có
+    const body = await req.json();
+
     if (body.workInfo) {
       await prisma.workInfo.update({
         where: { employeeId: employee.id },
@@ -179,7 +160,6 @@ export async function PATCH(req: NextRequest, context: Context) {
       });
     }
 
-    // Cập nhật PersonalInfo nếu có
     if (body.personalInfo) {
       await prisma.personalInfo.update({
         where: { employeeId: employee.id },
@@ -201,7 +181,6 @@ export async function PATCH(req: NextRequest, context: Context) {
       });
     }
 
-    // Cập nhật ContactInfo nếu có
     if (body.contactInfo) {
       await prisma.contactInfo.update({
         where: { employeeId: employee.id },
@@ -214,7 +193,6 @@ export async function PATCH(req: NextRequest, context: Context) {
       });
     }
 
-    // Cập nhật OtherInfo nếu có
     if (body.otherInfo) {
       await prisma.otherInfo.update({
         where: { employeeId: employee.id },
