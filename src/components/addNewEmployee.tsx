@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import {
   Button,
@@ -8,19 +9,14 @@ import {
   Input,
   message,
   Select,
-  Space,
-  Table,
-  TableProps,
   Upload,
   UploadProps,
 } from "antd";
-import { createStyles, FullToken } from "antd-style";
-import { formatDateTime, StatusLeave } from "./function";
-import { EmployeeCreateData, RequestLeave } from "./api";
-import ModalApproveRequest from "./modalApproveRequest";
+
 import ModalLoading from "./modalLoading";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
+import Image from "next/image";
 
 interface ModalAddNewEmployeeProps {
   open: boolean;
@@ -30,7 +26,6 @@ interface ModalAddNewEmployeeProps {
 const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
   const [imageUrl, setImageUrl] = useState<string>();
   const [loading, setLoading] = useState(false);
-  const [newEmployeeData, setNewEmployeeData] = useState<EmployeeCreateData>();
   const [seniorityText, setSeniorityText] = useState<string>("");
   type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -40,10 +35,6 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
   const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
-  };
-
-  const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
   };
 
   const [form] = Form.useForm();
@@ -273,7 +264,7 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                     onChange={handleChange}
                   >
                     {imageUrl ? (
-                      <img
+                      <Image
                         src={imageUrl}
                         alt="avatar"
                         style={{ width: "145px" }}

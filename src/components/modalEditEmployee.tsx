@@ -11,19 +11,17 @@ import {
   Upload,
   UploadProps,
 } from "antd";
-import { createStyles, FullToken } from "antd-style";
-import { formatDateTime, StatusLeave } from "./function";
-import { EmployeeCreateData, RequestLeave } from "./api";
-import ModalApproveRequest from "./modalApproveRequest";
 import ModalLoading from "./modalLoading";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { InfoEmployee } from "@/lib/interface";
+import Image from "next/image";
 
 interface ModalEditEmployeeProps {
   open: boolean;
   onClose: () => void;
   employeeInfo?: InfoEmployee;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleUpdateEmployee: (employeeCode: string, infoEmployee: any) => void;
 }
 
@@ -46,12 +44,9 @@ const ModalEditEmployee = ({
     wrapperCol: { span: 16 },
   };
 
-  const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
-  };
-
   const [form] = Form.useForm();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onFinish = async (formData: any) => {
     // Convert avatar File -> base64 nếu có
     // Chuẩn hóa object gửi đi
@@ -205,6 +200,7 @@ const ModalEditEmployee = ({
     },
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const normFile = (e: any) => {
     if (Array.isArray(e)) {
       return e;
@@ -289,6 +285,7 @@ const ModalEditEmployee = ({
 
       form.setFieldsValue(transformEmployeeDataToFormData(employeeInfo));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   return (
@@ -333,7 +330,7 @@ const ModalEditEmployee = ({
                     onChange={handleChange}
                   >
                     {imageUrl ? (
-                      <img
+                      <Image
                         src={imageUrl}
                         alt="avatar"
                         style={{ width: "145px" }}

@@ -28,6 +28,7 @@ export function requireAuth(
       return res.status(403).json({ message: `Forbidden ${user.role}` });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (req as any).user = user;
 
     return handler(req, res);

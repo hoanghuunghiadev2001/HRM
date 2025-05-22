@@ -1,38 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
 
 import React from "react";
-import {
-  DatePicker,
-  Form,
-  Input,
-  message,
-  Pagination,
-  Select,
-  Space,
-  Table,
-  Tag,
-} from "antd";
+import { DatePicker, Form, Input, Pagination, Select, Table } from "antd";
 import type { TableProps } from "antd";
-import {
-  AllRequests,
-  approveLeaveRequest,
-  fetchLeaveRequests,
-  getApiAllRequestsNeedApprove,
-  getUserFromLocalStorage,
-  ListRequestLeave,
-  RequestLeave,
-} from "@/components/api";
+import { getUserFromLocalStorage } from "@/components/api";
 import ModalLoading from "@/components/modalLoading";
-import { formatDateTime, StatusLeave } from "@/components/function";
-import ModalDetailLeave from "@/components/modalDetailLeave";
-import { Plus } from "lucide-react";
-import ModalCreateNewRequest from "@/components/modalCreateNewRequest";
-import { createStyles, FullToken } from "antd-style";
-import ModalNeedApproved from "@/components/modalNeedApproved";
+import { formatDateTime } from "@/components/function";
+import { createStyles } from "antd-style";
 import dayjs from "dayjs";
 import { fetchAttendances } from "@/lib/api";
 import { AttendanceResponse } from "@/lib/interface";
+import Image from "next/image";
 
 interface DataType {
   key: string;
@@ -91,7 +71,7 @@ export default function AttendancePage() {
       dataIndex: "key",
       rowScope: "row",
       width: "60px",
-      render: (_, record) => <p>{_}</p>,
+      render: (_) => <p>{_}</p>,
     },
     {
       title: "MSNV",
@@ -105,7 +85,7 @@ export default function AttendancePage() {
       key: "employeeName",
       render: (_, record) => (
         <div className="flex items-center gap-2">
-          <img
+          <Image
             src={record.avatar ? record.avatar : "/storage/avt-default.png"}
             alt="avt"
             className="h-8 w-8 rounded-[50%]"

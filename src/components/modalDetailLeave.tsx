@@ -7,6 +7,7 @@ import { InfoPersonal } from "@/app/dashboard/page";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import Image from "next/image";
 
 // Extend plugin
 dayjs.extend(utc);
@@ -39,7 +40,7 @@ const ModalDetailLeave = ({
       <div>
         <p className="text-xl font-bold">Thông tin:</p>
         <div className="flex justify-center mt-2">
-          <img
+          <Image
             src={
               infoRequetLeave?.employee.avatar
                 ? infoRequetLeave?.employee.avatar

@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import {
-  Button,
   Form,
   GetProp,
   Input,
@@ -10,11 +9,12 @@ import {
   Upload,
   UploadProps,
 } from "antd";
-import { LoadingOutlined, PlusOutlined, SyncOutlined } from "@ant-design/icons";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Send } from "lucide-react";
 import { fetchUser, ProfileInfo } from "@/components/api";
 import { formatCurrency } from "@/components/function";
 import ModalLoading from "@/components/modalLoading";
+import Image from "next/image";
 
 // interface ProfileProps {
 //   dataProfile?: ProfileInfo;
@@ -216,7 +216,7 @@ const Profile = () => {
           onChange={handleChange}
         >
           {imageUrl ? (
-            <img
+            <Image
               src={imageUrl ? imageUrl : "/storage/avt-default.png"}
               alt="avatar"
               style={{ width: "145px" }}

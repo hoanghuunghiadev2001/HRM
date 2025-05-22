@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState, useMemo } from "react";
 import { Treemap, ResponsiveContainer, Tooltip } from "recharts";
@@ -125,7 +126,7 @@ export function DepartmentDistribution({ departmentData: initialData = [] }) {
   };
 
   const CustomizedContent = (props: any) => {
-    const { root, depth, x, y, width, height, index, name, size } = props;
+    const { depth, x, y, width, height, name, size } = props;
 
     return (
       <g>

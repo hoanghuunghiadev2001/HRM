@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -10,7 +11,6 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AttendanceOverview } from "@/components/attendance-overview";
-import { LeaveRequestsChart } from "@/components/leave-requests-chart";
 import { EmployeeStatusChart } from "@/components/employee-status-chart";
 import { DepartmentDistribution } from "@/components/department-distribution";
 import { RecentLeaveRequests } from "@/components/recent-leave-requests";

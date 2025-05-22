@@ -1,17 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import type React from "react";
 
 import { useState, useEffect } from "react";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
 
 interface EmailScheduleModalProps {
   open: boolean;
@@ -22,7 +15,6 @@ interface EmailScheduleModalProps {
 
 export function EmailScheduleModal({
   open,
-  onOpenChange,
   schedule,
   onSave,
 }: EmailScheduleModalProps) {

@@ -20,8 +20,8 @@ export interface WorkInfo {
   position: string;
   specialization: string;
   joinedTBD: string;
-  joinedTeSCC: any;
-  seniorityStart: any;
+  joinedTeSCC: string;
+  seniorityStart: string;
   seniority: number;
   contractNumber: string;
   contractDate: string;
@@ -38,8 +38,8 @@ export interface PersonalInfo {
   hometown: string;
   idAddress: string;
   education: string;
-  drivingLicense: any;
-  toyotaCertificate: any;
+  drivingLicense: string;
+  toyotaCertificate: string;
   taxCode: string;
   insuranceNumber: string;
   insuranceSalary: number;
@@ -50,7 +50,7 @@ export interface ContactInfo {
   id: number;
   phoneNumber: string;
   relativePhone: string;
-  companyPhone: any;
+  companyPhone: string;
   email: string;
   employeeId: number;
 }
@@ -58,12 +58,12 @@ export interface ContactInfo {
 export interface OtherInfo {
   id: number;
   workStatus: string;
-  resignedDate: any;
+  resignedDate: string;
   documentsChecked: string;
-  updatedAt: any;
-  VCB: any;
-  MTCV: any;
-  PNJ: any;
+  updatedAt: string;
+  VCB: string;
+  MTCV: string;
+  PNJ: string;
   employeeId: number;
 }
 
@@ -77,7 +77,7 @@ export interface LeaveRequest {
   reason: string;
   status: string;
   approvedBy: string;
-  approvedAt: any;
+  approvedAt: string;
   createdAt: string;
 }
 export interface Attendance {

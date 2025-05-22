@@ -19,7 +19,7 @@ export default async function DashboardLayout({
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as { role: string };
       isAdmin = decoded.role;
-    } catch (err) {
+    } catch {
       // Nếu token sai hoặc hết hạn, có thể xử lý redirect bằng middleware
       redirect("/login");
     }

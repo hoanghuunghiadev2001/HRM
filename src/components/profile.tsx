@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { ProfileInfo } from "./api";
 import { GetProp, Input, message, Upload, UploadProps } from "antd";
-import { LoadingOutlined, PlusOutlined, SyncOutlined } from "@ant-design/icons";
-import ModalLoading from "./modalLoading";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Send } from "lucide-react";
 import { formatCurrency } from "./function";
+import Image from "next/image";
 
 interface ProfileProps {
   dataProfile?: ProfileInfo;
@@ -126,22 +126,6 @@ const Profile = ({ dataProfile, updateProfile }: ProfileProps) => {
     setEmail(dataProfile?.contactInfo.email);
   }, [dataProfile]);
 
-  const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-  };
-
-  const validateMessages = {
-    required: "${label} is required!",
-    types: {
-      email: "${label} is not a valid email!",
-      number: "${label} is not a valid number!",
-    },
-    number: {
-      range: "${label} must be between ${min} and ${max}",
-    },
-  };
-
   return (
     <div className="flex flex-col items-center w-full">
       <div className="mt-3 ">
@@ -155,7 +139,7 @@ const Profile = ({ dataProfile, updateProfile }: ProfileProps) => {
           onChange={handleChange}
         >
           {imageUrl ? (
-            <img
+            <Image
               src={imageUrl ? imageUrl : "/storage/avt-default.png"}
               alt="avatar"
               style={{ width: "145px" }}

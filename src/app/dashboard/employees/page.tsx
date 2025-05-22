@@ -1,40 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
 
 import React from "react";
-import {
-  Form,
-  Input,
-  message,
-  Pagination,
-  Select,
-  Space,
-  Table,
-  Tag,
-} from "antd";
+import { Form, Input, Pagination, Select, Space, Table } from "antd";
 import type { TableProps } from "antd";
 import {
-  AllRequests,
-  approveLeaveRequest,
   EmployeesSumary,
   fetchEmployeeSummary,
-  fetchLeaveRequests,
-  getApiAllRequestsNeedApprove,
   getUserFromLocalStorage,
-  ListRequestLeave,
-  RequestLeave,
 } from "@/components/api";
 import ModalLoading from "@/components/modalLoading";
-import { formatDateTime, StatusLeave } from "@/components/function";
-import ModalDetailLeave from "@/components/modalDetailLeave";
-import { Plus, PlusIcon } from "lucide-react";
-import ModalCreateNewRequest from "@/components/modalCreateNewRequest";
-import { createStyles, FullToken } from "antd-style";
-import ModalNeedApproved from "@/components/modalNeedApproved";
+import { PlusIcon } from "lucide-react";
+import { createStyles } from "antd-style";
 import ModalAddNewEmployee from "@/components/addNewEmployee";
 import { fetchEmployeeByCode, updateEmployee } from "@/lib/api";
 import { InfoEmployee } from "@/lib/interface";
 import ModalEditEmployee from "@/components/modalEditEmployee";
+import Image from "next/image";
 
 interface DataType {
   key: string;
@@ -125,7 +108,7 @@ export default function EmployeesPage() {
       dataIndex: "key",
       rowScope: "row",
       width: "60px",
-      render: (_, record) => <p>{_}</p>,
+      render: (_) => <p>{_}</p>,
     },
     {
       title: "MSNV",
@@ -138,7 +121,7 @@ export default function EmployeesPage() {
       key: "name",
       render: (_, record) => (
         <div className="flex gap-2 items-center">
-          <img
+          <Image
             src={record.avatar ? record.avatar : "/storage/avt-default.png"}
             alt=""
             className="h-8 w-8 border-1 border-[#999999] rounded-[50%] flex-shrink-0"
@@ -209,6 +192,7 @@ export default function EmployeesPage() {
 
   const handleUpdateEmployee = async (
     employeeCode: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     infoEmployee: any
   ) => {
     setLoading(true);

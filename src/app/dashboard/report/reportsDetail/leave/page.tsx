@@ -25,28 +25,8 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { LeaveRequestsChart } from "@/components/leave-requests-chart";
-import { format } from "date-fns";
-import { vi } from "date-fns/locale";
 import dayjs from "dayjs";
 import quarterOfYear from "dayjs/plugin/quarterOfYear";
-
-// Định nghĩa các interface cho dữ liệu
-interface LeaveRequest {
-  id: number;
-  employeeId: number;
-  employee: {
-    employeeCode: string;
-    name: string;
-    workInfo?: {
-      department?: string;
-    };
-  };
-  leaveType: string;
-  startDate: string;
-  endDate: string;
-  totalHours: number;
-  status: "approved" | "rejected" | "pending";
-}
 
 interface LeaveTypeStats {
   type: string;
@@ -190,16 +170,6 @@ export default function LeaveReportPage() {
     fetchLeaveReport();
   }, [dateRange, department]);
 
-  // Hàm format ngày tháng
-  const formatDate = (dateString: string) => {
-    try {
-      const date = new Date(dateString);
-      return format(date, "dd/MM/yyyy", { locale: vi });
-    } catch (error) {
-      return dateString;
-    }
-  };
-
   // Hàm lấy tên loại phép
   const getLeaveTypeName = (type: string): string => {
     const typeNames: Record<string, string> = {
@@ -211,16 +181,6 @@ export default function LeaveReportPage() {
       PB: "Phép bệnh",
     };
     return typeNames[type] || type;
-  };
-
-  // Hàm lấy trạng thái đơn
-  const getStatusName = (status: string): string => {
-    const statusNames: Record<string, string> = {
-      approved: "Đã duyệt",
-      rejected: "Từ chối",
-      pending: "Chờ duyệt",
-    };
-    return statusNames[status] || status;
   };
 
   // Hiển thị trạng thái loading

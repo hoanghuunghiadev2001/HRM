@@ -1,11 +1,9 @@
-import axios from "axios";
 import { axiosClient } from "./axiosClient";
 import {
   AttendanceResponse,
   InfoEmployee,
   UseAttendanceParams,
 } from "./interface";
-import { useQuery } from "@tanstack/react-query";
 
 export async function logoutApi(): Promise<{
   success: boolean;
@@ -52,27 +50,27 @@ export const fetchAttendances = async (params: UseAttendanceParams) => {
   }
 };
 
-const fetchUser = async () => {
-  const controller = new AbortController();
+// const fetchUser = async () => {
+//   const controller = new AbortController();
 
-  try {
-    const res = await fetch("/api/me", { signal: controller.signal });
-    if (res.ok) {
-      const data = await res.json();
+//   try {
+//     const res = await fetch("/api/me", { signal: controller.signal });
+//     if (res.ok) {
+//       const data = await res.json();
 
-      // ✅ Lưu user vào localStorage
-      localStorage.setItem("user", JSON.stringify(data));
-      return data;
-    } else {
-      console.error("Không lấy được dữ liệu user");
-    }
-  } catch (error) {
-    console.error("Lỗi khi gọi API /api/me:", error);
-  } finally {
-  }
+//       // ✅ Lưu user vào localStorage
+//       localStorage.setItem("user", JSON.stringify(data));
+//       return data;
+//     } else {
+//       console.error("Không lấy được dữ liệu user");
+//     }
+//   } catch (error) {
+//     console.error("Lỗi khi gọi API /api/me:", error);
+//   } finally {
+//   }
 
-  return () => controller.abort();
-};
+//   return () => controller.abort();
+// };
 
 // export function useAttendances(params: UseAttendanceParams, anable: boolean) {
 //   // Đặt default page=1, pageSize=20 nếu không có params truyền vào

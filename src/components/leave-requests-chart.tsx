@@ -43,7 +43,6 @@ interface LeaveRequestsChartProps {
 export function LeaveRequestsChart({ leaveTypeData }: LeaveRequestsChartProps) {
   const [leaveData, setLeaveData] = useState<ChartData[]>([]);
   const [loading, setLoading] = useState(leaveTypeData === undefined);
-  const [viewType, setViewType] = useState("type");
 
   // Dữ liệu mẫu khi API chưa trả về kết quả - định nghĩa bên ngoài useEffect
   const sampleData = useMemo<ChartData[]>(
@@ -134,8 +133,8 @@ export function LeaveRequestsChart({ leaveTypeData }: LeaveRequestsChartProps) {
     innerRadius,
     outerRadius,
     percent,
-    index,
-  }: any) => {
+  }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  any) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
