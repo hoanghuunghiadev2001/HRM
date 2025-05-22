@@ -89,6 +89,8 @@ export default function AttendancePage() {
             src={record.avatar ? record.avatar : "/storage/avt-default.png"}
             alt="avt"
             className="h-8 w-8 rounded-[50%]"
+            width={32}
+            height={32}
           />
           <a>{record.employeeName}</a>
         </div>

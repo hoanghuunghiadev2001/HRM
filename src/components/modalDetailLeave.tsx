@@ -41,6 +41,8 @@ const ModalDetailLeave = ({
         <p className="text-xl font-bold">Thông tin:</p>
         <div className="flex justify-center mt-2">
           <Image
+            width={100}
+            height={100}
             src={
               infoRequetLeave?.employee.avatar
                 ? infoRequetLeave?.employee.avatar

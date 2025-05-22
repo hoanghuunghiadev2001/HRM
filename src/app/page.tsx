@@ -87,7 +87,13 @@ export default function Login() {
         /> */}
         <div className="w-[350px] rounded-2xl shadow-form-login bg-[#ffffff80] z-50 relative px-10 flex flex-col items-center pb-5">
           <div className="flex items-center pt-4 gap-3 font-bold">
-            <Image src="/storage/logo-toyota.png" alt="" className="w-24 " />
+            <Image
+              width={96}
+              height={90}
+              src="/storage/logo-toyota.png"
+              alt=""
+              className="w-24 "
+            />
             <div className="flex-shrink-0">
               <p className="text-xl">TOYOTA</p>
               <p className="text-xl">BÌNH DƯƠNG</p>

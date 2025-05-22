@@ -144,6 +144,8 @@ const Profile = ({ dataProfile, updateProfile }: ProfileProps) => {
               alt="avatar"
               style={{ width: "145px" }}
               className="rounded-[50%] h-[145px] object-cover"
+              width={145}
+              height={145}
             />
           ) : (
             uploadButton

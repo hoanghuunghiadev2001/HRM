@@ -157,6 +157,8 @@ export default function ClientDashboard({
               src="/storage/logo-toyota.png"
               alt="logo"
               className="w-14 invert-100"
+              width={56}
+              height={50}
             />
             <p className="text-2xl font-bold text-white">TOYOTA BÌNH DƯƠNG</p>
           </div>
@@ -172,6 +174,8 @@ export default function ClientDashboard({
               onError={(e) => {
                 (e.target as HTMLImageElement).src = "/storage/avt-default.png";
               }}
+              width={36}
+              height={36}
             />
           </div>
         </div>

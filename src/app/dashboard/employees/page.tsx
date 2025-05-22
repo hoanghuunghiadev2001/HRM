@@ -128,6 +128,8 @@ export default function EmployeesPage() {
             onError={(e) => {
               (e.target as HTMLImageElement).src = "/storage/avt-default.png";
             }}
+            width={32}
+            height={32}
           />
           <a className="">{record.name}</a>
         </div>
