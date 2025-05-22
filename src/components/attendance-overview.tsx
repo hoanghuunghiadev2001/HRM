@@ -37,7 +37,6 @@ interface AttendanceData {
 export function AttendanceOverview() {
   const [timeRange, setTimeRange] = useState("week");
   const [attendanceData, setAttendanceData] = useState<AttendanceData[]>([]);
-  const [loading, setLoading] = useState(true);
 
   // Dữ liệu mẫu khi API chưa trả về kết quả - định nghĩa bên ngoài useEffect
   const sampleData = useMemo<AttendanceData[]>(
@@ -95,6 +94,7 @@ export function AttendanceOverview() {
 
         // Xử lý dữ liệu từ API để hiển thị trên biểu đồ
         if (data && data.stats && data.stats.dailyStats) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const formattedData = data.stats.dailyStats.map((day: any) => ({
             name: new Date(day.date).toLocaleDateString("vi-VN", {
               weekday: "short",
@@ -113,7 +113,6 @@ export function AttendanceOverview() {
         // Sử dụng dữ liệu mẫu nếu API lỗi
         setAttendanceData(timeRange === "week" ? sampleData : monthlyData);
       } finally {
-        setLoading(false);
       }
     }
 

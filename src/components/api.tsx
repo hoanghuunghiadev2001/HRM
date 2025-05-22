@@ -126,7 +126,7 @@ export interface WorkInfo {
 export interface OtherInfo {
   id: number;
   workStatus: string;
-  resignedDate: any;
+  resignedDate: string;
   documentsChecked: string;
   updatedAt: string;
   VCB: string;
@@ -231,7 +231,7 @@ export interface RequestsLeave {
   totalHours: number;
   reason: string;
   status: string;
-  approvedBy: any;
+  approvedBy: string;
   createdAt: string;
   employee: Employee;
 }

@@ -4,12 +4,12 @@ import {
   InfoCircleOutlined,
   LockOutlined,
   PoweroffOutlined,
-  SyncOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { Button, Checkbox, CheckboxProps, Input, Tooltip } from "antd";
 import ModalLoading from "@/components/modalLoading";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function LoginClient() {
   const [employeeCode, setEmployeeCode] = useState("");
@@ -68,7 +68,7 @@ export default function LoginClient() {
         /> */}
         <div className="w-[350px] rounded-2xl shadow-form-login bg-[#ffffff80] z-50 relative px-10 flex flex-col items-center pb-5">
           <div className="flex items-center pt-4 gap-3 font-bold">
-            <img src="/storage/logo-toyota.png" alt="" className="w-24 " />
+            <Image src="/storage/logo-toyota.png" alt="" className="w-24 " />
             <div className="flex-shrink-0">
               <p className="text-xl">TOYOTA</p>
               <p className="text-xl">BÌNH DƯƠNG</p>

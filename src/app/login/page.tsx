@@ -15,8 +15,8 @@ export default async function LoginPage() {
     try {
       jwt.verify(token, JWT_SECRET);
       redirect("/dashboard");
-    } catch (err) {
-      // token invalid → tiếp tục hiển thị form login
+    } catch {
+      redirect("/login");
     }
   }
 

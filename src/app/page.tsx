@@ -3,9 +3,6 @@ import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import "../app/globals.css";
 
-import { GetServerSideProps } from "next";
-import jwt from "jsonwebtoken";
-import { parse } from "cookie";
 import {
   InfoCircleOutlined,
   LockOutlined,
@@ -15,8 +12,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Checkbox, CheckboxProps, Input, Tooltip } from "antd";
 import ModalLoading from "@/components/modalLoading";
-
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+import Image from "next/image";
 
 // export
 
@@ -91,7 +87,7 @@ export default function Login() {
         /> */}
         <div className="w-[350px] rounded-2xl shadow-form-login bg-[#ffffff80] z-50 relative px-10 flex flex-col items-center pb-5">
           <div className="flex items-center pt-4 gap-3 font-bold">
-            <img src="/storage/logo-toyota.png" alt="" className="w-24 " />
+            <Image src="/storage/logo-toyota.png" alt="" className="w-24 " />
             <div className="flex-shrink-0">
               <p className="text-xl">TOYOTA</p>
               <p className="text-xl">BÌNH DƯƠNG</p>
