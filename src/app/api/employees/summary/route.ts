@@ -1,25 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { PrismaClient, Prisma } from "../../../../../generated/prisma";
 
+const prisma = new PrismaClient();
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
 
-    const role = searchParams.get("role") || "MANAGER";
+    const role = searchParams.get("role") || "USER";
     const department = searchParams.get("department") || "";
     const name = searchParams.get("name") || "";
     const employeeCode = searchParams.get("employeeCode") || "";
     const page = parseInt(searchParams.get("page") || "1", 10);
     const pageSize = parseInt(searchParams.get("pageSize") || "10", 10);
-
+    if (role === "USER") {
+      return NextResponse.json(
+        { message: "Bạn không có quyền truy cập" },
+        { status: 401 }
+      );
+    }
     // Bộ lọc chung
-    const whereFilter: any = {
+    const whereFilter: Prisma.EmployeeWhereInput = {
       AND: [
         name
           ? {
               name: {
                 contains: name,
-                mode: "insensitive", // Tìm không phân biệt hoa thường
               },
             }
           : {},
@@ -27,7 +32,7 @@ export async function GET(req: NextRequest) {
           ? {
               employeeCode: {
                 contains: employeeCode,
-                mode: "insensitive",
+                // mode: "insensitive",
               },
             }
           : {},

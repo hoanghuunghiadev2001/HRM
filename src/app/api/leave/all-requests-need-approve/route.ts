@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "../../../../../generated/prisma";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(req: NextRequest) {
@@ -7,16 +8,20 @@ export async function GET(req: NextRequest) {
     const role = url.searchParams.get("role");
     const department = url.searchParams.get("department");
 
-    const whereClause: any = {
-      status: "pending",
-      employee: {
-        workInfo: {},
-      },
-    };
+    const employeeFilter: Prisma.EmployeeWhereInput = {};
 
     if ((role === "MANAGER" || role === "ADMIN") && department) {
-      whereClause.employee.workInfo.department = department;
+      employeeFilter.workInfo = {
+        is: {
+          department,
+        },
+      };
     }
+
+    const whereClause: Prisma.LeaveRequestWhereInput = {
+      status: "pending",
+      employee: employeeFilter,
+    };
 
     const pendingRequests = await prisma.leaveRequest.findMany({
       where: whereClause,

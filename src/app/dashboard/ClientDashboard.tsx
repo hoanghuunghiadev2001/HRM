@@ -13,11 +13,11 @@ import {
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Button, Menu } from "antd";
 import type { MenuProps } from "antd";
-import { redirect, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import ModalLoading from "@/components/modalLoading";
-import { getUserFromLocalStorage, ProfileInfo } from "@/components/api";
 import { useMutation } from "@tanstack/react-query";
 import { logoutApi } from "@/lib/api";
+import Image from "next/image";
 
 interface User {
   name: string;
@@ -153,7 +153,7 @@ export default function ClientDashboard({
                 <MenuFoldOutlined className="text-2xl" />
               )}
             </Button>
-            <img
+            <Image
               src="/storage/logo-toyota.png"
               alt="logo"
               className="w-14 invert-100"
@@ -165,7 +165,7 @@ export default function ClientDashboard({
               Hi!, {user?.name}
             </p>
 
-            <img
+            <Image
               src={user?.avatar ? user?.avatar : "/storage/avt-default.png"}
               alt="avatar"
               className="h-9 w-9 border-2 bg-white border-[#c4c4c4] rounded-full object-cover"

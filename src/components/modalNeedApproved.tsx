@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Drawer, Space, Table, TableProps } from "antd";
-import { createStyles, FullToken } from "antd-style";
-import { formatDateTime, StatusLeave } from "./function";
+import { createStyles } from "antd-style";
 import { RequestLeave } from "./api";
 import ModalApproveRequest from "./modalApproveRequest";
 import ModalLoading from "./modalLoading";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+
+// Extend plugin
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface ModalNeedApprovedProps {
   open: boolean;
@@ -20,14 +23,15 @@ interface DataType {
   id: number;
   MSNV: string;
   name: string;
-  startDate: any;
-  endDate: any;
+  startDate: string;
+  endDate: string;
   totalHours: string;
   leaveType: string;
   status: string;
 }
 const useStyle = createStyles((utils) => {
   const { css, token } = utils;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const antCls = (token as any).antCls || ".ant"; // fallback nếu token.antCls không tồn tại
 
   return {

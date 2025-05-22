@@ -2,16 +2,7 @@
 import { useEffect, useState } from "react";
 
 import React from "react";
-import {
-  Form,
-  Input,
-  message,
-  Pagination,
-  Select,
-  Space,
-  Table,
-  Tag,
-} from "antd";
+import { Form, Input, Pagination, Select, Space, Table } from "antd";
 import type { TableProps } from "antd";
 import {
   AllRequests,
@@ -19,17 +10,14 @@ import {
   fetchLeaveRequests,
   getApiAllRequestsNeedApprove,
   getUserFromLocalStorage,
-  ListRequestLeave,
   RequestLeave,
 } from "@/components/api";
 import ModalLoading from "@/components/modalLoading";
-import { formatDateTime, StatusLeave } from "@/components/function";
+import { StatusLeave } from "@/components/function";
 import ModalDetailLeave from "@/components/modalDetailLeave";
-import { Plus } from "lucide-react";
-import ModalCreateNewRequest from "@/components/modalCreateNewRequest";
-import { createStyles, FullToken } from "antd-style";
+import { createStyles } from "antd-style";
 import ModalNeedApproved from "@/components/modalNeedApproved";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 
@@ -50,9 +38,9 @@ interface DataType {
 }
 
 const useStyle = createStyles((utils) => {
-  const { css, token } = utils;
-  const antCls = (token as any).antCls || ".ant"; // fallback nếu token.antCls không tồn tại
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { css, token } = utils as { css: any; token: { antCls?: string } };
+  const antCls = token.antCls || ".ant";
   return {
     customTable: css`
       ${antCls}-table {
@@ -166,7 +154,7 @@ export default function AllRequestPage() {
       dataIndex: "key",
       rowScope: "row",
       width: "60px",
-      render: (_, record) => <p>{_}</p>,
+      render: (_) => <p>{_}</p>,
     },
     {
       title: "MSNV",

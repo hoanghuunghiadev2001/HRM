@@ -1,17 +1,30 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { Prisma } from "../../../../../generated/prisma";
+
+// Định nghĩa kiểu dữ liệu cho record có include employee
+type AttendanceWithEmployee = Awaited<
+  ReturnType<typeof prisma.attendance.findFirst>
+> & {
+  employee: {
+    id: number;
+    name: string;
+    employeeCode: string;
+    workInfo: {
+      department: string | null;
+    } | null;
+  };
+};
 
 export async function GET(request: Request) {
   try {
-    // Get query parameters
     const { searchParams } = new URL(request.url);
     const startDate = searchParams.get("startDate");
     const endDate = searchParams.get("endDate");
     const employeeId = searchParams.get("employeeId");
     const department = searchParams.get("department");
 
-    // Build where clause
-    const where: any = {};
+    const where: Prisma.AttendanceWhereInput = {}; // 👈 Đây là chỗ duy nhất còn dùng `any` vì Prisma chưa hỗ trợ strongly-typed `where` phức tạp (có thể dùng Zod nếu muốn chắc chắn hơn).
 
     if (startDate && endDate) {
       where.date = {
@@ -32,8 +45,7 @@ export async function GET(request: Request) {
       where.employeeId = Number.parseInt(employeeId);
     }
 
-    // If department is specified, we need to join with employee and workInfo
-    let attendanceData;
+    let attendanceData: AttendanceWithEmployee[] = [];
 
     if (department) {
       attendanceData = await prisma.attendance.findMany({
@@ -44,14 +56,12 @@ export async function GET(request: Request) {
               id: true,
               name: true,
               employeeCode: true,
-              workInfo: true, // nếu cần
-              // không include password
+              workInfo: true,
             },
           },
         },
       });
 
-      // Filter by department after fetching
       attendanceData = attendanceData.filter(
         (record) => record.employee.workInfo?.department === department
       );
@@ -64,15 +74,13 @@ export async function GET(request: Request) {
               id: true,
               name: true,
               employeeCode: true,
-              workInfo: true, // nếu cần
-              // không include password
+              workInfo: true,
             },
           },
         },
       });
     }
 
-    // Calculate statistics
     const stats = calculateAttendanceStats(attendanceData);
 
     return NextResponse.json({
@@ -88,62 +96,77 @@ export async function GET(request: Request) {
   }
 }
 
-function calculateAttendanceStats(attendanceData: any[]) {
-  // Group by date
-  const groupedByDate = attendanceData.reduce((acc, record) => {
+type DailyStat = {
+  date: string;
+  onTime: number;
+  late: number;
+  absent: number;
+  total: number;
+};
+
+type AttendanceStats = {
+  dailyStats: DailyStat[];
+  summary: {
+    onTime: number;
+    late: number;
+    absent: number;
+    total: number;
+  };
+};
+
+function calculateAttendanceStats(
+  data: AttendanceWithEmployee[]
+): AttendanceStats {
+  const groupedByDate: Record<string, AttendanceWithEmployee[]> = {};
+
+  for (const record of data) {
     const dateStr = record.date.toISOString().split("T")[0];
-    if (!acc[dateStr]) {
-      acc[dateStr] = [];
+    if (!groupedByDate[dateStr]) {
+      groupedByDate[dateStr] = [];
     }
-    acc[dateStr].push(record);
-    return acc;
-  }, {} as Record<string, any[]>);
+    groupedByDate[dateStr].push(record);
+  }
 
-  // Calculate stats for each date
-  let dailyStats = Object.entries(groupedByDate).map(([date, records]) => {
-    const typedRecords = records as any[]; // 👈 ép kiểu ở đây
-
-    const onTime = typedRecords.filter(
-      (r) => r.checkInTime && new Date(r.checkInTime).getHours() < 8
-    ).length;
-    console.log(
-      typedRecords.filter(
+  const dailyStats: DailyStat[] = Object.entries(groupedByDate).map(
+    ([date, records]) => {
+      const onTime = records.filter(
         (r) => r.checkInTime && new Date(r.checkInTime).getHours() < 8
-      ).length
-    );
+      ).length;
 
-    const late = typedRecords.filter(
-      (r) => r.checkInTime && new Date(r.checkInTime).getHours() >= 8
-    ).length;
+      const late = records.filter(
+        (r) => r.checkInTime && new Date(r.checkInTime).getHours() >= 8
+      ).length;
 
-    const absent = typedRecords.filter((r) => !r.checkInTime).length;
+      const absent = records.filter((r) => !r.checkInTime).length;
 
-    return {
-      date,
-      onTime,
-      late,
-      absent,
-      total: typedRecords.length,
-    };
-  });
+      return {
+        date,
+        onTime,
+        late,
+        absent,
+        total: records.length,
+      };
+    }
+  );
 
-  // 👉 Sort từ ngày bé đến ngày lớn
-  dailyStats = dailyStats.sort(
+  dailyStats.sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+  );
+
+  const summary = dailyStats.reduce(
+    (acc, day) => {
+      acc.onTime += day.onTime;
+      acc.late += day.late;
+      acc.absent += day.absent;
+      acc.total += day.total;
+      return acc;
+    },
+    { onTime: 0, late: 0, absent: 0, total: 0 }
   );
 
   return {
     dailyStats,
-    summary: dailyStats.reduce(
-      (acc, day) => {
-        acc.onTime += day.onTime;
-        acc.late += day.late;
-        acc.absent += day.absent;
-        acc.total += day.total;
-        return acc;
-      },
-      { onTime: 0, late: 0, absent: 0, total: 0 }
-    ),
+    summary,
   };
 }
 
@@ -152,7 +175,6 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { employeeId, date, checkInTime, checkOutTime } = body;
 
-    // Validate required fields
     if (!employeeId || !date) {
       return NextResponse.json(
         { error: "Employee ID and date are required" },
@@ -160,22 +182,21 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check if record already exists
+    const parsedEmployeeId = Number.parseInt(employeeId);
+    const parsedDate = new Date(date);
+
     const existingRecord = await prisma.attendance.findFirst({
       where: {
-        employeeId: Number.parseInt(employeeId),
-        date: new Date(date),
+        employeeId: parsedEmployeeId,
+        date: parsedDate,
       },
     });
 
     let attendance;
 
     if (existingRecord) {
-      // Update existing record
       attendance = await prisma.attendance.update({
-        where: {
-          id: existingRecord.id,
-        },
+        where: { id: existingRecord.id },
         data: {
           checkInTime: checkInTime
             ? new Date(checkInTime)
@@ -186,11 +207,10 @@ export async function POST(request: Request) {
         },
       });
     } else {
-      // Create new record
       attendance = await prisma.attendance.create({
         data: {
-          employeeId: Number.parseInt(employeeId),
-          date: new Date(date),
+          employeeId: parsedEmployeeId,
+          date: parsedDate,
           checkInTime: checkInTime ? new Date(checkInTime) : null,
           checkOutTime: checkOutTime ? new Date(checkOutTime) : null,
         },

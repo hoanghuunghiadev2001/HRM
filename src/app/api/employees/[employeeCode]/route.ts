@@ -149,18 +149,6 @@ export async function PATCH(
       );
     }
 
-    // Cập nhật bảng chính Employee
-    const updatedEmployee = await prisma.employee.update({
-      where: { employeeCode },
-      data: {
-        name: body.name,
-        avatar: body.avatar,
-        gender: body.gender,
-        birthDate: body.birthDate ? new Date(body.birthDate) : undefined,
-        role: body.role,
-      },
-    });
-
     // Cập nhật WorkInfo nếu có
     if (body.workInfo) {
       await prisma.workInfo.update({

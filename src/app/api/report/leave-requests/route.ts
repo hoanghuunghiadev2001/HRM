@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { LeaveStatus, LeaveTypeEnum } from "../../../../../generated/prisma";
+import {
+  LeaveStatus,
+  LeaveTypeEnum,
+  Prisma,
+} from "../../../../../generated/prisma";
 
+// [GET] Lấy danh sách đơn nghỉ có phân trang + lọc
 export async function GET(request: Request) {
   try {
-    // Get query parameters
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status") as LeaveStatus | null;
     const type = searchParams.get("type") as LeaveTypeEnum | null;
@@ -15,73 +19,48 @@ export async function GET(request: Request) {
     const page = Number.parseInt(searchParams.get("page") || "1");
     const skip = (page - 1) * limit;
 
-    // Build where clause
-    const where: any = {};
+    // Tạo điều kiện lọc dữ liệu
+    const where: Prisma.LeaveRequestWhereInput = {};
 
-    if (status) {
-      where.status = status;
-    }
+    if (status) where.status = status;
+    if (type) where.leaveType = type;
+    if (employeeId) where.employeeId = Number.parseInt(employeeId);
 
-    if (type) {
-      where.leaveType = type;
-    }
-
-    if (employeeId) {
-      where.employeeId = Number.parseInt(employeeId);
-    }
-
-    // Date filtering
+    // Lọc theo khoảng thời gian nếu có
     if (startDate || endDate) {
       where.OR = [];
 
       if (startDate && endDate) {
-        // Requests that overlap with the date range
         where.OR.push({
-          startDate: {
-            lte: new Date(endDate),
-          },
-          endDate: {
-            gte: new Date(startDate),
-          },
+          startDate: { lte: new Date(endDate) },
+          endDate: { gte: new Date(startDate) },
         });
       } else if (startDate) {
-        // Requests that end on or after startDate
-        where.OR.push({
-          endDate: {
-            gte: new Date(startDate),
-          },
-        });
+        where.OR.push({ endDate: { gte: new Date(startDate) } });
       } else if (endDate) {
-        // Requests that start on or before endDate
-        where.OR.push({
-          startDate: {
-            lte: new Date(endDate),
-          },
-        });
+        where.OR.push({ startDate: { lte: new Date(endDate) } });
       }
     }
 
-    // Get leave requests with employee info
+    // Truy vấn dữ liệu đơn nghỉ kèm nhân viên
     const leaveRequests = await prisma.leaveRequest.findMany({
       where,
       include: {
         employee: {
           include: {
-            workInfo: true,
+            workInfo: true, // Lấy thông tin phòng ban, chức vụ
           },
         },
       },
-      orderBy: {
-        createdAt: "desc",
-      },
+      orderBy: { createdAt: "desc" },
       skip,
       take: limit,
     });
 
-    // Get total count for pagination
+    // Tổng số bản ghi
     const total = await prisma.leaveRequest.count({ where });
 
-    // Calculate statistics
+    // Thống kê tổng hợp
     const stats = await calculateLeaveStats();
 
     return NextResponse.json({
@@ -103,24 +82,21 @@ export async function GET(request: Request) {
   }
 }
 
+// Hàm tính toán thống kê đơn nghỉ
 async function calculateLeaveStats() {
-  // Get counts by leave type
+  // Thống kê theo loại nghỉ
   const leaveTypeStats = await prisma.leaveRequest.groupBy({
     by: ["leaveType"],
-    _count: {
-      id: true,
-    },
+    _count: { id: true },
   });
 
-  // Get counts by status
+  // Thống kê theo trạng thái
   const statusStats = await prisma.leaveRequest.groupBy({
     by: ["status"],
-    _count: {
-      id: true,
-    },
+    _count: { id: true },
   });
 
-  // Get monthly counts for the current year
+  // Thống kê theo tháng trong năm hiện tại
   const currentYear = new Date().getFullYear();
   const startOfYear = new Date(currentYear, 0, 1);
   const endOfYear = new Date(currentYear, 11, 31);
@@ -140,22 +116,18 @@ async function calculateLeaveStats() {
     },
   });
 
-  // Group by month
-  const monthlyStats = Array(12)
-    .fill(0)
-    .map((_, i) => ({
-      month: i + 1,
-      count: 0,
-      hours: 0,
-    }));
+  // Mảng lưu thống kê theo tháng
+  const monthlyStats = Array.from({ length: 12 }, (_, i) => ({
+    month: i + 1,
+    count: 0,
+    hours: 0,
+  }));
 
-  monthlyLeaves.forEach(
-    (leave: { startDate: string | number | Date; totalHours: any }) => {
-      const month = new Date(leave.startDate).getMonth();
-      monthlyStats[month].count++;
-      monthlyStats[month].hours += leave.totalHours || 0;
-    }
-  );
+  monthlyLeaves.forEach((leave) => {
+    const month = new Date(leave.startDate).getMonth();
+    monthlyStats[month].count++;
+    monthlyStats[month].hours += leave.totalHours || 0;
+  });
 
   return {
     byType: leaveTypeStats,
@@ -164,13 +136,14 @@ async function calculateLeaveStats() {
   };
 }
 
+// [POST] Tạo đơn xin nghỉ mới
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { employeeId, leaveType, startDate, endDate, totalHours, reason } =
       body;
 
-    // Validate required fields
+    // Kiểm tra dữ liệu đầu vào
     if (!employeeId || !leaveType || !startDate || !endDate) {
       return NextResponse.json(
         {
@@ -181,7 +154,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create leave request
+    // Tạo đơn nghỉ
     const leaveRequest = await prisma.leaveRequest.create({
       data: {
         employeeId: Number.parseInt(employeeId),
@@ -205,19 +178,17 @@ export async function POST(request: Request) {
   }
 }
 
-// Helper function to calculate hours between dates (excluding weekends)
-function calculateHours(startDate: Date, endDate: Date) {
+// Tính số giờ nghỉ giữa 2 ngày (trừ cuối tuần)
+function calculateHours(startDate: Date, endDate: Date): number {
   let hours = 0;
-  const currentDate = new Date(startDate);
+  const current = new Date(startDate);
 
-  while (currentDate <= endDate) {
-    // Skip weekends (0 = Sunday, 6 = Saturday)
-    const day = currentDate.getDay();
+  while (current <= endDate) {
+    const day = current.getDay();
     if (day !== 0 && day !== 6) {
-      hours += 8; // Assuming 8-hour workday
+      hours += 8; // 8 tiếng mỗi ngày làm việc
     }
-
-    currentDate.setDate(currentDate.getDate() + 1);
+    current.setDate(current.getDate() + 1);
   }
 
   return hours;

@@ -2,20 +2,16 @@
 import { useEffect, useState } from "react";
 
 import React from "react";
-import { message, Space, Table, Tag } from "antd";
+import { message, Space, Table } from "antd";
 import type { TableProps } from "antd";
-import {
-  getUserFromLocalStorage,
-  ListRequestLeave,
-  RequestLeave,
-} from "@/components/api";
+import { ListRequestLeave, RequestLeave } from "@/components/api";
 import ModalLoading from "@/components/modalLoading";
-import { formatDateTime, StatusLeave } from "@/components/function";
+import { StatusLeave } from "@/components/function";
 import ModalDetailLeave from "@/components/modalDetailLeave";
 import { Plus } from "lucide-react";
 import ModalCreateNewRequest from "@/components/modalCreateNewRequest";
-import { createStyles, FullToken } from "antd-style";
-import dayjs, { Dayjs } from "dayjs";
+import { createStyles } from "antd-style";
+import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 
@@ -27,8 +23,8 @@ interface DataType {
   key: string;
   id: number;
   name: string;
-  startDate: any;
-  endDate: any;
+  startDate: string;
+  endDate: string;
   totalHours: string;
   leaveType: string;
   status: string;
@@ -36,6 +32,7 @@ interface DataType {
 
 const useStyle = createStyles((utils) => {
   const { css, token } = utils;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const antCls = (token as any).antCls || ".ant"; // fallback nếu token.antCls không tồn tại
 
   return {

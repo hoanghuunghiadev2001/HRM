@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { LeaveStatus, Prisma } from "../../../../../generated/prisma";
 
 export async function GET(req: NextRequest) {
   try {
@@ -13,40 +14,47 @@ export async function GET(req: NextRequest) {
     const name = searchParams.get("name");
     const status = searchParams.get("status");
 
-    // Điều kiện lọc cơ bản
-    const baseWhere: any = {
-      status: {
-        in: ["approved", "rejected"],
-      },
-      employee: {
-        workInfo: {},
-      },
+    const employeeFilter: Prisma.EmployeeWhereInput = {
+      workInfo: {},
     };
 
-    // Lọc theo trạng thái nếu có
-    if (status) {
-      baseWhere.status = status;
+    const defaultStatusFilter: Prisma.EnumLeaveStatusFilter = {
+      in: [LeaveStatus.approved, LeaveStatus.rejected],
+    };
+
+    let statusFilter: LeaveStatus | Prisma.EnumLeaveStatusFilter =
+      defaultStatusFilter;
+
+    if (
+      status === LeaveStatus.approved ||
+      status === LeaveStatus.rejected ||
+      status === LeaveStatus.pending
+    ) {
+      statusFilter = status as LeaveStatus;
     }
 
     if (employeeCode) {
-      baseWhere.employee.employeeCode = {
+      employeeFilter.employeeCode = {
         contains: employeeCode,
-        // mode: "insensitive" không dùng cho nested relation
       };
     }
 
     if (name) {
-      baseWhere.employee.name = {
+      employeeFilter.name = {
         contains: name,
-        // mode: "insensitive" không dùng cho nested relation
       };
     }
 
-    if (role === "MANAGER" && department) {
-      baseWhere.employee.workInfo.department = department;
-    } else if (role === "ADMIN" && department) {
-      baseWhere.employee.workInfo.department = department;
+    if ((role === "MANAGER" || role === "ADMIN") && department) {
+      employeeFilter.workInfo = {
+        department,
+      };
     }
+
+    const baseWhere: Prisma.LeaveRequestWhereInput = {
+      status: statusFilter,
+      employee: employeeFilter,
+    };
 
     const [processedRequests, total] = await Promise.all([
       prisma.leaveRequest.findMany({

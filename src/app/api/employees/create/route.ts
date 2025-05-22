@@ -12,9 +12,16 @@ export const config = {
 };
 
 // Hàm parse ngày bắt buộc, throw lỗi nếu thiếu hoặc sai định dạng
-function parseDateRequired(dateStr: any, fieldName: string): Date {
-  if (!dateStr) {
+function parseDateRequired(dateStr: unknown, fieldName: string): Date {
+  if (dateStr === null || dateStr === undefined) {
     throw new Error(`Missing required date field: ${fieldName}`);
+  }
+  if (
+    typeof dateStr !== "string" &&
+    typeof dateStr !== "number" &&
+    !(dateStr instanceof Date)
+  ) {
+    throw new Error(`Invalid type for date field: ${fieldName}`);
   }
   const d = new Date(dateStr);
   if (isNaN(d.getTime())) {
@@ -24,8 +31,15 @@ function parseDateRequired(dateStr: any, fieldName: string): Date {
 }
 
 // Hàm parse ngày nullable (có thể null)
-function parseDateNullable(dateStr: any): Date | null {
-  if (!dateStr) return null;
+function parseDateNullable(dateStr: unknown): Date | null {
+  if (dateStr === null || dateStr === undefined) return null;
+  if (
+    typeof dateStr !== "string" &&
+    typeof dateStr !== "number" &&
+    !(dateStr instanceof Date)
+  ) {
+    return null;
+  }
   const d = new Date(dateStr);
   return isNaN(d.getTime()) ? null : d;
 }
@@ -190,10 +204,10 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(newEmployee, { status: 201 });
-  } catch (error: any) {
+  } catch (error) {
     console.error("❌ Internal Error:", error);
     return NextResponse.json(
-      { message: error.message || "Failed to create employee" },
+      { message: "Failed to create employee" },
       { status: 500 }
     );
   }

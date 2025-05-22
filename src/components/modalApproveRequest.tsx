@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button, DatePicker, Form, Modal, Select } from "antd";
-import { getUserFromLocalStorage, RequestLeave } from "./api";
-import dayjs, { Dayjs } from "dayjs";
+import { RequestLeave } from "./api";
+import dayjs from "dayjs";
 import TextArea from "antd/es/input/TextArea";
 import { NumericInput } from "./function";
-import ModalLoading from "./modalLoading";
 
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -25,32 +24,12 @@ const ModalApproveRequest = ({
   requestApprove,
   putApprovedRequest,
 }: ModalApproveRequestProps) => {
-  const localUser = getUserFromLocalStorage();
-
   const { RangePicker } = DatePicker;
-
-  // state push api
-  const [totalHours, setTotalHours] = useState("");
-  const [typeLeave, setTypeLeave] = useState("");
-  const [timeStart, setTimeStart] = useState("");
-  const [timeEnd, setTimeEnd] = useState("");
-  const [reason, setReason] = useState("");
-  const [messErr, setMessErr] = useState("");
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const onChange = (value: any, dateString: any) => {
-    setTimeStart(dateString[0]);
-    setTimeEnd(dateString[1]);
-  };
 
   const disabledDate = (currentDate: dayjs.Dayjs) => {
     // Không cho chọn ngày trước hôm nay (chỉ chọn hôm nay trở đi)
     return currentDate && currentDate.isBefore(dayjs().startOf("day"));
   };
-
-  useEffect(() => {
-    setLoading(false);
-  }, [open]);
 
   const rangeValue: [dayjs.Dayjs, dayjs.Dayjs] = [
     dayjs.utc(requestApprove?.startDate).tz("Asia/Ho_Chi_Minh"),
@@ -127,7 +106,6 @@ const ModalApproveRequest = ({
             <Select
               value={requestApprove?.leaveType}
               disabled
-              onChange={(e) => setTypeLeave(e)}
               options={[
                 { value: "PN", label: "PN-Phép năm" },
                 { value: "NB", label: "NB-Nghỉ bù" },
@@ -144,7 +122,8 @@ const ModalApproveRequest = ({
             <NumericInput
               style={{ width: 60 }}
               value={String(requestApprove?.totalHours)}
-              onChange={setTotalHours}
+              onChange={() => {}}
+              disable
             />
           </div>
         </div>
@@ -162,7 +141,7 @@ const ModalApproveRequest = ({
             }}
             format="DD/MM/YYYY HH:mm:ss"
             value={rangeValue}
-            onChange={onChange}
+            disabled
           />
         </div>
         <div>
@@ -172,14 +151,10 @@ const ModalApproveRequest = ({
           <TextArea
             rows={4}
             placeholder="Nhập lý do"
-            onChange={(e) => {
-              setReason(e.target.value);
-            }}
             value={requestApprove?.reason}
             disabled={true}
           />
         </div>
-        <p className="text-center text-sm italic text-red-600">{messErr}</p>
       </Modal>
     </>
   );

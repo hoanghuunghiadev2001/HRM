@@ -92,7 +92,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(formattedEmployee);
   } catch (error) {
     return NextResponse.json(
-      { message: "Token không hợp lệ" },
+      { message: "Token không hợp lệ" + error },
       { status: 401 }
     );
   }

@@ -63,7 +63,7 @@ export async function GET(req: NextRequest) {
     };
 
     return NextResponse.json(formattedEmployee);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { message: "Token không hợp lệ" },
       { status: 401 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "../../../../generated/prisma";
 
 function parseDate(dateStr?: string): Date | undefined {
   if (!dateStr) return undefined;
@@ -52,7 +53,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Điều kiện lọc nhân viên
-    const employeeWhere: any = {};
+    const employeeWhere: Prisma.EmployeeWhereInput = {};
     if (msnv) employeeWhere.employeeCode = { contains: msnv };
     if (name) employeeWhere.name = { contains: name };
     if (department) {
@@ -64,13 +65,18 @@ export async function GET(req: NextRequest) {
     }
 
     // Điều kiện lọc attendance
-    const attendanceWhere: any = {};
+    const attendanceWhere: Prisma.AttendanceWhereInput = {};
     if (fromDate) attendanceWhere.date = { gte: fromDate };
-    if (toDate)
+    if (fromDate && toDate) {
       attendanceWhere.date = {
-        ...(attendanceWhere.date || {}),
+        gte: fromDate,
         lte: toDate,
       };
+    } else if (fromDate) {
+      attendanceWhere.date = { gte: fromDate };
+    } else if (toDate) {
+      attendanceWhere.date = { lte: toDate };
+    }
 
     // Lấy tất cả attendance thỏa điều kiện với employee info
     // Không phân trang để tính tổng số bản ghi sau khi group theo employeeId + date

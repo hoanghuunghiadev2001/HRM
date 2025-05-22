@@ -1,10 +1,10 @@
 // /lib/middleware/requireAuth.ts
-import { NextRequest, NextResponse, NextFetchEvent } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
-export async function requireAuth(req: NextRequest, event: NextFetchEvent) {
+export async function requireAuth(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
 
   if (!token) {

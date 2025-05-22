@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { DatePicker, Form, Modal, Select } from "antd";
-import { getUserFromLocalStorage, RequestLeave } from "./api";
+import { getUserFromLocalStorage } from "./api";
 import dayjs from "dayjs";
 import TextArea from "antd/es/input/TextArea";
 import { NumericInput } from "./function";
-import ModalLoading from "./modalLoading";
 
 interface ModalCreateNewRequestProps {
   open: boolean;
@@ -30,22 +29,10 @@ const ModalCreateNewRequest = ({
   // state push api
   const [totalHours, setTotalHours] = useState("");
   const [typeLeave, setTypeLeave] = useState("");
-  const [timeStart, setTimeStart] = useState("");
-  const [timeEnd, setTimeEnd] = useState("");
   const [reason, setReason] = useState("");
   const [messErr, setMessErr] = useState("");
-  const [loading, setLoading] = useState<boolean>(false);
   const [timeStartObj, setTimeStartObj] = useState<dayjs.Dayjs | null>(null);
   const [timeEndObj, setTimeEndObj] = useState<dayjs.Dayjs | null>(null);
-
-  const onChange = (value: any, dateString: any) => {
-    if (dateString) {
-      setTimeStartObj(dateString[0]);
-      setTimeEndObj(dateString[1]);
-      setTimeStart(dateString[0].format("DD/MM/YYYY HH:mm:ss")); // để hiển thị
-      setTimeEnd(dateString[1].format("DD/MM/YYYY HH:mm:ss")); // để hiển thị
-    }
-  };
 
   // const onChange = (value: any, dateString: any) => {
   //   setTimeStart(dateString[0]);
@@ -58,7 +45,6 @@ const ModalCreateNewRequest = ({
   };
 
   const handleCreateNewRequest = () => {
-    setLoading(true);
     if (
       !localUser?.id ||
       !typeLeave ||
@@ -67,7 +53,6 @@ const ModalCreateNewRequest = ({
       !totalHours ||
       !reason
     ) {
-      setLoading(false);
       setMessErr("Vui lòng điền đầy đủ thông tin");
       return;
     }
@@ -80,10 +65,6 @@ const ModalCreateNewRequest = ({
       totalHours
     );
   };
-
-  useEffect(() => {
-    setLoading(false);
-  }, [open]);
 
   return (
     <>
@@ -162,8 +143,8 @@ const ModalCreateNewRequest = ({
             showTime={{
               hideDisabledOptions: true,
               defaultValue: [
-                dayjs("00:00:00", "HH:mm:ss"),
-                dayjs("11:59:59", "HH:mm:ss"),
+                dayjs("08:00:00", "HH:mm:ss"),
+                dayjs("17:00:00", "HH:mm:ss"),
               ],
             }}
             format="DD/MM/YYYY HH:mm:ss"

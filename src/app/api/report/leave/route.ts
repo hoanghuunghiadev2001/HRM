@@ -30,7 +30,6 @@ export async function GET(request: Request) {
     const start = startDate ? new Date(startDate) : defaultStart;
     const end = endDate ? new Date(endDate) : defaultEnd;
 
-    // Tìm các đơn nghỉ trong khoảng thời gian chồng lấn
     const leaveRequests = await prisma.leaveRequest.findMany({
       where: {
         startDate: { lte: end },
@@ -45,23 +44,18 @@ export async function GET(request: Request) {
       },
     });
 
-    // Lọc theo phòng ban nếu có
     const filteredRequests = department
       ? leaveRequests.filter(
           (req) => req.employee.workInfo?.department === department
         )
       : leaveRequests;
 
-    // Gom nhóm dữ liệu
     const groupedData =
       groupBy === "type"
         ? groupByType(filteredRequests)
         : groupByTime(filteredRequests, groupBy);
 
-    // Tổng hợp thống kê
     const summary = getSummary(filteredRequests);
-
-    // Thống kê theo từng nhân viên
     const employeeDetails = await getEmployeeStats(start, end, department);
 
     return NextResponse.json({
@@ -79,10 +73,19 @@ export async function GET(request: Request) {
 }
 
 // Gom nhóm theo loại nghỉ
-function groupByType(requests: LeaveRequestWithEmployee[]) {
-  const result: Record<string, any> = {};
+type LeaveTypeStats = {
+  type: string;
+  count: number;
+  hours: number;
+  approved: number;
+  rejected: number;
+  pending: number;
+};
 
-  Object.values(LeaveTypeEnum).forEach((type) => {
+function groupByType(requests: LeaveRequestWithEmployee[]): LeaveTypeStats[] {
+  const result: Record<string, LeaveTypeStats> = {};
+
+  for (const type of Object.values(LeaveTypeEnum)) {
     result[type] = {
       type,
       count: 0,
@@ -91,7 +94,7 @@ function groupByType(requests: LeaveRequestWithEmployee[]) {
       rejected: 0,
       pending: 0,
     };
-  });
+  }
 
   for (const req of requests) {
     const item = result[req.leaveType];
@@ -107,15 +110,28 @@ function groupByType(requests: LeaveRequestWithEmployee[]) {
 }
 
 // Gom nhóm theo thời gian (ngày / tuần / tháng)
-function groupByTime(requests: LeaveRequestWithEmployee[], groupBy: string) {
-  const result: Record<string, any> = {};
+type TimeGroup = {
+  period: string;
+  total: number;
+  hours: number;
+  approved: number;
+  rejected: number;
+  pending: number;
+  byType: Record<string, { count: number; hours: number }>;
+};
+
+function groupByTime(
+  requests: LeaveRequestWithEmployee[],
+  groupBy: string
+): TimeGroup[] {
+  const result: Record<string, TimeGroup> = {};
 
   for (const req of requests) {
     const date = new Date(req.startDate);
     let key: string;
 
     if (groupBy === "day") {
-      key = date.toISOString().split("T")[0]; // YYYY-MM-DD
+      key = date.toISOString().split("T")[0];
     } else if (groupBy === "week") {
       const firstDay = new Date(date.getFullYear(), 0, 1);
       const weekNum = Math.ceil(

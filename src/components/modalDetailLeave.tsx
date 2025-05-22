@@ -1,10 +1,10 @@
 import { Drawer } from "antd";
-import { getUserFromLocalStorage, RequestLeave } from "./api";
-import { formatDateTime, StatusLeave } from "./function";
+import { RequestLeave } from "./api";
+import { StatusLeave } from "./function";
 // import { InfoPersonal } from "@/app/dashboard/page";
 import TextArea from "antd/es/input/TextArea";
 import { InfoPersonal } from "@/app/dashboard/page";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 
