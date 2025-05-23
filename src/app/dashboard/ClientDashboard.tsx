@@ -235,7 +235,7 @@ export default function ClientDashboard({
                 Hi!, {user?.name}
               </p>
 
-              {/* <Image
+              <Image
                 src={user?.avatar ? user?.avatar : "/storage/avt-default.png"}
                 alt="avatar"
                 className="h-9 w-9 border-2 bg-white border-[#c4c4c4] rounded-full object-cover"
@@ -245,7 +245,7 @@ export default function ClientDashboard({
                 }}
                 width={36}
                 height={36}
-              /> */}
+              />
             </div>
           </Dropdown>
         </div>
