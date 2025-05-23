@@ -4,6 +4,13 @@ import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
 import { prisma } from "@/lib/prisma";
 import { logger } from "@/lib/logger";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+// Kích hoạt plugin
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export async function POST(request: NextRequest) {
   try {
@@ -90,20 +97,38 @@ export async function POST(request: NextRequest) {
 
         // Parse dates and other fields
         const birthDate = parseExcelDate(row["Ngày sinh"]);
-        const joinedTBD = parseExcelDate(
-          row["Ngày vào\n Tbd"] || row["Ngày vào Tbd"]
-        );
-        const joinedTeSCC = parseExcelDate(
-          row["Ngày vào\n TeSCC"] || row["Ngày vào TeSCC"]
-        );
-        const seniorityStart = parseExcelDate(
-          row["Ngày bắt đâu tính thâm niên"]
-        );
-        const contractDate = parseExcelDate(row["Ngày kí HĐ"]);
-        const contractEndDate = parseExcelDate(row["Ngày hết hạn"]);
-        const issueDate = parseExcelDate(row["Ngày cấp"]);
-        const resignedDate = parseExcelDate(row["Ngày nghỉ"]);
-        const updatedAt = parseExcelDate(row["Thời gian update"]);
+        const joinedTBD = dayjs
+          .utc(parseExcelDate(row["Ngày vào\n Tbd"] || row["Ngày vào Tbd"]))
+          .tz("Asia/Ho_Chi_Minh")
+          .toDate();
+        const joinedTeSCC = dayjs
+          .utc(parseExcelDate(row["Ngày vào\n TeSCC"] || row["Ngày vào TeSCC"]))
+          .tz("Asia/Ho_Chi_Minh")
+          .toDate();
+        const seniorityStart = dayjs
+          .utc(parseExcelDate(row["Ngày bắt đâu tính thâm niên"]))
+          .tz("Asia/Ho_Chi_Minh")
+          .toDate();
+        const contractDate = dayjs
+          .utc(parseExcelDate(row["Ngày kí HĐ"]))
+          .tz("Asia/Ho_Chi_Minh")
+          .toDate();
+        const contractEndDate = dayjs
+          .utc(parseExcelDate(row["Ngày hết hạn"]))
+          .tz("Asia/Ho_Chi_Minh")
+          .toDate();
+        const issueDate = dayjs
+          .utc(parseExcelDate(row["Ngày cấp"]))
+          .tz("Asia/Ho_Chi_Minh")
+          .toDate();
+        const resignedDate = dayjs
+          .utc(parseExcelDate(row["Ngày nghỉ"]))
+          .tz("Asia/Ho_Chi_Minh")
+          .toDate();
+        const updatedAt = dayjs
+          .utc(parseExcelDate(row["Thời gian update"]))
+          .tz("Asia/Ho_Chi_Minh")
+          .toDate();
 
         // Parse seniority
         const seniorityMonths = parseSeniority(row["Thâm niên"]);
