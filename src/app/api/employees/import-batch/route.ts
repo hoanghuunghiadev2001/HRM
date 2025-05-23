@@ -96,39 +96,46 @@ export async function POST(request: NextRequest) {
         });
 
         // Parse dates and other fields
-        const birthDate = parseExcelDate(row["Ngày sinh"]);
-        const joinedTBD = dayjs
-          .utc(parseExcelDate(row["Ngày vào\n Tbd"] || row["Ngày vào Tbd"]))
-          .tz("Asia/Ho_Chi_Minh")
-          .toDate();
-        const joinedTeSCC = dayjs
-          .utc(parseExcelDate(row["Ngày vào\n TeSCC"] || row["Ngày vào TeSCC"]))
-          .tz("Asia/Ho_Chi_Minh")
-          .toDate();
-        const seniorityStart = dayjs
-          .utc(parseExcelDate(row["Ngày bắt đâu tính thâm niên"]))
-          .tz("Asia/Ho_Chi_Minh")
-          .toDate();
-        const contractDate = dayjs
-          .utc(parseExcelDate(row["Ngày kí HĐ"]))
-          .tz("Asia/Ho_Chi_Minh")
-          .toDate();
-        const contractEndDate = dayjs
-          .utc(parseExcelDate(row["Ngày hết hạn"]))
-          .tz("Asia/Ho_Chi_Minh")
-          .toDate();
-        const issueDate = dayjs
-          .utc(parseExcelDate(row["Ngày cấp"]))
-          .tz("Asia/Ho_Chi_Minh")
-          .toDate();
-        const resignedDate = dayjs
-          .utc(parseExcelDate(row["Ngày nghỉ"]))
-          .tz("Asia/Ho_Chi_Minh")
-          .toDate();
-        const updatedAt = dayjs
-          .utc(parseExcelDate(row["Thời gian update"]))
-          .tz("Asia/Ho_Chi_Minh")
-          .toDate();
+        function parseAndValidateDate(dateValue: any): Date | null {
+          if (!dateValue) return null;
+          const parsedDate = dayjs
+            .utc(parseExcelDate(dateValue))
+            .tz("Asia/Ho_Chi_Minh")
+            .toDate();
+          return isValidDate(parsedDate) ? parsedDate : null;
+        }
+
+        function isValidDate(d: any): d is Date {
+          return d instanceof Date && !isNaN(d.getTime());
+        }
+
+        // Sử dụng hàm để parse từng ngày:
+        const birthDate = parseAndValidateDate(row["Ngày sinh"]);
+
+        const joinedTBD = parseAndValidateDate(
+          row["Ngày vào\n Tbd"] || row["Ngày vào Tbd"]
+        );
+
+        const joinedTeSCC = parseAndValidateDate(
+          row["Ngày vào\n TeSCC"] || row["Ngày vào TeSCC"]
+        );
+
+        const seniorityStart = parseAndValidateDate(
+          row["Ngày bắt đâu tính thâm niên"]
+        );
+
+        const contractDate = parseAndValidateDate(row["Ngày kí HĐ"]);
+
+        const contractEndDate = parseAndValidateDate(row["Ngày hết hạn"]);
+
+        const issueDate = parseAndValidateDate(row["Ngày cấp"]);
+
+        const resignedDate = parseAndValidateDate(row["Ngày nghỉ"]);
+
+        // Riêng updatedAt, nếu bạn muốn giữ nguyên kiểu gốc mà không dùng dayjs,
+        // chỉ parse Excel date rồi kiểm tra hợp lệ:
+        const rawUpdatedAt = parseExcelDate(row["Thời gian update"]);
+        const updatedAt = isValidDate(rawUpdatedAt) ? rawUpdatedAt : null;
 
         // Parse seniority
         const seniorityMonths = parseSeniority(row["Thâm niên"]);
@@ -192,16 +199,21 @@ export async function POST(request: NextRequest) {
           email: row["Mail"]?.toString(),
         };
 
-        const otherInfoData = {
+        const otherInfoData: any = {
           workStatus,
-          resignedDate,
           documentsChecked: row["Check hồ sơ"]?.toString(),
-          updatedAt,
           VCB: row["VCB"]?.toString(),
           MTCV: row["Bảng MTCV"]?.toString(),
           PNJ: row["PNJ"]?.toString(),
         };
 
+        if (resignedDate !== null) {
+          otherInfoData.resignedDate = resignedDate;
+        }
+
+        if (updatedAt !== null) {
+          otherInfoData.updatedAt = updatedAt;
+        }
         logger.debug(`Processing employee: ${employeeCode}`, {
           name: employeeName,
           department,
