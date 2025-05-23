@@ -218,7 +218,9 @@ const ModalEditEmployee = ({
       employeeCode: data.employeeCode,
       name: data.name,
       gender: data.gender,
-      birthDate: data.birthDate ? dayjs(data.birthDate, "DD/MM/YYYY") : null,
+      birthDate: data.birthDate
+        ? dayjs.utc(data.birthDate).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD")
+        : null,
       password: data.password, // luôn mặc định
       role: data.role,
       avatarBase64: data.avatar ?? null,
@@ -228,30 +230,48 @@ const ModalEditEmployee = ({
       position: data.workInfo?.position ?? "",
       specialization: data.workInfo?.specialization ?? "",
       joinedTBD: data.workInfo?.joinedTBD
-        ? dayjs(data.workInfo?.joinedTBD, "DD/MM/YYYY")
+        ? dayjs
+            .utc(data.workInfo?.joinedTBD)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY")
         : null,
       joinedTeSCC: data.workInfo?.joinedTeSCC
-        ? dayjs(data.workInfo?.joinedTeSCC, "DD/MM/YYYY")
+        ? dayjs
+            .utc(data.workInfo?.joinedTeSCC)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY")
         : null,
       seniorityStart: data.workInfo?.seniorityStart
-        ? dayjs(data.workInfo?.seniorityStart, "DD/MM/YYYY")
+        ? dayjs
+            .utc(data.workInfo?.seniorityStart)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY")
         : null,
       seniority: handleDateChange(
         dayjs(data.workInfo?.seniorityStart, "DD/MM/YYYY")
       ),
       contractNumber: data.workInfo?.contractNumber ?? "",
       contractDate: data.workInfo?.contractDate
-        ? dayjs(data.workInfo?.contractDate, "DD/MM/YYYY")
+        ? dayjs
+            .utc(data.workInfo?.contractDate)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY")
         : null,
       contractType: data.workInfo?.contractType ?? "",
       contractEndDate: data.workInfo?.contractEndDate
-        ? dayjs(data.workInfo?.contractEndDate, "DD/MM/YYYY")
+        ? dayjs
+            .utc(data.workInfo?.contractEndDate)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY")
         : null,
 
       // personalInfo
       identityNumber: data.personalInfo?.identityNumber ?? "",
       issueDate: data.personalInfo?.issueDate
-        ? dayjs(data.personalInfo?.issueDate, "DD/MM/YYYY")
+        ? dayjs
+            .utc(data.personalInfo?.issueDate)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY")
         : null,
       issuePlace: data.personalInfo?.issuePlace ?? "",
       hometown: data.personalInfo?.hometown ?? "",
@@ -272,7 +292,10 @@ const ModalEditEmployee = ({
       // otherInfo
       workStatus: data.otherInfo?.workStatus ?? "",
       resignedDate: data.otherInfo?.resignedDate
-        ? dayjs(data.otherInfo?.resignedDate, "DD/MM/YYYY")
+        ? dayjs
+            .utc(data.otherInfo?.resignedDate)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY")
         : null,
       documentsChecked: data.otherInfo?.documentsChecked ?? "",
       updatedAt: data.otherInfo?.updatedAt
