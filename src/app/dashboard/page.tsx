@@ -161,7 +161,7 @@ const Profile = () => {
   );
 
   useEffect(() => {
-    setImageUrl(dataProfile?.avatar);
+    // setImageUrl(dataProfile?.avatar);
     setPhoneNumber(dataProfile?.contactInfo.phoneNumber);
     setRelativePhone(dataProfile?.contactInfo.relativePhone);
     setCompanyPhone(dataProfile?.contactInfo.companyPhone);
@@ -461,8 +461,8 @@ const Profile = () => {
               dataProfile?.otherInfo.workStatus === "OFFICIAL"
                 ? "Chính thức"
                 : dataProfile?.otherInfo.workStatus === "PROBATION"
-                ? "Thử việc"
-                : "Nghỉ việc"
+                  ? "Thử việc"
+                  : "Nghỉ việc"
             }
           />
           <InfoPersonal

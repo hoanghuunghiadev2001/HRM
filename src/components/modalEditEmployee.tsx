@@ -41,7 +41,8 @@ const ModalEditEmployee = ({
 }: ModalEditEmployeeProps) => {
   const [imageUrl, setImageUrl] = useState<string>();
   const [loading, setLoading] = useState(false);
-  const [seniorityText, setSeniorityText] = useState<string>("");
+  const [seniorityText, setSeniorityText] = useState<number>(0);
+  const [isMounted, setIsMounted] = useState(false);
   type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
   const localUser = getUserFromLocalStorage();
@@ -124,42 +125,41 @@ const ModalEditEmployee = ({
     }
   };
 
-  const handleDateChange = (date: dayjs.Dayjs | null) => {
-    if (!date) {
-      setSeniorityText("");
-      return;
-    }
-
+  function handleDateChange(date: dayjs.Dayjs | null): number {
+    if (!date) return 0;
     const today = dayjs();
-    const selected = date;
+    let totalMonths = (today.year() - date.year()) * 12 + (today.month() - date.month());
+    if (today.date() < date.date()) totalMonths -= 1;
+    setSeniorityText(totalMonths);
+    return totalMonths;
+  }
 
-    // Tính tổng tháng giữa 2 ngày
-    let totalMonths =
-      (today.year() - selected.year()) * 12 +
-      (today.month() - selected.month());
+  function formatSeniorityText(months: number): string {
+    const years = Math.floor(months / 12);
+    const m = months % 12;
+    return `${years > 0 ? `${years} năm ` : ""}${m > 0 ? `${m} tháng` : ""}`.trim() || "0 tháng";
+  }
 
-    if (today.date() < selected.date()) {
-      // Nếu ngày hiện tại nhỏ hơn ngày chọn thì trừ 1 tháng (chưa đủ tháng)
-      totalMonths -= 1;
-    }
+  // const handleDateChange = (date: dayjs.Dayjs | null) => {
+  //   if (!date) return "";
 
-    // Tính năm và tháng từ tổng tháng
-    const years = Math.floor(totalMonths / 12);
-    const months = totalMonths % 12;
+  //   const today = dayjs();
+  //   let totalMonths = (today.year() - date.year()) * 12 + (today.month() - date.month());
 
-    let result = "";
-    if (years > 0) {
-      result += `${years} năm `;
-    }
-    if (months > 0) {
-      result += `${months} tháng`;
-    }
-    if (!result) {
-      result = "0 tháng";
-    }
+  //   if (today.date() < date.date()) {
+  //     totalMonths -= 1;
+  //   }
 
-    setSeniorityText(result.trim());
-  };
+  //   const years = Math.floor(totalMonths / 12);
+  //   const months = totalMonths % 12;
+
+  //   let result = "";
+  //   if (years > 0) result += `${years} năm `;
+  //   if (months > 0) result += `${months} tháng`;
+  //   if (!result) result = "0 tháng";
+  //   setSeniorityText(result.trim());
+  //   return result.trim();
+  // };
 
   //Up ảnh hồ sơ
   const beforeUpload = (file: FileType) => {
@@ -226,7 +226,7 @@ const ModalEditEmployee = ({
       name: data.name,
       gender: data.gender,
       birthDate: data.birthDate
-        ? dayjs.utc(data.birthDate).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD")
+        ? dayjs(data.birthDate, 'DD/MM/YYYY')
         : null,
       password: data.password, // luôn mặc định
       role: data.role,
@@ -237,48 +237,30 @@ const ModalEditEmployee = ({
       position: data.workInfo?.position ?? "",
       specialization: data.workInfo?.specialization ?? "",
       joinedTBD: data.workInfo?.joinedTBD
-        ? dayjs
-          .utc(data.workInfo?.joinedTBD)
-          .tz("Asia/Ho_Chi_Minh")
-          .format("DD/MM/YYYY")
+        ? dayjs(data.workInfo?.joinedTBD, 'DD/MM/YYYY')
         : null,
       joinedTeSCC: data.workInfo?.joinedTeSCC
-        ? dayjs
-          .utc(data.workInfo?.joinedTeSCC)
-          .tz("Asia/Ho_Chi_Minh")
-          .format("DD/MM/YYYY")
+        ? dayjs(data.workInfo?.joinedTeSCC, 'DD/MM/YYYY')
         : null,
       seniorityStart: data.workInfo?.seniorityStart
-        ? dayjs
-          .utc(data.workInfo?.seniorityStart)
-          .tz("Asia/Ho_Chi_Minh")
-          .format("DD/MM/YYYY")
+        ? dayjs(data.workInfo?.seniorityStart, 'DD/MM/YYYY')
         : null,
       seniority: handleDateChange(
         dayjs(data.workInfo?.seniorityStart, "DD/MM/YYYY")
       ),
       contractNumber: data.workInfo?.contractNumber ?? "",
       contractDate: data.workInfo?.contractDate
-        ? dayjs
-          .utc(data.workInfo?.contractDate)
-          .tz("Asia/Ho_Chi_Minh")
-          .format("DD/MM/YYYY")
+        ? dayjs(data.workInfo?.contractDate, 'DD/MM/YYYY')
         : null,
       contractType: data.workInfo?.contractType ?? "",
       contractEndDate: data.workInfo?.contractEndDate
-        ? dayjs
-          .utc(data.workInfo?.contractEndDate)
-          .tz("Asia/Ho_Chi_Minh")
-          .format("DD/MM/YYYY")
+        ? dayjs(data.workInfo?.contractEndDate, 'DD/MM/YYYY')
         : null,
 
       // personalInfo
       identityNumber: data.personalInfo?.identityNumber ?? "",
       issueDate: data.personalInfo?.issueDate
-        ? dayjs
-          .utc(data.personalInfo?.issueDate)
-          .tz("Asia/Ho_Chi_Minh")
-          .format("DD/MM/YYYY")
+        ? dayjs(data.personalInfo?.issueDate, 'DD/MM/YYYY')
         : null,
       issuePlace: data.personalInfo?.issuePlace ?? "",
       hometown: data.personalInfo?.hometown ?? "",
@@ -314,14 +296,24 @@ const ModalEditEmployee = ({
     };
   }
 
+
   useEffect(() => {
-    if (open && employeeInfo) {
+    setIsMounted(true);  // Đánh dấu đã mount client
+  }, []);
+
+  useEffect(() => {
+    if (isMounted && employeeInfo && open) {
       setImageUrl(employeeInfo.avatar);
+
+      const date = dayjs.utc(employeeInfo.workInfo.joinedTBD).tz('Asia/Ho_Chi_Minh')
+      console.log(date.format('DD/MM/YYYY'));
+
 
       form.setFieldsValue(transformEmployeeDataToFormData(employeeInfo));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [employeeInfo, isMounted]);
+
 
   return (
     <>
@@ -581,12 +573,12 @@ const ModalEditEmployee = ({
                 <Form.Item
                   name="seniority"
                   label="Thâm niên"
-                  valuePropName={seniorityText}
+                  valuePropName={formatSeniorityText(seniorityText)}
                 //   rules={[{ required: true }]}
                 >
                   <Input
                     disabled
-                    value={seniorityText}
+                    value={formatSeniorityText(seniorityText)}
                   // defaultValue={seniorityText}
                   />
                 </Form.Item>

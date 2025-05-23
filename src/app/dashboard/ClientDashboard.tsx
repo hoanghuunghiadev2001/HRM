@@ -89,31 +89,31 @@ export default function ClientDashboard({
     { key: "/dashboard/request", icon: <FileText />, label: "Phiếu yêu cầu" },
     ...(isAdmin === "ADMIN" || isAdmin === "MANAGER"
       ? [
-          {
-            key: "/dashboard/allRequests",
-            icon: <FileStack />,
-            label: "DS yêu cầu",
-          },
-          {
-            key: "/dashboard/employees",
-            icon: <UsersRound />,
-            label: "Quản lý nhân sự",
-          },
-          {
-            key: "/dashboard/attendance",
-            icon: <Fingerprint />,
-            label: "Chấm công",
-          },
-        ]
+        {
+          key: "/dashboard/allRequests",
+          icon: <FileStack />,
+          label: "DS yêu cầu",
+        },
+        {
+          key: "/dashboard/employees",
+          icon: <UsersRound />,
+          label: "Quản lý nhân sự",
+        },
+        {
+          key: "/dashboard/attendance",
+          icon: <Fingerprint />,
+          label: "Chấm công",
+        },
+      ]
       : []),
     ...(isAdmin === "ADMIN"
       ? [
-          {
-            key: "/dashboard/report",
-            icon: <ClipboardPlus />,
-            label: "Báo cáo",
-          },
-        ]
+        {
+          key: "/dashboard/report",
+          icon: <ClipboardPlus />,
+          label: "Báo cáo",
+        },
+      ]
       : []),
   ];
 
@@ -235,7 +235,7 @@ export default function ClientDashboard({
                 Hi!, {user?.name}
               </p>
 
-              <Image
+              {/* <Image
                 src={user?.avatar ? user?.avatar : "/storage/avt-default.png"}
                 alt="avatar"
                 className="h-9 w-9 border-2 bg-white border-[#c4c4c4] rounded-full object-cover"
@@ -245,15 +245,14 @@ export default function ClientDashboard({
                 }}
                 width={36}
                 height={36}
-              />
+              /> */}
             </div>
           </Dropdown>
         </div>
         <div className="w-full h-[calc(100vh-60px)] flex">
           <div
-            className={`${
-              collapsed ? "w-[80px]" : "w-[250px]"
-            } border-r flex-shrink-0 border-[#999999] h-full flex flex-col justify-between transition-all duration-300 ease-in-out`}
+            className={`${collapsed ? "w-[80px]" : "w-[250px]"
+              } border-r flex-shrink-0 border-[#999999] h-full flex flex-col justify-between transition-all duration-300 ease-in-out`}
           >
             <div className="h-full bg-[#aa0404]">
               <Menu
@@ -266,15 +265,13 @@ export default function ClientDashboard({
               />
             </div>
             <div
-              className={`h-10 flex gap-2 items-center p-4 border-t border-[#999999] cursor-pointer  ${
-                collapsed ? "justify-center" : "justify-between"
-              } bg-[#aa0404] transition-all duration-300 ease-in-out`}
+              className={`h-10 flex gap-2 items-center p-4 border-t border-[#999999] cursor-pointer  ${collapsed ? "justify-center" : "justify-between"
+                } bg-[#aa0404] transition-all duration-300 ease-in-out`}
               onClick={handleLogout}
             >
               <p
-                className={`${
-                  collapsed ? "hidden" : ""
-                } font-semibold text-white transition-all duration-300 ease-in-out`}
+                className={`${collapsed ? "hidden" : ""
+                  } font-semibold text-white transition-all duration-300 ease-in-out`}
               >
                 Đăng xuất
               </p>

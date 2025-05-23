@@ -81,7 +81,6 @@ export default function EmployeesPage() {
   const [totalTable, setTotalTable] = useState();
   const [infoEmployee, setInfoEmployee] = useState<InfoEmployee>();
   const localUser = getUserFromLocalStorage();
-  console.log(localUser);
 
   const [modalEditEmployee, setModalEditEmployee] = useState<boolean>(false);
   const [modalChangePassEmployee, setModalChangePassEmployee] =
