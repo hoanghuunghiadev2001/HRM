@@ -18,6 +18,13 @@ import { InfoEmployee } from "@/lib/interface";
 import Image from "next/image";
 import { getUserFromLocalStorage } from "./api";
 
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+// Extend plugin
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 interface ModalEditEmployeeProps {
   open: boolean;
   onClose: () => void;
@@ -231,21 +238,21 @@ const ModalEditEmployee = ({
       specialization: data.workInfo?.specialization ?? "",
       joinedTBD: data.workInfo?.joinedTBD
         ? dayjs
-            .utc(data.workInfo?.joinedTBD)
-            .tz("Asia/Ho_Chi_Minh")
-            .format("DD/MM/YYYY")
+          .utc(data.workInfo?.joinedTBD)
+          .tz("Asia/Ho_Chi_Minh")
+          .format("DD/MM/YYYY")
         : null,
       joinedTeSCC: data.workInfo?.joinedTeSCC
         ? dayjs
-            .utc(data.workInfo?.joinedTeSCC)
-            .tz("Asia/Ho_Chi_Minh")
-            .format("DD/MM/YYYY")
+          .utc(data.workInfo?.joinedTeSCC)
+          .tz("Asia/Ho_Chi_Minh")
+          .format("DD/MM/YYYY")
         : null,
       seniorityStart: data.workInfo?.seniorityStart
         ? dayjs
-            .utc(data.workInfo?.seniorityStart)
-            .tz("Asia/Ho_Chi_Minh")
-            .format("DD/MM/YYYY")
+          .utc(data.workInfo?.seniorityStart)
+          .tz("Asia/Ho_Chi_Minh")
+          .format("DD/MM/YYYY")
         : null,
       seniority: handleDateChange(
         dayjs(data.workInfo?.seniorityStart, "DD/MM/YYYY")
@@ -253,25 +260,25 @@ const ModalEditEmployee = ({
       contractNumber: data.workInfo?.contractNumber ?? "",
       contractDate: data.workInfo?.contractDate
         ? dayjs
-            .utc(data.workInfo?.contractDate)
-            .tz("Asia/Ho_Chi_Minh")
-            .format("DD/MM/YYYY")
+          .utc(data.workInfo?.contractDate)
+          .tz("Asia/Ho_Chi_Minh")
+          .format("DD/MM/YYYY")
         : null,
       contractType: data.workInfo?.contractType ?? "",
       contractEndDate: data.workInfo?.contractEndDate
         ? dayjs
-            .utc(data.workInfo?.contractEndDate)
-            .tz("Asia/Ho_Chi_Minh")
-            .format("DD/MM/YYYY")
+          .utc(data.workInfo?.contractEndDate)
+          .tz("Asia/Ho_Chi_Minh")
+          .format("DD/MM/YYYY")
         : null,
 
       // personalInfo
       identityNumber: data.personalInfo?.identityNumber ?? "",
       issueDate: data.personalInfo?.issueDate
         ? dayjs
-            .utc(data.personalInfo?.issueDate)
-            .tz("Asia/Ho_Chi_Minh")
-            .format("DD/MM/YYYY")
+          .utc(data.personalInfo?.issueDate)
+          .tz("Asia/Ho_Chi_Minh")
+          .format("DD/MM/YYYY")
         : null,
       issuePlace: data.personalInfo?.issuePlace ?? "",
       hometown: data.personalInfo?.hometown ?? "",
@@ -293,9 +300,9 @@ const ModalEditEmployee = ({
       workStatus: data.otherInfo?.workStatus ?? "",
       resignedDate: data.otherInfo?.resignedDate
         ? dayjs
-            .utc(data.otherInfo?.resignedDate)
-            .tz("Asia/Ho_Chi_Minh")
-            .format("DD/MM/YYYY")
+          .utc(data.otherInfo?.resignedDate)
+          .tz("Asia/Ho_Chi_Minh")
+          .format("DD/MM/YYYY")
         : null,
       documentsChecked: data.otherInfo?.documentsChecked ?? "",
       updatedAt: data.otherInfo?.updatedAt
@@ -340,7 +347,7 @@ const ModalEditEmployee = ({
               labelWrap
               validateMessages={validateMessages}
 
-              //   style={{ maxWidth: 600 }}
+            //   style={{ maxWidth: 600 }}
             >
               <div className="flex justify-center">
                 <Form.Item
@@ -479,21 +486,21 @@ const ModalEditEmployee = ({
                 <Form.Item
                   name="phoneNumber"
                   label="Số DT"
-                  //   rules={[{ required: true }]}
+                //   rules={[{ required: true }]}
                 >
                   <Input type="number" />
                 </Form.Item>
                 <Form.Item
                   name="relativePhone"
                   label="SĐT người thân"
-                  //   rules={[{ required: true }]}
+                //   rules={[{ required: true }]}
                 >
                   <Input type="number" />
                 </Form.Item>
                 <Form.Item
                   name="companyPhone"
                   label="SĐT Cty"
-                  //   rules={[{ required: true }]}
+                //   rules={[{ required: true }]}
                 >
                   <Input type="number" />
                 </Form.Item>
@@ -575,18 +582,18 @@ const ModalEditEmployee = ({
                   name="seniority"
                   label="Thâm niên"
                   valuePropName={seniorityText}
-                  //   rules={[{ required: true }]}
+                //   rules={[{ required: true }]}
                 >
                   <Input
                     disabled
                     value={seniorityText}
-                    // defaultValue={seniorityText}
+                  // defaultValue={seniorityText}
                   />
                 </Form.Item>
                 <Form.Item
                   name="contractNumber"
                   label="Số HĐ"
-                  //   rules={[{ required: true }]}
+                //   rules={[{ required: true }]}
                 >
                   <Input />
                 </Form.Item>
