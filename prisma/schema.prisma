@@ -50,14 +50,14 @@ enum LeaveStatus {
 }
 
 model Employee {
-  id           Int      @id @default(autoincrement())
-  employeeCode String   @unique // Mã nhân viên (maNV)
+  id           Int       @id @default(autoincrement())
+  employeeCode String    @unique // Mã nhân viên (maNV)
   name         String // Tên
-  gender       Sex      @default(MALE) // Giới tính
-  birthDate    DateTime // Ngày sinh
+  gender       Sex       @default(MALE) // Giới tính
+  birthDate    DateTime? // Ngày sinh
   password     String // Mật khẩu (đã mã hoá)
-  role         Role     @default(USER) // Vai trò
-  avatar       String?  @db.LongText // <- Thêm trường avatar (có thể null)
+  role         Role      @default(USER) // Vai trò
+  avatar       String?   @db.LongText // <- Thêm trường avatar (có thể null)
 
   workInfo     WorkInfo?     @relation()
   personalInfo PersonalInfo? @relation()

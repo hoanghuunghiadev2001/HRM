@@ -107,8 +107,7 @@ const ModalEditEmployee = ({
     //   Gửi API
 
     if (employeeInfo?.employeeCode) {
-      const res = handleUpdateEmployee(employeeInfo?.employeeCode, payload);
-      console.log(res);
+      handleUpdateEmployee(employeeInfo?.employeeCode, payload);
     }
   };
 

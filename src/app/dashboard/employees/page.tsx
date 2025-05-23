@@ -3,8 +3,18 @@
 import { useEffect, useState } from "react";
 
 import React from "react";
-import { Dropdown, Form, Input, Modal, Pagination, Select, Table } from "antd";
-import type { TableProps } from "antd";
+import {
+  Button,
+  Dropdown,
+  Form,
+  Input,
+  Modal,
+  Pagination,
+  Select,
+  Table,
+  Upload,
+} from "antd";
+import { TableProps, message } from "antd";
 import {
   EmployeesSumary,
   fetchEmployeeSummary,
@@ -16,6 +26,7 @@ import { createStyles } from "antd-style";
 import ModalAddNewEmployee from "@/components/addNewEmployee";
 import {
   changeEmployeePassword,
+  deleteEmployeeApi,
   fetchEmployeeByCode,
   updateEmployee,
 } from "@/lib/api";
@@ -23,7 +34,13 @@ import { InfoEmployee } from "@/lib/interface";
 import ModalEditEmployee from "@/components/modalEditEmployee";
 import Image from "next/image";
 import { MenuProps } from "antd/lib";
-import { InfoCircleOutlined, LockOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  DownloadOutlined,
+  InfoCircleOutlined,
+  LockOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 import ModalChangePassEmployee from "@/components/modalChangePassEmployee";
 
 interface DataType {
@@ -77,6 +94,40 @@ export default function EmployeesPage() {
 
   const [form] = Form.useForm();
 
+  const { styles } = useStyle();
+
+  const props = {
+    accept: ".xls,.xlsx", // chỉ cho phép file excel
+    showUploadList: false,
+    beforeUpload: (file: any) => {
+      setLoading(true);
+      const isExcel =
+        file.type ===
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+        file.type === "application/vnd.ms-excel";
+      if (!isExcel) {
+        message.error("Bạn chỉ có thể tải lên file Excel (.xls hoặc .xlsx)!");
+      }
+      return isExcel || Upload.LIST_IGNORE; // nếu ko phải file excel thì ko cho upload
+    },
+    onChange: (info: any) => {
+      if (info.file.status === "done") {
+        message.success(`${info.file.name} tải lên thành công.`);
+      } else if (info.file.status === "error") {
+        message.error(`${info.file.name} tải lên thất bại.`);
+      }
+    },
+    onSuccess: async () => {
+      setLoading(false);
+      message.success("Tải file thành công");
+
+      // Nếu cần gửi request xoá file trên server thì làm ở đây
+      // await fetch(`/api/employees/deletefile?filename=${file.name}`, { method: "DELETE" });
+    },
+    multiple: false, // nếu muốn upload nhiều file thì đổi thành true
+  };
+
+  // lấy nhân viên
   const getEmployeeSumary = async (page: number, pageSize: number) => {
     setLoading(true);
     try {
@@ -99,8 +150,6 @@ export default function EmployeesPage() {
       setLoading(false);
     }
   };
-
-  const { styles } = useStyle();
 
   //format và đưa dữ liệu ra table
   const formatted: DataType[] =
@@ -177,7 +226,6 @@ export default function EmployeesPage() {
             icon: <LockOutlined />,
             onClick: () => {
               // Ví dụ: bạn dùng record để mở modal đổi mật khẩu của nhân viên này
-              console.log("Mở modal đổi mật khẩu cho MSNV:", record.MSNV);
               setEmployeeCodeChoose(record.MSNV);
               setModalChangePassEmployee(true);
             },
@@ -187,6 +235,12 @@ export default function EmployeesPage() {
             label: "Chi tiết",
             icon: <InfoCircleOutlined />,
             onClick: () => getInforEmployee(record.MSNV), // Giả sử bạn tạo state để lưu nhân viên đang thao tác,
+          },
+          {
+            key: "3",
+            label: "Xóa nhân sự",
+            icon: <DeleteOutlined />,
+            onClick: () => handleDeleteEmployee(record.MSNV), // Giả sử bạn tạo state để lưu nhân viên đang thao tác,
           },
         ];
 
@@ -227,6 +281,20 @@ export default function EmployeesPage() {
     }
   };
 
+  //Xóa nhân sự
+  const handleDeleteEmployee = async (employeeCode: string) => {
+    setLoading(true);
+    const res = await deleteEmployeeApi(employeeCode);
+    if (res.status === 1) {
+      getEmployeeSumary(pageTable, pageSize);
+      countDownDelete();
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+  };
+
+  //cập nhật nhân viên
   const handleUpdateEmployee = async (
     employeeCode: string,
     infoEmployee: any
@@ -242,6 +310,24 @@ export default function EmployeesPage() {
     }
   };
 
+  const countDownDelete = () => {
+    let secondsToGo = 3;
+
+    const instance = modal.success({
+      title: "Xóa nhân sự thành công",
+    });
+
+    const timer = setInterval(() => {
+      secondsToGo -= 1;
+    }, 1000);
+
+    setTimeout(() => {
+      clearInterval(timer);
+      instance.destroy();
+    }, secondsToGo * 1000);
+  };
+
+  //show modal thành công
   const countDown = () => {
     let secondsToGo = 3;
 
@@ -286,6 +372,18 @@ export default function EmployeesPage() {
     }
   };
 
+  //Tải danh sách nhân viên
+  const handleExportExcel = async () => {
+    const res = await fetch("/api/employees/downloadfile");
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "employees.xlsx";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   useEffect(() => {
     getEmployeeSumary(pageTable, pageSize);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -318,10 +416,18 @@ export default function EmployeesPage() {
           Danh sách nhân viên:
         </p>
       </div>
-      <div className="w-full">
-        <div className="flex justify-end mb-3  w-full">
+      <div className="w-full  mt-4 ">
+        <div className="flex justify-end items-start mb-3 gap-4  w-full">
+          <Button onClick={handleExportExcel} icon={<DownloadOutlined />}>
+            Download
+          </Button>
+          <Upload {...props} action="/api/employees/upfile">
+            <Button type="primary" icon={<UploadOutlined />}>
+              Upload
+            </Button>
+          </Upload>
           <button
-            className="flex mt-4 relative  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
+            className="flex relative  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
             onClick={() => {
               setModalAddEmployee(true);
             }}

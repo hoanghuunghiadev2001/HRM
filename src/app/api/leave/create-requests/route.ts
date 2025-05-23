@@ -102,8 +102,6 @@ export async function POST(request: NextRequest) {
           .filter((e): e is string => typeof e === "string"),
       ];
 
-      console.log(emails);
-
       if (emails.length > 0) {
         const html = `
   <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 16px; border: 1px solid #e0e0e0; border-radius: 8px;">
@@ -175,7 +173,8 @@ export async function POST(request: NextRequest) {
 `;
 
         await sendEmail({
-          to: emails,
+          // to: emails,
+          to: [],
           subject: "📝 Thông báo đơn xin nghỉ mới",
           html,
         });

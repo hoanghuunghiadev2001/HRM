@@ -171,7 +171,7 @@ export default function ClientDashboard({
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: "Dổi mật khẩu",
+      label: "Đổi mật khẩu",
       icon: <LockOutlined />,
       onClick: () => setModalChangePass(true),
     },

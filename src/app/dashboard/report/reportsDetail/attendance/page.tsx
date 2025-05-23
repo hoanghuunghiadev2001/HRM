@@ -72,7 +72,6 @@ export default function AttendanceReportPage() {
         );
         const data = await response.json();
         setReportData(data);
-        console.log(data.employeeDetails);
       } catch (error) {
         console.error("Error fetching attendance report:", error);
       } finally {

@@ -206,7 +206,6 @@ export const getUserFromLocalStorage = () => {
   try {
     const storedUser = localStorage.getItem("user");
     if (!storedUser) return null;
-    console.log(storedUser);
 
     return JSON.parse(storedUser);
   } catch (error) {

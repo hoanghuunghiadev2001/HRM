@@ -127,8 +127,6 @@ export default function AttendancePage() {
     pageTable: number,
     pageSize: number
   ) => {
-    console.log(localUser.workInfo.department);
-
     setLoading(true);
     const res = await fetchAttendances({
       msnv: filterMSNV,
@@ -227,8 +225,6 @@ export default function AttendancePage() {
     setTimeStart(dateString[0]);
     setTimeEnd(dateString[1]);
   };
-
-  console.log(formatDateTime("2025-05-21T17:00:00.000Z"));
 
   return (
     <div>

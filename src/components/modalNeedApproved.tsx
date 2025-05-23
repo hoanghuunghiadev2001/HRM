@@ -60,12 +60,6 @@ const ModalNeedApproved = ({
   const [loading, setLoading] = useState<boolean>(false);
   const { styles } = useStyle();
 
-  console.log(
-    dayjs("2025-05-21 17:00:00.000")
-      .tz("Asia/Ho_Chi_Minh")
-      .format("hh:mm DD/MM/YYYY")
-  );
-
   const formatted: DataType[] =
     allRequestsApproved?.map((item, index) => ({
       key: (index + 1).toString(),

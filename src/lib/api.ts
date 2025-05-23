@@ -95,6 +95,19 @@ export async function changeEmployeePassword(
   }
 }
 
+export async function deleteEmployeeApi(employeeCode: string) {
+  try {
+    await axiosClient.delete(`/employees/${employeeCode}/delete`);
+    return { status: 1, message: "xóa thành công" };
+  } catch (error) {
+    console.error("có lỗi khi xóa:", error);
+    return {
+      status: 0,
+      message: error || "Lỗi hệ thống",
+    };
+  }
+}
+
 // const fetchUser = async () => {
 //   const controller = new AbortController();
 
