@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import fs from "fs";
+import path from "path";
 
 function getEmployeeCodeFromUrl(urlString: string) {
   const url = new URL(urlString);
@@ -19,6 +21,8 @@ function formatDate(date: Date | null | undefined): string | null {
 
 export async function GET(req: NextRequest) {
   const employeeCode = getEmployeeCodeFromUrl(req.url);
+
+  
 
   const token = req.cookies.get("token")?.value;
   if (!token) {
@@ -102,6 +106,10 @@ export async function GET(req: NextRequest) {
   }
 }
 
+function isBase64Image(str: string): boolean {
+  return /^data:image\/\w+;base64,/.test(str);
+}
+
 export async function PATCH(req: NextRequest) {
   const employeeCode = getEmployeeCodeFromUrl(req.url);
   const token = req.cookies.get("token")?.value;
@@ -138,10 +146,45 @@ export async function PATCH(req: NextRequest) {
     }
 
     const body = await req.json();
+
+    let avatar = body.avatar
+
+     if (typeof avatar === "string" && isBase64Image(avatar)) {
+      const matches = avatar.match(/^data:(image\/\w+);base64,(.+)$/);
+      if (!matches) {
+        return NextResponse.json(
+          { message: "Avatar base64 không hợp lệ" },
+          { status: 400 }
+        );
+      }
+
+      const ext = matches[1].split("/")[1];
+      const base64Data = matches[2];
+      const fileName = `employee-${body.id}-${Date.now()}.${ext}`;
+      const uploadDir = path.join(process.cwd(), "public/uploads");
+      const filePath = path.join(uploadDir, fileName);
+
+      // Tạo thư mục nếu chưa tồn tại
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+
+      fs.writeFileSync(filePath, Buffer.from(base64Data, "base64"));
+      avatar = `/uploads/${fileName}`;
+    } else if (typeof avatar === "string" && avatar.startsWith("http")) {
+      // Giữ nguyên URL avatar, không thay đổi
+    } else if (avatar === null) {
+      // Xóa avatar
+      avatar = null;
+    } else {
+      // Không cập nhật avatar nếu dữ liệu không hợp lệ hoặc không cần thay đổi
+      avatar = undefined;
+    }
+
     await prisma.employee.update({
       where: { id: employee.id },
       data: {
-        avatar: body.avatar,
+        avatar: avatar,
         name: body.name,
         birthDate: body.birthDate,
         role: body.role,
