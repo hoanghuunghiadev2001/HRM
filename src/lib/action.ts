@@ -257,11 +257,11 @@ export async function importEmployees(formData: FormData) {
           joinedTBD: parseExcelDate(
             row["Ngày vào\n Tbd"] ||
               row["Ngày vào\n Tbd "] ||
-              row["Ngày vào  Tbd"]
+              row["Ngày vào Tbd"]
           ),
           joinedTeSCC: parseExcelDate(
             row["Ngày vào\n TeSCC"] ||
-              row["Ngày vào  TeSCC"] ||
+              row["Ngày vào TeSCC"] ||
               row["Ngày vào\n TeSCC "]
           ),
           seniorityStart: parseExcelDate(row["Ngày bắt đâu tính thâm niên"]),
@@ -271,13 +271,6 @@ export async function importEmployees(formData: FormData) {
           contractType: row["Loại HĐ"]?.toString(),
           contractEndDate: parseExcelDate(row["Ngày hết hạn"]),
         };
-
-        console.log("11111111" + workInfoData.joinedTBD);
-        console.log("2222222" + workInfoData.joinedTeSCC);
-        console.log("333333" + row["Ngày vào\n Tbd"] || row["Ngày vào Tbd"]);
-        console.log(
-          "4444444" + row["Ngày vào\n TeSCC"] || row["Ngày vào TeSCC"]
-        );
 
         // Then update the employeeData to use the determined role:
         const employeeData = {
@@ -447,32 +440,27 @@ export async function importEmployees(formData: FormData) {
 function parseExcelDate(value: any): Date | null {
   if (!value) return null;
 
-  // If it's already a Date object
-  if (value instanceof Date) return value;
+  // Nếu đã là Date object
+  if (value instanceof Date && !isNaN(value.getTime())) return value;
 
-  // If it's an Excel serial date number
+  // Nếu là số serial date của Excel
   if (typeof value === "number") {
-    // Excel dates are number of days since 1900-01-01
-    // JavaScript dates are milliseconds since 1970-01-01
-    const excelEpoch = new Date(1899, 11, 30);
-    const date = new Date(excelEpoch.getTime() + value * 24 * 60 * 60 * 1000);
+    const excelEpoch = new Date(Date.UTC(1899, 11, 30)); // Sử dụng UTC để tránh lệch múi giờ
+    const date = new Date(excelEpoch.getTime() + (value - 1) * 86400 * 1000);
     return date;
   }
 
-  // If it's a string, try to parse it
+  // Nếu là chuỗi
   if (typeof value === "string") {
-    // Try to parse various date formats
-    const date = new Date(value);
-    if (!isNaN(date.getTime())) return date;
+    const isoDate = new Date(value);
+    if (!isNaN(isoDate.getTime())) return isoDate;
 
-    // Try DD/MM/YYYY format
+    // Thử parse định dạng DD/MM/YYYY hoặc DD-MM-YYYY
     const parts = value.split(/[/\-.]/);
     if (parts.length === 3) {
-      // Assuming DD/MM/YYYY format
       const day = Number.parseInt(parts[0], 10);
-      const month = Number.parseInt(parts[1], 10) - 1; // JS months are 0-based
+      const month = Number.parseInt(parts[1], 10) - 1;
       const year = Number.parseInt(parts[2], 10);
-
       if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
         return new Date(year, month, day);
       }
