@@ -17,6 +17,7 @@ import ModalLoading from "./modalLoading";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import Image from "next/image";
+import { getUserFromLocalStorage } from "./api";
 
 interface ModalAddNewEmployeeProps {
   open: boolean;
@@ -28,6 +29,7 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
   const [loading, setLoading] = useState(false);
   const [seniorityText, setSeniorityText] = useState<string>("");
   type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+  const localUser = getUserFromLocalStorage();
 
   const maxDate = dayjs();
 
@@ -59,7 +61,10 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
         avatar: imageUrl ?? null,
 
         workInfo: {
-          department: formData.department,
+          department:
+            localUser.role === "ADMIN"
+              ? formData.department
+              : localUser.department,
           position: formData.position,
           specialization: formData.specialization,
           joinedTBD: formData.joinedTBD,
@@ -415,10 +420,20 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                 <Form.Item
                   name="department"
                   label="Bộ phận"
-                  rules={[{ required: true }]}
+                  rules={[
+                    { required: localUser.role === "MANAGER" ? false : true },
+                  ]}
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  getValueProps={(value) => ({
+                    value:
+                      localUser.role === "MANAGER"
+                        ? localUser.department
+                        : undefined,
+                  })}
                 >
                   <Select
                     placeholder="Bộ phận"
+                    disabled={localUser.role === "MANAGER"}
                     allowClear
                     options={[
                       { value: "KD", label: "KD" },

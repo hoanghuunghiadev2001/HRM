@@ -16,6 +16,7 @@ import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { InfoEmployee } from "@/lib/interface";
 import Image from "next/image";
+import { getUserFromLocalStorage } from "./api";
 
 interface ModalEditEmployeeProps {
   open: boolean;
@@ -35,6 +36,8 @@ const ModalEditEmployee = ({
   const [loading, setLoading] = useState(false);
   const [seniorityText, setSeniorityText] = useState<string>("");
   type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+
+  const localUser = getUserFromLocalStorage();
 
   const maxDate = dayjs();
 
@@ -59,7 +62,10 @@ const ModalEditEmployee = ({
       avatar: imageUrl ?? null,
 
       workInfo: {
-        department: formData.department,
+        department:
+          localUser.role === "MANAGER"
+            ? localUser.department
+            : formData.department,
         position: formData.position,
         specialization: formData.specialization,
         joinedTBD: formData.joinedTBD,
@@ -370,7 +376,11 @@ const ModalEditEmployee = ({
                   rules={[{ required: true }]}
                 >
                   <Select placeholder="Vài trò" allowClear>
-                    <Option value="ADMIN">ADMIN</Option>
+                    {localUser.role === "ADMIN" ? (
+                      <Option value="ADMIN">ADMIN</Option>
+                    ) : (
+                      ""
+                    )}
                     <Option value="MANAGER">MANAGER</Option>
                     <Option value="USER">USER</Option>
                   </Select>
@@ -479,10 +489,13 @@ const ModalEditEmployee = ({
                 <Form.Item
                   name="department"
                   label="Bộ phận"
-                  rules={[{ required: true }]}
+                  rules={[
+                    { required: localUser.role === "MANAGER" ? false : true },
+                  ]}
                 >
                   <Select
                     placeholder="Bộ phận"
+                    disabled={localUser.role === "MANAGER"}
                     allowClear
                     options={[
                       { value: "KD", label: "KD" },

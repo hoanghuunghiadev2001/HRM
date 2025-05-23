@@ -255,10 +255,14 @@ export async function importEmployees(formData: FormData) {
           position: position || "",
           specialization: row["Ngành"]?.toString(),
           joinedTBD: parseExcelDate(
-            row["Ngày vào\n Tbd"] || row["Ngày vào Tbd"]
+            row["Ngày vào\n Tbd"] ||
+              row["Ngày vào\n Tbd "] ||
+              row["Ngày vào  Tbd"]
           ),
           joinedTeSCC: parseExcelDate(
-            row["Ngày vào\n TeSCC"] || row["Ngày vào TeSCC"]
+            row["Ngày vào\n TeSCC"] ||
+              row["Ngày vào  TeSCC"] ||
+              row["Ngày vào\n TeSCC "]
           ),
           seniorityStart: parseExcelDate(row["Ngày bắt đâu tính thâm niên"]),
           seniority: seniorityMonths,
