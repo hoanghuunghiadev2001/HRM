@@ -109,12 +109,19 @@ export async function POST(req: NextRequest) {
           { status: 400 }
         );
       }
-
-      const res = await cloudinary.uploader.upload(avatar, {
-        folder: "employee_avatars",
-        public_id: `employee-${employeeCode}-${Date.now()}`,
-      });
-      avatarPath = res.secure_url;
+      try {
+        const res = await cloudinary.uploader.upload(avatar, {
+          folder: "employee_avatars",
+          public_id: `employee-${employeeCode}-${Date.now()}`,
+        });
+        avatarPath = res.secure_url;
+      } catch {
+        console.log(
+          process.env.CLOUDINARY_API_SECRET!,
+          process.env.CLOUDINARY_API_KEY!,
+          process.env.CLOUDINARY_CLOUD_NAME!
+        );
+      }
     }
 
     // Xử lý workInfo
