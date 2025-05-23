@@ -2,8 +2,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { prisma } from "@/lib/prisma";
-import fs from "fs";
-import path from "path";
+import { v2 as cloudinary } from "cloudinary";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
+  api_key: process.env.CLOUDINARY_API_KEY!,
+  api_secret: process.env.CLOUDINARY_API_SECRET!,
+});
 
 export const config = {
   api: {
@@ -56,7 +61,7 @@ export async function POST(req: NextRequest) {
       birthDate,
       password,
       role,
-      avatarBase64,
+      avatar,
 
       workInfo,
       personalInfo,
@@ -96,8 +101,8 @@ export async function POST(req: NextRequest) {
     let avatarPath: string | undefined = undefined;
 
     // Xử lý ảnh base64 nếu có
-    if (avatarBase64) {
-      const matches = avatarBase64.match(/^data:(image\/\w+);base64,(.+)$/);
+    if (avatar) {
+      const matches = avatar.match(/^data:(image\/\w+);base64,(.+)$/);
       if (!matches) {
         return NextResponse.json(
           { message: "Invalid base64 format for image" },
@@ -105,19 +110,11 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      const ext = matches[1].split("/")[1]; // ví dụ: png, jpg
-      const base64Data = matches[2];
-      const fileName = `employee-${employeeCode}-${Date.now()}.${ext}`;
-      const filePath = path.join(process.cwd(), "public/uploads", fileName);
-
-      const dir = path.dirname(filePath);
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
-
-      fs.writeFileSync(filePath, Buffer.from(base64Data, "base64"));
-
-      avatarPath = `/uploads/${fileName}`;
+      const res = await cloudinary.uploader.upload(avatar, {
+        folder: "employee_avatars",
+        public_id: `employee-${employeeCode}-${Date.now()}`,
+      });
+      avatarPath = res.secure_url;
     }
 
     // Xử lý workInfo

@@ -2,10 +2,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { prisma } from "@/lib/prisma";
-import fs from "fs";
-import path from "path";
+import { v2 as cloudinary } from "cloudinary";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
+  api_key: process.env.CLOUDINARY_API_KEY!,
+  api_secret: process.env.CLOUDINARY_API_SECRET!,
+});
 
 function isBase64Image(str: string): boolean {
   return /^data:image\/\w+;base64,/.test(str);
@@ -38,21 +43,11 @@ export async function PUT(req: NextRequest) {
         );
       }
 
-      const ext = matches[1].split("/")[1];
-      const base64Data = matches[2];
-      const fileName = `employee-${userId}-${Date.now()}.${ext}`;
-      const uploadDir = path.join(process.cwd(), "public/uploads");
-      const filePath = path.join(uploadDir, fileName);
-
-      // Tạo thư mục nếu chưa tồn tại
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
-
-      fs.writeFileSync(filePath, Buffer.from(base64Data, "base64"));
-      avatar = `/uploads/${fileName}`;
-    } else if (typeof avatar === "string" && avatar.startsWith("http")) {
-      // Giữ nguyên URL avatar, không thay đổi
+      const res = await cloudinary.uploader.upload(avatar, {
+        folder: "employee_avatars",
+        public_id: `employee-${userId}-${Date.now()}`,
+      });
+      avatar = res.secure_url;
     } else if (avatar === null) {
       // Xóa avatar
       avatar = null;

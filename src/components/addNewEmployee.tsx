@@ -203,6 +203,10 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
       });
     }
   };
+  useEffect(() => {
+    console.log(imageUrl);
+
+  }, [imageUrl])
 
   const uploadButton = (
     <button style={{ border: 0, background: "none" }} type="button">

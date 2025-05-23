@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import fs from "fs";
-import path from "path";
+import { v2 as cloudinary } from "cloudinary";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
+  api_key: process.env.CLOUDINARY_API_KEY!,
+  api_secret: process.env.CLOUDINARY_API_SECRET!,
+});
 
 function getEmployeeCodeFromUrl(urlString: string) {
   const url = new URL(urlString);
@@ -21,8 +26,6 @@ function formatDate(date: Date | null | undefined): string | null {
 
 export async function GET(req: NextRequest) {
   const employeeCode = getEmployeeCodeFromUrl(req.url);
-
-  
 
   const token = req.cookies.get("token")?.value;
   if (!token) {
@@ -147,9 +150,9 @@ export async function PATCH(req: NextRequest) {
 
     const body = await req.json();
 
-    let avatar = body.avatar
+    let avatar = body.avatar;
 
-     if (typeof avatar === "string" && isBase64Image(avatar)) {
+    if (typeof avatar === "string" && isBase64Image(avatar)) {
       const matches = avatar.match(/^data:(image\/\w+);base64,(.+)$/);
       if (!matches) {
         return NextResponse.json(
@@ -158,19 +161,11 @@ export async function PATCH(req: NextRequest) {
         );
       }
 
-      const ext = matches[1].split("/")[1];
-      const base64Data = matches[2];
-      const fileName = `employee-${body.id}-${Date.now()}.${ext}`;
-      const uploadDir = path.join(process.cwd(), "public/uploads");
-      const filePath = path.join(uploadDir, fileName);
-
-      // Tạo thư mục nếu chưa tồn tại
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
-
-      fs.writeFileSync(filePath, Buffer.from(base64Data, "base64"));
-      avatar = `/uploads/${fileName}`;
+      const res = await cloudinary.uploader.upload(avatar, {
+        folder: "employee_avatars",
+        public_id: `employee-${employee.id}-${Date.now()}`,
+      });
+      avatar = res.secure_url;
     } else if (typeof avatar === "string" && avatar.startsWith("http")) {
       // Giữ nguyên URL avatar, không thay đổi
     } else if (avatar === null) {
