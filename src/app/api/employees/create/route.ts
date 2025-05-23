@@ -116,11 +116,7 @@ export async function POST(req: NextRequest) {
         });
         avatarPath = res.secure_url;
       } catch {
-        console.log(
-          process.env.CLOUDINARY_API_SECRET!,
-          process.env.CLOUDINARY_API_KEY!,
-          process.env.CLOUDINARY_CLOUD_NAME!
-        );
+        console.log("that bai");
       }
     }
 
