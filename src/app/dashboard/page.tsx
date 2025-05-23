@@ -161,7 +161,7 @@ const Profile = () => {
   );
 
   useEffect(() => {
-    // setImageUrl(dataProfile?.avatar);
+    setImageUrl(dataProfile?.avatar);
     setPhoneNumber(dataProfile?.contactInfo.phoneNumber);
     setRelativePhone(dataProfile?.contactInfo.relativePhone);
     setCompanyPhone(dataProfile?.contactInfo.companyPhone);
