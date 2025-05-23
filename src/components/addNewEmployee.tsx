@@ -62,7 +62,7 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
 
         workInfo: {
           department:
-            localUser.role === "ADMIN"
+            localUser?.role === "ADMIN"
               ? formData.department
               : localUser.department,
           position: formData.position,
@@ -421,19 +421,19 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                   name="department"
                   label="Bộ phận"
                   rules={[
-                    { required: localUser.role === "MANAGER" ? false : true },
+                    { required: localUser?.role === "MANAGER" ? false : true },
                   ]}
                   // eslint-disable-next-line @typescript-eslint/no-unused-vars
                   getValueProps={(value) => ({
                     value:
-                      localUser.role === "MANAGER"
+                      localUser?.role === "MANAGER"
                         ? localUser.department
                         : undefined,
                   })}
                 >
                   <Select
                     placeholder="Bộ phận"
-                    disabled={localUser.role === "MANAGER"}
+                    disabled={localUser?.role === "MANAGER"}
                     allowClear
                     options={[
                       { value: "KD", label: "KD" },

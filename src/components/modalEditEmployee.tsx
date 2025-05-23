@@ -63,7 +63,7 @@ const ModalEditEmployee = ({
 
       workInfo: {
         department:
-          localUser.role === "MANAGER"
+          localUser?.role === "MANAGER"
             ? localUser.department
             : formData.department,
         position: formData.position,
@@ -376,7 +376,7 @@ const ModalEditEmployee = ({
                   rules={[{ required: true }]}
                 >
                   <Select placeholder="Vài trò" allowClear>
-                    {localUser.role === "ADMIN" ? (
+                    {localUser?.role === "ADMIN" ? (
                       <Option value="ADMIN">ADMIN</Option>
                     ) : (
                       ""
@@ -490,12 +490,12 @@ const ModalEditEmployee = ({
                   name="department"
                   label="Bộ phận"
                   rules={[
-                    { required: localUser.role === "MANAGER" ? false : true },
+                    { required: localUser?.role === "MANAGER" ? false : true },
                   ]}
                 >
                   <Select
                     placeholder="Bộ phận"
-                    disabled={localUser.role === "MANAGER"}
+                    disabled={localUser?.role === "MANAGER"}
                     allowClear
                     options={[
                       { value: "KD", label: "KD" },

@@ -12,9 +12,8 @@ import {
   Pagination,
   Select,
   Table,
-  Upload,
 } from "antd";
-import { TableProps, message } from "antd";
+import { TableProps } from "antd";
 import {
   EmployeesSumary,
   fetchEmployeeSummary,
@@ -82,6 +81,8 @@ export default function EmployeesPage() {
   const [totalTable, setTotalTable] = useState();
   const [infoEmployee, setInfoEmployee] = useState<InfoEmployee>();
   const localUser = getUserFromLocalStorage();
+  console.log(localUser);
+
   const [modalEditEmployee, setModalEditEmployee] = useState<boolean>(false);
   const [modalChangePassEmployee, setModalChangePassEmployee] =
     useState<boolean>(false);
@@ -94,7 +95,6 @@ export default function EmployeesPage() {
   const [filterMSNV, setFilterMSNV] = useState("");
   const [filterDepartment, setDepartment] = useState("");
 
-  const [file, setFile] = useState<File | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [result, setResult] = useState<{
     success: number;
@@ -107,43 +107,6 @@ export default function EmployeesPage() {
   const [form] = Form.useForm();
 
   const { styles } = useStyle();
-
-  const props = {
-    accept: ".xls,.xlsx", // chỉ cho phép file excel
-    showUploadList: false,
-    beforeUpload: (file: any) => {
-      setLoading(true);
-      const isExcel =
-        file.type ===
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-        file.type === "application/vnd.ms-excel";
-      if (!isExcel) {
-        message.error("Bạn chỉ có thể tải lên file Excel (.xls hoặc .xlsx)!");
-      }
-      return isExcel || Upload.LIST_IGNORE; // nếu ko phải file excel thì ko cho upload
-    },
-    onChange: (info: any) => {
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} tải lên thành công.`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} tải lên thất bại.`);
-      }
-    },
-    onSuccess: async () => {
-      getEmployeeSumary(pageTable, pageSize);
-      addEmployeeSuccess();
-      setLoading(false);
-      message.success("Tải file thành công");
-
-      // Nếu cần gửi request xoá file trên server thì làm ở đây
-      // await fetch(`/api/employees/deletefile?filename=${file.name}`, { method: "DELETE" });
-    },
-    onerror: async () => {
-      addEmployeeErr();
-      setLoading(false);
-    },
-    multiple: false, // nếu muốn upload nhiều file thì đổi thành true
-  };
 
   // lấy nhân viên
   const getEmployeeSumary = async (page: number, pageSize: number) => {
@@ -437,16 +400,7 @@ export default function EmployeesPage() {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-      setResult(null);
-    }
-    handleUpload();
-  };
-
-  const handleUpload = async () => {
-    if (!file) return;
+    if (!e.target.files?.[0]) return;
 
     setLoading(true);
     console.log(10);
@@ -492,7 +446,7 @@ export default function EmployeesPage() {
             formData.append("batch", JSON.stringify(batch));
             formData.append("headerRowIndex", headerRowIndex.toString());
 
-            const batchResult = await fetch("/api/employees/upfile", {
+            const batchResult = await fetch("/api/employees/import-batch", {
               method: "POST",
               body: formData,
             }).then((res) => res.json());
@@ -507,8 +461,10 @@ export default function EmployeesPage() {
           }
 
           console.log(100);
+          addEmployeeSuccess();
           setResult(result);
         } catch (error) {
+          addEmployeeErr();
           console.error("Processing failed:", error);
           setResult({
             success: 0,
@@ -522,9 +478,10 @@ export default function EmployeesPage() {
         }
       };
 
-      reader.readAsArrayBuffer(file);
+      reader.readAsArrayBuffer(e.target.files?.[0]);
     } catch (error) {
       console.error("Upload failed:", error);
+      addEmployeeErr();
       setResult({
         success: 0,
         updated: 0,
@@ -670,26 +627,24 @@ export default function EmployeesPage() {
       </div>
       <div className="w-full  mt-4 ">
         <div className="flex justify-end items-start mb-3 gap-4  w-full">
-          {localUser.role === "ADMIN" && (
+          {localUser?.role === "ADMIN" && (
             <Button onClick={handleExportExcel} icon={<DownloadOutlined />}>
               Download
             </Button>
           )}
-          {localUser.role === "ADMIN" && (
-            <Upload {...props} action="/api/employees/upfile">
-              <Button type="primary" icon={<UploadOutlined />}>
-                Upload
-              </Button>
-            </Upload>
-          )}
 
-          <input
-            type="file"
-            id="file-upload"
-            className="hidden"
-            accept=".xlsx, .xls, .csv"
-            onChange={handleFileChange}
-          />
+          {localUser?.role === "ADMIN" && (
+            <label htmlFor="file-upload" className="relative inline-block">
+              <Button icon={<UploadOutlined />}>Upload</Button>
+              <input
+                type="file"
+                id="file-upload"
+                className="opacity-0 absolute z-10 w-full h-full top-0 right-0"
+                accept=".xlsx, .xls, .csv"
+                onChange={handleFileChange}
+              />
+            </label>
+          )}
 
           <button
             className="flex relative  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
@@ -724,7 +679,7 @@ export default function EmployeesPage() {
               />
             </Form.Item>
           </div>
-          {localUser.role === "ADMIN" && (
+          {localUser?.role === "ADMIN" && (
             <div className="!flex gap-2 items-center ">
               <Form.Item
                 label={<p className="font-bold text-[#242424]">Bộ phận</p>}
