@@ -2,13 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AttendanceOverview } from "@/components/attendance-overview";
 import { EmployeeStatusChart } from "@/components/employee-status-chart";
@@ -57,7 +51,6 @@ export default function DashboardPage() {
             </div>
             <TabsList>
               <TabsTrigger value="overview">Tổng quan</TabsTrigger>
-
               <TabsTrigger value="leave">Nghỉ phép</TabsTrigger>
             </TabsList>
           </div>
@@ -176,42 +169,10 @@ export default function DashboardPage() {
             </div>
           </TabsContent>
 
-          <TabsContent value="attendance" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Báo cáo chấm công chi tiết</CardTitle>
-                <CardDescription>
-                  Thống kê chấm công theo ngày, tuần, tháng
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Chọn khoảng thời gian để xem báo cáo chi tiết
-                </p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
           <TabsContent value="leave" className="space-y-4">
             <Card>
               <CardContent>
                 <LeaveReportPage />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="employees" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Báo cáo nhân viên</CardTitle>
-                <CardDescription>
-                  Thống kê và phân tích thông tin nhân viên
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Chọn tiêu chí để xem báo cáo chi tiết
-                </p>
               </CardContent>
             </Card>
           </TabsContent>

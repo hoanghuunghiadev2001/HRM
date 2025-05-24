@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 import { LeaveTypeEnum, Prisma } from "../../../../../generated/prisma";
-import { prisma } from "@/lib/prisma"; // Prisma dùng chung
+import { prisma } from "@/lib/prisma";
 
 // Giao diện đơn nghỉ kèm thông tin nhân viên
 type LeaveRequestWithEmployee = Prisma.LeaveRequestGetPayload<{
@@ -30,6 +31,7 @@ export async function GET(request: Request) {
     const start = startDate ? new Date(startDate) : defaultStart;
     const end = endDate ? new Date(endDate) : defaultEnd;
 
+    // Truy vấn toàn bộ đơn nghỉ
     const leaveRequests = await prisma.leaveRequest.findMany({
       where: {
         startDate: { lte: end },
@@ -44,19 +46,23 @@ export async function GET(request: Request) {
       },
     });
 
+    // Lọc theo phòng ban nếu có
     const filteredRequests = department
       ? leaveRequests.filter(
-          (req) => req.employee.workInfo?.department === department
+          (req: any) => req.employee.workInfo?.department === department
         )
       : leaveRequests;
 
+    // Gom nhóm dữ liệu
     const groupedData =
       groupBy === "type"
         ? groupByType(filteredRequests)
         : groupByTime(filteredRequests, groupBy);
 
     const summary = getSummary(filteredRequests);
-    const employeeDetails = await getEmployeeStats(start, end, department);
+
+    // Gom đơn nghỉ theo nhân viên
+    const employeeDetails = getEmployeeStats(filteredRequests);
 
     return NextResponse.json({
       data: groupedData,
@@ -73,17 +79,8 @@ export async function GET(request: Request) {
 }
 
 // Gom nhóm theo loại nghỉ
-type LeaveTypeStats = {
-  type: string;
-  count: number;
-  hours: number;
-  approved: number;
-  rejected: number;
-  pending: number;
-};
-
-function groupByType(requests: LeaveRequestWithEmployee[]): LeaveTypeStats[] {
-  const result: Record<string, LeaveTypeStats> = {};
+function groupByType(requests: LeaveRequestWithEmployee[]) {
+  const result: Record<string, any> = {};
 
   for (const type of Object.values(LeaveTypeEnum)) {
     result[type] = {
@@ -109,22 +106,9 @@ function groupByType(requests: LeaveRequestWithEmployee[]): LeaveTypeStats[] {
   return Object.values(result);
 }
 
-// Gom nhóm theo thời gian (ngày / tuần / tháng)
-type TimeGroup = {
-  period: string;
-  total: number;
-  hours: number;
-  approved: number;
-  rejected: number;
-  pending: number;
-  byType: Record<string, { count: number; hours: number }>;
-};
-
-function groupByTime(
-  requests: LeaveRequestWithEmployee[],
-  groupBy: string
-): TimeGroup[] {
-  const result: Record<string, TimeGroup> = {};
+// Gom nhóm theo thời gian
+function groupByTime(requests: LeaveRequestWithEmployee[], groupBy: string) {
+  const result: Record<string, any> = {};
 
   for (const req of requests) {
     const date = new Date(req.startDate);
@@ -209,64 +193,42 @@ function getSummary(requests: LeaveRequestWithEmployee[]) {
   };
 }
 
-// Thống kê theo từng nhân viên
-async function getEmployeeStats(
-  start: Date,
-  end: Date,
-  department: string | null
-) {
-  const where: Prisma.EmployeeWhereInput = {};
+// Gom đơn nghỉ theo từng nhân viên
+function getEmployeeStats(requests: LeaveRequestWithEmployee[]) {
+  const result: Record<string, any> = {};
 
-  if (department) {
-    where.workInfo = { department };
-  }
+  for (const req of requests) {
+    const emp = req.employee;
+    const id = emp.id;
 
-  const employees = await prisma.employee.findMany({
-    where,
-    include: {
-      workInfo: true,
-    },
-  });
-
-  return Promise.all(
-    employees.map(async (emp) => {
-      const leaves = await prisma.leaveRequest.findMany({
-        where: {
-          employeeId: emp.id,
-          startDate: { lte: end },
-          endDate: { gte: start },
-        },
-      });
-
-      const total = leaves.length;
-      const totalHours = leaves.reduce(
-        (sum, r) => sum + (r.totalHours || 0),
-        0
-      );
-      const approved = leaves.filter((r) => r.status === "approved").length;
-
-      const byType = Object.values(LeaveTypeEnum).reduce((acc, type) => {
-        const typeLeaves = leaves.filter((r) => r.leaveType === type);
-        acc[type] = {
-          count: typeLeaves.length,
-          hours: typeLeaves.reduce((sum, r) => sum + (r.totalHours || 0), 0),
-        };
-        return acc;
-      }, {} as Record<string, { count: number; hours: number }>);
-
-      return {
-        employeeId: emp.id,
+    if (!result[id]) {
+      result[id] = {
+        employeeId: id,
         employeeCode: emp.employeeCode,
         name: emp.name,
         department: emp.workInfo?.department,
         position: emp.workInfo?.position,
         leave: {
-          total,
-          hours: totalHours,
-          approved,
-          byType,
+          total: 0,
+          hours: 0,
+          approved: 0,
+          byType: {},
         },
       };
-    })
-  );
+
+      for (const type of Object.values(LeaveTypeEnum)) {
+        result[id].leave.byType[type] = { count: 0, hours: 0 };
+      }
+    }
+
+    const stats = result[id].leave;
+    stats.total++;
+    stats.hours += req.totalHours || 0;
+    if (req.status === "approved") stats.approved++;
+
+    stats.byType[req.leaveType].count++;
+    stats.byType[req.leaveType].hours += req.totalHours || 0;
+  }
+
+  return Object.values(result);
 }

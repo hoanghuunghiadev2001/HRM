@@ -1,32 +1,14 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from "react";
+
 import { LeaveRequestsChart } from "@/components/leave-requests-chart";
 import dayjs from "dayjs";
 import quarterOfYear from "dayjs/plugin/quarterOfYear";
+import { Select, Table, Tag } from "antd";
+import "../../../../globals.css";
+import { FileTextOutlined } from "@ant-design/icons";
+import { createStyles } from "antd-style";
 
 interface LeaveTypeStats {
   type: string;
@@ -82,6 +64,27 @@ interface LeaveReportData {
   employeeDetails: EmployeeLeave[];
 }
 
+const useStyle = createStyles((utils) => {
+  const { css, token } = utils;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const antCls = (token as any).antCls || ".ant"; // fallback nếu token.antCls không tồn tại
+
+  return {
+    customTable: css`
+      ${antCls}-table {
+        ${antCls}-table-container {
+          ${antCls}-table-body,
+          ${antCls}-table-content {
+            scrollbar-width: thin;
+            scrollbar-color: #eaeaea transparent;
+            scrollbar-gutter: stable;
+          }
+        }
+      }
+    `,
+  };
+});
+
 export default function LeaveReportPage() {
   dayjs.extend(quarterOfYear);
   const [dateRange, setDateRange] = useState("month");
@@ -90,18 +93,27 @@ export default function LeaveReportPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const { styles } = useStyle();
+
   // Danh sách phòng ban
-  const departments = useMemo(
-    () => [
-      { value: "all", label: "Tất cả phòng ban" },
-      { value: "tech", label: "Kỹ thuật" },
-      { value: "sales", label: "Kinh doanh" },
-      { value: "admin", label: "Hành chính" },
-      { value: "hr", label: "Nhân sự" },
-      { value: "accounting", label: "Kế toán" },
-    ],
-    []
-  );
+  const dateRangeSelect = [
+    { value: "week", label: "Tuần này" },
+    { value: "month", label: "Tháng này" },
+    { value: "quarter", label: "Quý này" },
+    { value: "year", label: "Năm này" },
+  ];
+
+  const departments = [
+    { value: "KD", label: "KD" },
+    { value: "SCC", label: "SCC" },
+    { value: "ĐS", label: "ĐS" },
+    { value: "HC", label: "HC" },
+    { value: "CV", label: "CV" },
+    { value: "PT", label: "PT" },
+    { value: "KT", label: "KT" },
+    { value: "IT", label: "IT" },
+    { value: "CS", label: "CS" },
+  ];
 
   // Fetch dữ liệu báo cáo nghỉ phép
   useEffect(() => {
@@ -232,185 +244,263 @@ export default function LeaveReportPage() {
   // Lấy danh sách chi tiết đơn nghỉ phép
   const leaveDetails = reportData?.employeeDetails || [];
 
+  const dataSource: DataType[] = leaveDetails.slice(0, 10).map((emp) => {
+    // Tìm loại phép phổ biến
+    let popularType = { type: "", count: 0 };
+    Object.entries(emp.leave.byType).forEach(([type, data]) => {
+      if (data.count > popularType.count) {
+        popularType = { type, count: data.count };
+      }
+    });
+
+    return {
+      id: emp.employeeId,
+      employeeCode: emp.employeeCode,
+      name: emp.name,
+      department: emp.department || "N/A",
+      totalRequests: emp.leave.total,
+      totalHours: emp.leave.hours,
+      totalApproved: emp.leave.approved,
+      approvalRate:
+        emp.leave.total > 0
+          ? `${((emp.leave.approved / emp.leave.total) * 100).toFixed(0)}%`
+          : "0%",
+      popularType: popularType.type
+        ? `${getLeaveTypeName(popularType.type)} (${popularType.count})`
+        : "N/A",
+    };
+  });
+
+  interface DataType {
+    id: number;
+    employeeCode: string;
+    name: string;
+    department: string;
+    totalRequests: number;
+    totalHours: number;
+    totalApproved: number;
+    approvalRate: string;
+    popularType: string;
+  }
+
   return (
     <div className="container mx-auto py-8">
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-3xl font-bold">Báo Cáo Nghỉ Phép</h1>
         <div className="flex gap-4">
-          <Select value={dateRange} onValueChange={setDateRange}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Chọn thời gian" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="week">Tuần này</SelectItem>
-              <SelectItem value="month">Tháng này</SelectItem>
-              <SelectItem value="quarter">Quý này</SelectItem>
-              <SelectItem value="year">Năm nay</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={department} onValueChange={setDepartment}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Chọn phòng ban" />
-            </SelectTrigger>
-            <SelectContent>
-              {departments.map((dept) => (
-                <SelectItem key={dept.value} value={dept.value}>
-                  {dept.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Select
+            onChange={(e) => setDateRange(e)}
+            style={{ width: "100px" }}
+            placeholder={"Thời gian"}
+            allowClear
+            options={dateRangeSelect}
+          />
+          <Select
+            onChange={(e) => setDepartment(e)}
+            style={{ width: "100px" }}
+            placeholder={"Bộ phận"}
+            allowClear
+            options={departments}
+          />
         </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">
-              Tổng đơn nghỉ phép
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary.total}</div>
-            <p className="text-xs text-muted-foreground">
-              {summary.totalHours} giờ nghỉ phép
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Đã duyệt</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary.approved}</div>
-            <p className="text-xs text-muted-foreground">
-              {summary.total > 0
-                ? ((summary.approved / summary.total) * 100).toFixed(1)
-                : 0}
-              % tổng đơn
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">
-              Đang chờ duyệt
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary.pending}</div>
-            <p className="text-xs text-muted-foreground">
-              {summary.total > 0
-                ? ((summary.pending / summary.total) * 100).toFixed(1)
-                : 0}
-              % tổng đơn
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Từ chối</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary.rejected}</div>
-            <p className="text-xs text-muted-foreground">
-              {summary.total > 0
-                ? ((summary.rejected / summary.total) * 100).toFixed(1)
-                : 0}
-              % tổng đơn
-            </p>
-          </CardContent>
-        </Card>
+        <div className="rounded-2xl bg-gradient-to-r from-[#2c00cc] to-[#9076ec] p-4">
+          <p className="text-white text-lg font-bold">Tổng đơn nghỉ phép</p>
+
+          <div className="flex justify-between">
+            <div>
+              <p className="text-white !text-[30px] font-bold">
+                {summary.total}
+              </p>
+              <p className="text-base text-white font-semibold">
+                {summary.totalHours} giờ
+              </p>
+            </div>
+            <FileTextOutlined className="!text-white !text-[50px] " />
+          </div>
+        </div>
+        <div className="rounded-2xl bg-gradient-to-r from-[#cc8b00] to-[#ecc776] p-4">
+          <p className="text-white text-lg font-bold">Đã duyệt</p>
+
+          <div className="flex justify-between">
+            <div>
+              <p className="text-white !text-[30px] font-bold">
+                {summary.approved}
+              </p>
+              <p className="text-base text-white font-semibold">
+                {summary.total > 0
+                  ? ((summary.approved / summary.total) * 100).toFixed(1)
+                  : 0}
+                % tổng đơn
+              </p>
+            </div>
+            <FileTextOutlined className="!text-white !text-[50px] " />
+          </div>
+        </div>
+        <div className="rounded-2xl bg-gradient-to-r from-[#0069cc] to-[#76a5ec] p-4">
+          <p className="text-white text-lg font-bold">Đang chờ duyệt</p>
+          <div className="flex justify-between">
+            <div>
+              <p className="text-white !text-[30px] font-bold">
+                {summary.pending}
+              </p>
+              <p className="text-base text-white font-semibold">
+                {summary.total > 0
+                  ? ((summary.pending / summary.total) * 100).toFixed(1)
+                  : 0}
+                % tổng đơn
+              </p>
+            </div>
+            <FileTextOutlined className="!text-white !text-[50px] " />
+          </div>
+        </div>
+        <div className="rounded-2xl bg-gradient-to-r from-[#07cc00] to-[#7aec76] p-4">
+          <p className="text-white text-lg font-bold">Đang chờ duyệt</p>
+
+          <div className="flex justify-between">
+            <div>
+              <p className="text-white !text-[30px] font-bold">
+                {summary.rejected}
+              </p>
+              <p className="text-base text-white font-semibold">
+                {summary.total > 0
+                  ? ((summary.rejected / summary.total) * 100).toFixed(1)
+                  : 0}
+                % tổng đơn
+              </p>
+            </div>
+            <FileTextOutlined className="!text-white !text-[50px] " />
+          </div>
+        </div>
       </div>
 
-      <div className="mt-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Thống kê nghỉ phép theo loại</CardTitle>
-            <CardDescription>
-              Phân bố đơn nghỉ phép theo từng loại phép
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="pt-4">
-            <LeaveRequestsChart leaveTypeData={reportData?.data ?? []} />
-          </CardContent>
-        </Card>
+      <div className="mt-6 shadow-card-report p-6 rounded-2xl">
+        <p className="text-2xl font-bold">Thống kê nghỉ phéo theo loại</p>
+        <LeaveRequestsChart leaveTypeData={reportData?.data ?? []} />
       </div>
 
-      <div className="mt-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Chi tiết đơn nghỉ phép</CardTitle>
-            <CardDescription>Danh sách chi tiết đơn nghỉ phép</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Mã NV</TableHead>
-                  <TableHead>Tên nhân viên</TableHead>
-                  <TableHead>Phòng ban</TableHead>
-                  <TableHead>Tổng đơn</TableHead>
-                  <TableHead>Tổng giờ</TableHead>
-                  <TableHead>Đã duyệt</TableHead>
-                  <TableHead>Loại phép phổ biến</TableHead>
+      <div className="mt-6 shadow-card-report p-6 rounded-2xl">
+        <p className="text-2xl font-bold">Chi tiết đơn nghỉ phép</p>
+
+        <Table<DataType>
+          dataSource={dataSource}
+          columns={[
+            {
+              title: "Mã NV",
+              dataIndex: "employeeCode",
+              key: "employeeCode",
+            },
+            {
+              title: "Tên nhân viên",
+              dataIndex: "name",
+              key: "name",
+              render: (text) => <strong>{text}</strong>,
+            },
+            {
+              title: "Phòng ban",
+              dataIndex: "department",
+              key: "department",
+            },
+            {
+              title: "Tổng đơn",
+              dataIndex: "total",
+              key: "total",
+            },
+            {
+              title: "Tổng giờ",
+              dataIndex: "hours",
+              key: "hours",
+            },
+            {
+              title: "Đã duyệt",
+              dataIndex: "approved",
+              key: "approved",
+              render: (approved: number, record) => (
+                <Tag color="green">
+                  {approved} (
+                  {(record.totalApproved / record.totalRequests) * 100}
+                  .toFixed(1)%)
+                </Tag>
+              ),
+            },
+            {
+              title: "Loại phép phổ biến",
+              dataIndex: "popularType",
+              key: "popularType",
+            },
+          ]}
+          pagination={{ pageSize: 10 }}
+          locale={{
+            emptyText: "Không có dữ liệu",
+          }}
+          className={styles.customTable}
+          // columns={columns}
+          // dataSource={formatted ?? []}
+          // pagination={{ pageSize: 12 }}
+          scroll={{ y: "calc(100vh - 305px)" }}
+        />
+        {/* <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Mã NV</TableHead>
+              <TableHead>Tên nhân viên</TableHead>
+              <TableHead>Phòng ban</TableHead>
+              <TableHead>Tổng đơn</TableHead>
+              <TableHead>Tổng giờ</TableHead>
+              <TableHead>Đã duyệt</TableHead>
+              <TableHead>Loại phép phổ biến</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {leaveDetails.slice(0, 10).map((employee) => {
+              // Tìm loại phép phổ biến nhất
+              let popularLeaveType = { type: "", count: 0 };
+              Object.entries(employee.leave.byType).forEach(([type, data]) => {
+                if (data.count > popularLeaveType.count) {
+                  popularLeaveType = { type, count: data.count };
+                }
+              });
+
+              return (
+                <TableRow key={employee.employeeId}>
+                  <TableCell>{employee.employeeCode}</TableCell>
+                  <TableCell className="font-medium">{employee.name}</TableCell>
+                  <TableCell>{employee.department || "N/A"}</TableCell>
+                  <TableCell>{employee.leave.total}</TableCell>
+                  <TableCell>{employee.leave.hours}</TableCell>
+                  <TableCell>
+                    <Badge variant="success">
+                      {employee.leave.approved} (
+                      {employee.leave.total > 0
+                        ? (
+                            (employee.leave.approved / employee.leave.total) *
+                            100
+                          ).toFixed(0)
+                        : 0}
+                      %)
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {popularLeaveType.type
+                      ? `${getLeaveTypeName(popularLeaveType.type)} (${
+                          popularLeaveType.count
+                        })`
+                      : "N/A"}
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {leaveDetails.slice(0, 10).map((employee) => {
-                  // Tìm loại phép phổ biến nhất
-                  let popularLeaveType = { type: "", count: 0 };
-                  Object.entries(employee.leave.byType).forEach(
-                    ([type, data]) => {
-                      if (data.count > popularLeaveType.count) {
-                        popularLeaveType = { type, count: data.count };
-                      }
-                    }
-                  );
-
-                  return (
-                    <TableRow key={employee.employeeId}>
-                      <TableCell>{employee.employeeCode}</TableCell>
-                      <TableCell className="font-medium">
-                        {employee.name}
-                      </TableCell>
-                      <TableCell>{employee.department || "N/A"}</TableCell>
-                      <TableCell>{employee.leave.total}</TableCell>
-                      <TableCell>{employee.leave.hours}</TableCell>
-                      <TableCell>
-                        <Badge variant="success">
-                          {employee.leave.approved} (
-                          {employee.leave.total > 0
-                            ? (
-                                (employee.leave.approved /
-                                  employee.leave.total) *
-                                100
-                              ).toFixed(0)
-                            : 0}
-                          %)
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        {popularLeaveType.type
-                          ? `${getLeaveTypeName(popularLeaveType.type)} (${
-                              popularLeaveType.count
-                            })`
-                          : "N/A"}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-                {leaveDetails.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={7} className="h-24 text-center">
-                      Không có dữ liệu
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+              );
+            })}
+            {leaveDetails.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={7} className="h-24 text-center">
+                  Không có dữ liệu
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table> */}
       </div>
     </div>
   );
