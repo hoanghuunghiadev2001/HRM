@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import { format, startOfWeek, addDays, isWithinInterval } from "date-fns";
 import ExcelJS from "exceljs";
@@ -46,20 +47,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Gom nhóm theo bộ phận
-    const grouped = employees.reduce<Record<string, typeof employees>>(
-      (acc, emp) => {
-        const dep = emp.workInfo?.department || "Không xác định";
-        if (!acc[dep]) acc[dep] = [];
-        acc[dep].push(emp);
-        return acc;
-      },
-      {}
-    );
+    const grouped: Record<string, (typeof employees)[number][]> = {};
 
+    for (const emp of employees) {
+      const dep = emp.workInfo?.department || "Không xác định";
+      if (!grouped[dep]) grouped[dep] = [];
+      grouped[dep].push(emp);
+    }
+
+    const groupedEntries = Object.entries(grouped) as [
+      string,
+      (typeof employees)[number][]
+    ][];
     const workbook = new ExcelJS.Workbook();
 
-    for (const [depName, empList] of Object.entries(grouped)) {
+    for (const [depName, empList] of groupedEntries) {
       const ws = workbook.addWorksheet(depName);
 
       // Tiêu đề cột
@@ -90,9 +92,9 @@ export async function POST(req: NextRequest) {
         for (let i = 0; i < 6; i++) {
           const date = addDays(monday, i);
           const att = emp.Attendance.find(
-            (a) => a.date.toDateString() === date.toDateString()
+            (a: any) => a.date.toDateString() === date.toDateString()
           );
-          const leave = emp.LeaveRequest.find((lr) =>
+          const leave = emp.LeaveRequest.find((lr: any) =>
             isWithinInterval(date, { start: lr.startDate, end: lr.endDate })
           );
 
