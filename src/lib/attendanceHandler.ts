@@ -1,6 +1,6 @@
 // src/lib/attendanceHandler.ts
 
-import { prisma } from "@/lib/prisma";
+import { prisma } from "./prisma";
 
 export async function handleAttendance(employeeCode: string, timeScan: string) {
   if (!employeeCode || !timeScan) {
