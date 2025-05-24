@@ -120,7 +120,11 @@ function calculateAttendanceStats(
   const groupedByDate: Record<string, AttendanceWithEmployee[]> = {};
 
   for (const record of data) {
-    const dateStr = record.date.toISOString().split("T")[0];
+    // Chuyển ngày attendance.date sang giờ VN để group đúng ngày
+    const dateUtc = new Date(record.date);
+    const dateVn = new Date(dateUtc.getTime() + 7 * 60 * 60 * 1000);
+    const dateStr = dateVn.toISOString().slice(0, 10);
+
     if (!groupedByDate[dateStr]) {
       groupedByDate[dateStr] = [];
     }
@@ -128,19 +132,34 @@ function calculateAttendanceStats(
   }
 
   const dailyStats: DailyStat[] = Object.entries(groupedByDate).map(
-    ([date, records]) => {
-      const onTime = records.filter(
-        (r) => r.checkInTime && new Date(r.checkInTime).getHours() < 8
-      ).length;
+    ([dateStr, records]) => {
+      // Tạo mốc 8:00 sáng giờ VN theo ngày đó
+      const baseTime = new Date(`${dateStr}T08:00:00+07:00`);
+      // baseTime.getTime() ra UTC timestamp tương ứng với 8:00 giờ VN ngày đó
 
-      const late = records.filter(
-        (r) => r.checkInTime && new Date(r.checkInTime).getHours() >= 8
-      ).length;
+      let onTime = 0,
+        late = 0,
+        absent = 0;
 
-      const absent = records.filter((r) => !r.checkInTime).length;
+      for (const r of records) {
+        if (!r.checkInTime) {
+          absent++;
+          continue;
+        }
+        // checkInTime là UTC, lấy timestamp UTC
+        const checkInUtc =
+          new Date(r.checkInTime).getTime() - 7 * 60 * 60 * 1000;
+
+        // So sánh checkIn UTC với mốc 8:00 giờ VN đã convert sang UTC timestamp
+        if (checkInUtc <= baseTime.getTime()) {
+          onTime++;
+        } else {
+          late++;
+        }
+      }
 
       return {
-        date,
+        date: dateStr,
         onTime,
         late,
         absent,

@@ -169,12 +169,11 @@ function getWorkingDaysCount(startDate: Date, endDate: Date) {
   const currentDate = new Date(startDate);
 
   while (currentDate <= endDate) {
-    // Skip weekends (0 = Sunday, 6 = Saturday)
+    // Bỏ Chủ nhật (0), tính thứ 7 (6) là ngày làm việc
     const day = currentDate.getDay();
-    if (day !== 0 && day !== 6) {
+    if (day !== 0) {
       count++;
     }
-
     currentDate.setDate(currentDate.getDate() + 1);
   }
 

@@ -3,7 +3,15 @@
 import { useEffect, useState } from "react";
 
 import React from "react";
-import { DatePicker, Form, Input, Pagination, Select, Table } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Pagination,
+  Select,
+  Table,
+} from "antd";
 import type { TableProps } from "antd";
 import { getUserFromLocalStorage } from "@/components/api";
 import ModalLoading from "@/components/modalLoading";
@@ -13,6 +21,7 @@ import dayjs from "dayjs";
 import { fetchAttendances } from "@/lib/api";
 import { AttendanceResponse } from "@/lib/interface";
 import Image from "next/image";
+import { DownloadOutlined } from "@ant-design/icons";
 
 interface DataType {
   key: string;
@@ -47,6 +56,17 @@ const useStyle = createStyles((utils) => {
     `,
   };
 });
+
+// utils/getTodayVN.ts
+export function getTodayVNDateString() {
+  const now = new Date();
+  const vietnamOffset = 7 * 60; // UTC+7
+  const localOffset = now.getTimezoneOffset();
+  const diff = vietnamOffset + localOffset;
+  now.setMinutes(now.getMinutes() + diff);
+  return now.toISOString().split("T")[0]; // YYYY-MM-DD
+}
+
 export default function AttendancePage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState(10);
@@ -56,6 +76,7 @@ export default function AttendancePage() {
   const [filterName, setFilterName] = useState("");
   const [filterMSNV, setFilterMSNV] = useState("");
   const [filterDepartment, setFilterDepartment] = useState("");
+  const todayVN = getTodayVNDateString();
 
   const [timeStart, setTimeStart] = useState("");
   const [timeEnd, setTimeEnd] = useState("");
@@ -226,14 +247,39 @@ export default function AttendancePage() {
     setTimeEnd(dateString[1]);
   };
 
+  const handleExportExcel = async () => {
+    const res = await fetch("/api/attendance/export", {
+      method: "POST",
+      body: JSON.stringify({
+        week: todayVN, // Ngày bất kỳ trong tuần muốn xuất
+        department: localUser.role === "ADMIN" ? "" : localUser.department, // Hoặc bỏ trống nếu xuất toàn bộ
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "employees.xlsx";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div>
       <ModalLoading isOpen={loading} />
 
-      <div className="w-full">
+      <div className="w-full flex justify-between">
         <p className="font-bold  text-2xl text-[#4a4a6a]">
           Danh sách phiếu yêu cầu:
         </p>
+        <Button
+          onClick={handleExportExcel}
+          type="primary"
+          icon={<DownloadOutlined />}
+        >
+          Xuất file tuần này
+        </Button>
       </div>
       <div className="w-full">
         <p className="font-bold  text-xl text-[#4a4a6a]">Tìm kiếm:</p>

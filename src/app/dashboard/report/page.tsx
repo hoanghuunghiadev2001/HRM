@@ -194,9 +194,6 @@ export default function DashboardPage() {
 
           <TabsContent value="leave" className="space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle>Thống kê nghỉ phép</CardTitle>
-              </CardHeader>
               <CardContent>
                 <LeaveReportPage />
               </CardContent>
