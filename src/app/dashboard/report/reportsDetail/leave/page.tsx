@@ -7,7 +7,12 @@ import dayjs from "dayjs";
 import quarterOfYear from "dayjs/plugin/quarterOfYear";
 import { Select, Table, Tag } from "antd";
 import "../../../../globals.css";
-import { FileTextOutlined } from "@ant-design/icons";
+import {
+  DiffOutlined,
+  FileProtectOutlined,
+  FileTextOutlined,
+  FileUnknownOutlined,
+} from "@ant-design/icons";
 import { createStyles } from "antd-style";
 
 interface LeaveTypeStats {
@@ -305,7 +310,7 @@ export default function LeaveReportPage() {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 shadow-card-report p-6 rounded-2xl">
         <div className="rounded-2xl bg-gradient-to-r from-[#2c00cc] to-[#9076ec] p-4">
           <p className="text-white text-lg font-bold">Tổng đơn nghỉ phép</p>
 
@@ -336,7 +341,7 @@ export default function LeaveReportPage() {
                 % tổng đơn
               </p>
             </div>
-            <FileTextOutlined className="!text-white !text-[50px] " />
+            <FileProtectOutlined className="!text-white !text-[50px] " />
           </div>
         </div>
         <div className="rounded-2xl bg-gradient-to-r from-[#0069cc] to-[#76a5ec] p-4">
@@ -353,11 +358,11 @@ export default function LeaveReportPage() {
                 % tổng đơn
               </p>
             </div>
-            <FileTextOutlined className="!text-white !text-[50px] " />
+            <FileUnknownOutlined className="!text-white !text-[50px] " />
           </div>
         </div>
         <div className="rounded-2xl bg-gradient-to-r from-[#07cc00] to-[#7aec76] p-4">
-          <p className="text-white text-lg font-bold">Đang chờ duyệt</p>
+          <p className="text-white text-lg font-bold">Từ chối</p>
 
           <div className="flex justify-between">
             <div>
@@ -371,7 +376,7 @@ export default function LeaveReportPage() {
                 % tổng đơn
               </p>
             </div>
-            <FileTextOutlined className="!text-white !text-[50px] " />
+            <DiffOutlined className="!text-white !text-[50px] " />
           </div>
         </div>
       </div>
@@ -405,13 +410,13 @@ export default function LeaveReportPage() {
             },
             {
               title: "Tổng đơn",
-              dataIndex: "total",
-              key: "total",
+              dataIndex: "totalRequests",
+              key: "totalRequests",
             },
             {
               title: "Tổng giờ",
-              dataIndex: "hours",
-              key: "hours",
+              dataIndex: "totalHours",
+              key: "totalHours",
             },
             {
               title: "Đã duyệt",
@@ -419,9 +424,11 @@ export default function LeaveReportPage() {
               key: "approved",
               render: (approved: number, record) => (
                 <Tag color="green">
-                  {approved} (
-                  {(record.totalApproved / record.totalRequests) * 100}
-                  .toFixed(1)%)
+                  {record.totalApproved} (
+                  {Number(
+                    (record.totalApproved / record.totalRequests) * 100
+                  ).toFixed(0)}
+                  %)
                 </Tag>
               ),
             },

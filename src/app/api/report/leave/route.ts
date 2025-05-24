@@ -29,7 +29,9 @@ export async function GET(request: Request) {
     const defaultEnd = new Date(today.getFullYear(), 11, 31);
 
     const start = startDate ? new Date(startDate) : defaultStart;
+    start.setHours(0, 0, 0, 0);
     const end = endDate ? new Date(endDate) : defaultEnd;
+    end.setHours(23, 59, 59, 999);
 
     // Truy vấn toàn bộ đơn nghỉ
     const leaveRequests = await prisma.leaveRequest.findMany({

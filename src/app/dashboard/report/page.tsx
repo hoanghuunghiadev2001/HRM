@@ -2,13 +2,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AttendanceOverview } from "@/components/attendance-overview";
 import { EmployeeStatusChart } from "@/components/employee-status-chart";
 import { DepartmentDistribution } from "@/components/department-distribution";
 import { RecentLeaveRequests } from "@/components/recent-leave-requests";
 import LeaveReportPage from "./reportsDetail/leave/page";
+import {
+  AreaChartOutlined,
+  FileTextOutlined,
+  UserAddOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
 export default function DashboardPage() {
   const [dashboardData, setDashboardData] = useState<any>(null);
@@ -43,138 +49,119 @@ export default function DashboardPage() {
 
   return (
     <div className="flex min-h-screen w-full flex-col">
-      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+      <main className="flex flex-1 flex-col gap-4 md:gap-8 md:p-4">
         <Tabs defaultValue="overview" className="space-y-4">
           <div className="flex gap-5 justify-between">
             <div className="flex items-center justify-between">
-              <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+              <h1 className="text-3xl font-bold tracking-tight">Thống kê</h1>
             </div>
             <TabsList>
-              <TabsTrigger value="overview">Tổng quan</TabsTrigger>
+              <TabsTrigger value="overview" className="">
+                Tổng quan
+              </TabsTrigger>
               <TabsTrigger value="leave">Nghỉ phép</TabsTrigger>
             </TabsList>
           </div>
           <TabsContent value="overview" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Tổng nhân viên
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {dashboardData?.totalEmployees || 0}
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 shadow-card-report p-6 rounded-2xl">
+              <div className="rounded-2xl bg-gradient-to-r from-[#2c00cc] to-[#9076ec] p-4">
+                <p className="text-white text-lg font-bold">Tổng nhân viên</p>
+
+                <div className="flex justify-between">
+                  <div>
+                    <p className="text-white !text-[30px] font-bold">
+                      {dashboardData?.totalEmployees || 0}
+                    </p>
+                    <p className="text-base text-white font-semibold">
+                      {dashboardData?.newEmployeesChange > 0
+                        ? `+${dashboardData.newEmployeesChange}`
+                        : dashboardData?.newEmployeesChange}{" "}
+                      so với tháng trước
+                    </p>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    {dashboardData?.newEmployeesChange > 0
-                      ? `+${dashboardData.newEmployeesChange}`
-                      : dashboardData?.newEmployeesChange}{" "}
-                    so với tháng trước
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Tỷ lệ đi làm
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {dashboardData?.attendanceRate || 0}%
+                  <UserOutlined className="!text-white !text-[50px] " />
+                </div>
+              </div>
+              <div className="rounded-2xl bg-gradient-to-r from-[#cc8b00] to-[#ecc776] p-4">
+                <p className="text-white text-lg font-bold"> Tỷ lệ đi làm</p>
+
+                <div className="flex justify-between">
+                  <div>
+                    <p className="text-white !text-[30px] font-bold">
+                      {dashboardData?.attendanceRate || 0}%
+                    </p>
+                    <p className="text-base text-white font-semibold">
+                      {dashboardData?.attendanceRateChange > 0
+                        ? `+${dashboardData.attendanceRateChange}`
+                        : dashboardData?.attendanceRateChange}
+                      % so với tháng trước
+                    </p>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    {dashboardData?.attendanceRateChange > 0
-                      ? `+${dashboardData.attendanceRateChange}`
-                      : dashboardData?.attendanceRateChange}
-                    % so với tháng trước
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Đơn nghỉ phép
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {dashboardData?.leaveRequests?.total || 0}
+                  <AreaChartOutlined className="!text-white !text-[50px] " />
+                </div>
+              </div>
+              <div className="rounded-2xl bg-gradient-to-r from-[#0069cc] to-[#76a5ec] p-4">
+                <p className="text-white text-lg font-bold"> Đơn nghỉ phép</p>
+                <div className="flex justify-between">
+                  <div>
+                    <p className="text-white !text-[30px] font-bold">
+                      {dashboardData?.leaveRequests?.total || 0}
+                    </p>
+                    <p className="text-base text-white font-semibold">
+                      {dashboardData?.leaveRequests?.pending || 0} đang chờ
+                      duyệt
+                    </p>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    {dashboardData?.leaveRequests?.pending || 0} đang chờ duyệt
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Nhân viên mới
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {dashboardData?.newEmployees || 0}
+                  <FileTextOutlined className="!text-white !text-[50px] " />
+                </div>
+              </div>
+              <div className="rounded-2xl bg-gradient-to-r from-[#07cc00] to-[#7aec76] p-4">
+                <p className="text-white text-lg font-bold">Nhân viên mới</p>
+
+                <div className="flex justify-between">
+                  <div>
+                    <p className="text-white !text-[30px] font-bold">
+                      {dashboardData?.newEmployees || 0}
+                    </p>
+                    <p className="text-base text-white font-semibold">
+                      Trong tháng này
+                    </p>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    Trong tháng này
-                  </p>
-                </CardContent>
-              </Card>
+                  <UserAddOutlined className="!text-white !text-[50px] " />
+                </div>
+              </div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-              <Card className="col-span-4">
-                <CardHeader>
-                  <CardTitle>Thống kê chấm công</CardTitle>
-                </CardHeader>
-                <CardContent className="pl-2">
-                  <AttendanceOverview />
-                </CardContent>
-              </Card>
-              <Card className="col-span-3">
-                <CardHeader>
-                  <CardTitle>Phân bố theo phòng ban</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <DepartmentDistribution
-                    departmentData={dashboardData?.departmentDistribution}
-                  />
-                </CardContent>
-              </Card>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2 ">
+              <AttendanceOverview />
+
+              <div className="shadow-card-report p-6 rounded-2xl">
+                <p className="font-bold text-2xl mb-2">
+                  Phân bố theo phòng ban
+                </p>
+                <DepartmentDistribution
+                  departmentData={dashboardData?.departmentDistribution}
+                />
+              </div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-              <Card className="col-span-3">
-                <CardHeader>
-                  <CardTitle>Trạng thái nhân viên</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <EmployeeStatusChart
-                    statusData={dashboardData?.employeeStatusDistribution}
-                  />
-                </CardContent>
-              </Card>
-              <Card className="col-span-4">
-                <CardHeader>
-                  <CardTitle>Đơn nghỉ phép gần đây</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <RecentLeaveRequests
-                    leaveRequests={dashboardData?.recentLeaveRequests || []}
-                  />
-                </CardContent>
-              </Card>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
+              <div className="shadow-card-report p-6 rounded-2xl">
+                <EmployeeStatusChart
+                  statusData={dashboardData?.employeeStatusDistribution}
+                />
+              </div>
+              <div className="shadow-card-report p-6 rounded-2xl">
+                <p className="font-bold text-2xl mb-2">Nghỉ phép</p>
+                <RecentLeaveRequests
+                  leaveRequests={dashboardData?.recentLeaveRequests || []}
+                />
+              </div>
             </div>
           </TabsContent>
 
           <TabsContent value="leave" className="space-y-4">
-            <Card>
-              <CardContent>
-                <LeaveReportPage />
-              </CardContent>
-            </Card>
+            <LeaveReportPage />
           </TabsContent>
         </Tabs>
       </main>

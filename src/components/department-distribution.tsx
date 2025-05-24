@@ -1,40 +1,56 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+
 import { useEffect, useState, useMemo } from "react";
 import { Treemap, ResponsiveContainer, Tooltip } from "recharts";
 
+// Mảng màu cho từng phòng ban (xoay vòng theo index)
 const COLORS = [
-  "#8884d8",
-  "#83a6ed",
-  "#8dd1e1",
-  "#82ca9d",
-  "#a4de6c",
-  "#d0ed57",
-  "#ffc658",
+  "#FF6B6B", // Đỏ tươi
+  "#4ECDC4", // Xanh ngọc
+  "#FF9F43", // Cam sáng
+  "#6A89CC", // Xanh tím nhạt
+  "#1DD1A1", // Xanh lá biển
+  "#F368E0", // Tím hồng
+  "#54A0FF", // Xanh dương tươi
+  "#576574", // Xám xanh
+  "#00D2D3", // Xanh lục bảo nhạt
+  "#FF9FF3", // Hồng pastel
+  "#EE5253", // Đỏ nhạt
+  "#48DBFB", // Xanh nước biển sáng
+  "#10AC84", // Xanh lá đậm
+  "#5F27CD", // Tím đậm
+  "#C4E538", // Xanh lá sáng
+  "#FDA7DF", // Hồng phấn
+  "#8395A7", // Xám nhạt
+  "#F79F1F", // Cam đậm
+  "#A3CB38", // Vàng xanh sáng
+  "#12CBC4", // Xanh ngọc đậm
 ];
-
-// Định nghĩa kiểu dữ liệu
+// Định nghĩa kiểu dữ liệu phòng ban trả về từ API
 interface DepartmentData {
-  department: string;
+  department: string; // Tên phòng ban
   _count: {
-    employeeId: number;
+    employeeId: number; // Số lượng nhân viên trong phòng ban
   };
 }
 
+// Kiểu dữ liệu cần cho Treemap (Recharts yêu cầu)
 interface TreemapData {
-  name: string;
+  name: string; // Tên nhóm gốc (ví dụ: "Phòng ban")
   children: {
-    name: string;
-    size: number;
-    color: string;
+    name: string; // Tên phòng ban
+    size: number; // Số lượng nhân viên
+    color: string; // Màu sắc cho phòng ban
   }[];
 }
 
+// Component chính
 export function DepartmentDistribution({ departmentData: initialData = [] }) {
-  const [data, setData] = useState<TreemapData[]>([]);
-  const [loading, setLoading] = useState(initialData === null);
+  const [data, setData] = useState<TreemapData[]>([]); // Dữ liệu đã xử lý cho Treemap
+  const [loading, setLoading] = useState(initialData === null); // Trạng thái loading
 
-  // Dữ liệu mẫu khi API chưa trả về kết quả - định nghĩa bên ngoài useEffect
+  // Dữ liệu mẫu hiển thị khi không có dữ liệu thực (hoặc demo)
   const sampleData: TreemapData[] = useMemo(
     () => [
       {
@@ -51,9 +67,10 @@ export function DepartmentDistribution({ departmentData: initialData = [] }) {
     []
   );
 
+  // Xử lý dữ liệu ban đầu (nếu có) hoặc fetch dữ liệu từ API
   useEffect(() => {
     if (initialData) {
-      // Transform the data to the format needed by the chart
+      // Dữ liệu ban đầu (truyền vào qua prop)
       const transformedData = {
         name: "Phòng ban",
         children: initialData.map((dept: DepartmentData, index: number) => ({
@@ -63,16 +80,17 @@ export function DepartmentDistribution({ departmentData: initialData = [] }) {
         })),
       };
       setData([transformedData]);
-      return;
+      return; // Kết thúc sớm nếu có initialData
     }
 
+    // Hàm fetch dữ liệu từ API
     async function fetchDepartmentData() {
       try {
         const response = await fetch("/api/report/dashboard");
         const responseData = await response.json();
 
         if (responseData && responseData.departmentDistribution) {
-          // Transform the data to the format needed by the chart
+          // Chuyển đổi dữ liệu API thành format Treemap
           const transformedData = {
             name: "Phòng ban",
             children: responseData.departmentDistribution.map(
@@ -85,13 +103,12 @@ export function DepartmentDistribution({ departmentData: initialData = [] }) {
           };
           setData([transformedData]);
         } else {
-          // Nếu không có dữ liệu, sử dụng dữ liệu mẫu
+          // Nếu không có dữ liệu -> dùng sample
           setData(sampleData);
         }
       } catch (error) {
         console.error("Error fetching department data:", error);
-        // Use sample data if API fails
-        setData(sampleData);
+        setData(sampleData); // Lỗi API -> fallback sample
       } finally {
         setLoading(false);
       }
@@ -100,12 +117,13 @@ export function DepartmentDistribution({ departmentData: initialData = [] }) {
     fetchDepartmentData();
   }, [initialData, sampleData]);
 
-  // Helper function to get total employees - chuyển thành useMemo để tránh tính toán lại
+  // Tính tổng số nhân viên (dùng useMemo để tránh tính lại mỗi lần render)
   const getTotalEmployees = useMemo(() => {
-    if (!data || data.length === 0 || !data[0]?.children) return 120; // Default value
+    if (!data || data.length === 0 || !data[0]?.children) return 120; // Giá trị mặc định (120) nếu chưa có data
     return data[0].children.reduce((sum, dept) => sum + dept.size, 0);
   }, [data]);
 
+  // Custom tooltip hiển thị khi hover
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const tooltipData = payload[0].payload;
@@ -125,6 +143,7 @@ export function DepartmentDistribution({ departmentData: initialData = [] }) {
     return null;
   };
 
+  // Custom rendering cho từng phần tử Treemap (ô vuông)
   const CustomizedContent = (props: any) => {
     const { depth, x, y, width, height, name, size } = props;
 
@@ -136,12 +155,13 @@ export function DepartmentDistribution({ departmentData: initialData = [] }) {
           width={width}
           height={height}
           style={{
-            fill: depth < 2 ? "none" : props.color,
+            fill: depth < 2 ? "none" : props.color, // Màu nền (level 1 không có màu, level 2 có màu)
             stroke: "#fff",
-            strokeWidth: 2 / (depth + 1e-10),
+            strokeWidth: 2 / (depth + 1e-10), // Viền mỏng hơn ở cấp sâu hơn
             strokeOpacity: 1 / (depth + 1e-10),
           }}
         />
+        {/* Chỉ hiển thị tên + số lượng nếu đủ chỗ */}
         {depth === 1 && width > 50 && height > 28 ? (
           <>
             <text
@@ -168,6 +188,7 @@ export function DepartmentDistribution({ departmentData: initialData = [] }) {
     );
   };
 
+  // Hiển thị loading nếu đang tải dữ liệu
   if (loading) {
     return (
       <div className="flex h-[350px] items-center justify-center">
@@ -176,23 +197,49 @@ export function DepartmentDistribution({ departmentData: initialData = [] }) {
     );
   }
 
-  // Sử dụng data trực tiếp thay vì tính toán lại
+  // Chọn data để hiển thị (dùng dữ liệu thực nếu có, ngược lại dùng sample)
   const chartData = data.length > 0 ? data : sampleData;
+  console.log(chartData);
 
   return (
-    <div className="h-[350px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
+    <div className="w-full">
+      <ResponsiveContainer width="100%" height="300px">
         <Treemap
-          data={chartData}
-          dataKey="size"
-          aspectRatio={4 / 3}
+          data={chartData} // Dữ liệu cho Treemap
+          dataKey="size" // Khóa để xác định diện tích ô
+          aspectRatio={4 / 3} // Tỉ lệ khung hình
           stroke="#fff"
           fill="#8884d8"
-          content={<CustomizedContent />}
+          content={<CustomizedContent />} // Render từng phần tử Treemap
         >
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip content={<CustomTooltip />} /> {/* Tooltip khi hover */}
         </Treemap>
       </ResponsiveContainer>
+      <div className="mt-3">
+        {data.map((item, index) => {
+          return (
+            <div
+              key={item.name + index}
+              className="flex gap-4 flex-wrap justify-center"
+            >
+              {item.children.map((children, i) => {
+                return (
+                  <div
+                    key={children.name + i}
+                    className="flex items-center gap-3"
+                  >
+                    <div
+                      className="h-4 w-4 "
+                      style={{ backgroundColor: children.color }}
+                    ></div>
+                    <p style={{ color: children.color }}>{children.name}</p>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

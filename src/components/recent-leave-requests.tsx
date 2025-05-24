@@ -1,15 +1,9 @@
 "use client";
 
+import { Table } from "antd";
+import { createStyles } from "antd-style";
 import { useEffect, useState, useMemo } from "react";
-import { Badge } from "@/components/ui/badge";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { StatusLeave } from "./function";
 
 // Định nghĩa kiểu dữ liệu
 interface LeaveRequest {
@@ -23,9 +17,41 @@ interface LeaveRequest {
   status: string;
 }
 
+interface DataType {
+  name: string | undefined;
+  startDate: string;
+  endDate: string;
+
+  leaveType: string;
+  status: string;
+}
+
+const useStyle = createStyles((utils) => {
+  const { css, token } = utils;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const antCls = (token as any).antCls || ".ant"; // fallback nếu token.antCls không tồn tại
+
+  return {
+    customTable: css`
+      ${antCls}-table {
+        ${antCls}-table-container {
+          ${antCls}-table-body,
+          ${antCls}-table-content {
+            scrollbar-width: thin;
+            scrollbar-color: #eaeaea transparent;
+            scrollbar-gutter: stable;
+          }
+        }
+      }
+    `,
+  };
+});
+
 export function RecentLeaveRequests({
   leaveRequests: initialLeaveRequests = [],
 }) {
+  const { styles } = useStyle();
+
   const [leaveRequests, setLeaveRequests] =
     useState<LeaveRequest[]>(initialLeaveRequests);
   const [loading, setLoading] = useState(initialLeaveRequests.length === 0);
@@ -120,46 +146,96 @@ export function RecentLeaveRequests({
     );
   }
 
+  const formatted: DataType[] =
+    leaveRequests?.map((item) => ({
+      name: item.employee?.name,
+      startDate: formatDate(item.startDate),
+      endDate: formatDate(item.endDate),
+      leaveType: item.leaveType,
+      status: item.status,
+    })) || [];
+
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Nhân viên</TableHead>
-          <TableHead>Loại phép</TableHead>
-          <TableHead>Từ ngày</TableHead>
-          <TableHead>Đến ngày</TableHead>
-          <TableHead>Trạng thái</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {leaveRequests.map((request) => (
-          <TableRow key={request.id}>
-            <TableCell className="font-medium">
-              {request.employee?.name || "N/A"}
-            </TableCell>
-            <TableCell>{request.leaveType}</TableCell>
-            <TableCell>{formatDate(request.startDate)}</TableCell>
-            <TableCell>{formatDate(request.endDate)}</TableCell>
-            <TableCell>
-              <Badge
-                variant={
-                  request.status === "approved"
-                    ? "success"
-                    : request.status === "rejected"
-                    ? "destructive"
-                    : "outline"
-                }
-              >
-                {request.status === "approved"
-                  ? "Đã duyệt"
-                  : request.status === "rejected"
-                  ? "Từ chối"
-                  : "Chờ duyệt"}
-              </Badge>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <Table<DataType>
+      dataSource={formatted}
+      columns={[
+        {
+          title: "Tên nhân viên",
+          dataIndex: "name",
+          key: "name",
+          render: (text) => <strong>{text}</strong>,
+        },
+        {
+          title: "Loại phép",
+          dataIndex: "leaveType",
+          key: "leaveType",
+        },
+        {
+          title: "Từ ngày",
+          dataIndex: "startDate",
+          key: "startDate",
+        },
+        {
+          title: "Đến ngày",
+          dataIndex: "endDate",
+          key: "endDate",
+        },
+        {
+          title: "Trạng thái",
+          dataIndex: "status",
+          key: "status",
+          render: (_, record) => <StatusLeave status={record.status} />,
+        },
+      ]}
+      pagination={{ pageSize: 10 }}
+      locale={{
+        emptyText: "Không có dữ liệu",
+      }}
+      className={styles.customTable}
+      // columns={columns}
+      // dataSource={formatted ?? []}
+      // pagination={{ pageSize: 12 }}
+      scroll={{ y: "calc(100vh - 305px)" }}
+    />
+    // <Table>
+    //   <TableHeader>
+    //     <TableRow>
+    //       <TableHead>Nhân viên</TableHead>
+    //       <TableHead>Loại phép</TableHead>
+    //       <TableHead>Từ ngày</TableHead>
+    //       <TableHead>Đến ngày</TableHead>
+    //       <TableHead>Trạng thái</TableHead>
+    //     </TableRow>
+    //   </TableHeader>
+    //   <TableBody>
+    //     {leaveRequests.map((request) => (
+    //       <TableRow key={request.id}>
+    //         <TableCell className="font-medium">
+    //           {request.employee?.name || "N/A"}
+    //         </TableCell>
+    //         <TableCell>{request.leaveType}</TableCell>
+    //         <TableCell>{formatDate(request.startDate)}</TableCell>
+    //         <TableCell>{formatDate(request.endDate)}</TableCell>
+    //         <TableCell>
+    //           <Badge
+    //             variant={
+    //               request.status === "approved"
+    //                 ? "success"
+    //                 : request.status === "rejected"
+    //                 ? "destructive"
+    //                 : "outline"
+    //             }
+    //           >
+    //             {request.status === "approved"
+    //               ? "Đã duyệt"
+    //               : request.status === "rejected"
+    //               ? "Từ chối"
+    //               : "Chờ duyệt"}
+    //           </Badge>
+    //         </TableCell>
+    //       </TableRow>
+    //     ))}
+    //   </TableBody>
+    // </Table>
   );
 }

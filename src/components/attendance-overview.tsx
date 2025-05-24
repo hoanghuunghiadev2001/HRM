@@ -11,20 +11,8 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select } from "antd";
 
 // Định nghĩa kiểu dữ liệu
 interface AttendanceData {
@@ -41,25 +29,25 @@ export function AttendanceOverview() {
   // Dữ liệu mẫu khi API chưa trả về kết quả - định nghĩa bên ngoài useEffect
   const sampleData = useMemo<AttendanceData[]>(
     () => [
-      { name: "T2", đúng_giờ: 120, đi_muộn: 5, vắng: 2 },
-      { name: "T3", đúng_giờ: 118, đi_muộn: 7, vắng: 3 },
-      { name: "T4", đúng_giờ: 115, đi_muộn: 9, vắng: 4 },
-      { name: "T5", đúng_giờ: 119, đi_muộn: 6, vắng: 3 },
-      { name: "T6", đúng_giờ: 117, đi_muộn: 8, vắng: 3 },
-      { name: "T7", đúng_giờ: 110, đi_muộn: 4, vắng: 14 },
-      { name: "CN", đúng_giờ: 30, đi_muộn: 2, vắng: 96 },
+      { name: "T2", đúng_giờ: 0, đi_muộn: 0, vắng: 0 },
+      { name: "T3", đúng_giờ: 0, đi_muộn: 0, vắng: 0 },
+      { name: "T4", đúng_giờ: 0, đi_muộn: 0, vắng: 0 },
+      { name: "T5", đúng_giờ: 0, đi_muộn: 0, vắng: 0 },
+      { name: "T6", đúng_giờ: 0, đi_muộn: 0, vắng: 0 },
+      { name: "T7", đúng_giờ: 0, đi_muộn: 0, vắng: 0 },
+      { name: "CN", đúng_giờ: 0, đi_muộn: 0, vắng: 0 },
     ],
     []
   );
 
   const monthlyData = useMemo<AttendanceData[]>(
     () => [
-      { name: "T1", đúng_giờ: 2200, đi_muộn: 120, vắng: 80 },
-      { name: "T2", đúng_giờ: 2150, đi_muộn: 130, vắng: 90 },
-      { name: "T3", đúng_giờ: 2180, đi_muộn: 110, vắng: 85 },
-      { name: "T4", đúng_giờ: 2220, đi_muộn: 100, vắng: 70 },
-      { name: "T5", đúng_giờ: 2250, đi_muộn: 95, vắng: 65 },
-      { name: "T6", đúng_giờ: 2300, đi_muộn: 90, vắng: 60 },
+      { name: "T1", đúng_giờ: 0, đi_muộn: 0, vắng: 0 },
+      { name: "T2", đúng_giờ: 0, đi_muộn: 0, vắng: 0 },
+      { name: "T3", đúng_giờ: 0, đi_muộn: 0, vắng: 0 },
+      { name: "T4", đúng_giờ: 0, đi_muộn: 0, vắng: 0 },
+      { name: "T5", đúng_giờ: 0, đi_muộn: 0, vắng: 0 },
+      { name: "T6", đúng_giờ: 0, đi_muộn: 0, vắng: 0 },
     ],
     []
   );
@@ -128,25 +116,22 @@ export function AttendanceOverview() {
       : monthlyData;
 
   return (
-    <Card className="border-none shadow-none">
+    <div className="border-none shadow-none shadow-card-report p-6 rounded-2xl">
       <CardHeader className="px-0 pt-0">
         <div className="flex items-center justify-between">
           <CardTitle>Thống kê chấm công</CardTitle>
-          <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Chọn thời gian" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="week">Tuần này</SelectItem>
-              <SelectItem value="month">6 tháng gần đây</SelectItem>
-            </SelectContent>
-          </Select>
+          <Select
+            value={timeRange}
+            onChange={(e) => setTimeRange(e)}
+            style={{ width: "100px" }}
+            placeholder={"Chọn thời gian"}
+            allowClear
+            options={[
+              { value: "week", label: "Tuần này" },
+              { value: "month", label: "6 tháng gần đây" },
+            ]}
+          />
         </div>
-        <CardDescription>
-          {timeRange === "week"
-            ? "Số liệu chấm công trong tuần này"
-            : "Số liệu chấm công 6 tháng gần đây"}
-        </CardDescription>
       </CardHeader>
       <CardContent className="px-0 pb-0">
         <div className="h-[350px] w-full">
@@ -200,6 +185,6 @@ export function AttendanceOverview() {
           </ResponsiveContainer>
         </div>
       </CardContent>
-    </Card>
+    </div>
   );
 }
