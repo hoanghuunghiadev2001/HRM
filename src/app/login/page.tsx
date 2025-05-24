@@ -15,9 +15,7 @@ export default async function LoginPage() {
     try {
       jwt.verify(token, JWT_SECRET);
       redirect("/dashboard");
-    } catch {
-      redirect("/login");
-    }
+    } catch {}
   }
 
   return <LoginClient />;

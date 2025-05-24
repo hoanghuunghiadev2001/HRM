@@ -1,0 +1,160 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER // Nhân viên
+  MANAGER // Quản lý
+  ADMIN // Quản trị viên
+}
+
+enum Sex {
+  MALE // Nam
+  FEMALE // Nữ
+}
+
+enum WorkStatus {
+  OFFICIAL // Chính thức
+  PROBATION // Học việc
+  RESIGNED // Nghỉ việc
+}
+
+enum LeaveTypeEnum {
+  PN // Phép năm
+  NB // Nghỉ bù
+  PC // Phép cưới
+  PT // Phép tang
+  Cgt // Công tác
+  PB // Phép bệnh (không hưởng lương)
+  TS // Thai sản (không hưởng lương)
+  PR // Phép riêng (không hưởng lương)
+}
+
+// Định nghĩa enum trạng thái đơn nghỉ
+enum LeaveStatus {
+  pending // Đang chờ duyệt
+  approved // Đã chấp thuận
+  rejected // Đã từ chối
+}
+
+model Employee {
+  id           Int       @id @default(autoincrement())
+  employeeCode String    @unique // Mã nhân viên (maNV)
+  name         String // Tên
+  gender       Sex       @default(MALE) // Giới tính
+  birthDate    DateTime? // Ngày sinh
+  password     String // Mật khẩu (đã mã hoá)
+  role         Role      @default(USER) // Vai trò
+  avatar       String?   @db.LongText // <- Thêm trường avatar (có thể null)
+
+  workInfo     WorkInfo?     @relation()
+  personalInfo PersonalInfo? @relation()
+  contactInfo  ContactInfo?  @relation()
+  otherInfo    OtherInfo?    @relation()
+
+  LeaveRequest LeaveRequest[]
+
+  Attendance Attendance[]
+}
+
+model WorkInfo {
+  id              Int       @id @default(autoincrement())
+  department      String // Bộ phận
+  position        String // Chức vụ
+  specialization  String? // Ngành
+  joinedTBD       DateTime? // Ngày vào TBD
+  joinedTeSCC     DateTime? // Ngày vào TeSCC
+  seniorityStart  DateTime? // Ngày tính thâm niên
+  seniority       Int? // Thâm niên
+  contractNumber  String? // Số hợp đồng
+  contractDate    DateTime? // Ngày ký hợp đồng
+  contractType    String? // Loại hợp đồng
+  contractEndDate DateTime? // Ngày hết hạn
+
+  employeeId Int      @unique
+  employee   Employee @relation(fields: [employeeId], references: [id], map: "WorkInfo_employee_fkey")
+}
+
+model PersonalInfo {
+  id                Int       @id @default(autoincrement())
+  identityNumber    String? // Số CMND
+  issueDate         DateTime? // Ngày cấp
+  issuePlace        String? // Nơi cấp
+  hometown          String? // Nguyên quán
+  idAddress         String? // Địa chỉ theo CMND
+  education         String? // Trình độ
+  drivingLicense    String? // Giấy phép lái xe
+  toyotaCertificate String? // Chứng chỉ Toyota
+  taxCode           String? // Mã số thuế
+  insuranceNumber   String? // Số sổ BH
+  insuranceSalary   Int? // Lương đóng BH
+
+  employeeId Int      @unique
+  employee   Employee @relation(fields: [employeeId], references: [id], map: "PersonalInfo_employee_fkey")
+}
+
+model ContactInfo {
+  id            Int     @id @default(autoincrement())
+  phoneNumber   String? // Số điện thoại
+  relativePhone String? // Số điện thoại người thân
+  companyPhone  String? // Điện thoại công ty
+  email         String? // Email
+
+  employeeId Int      @unique
+  employee   Employee @relation(fields: [employeeId], references: [id], map: "ContactInfo_employee_fkey")
+}
+
+model OtherInfo {
+  id               Int        @id @default(autoincrement())
+  workStatus       WorkStatus @default(OFFICIAL) // Trạng thái làm việc
+  resignedDate     DateTime? // Ngày nghỉ
+  documentsChecked String? // Đã kiểm tra hồ sơ
+  updatedAt        DateTime? // Thời gian cập nhật
+  VCB              String? // Ngân hàng VCB
+  MTCV             String? // MTCV (nếu có thể là hệ thống nội bộ)
+  PNJ              String? // PNJ (tuỳ chỉnh)
+
+  employeeId Int      @unique
+  employee   Employee @relation(fields: [employeeId], references: [id], map: "OtherInfo_employee_fkey")
+}
+
+model LeaveRequest {
+  id         Int           @id @default(autoincrement()) // ID đơn xin nghỉ
+  employeeId Int // ID nhân viên
+  leaveType  LeaveTypeEnum // Loại phép (enum)
+  startDate  DateTime // Ngày bắt đầu nghỉ
+  endDate    DateTime // Ngày kết thúc nghỉ
+  totalHours Float? // Tổng giờ nghỉ (có thể tính toán)
+  reason     String? // Lý do nghỉ (có thể null)
+  status     LeaveStatus   @default(pending) // trạng thái nghỉ việc
+  approvedBy String? // Người phê duyệt (có thể null)
+  approvedAt DateTime? // Thời điểm đơn được duyệt (approved/rejected)
+
+  // Quan hệ với nhân viên
+  employee  Employee @relation(fields: [employeeId], references: [id])
+  createdAt DateTime @default(now()) // <- cần có dòng này
+}
+
+model Attendance {
+  id           Int       @id @default(autoincrement())
+  employeeId   Int
+  date         DateTime
+  checkInTime  DateTime? // giờ vào, có thể null
+  checkOutTime DateTime? // giờ ra, có thể null
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@index([employeeId, date])
+}
