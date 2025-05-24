@@ -58,7 +58,7 @@ const useStyle = createStyles((utils) => {
 });
 
 // utils/getTodayVN.ts
-export function getTodayVNDateString() {
+function getTodayVNDateString() {
   const now = new Date();
   const vietnamOffset = 7 * 60; // UTC+7
   const localOffset = now.getTimezoneOffset();
