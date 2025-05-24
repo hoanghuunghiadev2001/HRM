@@ -7,6 +7,7 @@ import { logger } from "@/lib/logger";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { WorkStatus } from "../../../../../generated/prisma";
 
 // Kích hoạt plugin
 dayjs.extend(utc);
@@ -149,7 +150,12 @@ export async function POST(request: NextRequest) {
         const gender = mapGender(row["Giới tính"]);
 
         // Map work status
-        const workStatus = mapWorkStatus(row["Chính thức"], row["Nghỉ việc"]);
+        const workStatus =
+          row["Chính thức"] === "Chính thức"
+            ? WorkStatus.OFFICIAL
+            : row["Chính thức"] === "Thử việc"
+            ? WorkStatus.PROBATION
+            : WorkStatus.RESIGNED;
 
         // Prepare data objects
         const employeeData = {
@@ -384,33 +390,6 @@ function mapGender(value: any): "MALE" | "FEMALE" {
   }
 
   return "MALE"; // Default
-}
-
-function mapWorkStatus(
-  officialValue: any,
-  resignedValue: any
-): "OFFICIAL" | "PROBATION" | "RESIGNED" {
-  if (
-    resignedValue &&
-    (resignedValue === "x" ||
-      resignedValue === "X" ||
-      resignedValue === true ||
-      resignedValue === 1)
-  ) {
-    return "RESIGNED";
-  }
-
-  if (
-    officialValue &&
-    (officialValue === "x" ||
-      officialValue === "X" ||
-      officialValue === true ||
-      officialValue === 1)
-  ) {
-    return "OFFICIAL";
-  }
-
-  return "PROBATION";
 }
 
 function parseSeniority(value: any): number | null {
