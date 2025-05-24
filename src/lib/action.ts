@@ -569,19 +569,32 @@ export async function getEmployees() {
       },
     });
 
-    return employees.map((employee) => ({
-      id: employee.id,
-      employeeCode: employee.employeeCode,
-      name: employee.name,
-      department: employee.workInfo?.department || null,
-      position: employee.workInfo?.position || null,
-      joinedTBD: employee.workInfo?.joinedTBD
-        ? employee.workInfo.joinedTBD.toISOString()
-        : null,
-      phoneNumber: employee.contactInfo?.phoneNumber || null,
-      email: employee.contactInfo?.email || null,
-      workStatus: employee.otherInfo?.workStatus || "PROBATION",
-    }));
+    return employees.map(
+      (employee: {
+        id: any;
+        employeeCode: any;
+        name: any;
+        workInfo: {
+          department: any;
+          position: any;
+          joinedTBD: { toISOString: () => any };
+        };
+        contactInfo: { phoneNumber: any; email: any };
+        otherInfo: { workStatus: any };
+      }) => ({
+        id: employee.id,
+        employeeCode: employee.employeeCode,
+        name: employee.name,
+        department: employee.workInfo?.department || null,
+        position: employee.workInfo?.position || null,
+        joinedTBD: employee.workInfo?.joinedTBD
+          ? employee.workInfo.joinedTBD.toISOString()
+          : null,
+        phoneNumber: employee.contactInfo?.phoneNumber || null,
+        email: employee.contactInfo?.email || null,
+        workStatus: employee.otherInfo?.workStatus || "PROBATION",
+      })
+    );
   } catch (error) {
     console.error("Error fetching employees:", error);
     throw new Error("Failed to fetch employees");
