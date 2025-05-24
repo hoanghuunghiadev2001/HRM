@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "../../../../generated/prisma";
@@ -133,7 +134,7 @@ export async function GET(req: NextRequest) {
       }
     >();
 
-    attendances.forEach((att) => {
+    attendances.forEach((att: any) => {
       const key = `${att.employeeId}-${att.date.toISOString().slice(0, 10)}`;
 
       if (!grouped.has(key)) {
