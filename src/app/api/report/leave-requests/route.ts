@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import {
@@ -123,7 +124,7 @@ async function calculateLeaveStats() {
     hours: 0,
   }));
 
-  monthlyLeaves.forEach((leave) => {
+  monthlyLeaves.forEach((leave: any) => {
     const month = new Date(leave.startDate).getMonth();
     monthlyStats[month].count++;
     monthlyStats[month].hours += leave.totalHours || 0;

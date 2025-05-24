@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -93,7 +94,7 @@ export async function GET(req: NextRequest) {
             updatedAt: formatDate(employee.otherInfo.updatedAt),
           }
         : null,
-      LeaveRequest: employee.LeaveRequest?.map((leave) => ({
+      LeaveRequest: employee.LeaveRequest?.map((leave: any) => ({
         ...leave,
         startDate: formatDate(leave.startDate),
         endDate: formatDate(leave.endDate),

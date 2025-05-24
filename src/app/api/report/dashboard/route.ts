@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { WorkStatus } from "../../../../../generated/prisma";
@@ -65,7 +66,7 @@ export async function GET() {
     const workingDaysCount = getWorkingDaysCount(firstDayOfMonth, today);
     const expectedAttendance = totalEmployees * workingDaysCount;
     const actualAttendance = attendanceRecords.filter(
-      (record) => record.checkInTime
+      (record: any) => record.checkInTime
     ).length;
     const attendanceRate =
       expectedAttendance > 0
@@ -88,7 +89,7 @@ export async function GET() {
     );
     const prevMonthExpectedAttendance = totalEmployees * prevMonthWorkingDays;
     const prevMonthActualAttendance = prevMonthAttendanceRecords.filter(
-      (record) => record.checkInTime
+      (record: any) => record.checkInTime
     ).length;
     const prevMonthAttendanceRate =
       prevMonthExpectedAttendance > 0
