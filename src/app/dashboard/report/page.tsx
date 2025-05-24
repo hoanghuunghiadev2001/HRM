@@ -2,7 +2,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AttendanceOverview } from "@/components/attendance-overview";
 import { EmployeeStatusChart } from "@/components/employee-status-chart";
