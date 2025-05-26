@@ -424,13 +424,13 @@ export default function LeaveReportPage() {
               width: "80px",
             },
             {
-              title: "Đã duyệt",
+              title: "Chấp thuận",
               dataIndex: "approved",
               key: "approved",
               width: "80px",
               render: (approved: number, record) => (
                 <Tag color="green">
-                  {record.totalApproved} (
+                  {record.totalApproved}/{record.totalRequests} (
                   {Number(
                     (record.totalApproved / record.totalRequests) * 100
                   ).toFixed(0)}
