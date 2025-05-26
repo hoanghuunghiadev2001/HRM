@@ -229,7 +229,7 @@ export function LeaveRequestsChart({ leaveTypeData }: LeaveRequestsChartProps) {
             ))}
           </Pie>
           <Tooltip
-            formatter={(value) => [`${value} đơn`, "Số lượng"]}
+            formatter={(value, name) => [`${value} đơn`, `${name}`]}
             contentStyle={{
               backgroundColor: "rgba(255, 255, 255, 0.8)",
               borderRadius: "none",
