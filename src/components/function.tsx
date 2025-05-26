@@ -14,7 +14,7 @@ interface StatusLeaveProps {
 export const StatusLeave = ({ status }: StatusLeaveProps) => {
   return (
     <div
-      className={`px-4 py-1 rounded-xl w-fit font-medium  ${
+      className={`px-4 py-1 rounded-xl w-fit font-medium text-nowrap ${
         status === "pending"
           ? "bg-[#a5cbe4] text-[#1181c8]"
           : status === "approved"

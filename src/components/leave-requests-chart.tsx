@@ -1,6 +1,8 @@
 "use client";
 
+import { RootState } from "@/store";
 import { useState, useEffect, useMemo } from "react";
+import { useSelector } from "react-redux";
 import {
   PieChart,
   Pie,
@@ -43,6 +45,7 @@ interface LeaveRequestsChartProps {
 export function LeaveRequestsChart({ leaveTypeData }: LeaveRequestsChartProps) {
   const [leaveData, setLeaveData] = useState<ChartData[]>([]);
   const [loading, setLoading] = useState(leaveTypeData === undefined);
+  const isMobile = useSelector((state: RootState) => state.responsive.isMobile);
 
   // Dữ liệu mẫu khi API chưa trả về kết quả - định nghĩa bên ngoài useEffect
   const sampleData = useMemo<ChartData[]>(
@@ -204,13 +207,13 @@ export function LeaveRequestsChart({ leaveTypeData }: LeaveRequestsChartProps) {
   const data = leaveData.length > 0 ? leaveData : sampleData;
 
   return (
-    <div className="h-[280px] w-[600px] px-10">
+    <div className="h-[400px] w-[100%] px-10">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
             data={data}
             cx="50%" // lệch sang trái để chừa chỗ bên phải cho label
-            cy="50%"
+            cy={"50%"}
             labelLine={false}
             label={renderCustomizedLabel2}
             outerRadius={120}
@@ -232,10 +235,10 @@ export function LeaveRequestsChart({ leaveTypeData }: LeaveRequestsChartProps) {
             }}
           />
           <Legend
-            align="right"
-            layout="vertical"
-            verticalAlign="middle"
-            cx={"80%"}
+            align={isMobile ? "center" : "right"}
+            layout={isMobile ? "horizontal" : "vertical"}
+            verticalAlign={isMobile ? "bottom" : "middle"}
+            cx={isMobile ? "0" : "80%"}
           />
         </PieChart>
       </ResponsiveContainer>

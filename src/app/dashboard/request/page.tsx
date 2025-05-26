@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { useEffect, useState } from "react";
 
+import { useEffect, useState } from "react";
 import React from "react";
-import { message, Space, Table } from "antd";
+import { message, Table } from "antd";
 import type { TableProps } from "antd";
 import { ListRequestLeave, RequestLeave } from "@/components/api";
 import ModalLoading from "@/components/modalLoading";
@@ -14,11 +15,15 @@ import { createStyles } from "antd-style";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
-// Extend plugin
+// Extend plugin cho dayjs
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+// Interface cho dữ liệu table
 interface DataType {
   key: string;
   id: number;
@@ -30,9 +35,9 @@ interface DataType {
   status: string;
 }
 
+// Custom scroll cho table Ant Design
 const useStyle = createStyles((utils) => {
   const { css, token } = utils;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const antCls = (token as any).antCls || ".ant"; // fallback nếu token.antCls không tồn tại
 
   return {
@@ -50,31 +55,30 @@ const useStyle = createStyles((utils) => {
     `,
   };
 });
+
 export default function RequestPage() {
   const [myRequestsLeave, setMyRequetsLeave] = useState<ListRequestLeave>();
   const [loading, setLoading] = useState<boolean>(false);
   const [modalDetailLeave, setModalDetailLeave] = useState<boolean>(false);
   const [infoRequetLeave, setInfoRequestLeave] = useState<RequestLeave>();
   const [createRequest, setCreateRequest] = useState<boolean>(false);
-
+  const isMobile = useSelector((state: RootState) => state.responsive.isMobile);
   const { styles } = useStyle();
 
-  //api lấy thông tin nghỉ
+  // API lấy thông tin nghỉ
   const getRequestsLeave = async () => {
     setLoading(true);
     const res = await fetch("/api/leave/my-requests");
     if (res.ok) {
-      const data = await res.json(); // Lấy JSON data từ response
+      const data = await res.json();
       setMyRequetsLeave(data);
-      setLoading(false);
     } else {
-      // xử lý lỗi nếu cần
       console.error("Lỗi khi lấy dữ liệu:", res.statusText);
-      setLoading(false);
     }
+    setLoading(false);
   };
 
-  //format và đưa dữ liệu ra table
+  // Chuyển đổi dữ liệu cho table
   const formatted: DataType[] =
     myRequestsLeave?.map((item, index) => ({
       key: (index + 1).toString(),
@@ -85,7 +89,7 @@ export default function RequestPage() {
         .tz("Asia/Ho_Chi_Minh")
         .format("HH:mm DD/MM/YYYY"),
       endDate: dayjs
-        .utc(item.startDate)
+        .utc(item.endDate) // sửa endDate (trước bị lỗi dùng startDate)
         .tz("Asia/Ho_Chi_Minh")
         .format("HH:mm DD/MM/YYYY"),
       totalHours: item.totalHours.toString(),
@@ -93,56 +97,33 @@ export default function RequestPage() {
       status: item.status,
     })) || [];
 
+  // Cấu hình cột table
   const columns: TableProps<DataType>["columns"] = [
-    {
-      title: "STT",
-      dataIndex: "key",
-      rowScope: "row",
-      width: "60px",
-    },
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Ngày nghỉ",
-      dataIndex: "startDate",
-      key: "age",
-    },
-    {
-      title: "Loại phép",
-      dataIndex: "leaveType",
-      key: "leaveType",
-    },
+    { title: "STT", dataIndex: "key", width: "60px" },
+    { title: "Tên", dataIndex: "name" },
+    { title: "Ngày nghỉ", dataIndex: "startDate" },
+    { title: "Loại phép", dataIndex: "leaveType" },
     {
       title: "Trạng thái",
       dataIndex: "status",
-      key: "status",
       render: (status) => <StatusLeave status={status} />,
     },
     {
       title: "Chi tiết",
-      key: "action",
-      width: "80px",
       render: (_, record) => (
-        <Space size="middle">
-          <a onClick={() => DetailRequetsLeave(record.id)}>chi tiết</a>
-        </Space>
+        <a onClick={() => DetailRequetsLeave(record.id)}>Chi tiết</a>
       ),
     },
   ];
 
-  //xem chi tiết đơn xin nghỉ
+  // Xem chi tiết đơn
   const DetailRequetsLeave = (id: number) => {
     const item = myRequestsLeave?.find((item) => item.id === id);
     setInfoRequestLeave(item);
     setModalDetailLeave(true);
   };
 
-  //Tạo đơn mới
-
+  // Tạo đơn mới
   const CreateRequestLeave = async (
     employeeId: string,
     leaveType: string,
@@ -151,37 +132,31 @@ export default function RequestPage() {
     reason: string,
     totalHours: string
   ) => {
-    const payload = {
-      employeeId,
-      leaveType,
-      startDateTime,
-      endDateTime,
-      reason,
-      totalHours,
-    };
     try {
       setLoading(true);
       const res = await fetch("/api/leave/create-requests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          employeeId,
+          leaveType,
+          startDateTime,
+          endDateTime,
+          reason,
+          totalHours,
+        }),
       });
 
       const data = await res.json();
-
       if (!res.ok) {
         message.error(data.message || "Gửi đơn nghỉ thất bại");
-        setLoading(false);
       } else {
         message.success("Gửi đơn nghỉ thành công");
         setCreateRequest(false);
         getRequestsLeave();
-        setLoading(false);
       }
-    } catch (error) {
-      console.error("Lỗi gửi đơn:", error);
+    } catch {
       message.error("Lỗi gửi đơn nghỉ");
-      setLoading(false);
     } finally {
       setLoading(false);
     }
@@ -191,10 +166,9 @@ export default function RequestPage() {
     getRequestsLeave();
   }, []);
 
-  //style table scroll
-
   return (
-    <div>
+    <div className="w-full p-4">
+      {/* Modal */}
       <ModalCreateNewRequest
         onClose={() => setCreateRequest(false)}
         open={createRequest}
@@ -208,27 +182,82 @@ export default function RequestPage() {
       />
       <ModalLoading isOpen={loading} />
 
-      <div className="w-full">
-        <p className="font-bold  text-2xl text-[#4a4a6a]">Phiếu yêu cầu:</p>
+      {/* Header + Nút */}
+      <div className="flex flex-col  sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
+        <p className="font-bold text-xl text-[#4a4a6a]">Phiếu yêu cầu</p>
+        <button
+          className="flex gap-2 items-center  h-10 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] text-white text-sm font-semibold w-fit"
+          onClick={() => setCreateRequest(true)}
+        >
+          <Plus size={16} />
+          Tạo phiếu yêu cầu
+        </button>
       </div>
-      <div className="w-full">
-        <div className="flex justify-end mb-3">
-          <button
-            className="flex mt-4  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
-            onClick={() => setCreateRequest(true)}
-          >
-            <Plus />
-            Tạo phiếu yêu cầu
-          </button>
+
+      {/* Table responsive */}
+      {isMobile ? (
+        <div className="space-y-4">
+          {formatted.map((item) => (
+            <div
+              key={item.id}
+              className="rounded-lg p-4 shadow-sm bg-white shadow-card-request"
+            >
+              <div className="w-full flex justify-between">
+                <div className="flex items-center gap-2">
+                  <p
+                    className={`font-bold ${
+                      item.status === "pending"
+                        ? " text-[#1181c8]"
+                        : item.status === "approved"
+                        ? "text-[#0b5705] "
+                        : " text-[#eb2128]"
+                    }`}
+                  >
+                    {item.status === "pending"
+                      ? "Đang chờ"
+                      : item.status === "approved"
+                      ? "Chấp nhận"
+                      : "Từ chối"}
+                  </p>
+
+                  <div className="italic text-sm">- {item.startDate}</div>
+                </div>
+                <button
+                  className="mt-2 text-blue-500 underline"
+                  onClick={() => DetailRequetsLeave(item.id)}
+                >
+                  <ExclamationCircleOutlined />
+                </button>
+              </div>
+              <div className="flex justify-between">
+                <p>
+                  <span className="font-semibold">Tên: </span>
+                  {item.name}
+                </p>
+                <p>
+                  <span className="font-semibold">Tổng giờ: </span>
+                  {item.totalHours}
+                </p>
+              </div>
+
+              <p>
+                <span className="font-semibold">Loại phép: </span>
+                {item.leaveType}
+              </p>
+            </div>
+          ))}
         </div>
-        <Table<DataType>
-          className={styles.customTable}
-          columns={columns}
-          dataSource={formatted ?? []}
-          pagination={{ pageSize: 12 }}
-          scroll={{ y: "calc(100vh - 305px)" }}
-        />
-      </div>
+      ) : (
+        <div className="overflow-x-auto rounded-lg border border-gray-200">
+          <Table<DataType>
+            className={styles.customTable}
+            columns={columns}
+            dataSource={formatted}
+            pagination={{ pageSize: 12 }}
+            scroll={{ x: "100%" }}
+          />
+        </div>
+      )}
     </div>
   );
 }

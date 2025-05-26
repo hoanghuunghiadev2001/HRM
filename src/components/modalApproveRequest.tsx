@@ -71,7 +71,7 @@ const ModalApproveRequest = ({
         ]}
       >
         {/* <ModalLoading isOpen={loading} /> */}
-        <div className="grid grid-cols-2 mt-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 mt-4 gap-4 sm:mt-2">
           <div className="font-bold text-[#242424] flex flex-shrink-0 gap-2 items-center">
             <p className="flex-shrink-0">Họ và tên:</p>
             <p className="inline font-medium text-[#3a3a3a]">
@@ -98,7 +98,7 @@ const ModalApproveRequest = ({
           </div>
         </div>
 
-        <div className="mt-3 grid grid-cols-2 gap-4">
+        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Form.Item
             label={<p className="font-bold text-[#242424]">Loại Phép</p>}
             rules={[{ required: true, message: "Vui lòng chọn loại phép" }]}

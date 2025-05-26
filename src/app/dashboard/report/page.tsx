@@ -47,8 +47,6 @@ export default function DashboardPage() {
   }
   console.log(dashboardData?.departmentDistribution);
 
-
-
   return (
     <div className="flex min-h-screen w-full flex-col">
       <main className="flex flex-1 flex-col gap-4 md:gap-8 md:p-4">
@@ -65,7 +63,7 @@ export default function DashboardPage() {
             </TabsList>
           </div>
           <TabsContent value="overview" className="space-y-4">
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 shadow-card-report p-6 rounded-2xl">
+            <div className="grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-4 shadow-card-report p-6 rounded-2xl">
               <div className="rounded-2xl bg-gradient-to-r from-[#2c00cc] to-[#9076ec] p-4">
                 <p className="text-white text-lg font-bold">Tổng nhân viên</p>
 
@@ -138,16 +136,13 @@ export default function DashboardPage() {
               <AttendanceOverview />
 
               <div className="shadow-card-report p-6 rounded-2xl">
-                <p className="font-bold text-2xl mb-2">
-                  Phân bố theo phòng ban
-                </p>
                 <DepartmentDistribution
                   departmentData={dashboardData?.departmentDistribution}
                 />
               </div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 ">
               <div className="shadow-card-report p-6 rounded-2xl">
                 <EmployeeStatusChart
                   statusData={dashboardData?.employeeStatusDistribution}
@@ -155,9 +150,11 @@ export default function DashboardPage() {
               </div>
               <div className="shadow-card-report p-6 rounded-2xl">
                 <p className="font-bold text-2xl mb-2">Nghỉ phép</p>
-                <RecentLeaveRequests
-                  leaveRequests={dashboardData?.recentLeaveRequests || []}
-                />
+                <div className="overflow-x-auto">
+                  <RecentLeaveRequests
+                    leaveRequests={dashboardData?.recentLeaveRequests || []}
+                  />
+                </div>
               </div>
             </div>
           </TabsContent>

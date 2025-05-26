@@ -165,22 +165,26 @@ export default function AllRequestPage() {
       title: "Tên NV",
       dataIndex: "name",
       key: "name",
+      width: "170px",
       render: (text) => <a>{text}</a>,
     },
     {
       title: "Ngày nghỉ",
       dataIndex: "startDate",
       key: "age",
+      width: "170px",
     },
     {
       title: "Loại phép",
       dataIndex: "leaveType",
       key: "leaveType",
+      width: "80px",
     },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
+      width: "120px",
       render: (status) => <StatusLeave status={status} />,
     },
 
@@ -188,6 +192,7 @@ export default function AllRequestPage() {
       title: "Người phê duyệt",
       dataIndex: "approvedBy",
       key: "approvedBy",
+      width: "170px",
     },
 
     {
@@ -285,9 +290,11 @@ export default function AllRequestPage() {
             </div>
           </button>
         </div>
-        <div className="flex items-center gap-4 mb-4 w-full">
-          <p className="font-bold  text-2xl text-[#4a4a6a]">Lọc:</p>
-          <div className="flex gap-2 items-center">
+        <div className="flex flex-wrap items-center gap-4 mb-4 w-full">
+          <p className="font-bold  text-2xl text-[#4a4a6a] hidden md:block">
+            Lọc:
+          </p>
+          <div className="flex gap-2 items-center flex-shrink-0">
             <Form.Item label={<p className="font-bold text-[#242424]">MSNV</p>}>
               <Input
                 className="!w-[80px]"
@@ -296,7 +303,7 @@ export default function AllRequestPage() {
               />
             </Form.Item>
           </div>
-          <div className="flex gap-2 items-center ">
+          <div className="flex gap-2 items-center flex-shrink-0">
             {/* <p className="text-sm text-[#4a4a6a] flex-shrink-0">Tên NV:</p> */}
             <Form.Item
               label={<p className="font-bold text-[#242424]">Tên NV</p>}
@@ -308,7 +315,7 @@ export default function AllRequestPage() {
               />
             </Form.Item>
           </div>
-          <div className="!flex gap-2 items-center ">
+          <div className="!flex gap-2 items-center flex-shrink-0">
             <Form.Item
               label={<p className="font-bold text-[#242424]">Bộ phận</p>}
             >
@@ -332,7 +339,7 @@ export default function AllRequestPage() {
             </Form.Item>
           </div>
           <button
-            className="flex  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
+            className="flex  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold flex-shrink-0"
             onClick={() => getApiAllRequestsApproved(pageTable, pageSize)}
           >
             Tìm kiếm
@@ -342,7 +349,7 @@ export default function AllRequestPage() {
           className={styles.customTable}
           columns={columns}
           dataSource={formatted ?? []}
-          scroll={{ y: "calc(100vh - 335px)" }}
+          scroll={{ y: "calc(100vh - 335px)", x: "100%" }}
           pagination={false}
         />
         <Pagination

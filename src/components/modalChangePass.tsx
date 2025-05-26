@@ -67,6 +67,7 @@ const ModalChangePass = ({
         <Form.Item<FieldType>
           label="Mật khẩu mới"
           name="newPassword"
+          className="!mt-2"
           rules={[
             { required: true, message: "Nhập mật khẩu mới!" },
             { min: 6, message: "Mật khẩu phải có ít nhất 6 ký tự!" },
@@ -79,6 +80,7 @@ const ModalChangePass = ({
         <Form.Item<FieldType>
           label="Nhập lại mật khẩu mới"
           name="renewPassword"
+          className="!mt-2"
           dependencies={["newPassword"]}
           hasFeedback
           rules={[

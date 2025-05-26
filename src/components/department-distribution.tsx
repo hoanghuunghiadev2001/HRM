@@ -1,7 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState, useMemo } from "react";
-import { Treemap, ResponsiveContainer, Tooltip } from "recharts";
+import Chart from "react-apexcharts";
+import type { ApexOptions } from "apexcharts";
+
+// import { Treemap, ResponsiveContainer, Tooltip } from "recharts";
 
 const COLORS = [
   "#FF6B6B", // Đỏ tươi
@@ -39,7 +41,6 @@ interface TreemapData {
   children: {
     name: string;
     size: number;
-    color: string;
   }[];
 }
 
@@ -69,10 +70,9 @@ export function DepartmentDistribution({ departmentData: initialData = [] }) {
       // Transform the data to the format needed by the chart
       const transformedData = {
         name: "Phòng ban",
-        children: initialData.map((dept: DepartmentData, index: number) => ({
+        children: initialData.map((dept: DepartmentData) => ({
           name: dept.department,
           size: dept._count.employeeId,
-          color: COLORS[index % COLORS.length],
         })),
       };
       setData([transformedData]);
@@ -113,73 +113,15 @@ export function DepartmentDistribution({ departmentData: initialData = [] }) {
     fetchDepartmentData();
   }, [initialData, sampleData]);
 
-  // Helper function to get total employees - chuyển thành useMemo để tránh tính toán lại
-  const getTotalEmployees = useMemo(() => {
-    if (!data || data.length === 0 || !data[0]?.children) return 120; // Default value
-    return data[0].children.reduce((sum, dept) => sum + dept.size, 0);
-  }, [data]);
-
-  const CustomTooltip = ({ active, payload }: any) => {
-    if (active && payload && payload.length) {
-      const tooltipData = payload[0].payload;
-      return (
-        <div className="rounded-lg border bg-background p-2 shadow-sm">
-          <p className="font-medium">{tooltipData.name}</p>
-          <p className="text-sm text-muted-foreground">
-            {tooltipData.size} nhân viên
-          </p>
-          <p className="text-sm text-muted-foreground">
-            {((tooltipData.size / getTotalEmployees) * 100).toFixed(1)}% tổng
-            nhân viên
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
-
-  const CustomizedContent = (props: any) => {
-    const { depth, x, y, width, height, name, size } = props;
-
-    return (
-      <g>
-        <rect
-          x={x}
-          y={y}
-          width={width}
-          height={height}
-          style={{
-            fill: depth < 2 ? "none" : props.color,
-            stroke: "#fff",
-            strokeWidth: 2 / (depth + 1e-10),
-            strokeOpacity: 1 / (depth + 1e-10),
-          }}
-        />
-        {depth === 1 && width > 50 && height > 28 ? (
-          <>
-            <text
-              x={x + width / 2}
-              y={y + height / 2 - 7}
-              textAnchor="middle"
-              fill="#fff"
-              fontSize={14}
-            >
-              {name}
-            </text>
-            <text
-              x={x + width / 2}
-              y={y + height / 2 + 7}
-              textAnchor="middle"
-              fill="#fff"
-              fontSize={12}
-            >
-              {size} nhân viên
-            </text>
-          </>
-        ) : null}
-      </g>
-    );
-  };
+  const series = [
+    {
+      data:
+        data[0]?.children.map((child) => ({
+          x: child.name,
+          y: child.size,
+        })) || [],
+    },
+  ];
 
   if (loading) {
     return (
@@ -188,48 +130,42 @@ export function DepartmentDistribution({ departmentData: initialData = [] }) {
       </div>
     );
   }
+  const options: ApexOptions = {
+    chart: {
+      height: 350,
+      type: "treemap",
+    },
+    legend: {
+      show: true,
+    },
+    title: {
+      text: "Phòng ban",
+      align: "center",
+      style: {
+        fontSize: "16px",
+        fontWeight: "bold",
+      },
+    },
+    colors: COLORS, // Dùng mảng màu của bạn
+    plotOptions: {
+      treemap: {
+        distributed: true,
+        enableShades: false,
+      },
+    },
+    tooltip: {
+      enabled: true,
+      // ApexCharts tooltip sẽ hiển thị name và value theo mặc định
+      // Nếu muốn customize phức tạp hơn, cần dùng events hoặc custom HTML tooltip riêng
+    },
+  };
+  console.log(data);
 
   // Sử dụng data trực tiếp thay vì tính toán lại
 
   return (
-    <div className="h-[auto] w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <Treemap
-          data={data}
-          dataKey="size"
-          aspectRatio={4 / 3}
-          stroke="#fff"
-          fill="#8884d8"
-          content={<CustomizedContent />}
-        >
-          <Tooltip content={<CustomTooltip />} />
-        </Treemap>
-      </ResponsiveContainer>
-      <div className="mt-3">
-        {data.map((item, index) => {
-          return (
-            <div
-              key={item.name + index}
-              className="flex gap-4 flex-wrap justify-center"
-            >
-              {item.children.map((children, i) => {
-                return (
-                  <div
-                    key={children.name + i}
-                    className="flex items-center gap-3"
-                  >
-                    <div
-                      className="h-4 w-4 "
-                      style={{ backgroundColor: children.color }}
-                    ></div>
-                    <p style={{ color: children.color }}>{children.name}</p>
-                  </div>
-                );
-              })}
-            </div>
-          );
-        })}
-      </div>
+    <div>
+      <Chart options={options} series={series} type="treemap" height={350} />
     </div>
   );
 }

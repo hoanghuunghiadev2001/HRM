@@ -164,26 +164,31 @@ export function RecentLeaveRequests({
           dataIndex: "name",
           key: "name",
           render: (text) => <strong>{text}</strong>,
+          width: "150px",
         },
         {
           title: "Loại phép",
           dataIndex: "leaveType",
           key: "leaveType",
+          width: "80px",
         },
         {
           title: "Từ ngày",
           dataIndex: "startDate",
           key: "startDate",
+          width: "120px",
         },
         {
           title: "Đến ngày",
           dataIndex: "endDate",
           key: "endDate",
+          width: "120px",
         },
         {
           title: "Trạng thái",
           dataIndex: "status",
           key: "status",
+          width: "120px",
           render: (_, record) => <StatusLeave status={record.status} />,
         },
       ]}
@@ -195,7 +200,7 @@ export function RecentLeaveRequests({
       // columns={columns}
       // dataSource={formatted ?? []}
       // pagination={{ pageSize: 12 }}
-      scroll={{ y: "calc(100vh - 305px)" }}
+      scroll={{ y: "calc(100vh - 305px)", x: "100%" }}
     />
     // <Table>
     //   <TableHeader>

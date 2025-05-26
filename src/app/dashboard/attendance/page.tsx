@@ -21,7 +21,7 @@ import dayjs from "dayjs";
 import { fetchAttendances } from "@/lib/api";
 import { AttendanceResponse } from "@/lib/interface";
 import Image from "next/image";
-import { DownloadOutlined } from "@ant-design/icons";
+import { UploadOutlined } from "@ant-design/icons";
 
 interface DataType {
   key: string;
@@ -104,6 +104,7 @@ export default function AttendancePage() {
       title: "Tên NV",
       dataIndex: "employeeName",
       key: "employeeName",
+      width: "200px",
       render: (_, record) => (
         <div className="flex items-center gap-2">
           <Image
@@ -121,26 +122,31 @@ export default function AttendancePage() {
       title: "Bộ phận",
       dataIndex: "department",
       key: "department",
+      width: "80px",
     },
     {
       title: "Vị trí",
       dataIndex: "position",
       key: "position",
+      width: "120px",
     },
     {
       title: "Giờ vào",
       dataIndex: "firstCheckIn",
       key: "firstCheckIn",
+      width: "120px",
     },
     {
       title: "Giờ ra",
       dataIndex: "lastCheckOut",
       key: "lastCheckOut",
+      width: "120px",
     },
     {
       title: "Tổng giờ",
       dataIndex: "totalHours",
       key: "totalHours",
+      width: "80px",
     },
   ];
 
@@ -271,19 +277,19 @@ export default function AttendancePage() {
 
       <div className="w-full flex justify-between">
         <p className="font-bold  text-2xl text-[#4a4a6a]">
-          Danh sách phiếu yêu cầu:
+          Danh sách chấm công:
         </p>
         <Button
           onClick={handleExportExcel}
           type="primary"
-          icon={<DownloadOutlined />}
+          icon={<UploadOutlined />}
         >
-          Xuất file tuần này
+          <p className="hidden sm:block">Xuất file tuần này</p>
         </Button>
       </div>
       <div className="w-full">
         <p className="font-bold  text-xl text-[#4a4a6a]">Tìm kiếm:</p>
-        <div className="flex items-center gap-4 mb-4 w-full mt-2 px-4">
+        <div className="flex items-center gap-4 mb-4 w-full mt-2 px-4 flex-wrap">
           <div className="flex gap-2 items-center">
             <Form.Item label={<p className="font-bold text-[#242424]">MSNV</p>}>
               <Input
@@ -360,7 +366,7 @@ export default function AttendancePage() {
           className={styles.customTable}
           columns={columns}
           dataSource={formatted ?? []}
-          scroll={{ y: "calc(100vh - 335px)" }}
+          scroll={{ y: "calc(100vh - 335px)", x: "100%" }}
           pagination={false}
         />
         <Pagination

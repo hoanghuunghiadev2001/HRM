@@ -62,6 +62,7 @@ const ModalChangePassEmployee = ({
         <Form.Item<FieldType>
           label="Nhập lại mật khẩu mới"
           name="renewPassword"
+          className="!mt-2"
           dependencies={["newPassword"]}
           hasFeedback
           rules={[

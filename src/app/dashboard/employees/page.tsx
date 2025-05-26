@@ -161,6 +161,7 @@ export default function EmployeesPage() {
       title: "Tên NV",
       dataIndex: "name",
       key: "name",
+      width: "200px",
       render: (_, record) => (
         <div className="flex gap-2 items-center">
           <Image
@@ -181,16 +182,19 @@ export default function EmployeesPage() {
       title: "Bộ phận",
       dataIndex: "department",
       key: "department",
+      width: "100px",
     },
     {
       title: "Chức vụ",
       dataIndex: "position",
       key: "position",
+      width: "120px",
     },
     {
       title: "Giới tính",
       dataIndex: "gender",
       key: "gender",
+      width: "80px",
       render: (text) => (text === "MALE" ? "Nam" : "Nữ"),
     },
     {
@@ -625,7 +629,7 @@ export default function EmployeesPage() {
         </p>
       </div>
       <div className="w-full  mt-4 ">
-        <div className="flex justify-end items-start mb-3 gap-4  w-full">
+        <div className="flex justify-end items-start mb-3 gap-4  w-full flex-wrap">
           {localUser?.role === "ADMIN" && (
             <Button onClick={handleExportExcel} icon={<DownloadOutlined />}>
               Download
@@ -655,9 +659,11 @@ export default function EmployeesPage() {
             Thêm nhân sự
           </button>
         </div>
-        <div className="flex items-center gap-4 mb-4 w-full">
-          <p className="font-bold  text-2xl text-[#4a4a6a]">Lọc:</p>
-          <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-4 mb-4 w-full flex-wrap">
+          <p className="font-bold  text-2xl text-[#4a4a6a] hidden sm:block">
+            Lọc:
+          </p>
+          <div className="flex gap-2 items-center flex-wrap">
             <Form.Item label={<p className="font-bold text-[#242424]">MSNV</p>}>
               <Input
                 className="!w-[80px]"
@@ -715,7 +721,7 @@ export default function EmployeesPage() {
           className={styles.customTable}
           columns={columns}
           dataSource={formatted ?? []}
-          scroll={{ y: "calc(100vh - 335px)" }}
+          scroll={{ y: "calc(100vh - 335px)", x: "100%" }}
           pagination={false}
         />
         <Pagination

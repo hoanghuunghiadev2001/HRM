@@ -96,22 +96,26 @@ const ModalNeedApproved = ({
       title: "Tên NV",
       dataIndex: "name",
       key: "name",
+      width: "170px",
       render: (text) => <a>{text}</a>,
     },
     {
       title: "Phòng ban",
       dataIndex: "department",
       key: "department",
+      width: "80px",
     },
     {
       title: "Ngày nghỉ",
       dataIndex: "startDate",
       key: "startDate",
+      width: "170px",
     },
     {
       title: "Loại phép",
       dataIndex: "leaveType",
       key: "leaveType",
+      width: "80px",
     },
     {
       title: "",

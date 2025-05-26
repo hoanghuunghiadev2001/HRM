@@ -310,7 +310,7 @@ export default function LeaveReportPage() {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 shadow-card-report p-6 rounded-2xl">
+      <div className="grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-4 shadow-card-report p-6 rounded-2xl">
         <div className="rounded-2xl bg-gradient-to-r from-[#2c00cc] to-[#9076ec] p-4">
           <p className="text-white text-lg font-bold">Tổng đơn nghỉ phép</p>
 
@@ -396,32 +396,38 @@ export default function LeaveReportPage() {
               title: "Mã NV",
               dataIndex: "employeeCode",
               key: "employeeCode",
+              width: "80px",
             },
             {
               title: "Tên nhân viên",
               dataIndex: "name",
               key: "name",
+              width: "120px",
               render: (text) => <strong>{text}</strong>,
             },
             {
               title: "Phòng ban",
               dataIndex: "department",
               key: "department",
+              width: "80px",
             },
             {
               title: "Tổng đơn",
               dataIndex: "totalRequests",
               key: "totalRequests",
+              width: "80px",
             },
             {
               title: "Tổng giờ",
               dataIndex: "totalHours",
               key: "totalHours",
+              width: "80px",
             },
             {
               title: "Đã duyệt",
               dataIndex: "approved",
               key: "approved",
+              width: "80px",
               render: (approved: number, record) => (
                 <Tag color="green">
                   {record.totalApproved} (
@@ -436,6 +442,7 @@ export default function LeaveReportPage() {
               title: "Loại phép phổ biến",
               dataIndex: "popularType",
               key: "popularType",
+              width: "120px",
             },
           ]}
           pagination={{ pageSize: 10 }}
