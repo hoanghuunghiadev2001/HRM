@@ -649,7 +649,7 @@ export default function EmployeesPage() {
             </label>
           )}
 
-          <button
+          <Button
             className="flex relative  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
             onClick={() => {
               setModalAddEmployee(true);
@@ -657,7 +657,7 @@ export default function EmployeesPage() {
           >
             <PlusIcon />
             Thêm nhân sự
-          </button>
+          </Button>
         </div>
         <div className="grid grid-cols-2 md:flex md:items-center gap-4 mb-4 w-full flex-wrap">
           <p className="font-bold  text-2xl text-[#4a4a6a] hidden md:block">

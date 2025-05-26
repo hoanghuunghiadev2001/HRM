@@ -1,4 +1,30 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Input, Tooltip } from "antd";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
+
+export function parseDateString(dateStr: string) {
+  if (!dateStr) return null;
+
+  // Chuyển về string để xử lý
+  const str = String(dateStr);
+
+  // Thử parse ISO trước
+  const isoDate = dayjs(str);
+  if (isoDate.isValid()) {
+    return isoDate.toISOString();
+  }
+
+  // Thử parse format dd/MM/yyyy nếu cần
+  const altDate = dayjs(str, "DD/MM/YYYY");
+  if (altDate.isValid()) {
+    return altDate.toISOString();
+  }
+
+  // Nếu không parse được, trả về null hoặc giữ nguyên chuỗi gốc
+  return null;
+}
 
 export function formatCurrency(number: number): string {
   return number.toLocaleString("vi-VN", {
@@ -95,3 +121,54 @@ export const NumericInput = (props: NumericInputProps) => {
     </Tooltip>
   );
 };
+
+export function deepDiff(newData: any, oldData: any): any {
+  if (dayjs.isDayjs(newData)) {
+    const newValue = newData.toISOString();
+    const oldValue = dayjs.isDayjs(oldData) ? oldData.toISOString() : oldData;
+    return newValue !== oldValue ? newValue : undefined;
+  }
+
+  if (typeof newData !== "object" || newData === null) {
+    return newData !== oldData ? newData : undefined;
+  }
+
+  const diff: any = Array.isArray(newData) ? [] : {};
+  let hasDiff = false;
+
+  for (const key in newData) {
+    const value = deepDiff(newData[key], oldData?.[key]);
+    if (value !== undefined) {
+      diff[key] = value;
+      hasDiff = true;
+    }
+  }
+
+  return hasDiff ? diff : undefined;
+}
+
+export function normalizeObject(obj: any): any {
+  if (obj === null || obj === undefined) return obj;
+
+  if (typeof obj === "string") {
+    // Nếu là ngày định dạng string, chuẩn hóa
+    return parseDateString(obj);
+  }
+
+  if (typeof obj !== "object") return obj;
+
+  if (Array.isArray(obj)) {
+    return obj.map(normalizeObject);
+  }
+
+  const newObj: any = {};
+  for (const key in obj) {
+    // Bỏ qua các trường id, employeeId
+    if (key.toLowerCase().includes("id")) continue;
+    // Bỏ mảng LeaveRequest nếu bạn không cần so sánh nó
+    if (key === "LeaveRequest") continue;
+
+    newObj[key] = normalizeObject(obj[key]);
+  }
+  return newObj;
+}

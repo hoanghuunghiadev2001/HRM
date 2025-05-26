@@ -78,7 +78,7 @@ model WorkInfo {
   joinedTBD       DateTime? // Ngày vào TBD
   joinedTeSCC     DateTime? // Ngày vào TeSCC
   seniorityStart  DateTime? // Ngày tính thâm niên
-  seniority       Int? // Thâm niên
+  seniority       String? // Thâm niên
   contractNumber  String? // Số hợp đồng
   contractDate    DateTime? // Ngày ký hợp đồng
   contractType    String? // Loại hợp đồng

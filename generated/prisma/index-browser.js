@@ -227,6 +227,7 @@ exports.Prisma.WorkInfoOrderByRelevanceFieldEnum = {
   department: 'department',
   position: 'position',
   specialization: 'specialization',
+  seniority: 'seniority',
   contractNumber: 'contractNumber',
   contractType: 'contractType'
 };

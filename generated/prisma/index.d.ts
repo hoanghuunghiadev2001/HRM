@@ -2628,13 +2628,11 @@ export namespace Prisma {
 
   export type WorkInfoAvgAggregateOutputType = {
     id: number | null
-    seniority: number | null
     employeeId: number | null
   }
 
   export type WorkInfoSumAggregateOutputType = {
     id: number | null
-    seniority: number | null
     employeeId: number | null
   }
 
@@ -2646,7 +2644,7 @@ export namespace Prisma {
     joinedTBD: Date | null
     joinedTeSCC: Date | null
     seniorityStart: Date | null
-    seniority: number | null
+    seniority: string | null
     contractNumber: string | null
     contractDate: Date | null
     contractType: string | null
@@ -2662,7 +2660,7 @@ export namespace Prisma {
     joinedTBD: Date | null
     joinedTeSCC: Date | null
     seniorityStart: Date | null
-    seniority: number | null
+    seniority: string | null
     contractNumber: string | null
     contractDate: Date | null
     contractType: string | null
@@ -2690,13 +2688,11 @@ export namespace Prisma {
 
   export type WorkInfoAvgAggregateInputType = {
     id?: true
-    seniority?: true
     employeeId?: true
   }
 
   export type WorkInfoSumAggregateInputType = {
     id?: true
-    seniority?: true
     employeeId?: true
   }
 
@@ -2843,7 +2839,7 @@ export namespace Prisma {
     joinedTBD: Date | null
     joinedTeSCC: Date | null
     seniorityStart: Date | null
-    seniority: number | null
+    seniority: string | null
     contractNumber: string | null
     contractDate: Date | null
     contractType: string | null
@@ -2923,7 +2919,7 @@ export namespace Prisma {
       joinedTBD: Date | null
       joinedTeSCC: Date | null
       seniorityStart: Date | null
-      seniority: number | null
+      seniority: string | null
       contractNumber: string | null
       contractDate: Date | null
       contractType: string | null
@@ -3306,7 +3302,7 @@ export namespace Prisma {
     readonly joinedTBD: FieldRef<"WorkInfo", 'DateTime'>
     readonly joinedTeSCC: FieldRef<"WorkInfo", 'DateTime'>
     readonly seniorityStart: FieldRef<"WorkInfo", 'DateTime'>
-    readonly seniority: FieldRef<"WorkInfo", 'Int'>
+    readonly seniority: FieldRef<"WorkInfo", 'String'>
     readonly contractNumber: FieldRef<"WorkInfo", 'String'>
     readonly contractDate: FieldRef<"WorkInfo", 'DateTime'>
     readonly contractType: FieldRef<"WorkInfo", 'String'>
@@ -8876,6 +8872,7 @@ export namespace Prisma {
     department: 'department',
     position: 'position',
     specialization: 'specialization',
+    seniority: 'seniority',
     contractNumber: 'contractNumber',
     contractType: 'contractType'
   };
@@ -9096,7 +9093,7 @@ export namespace Prisma {
     joinedTBD?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
     joinedTeSCC?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
     seniorityStart?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
-    seniority?: IntNullableFilter<"WorkInfo"> | number | null
+    seniority?: StringNullableFilter<"WorkInfo"> | string | null
     contractNumber?: StringNullableFilter<"WorkInfo"> | string | null
     contractDate?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
     contractType?: StringNullableFilter<"WorkInfo"> | string | null
@@ -9135,7 +9132,7 @@ export namespace Prisma {
     joinedTBD?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
     joinedTeSCC?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
     seniorityStart?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
-    seniority?: IntNullableFilter<"WorkInfo"> | number | null
+    seniority?: StringNullableFilter<"WorkInfo"> | string | null
     contractNumber?: StringNullableFilter<"WorkInfo"> | string | null
     contractDate?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
     contractType?: StringNullableFilter<"WorkInfo"> | string | null
@@ -9175,7 +9172,7 @@ export namespace Prisma {
     joinedTBD?: DateTimeNullableWithAggregatesFilter<"WorkInfo"> | Date | string | null
     joinedTeSCC?: DateTimeNullableWithAggregatesFilter<"WorkInfo"> | Date | string | null
     seniorityStart?: DateTimeNullableWithAggregatesFilter<"WorkInfo"> | Date | string | null
-    seniority?: IntNullableWithAggregatesFilter<"WorkInfo"> | number | null
+    seniority?: StringNullableWithAggregatesFilter<"WorkInfo"> | string | null
     contractNumber?: StringNullableWithAggregatesFilter<"WorkInfo"> | string | null
     contractDate?: DateTimeNullableWithAggregatesFilter<"WorkInfo"> | Date | string | null
     contractType?: StringNullableWithAggregatesFilter<"WorkInfo"> | string | null
@@ -9672,7 +9669,7 @@ export namespace Prisma {
     joinedTBD?: Date | string | null
     joinedTeSCC?: Date | string | null
     seniorityStart?: Date | string | null
-    seniority?: number | null
+    seniority?: string | null
     contractNumber?: string | null
     contractDate?: Date | string | null
     contractType?: string | null
@@ -9688,7 +9685,7 @@ export namespace Prisma {
     joinedTBD?: Date | string | null
     joinedTeSCC?: Date | string | null
     seniorityStart?: Date | string | null
-    seniority?: number | null
+    seniority?: string | null
     contractNumber?: string | null
     contractDate?: Date | string | null
     contractType?: string | null
@@ -9703,7 +9700,7 @@ export namespace Prisma {
     joinedTBD?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     joinedTeSCC?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniorityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    seniority?: NullableIntFieldUpdateOperationsInput | number | null
+    seniority?: NullableStringFieldUpdateOperationsInput | string | null
     contractNumber?: NullableStringFieldUpdateOperationsInput | string | null
     contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     contractType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9719,7 +9716,7 @@ export namespace Prisma {
     joinedTBD?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     joinedTeSCC?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniorityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    seniority?: NullableIntFieldUpdateOperationsInput | number | null
+    seniority?: NullableStringFieldUpdateOperationsInput | string | null
     contractNumber?: NullableStringFieldUpdateOperationsInput | string | null
     contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     contractType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9735,7 +9732,7 @@ export namespace Prisma {
     joinedTBD?: Date | string | null
     joinedTeSCC?: Date | string | null
     seniorityStart?: Date | string | null
-    seniority?: number | null
+    seniority?: string | null
     contractNumber?: string | null
     contractDate?: Date | string | null
     contractType?: string | null
@@ -9750,7 +9747,7 @@ export namespace Prisma {
     joinedTBD?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     joinedTeSCC?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniorityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    seniority?: NullableIntFieldUpdateOperationsInput | number | null
+    seniority?: NullableStringFieldUpdateOperationsInput | string | null
     contractNumber?: NullableStringFieldUpdateOperationsInput | string | null
     contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     contractType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9765,7 +9762,7 @@ export namespace Prisma {
     joinedTBD?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     joinedTeSCC?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniorityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    seniority?: NullableIntFieldUpdateOperationsInput | number | null
+    seniority?: NullableStringFieldUpdateOperationsInput | string | null
     contractNumber?: NullableStringFieldUpdateOperationsInput | string | null
     contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     contractType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10410,17 +10407,6 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type EmployeeScalarRelationFilter = {
     is?: EmployeeWhereInput
     isNot?: EmployeeWhereInput
@@ -10450,7 +10436,6 @@ export namespace Prisma {
 
   export type WorkInfoAvgOrderByAggregateInput = {
     id?: SortOrder
-    seniority?: SortOrder
     employeeId?: SortOrder
   }
 
@@ -10488,11 +10473,10 @@ export namespace Prisma {
 
   export type WorkInfoSumOrderByAggregateInput = {
     id?: SortOrder
-    seniority?: SortOrder
     employeeId?: SortOrder
   }
 
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+  export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | null
     notIn?: number[] | null
@@ -10500,12 +10484,7 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type PersonalInfoOrderByRelevanceInput = {
@@ -10572,6 +10551,22 @@ export namespace Prisma {
     id?: SortOrder
     insuranceSalary?: SortOrder
     employeeId?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type ContactInfoOrderByRelevanceInput = {
@@ -11112,14 +11107,6 @@ export namespace Prisma {
     connect?: EmployeeWhereUniqueInput
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type EmployeeUpdateOneRequiredWithoutWorkInfoNestedInput = {
     create?: XOR<EmployeeCreateWithoutWorkInfoInput, EmployeeUncheckedCreateWithoutWorkInfoInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutWorkInfoInput
@@ -11132,6 +11119,14 @@ export namespace Prisma {
     create?: XOR<EmployeeCreateWithoutPersonalInfoInput, EmployeeUncheckedCreateWithoutPersonalInfoInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutPersonalInfoInput
     connect?: EmployeeWhereUniqueInput
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type EmployeeUpdateOneRequiredWithoutPersonalInfoNestedInput = {
@@ -11522,7 +11517,7 @@ export namespace Prisma {
     joinedTBD?: Date | string | null
     joinedTeSCC?: Date | string | null
     seniorityStart?: Date | string | null
-    seniority?: number | null
+    seniority?: string | null
     contractNumber?: string | null
     contractDate?: Date | string | null
     contractType?: string | null
@@ -11537,7 +11532,7 @@ export namespace Prisma {
     joinedTBD?: Date | string | null
     joinedTeSCC?: Date | string | null
     seniorityStart?: Date | string | null
-    seniority?: number | null
+    seniority?: string | null
     contractNumber?: string | null
     contractDate?: Date | string | null
     contractType?: string | null
@@ -11705,7 +11700,7 @@ export namespace Prisma {
     joinedTBD?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     joinedTeSCC?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniorityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    seniority?: NullableIntFieldUpdateOperationsInput | number | null
+    seniority?: NullableStringFieldUpdateOperationsInput | string | null
     contractNumber?: NullableStringFieldUpdateOperationsInput | string | null
     contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     contractType?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11720,7 +11715,7 @@ export namespace Prisma {
     joinedTBD?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     joinedTeSCC?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     seniorityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    seniority?: NullableIntFieldUpdateOperationsInput | number | null
+    seniority?: NullableStringFieldUpdateOperationsInput | string | null
     contractNumber?: NullableStringFieldUpdateOperationsInput | string | null
     contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     contractType?: NullableStringFieldUpdateOperationsInput | string | null

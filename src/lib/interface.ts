@@ -22,7 +22,7 @@ export interface WorkInfo {
   joinedTBD: string;
   joinedTeSCC: string;
   seniorityStart: string;
-  seniority: number;
+  seniority: string;
   contractNumber: string;
   contractDate: string;
   contractType: string;

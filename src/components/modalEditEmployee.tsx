@@ -79,7 +79,7 @@ const ModalEditEmployee = ({
         joinedTBD: formData.joinedTBD,
         joinedTeSCC: formData.joinedTeSCC,
         seniorityStart: formData.seniorityStart,
-        seniority: parseInt(formData.seniority, 10) || null,
+        seniority: formData.seniority,
         contractNumber: formData.contractNumber,
         contractDate: formData.contractDate,
         contractType: formData.contractType,
@@ -128,7 +128,8 @@ const ModalEditEmployee = ({
   function handleDateChange(date: dayjs.Dayjs | null): number {
     if (!date) return 0;
     const today = dayjs();
-    let totalMonths = (today.year() - date.year()) * 12 + (today.month() - date.month());
+    let totalMonths =
+      (today.year() - date.year()) * 12 + (today.month() - date.month());
     if (today.date() < date.date()) totalMonths -= 1;
     setSeniorityText(totalMonths);
     return totalMonths;
@@ -137,7 +138,11 @@ const ModalEditEmployee = ({
   function formatSeniorityText(months: number): string {
     const years = Math.floor(months / 12);
     const m = months % 12;
-    return `${years > 0 ? `${years} năm ` : ""}${m > 0 ? `${m} tháng` : ""}`.trim() || "0 tháng";
+    return (
+      `${years > 0 ? `${years} năm ` : ""}${
+        m > 0 ? `${m} tháng` : ""
+      }`.trim() || "0 tháng"
+    );
   }
 
   // const handleDateChange = (date: dayjs.Dayjs | null) => {
@@ -225,9 +230,7 @@ const ModalEditEmployee = ({
       employeeCode: data.employeeCode,
       name: data.name,
       gender: data.gender,
-      birthDate: data.birthDate
-        ? dayjs(data.birthDate, 'DD/MM/YYYY')
-        : null,
+      birthDate: data.birthDate ? dayjs(data.birthDate, "DD/MM/YYYY") : null,
       password: data.password, // luôn mặc định
       role: data.role,
       avatarBase64: data.avatar ?? null,
@@ -237,30 +240,30 @@ const ModalEditEmployee = ({
       position: data.workInfo?.position ?? "",
       specialization: data.workInfo?.specialization ?? "",
       joinedTBD: data.workInfo?.joinedTBD
-        ? dayjs(data.workInfo?.joinedTBD, 'DD/MM/YYYY')
+        ? dayjs(data.workInfo?.joinedTBD, "DD/MM/YYYY")
         : null,
       joinedTeSCC: data.workInfo?.joinedTeSCC
-        ? dayjs(data.workInfo?.joinedTeSCC, 'DD/MM/YYYY')
+        ? dayjs(data.workInfo?.joinedTeSCC, "DD/MM/YYYY")
         : null,
       seniorityStart: data.workInfo?.seniorityStart
-        ? dayjs(data.workInfo?.seniorityStart, 'DD/MM/YYYY')
+        ? dayjs(data.workInfo?.seniorityStart, "DD/MM/YYYY")
         : null,
-      seniority: handleDateChange(
-        dayjs(data.workInfo?.seniorityStart, "DD/MM/YYYY")
+      seniority: formatSeniorityText(
+        handleDateChange(dayjs(data.workInfo?.seniorityStart, "DD/MM/YYYY"))
       ),
       contractNumber: data.workInfo?.contractNumber ?? "",
       contractDate: data.workInfo?.contractDate
-        ? dayjs(data.workInfo?.contractDate, 'DD/MM/YYYY')
+        ? dayjs(data.workInfo?.contractDate, "DD/MM/YYYY")
         : null,
       contractType: data.workInfo?.contractType ?? "",
       contractEndDate: data.workInfo?.contractEndDate
-        ? dayjs(data.workInfo?.contractEndDate, 'DD/MM/YYYY')
+        ? dayjs(data.workInfo?.contractEndDate, "DD/MM/YYYY")
         : null,
 
       // personalInfo
       identityNumber: data.personalInfo?.identityNumber ?? "",
       issueDate: data.personalInfo?.issueDate
-        ? dayjs(data.personalInfo?.issueDate, 'DD/MM/YYYY')
+        ? dayjs(data.personalInfo?.issueDate, "DD/MM/YYYY")
         : null,
       issuePlace: data.personalInfo?.issuePlace ?? "",
       hometown: data.personalInfo?.hometown ?? "",
@@ -282,9 +285,9 @@ const ModalEditEmployee = ({
       workStatus: data.otherInfo?.workStatus ?? "",
       resignedDate: data.otherInfo?.resignedDate
         ? dayjs
-          .utc(data.otherInfo?.resignedDate)
-          .tz("Asia/Ho_Chi_Minh")
-          .format("DD/MM/YYYY")
+            .utc(data.otherInfo?.resignedDate)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY")
         : null,
       documentsChecked: data.otherInfo?.documentsChecked ?? "",
       updatedAt: data.otherInfo?.updatedAt
@@ -296,24 +299,23 @@ const ModalEditEmployee = ({
     };
   }
 
-
   useEffect(() => {
-    setIsMounted(true);  // Đánh dấu đã mount client
+    setIsMounted(true); // Đánh dấu đã mount client
   }, []);
 
   useEffect(() => {
     if (isMounted && employeeInfo && open) {
       setImageUrl(employeeInfo.avatar);
 
-      const date = dayjs.utc(employeeInfo.workInfo.joinedTBD).tz('Asia/Ho_Chi_Minh')
-      console.log(date.format('DD/MM/YYYY'));
-
+      const date = dayjs
+        .utc(employeeInfo.workInfo.joinedTBD)
+        .tz("Asia/Ho_Chi_Minh");
+      console.log(date.format("DD/MM/YYYY"));
 
       form.setFieldsValue(transformEmployeeDataToFormData(employeeInfo));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [employeeInfo, isMounted]);
-
 
   return (
     <>
@@ -339,7 +341,7 @@ const ModalEditEmployee = ({
               labelWrap
               validateMessages={validateMessages}
 
-            //   style={{ maxWidth: 600 }}
+              //   style={{ maxWidth: 600 }}
             >
               <div className="flex justify-center">
                 <Form.Item
@@ -478,21 +480,21 @@ const ModalEditEmployee = ({
                 <Form.Item
                   name="phoneNumber"
                   label="Số DT"
-                //   rules={[{ required: true }]}
+                  //   rules={[{ required: true }]}
                 >
                   <Input type="number" />
                 </Form.Item>
                 <Form.Item
                   name="relativePhone"
                   label="SĐT người thân"
-                //   rules={[{ required: true }]}
+                  //   rules={[{ required: true }]}
                 >
                   <Input type="number" />
                 </Form.Item>
                 <Form.Item
                   name="companyPhone"
                   label="SĐT Cty"
-                //   rules={[{ required: true }]}
+                  //   rules={[{ required: true }]}
                 >
                   <Input type="number" />
                 </Form.Item>
@@ -574,18 +576,18 @@ const ModalEditEmployee = ({
                   name="seniority"
                   label="Thâm niên"
                   valuePropName={formatSeniorityText(seniorityText)}
-                //   rules={[{ required: true }]}
+                  //   rules={[{ required: true }]}
                 >
                   <Input
                     disabled
                     value={formatSeniorityText(seniorityText)}
-                  // defaultValue={seniorityText}
+                    // defaultValue={seniorityText}
                   />
                 </Form.Item>
                 <Form.Item
                   name="contractNumber"
                   label="Số HĐ"
-                //   rules={[{ required: true }]}
+                  //   rules={[{ required: true }]}
                 >
                   <Input />
                 </Form.Item>
