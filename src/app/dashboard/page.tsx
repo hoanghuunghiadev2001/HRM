@@ -262,13 +262,14 @@ const Profile = () => {
           2. Thông Tin Liên Hệ:
         </p>
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4  pr-4 gap-4  border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
-          <div className="flex  gap-2 items-start">
-            <p className="font-bold text-[#242424] flex-shrink-0 ">
+          <div className="grid grid-cols-5">
+            <p className="font-bold text-[#242424] flex-shrink-0  col-span-2 flex items-center">
               Số điện thoại:
             </p>
             <Form
-            // onFinish={onFinish}
-            // style={{ maxWidth: 600 }}
+              // onFinish={onFinish}
+              // style={{ maxWidth: 600 }}
+              className="col-span-3"
             >
               <Form.Item
                 name={["number"]}
@@ -289,13 +290,14 @@ const Profile = () => {
               </Form.Item>
             </Form>
           </div>
-          <div className="flex  gap-2 items-start">
-            <p className="font-bold text-[#242424] flex-shrink-0 ">
+          <div className="grid grid-cols-5">
+            <p className="font-bold text-[#242424] flex-shrink-0  col-span-2 flex items-center ">
               SĐT người thân:
             </p>
             <Form
-            // onFinish={onFinish}
-            // style={{ maxWidth: 600 }}
+              // onFinish={onFinish}
+              // style={{ maxWidth: 600 }}
+              className="col-span-3"
             >
               <Form.Item
                 name={["number"]}
@@ -316,13 +318,14 @@ const Profile = () => {
               </Form.Item>
             </Form>
           </div>
-          <div className="flex  gap-2 items-start">
-            <p className="font-bold text-[#242424] flex-shrink-0 ">
+          <div className="grid grid-cols-5">
+            <p className="font-bold text-[#242424] flex-shrink-0  col-span-2 flex items-center">
               SĐT công ty:
             </p>
             <Form
-            // onFinish={onFinish}
-            // style={{ maxWidth: 600 }}
+              // onFinish={onFinish}
+              // style={{ maxWidth: 600 }}
+              className="col-span-3"
             >
               <Form.Item
                 name={["number"]}
@@ -343,11 +346,14 @@ const Profile = () => {
               </Form.Item>
             </Form>
           </div>
-          <div className="flex  gap-2 items-start">
-            <p className="font-bold text-[#242424] flex-shrink-0 ">Email:</p>
+          <div className="grid grid-cols-5">
+            <p className="font-bold text-[#242424] flex-shrink-0  col-span-2 flex items-center">
+              Email:
+            </p>
             <Form
-            // onFinish={onFinish}
-            // style={{ maxWidth: 600 }}
+              // onFinish={onFinish}
+              // style={{ maxWidth: 600 }}
+              className="col-span-3"
             >
               <Form.Item valuePropName={email} rules={[{ type: "email" }]}>
                 <Input
@@ -461,8 +467,8 @@ const Profile = () => {
               dataProfile?.otherInfo.workStatus === "OFFICIAL"
                 ? "Chính thức"
                 : dataProfile?.otherInfo.workStatus === "PROBATION"
-                  ? "Thử việc"
-                  : "Nghỉ việc"
+                ? "Thử việc"
+                : "Nghỉ việc"
             }
           />
           <InfoPersonal

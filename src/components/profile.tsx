@@ -215,7 +215,7 @@ const Profile = ({ dataProfile, updateProfile }: ProfileProps) => {
           2. Thông Tin Liên Hệ:
         </p>
         <div className="grid grid-cols-3 mt-1 w-full pl-10  pr-6 gap-4">
-          <div className="flex  gap-2 items-start">
+          <div className="grid grid-cols-2">
             <p className="font-bold text-[#242424] flex-shrink-0 ">
               Số điện thoại:
             </p>
@@ -228,7 +228,7 @@ const Profile = ({ dataProfile, updateProfile }: ProfileProps) => {
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
           </div>
-          <div className="flex  gap-2 items-start">
+          <div className="grid grid-cols-2">
             <p className="font-bold text-[#242424] flex-shrink-0 ">
               SĐT người thân:
             </p>
@@ -241,7 +241,7 @@ const Profile = ({ dataProfile, updateProfile }: ProfileProps) => {
               onChange={(e) => setRelativePhone(e.target.value)}
             />
           </div>
-          <div className="flex  gap-2 items-start">
+          <div className="grid grid-cols-2">
             <p className="font-bold text-[#242424] flex-shrink-0 ">
               SĐT công ty:
             </p>
@@ -254,7 +254,7 @@ const Profile = ({ dataProfile, updateProfile }: ProfileProps) => {
               onChange={(e) => setCompanyPhone(e.target.value)}
             />
           </div>
-          <div className="flex  gap-2 items-start">
+          <div className="grid grid-cols-2">
             <p className="font-bold text-[#242424] flex-shrink-0 ">Email:</p>
 
             <Input
