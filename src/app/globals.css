@@ -146,7 +146,11 @@ div::-webkit-scrollbar-thumb {
 
 @media (max-width: 768px) {
   .ant-picker-dropdown {
-    transform: scale(0.8) !important;
-    transform-origin: top center !important;
+    position: fixed !important; /* Fix vào viewport */
+    top: 50% !important; /* Căn giữa theo trục dọc */
+    left: 50% !important; /* Căn giữa theo trục ngang */
+    transform: translate(-50%, -50%) scale(0.6) !important;
+    transform-origin: center center !important;
+    z-index: 9999999 !important; /* Đảm bảo hiển thị trên cùng */
   }
 }

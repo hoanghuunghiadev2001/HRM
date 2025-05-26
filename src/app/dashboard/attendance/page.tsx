@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
+import "../../globals.css";
 
 import React from "react";
 import {
@@ -289,11 +290,15 @@ export default function AttendancePage() {
       </div>
       <div className="w-full">
         <p className="font-bold  text-xl text-[#4a4a6a]">Tìm kiếm:</p>
-        <div className="flex items-center gap-4 mb-4 w-full mt-2 px-4 flex-wrap">
+        <div className="grid grid-cols-2 md:flex md:items-center gap-4 mb-4 w-full mt-2 px-4 flex-wrap">
           <div className="flex gap-2 items-center">
-            <Form.Item label={<p className="font-bold text-[#242424]">MSNV</p>}>
+            <Form.Item
+              label={
+                <p className="font-bold text-[#242424] hidden md:block">MSNV</p>
+              }
+            >
               <Input
-                className="!w-[80px]"
+                className=" w-full md:!w-[80px]"
                 placeholder="MSNV"
                 onChange={(e) => setFilterMSNV(e.target.value)}
                 onKeyDown={(e) => {
@@ -307,10 +312,14 @@ export default function AttendancePage() {
           <div className="flex gap-2 items-center ">
             {/* <p className="text-sm text-[#4a4a6a] flex-shrink-0">Tên NV:</p> */}
             <Form.Item
-              label={<p className="font-bold text-[#242424]">Tên NV</p>}
+              label={
+                <p className="font-bold text-[#242424] hidden md:block">
+                  Tên NV
+                </p>
+              }
             >
               <Input
-                className="!w-[100px]"
+                className="w-full md:!w-[100px]"
                 placeholder="Tên NV"
                 onChange={(e) => setFilterName(e.target.value)}
                 onKeyDown={(e) => {
@@ -321,10 +330,14 @@ export default function AttendancePage() {
               />
             </Form.Item>
           </div>
-          <div className="!flex gap-2 items-center ">
+          <div className="!flex gap-2 items-center col-span-2">
             <Form.Item
               name="range-picker"
-              label={<p className="font-bold text-[#242424]">Theo ngày</p>}
+              label={
+                <p className="font-bold text-[#242424] hidden md:block">
+                  Theo ngày
+                </p>
+              }
             >
               <RangePicker
                 format={"DD/MM/YYYY"}
@@ -339,11 +352,15 @@ export default function AttendancePage() {
           {localUser?.role === "ADMIN" ? (
             <div className="!flex gap-2 items-center ">
               <Form.Item
-                label={<p className="font-bold text-[#242424]">Bộ phận</p>}
+                label={
+                  <p className="font-bold text-[#242424] hidden md:block">
+                    Bộ phận
+                  </p>
+                }
               >
                 <Select
                   onChange={(e) => setFilterDepartment(e)}
-                  style={{ width: "100px" }}
+                  className="w-full md:!w-[100px]"
                   placeholder={"Bộ phận"}
                   allowClear
                   options={[
