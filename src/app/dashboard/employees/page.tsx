@@ -632,13 +632,15 @@ export default function EmployeesPage() {
         <div className="flex justify-end items-start mb-3 gap-4  w-full flex-wrap">
           {localUser?.role === "ADMIN" && (
             <Button onClick={handleExportExcel} icon={<DownloadOutlined />}>
-              Download
+              <p className="hidden sm:block">Download</p>
             </Button>
           )}
 
           {localUser?.role === "ADMIN" && (
             <label htmlFor="file-upload" className="relative inline-block">
-              <Button icon={<UploadOutlined />}>Upload</Button>
+              <Button icon={<UploadOutlined />}>
+                <p className="hidden sm:block">Upload</p>
+              </Button>
               <input
                 type="file"
                 id="file-upload"
@@ -650,13 +652,13 @@ export default function EmployeesPage() {
           )}
 
           <Button
-            className="flex relative  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
+            className="flex relative  gap-2 items-center h-8 px-4 rounded-lg !bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer !text-white font-semibold"
             onClick={() => {
               setModalAddEmployee(true);
             }}
           >
             <PlusIcon />
-            Thêm nhân sự
+            <p className="hidden sm:block">Thêm nhân sự</p>
           </Button>
         </div>
         <div className="grid grid-cols-2 md:flex md:items-center gap-4 mb-4 w-full flex-wrap">
@@ -664,9 +666,13 @@ export default function EmployeesPage() {
             Lọc:
           </p>
           <div className="flex gap-2 items-center flex-wrap">
-            <Form.Item label={<p className="font-bold text-[#242424]">MSNV</p>}>
+            <Form.Item
+              label={
+                <p className="font-bold text-[#242424] hidden sm:block">MSNV</p>
+              }
+            >
               <Input
-                className="!w-[80px]"
+                className="w-full md:!w-[100px]"
                 placeholder="MSNV"
                 onChange={(e) => setFilterMSNV(e.target.value)}
                 onKeyDown={(e) => {
@@ -680,10 +686,14 @@ export default function EmployeesPage() {
           <div className="flex gap-2 items-center ">
             {/* <p className="text-sm text-[#4a4a6a] flex-shrink-0">Tên NV:</p> */}
             <Form.Item
-              label={<p className="font-bold text-[#242424]">Tên NV</p>}
+              label={
+                <p className="font-bold text-[#242424] hidden sm:block">
+                  Tên NV
+                </p>
+              }
             >
               <Input
-                className="!w-[100px]"
+                className="w-full md:!w-[100px]"
                 placeholder="Tên NV"
                 onChange={(e) => setFilterName(e.target.value)}
                 onKeyDown={(e) => {
@@ -697,11 +707,16 @@ export default function EmployeesPage() {
           {localUser?.role === "ADMIN" && (
             <div className="!flex gap-2 items-center ">
               <Form.Item
-                label={<p className="font-bold text-[#242424]">Bộ phận</p>}
+                className="w-full md:!w-[100px]"
+                label={
+                  <p className="font-bold text-[#242424] hidden sm:block">
+                    Bộ phận
+                  </p>
+                }
               >
                 <Select
                   onChange={(e) => setDepartment(e)}
-                  style={{ width: "100px" }}
+                  className="!w-full md:!w-[100px] flex-shrink-0"
                   placeholder={"Bộ phận"}
                   allowClear
                   options={[
@@ -720,12 +735,14 @@ export default function EmployeesPage() {
             </div>
           )}
 
-          <button
-            className="flex  gap-2 items-center h-8 px-4 rounded-lg justify-center bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
-            onClick={() => getEmployeeSumary(pageTable, pageSize)}
-          >
-            Tìm kiếm
-          </button>
+          <div className="flex items-center w-full">
+            <Button
+              className="w-full sm:w-fit flex  gap-2 items-center h-8 px-4 rounded-lg justify-center !bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer !text-white font-semibold"
+              onClick={() => getEmployeeSumary(pageTable, pageSize)}
+            >
+              Tìm kiếm
+            </Button>
+          </div>
         </div>
         <Table<DataType>
           className={styles.customTable}

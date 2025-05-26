@@ -211,7 +211,7 @@ export function LeaveRequestsChart({ leaveTypeData }: LeaveRequestsChartProps) {
   const data = leaveData.length > 0 ? leaveData : sampleData;
 
   return (
-    <div className="h-[500px] w-[100%] px-10">
+    <div className="h-[500px] w-[100%] md:px-10">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie

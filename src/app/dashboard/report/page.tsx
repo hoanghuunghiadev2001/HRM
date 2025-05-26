@@ -53,7 +53,9 @@ export default function DashboardPage() {
         <Tabs defaultValue="overview" className="space-y-4">
           <div className="flex gap-5 justify-between">
             <div className="flex items-center justify-between">
-              <h1 className="text-3xl font-bold tracking-tight">Thống kê</h1>
+              <h1 className="text-sm md:text-3xl font-bold tracking-tight">
+                Thống kê
+              </h1>
             </div>
             <TabsList>
               <TabsTrigger value="overview" className="">

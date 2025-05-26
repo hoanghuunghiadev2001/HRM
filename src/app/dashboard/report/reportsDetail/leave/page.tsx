@@ -291,7 +291,7 @@ export default function LeaveReportPage() {
   return (
     <div className="container mx-auto py-8">
       <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Báo Cáo Nghỉ Phép</h1>
+        <h1 className="text-sm md:text-3xl font-bold">Báo Cáo Nghỉ Phép</h1>
         <div className="flex gap-4">
           <Select
             onChange={(e) => setDateRange(e)}
