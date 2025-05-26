@@ -139,7 +139,7 @@ export async function POST(request: NextRequest) {
         const updatedAt = isValidDate(rawUpdatedAt) ? rawUpdatedAt : null;
 
         // Parse seniority
-        const seniorityMonths = parseSeniority(row["Thâm niên"]);
+        const seniorityMonths = row["Thâm niên"];
 
         // Parse salary
         const insuranceSalary = parseSalary(
@@ -390,28 +390,6 @@ function mapGender(value: any): "MALE" | "FEMALE" {
   }
 
   return "MALE"; // Default
-}
-
-function parseSeniority(value: any): number | null {
-  if (!value) return null;
-
-  const str = value.toString().toLowerCase();
-
-  // Parse "X năm Y tháng" format
-  const yearMatch = str.match(/(\d+)\s*năm/);
-  const monthMatch = str.match(/(\d+)\s*tháng/);
-
-  let totalMonths = 0;
-
-  if (yearMatch) {
-    totalMonths += Number.parseInt(yearMatch[1]) * 12;
-  }
-
-  if (monthMatch) {
-    totalMonths += Number.parseInt(monthMatch[1]);
-  }
-
-  return totalMonths > 0 ? totalMonths : null;
 }
 
 function parseSalary(value: any): number | null {
