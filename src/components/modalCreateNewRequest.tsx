@@ -91,26 +91,26 @@ const ModalCreateNewRequest = ({
       >
         {/* <ModalLoading isOpen={loading} /> */}
         <div className="grid grid-cols-1 sm:grid-cols-2 mt-2 gap-4">
-          <div className="font-bold text-[#242424] flex flex-shrink-0 gap-2 items-center">
-            <p className="flex-shrink-0">Họ và tên:</p>
+          <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
+            <p className="shrink-0">Họ và tên:</p>
             <p className="inline font-medium text-[#3a3a3a]">
               {localUser?.name}
             </p>
           </div>
-          <div className="font-bold text-[#242424] flex flex-shrink-0 gap-2 items-center">
-            <p className="flex-shrink-0">MSNV:</p>
+          <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
+            <p className="shrink-0">MSNV:</p>
             <p className="inline font-medium text-[#3a3a3a]">
               {localUser?.employeeCode}
             </p>
           </div>
-          <div className="font-bold text-[#242424] flex flex-shrink-0 gap-2 items-center">
-            <p className="flex-shrink-0">Bộ phận:</p>
+          <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
+            <p className="shrink-0">Bộ phận:</p>
             <p className="inline font-medium text-[#3a3a3a]">
               {localUser?.workInfo.department}
             </p>
           </div>
-          <div className="font-bold text-[#242424] flex flex-shrink-0 gap-2 items-center">
-            <p className="flex-shrink-0">Chức vụ:</p>
+          <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
+            <p className="shrink-0">Chức vụ:</p>
             <p className="inline font-medium text-[#3a3a3a]">
               {localUser?.workInfo.position}
             </p>
@@ -145,7 +145,7 @@ const ModalCreateNewRequest = ({
           </div>
         </div>
         <div className="flex gap-2 items-center mt-3">
-          <p className="font-bold text-[#242424] flex-shrink-0">Thời gian</p>
+          <p className="font-bold text-[#242424] shrink-0">Thời gian</p>
           <RangePicker
             disabledDate={disabledDate}
             placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
@@ -169,7 +169,7 @@ const ModalCreateNewRequest = ({
           />
         </div>
         <div>
-          <p className="font-bold text-[#242424] flex flex-shrink-0 gap-2 items-center">
+          <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             Lý do:
           </p>
           <TextArea

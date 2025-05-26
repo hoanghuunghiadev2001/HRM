@@ -263,7 +263,7 @@ const Profile = () => {
         </p>
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4  pr-4 gap-4  border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
           <div className="grid grid-cols-5">
-            <p className="font-bold text-[#242424] flex-shrink-0  col-span-2 flex items-center">
+            <p className="font-bold text-[#242424] shrink-0  col-span-2 flex items-center">
               Số điện thoại:
             </p>
             <Form
@@ -291,7 +291,7 @@ const Profile = () => {
             </Form>
           </div>
           <div className="grid grid-cols-5">
-            <p className="font-bold text-[#242424] flex-shrink-0  col-span-2 flex items-center ">
+            <p className="font-bold text-[#242424] shrink-0  col-span-2 flex items-center ">
               SĐT người thân:
             </p>
             <Form
@@ -319,7 +319,7 @@ const Profile = () => {
             </Form>
           </div>
           <div className="grid grid-cols-5">
-            <p className="font-bold text-[#242424] flex-shrink-0  col-span-2 flex items-center">
+            <p className="font-bold text-[#242424] shrink-0  col-span-2 flex items-center">
               SĐT công ty:
             </p>
             <Form
@@ -347,7 +347,7 @@ const Profile = () => {
             </Form>
           </div>
           <div className="grid grid-cols-5">
-            <p className="font-bold text-[#242424] flex-shrink-0  col-span-2 flex items-center">
+            <p className="font-bold text-[#242424] shrink-0  col-span-2 flex items-center">
               Email:
             </p>
             <Form

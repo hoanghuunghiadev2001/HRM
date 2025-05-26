@@ -310,7 +310,7 @@ export default function AttendancePage() {
             </Form.Item>
           </div>
           <div className="flex gap-2 items-center ">
-            {/* <p className="text-sm text-[#4a4a6a] flex-shrink-0">Tên NV:</p> */}
+            {/* <p className="text-sm text-[#4a4a6a] shrink-0">Tên NV:</p> */}
             <Form.Item
               label={
                 <p className="font-bold text-[#242424] hidden md:block">
@@ -381,7 +381,7 @@ export default function AttendancePage() {
             ""
           )}
           <button
-            className="flex flex-shrink-0 gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
+            className="flex shrink-0 gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
             onClick={() => {
               handleFetchAttendances(pageTable, pageSize);
             }}

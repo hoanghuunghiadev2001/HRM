@@ -74,7 +74,7 @@ export default function LoginClient() {
               width={96}
               height={90}
             />
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <p className="text-xl">TOYOTA</p>
               <p className="text-xl">BÌNH DƯƠNG</p>
             </div>

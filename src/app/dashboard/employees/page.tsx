@@ -167,7 +167,7 @@ export default function EmployeesPage() {
           <Image
             src={record.avatar ? record.avatar : "/storage/avt-default.png"}
             alt=""
-            className="h-8 w-8 border-1 border-[#999999] rounded-[50%] flex-shrink-0 object-cover"
+            className="h-8 w-8 border-1 border-[#999999] rounded-[50%] shrink-0 object-cover"
             onError={(e) => {
               (e.target as HTMLImageElement).src = "/storage/avt-default.png";
             }}
@@ -684,7 +684,7 @@ export default function EmployeesPage() {
             </Form.Item>
           </div>
           <div className="flex gap-2 items-center ">
-            {/* <p className="text-sm text-[#4a4a6a] flex-shrink-0">Tên NV:</p> */}
+            {/* <p className="text-sm text-[#4a4a6a] shrink-0">Tên NV:</p> */}
             <Form.Item
               label={
                 <p className="font-bold text-[#242424] hidden sm:block">
@@ -716,7 +716,7 @@ export default function EmployeesPage() {
               >
                 <Select
                   onChange={(e) => setDepartment(e)}
-                  className="!w-full md:!w-[100px] flex-shrink-0"
+                  className="!w-full md:!w-[100px] shrink-0"
                   placeholder={"Bộ phận"}
                   allowClear
                   options={[

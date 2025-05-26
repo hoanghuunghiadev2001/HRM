@@ -31,8 +31,8 @@ const InfoPersonal = ({
   onChangeValue,
 }: InfoPersonalProps) => {
   return (
-    <p className="font-bold text-[#242424] flex flex-shrink-0 gap-2 items-center">
-      <p className="flex-shrink-0"> {titleValue + ":"}</p>
+    <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
+      <p className="shrink-0"> {titleValue + ":"}</p>
       {canChange === true ? (
         <Input
           placeholder=""
@@ -216,9 +216,7 @@ const Profile = ({ dataProfile, updateProfile }: ProfileProps) => {
         </p>
         <div className="grid grid-cols-3 mt-1 w-full pl-10  pr-6 gap-4">
           <div className="grid grid-cols-2">
-            <p className="font-bold text-[#242424] flex-shrink-0 ">
-              Số điện thoại:
-            </p>
+            <p className="font-bold text-[#242424] shrink-0 ">Số điện thoại:</p>
 
             <Input
               maxLength={14}
@@ -229,7 +227,7 @@ const Profile = ({ dataProfile, updateProfile }: ProfileProps) => {
             />
           </div>
           <div className="grid grid-cols-2">
-            <p className="font-bold text-[#242424] flex-shrink-0 ">
+            <p className="font-bold text-[#242424] shrink-0 ">
               SĐT người thân:
             </p>
 
@@ -242,9 +240,7 @@ const Profile = ({ dataProfile, updateProfile }: ProfileProps) => {
             />
           </div>
           <div className="grid grid-cols-2">
-            <p className="font-bold text-[#242424] flex-shrink-0 ">
-              SĐT công ty:
-            </p>
+            <p className="font-bold text-[#242424] shrink-0 ">SĐT công ty:</p>
 
             <Input
               maxLength={14}
@@ -255,7 +251,7 @@ const Profile = ({ dataProfile, updateProfile }: ProfileProps) => {
             />
           </div>
           <div className="grid grid-cols-2">
-            <p className="font-bold text-[#242424] flex-shrink-0 ">Email:</p>
+            <p className="font-bold text-[#242424] shrink-0 ">Email:</p>
 
             <Input
               className="m-0"

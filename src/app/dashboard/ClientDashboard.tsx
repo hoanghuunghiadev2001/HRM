@@ -282,7 +282,7 @@ export default function ClientDashboard({
             className={`
               ${!isMobile && collapsed ? "sm:w-[80px]" : "sm:w-[250px]"}
               ${isMobile && !collapsed ? "hidden " : ""}
-              w-full  flex-shrink-0 border-r bg-[#aa0404] border-[#999999] h-full flex flex-col justify-between
+              w-full  shrink-0 border-r bg-[#aa0404] border-[#999999] h-full flex flex-col justify-between
               transition-all duration-300 ease-in-out
             `}
           >

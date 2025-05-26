@@ -14,8 +14,8 @@ const InfoPersonal = ({
   onChangeValue,
 }: InfoPersonalProps) => {
   return (
-    <div className="font-bold text-[#242424] flex flex-shrink-0 gap-2 items-center">
-      <p className="flex-shrink-0"> {titleValue + ":"}</p>
+    <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
+      <p className="shrink-0"> {titleValue + ":"}</p>
       {canChange === true ? (
         <Input
           placeholder="Basic usage"
