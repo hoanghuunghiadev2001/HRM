@@ -47,6 +47,10 @@ export function LeaveRequestsChart({ leaveTypeData }: LeaveRequestsChartProps) {
   const [loading, setLoading] = useState(leaveTypeData === undefined);
   const isMobile = useSelector((state: RootState) => state.responsive.isMobile);
 
+  useEffect(() => {
+    console.log(isMobile);
+  }, [isMobile]);
+
   // Dữ liệu mẫu khi API chưa trả về kết quả - định nghĩa bên ngoài useEffect
   const sampleData = useMemo<ChartData[]>(
     () => [
@@ -207,7 +211,7 @@ export function LeaveRequestsChart({ leaveTypeData }: LeaveRequestsChartProps) {
   const data = leaveData.length > 0 ? leaveData : sampleData;
 
   return (
-    <div className="h-[400px] w-[100%] px-10">
+    <div className="h-[500px] w-[100%] px-10">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useEffect, useState, useMemo } from "react";
 import Chart from "react-apexcharts";
@@ -111,7 +112,7 @@ export function DepartmentDistribution({ departmentData: initialData = [] }) {
     }
 
     fetchDepartmentData();
-  }, [initialData, sampleData]);
+  }, []);
 
   const series = [
     {
@@ -159,7 +160,6 @@ export function DepartmentDistribution({ departmentData: initialData = [] }) {
       // Nếu muốn customize phức tạp hơn, cần dùng events hoặc custom HTML tooltip riêng
     },
   };
-  console.log(data);
 
   // Sử dụng data trực tiếp thay vì tính toán lại
 
