@@ -290,7 +290,7 @@ export default function AllRequestPage() {
             </div>
           </button>
         </div>
-        <div className="flex flex-wrap items-center gap-4 mb-4 w-full">
+        <div className="grid grid-cols-2 md:flex flex-wrap items-center gap-4 mb-4 w-full">
           <p className="font-bold  text-2xl text-[#4a4a6a] hidden md:block">
             Lọc:
           </p>
@@ -309,7 +309,7 @@ export default function AllRequestPage() {
               label={<p className="font-bold text-[#242424]">Tên NV</p>}
             >
               <Input
-                className="!w-[100px]"
+                className="!w-[100%]"
                 placeholder="Tên NV"
                 onChange={(e) => setFilterName(e.target.value)}
               />
@@ -321,7 +321,7 @@ export default function AllRequestPage() {
             >
               <Select
                 onChange={(e) => setDepartment(e)}
-                style={{ width: "100px" }}
+                style={{ width: "100%" }}
                 placeholder={"Bộ phận"}
                 allowClear
                 options={[
@@ -339,7 +339,7 @@ export default function AllRequestPage() {
             </Form.Item>
           </div>
           <button
-            className="flex  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold flex-shrink-0"
+            className="flex w-fit justify-center gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold flex-shrink-0"
             onClick={() => getApiAllRequestsApproved(pageTable, pageSize)}
           >
             Tìm kiếm

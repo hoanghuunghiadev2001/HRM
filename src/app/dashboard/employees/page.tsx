@@ -659,8 +659,8 @@ export default function EmployeesPage() {
             Thêm nhân sự
           </button>
         </div>
-        <div className="flex items-center gap-4 mb-4 w-full flex-wrap">
-          <p className="font-bold  text-2xl text-[#4a4a6a] hidden sm:block">
+        <div className="grid grid-cols-2 md:flex md:items-center gap-4 mb-4 w-full flex-wrap">
+          <p className="font-bold  text-2xl text-[#4a4a6a] hidden md:block">
             Lọc:
           </p>
           <div className="flex gap-2 items-center flex-wrap">
@@ -711,7 +711,7 @@ export default function EmployeesPage() {
           )}
 
           <button
-            className="flex  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
+            className="flex  gap-2 items-center h-8 px-4 rounded-lg justify-center bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
             onClick={() => getEmployeeSumary(pageTable, pageSize)}
           >
             Tìm kiếm
