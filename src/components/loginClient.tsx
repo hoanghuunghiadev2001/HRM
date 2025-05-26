@@ -19,8 +19,7 @@ export default function LoginClient() {
   const [err, setErr] = useState("");
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (!employeeCode || !password) {
       setErr("Vui lòng nhập đầy đủ thông tin");
       return;
@@ -108,6 +107,11 @@ export default function LoginClient() {
               onChange={(e) => {
                 setErr("");
                 setPassword(e.target.value);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmit();
+                }
               }}
               prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
             />

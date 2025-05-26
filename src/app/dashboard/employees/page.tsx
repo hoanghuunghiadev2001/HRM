@@ -669,6 +669,11 @@ export default function EmployeesPage() {
                 className="!w-[80px]"
                 placeholder="MSNV"
                 onChange={(e) => setFilterMSNV(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    getEmployeeSumary(pageTable, pageSize);
+                  }
+                }}
               />
             </Form.Item>
           </div>
@@ -681,6 +686,11 @@ export default function EmployeesPage() {
                 className="!w-[100px]"
                 placeholder="Tên NV"
                 onChange={(e) => setFilterName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    getEmployeeSumary(pageTable, pageSize);
+                  }
+                }}
               />
             </Form.Item>
           </div>

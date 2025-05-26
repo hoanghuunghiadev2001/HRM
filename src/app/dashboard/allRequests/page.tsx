@@ -300,6 +300,11 @@ export default function AllRequestPage() {
                 className="!w-[80px]"
                 placeholder="MSNV"
                 onChange={(e) => setFilterMSNV(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    getApiAllRequestsApproved(pageTable, pageSize);
+                  }
+                }}
               />
             </Form.Item>
           </div>
@@ -312,6 +317,11 @@ export default function AllRequestPage() {
                 className="!w-[100%]"
                 placeholder="Tên NV"
                 onChange={(e) => setFilterName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    getApiAllRequestsApproved(pageTable, pageSize);
+                  }
+                }}
               />
             </Form.Item>
           </div>

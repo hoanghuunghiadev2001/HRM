@@ -296,6 +296,11 @@ export default function AttendancePage() {
                 className="!w-[80px]"
                 placeholder="MSNV"
                 onChange={(e) => setFilterMSNV(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleFetchAttendances(pageTable, pageSize);
+                  }
+                }}
               />
             </Form.Item>
           </div>
@@ -308,6 +313,11 @@ export default function AttendancePage() {
                 className="!w-[100px]"
                 placeholder="Tên NV"
                 onChange={(e) => setFilterName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleFetchAttendances(pageTable, pageSize);
+                  }
+                }}
               />
             </Form.Item>
           </div>
