@@ -291,7 +291,7 @@ export async function importEmployees(formData: FormData) {
         );
 
         // Parse seniority from "X năm Y tháng" format
-        const seniorityMonths = parseSeniority(row["Thâm niên"]);
+        const seniorityMonths = row["Thâm niên"];
 
         // Prepare related data
         const workInfoData = {
