@@ -3,7 +3,6 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import ClientDashboard from "./ClientDashboard";
 import { redirect } from "next/navigation";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 export const experimental_ppr = true;
@@ -26,9 +25,5 @@ export default async function DashboardLayout({
     }
   }
 
-  return (
-    <ClientDashboard isAdmin={isAdmin}>
-      {children} <SpeedInsights />
-    </ClientDashboard>
-  );
+  return <ClientDashboard isAdmin={isAdmin}>{children}</ClientDashboard>;
 }
