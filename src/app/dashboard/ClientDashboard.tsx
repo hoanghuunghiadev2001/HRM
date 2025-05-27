@@ -72,14 +72,17 @@ export default function ClientDashboard({
   };
 
   const handleChangPass = async (change: interfaceChangePassword) => {
+    setLoading(true);
     const res = await postchangePassword(change);
     if (res.status === 1) {
       countDown();
       setModalChangePass(false);
+      setLoading(false);
     } else {
       form.setFields([
         { name: "currentPassword", errors: ["Mật khẩu hiện tại không đúng"] },
       ]);
+      setLoading(false);
     }
   };
 
