@@ -1,4 +1,5 @@
 // app/api/employees/[employeeCode]/changePassword/route.ts
+import "server-only";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyToken } from "@/lib/auth";

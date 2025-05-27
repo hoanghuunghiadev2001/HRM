@@ -1,4 +1,5 @@
 // app/api/test-mail/route.ts
+import "server-only";
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 

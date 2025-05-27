@@ -14,6 +14,7 @@ import {
   UserAddOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { fetchUser } from "@/components/api";
 
 export default function DashboardPage() {
   const [dashboardData, setDashboardData] = useState<any>(null);
@@ -22,9 +23,14 @@ export default function DashboardPage() {
   useEffect(() => {
     async function fetchDashboardData() {
       try {
-        const response = await fetch("/api/report/dashboard");
-        const data = await response.json();
-        setDashboardData(data);
+        const [response] = await Promise.all([
+          fetch("/api/report/dashboard"),
+          fetchUser(), // Assuming this returns a Promise
+        ]);
+        if (response.ok) {
+          const data = await response.json();
+          setDashboardData(data);
+        }
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       } finally {

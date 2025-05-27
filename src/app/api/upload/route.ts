@@ -1,3 +1,4 @@
+import "server-only";
 import { writeFile } from "fs/promises";
 import path from "path";
 import { NextRequest, NextResponse } from "next/server";

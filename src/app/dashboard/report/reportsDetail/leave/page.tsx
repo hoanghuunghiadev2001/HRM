@@ -14,6 +14,7 @@ import {
   FileUnknownOutlined,
 } from "@ant-design/icons";
 import { createStyles } from "antd-style";
+import { fetchUser } from "@/components/api";
 
 interface LeaveTypeStats {
   type: string;
@@ -162,16 +163,23 @@ export default function LeaveReportPage() {
         if (department !== "all") {
           params.append("department", department);
         }
-
-        // Gọi API
-        const response = await fetch(`/api/report/leave?${params.toString()}`);
-
-        if (!response.ok) {
-          throw new Error(`Lỗi khi tải dữ liệu: ${response.status}`);
+        const [response] = await Promise.all([
+          fetch(`/api/report/leave?${params.toString()}`),
+          fetchUser(), // Assuming this returns a Promise
+        ]);
+        if (response.ok) {
+          const data = await response.json();
+          setReportData(data);
         }
+        // Gọi API
+        // const response = await fetch(`/api/report/leave?${params.toString()}`);
 
-        const data = await response.json();
-        setReportData(data);
+        // if (!response.ok) {
+        //   throw new Error(`Lỗi khi tải dữ liệu: ${response.status}`);
+        // }
+
+        // const data = await response.json();
+        // setReportData(data);
       } catch (error) {
         console.error("Error fetching leave report:", error);
         setError(

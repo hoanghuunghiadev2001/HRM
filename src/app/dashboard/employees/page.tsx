@@ -707,7 +707,7 @@ export default function EmployeesPage() {
           {localUser?.role === "ADMIN" && (
             <div className="!flex gap-2 items-center ">
               <Form.Item
-                className="w-full md:!w-[100px]"
+                className=""
                 label={
                   <p className="font-bold text-[#242424] hidden sm:block">
                     Bộ phận
@@ -716,7 +716,8 @@ export default function EmployeesPage() {
               >
                 <Select
                   onChange={(e) => setDepartment(e)}
-                  className="!w-full md:!w-[100px] shrink-0"
+                  className=" shrink-0"
+                  style={{ width: "100%" }}
                   placeholder={"Bộ phận"}
                   allowClear
                   options={[
@@ -735,7 +736,7 @@ export default function EmployeesPage() {
             </div>
           )}
 
-          <div className="flex items-center w-full">
+          <div className="flex items-center w-fit">
             <Button
               className="w-full sm:w-fit flex  gap-2 items-center h-8 px-4 rounded-lg justify-center !bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer !text-white font-semibold"
               onClick={() => getEmployeeSumary(pageTable, pageSize)}

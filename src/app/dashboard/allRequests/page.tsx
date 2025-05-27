@@ -56,6 +56,7 @@ const useStyle = createStyles((utils) => {
     `,
   };
 });
+
 export default function AllRequestPage() {
   const [allRequestsApproved, setAllRequestsApproved] = useState<AllRequests>();
   const [loading, setLoading] = useState<boolean>(false);

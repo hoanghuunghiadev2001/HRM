@@ -75,8 +75,8 @@ export default function LoginClient() {
               height={90}
             />
             <div className="shrink-0">
-              <p className="text-xl">TOYOTA</p>
-              <p className="text-xl">BÌNH DƯƠNG</p>
+              <p className="text-2xl">TOYOTA</p>
+              <p className="text-2xl">BÌNH DƯƠNG</p>
             </div>
           </div>
           <p className="font-bold text-3xl mt-3">Đăng nhập</p>

@@ -1,3 +1,4 @@
+import "server-only";
 import { prisma } from "@/lib/prisma";
 import { type NextRequest, NextResponse } from "next/server";
 

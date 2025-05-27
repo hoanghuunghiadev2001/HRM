@@ -1,58 +1,128 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
 import {
   Form,
-  GetProp,
+  type GetProp,
   Input,
   message,
   Modal,
   Upload,
-  UploadProps,
+  type UploadProps,
 } from "antd";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Send } from "lucide-react";
-import { fetchUser, ProfileInfo } from "@/components/api";
+import { fetchUser, type ProfileInfo } from "@/components/api";
 import { formatCurrency } from "@/components/function";
 import ModalLoading from "@/components/modalLoading";
 import Image from "next/image";
 import InfoPersonal from "@/components/infoPersonal";
 
-// interface ProfileProps {
-//   dataProfile?: ProfileInfo;
-//   updateProfile: (
-//     avt: string,
-//     phoneNumber: string,
-//     relativePhone: string,
-//     companyPhone: string,
-//     email: string
-//   ) => void;
-// }
-
 const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
-  const [phoneNumber, setPhoneNumber] = useState<string>();
-  const [relativePhone, setRelativePhone] = useState<string>();
-  const [companyPhone, setCompanyPhone] = useState<string>();
-  const [email, setEmail] = useState<string>();
   const [dataProfile, setDataProfile] = useState<ProfileInfo>();
   const [modal, contextHolder] = Modal.useModal();
+  const [form] = Form.useForm();
 
+  // Optimized fetch functions using Promise.all
+  const fetchAllData = async () => {
+    setLoading(true);
+    try {
+      // Thực hiện nhiều API calls song song
+      const [profileResponse, userResponse] = await Promise.all([
+        fetch("/api/profile/profile"),
+        fetchUser(), // Assuming this returns a Promise
+      ]);
+
+      if (profileResponse.ok) {
+        const profileData = await profileResponse.json();
+        setDataProfile(profileData);
+      }
+
+      // Handle user response if needed
+      console.log("User data fetched concurrently");
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      message.error("Có lỗi xảy ra khi tải dữ liệu");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Alternative: Fetch only profile if you don't need concurrent user fetch
   const fetchProfile = async () => {
     setLoading(true);
-    const res = await fetch("/api/profile/profile");
-    if (res.ok) {
-      const data = await res.json();
-      setDataProfile(data);
+    try {
+      const res = await fetch("/api/profile/profile");
+      if (res.ok) {
+        const data = await res.json();
+        setDataProfile(data);
+      }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      message.error("Có lỗi xảy ra khi tải hồ sơ");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
-    fetchProfile();
+    // Use the optimized fetch function
+    fetchAllData();
   }, []);
 
   type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+
+  useEffect(() => {
+    if (dataProfile) {
+      // Set giá trị ban đầu cho form
+      form.setFieldsValue({
+        phoneNumber: dataProfile.contactInfo.phoneNumber,
+        relativePhone: dataProfile.contactInfo.relativePhone,
+        companyPhone: dataProfile.contactInfo.companyPhone,
+        email: dataProfile.contactInfo.email,
+      });
+
+      setImageUrl(dataProfile.avatar);
+    }
+  }, [dataProfile, form]);
+
+  // Optimized update function using Promise.all for validation and update
+  const handleUpdateProfile = async () => {
+    try {
+      setLoading(true);
+
+      // Thực hiện validation và chuẩn bị dữ liệu song song
+      const [values] = await Promise.all([
+        form.validateFields(), // Validate form
+        // Có thể thêm các operations khác như validate image, etc.
+      ]);
+
+      console.log(values);
+
+      // Thực hiện update và các operations liên quan song song
+      await Promise.all([
+        updateProfile(
+          imageUrl ?? "",
+          values.phoneNumber ?? "",
+          values.relativePhone ?? "",
+          values.companyPhone ?? "",
+          values.email ?? ""
+        ),
+        // Có thể thêm các API calls khác nếu cần
+      ]);
+
+      message.success("Cập nhật thông tin thành công!");
+    } catch (error) {
+      console.error("Lỗi khi cập nhật thông tin:", error);
+      message.error("Có lỗi xảy ra khi cập nhật thông tin");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const updateProfile = async (
     avt: string,
@@ -61,49 +131,37 @@ const Profile = () => {
     companyPhone: string,
     email: string
   ) => {
-    setLoading(true);
-    const req = await fetch("/api/profile/update", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        avatar: avt,
-        phone: phoneNumber,
-        personalPhone: relativePhone,
-        companyPhone: companyPhone,
-        email: email,
-      }),
-    });
+    try {
+      const req = await fetch("/api/profile/update", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          avatar: avt,
+          phone: phoneNumber,
+          personalPhone: relativePhone,
+          companyPhone: companyPhone,
+          email: email,
+        }),
+      });
 
-    if (req.ok) {
-      setLoading(false);
-      fetchProfile();
-      countDown();
-      fetchUser();
-    } else {
-      setLoading(false);
+      if (req.ok) {
+        // Thực hiện các operations sau update song song
+        await Promise.all([
+          fetchProfile(), // Refresh profile data
+          fetchUser(), // Refresh user data if needed
+        ]);
+
+        countDown();
+      } else {
+        throw new Error("Update failed");
+      }
+    } catch (error) {
+      console.error("Update profile error:", error);
+      throw error;
     }
   };
 
-  const handleUpdateProfile = () => {
-    if (
-      imageUrl === dataProfile?.avatar &&
-      phoneNumber === dataProfile?.contactInfo.phoneNumber &&
-      relativePhone === dataProfile?.contactInfo.relativePhone &&
-      companyPhone === dataProfile?.contactInfo.companyPhone &&
-      email === dataProfile?.contactInfo.email
-    ) {
-      return;
-    }
-    updateProfile(
-      imageUrl ?? "",
-      phoneNumber ?? "",
-      relativePhone ?? "",
-      companyPhone ?? "",
-      email ?? ""
-    );
-  };
-
-  //Up ảnh hồ sơ
+  // Optimized image processing
   const beforeUpload = (file: FileType) => {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
@@ -115,24 +173,34 @@ const Profile = () => {
     }
     return isJpgOrPng && isLt2M;
   };
-  //chuyển ảnh sang base64
-  const getBase64 = (img: FileType, callback: (url: string) => void) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result as string));
-    reader.readAsDataURL(img);
+
+  // Optimized base64 conversion with Promise
+  const getBase64 = (img: FileType): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => resolve(reader.result as string));
+      reader.addEventListener("error", reject);
+      reader.readAsDataURL(img);
+    });
   };
 
-  const handleChange: UploadProps["onChange"] = (info) => {
+  const handleChange: UploadProps["onChange"] = async (info) => {
     if (info.file.status === "uploading") {
       setLoading(true);
       return;
     }
+
     if (info.file.status === "done") {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj as FileType, (url) => {
-        setLoading(false);
+      try {
+        // Sử dụng Promise-based getBase64
+        const url = await getBase64(info.file.originFileObj as FileType);
         setImageUrl(url);
-      });
+      } catch (error) {
+        console.error("Error converting image:", error);
+        message.error("Có lỗi xảy ra khi xử lý ảnh");
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -160,28 +228,19 @@ const Profile = () => {
     </button>
   );
 
-  useEffect(() => {
-    setImageUrl(dataProfile?.avatar);
-    setPhoneNumber(dataProfile?.contactInfo.phoneNumber);
-    setRelativePhone(dataProfile?.contactInfo.relativePhone);
-    setCompanyPhone(dataProfile?.contactInfo.companyPhone);
-    setEmail(dataProfile?.contactInfo.email);
-  }, [dataProfile]);
-
   return (
     <div className="flex flex-col items-center w-full">
       <ModalLoading isOpen={loading} />
       {contextHolder}
       <div className="w-full">
-        <p className="font-bold  text-2xl text-[#4a4a6a]">Hồ sơ cá nhân:</p>
+        <p className="font-bold text-2xl text-[#4a4a6a]">Hồ sơ cá nhân:</p>
       </div>
-      <div className="mt-3 ">
+      <div className="mt-3">
         <Upload
           name="avatar"
           listType="picture-circle"
           className="avatar-uploader w-[155px] h-[155px] flex justify-center items-center"
           showUploadList={false}
-          // action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
           beforeUpload={beforeUpload}
           onChange={handleChange}
         >
@@ -200,10 +259,10 @@ const Profile = () => {
         </Upload>
       </div>
       <div className="w-full mt-5">
-        <p className="font-bold  text-2xl text-[#4a4a6a]">
+        <p className="font-bold text-2xl text-[#4a4a6a]">
           1. Thông Tin Cá Nhân:
         </p>
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4  pr-4 gap-4  border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4 pr-4 gap-4 border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
           <InfoPersonal titleValue="Họ và tên" value={dataProfile?.name} />
           <InfoPersonal
             titleValue="Giới tính"
@@ -211,7 +270,6 @@ const Profile = () => {
           />
           <InfoPersonal titleValue="Ngày sinh" value={dataProfile?.birthDate} />
           <InfoPersonal titleValue="Mã NV" value={dataProfile?.employeeCode} />
-
           <InfoPersonal
             titleValue="Bộ phận"
             value={dataProfile?.workInfo.department}
@@ -232,7 +290,10 @@ const Profile = () => {
             titleValue="Nơi cấp"
             value={dataProfile?.personalInfo.issuePlace}
           />
-          <InfoPersonal titleValue="Số điện thoại" value={phoneNumber} />
+          <InfoPersonal
+            titleValue="Số điện thoại"
+            value={dataProfile?.contactInfo.phoneNumber}
+          />
           <InfoPersonal
             titleValue="Nguyên quán"
             value={dataProfile?.personalInfo.hometown}
@@ -258,118 +319,63 @@ const Profile = () => {
         </div>
       </div>
       <div className="w-full mt-5">
-        <p className="font-bold  text-2xl text-[#4a4a6a]">
+        <p className="font-bold text-2xl text-[#4a4a6a]">
           2. Thông Tin Liên Hệ:
         </p>
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4  pr-4 gap-4  border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
-          <div className="grid grid-cols-5">
-            <p className="font-bold text-[#242424] shrink-0  col-span-2 flex items-center">
-              Số điện thoại:
-            </p>
-            <Form
-              // onFinish={onFinish}
-              // style={{ maxWidth: 600 }}
-              className="col-span-3"
-            >
-              <Form.Item
-                name={["number"]}
-                valuePropName={phoneNumber}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your phone number!",
-                  },
-                ]}
-              >
-                <Input
-                  maxLength={14}
-                  type="number"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                />
-              </Form.Item>
-            </Form>
-          </div>
-          <div className="grid grid-cols-5">
-            <p className="font-bold text-[#242424] shrink-0  col-span-2 flex items-center ">
-              SĐT người thân:
-            </p>
-            <Form
-              // onFinish={onFinish}
-              // style={{ maxWidth: 600 }}
-              className="col-span-3"
-            >
-              <Form.Item
-                name={["number"]}
-                valuePropName={relativePhone}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your phone number!",
-                  },
-                ]}
-              >
-                <Input
-                  maxLength={14}
-                  type="number"
-                  value={relativePhone}
-                  onChange={(e) => setRelativePhone(e.target.value)}
-                />
-              </Form.Item>
-            </Form>
-          </div>
-          <div className="grid grid-cols-5">
-            <p className="font-bold text-[#242424] shrink-0  col-span-2 flex items-center">
-              SĐT công ty:
-            </p>
-            <Form
-              // onFinish={onFinish}
-              // style={{ maxWidth: 600 }}
-              className="col-span-3"
-            >
-              <Form.Item
-                name={["number"]}
-                valuePropName={companyPhone}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your phone number!",
-                  },
-                ]}
-              >
-                <Input
-                  maxLength={14}
-                  type="number"
-                  value={companyPhone}
-                  onChange={(e) => setCompanyPhone(e.target.value)}
-                />
-              </Form.Item>
-            </Form>
-          </div>
-          <div className="grid grid-cols-5">
-            <p className="font-bold text-[#242424] shrink-0  col-span-2 flex items-center">
-              Email:
-            </p>
-            <Form
-              // onFinish={onFinish}
-              // style={{ maxWidth: 600 }}
-              className="col-span-3"
-            >
-              <Form.Item valuePropName={email} rules={[{ type: "email" }]}>
-                <Input
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </Form.Item>
-            </Form>
-          </div>
-        </div>
+        <Form
+          form={form}
+          layout="vertical"
+          className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full gap-4 border border-[#e6e6e6] shadow-xl !p-4 rounded-xl"
+        >
+          <Form.Item
+            name="phoneNumber"
+            label={
+              <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
+                Số điện thoại
+              </p>
+            }
+          >
+            <Input maxLength={14} inputMode="numeric" type="number" />
+          </Form.Item>
+          <Form.Item
+            name="relativePhone"
+            label={
+              <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
+                SĐT người thân
+              </p>
+            }
+          >
+            <Input maxLength={14} inputMode="numeric" type="number" />
+          </Form.Item>
+          <Form.Item
+            name="companyPhone"
+            label={
+              <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
+                SĐT công ty
+              </p>
+            }
+            vertical={true}
+          >
+            <Input maxLength={14} inputMode="numeric" type="number" />
+          </Form.Item>
+          <Form.Item
+            name="email"
+            label={
+              <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
+                Email
+              </p>
+            }
+            rules={[{ type: "email", message: "Email không hợp lệ!" }]}
+          >
+            <Input />
+          </Form.Item>
+        </Form>
       </div>
       <div className="w-full mt-5">
-        <p className="font-bold  text-2xl text-[#4a4a6a]">
+        <p className="font-bold text-2xl text-[#4a4a6a]">
           3. Thông tin công việc:
         </p>
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4  pr-4 gap-4  border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4 pr-4 gap-4 border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
           <InfoPersonal
             titleValue="Bộ phận"
             value={dataProfile?.workInfo.department}
@@ -417,10 +423,10 @@ const Profile = () => {
         </div>
       </div>
       <div className="w-full mt-5">
-        <p className="font-bold  text-2xl text-[#4a4a6a]">
+        <p className="font-bold text-2xl text-[#4a4a6a]">
           4. Chứng chỉ & Trình độ:
         </p>
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4  pr-4 gap-4  border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4 pr-4 gap-4 border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
           <InfoPersonal
             titleValue="Trình độ học vấn"
             value={dataProfile?.personalInfo.education}
@@ -430,16 +436,16 @@ const Profile = () => {
             value={dataProfile?.personalInfo.drivingLicense}
           />
           <InfoPersonal
-            titleValue="Chứng chỉ Toyota	"
+            titleValue="Chứng chỉ Toyota"
             value={dataProfile?.personalInfo.toyotaCertificate}
           />
         </div>
       </div>
       <div className="w-full mt-5">
-        <p className="font-bold  text-2xl text-[#4a4a6a]">
+        <p className="font-bold text-2xl text-[#4a4a6a]">
           5. Thông tin bảo hiểm / Thuế:
         </p>
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4  pr-4 gap-4  border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4 pr-4 gap-4 border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
           <InfoPersonal
             titleValue="Mã số thuế"
             value={dataProfile?.personalInfo.taxCode}
@@ -457,10 +463,10 @@ const Profile = () => {
         </div>
       </div>
       <div className="w-full mt-5">
-        <p className="font-bold  text-2xl text-[#4a4a6a]">
+        <p className="font-bold text-2xl text-[#4a4a6a]">
           6. Trạng thái và thông tin khác:
         </p>
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4  pr-4 gap-4  border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4 pr-4 gap-4 border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
           <InfoPersonal
             titleValue="Trạng thái làm việc"
             value={
@@ -486,7 +492,7 @@ const Profile = () => {
           <InfoPersonal
             titleValue="Ngân hàng VCB"
             value={dataProfile?.otherInfo.VCB}
-          />{" "}
+          />
           <InfoPersonal
             titleValue="MTCV"
             value={
@@ -494,7 +500,7 @@ const Profile = () => {
                 ? "Có bảng MTCV"
                 : "Không có bảng MTCV"
             }
-          />{" "}
+          />
           <InfoPersonal
             titleValue="PNJ"
             value={dataProfile?.otherInfo.PNJ ? "R" : ""}
@@ -502,7 +508,7 @@ const Profile = () => {
         </div>
       </div>
       <button
-        className="flex mt-4  gap-2 items-center h-10 px-4 rounded-2xl bg-gradient-to-r from-[#aa0404] to-[#350000] cursor-pointer text-white font-semibold"
+        className="flex mt-4 gap-2 items-center h-10 px-4 rounded-2xl bg-gradient-to-r from-[#aa0404] to-[#350000] cursor-pointer text-white font-semibold"
         onClick={handleUpdateProfile}
       >
         <Send />
@@ -511,4 +517,5 @@ const Profile = () => {
     </div>
   );
 };
+
 export default Profile;

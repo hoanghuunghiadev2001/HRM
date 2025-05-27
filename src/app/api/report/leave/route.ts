@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import "server-only";
 import { NextResponse } from "next/server";
 import { LeaveTypeEnum, Prisma } from "../../../../../generated/prisma";
 import { prisma } from "@/lib/prisma";

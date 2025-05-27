@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import "server-only";
 import { NextRequest, NextResponse } from "next/server";
 import { format, startOfWeek, addDays, isWithinInterval } from "date-fns";
 import ExcelJS from "exceljs";

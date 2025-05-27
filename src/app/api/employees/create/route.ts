@@ -1,4 +1,5 @@
 // /app/api/employee/route.ts
+import "server-only";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { prisma } from "@/lib/prisma";

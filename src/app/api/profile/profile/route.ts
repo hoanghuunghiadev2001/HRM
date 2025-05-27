@@ -1,4 +1,5 @@
 // app/api/user/route.ts
+import "server-only";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { prisma } from "@/lib/prisma";

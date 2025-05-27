@@ -149,7 +149,7 @@ div::-webkit-scrollbar-thumb {
     position: fixed !important; /* Fix vào viewport */
     top: 50% !important; /* Căn giữa theo trục dọc */
     left: 50% !important; /* Căn giữa theo trục ngang */
-    transform: translate(-50%, -50%) scale(0.6) !important;
+    transform: translate(-50%, -50%) scale(0.85) !important;
     transform-origin: center center !important;
     z-index: 9999999 !important; /* Đảm bảo hiển thị trên cùng */
   }
