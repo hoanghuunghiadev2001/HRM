@@ -7,8 +7,9 @@ export async function GET() {
   try {
     // Get current date info
     const today = new Date();
-    const currentMonth = today.getMonth();
-    const currentYear = today.getFullYear();
+    const nowVietnam = new Date(today.getTime() + 7 * 60 * 60 * 1000);
+    const currentMonth = nowVietnam.getMonth();
+    const currentYear = nowVietnam.getFullYear();
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
     const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
 
@@ -58,7 +59,7 @@ export async function GET() {
       where: {
         date: {
           gte: firstDayOfMonth,
-          lte: lastDayOfMonth,
+          lte: nowVietnam,
         },
       },
     });

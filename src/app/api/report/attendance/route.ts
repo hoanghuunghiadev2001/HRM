@@ -135,6 +135,9 @@ function calculateAttendanceStats(
     ([dateStr, records]) => {
       // Tạo mốc 8:00 sáng giờ VN theo ngày đó
       const baseTime = new Date(`${dateStr}T08:00:00+07:00`);
+      const baseTime2 = new Date(`${dateStr}T12:00:00+07:00`);
+      const baseTime3 = new Date(`${dateStr}T13:00:00+07:00`);
+
       // baseTime.getTime() ra UTC timestamp tương ứng với 8:00 giờ VN ngày đó
 
       let onTime = 0,
@@ -151,7 +154,11 @@ function calculateAttendanceStats(
           new Date(r.checkInTime).getTime() - 7 * 60 * 60 * 1000;
 
         // So sánh checkIn UTC với mốc 8:00 giờ VN đã convert sang UTC timestamp
-        if (checkInUtc <= baseTime.getTime()) {
+        if (
+          checkInUtc <= baseTime.getTime() ||
+          (checkInUtc > baseTime2.getTime() &&
+            checkInUtc <= baseTime3.getTime())
+        ) {
           onTime++;
         } else {
           late++;
