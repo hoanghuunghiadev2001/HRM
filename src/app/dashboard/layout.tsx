@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
-
+export const experimental_ppr = true;
 export default async function DashboardLayout({
   children,
 }: {

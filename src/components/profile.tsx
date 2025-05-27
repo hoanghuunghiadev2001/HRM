@@ -140,6 +140,7 @@ const Profile = ({ dataProfile, updateProfile }: ProfileProps) => {
         >
           {imageUrl ? (
             <Image
+              loading="lazy"
               src={imageUrl ? imageUrl : "/storage/avt-default.png"}
               alt="avatar"
               style={{ width: "145px" }}

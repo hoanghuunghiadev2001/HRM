@@ -165,6 +165,7 @@ export default function EmployeesPage() {
       render: (_, record) => (
         <div className="flex gap-2 items-center">
           <Image
+            loading="lazy"
             src={record.avatar ? record.avatar : "/storage/avt-default.png"}
             alt=""
             className="h-8 w-8 border-1 border-[#999999] rounded-[50%] shrink-0 object-cover"

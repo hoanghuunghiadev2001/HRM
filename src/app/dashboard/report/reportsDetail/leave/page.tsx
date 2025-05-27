@@ -14,7 +14,6 @@ import {
   FileUnknownOutlined,
 } from "@ant-design/icons";
 import { createStyles } from "antd-style";
-import { fetchUser } from "@/components/api";
 
 interface LeaveTypeStats {
   type: string;
@@ -164,8 +163,7 @@ export default function LeaveReportPage() {
           params.append("department", department);
         }
         const [response] = await Promise.all([
-          fetch(`/api/report/leave?${params.toString()}`),
-          fetchUser(), // Assuming this returns a Promise
+          fetch(`/api/report/leave?${params.toString()}`), // Assuming this returns a Promise
         ]);
         if (response.ok) {
           const data = await response.json();

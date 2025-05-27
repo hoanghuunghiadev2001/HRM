@@ -360,6 +360,7 @@ const ModalEditEmployee = ({
                   >
                     {imageUrl ? (
                       <Image
+                        loading="lazy"
                         src={imageUrl}
                         alt="avatar"
                         style={{ width: "145px" }}

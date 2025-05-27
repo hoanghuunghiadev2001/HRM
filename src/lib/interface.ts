@@ -104,8 +104,8 @@ export interface UseAttendanceParams {
   msnv?: string;
   name?: string;
   department?: string;
-  fromDate?: string; // yyyy-mm-dd
-  toDate?: string; // yyyy-mm-dd
+  fromDate?: string | null; // yyyy-mm-dd
+  toDate?: string | null; // yyyy-mm-dd
   page?: number;
   pageSize?: number;
 }

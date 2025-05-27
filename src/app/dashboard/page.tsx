@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
 import {
@@ -14,7 +12,7 @@ import {
 } from "antd";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Send } from "lucide-react";
-import { fetchUser, type ProfileInfo } from "@/components/api";
+import { ProfileInfo } from "@/components/api";
 import { formatCurrency } from "@/components/function";
 import ModalLoading from "@/components/modalLoading";
 import Image from "next/image";
@@ -32,9 +30,8 @@ const Profile = () => {
     setLoading(true);
     try {
       // Thực hiện nhiều API calls song song
-      const [profileResponse, userResponse] = await Promise.all([
-        fetch("/api/profile/profile"),
-        fetchUser(), // Assuming this returns a Promise
+      const [profileResponse] = await Promise.all([
+        fetch("/api/profile/profile"), // Assuming this returns a Promise
       ]);
 
       if (profileResponse.ok) {
@@ -148,7 +145,6 @@ const Profile = () => {
         // Thực hiện các operations sau update song song
         await Promise.all([
           fetchProfile(), // Refresh profile data
-          fetchUser(), // Refresh user data if needed
         ]);
 
         countDown();
@@ -246,6 +242,7 @@ const Profile = () => {
         >
           {imageUrl ? (
             <Image
+              loading="lazy"
               src={imageUrl ? imageUrl : "/storage/avt-default.png"}
               alt="avatar"
               style={{ width: "145px" }}

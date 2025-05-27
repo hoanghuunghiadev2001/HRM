@@ -68,6 +68,7 @@ export default function LoginClient() {
         <div className="w-[350px] rounded-2xl shadow-form-login bg-[#ffffff80] z-50 relative px-10 flex flex-col items-center pb-5">
           <div className="flex items-center pt-4 gap-3 font-bold">
             <Image
+              loading="lazy"
               src="/storage/logo-toyota.png"
               alt=""
               className="w-24 "

@@ -161,6 +161,7 @@ export default function ClientDashboard({
       }
     } catch (error) {
       console.error("Lỗi khi gọi API /api/me:", error);
+      window.location.href = "/login";
     }
     return () => controller.abort();
   };
@@ -233,6 +234,7 @@ export default function ClientDashboard({
               )}
             </Button>
             <Image
+              loading="lazy"
               src="/storage/logo-toyota.png"
               alt="logo"
               className="w-14 invert-100"
@@ -253,6 +255,7 @@ export default function ClientDashboard({
                 Hi!, {user?.name}
               </p>
               <Image
+                loading="lazy"
                 src={user?.avatar || "/storage/avt-default.png"}
                 alt="avatar"
                 className="h-9 w-9 border-2 bg-white border-[#c4c4c4] rounded-full object-cover"
