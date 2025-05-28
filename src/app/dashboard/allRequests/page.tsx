@@ -76,6 +76,7 @@ export default function AllRequestPage() {
   const [filterDepartment, setDepartment] = useState("");
 
   const getApiAllRequestsApproved = async (page: number, pageSize: number) => {
+    setLoading(true);
     try {
       const res = await fetchLeaveRequests({
         // page: page,
@@ -99,7 +100,9 @@ export default function AllRequestPage() {
       });
       setAllRequestsApproved(res);
       setTotalTable(res.total);
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.error("Lỗi:", err);
     }
   };
