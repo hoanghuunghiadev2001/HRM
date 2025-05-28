@@ -93,7 +93,7 @@ const useStyle = createStyles((utils) => {
 export default function LeaveReportPage() {
   dayjs.extend(quarterOfYear);
   const [dateRange, setDateRange] = useState("month");
-  const [department, setDepartment] = useState("all");
+  const [department, setDepartment] = useState();
   const [reportData, setReportData] = useState<LeaveReportData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -159,7 +159,7 @@ export default function LeaveReportPage() {
         const params = new URLSearchParams();
         params.append("startDate", startDate.toISOString().split("T")[0]);
         params.append("endDate", endDate.toISOString().split("T")[0]);
-        if (department !== "all") {
+        if (department) {
           params.append("department", department);
         }
         const [response] = await Promise.all([
@@ -302,17 +302,16 @@ export default function LeaveReportPage() {
           <Select
             value={dateRange}
             onChange={(e) => setDateRange(e)}
-            style={{ width: "100px" }}
+            style={{ width: "200px" }}
             placeholder={"Thời gian"}
-            allowClear
             options={dateRangeSelect}
           />
           <Select
+            allowClear
             value={department}
             onChange={(e) => setDepartment(e)}
             style={{ width: "100px" }}
             placeholder={"Bộ phận"}
-            allowClear
             options={departments}
           />
         </div>
