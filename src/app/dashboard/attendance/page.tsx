@@ -269,7 +269,7 @@ export default function AttendancePage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "employees.xlsx";
+    a.download = "attendance.xlsx";
     a.click();
     URL.revokeObjectURL(url);
   };

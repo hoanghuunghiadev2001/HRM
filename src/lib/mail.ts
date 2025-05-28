@@ -19,7 +19,7 @@ export async function sendEmail({
   html: string;
 }) {
   return transporter.sendMail({
-    from: process.env.EMAIL_USER,
+    from: `HRM <${process.env.EMAIL_USER}>`,
     to,
     subject,
     html,
