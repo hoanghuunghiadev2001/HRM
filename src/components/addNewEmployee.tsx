@@ -278,6 +278,8 @@ const ModalAddNewEmployee = ({ onClose, open }: ModalAddNewEmployeeProps) => {
                         className="rounded-[50%] h-[145px] object-cover"
                         width={145}
                         height={145}
+                        quality={70} // giảm chất lượng xuống chút để nhẹ hơn
+                        priority={false}
                       />
                     ) : (
                       uploadButton

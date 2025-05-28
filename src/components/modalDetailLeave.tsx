@@ -44,15 +44,17 @@ const ModalDetailLeave = ({
             loading="lazy"
             width={100}
             height={100}
+            quality={70} // giảm chất lượng xuống chút để nhẹ hơn
+            priority={false}
             src={
               infoRequetLeave?.employee.avatar
                 ? infoRequetLeave?.employee.avatar
-                : "/storage/avt-default.png"
+                : "/storage/avt-default.webp"
             }
             alt=""
             className="h-[100px] w-[100px] rounded-[50%] object-cover"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = "/storage/avt-default.png";
+              (e.target as HTMLImageElement).src = "/storage/avt-default.webp";
             }}
           />
         </div>

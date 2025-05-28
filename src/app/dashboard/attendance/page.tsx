@@ -109,11 +109,13 @@ export default function AttendancePage() {
       render: (_, record) => (
         <div className="flex items-center gap-2">
           <Image
-            src={record.avatar ? record.avatar : "/storage/avt-default.png"}
+            src={record.avatar ? record.avatar : "/storage/avt-default.webp"}
             alt="avt"
             className="h-8 w-8 rounded-[50%]"
             width={32}
             height={32}
+            quality={70} // giảm chất lượng xuống chút để nhẹ hơn
+            priority={false}
           />
           <a>{record.employeeName}</a>
         </div>

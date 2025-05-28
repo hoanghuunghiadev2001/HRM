@@ -241,12 +241,14 @@ const Profile = () => {
           {imageUrl ? (
             <Image
               loading="lazy"
-              src={imageUrl ? imageUrl : "/storage/avt-default.png"}
+              src={imageUrl ? imageUrl : "/storage/avt-default.webp"}
               alt="avatar"
               style={{ width: "145px" }}
               className="rounded-[50%] h-[145px] object-cover"
               width={145}
               height={145}
+              quality={70} // giảm chất lượng xuống chút để nhẹ hơn
+              priority={false}
             />
           ) : (
             uploadButton

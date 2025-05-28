@@ -69,11 +69,13 @@ export default function LoginClient() {
           <div className="flex items-center pt-4 gap-3 font-bold">
             <Image
               loading="lazy"
-              src="/storage/logo-toyota.png"
+              src="/storage/logo-toyota.webp"
               alt=""
               className="w-24 "
               width={96}
               height={90}
+              quality={70} // giảm chất lượng xuống chút để nhẹ hơn
+              priority={false}
             />
             <div className="shrink-0">
               <p className="text-2xl">TOYOTA</p>

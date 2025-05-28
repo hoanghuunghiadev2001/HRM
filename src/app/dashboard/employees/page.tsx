@@ -166,14 +166,16 @@ export default function EmployeesPage() {
         <div className="flex gap-2 items-center">
           <Image
             loading="lazy"
-            src={record.avatar ? record.avatar : "/storage/avt-default.png"}
+            src={record.avatar ? record.avatar : "/storage/avt-default.webp"}
             alt=""
             className="h-8 w-8 border-1 border-[#999999] rounded-[50%] shrink-0 object-cover"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = "/storage/avt-default.png";
+              (e.target as HTMLImageElement).src = "/storage/avt-default.webp";
             }}
             width={32}
             height={32}
+            quality={70} // giảm chất lượng xuống chút để nhẹ hơn
+            priority={false}
           />
           <a className="">{record.name}</a>
         </div>

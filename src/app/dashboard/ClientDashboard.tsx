@@ -234,11 +234,13 @@ export default function ClientDashboard({
             </Button>
             <Image
               loading="lazy"
-              src="/storage/logo-toyota.png"
+              src="/storage/logo-toyota.webp"
               alt="logo"
               className="w-14 invert-100"
               width={56}
               height={50}
+              quality={70} // giảm chất lượng xuống chút để nhẹ hơn
+              priority={false}
             />
             <p className="text-2xl font-bold text-white hidden sm:block">
               TOYOTA BÌNH DƯƠNG
@@ -255,15 +257,17 @@ export default function ClientDashboard({
               </p>
               <Image
                 loading="lazy"
-                src={user?.avatar || "/storage/avt-default.png"}
+                src={user?.avatar || "/storage/avt-default.webp"}
                 alt="avatar"
                 className="h-9 w-9 border-2 bg-white border-[#c4c4c4] rounded-full object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src =
-                    "/storage/avt-default.png";
+                    "/storage/avt-default.webp";
                 }}
                 width={36}
                 height={36}
+                quality={70} // giảm chất lượng xuống chút để nhẹ hơn
+                priority={false}
               />
             </div>
           </Dropdown>
