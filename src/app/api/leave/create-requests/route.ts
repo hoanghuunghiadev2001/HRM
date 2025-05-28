@@ -108,9 +108,7 @@ export async function POST(request: NextRequest) {
       <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 16px; border: 1px solid #e0e0e0; border-radius: 8px;">
         <!-- Logo -->
         <div style="text-align: center; margin-bottom: 24px;">
-         <img src="${
-           process.env.logoToyota
-         }" alt="Toyota" style="height: 50px; object-fit: contain;" />
+          <h2 style="color: #4a4a6a; margin-bottom: 8px;">TOYOTA BÌNH DƯƠNG</h2>
         </div>
 
         <h2 style="color: #2a8af6; margin-bottom: 8px;">📌 Đơn xin nghỉ mới</h2>
