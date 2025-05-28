@@ -4,6 +4,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@/lib/mail";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export async function POST(request: NextRequest) {
   try {
@@ -103,6 +108,13 @@ export async function POST(request: NextRequest) {
           .filter((e: any): e is string => typeof e === "string"),
       ];
 
+      const startVN = dayjs(start)
+        .tz("Asia/Ho_Chi_Minh")
+        .format("DD/MM/YYYY HH:mm");
+      const endVN = dayjs(end)
+        .tz("Asia/Ho_Chi_Minh")
+        .format("DD/MM/YYYY HH:mm");
+
       if (emails.length > 0) {
         const html = `
       <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 16px; border: 1px solid #e0e0e0; border-radius: 8px;">
@@ -136,9 +148,7 @@ export async function POST(request: NextRequest) {
           </tr>
           <tr>
             <td style="padding: 8px; font-weight: bold;">🕒 Thời gian:</td>
-            <td style="padding: 8px;">${start.format(
-              "DD/MM/YYYY HH:mm"
-            )} - ${end.format("DD/MM/YYYY HH:mm")}</td>
+            <td style="padding: 8px;">${startVN} - ${endVN}</td>
           </tr>
           <tr style="background-color: #f9f9f9;">
             <td style="padding: 8px; font-weight: bold;">📄 Lý do:</td>

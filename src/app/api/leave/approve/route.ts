@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@/lib/mail"; // Import hàm sendEmail
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
@@ -72,7 +78,12 @@ export async function PUT(req: NextRequest) {
     });
 
     const statusColor = status === "approved" ? "#28a745" : "#dc3545"; // Màu xanh lá hoặc đỏ
-
+    const startVN = dayjs(leaveRequest.startDate)
+      .tz("Asia/Ho_Chi_Minh")
+      .format("DD/MM/YYYY HH:mm");
+    const endVN = dayjs(leaveRequest.endDate)
+      .tz("Asia/Ho_Chi_Minh")
+      .format("DD/MM/YYYY HH:mm");
     await sendEmail({
       to: [leaveRequest.employee.contactInfo?.email ?? ""],
       subject: `Kết quả đơn nghỉ phép #${leaveRequestId}`,
@@ -91,9 +102,7 @@ export async function PUT(req: NextRequest) {
         </tr>
         <tr>
           <td style="padding: 8px; font-weight: bold; background: #f0f0f0;">Ngày nghỉ</td>
-          <td style="padding: 8px;">${leaveRequest.startDate?.toLocaleDateString(
-            "vi-VN"
-          )} đến ${leaveRequest.endDate?.toLocaleDateString("vi-VN")}</td>
+          <td style="padding: 8px;">${startVN} - ${endVN}</td>
         </tr>
         <tr>
           <td style="padding: 8px; font-weight: bold; background: #f0f0f0;">Lý do</td>
