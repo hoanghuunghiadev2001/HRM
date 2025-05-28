@@ -326,29 +326,32 @@ export default function AllRequestPage() {
               />
             </Form.Item>
           </div>
-          <div className="!flex gap-2 items-center shrink-0">
-            <Form.Item
-              label={<p className="font-bold text-[#242424]">Bộ phận</p>}
-            >
-              <Select
-                onChange={(e) => setDepartment(e)}
-                style={{ width: "100%" }}
-                placeholder={"Bộ phận"}
-                allowClear
-                options={[
-                  { value: "KD", label: "KD" },
-                  { value: "SCC", label: "SCC" },
-                  { value: "ĐS", label: "ĐS" },
-                  { value: "HC", label: "HC" },
-                  { value: "CV", label: "CV" },
-                  { value: "PT", label: "PT" },
-                  { value: "KT", label: "KT" },
-                  { value: "IT", label: "IT" },
-                  { value: "CS", label: "CS" },
-                ]}
-              />
-            </Form.Item>
-          </div>
+          {localUser.role === "ADMIN" && (
+            <div className="!flex gap-2 items-center shrink-0">
+              <Form.Item
+                label={<p className="font-bold text-[#242424]">Bộ phận</p>}
+              >
+                <Select
+                  onChange={(e) => setDepartment(e)}
+                  style={{ width: "100%" }}
+                  placeholder={"Bộ phận"}
+                  allowClear
+                  options={[
+                    { value: "KD", label: "KD" },
+                    { value: "SCC", label: "SCC" },
+                    { value: "ĐS", label: "ĐS" },
+                    { value: "HC", label: "HC" },
+                    { value: "CV", label: "CV" },
+                    { value: "PT", label: "PT" },
+                    { value: "KT", label: "KT" },
+                    { value: "IT", label: "IT" },
+                    { value: "CS", label: "CS" },
+                  ]}
+                />
+              </Form.Item>
+            </div>
+          )}
+
           <button
             className="flex w-fit justify-center gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold shrink-0"
             onClick={() => getApiAllRequestsApproved(pageTable, pageSize)}
