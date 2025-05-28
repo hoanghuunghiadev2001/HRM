@@ -98,8 +98,6 @@ const Profile = () => {
         // Có thể thêm các operations khác như validate image, etc.
       ]);
 
-      console.log(values);
-
       // Thực hiện update và các operations liên quan song song
       await Promise.all([
         updateProfile(

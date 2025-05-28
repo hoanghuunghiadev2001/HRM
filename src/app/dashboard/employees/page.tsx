@@ -407,7 +407,6 @@ export default function EmployeesPage() {
     if (!e.target.files?.[0]) return;
 
     setLoading(true);
-    console.log(10);
 
     try {
       // Process the file in chunks on the client side
@@ -426,12 +425,8 @@ export default function EmployeesPage() {
             raw: false,
           });
 
-          console.log(30);
-
           // Find header row and process data
           const { jsonData, headerRowIndex } = processExcelData(rawData);
-
-          console.log(50);
 
           // Process in batches of 10 rows at a time
           const result = {
@@ -460,11 +455,8 @@ export default function EmployeesPage() {
             result.updated += batchResult.updated;
             result.created += batchResult.created;
             result.errors = [...result.errors, ...batchResult.errors];
-
-            console.log(50 + Math.floor((i / jsonData.length) * 50));
           }
 
-          console.log(100);
           addEmployeeSuccess();
           setResult(result);
         } catch (error) {

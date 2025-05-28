@@ -10,7 +10,6 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 export default async function LoginPage() {
   const cookieStore = cookies();
   const token = (await cookieStore).get("token")?.value;
-  console.log(token);
 
   if (token) {
     try {

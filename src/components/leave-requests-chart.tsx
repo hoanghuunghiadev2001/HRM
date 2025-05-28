@@ -47,10 +47,6 @@ export function LeaveRequestsChart({ leaveTypeData }: LeaveRequestsChartProps) {
   const [loading, setLoading] = useState(leaveTypeData === undefined);
   const isMobile = useSelector((state: RootState) => state.responsive.isMobile);
 
-  useEffect(() => {
-    console.log(isMobile);
-  }, [isMobile]);
-
   // Dữ liệu mẫu khi API chưa trả về kết quả - định nghĩa bên ngoài useEffect
   const sampleData = useMemo<ChartData[]>(
     () => [

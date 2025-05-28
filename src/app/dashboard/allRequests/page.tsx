@@ -179,7 +179,7 @@ export default function AllRequestPage() {
       title: "Loại phép",
       dataIndex: "leaveType",
       key: "leaveType",
-      width: "80px",
+      width: "100px",
     },
     {
       title: "Trạng thái",

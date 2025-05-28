@@ -185,10 +185,6 @@ export default function ClientDashboard({
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(collapsed);
-  }, [collapsed]);
-
-  useEffect(() => {
     setLoading(false);
     fetchUser();
   }, [pathname]);

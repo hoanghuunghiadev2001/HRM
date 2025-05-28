@@ -300,6 +300,7 @@ export default function LeaveReportPage() {
         <h1 className="text-sm md:text-3xl font-bold">Báo Cáo Nghỉ Phép</h1>
         <div className="flex gap-4">
           <Select
+            value={dateRange}
             onChange={(e) => setDateRange(e)}
             style={{ width: "100px" }}
             placeholder={"Thời gian"}
@@ -307,6 +308,7 @@ export default function LeaveReportPage() {
             options={dateRangeSelect}
           />
           <Select
+            value={department}
             onChange={(e) => setDepartment(e)}
             style={{ width: "100px" }}
             placeholder={"Bộ phận"}

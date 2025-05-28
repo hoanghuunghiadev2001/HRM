@@ -26,8 +26,9 @@ export async function GET(request: Request) {
     }
 
     const today = new Date();
-    const defaultStart = new Date(today.getFullYear(), 0, 1);
-    const defaultEnd = new Date(today.getFullYear(), 11, 31);
+    const nowVietnam = new Date(today.getTime() + 7 * 60 * 60 * 1000);
+    const defaultStart = new Date(nowVietnam.getFullYear(), 0, 1);
+    const defaultEnd = new Date(nowVietnam.getFullYear(), 11, 31);
 
     const start = startDate ? new Date(startDate) : defaultStart;
     start.setHours(0, 0, 0, 0);

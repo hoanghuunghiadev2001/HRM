@@ -173,14 +173,14 @@ export function AttendanceOverview() {
                 fill="#facc15"
                 fillOpacity={0.6}
               />
-              <Area
+              {/* <Area
                 type="monotone"
                 dataKey="vắng"
                 stackId="1"
                 stroke="#f87171"
                 fill="#f87171"
                 fillOpacity={0.6}
-              />
+              /> */}
             </AreaChart>
           </ResponsiveContainer>
         </div>

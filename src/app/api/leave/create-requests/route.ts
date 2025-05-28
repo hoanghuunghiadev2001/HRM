@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // app/api/create-leaves/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-// import { sendEmail } from "@/lib/mail";
+import { sendEmail } from "@/lib/mail";
 import dayjs from "dayjs";
 
 export async function POST(request: NextRequest) {
@@ -59,126 +60,126 @@ export async function POST(request: NextRequest) {
     });
 
     // Lấy thông tin nhân viên và phòng ban
-    // const employee = await prisma.employee.findUnique({
-    //   where: { id: employeeId },
-    //   include: { workInfo: true },
-    // });
+    const employee = await prisma.employee.findUnique({
+      where: { id: employeeId },
+      include: { workInfo: true },
+    });
 
-    // const department = employee?.workInfo?.department;
-    // const position = employee?.workInfo?.position;
+    const department = employee?.workInfo?.department;
+    const position = employee?.workInfo?.position;
 
-    //     if (!employee || !department) {
-    //       console.warn("Không tìm thấy thông tin phòng ban hoặc nhân viên");
-    //     } else {
-    //       // Lấy các manager của cùng bộ phận
-    //       const managers = await prisma.employee.findMany({
-    //         where: {
-    //           role: "MANAGER",
-    //           workInfo: {
-    //             department,
-    //           },
-    //         },
-    //         include: {
-    //           contactInfo: true,
-    //         },
-    //       });
+    if (!employee || !department) {
+      console.warn("Không tìm thấy thông tin phòng ban hoặc nhân viên");
+    } else {
+      // Lấy các manager của cùng bộ phận
+      const managers = await prisma.employee.findMany({
+        where: {
+          role: "MANAGER",
+          workInfo: {
+            department,
+          },
+        },
+        include: {
+          contactInfo: true,
+        },
+      });
 
-    //       // Lấy tất cả admin
-    //       const admins = await prisma.employee.findMany({
-    //         where: {
-    //           role: "ADMIN",
-    //         },
-    //         include: {
-    //           contactInfo: true,
-    //         },
-    //       });
+      // Lấy tất cả admin
+      const admins = await prisma.employee.findMany({
+        where: {
+          role: "ADMIN",
+        },
+        include: {
+          contactInfo: true,
+        },
+      });
 
-    //       const emails = [
-    //         ...managers
-    //           .map((m: any) => m.contactInfo?.email)
-    //           .filter((e: any): e is string => typeof e === "string"),
-    //         ...admins
-    //           .map((a: any) => a.contactInfo?.email)
-    //           .filter((e: any): e is string => typeof e === "string"),
-    //       ];
+      const emails = [
+        ...managers
+          .map((m: any) => m.contactInfo?.email)
+          .filter((e: any): e is string => typeof e === "string"),
+        ...admins
+          .map((a: any) => a.contactInfo?.email)
+          .filter((e: any): e is string => typeof e === "string"),
+      ];
 
-    //       if (emails.length > 0) {
-    //         const html = `
-    //   <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 16px; border: 1px solid #e0e0e0; border-radius: 8px;">
-    //     <!-- Logo -->
-    //     <div style="text-align: center; margin-bottom: 24px;">
-    //      <img src="${
-    //        process.env.logoToyota
-    //      }" alt="Toyota" style="height: 50px; object-fit: contain;" />
-    //     </div>
+      if (emails.length > 0) {
+        const html = `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 16px; border: 1px solid #e0e0e0; border-radius: 8px;">
+        <!-- Logo -->
+        <div style="text-align: center; margin-bottom: 24px;">
+         <img src="${
+           process.env.logoToyota
+         }" alt="Toyota" style="height: 50px; object-fit: contain;" />
+        </div>
 
-    //     <h2 style="color: #2a8af6; margin-bottom: 8px;">📌 Đơn xin nghỉ mới</h2>
-    //     <p>Xin chào,</p>
-    //     <p>Hệ thống HRM vừa ghi nhận một đơn xin nghỉ mới với thông tin như sau:</p>
+        <h2 style="color: #2a8af6; margin-bottom: 8px;">📌 Đơn xin nghỉ mới</h2>
+        <p>Xin chào,</p>
+        <p>Hệ thống HRM vừa ghi nhận một đơn xin nghỉ mới với thông tin như sau:</p>
 
-    //     <table style="width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px;">
-    //       <tr>
-    //         <td style="padding: 8px; font-weight: bold; width: 120px;">👤 Nhân viên:</td>
-    //         <td style="padding: 8px;">${employee.name} (${
-    //           employee.employeeCode
-    //         })</td>
-    //       </tr>
-    //       <tr style="background-color: #f9f9f9;">
-    //         <td style="padding: 8px; font-weight: bold;">💼 Chức vụ:</td>
-    //         <td style="padding: 8px;">${position}</td>
-    //       </tr>
-    //       <tr>
-    //         <td style="padding: 8px; font-weight: bold;">🏢 Bộ phận:</td>
-    //         <td style="padding: 8px;">${department}</td>
-    //       </tr>
-    //       <tr style="background-color: #f9f9f9;">
-    //         <td style="padding: 8px; font-weight: bold;">📝 Loại phép:</td>
-    //         <td style="padding: 8px;">${leaveType}</td>
-    //       </tr>
-    //       <tr>
-    //         <td style="padding: 8px; font-weight: bold;">🕒 Thời gian:</td>
-    //         <td style="padding: 8px;">${start.format(
-    //           "DD/MM/YYYY HH:mm"
-    //         )} - ${end.format("DD/MM/YYYY HH:mm")}</td>
-    //       </tr>
-    //       <tr style="background-color: #f9f9f9;">
-    //         <td style="padding: 8px; font-weight: bold;">📄 Lý do:</td>
-    //         <td style="padding: 8px;">${reason || "Không có"}</td>
-    //       </tr>
-    //     </table>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px;">
+          <tr>
+            <td style="padding: 8px; font-weight: bold; width: 120px;">👤 Nhân viên:</td>
+            <td style="padding: 8px;">${employee.name} (${
+          employee.employeeCode
+        })</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 8px; font-weight: bold;">💼 Chức vụ:</td>
+            <td style="padding: 8px;">${position}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; font-weight: bold;">🏢 Bộ phận:</td>
+            <td style="padding: 8px;">${department}</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 8px; font-weight: bold;">📝 Loại phép:</td>
+            <td style="padding: 8px;">${leaveType}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; font-weight: bold;">🕒 Thời gian:</td>
+            <td style="padding: 8px;">${start.format(
+              "DD/MM/YYYY HH:mm"
+            )} - ${end.format("DD/MM/YYYY HH:mm")}</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 8px; font-weight: bold;">📄 Lý do:</td>
+            <td style="padding: 8px;">${reason || "Không có"}</td>
+          </tr>
+        </table>
 
-    //     <div style="text-align: center; margin-top: 32px;">
-    //       <a href="${process.env.detailUrlRequest}" target="_blank" style="
-    //           display: inline-block;
-    //           padding: 12px 24px;
-    //           font-weight: bold;
-    //           color: white;
-    //           background-color: #2a8af6;
-    //           border-radius: 6px;
-    //           text-decoration: none;
-    //           box-shadow: 0 3px 6px rgba(42, 138, 246, 0.4);
-    //           transition: background-color 0.3s ease;
-    //         "
-    //         onmouseover="this.style.backgroundColor='#1a5edb'"
-    //         onmouseout="this.style.backgroundColor='#2a8af6'"
-    //       >
-    //         🔍 Xem chi tiết
-    //       </a>
-    //     </div>
+        <div style="text-align: center; margin-top: 32px;">
+          <a href="${process.env.detailUrlRequest}" target="_blank" style="
+              display: inline-block;
+              padding: 12px 24px;
+              font-weight: bold;
+              color: white;
+              background-color: #2a8af6;
+              border-radius: 6px;
+              text-decoration: none;
+              box-shadow: 0 3px 6px rgba(42, 138, 246, 0.4);
+              transition: background-color 0.3s ease;
+            "
+            onmouseover="this.style.backgroundColor='#1a5edb'"
+            onmouseout="this.style.backgroundColor='#2a8af6'"
+          >
+            🔍 Xem chi tiết
+          </a>
+        </div>
 
-    //     <p style="color: #888; font-size: 12px; margin-top: 40px; text-align: center;">
-    //       Email được gửi tự động từ hệ thống HRM.
-    //     </p>
-    //   </div>
-    // `;
+        <p style="color: #888; font-size: 12px; margin-top: 40px; text-align: center; font-style: italic">
+          Email được gửi tự động từ hệ thống HRM. Vui lòng không trả lời email này.
+        </p>
+      </div>
+    `;
 
-    //         await sendEmail({
-    //           to: emails,
-    //           subject: "📝 Thông báo đơn xin nghỉ mới",
-    //           html,
-    //         });
-    //       }
-    //     }
+        await sendEmail({
+          to: emails,
+          subject: "📝 Thông báo đơn xin nghỉ mới",
+          html,
+        });
+      }
+    }
 
     return NextResponse.json(leaveRequest, { status: 201 });
   } catch (error) {

@@ -145,7 +145,6 @@ export function EmployeeStatusChart({ statusData: initialData = [] }) {
 
   // Xác định dữ liệu hiển thị dựa trên viewType
   const data = statusData.length > 0 ? statusData : sampleStatusData;
-  console.log(data);
 
   return (
     <div className="h-[350px] w-full">

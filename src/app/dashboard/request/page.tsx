@@ -254,7 +254,7 @@ export default function RequestPage() {
             columns={columns}
             dataSource={formatted}
             pagination={{ pageSize: 12 }}
-            scroll={{ x: "100%" }}
+            scroll={{ y: "calc(100vh - 320px)", x: "100%" }}
           />
         </div>
       )}
