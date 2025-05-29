@@ -3,9 +3,6 @@ import withBundleAnalyzer from "@next/bundle-analyzer";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  experimental: {
-    ppr: "incremental",
-  },
   reactStrictMode: false,
   transpilePackages: [
     "antd",
