@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 interface Params {
@@ -7,7 +7,10 @@ interface Params {
   posId: string;
 }
 
-export async function PATCH(request: Request, { params }: { params: Params }) {
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Params }
+) {
   const positionId = Number(params.posId);
   if (isNaN(positionId))
     return NextResponse.json({ error: "Invalid position ID" }, { status: 400 });
@@ -31,7 +34,10 @@ export async function PATCH(request: Request, { params }: { params: Params }) {
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: Params }) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Params }
+) {
   const positionId = Number(params.posId);
   if (isNaN(positionId))
     return NextResponse.json({ error: "Invalid position ID" }, { status: 400 });
