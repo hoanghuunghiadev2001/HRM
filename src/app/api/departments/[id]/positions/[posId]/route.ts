@@ -2,14 +2,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+// Định nghĩa kiểu RouteContext để đảm bảo tính chính xác
+interface RouteContext {
+  params: {
+    id: string;
+    posId: string;
+  };
+}
+
 // PATCH: Cập nhật tên position
-export async function PATCH(
-  request: NextRequest,
-  context: { params: { id: string; posId: string } }
-) {
-  const { id, posId } = context.params;
-  const departmentId = Number(id);
-  const positionId = Number(posId);
+export async function PATCH(request: NextRequest, context: RouteContext) {
+  const { params } = context;
+  const departmentId = Number(params.id);
+  const positionId = Number(params.posId);
 
   if (isNaN(departmentId) || isNaN(positionId)) {
     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
@@ -49,13 +54,10 @@ export async function PATCH(
 }
 
 // DELETE: Xóa position
-export async function DELETE(
-  request: NextRequest,
-  context: { params: { id: string; posId: string } }
-) {
-  const { id, posId } = context.params;
-  const departmentId = Number(id);
-  const positionId = Number(posId);
+export async function DELETE(request: NextRequest, context: RouteContext) {
+  const { params } = context;
+  const departmentId = Number(params.id);
+  const positionId = Number(params.posId);
 
   if (isNaN(departmentId) || isNaN(positionId)) {
     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
