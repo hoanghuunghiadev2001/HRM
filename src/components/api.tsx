@@ -63,8 +63,23 @@ export interface EmployeesSumary {
 }
 
 export interface WorkInfo {
-  department: string;
-  position: string;
+  department?: Department;
+  position?: Position;
+}
+export interface Department {
+  id: number;
+  name: string;
+  abbreviation: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Position {
+  id: number;
+  name: string;
+  departmentId: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ProfileInfo {
@@ -109,8 +124,8 @@ export interface ContactInfo {
 
 export interface WorkInfo {
   id: number;
-  department: string;
-  position: string;
+  department?: Department;
+  position?: Position;
   specialization: string;
   joinedTBD: string;
   joinedTeSCC: string;
@@ -149,10 +164,6 @@ export interface RequestLeave {
   approvedBy: string;
 }
 
-export interface WorkInfo {
-  department: string;
-  position: string;
-}
 export interface Employee {
   name: string;
   employeeCode: string;
@@ -239,11 +250,6 @@ export interface Employee {
   name: string;
   employeeCode: string;
   workInfo: WorkInfo;
-}
-
-export interface WorkInfo {
-  department: string;
-  position: string;
 }
 
 type LeaveFilters = {

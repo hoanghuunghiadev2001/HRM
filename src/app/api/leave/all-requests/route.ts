@@ -46,9 +46,16 @@ export async function GET(req: NextRequest) {
     }
 
     if ((role === "MANAGER" || role === "ADMIN") && department) {
-      employeeFilter.workInfo = {
-        department,
-      };
+      if (department) {
+        const parts = department.split("-");
+        const departmentId = parts[0] ? parseInt(parts[0], 10) : undefined;
+        const positionId = parts[1] ? parseInt(parts[1], 10) : undefined;
+
+        employeeFilter.workInfo = {
+          ...(departmentId && { departmentId }),
+          ...(positionId && { positionId }),
+        };
+      }
     }
 
     const baseWhere: Prisma.LeaveRequestWhereInput = {

@@ -143,6 +143,15 @@ div::-webkit-scrollbar-thumb {
 .shadow-card-request {
   box-shadow: rgba(71, 71, 71, 0.2) 0px 2px 8px 0px;
 }
+.table-department .ant-table-thead .ant-table-cell {
+  background-color: rgb(166, 240, 253);
+  color: rgb(3, 116, 136);
+}
+.table-position .ant-table-thead .ant-table-cell {
+  background-color: rgb(149, 143, 231);
+
+  color: rgb(51, 38, 228);
+}
 
 @media (max-width: 768px) {
   .ant-picker-dropdown {

@@ -7,6 +7,8 @@ import {
   FileText,
   Fingerprint,
   LogOut,
+  Network,
+  UserCog,
   UserRoundPen,
   UsersRound,
 } from "lucide-react";
@@ -100,7 +102,7 @@ export default function ClientDashboard({
           {
             key: "/dashboard/employees",
             icon: <UsersRound />,
-            label: "Quản lý nhân sự",
+            label: "Nhân sự",
           },
           {
             key: "/dashboard/attendance",
@@ -111,6 +113,16 @@ export default function ClientDashboard({
       : []),
     ...(isAdmin === "ADMIN"
       ? [
+          {
+            key: "/dashboard/department",
+            icon: <Network />,
+            label: "Phòng ban",
+          },
+          {
+            key: "/dashboard/users",
+            icon: <UserCog />,
+            label: "Người dùng",
+          },
           {
             key: "/dashboard/report",
             icon: <ClipboardPlus />,

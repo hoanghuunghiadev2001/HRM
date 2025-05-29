@@ -53,7 +53,7 @@ interface EmployeeLeave {
   employeeId: number;
   employeeCode: string;
   name: string;
-  department?: string;
+  department: string;
   position?: string;
   leave: {
     total: number;

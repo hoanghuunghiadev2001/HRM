@@ -16,8 +16,8 @@ export interface InfoEmployee {
 
 export interface WorkInfo {
   id: number;
-  department: string;
-  position: string;
+  department?: Department;
+  position?: Position;
   specialization: string;
   joinedTBD: string;
   joinedTeSCC: string;
@@ -28,6 +28,23 @@ export interface WorkInfo {
   contractType: string;
   contractEndDate: string;
   employeeId: number;
+}
+
+export interface Department {
+  positions: Position[];
+  id: number;
+  name: string;
+  abbreviation: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Position {
+  id: number;
+  name: string;
+  departmentId: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface PersonalInfo {
@@ -85,8 +102,8 @@ export interface Attendance {
   employeeCode: string;
   avatar: string;
   employeeName: string;
-  department: string;
-  position: string;
+  department: Department;
+  position: Position;
   date: string;
   firstCheckIn: string;
   lastCheckOut: string;

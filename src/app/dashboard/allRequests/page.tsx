@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
 
 import React from "react";
-import { Form, Input, Pagination, Select, Space, Table } from "antd";
-import type { TableProps } from "antd";
+import { Form, Input, Pagination, Space, Table } from "antd";
+import type { TableProps, TreeSelectProps } from "antd";
 import {
   AllRequests,
   approveLeaveRequest,
@@ -20,6 +21,8 @@ import ModalNeedApproved from "@/components/modalNeedApproved";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { TreeSelect } from "antd/lib";
+import { Department } from "@/lib/interface";
 
 // Extend plugin
 dayjs.extend(utc);
@@ -70,10 +73,31 @@ export default function AllRequestPage() {
     RequestLeave[]
   >([]);
   const localUser = getUserFromLocalStorage();
+  const [departments, setDepartments] = useState<Department[]>([]);
 
   const [filterName, setFilterName] = useState("");
   const [filterMSNV, setFilterMSNV] = useState("");
   const [filterDepartment, setDepartment] = useState("");
+
+  const onChangeSelectDepartment = (newValue: string) => {
+    setDepartment(newValue);
+    console.log(newValue);
+  };
+
+  const treeData = departments.map((dept) => ({
+    value: dept.id.toString(),
+    title: dept.name.toString(),
+    key: dept.id,
+    children: dept.positions.map((pos: any) => ({
+      value: `${dept.id}-${pos.id}`,
+      title: ` ${pos.name}`,
+      key: `${dept.id}-${pos.id}`,
+    })),
+  }));
+
+  const onPopupScroll: TreeSelectProps["onPopupScroll"] = (e) => {
+    console.log("onPopupScroll", e);
+  };
 
   const getApiAllRequestsApproved = async (page: number, pageSize: number) => {
     setLoading(true);
@@ -245,8 +269,17 @@ export default function AllRequestPage() {
     }
   };
 
+  // lấy danh sách bộ phận
+  const listDepartment = async () => {
+    const res = await fetch("/api/departments");
+    if (!res.ok) throw new Error("Lấy dữ liệu thất bại");
+    const departmentsData = await res.json(); //
+    setDepartments(departmentsData);
+  };
+
   useEffect(() => {
     getApiAllRequestsApproved(pageTable, pageSize);
+    listDepartment();
     getApiAllRequestsNeed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -329,27 +362,31 @@ export default function AllRequestPage() {
               />
             </Form.Item>
           </div>
-          {localUser.role === "ADMIN" && (
-            <div className="!flex gap-2 items-center shrink-0">
+          {localUser?.role === "ADMIN" && (
+            <div className="!flex gap-2 items-center ">
               <Form.Item
-                label={<p className="font-bold text-[#242424]">Bộ phận</p>}
+                className=""
+                label={
+                  <p className="font-bold text-[#242424] hidden sm:block">
+                    Bộ phận
+                  </p>
+                }
               >
-                <Select
-                  onChange={(e) => setDepartment(e)}
-                  style={{ width: "100%" }}
-                  placeholder={"Bộ phận"}
+                <TreeSelect
+                  showSearch
+                  style={{ width: "200px" }}
+                  value={filterDepartment}
+                  styles={{
+                    popup: { root: { maxHeight: 400, overflow: "auto" } },
+                  }}
+                  placeholder="Phòng ban"
                   allowClear
-                  options={[
-                    { value: "KD", label: "KD" },
-                    { value: "SCC", label: "SCC" },
-                    { value: "ĐS", label: "ĐS" },
-                    { value: "HC", label: "HC" },
-                    { value: "CV", label: "CV" },
-                    { value: "PT", label: "PT" },
-                    { value: "KT", label: "KT" },
-                    { value: "IT", label: "IT" },
-                    { value: "CS", label: "CS" },
-                  ]}
+                  listItemScrollOffset={200}
+                  treeDefaultExpandAll={false}
+                  onChange={onChangeSelectDepartment}
+                  showCheckedStrategy="SHOW_ALL"
+                  treeData={treeData}
+                  onPopupScroll={onPopupScroll}
                 />
               </Form.Item>
             </div>

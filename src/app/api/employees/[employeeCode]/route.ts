@@ -52,7 +52,12 @@ export async function GET(req: NextRequest) {
     const employee = await prisma.employee.findUnique({
       where: { employeeCode },
       include: {
-        workInfo: true,
+        workInfo: {
+          include: {
+            department: true, // Lấy tên bộ phận
+            position: true, // Lấy tên chức vụ
+          },
+        },
         personalInfo: true,
         contactInfo: true,
         otherInfo: true,
@@ -73,6 +78,8 @@ export async function GET(req: NextRequest) {
       workInfo: employee.workInfo
         ? {
             ...employee.workInfo,
+            department: employee.workInfo.department || null, // Lấy tên bộ phận
+            position: employee.workInfo.position || null,
             joinedTBD: formatDate(employee.workInfo.joinedTBD),
             joinedTeSCC: formatDate(employee.workInfo.joinedTeSCC),
             seniorityStart: formatDate(employee.workInfo.seniorityStart),
@@ -191,8 +198,9 @@ export async function PATCH(req: NextRequest) {
       await prisma.workInfo.update({
         where: { employeeId: employee.id },
         data: {
-          department: body.workInfo.department,
-          position: body.workInfo.position,
+          departmentId: body.workInfo.department, // 🟢 Thay vì department: 1
+          positionId: body.workInfo.position,
+
           specialization: body.workInfo.specialization,
           joinedTBD: body.workInfo.joinedTBD
             ? new Date(body.workInfo.joinedTBD)

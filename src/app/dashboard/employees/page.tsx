@@ -10,8 +10,10 @@ import {
   Input,
   Modal,
   Pagination,
-  Select,
+  // Select,
   Table,
+  TreeSelect,
+  TreeSelectProps,
 } from "antd";
 import { TableProps } from "antd";
 import {
@@ -29,7 +31,7 @@ import {
   fetchEmployeeByCode,
   updateEmployee,
 } from "@/lib/api";
-import { InfoEmployee } from "@/lib/interface";
+import { Department, InfoEmployee } from "@/lib/interface";
 import ModalEditEmployee from "@/components/modalEditEmployee";
 import Image from "next/image";
 import { MenuProps } from "antd/lib";
@@ -81,7 +83,7 @@ export default function EmployeesPage() {
   const [totalTable, setTotalTable] = useState();
   const [infoEmployee, setInfoEmployee] = useState<InfoEmployee>();
   const localUser = getUserFromLocalStorage();
-
+  const [departments, setDepartments] = useState<Department[]>([]);
   const [modalEditEmployee, setModalEditEmployee] = useState<boolean>(false);
   const [modalChangePassEmployee, setModalChangePassEmployee] =
     useState<boolean>(false);
@@ -92,7 +94,29 @@ export default function EmployeesPage() {
 
   const [filterName, setFilterName] = useState("");
   const [filterMSNV, setFilterMSNV] = useState("");
-  const [filterDepartment, setDepartment] = useState("");
+  const [filterDepartment, setDepartment] = useState<string>();
+
+  const treeData = departments.map((dept) => ({
+    value: dept.id.toString(),
+    title: dept.name.toString(),
+    key: dept.id,
+    children: dept.positions.map((pos: any) => ({
+      value: `${dept.id}-${pos.id}`,
+      title: ` ${pos.name}`,
+      key: `${dept.id}-${pos.id}`,
+    })),
+  }));
+
+  // const [value, setValue] = useState<string>();
+
+  const onChangeSelectDepartment = (newValue: string) => {
+    setDepartment(newValue);
+    console.log(newValue);
+  };
+
+  const onPopupScroll: TreeSelectProps["onPopupScroll"] = (e) => {
+    console.log("onPopupScroll", e);
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [result, setResult] = useState<{
@@ -138,8 +162,8 @@ export default function EmployeesPage() {
       id: item.id,
       MSNV: item.employeeCode,
       name: item.name,
-      department: item.workInfo.department,
-      position: item.workInfo.position,
+      department: item.workInfo.department?.name ?? "",
+      position: item.workInfo.position?.name ?? "",
       gender: item.gender,
       avatar: item.avatar,
     })) || [];
@@ -590,9 +614,17 @@ export default function EmployeesPage() {
 
     return { jsonData, headerRowIndex };
   };
+  // lấy danh sách bộ phận
+  const listDepartment = async () => {
+    const res = await fetch("/api/departments");
+    if (!res.ok) throw new Error("Lấy dữ liệu thất bại");
+    const departmentsData = await res.json(); //
+    setDepartments(departmentsData);
+  };
 
   useEffect(() => {
     getEmployeeSumary(pageTable, pageSize);
+    listDepartment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -605,6 +637,7 @@ export default function EmployeesPage() {
       />
       <ModalLoading isOpen={loading} />
       <ModalEditEmployee
+        department={departments ?? []}
         handleUpdateEmployee={handleUpdateEmployee}
         employeeInfo={infoEmployee}
         onClose={() => {
@@ -709,23 +742,20 @@ export default function EmployeesPage() {
                   </p>
                 }
               >
-                <Select
-                  onChange={(e) => setDepartment(e)}
-                  className=" shrink-0"
-                  style={{ width: "100%" }}
-                  placeholder={"Bộ phận"}
+                <TreeSelect
+                  showSearch
+                  style={{ width: "200px" }}
+                  value={filterDepartment}
+                  styles={{
+                    popup: { root: { maxHeight: 400, overflow: "auto" } },
+                  }}
+                  placeholder="Phòng ban"
                   allowClear
-                  options={[
-                    { value: "KD", label: "KD" },
-                    { value: "SCC", label: "SCC" },
-                    { value: "ĐS", label: "ĐS" },
-                    { value: "HC", label: "HC" },
-                    { value: "CV", label: "CV" },
-                    { value: "PT", label: "PT" },
-                    { value: "KT", label: "KT" },
-                    { value: "IT", label: "IT" },
-                    { value: "CS", label: "CS" },
-                  ]}
+                  listItemScrollOffset={200}
+                  onChange={onChangeSelectDepartment}
+                  showCheckedStrategy="SHOW_ALL"
+                  treeData={treeData}
+                  onPopupScroll={onPopupScroll}
                 />
               </Form.Item>
             </div>

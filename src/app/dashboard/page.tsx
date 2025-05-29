@@ -269,11 +269,11 @@ const Profile = () => {
           <InfoPersonal titleValue="Mã NV" value={dataProfile?.employeeCode} />
           <InfoPersonal
             titleValue="Bộ phận"
-            value={dataProfile?.workInfo.department}
+            value={dataProfile?.workInfo.department?.name}
           />
           <InfoPersonal
             titleValue="Chức vụ"
-            value={dataProfile?.workInfo.position}
+            value={dataProfile?.workInfo.position?.name}
           />
           <InfoPersonal
             titleValue="Số CCCD"
@@ -375,11 +375,11 @@ const Profile = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4 pr-4 gap-4 border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
           <InfoPersonal
             titleValue="Bộ phận"
-            value={dataProfile?.workInfo.department}
+            value={dataProfile?.workInfo.department?.name}
           />
           <InfoPersonal
             titleValue="Chức vụ"
-            value={dataProfile?.workInfo.position}
+            value={dataProfile?.workInfo.position?.name}
           />
           <InfoPersonal
             titleValue="Ngành"

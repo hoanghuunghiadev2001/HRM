@@ -41,8 +41,13 @@ export async function GET(req: NextRequest) {
 
     // Lọc phòng ban
     if (department) {
+      const parts = department.split("-");
+      const departmentId = parts[0] ? parseInt(parts[0], 10) : undefined;
+      const positionId = parts[1] ? parseInt(parts[1], 10) : undefined;
+
       whereFilter.workInfo = {
-        department,
+        ...(departmentId && { departmentId }),
+        ...(positionId && { positionId }),
       };
     }
 

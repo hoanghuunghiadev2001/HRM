@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // app/api/user/route.ts
 import "server-only";
 import { NextRequest, NextResponse } from "next/server";
@@ -32,7 +33,12 @@ export async function GET(req: NextRequest) {
       include: {
         personalInfo: true,
         contactInfo: true,
-        workInfo: true,
+        workInfo: {
+          include: {
+            department: true, // Thông tin phòng ban
+            position: true, // Thông tin chức vụ
+          },
+        },
         otherInfo: true,
       },
     });
@@ -43,6 +49,8 @@ export async function GET(req: NextRequest) {
         { status: 404 }
       );
     }
+    // Xóa password
+    delete (employee as any).password;
 
     const formattedEmployee = {
       ...employee,

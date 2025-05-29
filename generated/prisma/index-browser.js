@@ -128,13 +128,33 @@ exports.Prisma.EmployeeScalarFieldEnum = {
   birthDate: 'birthDate',
   password: 'password',
   role: 'role',
-  avatar: 'avatar'
+  avatar: 'avatar',
+  managerId: 'managerId'
+};
+
+exports.Prisma.DepartmentScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  abbreviation: 'abbreviation',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  headId: 'headId',
+  directorId: 'directorId'
+};
+
+exports.Prisma.PositionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  level: 'level',
+  departmentId: 'departmentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.WorkInfoScalarFieldEnum = {
   id: 'id',
-  department: 'department',
-  position: 'position',
+  departmentId: 'departmentId',
+  positionId: 'positionId',
   specialization: 'specialization',
   joinedTBD: 'joinedTBD',
   joinedTeSCC: 'joinedTeSCC',
@@ -211,56 +231,14 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
-};
-
-exports.Prisma.EmployeeOrderByRelevanceFieldEnum = {
-  employeeCode: 'employeeCode',
-  name: 'name',
-  password: 'password',
-  avatar: 'avatar'
-};
-
-exports.Prisma.WorkInfoOrderByRelevanceFieldEnum = {
-  department: 'department',
-  position: 'position',
-  specialization: 'specialization',
-  seniority: 'seniority',
-  contractNumber: 'contractNumber',
-  contractType: 'contractType'
-};
-
-exports.Prisma.PersonalInfoOrderByRelevanceFieldEnum = {
-  identityNumber: 'identityNumber',
-  issuePlace: 'issuePlace',
-  hometown: 'hometown',
-  idAddress: 'idAddress',
-  education: 'education',
-  drivingLicense: 'drivingLicense',
-  toyotaCertificate: 'toyotaCertificate',
-  taxCode: 'taxCode',
-  insuranceNumber: 'insuranceNumber'
-};
-
-exports.Prisma.ContactInfoOrderByRelevanceFieldEnum = {
-  phoneNumber: 'phoneNumber',
-  relativePhone: 'relativePhone',
-  companyPhone: 'companyPhone',
-  email: 'email'
-};
-
-exports.Prisma.OtherInfoOrderByRelevanceFieldEnum = {
-  documentsChecked: 'documentsChecked',
-  VCB: 'VCB',
-  MTCV: 'MTCV',
-  PNJ: 'PNJ'
-};
-
-exports.Prisma.LeaveRequestOrderByRelevanceFieldEnum = {
-  reason: 'reason',
-  approvedBy: 'approvedBy'
 };
 exports.Sex = exports.$Enums.Sex = {
   MALE: 'MALE',
@@ -298,6 +276,8 @@ exports.LeaveStatus = exports.$Enums.LeaveStatus = {
 
 exports.Prisma.ModelName = {
   Employee: 'Employee',
+  Department: 'Department',
+  Position: 'Position',
   WorkInfo: 'WorkInfo',
   PersonalInfo: 'PersonalInfo',
   ContactInfo: 'ContactInfo',

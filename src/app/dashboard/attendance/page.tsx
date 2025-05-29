@@ -10,8 +10,8 @@ import {
   Form,
   Input,
   Pagination,
-  Select,
   Table,
+  TreeSelect,
 } from "antd";
 import type { TableProps } from "antd";
 import { getUserFromLocalStorage } from "@/components/api";
@@ -20,9 +20,10 @@ import { formatDateTime } from "@/components/function";
 import { createStyles } from "antd-style";
 import dayjs from "dayjs";
 import { fetchAttendances } from "@/lib/api";
-import { AttendanceResponse } from "@/lib/interface";
+import { AttendanceResponse, Department } from "@/lib/interface";
 import Image from "next/image";
 import { UploadOutlined } from "@ant-design/icons";
+import { TreeSelectProps } from "antd/lib";
 
 interface DataType {
   key: string;
@@ -83,6 +84,27 @@ export default function AttendancePage() {
   const [timeEnd, setTimeEnd] = useState("");
   const [listAttendance, setListAttendance] = useState<AttendanceResponse>();
 
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const onChangeSelectDepartment = (newValue: string) => {
+    setFilterDepartment(newValue);
+    console.log(newValue);
+  };
+
+  const treeData = departments.map((dept) => ({
+    value: dept.id.toString(),
+    title: dept.name.toString(),
+    key: dept.id,
+    children: dept.positions.map((pos: any) => ({
+      value: `${dept.id}-${pos.id}`,
+      title: ` ${pos.name}`,
+      key: `${dept.id}-${pos.id}`,
+    })),
+  }));
+
+  const onPopupScroll: TreeSelectProps["onPopupScroll"] = (e) => {
+    console.log("onPopupScroll", e);
+  };
+
   const { RangePicker } = DatePicker;
   const maxDate = dayjs();
   const { styles } = useStyle();
@@ -111,7 +133,7 @@ export default function AttendancePage() {
           <Image
             src={record.avatar ? record.avatar : "/storage/avt-default.webp"}
             alt="avt"
-            className="h-8 w-8 rounded-[50%]"
+            className="h-8 w-8 rounded-[50%] object-cover"
             width={32}
             height={32}
             quality={70} // giảm chất lượng xuống chút để nhẹ hơn
@@ -212,8 +234,14 @@ export default function AttendancePage() {
       handleFetchAttendances(page, pageSize);
     }
   };
-
+  const listDepartment = async () => {
+    const res = await fetch("/api/departments");
+    if (!res.ok) throw new Error("Lấy dữ liệu thất bại");
+    const departmentsData = await res.json(); //
+    setDepartments(departmentsData);
+  };
   useEffect(() => {
+    listDepartment();
     handleFetchAttendances(pageTable, pageSize);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -240,8 +268,8 @@ export default function AttendancePage() {
       employeeCode: item.employeeCode,
       avatar: item.avatar,
       employeeName: item.employeeName,
-      department: item.department,
-      position: item.position,
+      department: item.department.name,
+      position: item.position.name,
       date: formatDateTime(item.date),
       firstCheckIn: formatDateTime(item.firstCheckIn),
       lastCheckOut: item.lastCheckOut
@@ -360,22 +388,20 @@ export default function AttendancePage() {
                   </p>
                 }
               >
-                <Select
-                  onChange={(e) => setFilterDepartment(e)}
-                  className="w-full md:!w-[100px]"
-                  placeholder={"Bộ phận"}
+                <TreeSelect
+                  showSearch
+                  style={{ width: "200px" }}
+                  value={filterDepartment}
+                  styles={{
+                    popup: { root: { maxHeight: 400, overflow: "auto" } },
+                  }}
+                  placeholder="Phòng ban"
                   allowClear
-                  options={[
-                    { value: "KD", label: "KD" },
-                    { value: "SCC", label: "SCC" },
-                    { value: "ĐS", label: "ĐS" },
-                    { value: "HC", label: "HC" },
-                    { value: "CV", label: "CV" },
-                    { value: "PT", label: "PT" },
-                    { value: "KT", label: "KT" },
-                    { value: "IT", label: "IT" },
-                    { value: "CS", label: "CS" },
-                  ]}
+                  listItemScrollOffset={200}
+                  onChange={onChangeSelectDepartment}
+                  showCheckedStrategy="SHOW_ALL"
+                  treeData={treeData}
+                  onPopupScroll={onPopupScroll}
                 />
               </Form.Item>
             </div>

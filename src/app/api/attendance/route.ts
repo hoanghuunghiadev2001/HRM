@@ -59,10 +59,13 @@ export async function GET(req: NextRequest) {
     if (msnv) employeeWhere.employeeCode = { contains: msnv };
     if (name) employeeWhere.name = { contains: name };
     if (department) {
+      const parts = department.split("-");
+      const departmentId = parts[0] ? parseInt(parts[0], 10) : undefined;
+      const positionId = parts[1] ? parseInt(parts[1], 10) : undefined;
+
       employeeWhere.workInfo = {
-        is: {
-          department: { contains: department },
-        },
+        ...(departmentId && { departmentId }),
+        ...(positionId && { positionId }),
       };
     }
 
@@ -107,8 +110,16 @@ export async function GET(req: NextRequest) {
             avatar: true,
             workInfo: {
               select: {
-                department: true,
-                position: true,
+                department: {
+                  select: {
+                    name: true,
+                  },
+                },
+                position: {
+                  select: {
+                    name: true,
+                  },
+                },
               },
             },
           },

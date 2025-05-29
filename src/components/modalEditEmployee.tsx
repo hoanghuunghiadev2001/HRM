@@ -14,7 +14,7 @@ import {
 import ModalLoading from "./modalLoading";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
-import { InfoEmployee } from "@/lib/interface";
+import { Department, InfoEmployee } from "@/lib/interface";
 import Image from "next/image";
 import { getUserFromLocalStorage } from "./api";
 
@@ -31,6 +31,12 @@ interface ModalEditEmployeeProps {
   employeeInfo?: InfoEmployee;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleUpdateEmployee: (employeeCode: string, infoEmployee: any) => void;
+  department: Department[];
+}
+
+interface Position {
+  id: number;
+  name: string;
 }
 
 const ModalEditEmployee = ({
@@ -38,11 +44,15 @@ const ModalEditEmployee = ({
   open,
   employeeInfo,
   handleUpdateEmployee,
+  department,
 }: ModalEditEmployeeProps) => {
   const [imageUrl, setImageUrl] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [seniorityText, setSeniorityText] = useState<number>(0);
   const [isMounted, setIsMounted] = useState(false);
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const [selectedDepartmentId, setSelectedDepartmentId] = useState(0);
+  const [positions, setPositions] = useState<Position[]>([]);
   type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
   const localUser = getUserFromLocalStorage();
@@ -145,27 +155,6 @@ const ModalEditEmployee = ({
     );
   }
 
-  // const handleDateChange = (date: dayjs.Dayjs | null) => {
-  //   if (!date) return "";
-
-  //   const today = dayjs();
-  //   let totalMonths = (today.year() - date.year()) * 12 + (today.month() - date.month());
-
-  //   if (today.date() < date.date()) {
-  //     totalMonths -= 1;
-  //   }
-
-  //   const years = Math.floor(totalMonths / 12);
-  //   const months = totalMonths % 12;
-
-  //   let result = "";
-  //   if (years > 0) result += `${years} năm `;
-  //   if (months > 0) result += `${months} tháng`;
-  //   if (!result) result = "0 tháng";
-  //   setSeniorityText(result.trim());
-  //   return result.trim();
-  // };
-
   //Up ảnh hồ sơ
   const beforeUpload = (file: FileType) => {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
@@ -236,8 +225,8 @@ const ModalEditEmployee = ({
       avatarBase64: data.avatar ?? null,
 
       // workInfo
-      department: data.workInfo?.department ?? "",
-      position: data.workInfo?.position ?? "",
+      department: data.workInfo?.department?.name ?? "",
+      position: data.workInfo?.position?.name ?? "",
       specialization: data.workInfo?.specialization ?? "",
       joinedTBD: data.workInfo?.joinedTBD
         ? dayjs(data.workInfo?.joinedTBD, "DD/MM/YYYY")
@@ -299,7 +288,46 @@ const ModalEditEmployee = ({
     };
   }
 
+  //lấy danh sách bộ phận
+  // const listDepartment = async () => {
+  //   const res = await fetch("/api/departments");
+  //   if (!res.ok) throw new Error("Lấy dữ liệu thất bại");
+  //   const departmentsData = await res.json(); //
+  //   setDepartments(departmentsData);
+  // };
+
+  const listPosition = async () => {
+    const res = await fetch(`/api/departments/${selectedDepartmentId}`);
+    if (!res.ok) throw new Error("Lấy dữ liệu thất bại");
+    const departmentsData = await res.json(); //
+    setPositions(departmentsData.positions);
+  };
+
   useEffect(() => {
+    console.log(selectedDepartmentId);
+    if (selectedDepartmentId) {
+      listPosition();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDepartmentId]);
+
+  const fetchData = async () => {
+    try {
+      const [positionsData] = await Promise.all([
+        selectedDepartmentId
+          ? fetch(`/api/departments/${selectedDepartmentId}`).then((res) =>
+              res.json()
+            )
+          : Promise.resolve({ positions: [] }),
+      ]);
+      setPositions(positionsData.positions);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
     setIsMounted(true); // Đánh dấu đã mount client
   }, []);
 
@@ -313,7 +341,12 @@ const ModalEditEmployee = ({
       console.log(date.format("DD/MM/YYYY"));
 
       form.setFieldsValue(transformEmployeeDataToFormData(employeeInfo));
+      if (employeeInfo) {
+        setSelectedDepartmentId(employeeInfo.workInfo.department?.id ?? 0);
+      }
     }
+    setDepartments(department);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [employeeInfo, isMounted]);
 
@@ -524,17 +557,11 @@ const ModalEditEmployee = ({
                     placeholder="Bộ phận"
                     disabled={localUser?.role === "MANAGER"}
                     allowClear
-                    options={[
-                      { value: "KD", label: "KD" },
-                      { value: "SCC", label: "SCC" },
-                      { value: "ĐS", label: "ĐS" },
-                      { value: "HC", label: "HC" },
-                      { value: "CV", label: "CV" },
-                      { value: "PT", label: "PT" },
-                      { value: "KT", label: "KT" },
-                      { value: "IT", label: "IT" },
-                      { value: "CS", label: "CS" },
-                    ]}
+                    onChange={(e) => setSelectedDepartmentId(e)}
+                    options={departments.map((d) => ({
+                      value: d.id,
+                      label: d.name,
+                    }))}
                   ></Select>
                 </Form.Item>
                 <Form.Item
@@ -542,7 +569,16 @@ const ModalEditEmployee = ({
                   label="Chức vụ"
                   rules={[{ required: true }]}
                 >
-                  <Input />
+                  <Select
+                    placeholder="Bộ phận"
+                    disabled={localUser?.role === "MANAGER"}
+                    allowClear
+                    onChange={(e) => setSelectedDepartmentId(e.target.value)}
+                    options={positions.map((d) => ({
+                      value: d.id,
+                      label: d.name,
+                    }))}
+                  ></Select>
                 </Form.Item>
                 <Form.Item name="joinedTBD" label="Ngày vào TBD">
                   <DatePicker

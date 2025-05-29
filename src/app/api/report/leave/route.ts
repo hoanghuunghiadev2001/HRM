@@ -6,7 +6,18 @@ import { prisma } from "@/lib/prisma";
 
 // Giao diện đơn nghỉ kèm thông tin nhân viên
 type LeaveRequestWithEmployee = Prisma.LeaveRequestGetPayload<{
-  include: { employee: { include: { workInfo: true } } };
+  include: {
+    employee: {
+      include: {
+        workInfo: {
+          include: {
+            department: true;
+            position: true;
+          };
+        };
+      };
+    };
+  };
 }>;
 
 export async function GET(request: Request) {
@@ -44,7 +55,12 @@ export async function GET(request: Request) {
       include: {
         employee: {
           include: {
-            workInfo: true,
+            workInfo: {
+              include: {
+                department: true, // include bảng Department
+                position: true, // include bảng Position
+              },
+            },
           },
         },
       },
@@ -210,8 +226,8 @@ function getEmployeeStats(requests: LeaveRequestWithEmployee[]) {
         employeeId: id,
         employeeCode: emp.employeeCode,
         name: emp.name,
-        department: emp.workInfo?.department,
-        position: emp.workInfo?.position,
+        department: emp.workInfo?.department?.name,
+        position: emp.workInfo?.position?.name,
         leave: {
           total: 0,
           hours: 0,

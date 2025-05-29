@@ -122,12 +122,35 @@ export async function GET() {
     });
 
     // 8. Department distribution
-    const departmentDistribution = await prisma.workInfo.groupBy({
-      by: ["department"],
+    const departmentDistributionRaw = await prisma.workInfo.groupBy({
+      by: ["departmentId"], // ✅ Dùng departmentId
       _count: {
         employeeId: true,
       },
     });
+
+    // Lấy thông tin tên phòng ban
+    const departmentIds = departmentDistributionRaw
+      .map((item: any) => item.departmentId)
+      .filter((id: any): id is number => id !== null); // 🛡️ Chắc chắn là number[]
+
+    const departments = await prisma.department.findMany({
+      where: { id: { in: departmentIds } },
+    });
+
+    // Gộp tên phòng ban vào kết quả
+    const departmentDistribution = departmentDistributionRaw.map(
+      (item: any) => {
+        const department = departments.find(
+          (d: any) => d.id === item.departmentId
+        );
+        return {
+          departmentId: item.departmentId,
+          departmentName: department?.name || "Không xác định",
+          totalEmployees: item._count.employeeId,
+        };
+      }
+    );
 
     // 9. Recent leave requests
     const recentLeaveRequests = await prisma.leaveRequest.findMany({

@@ -11,7 +11,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -52,28 +52,66 @@ enum LeaveStatus {
 
 model Employee {
   id           Int       @id @default(autoincrement())
-  employeeCode String    @unique // Mã nhân viên (maNV)
-  name         String // Tên
-  gender       Sex       @default(MALE) // Giới tính
-  birthDate    DateTime? // Ngày sinh
-  password     String // Mật khẩu (đã mã hoá)
-  role         Role      @default(USER) // Vai trò
-  avatar       String?   @db.LongText // <- Thêm trường avatar (có thể null)
+  employeeCode String    @unique
+  name         String
+  gender       Sex       @default(MALE)
+  birthDate    DateTime?
+  password     String
+  role         Role      @default(USER)
+  avatar       String?
 
-  workInfo     WorkInfo?     @relation()
-  personalInfo PersonalInfo? @relation()
-  contactInfo  ContactInfo?  @relation()
-  otherInfo    OtherInfo?    @relation()
+  managerId    Int?
+  manager      Employee?  @relation("EmployeeManager", fields: [managerId], references: [id])
+  subordinates Employee[] @relation("EmployeeManager")
+
+  departmentHeadOf     Department? @relation("DepartmentHead")
+  departmentDirectorOf Department? @relation("DepartmentDirector")
+
+  workInfo     WorkInfo?
+  personalInfo PersonalInfo?
+  contactInfo  ContactInfo?
+  otherInfo    OtherInfo?
 
   LeaveRequest LeaveRequest[]
+  Attendance   Attendance[]
+}
 
-  Attendance Attendance[]
+model Department {
+  id           Int        @id @default(autoincrement())
+  name         String     @unique
+  positions    Position[]
+  abbreviation String     @unique
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  headId     Int? @unique
+  directorId Int? @unique
+
+  head     Employee? @relation("DepartmentHead", fields: [headId], references: [id])
+  director Employee? @relation("DepartmentDirector", fields: [directorId], references: [id])
+
+  workInfos WorkInfo[]
+}
+
+model Position {
+  id           Int        @id @default(autoincrement())
+  name         String // Tên chức vụ (ví dụ: Trưởng phòng, Nhân viên)
+  level        Int        @default(1) // Thêm mặc định cho level
+  departmentId Int
+  department   Department @relation(fields: [departmentId], references: [id])
+  employees    WorkInfo[] // Liên kết với nhân viên (WorkInfo)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 }
 
 model WorkInfo {
-  id              Int       @id @default(autoincrement())
-  department      String // Bộ phận
-  position        String // Chức vụ
+  id           Int  @id @default(autoincrement())
+  departmentId Int? // Khóa ngoại bộ phận
+  positionId   Int? // Khóa ngoại chức vụ
+
+  department Department? @relation(fields: [departmentId], references: [id])
+  position   Position?   @relation(fields: [positionId], references: [id])
+
   specialization  String? // Ngành
   joinedTBD       DateTime? // Ngày vào TBD
   joinedTeSCC     DateTime? // Ngày vào TeSCC

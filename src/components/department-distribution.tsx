@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useEffect, useState, useMemo } from "react";
@@ -30,12 +31,12 @@ const COLORS = [
 ];
 
 // Định nghĩa kiểu dữ liệu
-interface DepartmentData {
-  department: string;
-  _count: {
-    employeeId: number;
-  };
-}
+// interface DepartmentData {
+//   department: string;
+//   _count: {
+//     employeeId: number;
+//   };
+// }
 
 interface TreemapData {
   name: string;
@@ -71,9 +72,9 @@ export function DepartmentDistribution({ departmentData: initialData = [] }) {
       // Transform the data to the format needed by the chart
       const transformedData = {
         name: "Phòng ban",
-        children: initialData.map((dept: DepartmentData) => ({
-          name: dept.department,
-          size: dept._count.employeeId,
+        children: initialData.map((dept: any) => ({
+          name: dept.departmentName || "Không xác định",
+          size: dept.totalEmployees || 0,
         })),
       };
       setData([transformedData]);
@@ -90,21 +91,19 @@ export function DepartmentDistribution({ departmentData: initialData = [] }) {
           const transformedData = {
             name: "Phòng ban",
             children: responseData.departmentDistribution.map(
-              (dept: DepartmentData, index: number) => ({
-                name: dept.department,
-                size: dept._count.employeeId,
+              (dept: any, index: number) => ({
+                name: dept.departmentName || "Không xác định",
+                size: dept.totalEmployees || 0,
                 color: COLORS[index % COLORS.length],
               })
             ),
           };
           setData([transformedData]);
         } else {
-          // Nếu không có dữ liệu, sử dụng dữ liệu mẫu
           setData(sampleData);
         }
       } catch (error) {
         console.error("Error fetching department data:", error);
-        // Use sample data if API fails
         setData(sampleData);
       } finally {
         setLoading(false);

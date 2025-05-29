@@ -67,7 +67,14 @@ export async function POST(request: NextRequest) {
     // Lấy thông tin nhân viên và phòng ban
     const employee = await prisma.employee.findUnique({
       where: { id: employeeId },
-      include: { workInfo: true },
+      include: {
+        workInfo: {
+          include: {
+            department: true,
+            position: true,
+          },
+        },
+      },
     });
 
     const department = employee?.workInfo?.department;
