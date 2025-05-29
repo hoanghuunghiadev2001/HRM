@@ -1,32 +1,42 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// Import các module cần thiết từ Next.js và Prisma
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-// Hàm PATCH: Cập nhật tên chức danh (position)
+// PATCH: Cập nhật tên position
 export async function PATCH(
   request: NextRequest,
   context: { params: { id: string; posId: string } }
 ) {
-  const { params } = context;
-  const positionId = Number(params.posId); // Chuyển posId từ string sang number
+  const { id, posId } = context.params;
+  const departmentId = Number(id);
+  const positionId = Number(posId);
 
-  if (isNaN(positionId)) {
-    return NextResponse.json({ error: "Invalid position ID" }, { status: 400 });
+  if (isNaN(departmentId) || isNaN(positionId)) {
+    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
   }
 
-  const body = await request.json();
-  const name = body.name;
-
+  const { name } = await request.json();
   if (!name) {
     return NextResponse.json(
-      { error: "Position name is required" },
+      { error: "Position name required" },
       { status: 400 }
     );
   }
 
   try {
-    // Cập nhật tên chức danh trong database
+    // Kiểm tra position có thuộc về department không
+    const existingPosition = await prisma.position.findFirst({
+      where: { id: positionId, departmentId: departmentId },
+    });
+
+    if (!existingPosition) {
+      return NextResponse.json(
+        { error: "Position does not belong to the department" },
+        { status: 404 }
+      );
+    }
+
+    // Tiến hành cập nhật
     const updatedPosition = await prisma.position.update({
       where: { id: positionId },
       data: { name },
@@ -38,20 +48,33 @@ export async function PATCH(
   }
 }
 
-// Hàm DELETE: Xóa chức danh (position) khỏi database
+// DELETE: Xóa position
 export async function DELETE(
   request: NextRequest,
   context: { params: { id: string; posId: string } }
 ) {
-  const { params } = context;
-  const positionId = Number(params.posId);
+  const { id, posId } = context.params;
+  const departmentId = Number(id);
+  const positionId = Number(posId);
 
-  if (isNaN(positionId)) {
-    return NextResponse.json({ error: "Invalid position ID" }, { status: 400 });
+  if (isNaN(departmentId) || isNaN(positionId)) {
+    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
   }
 
   try {
-    // Xóa chức danh theo ID
+    // Kiểm tra position có thuộc về department không
+    const existingPosition = await prisma.position.findFirst({
+      where: { id: positionId, departmentId: departmentId },
+    });
+
+    if (!existingPosition) {
+      return NextResponse.json(
+        { error: "Position does not belong to the department" },
+        { status: 404 }
+      );
+    }
+
+    // Tiến hành xóa
     await prisma.position.delete({
       where: { id: positionId },
     });
