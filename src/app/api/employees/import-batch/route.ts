@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "server-only";
 import { type NextRequest, NextResponse } from "next/server";
@@ -60,6 +61,36 @@ export async function POST(request: NextRequest) {
         const departmentValue = row["Bộ phận"]?.toString() || null;
         const position = row["Chức vụ"]?.toString() || null;
 
+        let departmentId = null;
+        let positionId = null;
+
+        if (departmentValue) {
+          // Tìm phòng ban dựa trên abbreviation (mã viết tắt)
+          const department = await prisma.department.findUnique({
+            where: {
+              abbreviation: departmentValue,
+            },
+          });
+
+          if (department) {
+            departmentId = department.id;
+          }
+        }
+
+        if (position && departmentId) {
+          // Tìm phòng ban dựa trên abbreviation (mã viết tắt)
+          const positionValue = await prisma.position.findFirst({
+            where: {
+              name: String(position),
+              departmentId: departmentId,
+            },
+          });
+
+          if (positionValue) {
+            positionId = positionValue.id;
+          }
+        }
+
         // Validate required fields
         if (!employeeCode) {
           throw new Error("Mã NV là bắt buộc");
@@ -70,21 +101,21 @@ export async function POST(request: NextRequest) {
         }
 
         // Parse department and role based on - separator and -QL suffix
-        let department = departmentValue || "";
-        let role: "USER" | "MANAGER" | "ADMIN" = "USER";
+        // let department = departmentValue || "";
+        // let role: "USER" | "MANAGER" | "ADMIN" = "USER";
 
-        if (department) {
-          // Check if department contains a dash
-          if (department.includes("-")) {
-            // Check if it ends with -QL (indicating manager role)
-            if (department.endsWith("-QL")) {
-              role = "MANAGER";
-            }
-            // Always take the part before the first dash as the department
-            department = department.split("-")[0];
-          }
-          // If no dash, use the entire value as department (role remains USER)
-        }
+        // if (department) {
+        //   // Check if department contains a dash
+        //   if (department.includes("-")) {
+        //     // Check if it ends with -QL (indicating manager role)
+        //     if (department.endsWith("-QL")) {
+        //       role = "MANAGER";
+        //     }
+        //     // Always take the part before the first dash as the department
+        //     department = department.split("-")[0];
+        //   }
+        //   // If no dash, use the entire value as department (role remains USER)
+        // }
 
         // Check if employee already exists
         const existingEmployee = await prisma.employee.findUnique({
@@ -164,12 +195,12 @@ export async function POST(request: NextRequest) {
           name: employeeName,
           gender,
           birthDate,
-          role,
+          // role,
         };
 
         const workInfoData = {
-          department,
-          position: position || "",
+          departmentId: departmentId,
+          positionId: positionId,
           specialization: row["Ngành"]?.toString(),
           joinedTBD,
           joinedTeSCC,
@@ -223,7 +254,7 @@ export async function POST(request: NextRequest) {
         }
         logger.debug(`Processing employee: ${employeeCode}`, {
           name: employeeName,
-          department,
+          departmentId,
           position,
         });
 

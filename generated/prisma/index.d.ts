@@ -58,6 +58,21 @@ export type LeaveRequest = $Result.DefaultSelection<Prisma.$LeaveRequestPayload>
  * 
  */
 export type Attendance = $Result.DefaultSelection<Prisma.$AttendancePayload>
+/**
+ * Model KPI
+ * 
+ */
+export type KPI = $Result.DefaultSelection<Prisma.$KPIPayload>
+/**
+ * Model KPIEmployee
+ * 
+ */
+export type KPIEmployee = $Result.DefaultSelection<Prisma.$KPIEmployeePayload>
+/**
+ * Model KPIEntry
+ * 
+ */
+export type KPIEntry = $Result.DefaultSelection<Prisma.$KPIEntryPayload>
 
 /**
  * Enums
@@ -347,6 +362,36 @@ export class PrismaClient<
     * ```
     */
   get attendance(): Prisma.AttendanceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.kPI`: Exposes CRUD operations for the **KPI** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more KPIS
+    * const kPIS = await prisma.kPI.findMany()
+    * ```
+    */
+  get kPI(): Prisma.KPIDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.kPIEmployee`: Exposes CRUD operations for the **KPIEmployee** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more KPIEmployees
+    * const kPIEmployees = await prisma.kPIEmployee.findMany()
+    * ```
+    */
+  get kPIEmployee(): Prisma.KPIEmployeeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.kPIEntry`: Exposes CRUD operations for the **KPIEntry** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more KPIEntries
+    * const kPIEntries = await prisma.kPIEntry.findMany()
+    * ```
+    */
+  get kPIEntry(): Prisma.KPIEntryDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -795,7 +840,10 @@ export namespace Prisma {
     ContactInfo: 'ContactInfo',
     OtherInfo: 'OtherInfo',
     LeaveRequest: 'LeaveRequest',
-    Attendance: 'Attendance'
+    Attendance: 'Attendance',
+    KPI: 'KPI',
+    KPIEmployee: 'KPIEmployee',
+    KPIEntry: 'KPIEntry'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -814,7 +862,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "employee" | "department" | "position" | "workInfo" | "personalInfo" | "contactInfo" | "otherInfo" | "leaveRequest" | "attendance"
+      modelProps: "employee" | "department" | "position" | "workInfo" | "personalInfo" | "contactInfo" | "otherInfo" | "leaveRequest" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1484,6 +1532,228 @@ export namespace Prisma {
           }
         }
       }
+      KPI: {
+        payload: Prisma.$KPIPayload<ExtArgs>
+        fields: Prisma.KPIFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.KPIFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.KPIFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIPayload>
+          }
+          findFirst: {
+            args: Prisma.KPIFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.KPIFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIPayload>
+          }
+          findMany: {
+            args: Prisma.KPIFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIPayload>[]
+          }
+          create: {
+            args: Prisma.KPICreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIPayload>
+          }
+          createMany: {
+            args: Prisma.KPICreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.KPICreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIPayload>[]
+          }
+          delete: {
+            args: Prisma.KPIDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIPayload>
+          }
+          update: {
+            args: Prisma.KPIUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIPayload>
+          }
+          deleteMany: {
+            args: Prisma.KPIDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.KPIUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.KPIUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIPayload>[]
+          }
+          upsert: {
+            args: Prisma.KPIUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIPayload>
+          }
+          aggregate: {
+            args: Prisma.KPIAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateKPI>
+          }
+          groupBy: {
+            args: Prisma.KPIGroupByArgs<ExtArgs>
+            result: $Utils.Optional<KPIGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.KPICountArgs<ExtArgs>
+            result: $Utils.Optional<KPICountAggregateOutputType> | number
+          }
+        }
+      }
+      KPIEmployee: {
+        payload: Prisma.$KPIEmployeePayload<ExtArgs>
+        fields: Prisma.KPIEmployeeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.KPIEmployeeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEmployeePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.KPIEmployeeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEmployeePayload>
+          }
+          findFirst: {
+            args: Prisma.KPIEmployeeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEmployeePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.KPIEmployeeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEmployeePayload>
+          }
+          findMany: {
+            args: Prisma.KPIEmployeeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEmployeePayload>[]
+          }
+          create: {
+            args: Prisma.KPIEmployeeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEmployeePayload>
+          }
+          createMany: {
+            args: Prisma.KPIEmployeeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.KPIEmployeeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEmployeePayload>[]
+          }
+          delete: {
+            args: Prisma.KPIEmployeeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEmployeePayload>
+          }
+          update: {
+            args: Prisma.KPIEmployeeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEmployeePayload>
+          }
+          deleteMany: {
+            args: Prisma.KPIEmployeeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.KPIEmployeeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.KPIEmployeeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEmployeePayload>[]
+          }
+          upsert: {
+            args: Prisma.KPIEmployeeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEmployeePayload>
+          }
+          aggregate: {
+            args: Prisma.KPIEmployeeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateKPIEmployee>
+          }
+          groupBy: {
+            args: Prisma.KPIEmployeeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<KPIEmployeeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.KPIEmployeeCountArgs<ExtArgs>
+            result: $Utils.Optional<KPIEmployeeCountAggregateOutputType> | number
+          }
+        }
+      }
+      KPIEntry: {
+        payload: Prisma.$KPIEntryPayload<ExtArgs>
+        fields: Prisma.KPIEntryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.KPIEntryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEntryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.KPIEntryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEntryPayload>
+          }
+          findFirst: {
+            args: Prisma.KPIEntryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEntryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.KPIEntryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEntryPayload>
+          }
+          findMany: {
+            args: Prisma.KPIEntryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEntryPayload>[]
+          }
+          create: {
+            args: Prisma.KPIEntryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEntryPayload>
+          }
+          createMany: {
+            args: Prisma.KPIEntryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.KPIEntryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEntryPayload>[]
+          }
+          delete: {
+            args: Prisma.KPIEntryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEntryPayload>
+          }
+          update: {
+            args: Prisma.KPIEntryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEntryPayload>
+          }
+          deleteMany: {
+            args: Prisma.KPIEntryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.KPIEntryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.KPIEntryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEntryPayload>[]
+          }
+          upsert: {
+            args: Prisma.KPIEntryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KPIEntryPayload>
+          }
+          aggregate: {
+            args: Prisma.KPIEntryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateKPIEntry>
+          }
+          groupBy: {
+            args: Prisma.KPIEntryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<KPIEntryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.KPIEntryCountArgs<ExtArgs>
+            result: $Utils.Optional<KPIEntryCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1577,6 +1847,9 @@ export namespace Prisma {
     otherInfo?: OtherInfoOmit
     leaveRequest?: LeaveRequestOmit
     attendance?: AttendanceOmit
+    kPI?: KPIOmit
+    kPIEmployee?: KPIEmployeeOmit
+    kPIEntry?: KPIEntryOmit
   }
 
   /* Types for Logging */
@@ -1674,12 +1947,14 @@ export namespace Prisma {
     subordinates: number
     LeaveRequest: number
     Attendance: number
+    KPIEmployee: number
   }
 
   export type EmployeeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subordinates?: boolean | EmployeeCountOutputTypeCountSubordinatesArgs
     LeaveRequest?: boolean | EmployeeCountOutputTypeCountLeaveRequestArgs
     Attendance?: boolean | EmployeeCountOutputTypeCountAttendanceArgs
+    KPIEmployee?: boolean | EmployeeCountOutputTypeCountKPIEmployeeArgs
   }
 
   // Custom InputTypes
@@ -1712,6 +1987,13 @@ export namespace Prisma {
    */
   export type EmployeeCountOutputTypeCountAttendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AttendanceWhereInput
+  }
+
+  /**
+   * EmployeeCountOutputType without action
+   */
+  export type EmployeeCountOutputTypeCountKPIEmployeeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KPIEmployeeWhereInput
   }
 
 
@@ -1783,6 +2065,68 @@ export namespace Prisma {
    */
   export type PositionCountOutputTypeCountEmployeesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WorkInfoWhereInput
+  }
+
+
+  /**
+   * Count Type KPICountOutputType
+   */
+
+  export type KPICountOutputType = {
+    kpiEmployees: number
+  }
+
+  export type KPICountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    kpiEmployees?: boolean | KPICountOutputTypeCountKpiEmployeesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * KPICountOutputType without action
+   */
+  export type KPICountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPICountOutputType
+     */
+    select?: KPICountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * KPICountOutputType without action
+   */
+  export type KPICountOutputTypeCountKpiEmployeesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KPIEmployeeWhereInput
+  }
+
+
+  /**
+   * Count Type KPIEmployeeCountOutputType
+   */
+
+  export type KPIEmployeeCountOutputType = {
+    entries: number
+  }
+
+  export type KPIEmployeeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    entries?: boolean | KPIEmployeeCountOutputTypeCountEntriesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * KPIEmployeeCountOutputType without action
+   */
+  export type KPIEmployeeCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEmployeeCountOutputType
+     */
+    select?: KPIEmployeeCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * KPIEmployeeCountOutputType without action
+   */
+  export type KPIEmployeeCountOutputTypeCountEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KPIEntryWhereInput
   }
 
 
@@ -2034,6 +2378,7 @@ export namespace Prisma {
     otherInfo?: boolean | Employee$otherInfoArgs<ExtArgs>
     LeaveRequest?: boolean | Employee$LeaveRequestArgs<ExtArgs>
     Attendance?: boolean | Employee$AttendanceArgs<ExtArgs>
+    KPIEmployee?: boolean | Employee$KPIEmployeeArgs<ExtArgs>
     _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["employee"]>
 
@@ -2087,6 +2432,7 @@ export namespace Prisma {
     otherInfo?: boolean | Employee$otherInfoArgs<ExtArgs>
     LeaveRequest?: boolean | Employee$LeaveRequestArgs<ExtArgs>
     Attendance?: boolean | Employee$AttendanceArgs<ExtArgs>
+    KPIEmployee?: boolean | Employee$KPIEmployeeArgs<ExtArgs>
     _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EmployeeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2109,6 +2455,7 @@ export namespace Prisma {
       otherInfo: Prisma.$OtherInfoPayload<ExtArgs> | null
       LeaveRequest: Prisma.$LeaveRequestPayload<ExtArgs>[]
       Attendance: Prisma.$AttendancePayload<ExtArgs>[]
+      KPIEmployee: Prisma.$KPIEmployeePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2524,6 +2871,7 @@ export namespace Prisma {
     otherInfo<T extends Employee$otherInfoArgs<ExtArgs> = {}>(args?: Subset<T, Employee$otherInfoArgs<ExtArgs>>): Prisma__OtherInfoClient<$Result.GetResult<Prisma.$OtherInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     LeaveRequest<T extends Employee$LeaveRequestArgs<ExtArgs> = {}>(args?: Subset<T, Employee$LeaveRequestArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Attendance<T extends Employee$AttendanceArgs<ExtArgs> = {}>(args?: Subset<T, Employee$AttendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    KPIEmployee<T extends Employee$KPIEmployeeArgs<ExtArgs> = {}>(args?: Subset<T, Employee$KPIEmployeeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3160,6 +3508,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
+  }
+
+  /**
+   * Employee.KPIEmployee
+   */
+  export type Employee$KPIEmployeeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEmployee
+     */
+    select?: KPIEmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEmployee
+     */
+    omit?: KPIEmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEmployeeInclude<ExtArgs> | null
+    where?: KPIEmployeeWhereInput
+    orderBy?: KPIEmployeeOrderByWithRelationInput | KPIEmployeeOrderByWithRelationInput[]
+    cursor?: KPIEmployeeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: KPIEmployeeScalarFieldEnum | KPIEmployeeScalarFieldEnum[]
   }
 
   /**
@@ -12552,6 +12924,3391 @@ export namespace Prisma {
 
 
   /**
+   * Model KPI
+   */
+
+  export type AggregateKPI = {
+    _count: KPICountAggregateOutputType | null
+    _avg: KPIAvgAggregateOutputType | null
+    _sum: KPISumAggregateOutputType | null
+    _min: KPIMinAggregateOutputType | null
+    _max: KPIMaxAggregateOutputType | null
+  }
+
+  export type KPIAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type KPISumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type KPIMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    period: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type KPIMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    period: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type KPICountAggregateOutputType = {
+    id: number
+    name: number
+    period: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type KPIAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type KPISumAggregateInputType = {
+    id?: true
+  }
+
+  export type KPIMinAggregateInputType = {
+    id?: true
+    name?: true
+    period?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type KPIMaxAggregateInputType = {
+    id?: true
+    name?: true
+    period?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type KPICountAggregateInputType = {
+    id?: true
+    name?: true
+    period?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type KPIAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which KPI to aggregate.
+     */
+    where?: KPIWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KPIS to fetch.
+     */
+    orderBy?: KPIOrderByWithRelationInput | KPIOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: KPIWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KPIS from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KPIS.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned KPIS
+    **/
+    _count?: true | KPICountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: KPIAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: KPISumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: KPIMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: KPIMaxAggregateInputType
+  }
+
+  export type GetKPIAggregateType<T extends KPIAggregateArgs> = {
+        [P in keyof T & keyof AggregateKPI]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateKPI[P]>
+      : GetScalarType<T[P], AggregateKPI[P]>
+  }
+
+
+
+
+  export type KPIGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KPIWhereInput
+    orderBy?: KPIOrderByWithAggregationInput | KPIOrderByWithAggregationInput[]
+    by: KPIScalarFieldEnum[] | KPIScalarFieldEnum
+    having?: KPIScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: KPICountAggregateInputType | true
+    _avg?: KPIAvgAggregateInputType
+    _sum?: KPISumAggregateInputType
+    _min?: KPIMinAggregateInputType
+    _max?: KPIMaxAggregateInputType
+  }
+
+  export type KPIGroupByOutputType = {
+    id: number
+    name: string
+    period: string
+    createdAt: Date
+    updatedAt: Date
+    _count: KPICountAggregateOutputType | null
+    _avg: KPIAvgAggregateOutputType | null
+    _sum: KPISumAggregateOutputType | null
+    _min: KPIMinAggregateOutputType | null
+    _max: KPIMaxAggregateOutputType | null
+  }
+
+  type GetKPIGroupByPayload<T extends KPIGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<KPIGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof KPIGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], KPIGroupByOutputType[P]>
+            : GetScalarType<T[P], KPIGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type KPISelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    period?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    kpiEmployees?: boolean | KPI$kpiEmployeesArgs<ExtArgs>
+    _count?: boolean | KPICountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["kPI"]>
+
+  export type KPISelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    period?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["kPI"]>
+
+  export type KPISelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    period?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["kPI"]>
+
+  export type KPISelectScalar = {
+    id?: boolean
+    name?: boolean
+    period?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type KPIOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "period" | "createdAt" | "updatedAt", ExtArgs["result"]["kPI"]>
+  export type KPIInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    kpiEmployees?: boolean | KPI$kpiEmployeesArgs<ExtArgs>
+    _count?: boolean | KPICountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type KPIIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type KPIIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $KPIPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "KPI"
+    objects: {
+      kpiEmployees: Prisma.$KPIEmployeePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      period: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["kPI"]>
+    composites: {}
+  }
+
+  type KPIGetPayload<S extends boolean | null | undefined | KPIDefaultArgs> = $Result.GetResult<Prisma.$KPIPayload, S>
+
+  type KPICountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<KPIFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: KPICountAggregateInputType | true
+    }
+
+  export interface KPIDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['KPI'], meta: { name: 'KPI' } }
+    /**
+     * Find zero or one KPI that matches the filter.
+     * @param {KPIFindUniqueArgs} args - Arguments to find a KPI
+     * @example
+     * // Get one KPI
+     * const kPI = await prisma.kPI.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends KPIFindUniqueArgs>(args: SelectSubset<T, KPIFindUniqueArgs<ExtArgs>>): Prisma__KPIClient<$Result.GetResult<Prisma.$KPIPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one KPI that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {KPIFindUniqueOrThrowArgs} args - Arguments to find a KPI
+     * @example
+     * // Get one KPI
+     * const kPI = await prisma.kPI.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends KPIFindUniqueOrThrowArgs>(args: SelectSubset<T, KPIFindUniqueOrThrowArgs<ExtArgs>>): Prisma__KPIClient<$Result.GetResult<Prisma.$KPIPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first KPI that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIFindFirstArgs} args - Arguments to find a KPI
+     * @example
+     * // Get one KPI
+     * const kPI = await prisma.kPI.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends KPIFindFirstArgs>(args?: SelectSubset<T, KPIFindFirstArgs<ExtArgs>>): Prisma__KPIClient<$Result.GetResult<Prisma.$KPIPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first KPI that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIFindFirstOrThrowArgs} args - Arguments to find a KPI
+     * @example
+     * // Get one KPI
+     * const kPI = await prisma.kPI.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends KPIFindFirstOrThrowArgs>(args?: SelectSubset<T, KPIFindFirstOrThrowArgs<ExtArgs>>): Prisma__KPIClient<$Result.GetResult<Prisma.$KPIPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more KPIS that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all KPIS
+     * const kPIS = await prisma.kPI.findMany()
+     * 
+     * // Get first 10 KPIS
+     * const kPIS = await prisma.kPI.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const kPIWithIdOnly = await prisma.kPI.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends KPIFindManyArgs>(args?: SelectSubset<T, KPIFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KPIPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a KPI.
+     * @param {KPICreateArgs} args - Arguments to create a KPI.
+     * @example
+     * // Create one KPI
+     * const KPI = await prisma.kPI.create({
+     *   data: {
+     *     // ... data to create a KPI
+     *   }
+     * })
+     * 
+     */
+    create<T extends KPICreateArgs>(args: SelectSubset<T, KPICreateArgs<ExtArgs>>): Prisma__KPIClient<$Result.GetResult<Prisma.$KPIPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many KPIS.
+     * @param {KPICreateManyArgs} args - Arguments to create many KPIS.
+     * @example
+     * // Create many KPIS
+     * const kPI = await prisma.kPI.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends KPICreateManyArgs>(args?: SelectSubset<T, KPICreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many KPIS and returns the data saved in the database.
+     * @param {KPICreateManyAndReturnArgs} args - Arguments to create many KPIS.
+     * @example
+     * // Create many KPIS
+     * const kPI = await prisma.kPI.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many KPIS and only return the `id`
+     * const kPIWithIdOnly = await prisma.kPI.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends KPICreateManyAndReturnArgs>(args?: SelectSubset<T, KPICreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KPIPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a KPI.
+     * @param {KPIDeleteArgs} args - Arguments to delete one KPI.
+     * @example
+     * // Delete one KPI
+     * const KPI = await prisma.kPI.delete({
+     *   where: {
+     *     // ... filter to delete one KPI
+     *   }
+     * })
+     * 
+     */
+    delete<T extends KPIDeleteArgs>(args: SelectSubset<T, KPIDeleteArgs<ExtArgs>>): Prisma__KPIClient<$Result.GetResult<Prisma.$KPIPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one KPI.
+     * @param {KPIUpdateArgs} args - Arguments to update one KPI.
+     * @example
+     * // Update one KPI
+     * const kPI = await prisma.kPI.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends KPIUpdateArgs>(args: SelectSubset<T, KPIUpdateArgs<ExtArgs>>): Prisma__KPIClient<$Result.GetResult<Prisma.$KPIPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more KPIS.
+     * @param {KPIDeleteManyArgs} args - Arguments to filter KPIS to delete.
+     * @example
+     * // Delete a few KPIS
+     * const { count } = await prisma.kPI.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends KPIDeleteManyArgs>(args?: SelectSubset<T, KPIDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more KPIS.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many KPIS
+     * const kPI = await prisma.kPI.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends KPIUpdateManyArgs>(args: SelectSubset<T, KPIUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more KPIS and returns the data updated in the database.
+     * @param {KPIUpdateManyAndReturnArgs} args - Arguments to update many KPIS.
+     * @example
+     * // Update many KPIS
+     * const kPI = await prisma.kPI.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more KPIS and only return the `id`
+     * const kPIWithIdOnly = await prisma.kPI.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends KPIUpdateManyAndReturnArgs>(args: SelectSubset<T, KPIUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KPIPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one KPI.
+     * @param {KPIUpsertArgs} args - Arguments to update or create a KPI.
+     * @example
+     * // Update or create a KPI
+     * const kPI = await prisma.kPI.upsert({
+     *   create: {
+     *     // ... data to create a KPI
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the KPI we want to update
+     *   }
+     * })
+     */
+    upsert<T extends KPIUpsertArgs>(args: SelectSubset<T, KPIUpsertArgs<ExtArgs>>): Prisma__KPIClient<$Result.GetResult<Prisma.$KPIPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of KPIS.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPICountArgs} args - Arguments to filter KPIS to count.
+     * @example
+     * // Count the number of KPIS
+     * const count = await prisma.kPI.count({
+     *   where: {
+     *     // ... the filter for the KPIS we want to count
+     *   }
+     * })
+    **/
+    count<T extends KPICountArgs>(
+      args?: Subset<T, KPICountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], KPICountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a KPI.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends KPIAggregateArgs>(args: Subset<T, KPIAggregateArgs>): Prisma.PrismaPromise<GetKPIAggregateType<T>>
+
+    /**
+     * Group by KPI.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends KPIGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: KPIGroupByArgs['orderBy'] }
+        : { orderBy?: KPIGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, KPIGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetKPIGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the KPI model
+   */
+  readonly fields: KPIFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for KPI.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__KPIClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    kpiEmployees<T extends KPI$kpiEmployeesArgs<ExtArgs> = {}>(args?: Subset<T, KPI$kpiEmployeesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the KPI model
+   */
+  interface KPIFieldRefs {
+    readonly id: FieldRef<"KPI", 'Int'>
+    readonly name: FieldRef<"KPI", 'String'>
+    readonly period: FieldRef<"KPI", 'String'>
+    readonly createdAt: FieldRef<"KPI", 'DateTime'>
+    readonly updatedAt: FieldRef<"KPI", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * KPI findUnique
+   */
+  export type KPIFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPI
+     */
+    select?: KPISelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPI
+     */
+    omit?: KPIOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIInclude<ExtArgs> | null
+    /**
+     * Filter, which KPI to fetch.
+     */
+    where: KPIWhereUniqueInput
+  }
+
+  /**
+   * KPI findUniqueOrThrow
+   */
+  export type KPIFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPI
+     */
+    select?: KPISelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPI
+     */
+    omit?: KPIOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIInclude<ExtArgs> | null
+    /**
+     * Filter, which KPI to fetch.
+     */
+    where: KPIWhereUniqueInput
+  }
+
+  /**
+   * KPI findFirst
+   */
+  export type KPIFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPI
+     */
+    select?: KPISelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPI
+     */
+    omit?: KPIOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIInclude<ExtArgs> | null
+    /**
+     * Filter, which KPI to fetch.
+     */
+    where?: KPIWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KPIS to fetch.
+     */
+    orderBy?: KPIOrderByWithRelationInput | KPIOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for KPIS.
+     */
+    cursor?: KPIWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KPIS from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KPIS.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of KPIS.
+     */
+    distinct?: KPIScalarFieldEnum | KPIScalarFieldEnum[]
+  }
+
+  /**
+   * KPI findFirstOrThrow
+   */
+  export type KPIFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPI
+     */
+    select?: KPISelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPI
+     */
+    omit?: KPIOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIInclude<ExtArgs> | null
+    /**
+     * Filter, which KPI to fetch.
+     */
+    where?: KPIWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KPIS to fetch.
+     */
+    orderBy?: KPIOrderByWithRelationInput | KPIOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for KPIS.
+     */
+    cursor?: KPIWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KPIS from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KPIS.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of KPIS.
+     */
+    distinct?: KPIScalarFieldEnum | KPIScalarFieldEnum[]
+  }
+
+  /**
+   * KPI findMany
+   */
+  export type KPIFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPI
+     */
+    select?: KPISelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPI
+     */
+    omit?: KPIOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIInclude<ExtArgs> | null
+    /**
+     * Filter, which KPIS to fetch.
+     */
+    where?: KPIWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KPIS to fetch.
+     */
+    orderBy?: KPIOrderByWithRelationInput | KPIOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing KPIS.
+     */
+    cursor?: KPIWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KPIS from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KPIS.
+     */
+    skip?: number
+    distinct?: KPIScalarFieldEnum | KPIScalarFieldEnum[]
+  }
+
+  /**
+   * KPI create
+   */
+  export type KPICreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPI
+     */
+    select?: KPISelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPI
+     */
+    omit?: KPIOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIInclude<ExtArgs> | null
+    /**
+     * The data needed to create a KPI.
+     */
+    data: XOR<KPICreateInput, KPIUncheckedCreateInput>
+  }
+
+  /**
+   * KPI createMany
+   */
+  export type KPICreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many KPIS.
+     */
+    data: KPICreateManyInput | KPICreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * KPI createManyAndReturn
+   */
+  export type KPICreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPI
+     */
+    select?: KPISelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPI
+     */
+    omit?: KPIOmit<ExtArgs> | null
+    /**
+     * The data used to create many KPIS.
+     */
+    data: KPICreateManyInput | KPICreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * KPI update
+   */
+  export type KPIUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPI
+     */
+    select?: KPISelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPI
+     */
+    omit?: KPIOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIInclude<ExtArgs> | null
+    /**
+     * The data needed to update a KPI.
+     */
+    data: XOR<KPIUpdateInput, KPIUncheckedUpdateInput>
+    /**
+     * Choose, which KPI to update.
+     */
+    where: KPIWhereUniqueInput
+  }
+
+  /**
+   * KPI updateMany
+   */
+  export type KPIUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update KPIS.
+     */
+    data: XOR<KPIUpdateManyMutationInput, KPIUncheckedUpdateManyInput>
+    /**
+     * Filter which KPIS to update
+     */
+    where?: KPIWhereInput
+    /**
+     * Limit how many KPIS to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * KPI updateManyAndReturn
+   */
+  export type KPIUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPI
+     */
+    select?: KPISelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPI
+     */
+    omit?: KPIOmit<ExtArgs> | null
+    /**
+     * The data used to update KPIS.
+     */
+    data: XOR<KPIUpdateManyMutationInput, KPIUncheckedUpdateManyInput>
+    /**
+     * Filter which KPIS to update
+     */
+    where?: KPIWhereInput
+    /**
+     * Limit how many KPIS to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * KPI upsert
+   */
+  export type KPIUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPI
+     */
+    select?: KPISelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPI
+     */
+    omit?: KPIOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIInclude<ExtArgs> | null
+    /**
+     * The filter to search for the KPI to update in case it exists.
+     */
+    where: KPIWhereUniqueInput
+    /**
+     * In case the KPI found by the `where` argument doesn't exist, create a new KPI with this data.
+     */
+    create: XOR<KPICreateInput, KPIUncheckedCreateInput>
+    /**
+     * In case the KPI was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<KPIUpdateInput, KPIUncheckedUpdateInput>
+  }
+
+  /**
+   * KPI delete
+   */
+  export type KPIDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPI
+     */
+    select?: KPISelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPI
+     */
+    omit?: KPIOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIInclude<ExtArgs> | null
+    /**
+     * Filter which KPI to delete.
+     */
+    where: KPIWhereUniqueInput
+  }
+
+  /**
+   * KPI deleteMany
+   */
+  export type KPIDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which KPIS to delete
+     */
+    where?: KPIWhereInput
+    /**
+     * Limit how many KPIS to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * KPI.kpiEmployees
+   */
+  export type KPI$kpiEmployeesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEmployee
+     */
+    select?: KPIEmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEmployee
+     */
+    omit?: KPIEmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEmployeeInclude<ExtArgs> | null
+    where?: KPIEmployeeWhereInput
+    orderBy?: KPIEmployeeOrderByWithRelationInput | KPIEmployeeOrderByWithRelationInput[]
+    cursor?: KPIEmployeeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: KPIEmployeeScalarFieldEnum | KPIEmployeeScalarFieldEnum[]
+  }
+
+  /**
+   * KPI without action
+   */
+  export type KPIDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPI
+     */
+    select?: KPISelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPI
+     */
+    omit?: KPIOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model KPIEmployee
+   */
+
+  export type AggregateKPIEmployee = {
+    _count: KPIEmployeeCountAggregateOutputType | null
+    _avg: KPIEmployeeAvgAggregateOutputType | null
+    _sum: KPIEmployeeSumAggregateOutputType | null
+    _min: KPIEmployeeMinAggregateOutputType | null
+    _max: KPIEmployeeMaxAggregateOutputType | null
+  }
+
+  export type KPIEmployeeAvgAggregateOutputType = {
+    id: number | null
+    kpiId: number | null
+    employeeId: number | null
+  }
+
+  export type KPIEmployeeSumAggregateOutputType = {
+    id: number | null
+    kpiId: number | null
+    employeeId: number | null
+  }
+
+  export type KPIEmployeeMinAggregateOutputType = {
+    id: number | null
+    kpiId: number | null
+    employeeId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type KPIEmployeeMaxAggregateOutputType = {
+    id: number | null
+    kpiId: number | null
+    employeeId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type KPIEmployeeCountAggregateOutputType = {
+    id: number
+    kpiId: number
+    employeeId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type KPIEmployeeAvgAggregateInputType = {
+    id?: true
+    kpiId?: true
+    employeeId?: true
+  }
+
+  export type KPIEmployeeSumAggregateInputType = {
+    id?: true
+    kpiId?: true
+    employeeId?: true
+  }
+
+  export type KPIEmployeeMinAggregateInputType = {
+    id?: true
+    kpiId?: true
+    employeeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type KPIEmployeeMaxAggregateInputType = {
+    id?: true
+    kpiId?: true
+    employeeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type KPIEmployeeCountAggregateInputType = {
+    id?: true
+    kpiId?: true
+    employeeId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type KPIEmployeeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which KPIEmployee to aggregate.
+     */
+    where?: KPIEmployeeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KPIEmployees to fetch.
+     */
+    orderBy?: KPIEmployeeOrderByWithRelationInput | KPIEmployeeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: KPIEmployeeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KPIEmployees from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KPIEmployees.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned KPIEmployees
+    **/
+    _count?: true | KPIEmployeeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: KPIEmployeeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: KPIEmployeeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: KPIEmployeeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: KPIEmployeeMaxAggregateInputType
+  }
+
+  export type GetKPIEmployeeAggregateType<T extends KPIEmployeeAggregateArgs> = {
+        [P in keyof T & keyof AggregateKPIEmployee]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateKPIEmployee[P]>
+      : GetScalarType<T[P], AggregateKPIEmployee[P]>
+  }
+
+
+
+
+  export type KPIEmployeeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KPIEmployeeWhereInput
+    orderBy?: KPIEmployeeOrderByWithAggregationInput | KPIEmployeeOrderByWithAggregationInput[]
+    by: KPIEmployeeScalarFieldEnum[] | KPIEmployeeScalarFieldEnum
+    having?: KPIEmployeeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: KPIEmployeeCountAggregateInputType | true
+    _avg?: KPIEmployeeAvgAggregateInputType
+    _sum?: KPIEmployeeSumAggregateInputType
+    _min?: KPIEmployeeMinAggregateInputType
+    _max?: KPIEmployeeMaxAggregateInputType
+  }
+
+  export type KPIEmployeeGroupByOutputType = {
+    id: number
+    kpiId: number
+    employeeId: number
+    createdAt: Date
+    updatedAt: Date
+    _count: KPIEmployeeCountAggregateOutputType | null
+    _avg: KPIEmployeeAvgAggregateOutputType | null
+    _sum: KPIEmployeeSumAggregateOutputType | null
+    _min: KPIEmployeeMinAggregateOutputType | null
+    _max: KPIEmployeeMaxAggregateOutputType | null
+  }
+
+  type GetKPIEmployeeGroupByPayload<T extends KPIEmployeeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<KPIEmployeeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof KPIEmployeeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], KPIEmployeeGroupByOutputType[P]>
+            : GetScalarType<T[P], KPIEmployeeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type KPIEmployeeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    kpiId?: boolean
+    employeeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    kpi?: boolean | KPIDefaultArgs<ExtArgs>
+    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    entries?: boolean | KPIEmployee$entriesArgs<ExtArgs>
+    _count?: boolean | KPIEmployeeCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["kPIEmployee"]>
+
+  export type KPIEmployeeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    kpiId?: boolean
+    employeeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    kpi?: boolean | KPIDefaultArgs<ExtArgs>
+    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["kPIEmployee"]>
+
+  export type KPIEmployeeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    kpiId?: boolean
+    employeeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    kpi?: boolean | KPIDefaultArgs<ExtArgs>
+    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["kPIEmployee"]>
+
+  export type KPIEmployeeSelectScalar = {
+    id?: boolean
+    kpiId?: boolean
+    employeeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type KPIEmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "kpiId" | "employeeId" | "createdAt" | "updatedAt", ExtArgs["result"]["kPIEmployee"]>
+  export type KPIEmployeeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    kpi?: boolean | KPIDefaultArgs<ExtArgs>
+    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    entries?: boolean | KPIEmployee$entriesArgs<ExtArgs>
+    _count?: boolean | KPIEmployeeCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type KPIEmployeeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    kpi?: boolean | KPIDefaultArgs<ExtArgs>
+    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+  }
+  export type KPIEmployeeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    kpi?: boolean | KPIDefaultArgs<ExtArgs>
+    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+  }
+
+  export type $KPIEmployeePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "KPIEmployee"
+    objects: {
+      kpi: Prisma.$KPIPayload<ExtArgs>
+      employee: Prisma.$EmployeePayload<ExtArgs>
+      entries: Prisma.$KPIEntryPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      kpiId: number
+      employeeId: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["kPIEmployee"]>
+    composites: {}
+  }
+
+  type KPIEmployeeGetPayload<S extends boolean | null | undefined | KPIEmployeeDefaultArgs> = $Result.GetResult<Prisma.$KPIEmployeePayload, S>
+
+  type KPIEmployeeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<KPIEmployeeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: KPIEmployeeCountAggregateInputType | true
+    }
+
+  export interface KPIEmployeeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['KPIEmployee'], meta: { name: 'KPIEmployee' } }
+    /**
+     * Find zero or one KPIEmployee that matches the filter.
+     * @param {KPIEmployeeFindUniqueArgs} args - Arguments to find a KPIEmployee
+     * @example
+     * // Get one KPIEmployee
+     * const kPIEmployee = await prisma.kPIEmployee.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends KPIEmployeeFindUniqueArgs>(args: SelectSubset<T, KPIEmployeeFindUniqueArgs<ExtArgs>>): Prisma__KPIEmployeeClient<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one KPIEmployee that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {KPIEmployeeFindUniqueOrThrowArgs} args - Arguments to find a KPIEmployee
+     * @example
+     * // Get one KPIEmployee
+     * const kPIEmployee = await prisma.kPIEmployee.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends KPIEmployeeFindUniqueOrThrowArgs>(args: SelectSubset<T, KPIEmployeeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__KPIEmployeeClient<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first KPIEmployee that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIEmployeeFindFirstArgs} args - Arguments to find a KPIEmployee
+     * @example
+     * // Get one KPIEmployee
+     * const kPIEmployee = await prisma.kPIEmployee.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends KPIEmployeeFindFirstArgs>(args?: SelectSubset<T, KPIEmployeeFindFirstArgs<ExtArgs>>): Prisma__KPIEmployeeClient<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first KPIEmployee that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIEmployeeFindFirstOrThrowArgs} args - Arguments to find a KPIEmployee
+     * @example
+     * // Get one KPIEmployee
+     * const kPIEmployee = await prisma.kPIEmployee.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends KPIEmployeeFindFirstOrThrowArgs>(args?: SelectSubset<T, KPIEmployeeFindFirstOrThrowArgs<ExtArgs>>): Prisma__KPIEmployeeClient<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more KPIEmployees that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIEmployeeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all KPIEmployees
+     * const kPIEmployees = await prisma.kPIEmployee.findMany()
+     * 
+     * // Get first 10 KPIEmployees
+     * const kPIEmployees = await prisma.kPIEmployee.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const kPIEmployeeWithIdOnly = await prisma.kPIEmployee.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends KPIEmployeeFindManyArgs>(args?: SelectSubset<T, KPIEmployeeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a KPIEmployee.
+     * @param {KPIEmployeeCreateArgs} args - Arguments to create a KPIEmployee.
+     * @example
+     * // Create one KPIEmployee
+     * const KPIEmployee = await prisma.kPIEmployee.create({
+     *   data: {
+     *     // ... data to create a KPIEmployee
+     *   }
+     * })
+     * 
+     */
+    create<T extends KPIEmployeeCreateArgs>(args: SelectSubset<T, KPIEmployeeCreateArgs<ExtArgs>>): Prisma__KPIEmployeeClient<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many KPIEmployees.
+     * @param {KPIEmployeeCreateManyArgs} args - Arguments to create many KPIEmployees.
+     * @example
+     * // Create many KPIEmployees
+     * const kPIEmployee = await prisma.kPIEmployee.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends KPIEmployeeCreateManyArgs>(args?: SelectSubset<T, KPIEmployeeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many KPIEmployees and returns the data saved in the database.
+     * @param {KPIEmployeeCreateManyAndReturnArgs} args - Arguments to create many KPIEmployees.
+     * @example
+     * // Create many KPIEmployees
+     * const kPIEmployee = await prisma.kPIEmployee.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many KPIEmployees and only return the `id`
+     * const kPIEmployeeWithIdOnly = await prisma.kPIEmployee.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends KPIEmployeeCreateManyAndReturnArgs>(args?: SelectSubset<T, KPIEmployeeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a KPIEmployee.
+     * @param {KPIEmployeeDeleteArgs} args - Arguments to delete one KPIEmployee.
+     * @example
+     * // Delete one KPIEmployee
+     * const KPIEmployee = await prisma.kPIEmployee.delete({
+     *   where: {
+     *     // ... filter to delete one KPIEmployee
+     *   }
+     * })
+     * 
+     */
+    delete<T extends KPIEmployeeDeleteArgs>(args: SelectSubset<T, KPIEmployeeDeleteArgs<ExtArgs>>): Prisma__KPIEmployeeClient<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one KPIEmployee.
+     * @param {KPIEmployeeUpdateArgs} args - Arguments to update one KPIEmployee.
+     * @example
+     * // Update one KPIEmployee
+     * const kPIEmployee = await prisma.kPIEmployee.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends KPIEmployeeUpdateArgs>(args: SelectSubset<T, KPIEmployeeUpdateArgs<ExtArgs>>): Prisma__KPIEmployeeClient<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more KPIEmployees.
+     * @param {KPIEmployeeDeleteManyArgs} args - Arguments to filter KPIEmployees to delete.
+     * @example
+     * // Delete a few KPIEmployees
+     * const { count } = await prisma.kPIEmployee.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends KPIEmployeeDeleteManyArgs>(args?: SelectSubset<T, KPIEmployeeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more KPIEmployees.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIEmployeeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many KPIEmployees
+     * const kPIEmployee = await prisma.kPIEmployee.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends KPIEmployeeUpdateManyArgs>(args: SelectSubset<T, KPIEmployeeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more KPIEmployees and returns the data updated in the database.
+     * @param {KPIEmployeeUpdateManyAndReturnArgs} args - Arguments to update many KPIEmployees.
+     * @example
+     * // Update many KPIEmployees
+     * const kPIEmployee = await prisma.kPIEmployee.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more KPIEmployees and only return the `id`
+     * const kPIEmployeeWithIdOnly = await prisma.kPIEmployee.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends KPIEmployeeUpdateManyAndReturnArgs>(args: SelectSubset<T, KPIEmployeeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one KPIEmployee.
+     * @param {KPIEmployeeUpsertArgs} args - Arguments to update or create a KPIEmployee.
+     * @example
+     * // Update or create a KPIEmployee
+     * const kPIEmployee = await prisma.kPIEmployee.upsert({
+     *   create: {
+     *     // ... data to create a KPIEmployee
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the KPIEmployee we want to update
+     *   }
+     * })
+     */
+    upsert<T extends KPIEmployeeUpsertArgs>(args: SelectSubset<T, KPIEmployeeUpsertArgs<ExtArgs>>): Prisma__KPIEmployeeClient<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of KPIEmployees.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIEmployeeCountArgs} args - Arguments to filter KPIEmployees to count.
+     * @example
+     * // Count the number of KPIEmployees
+     * const count = await prisma.kPIEmployee.count({
+     *   where: {
+     *     // ... the filter for the KPIEmployees we want to count
+     *   }
+     * })
+    **/
+    count<T extends KPIEmployeeCountArgs>(
+      args?: Subset<T, KPIEmployeeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], KPIEmployeeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a KPIEmployee.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIEmployeeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends KPIEmployeeAggregateArgs>(args: Subset<T, KPIEmployeeAggregateArgs>): Prisma.PrismaPromise<GetKPIEmployeeAggregateType<T>>
+
+    /**
+     * Group by KPIEmployee.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIEmployeeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends KPIEmployeeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: KPIEmployeeGroupByArgs['orderBy'] }
+        : { orderBy?: KPIEmployeeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, KPIEmployeeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetKPIEmployeeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the KPIEmployee model
+   */
+  readonly fields: KPIEmployeeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for KPIEmployee.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__KPIEmployeeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    kpi<T extends KPIDefaultArgs<ExtArgs> = {}>(args?: Subset<T, KPIDefaultArgs<ExtArgs>>): Prisma__KPIClient<$Result.GetResult<Prisma.$KPIPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    entries<T extends KPIEmployee$entriesArgs<ExtArgs> = {}>(args?: Subset<T, KPIEmployee$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KPIEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the KPIEmployee model
+   */
+  interface KPIEmployeeFieldRefs {
+    readonly id: FieldRef<"KPIEmployee", 'Int'>
+    readonly kpiId: FieldRef<"KPIEmployee", 'Int'>
+    readonly employeeId: FieldRef<"KPIEmployee", 'Int'>
+    readonly createdAt: FieldRef<"KPIEmployee", 'DateTime'>
+    readonly updatedAt: FieldRef<"KPIEmployee", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * KPIEmployee findUnique
+   */
+  export type KPIEmployeeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEmployee
+     */
+    select?: KPIEmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEmployee
+     */
+    omit?: KPIEmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEmployeeInclude<ExtArgs> | null
+    /**
+     * Filter, which KPIEmployee to fetch.
+     */
+    where: KPIEmployeeWhereUniqueInput
+  }
+
+  /**
+   * KPIEmployee findUniqueOrThrow
+   */
+  export type KPIEmployeeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEmployee
+     */
+    select?: KPIEmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEmployee
+     */
+    omit?: KPIEmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEmployeeInclude<ExtArgs> | null
+    /**
+     * Filter, which KPIEmployee to fetch.
+     */
+    where: KPIEmployeeWhereUniqueInput
+  }
+
+  /**
+   * KPIEmployee findFirst
+   */
+  export type KPIEmployeeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEmployee
+     */
+    select?: KPIEmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEmployee
+     */
+    omit?: KPIEmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEmployeeInclude<ExtArgs> | null
+    /**
+     * Filter, which KPIEmployee to fetch.
+     */
+    where?: KPIEmployeeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KPIEmployees to fetch.
+     */
+    orderBy?: KPIEmployeeOrderByWithRelationInput | KPIEmployeeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for KPIEmployees.
+     */
+    cursor?: KPIEmployeeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KPIEmployees from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KPIEmployees.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of KPIEmployees.
+     */
+    distinct?: KPIEmployeeScalarFieldEnum | KPIEmployeeScalarFieldEnum[]
+  }
+
+  /**
+   * KPIEmployee findFirstOrThrow
+   */
+  export type KPIEmployeeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEmployee
+     */
+    select?: KPIEmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEmployee
+     */
+    omit?: KPIEmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEmployeeInclude<ExtArgs> | null
+    /**
+     * Filter, which KPIEmployee to fetch.
+     */
+    where?: KPIEmployeeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KPIEmployees to fetch.
+     */
+    orderBy?: KPIEmployeeOrderByWithRelationInput | KPIEmployeeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for KPIEmployees.
+     */
+    cursor?: KPIEmployeeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KPIEmployees from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KPIEmployees.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of KPIEmployees.
+     */
+    distinct?: KPIEmployeeScalarFieldEnum | KPIEmployeeScalarFieldEnum[]
+  }
+
+  /**
+   * KPIEmployee findMany
+   */
+  export type KPIEmployeeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEmployee
+     */
+    select?: KPIEmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEmployee
+     */
+    omit?: KPIEmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEmployeeInclude<ExtArgs> | null
+    /**
+     * Filter, which KPIEmployees to fetch.
+     */
+    where?: KPIEmployeeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KPIEmployees to fetch.
+     */
+    orderBy?: KPIEmployeeOrderByWithRelationInput | KPIEmployeeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing KPIEmployees.
+     */
+    cursor?: KPIEmployeeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KPIEmployees from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KPIEmployees.
+     */
+    skip?: number
+    distinct?: KPIEmployeeScalarFieldEnum | KPIEmployeeScalarFieldEnum[]
+  }
+
+  /**
+   * KPIEmployee create
+   */
+  export type KPIEmployeeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEmployee
+     */
+    select?: KPIEmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEmployee
+     */
+    omit?: KPIEmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEmployeeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a KPIEmployee.
+     */
+    data: XOR<KPIEmployeeCreateInput, KPIEmployeeUncheckedCreateInput>
+  }
+
+  /**
+   * KPIEmployee createMany
+   */
+  export type KPIEmployeeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many KPIEmployees.
+     */
+    data: KPIEmployeeCreateManyInput | KPIEmployeeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * KPIEmployee createManyAndReturn
+   */
+  export type KPIEmployeeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEmployee
+     */
+    select?: KPIEmployeeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEmployee
+     */
+    omit?: KPIEmployeeOmit<ExtArgs> | null
+    /**
+     * The data used to create many KPIEmployees.
+     */
+    data: KPIEmployeeCreateManyInput | KPIEmployeeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEmployeeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * KPIEmployee update
+   */
+  export type KPIEmployeeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEmployee
+     */
+    select?: KPIEmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEmployee
+     */
+    omit?: KPIEmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEmployeeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a KPIEmployee.
+     */
+    data: XOR<KPIEmployeeUpdateInput, KPIEmployeeUncheckedUpdateInput>
+    /**
+     * Choose, which KPIEmployee to update.
+     */
+    where: KPIEmployeeWhereUniqueInput
+  }
+
+  /**
+   * KPIEmployee updateMany
+   */
+  export type KPIEmployeeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update KPIEmployees.
+     */
+    data: XOR<KPIEmployeeUpdateManyMutationInput, KPIEmployeeUncheckedUpdateManyInput>
+    /**
+     * Filter which KPIEmployees to update
+     */
+    where?: KPIEmployeeWhereInput
+    /**
+     * Limit how many KPIEmployees to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * KPIEmployee updateManyAndReturn
+   */
+  export type KPIEmployeeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEmployee
+     */
+    select?: KPIEmployeeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEmployee
+     */
+    omit?: KPIEmployeeOmit<ExtArgs> | null
+    /**
+     * The data used to update KPIEmployees.
+     */
+    data: XOR<KPIEmployeeUpdateManyMutationInput, KPIEmployeeUncheckedUpdateManyInput>
+    /**
+     * Filter which KPIEmployees to update
+     */
+    where?: KPIEmployeeWhereInput
+    /**
+     * Limit how many KPIEmployees to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEmployeeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * KPIEmployee upsert
+   */
+  export type KPIEmployeeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEmployee
+     */
+    select?: KPIEmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEmployee
+     */
+    omit?: KPIEmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEmployeeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the KPIEmployee to update in case it exists.
+     */
+    where: KPIEmployeeWhereUniqueInput
+    /**
+     * In case the KPIEmployee found by the `where` argument doesn't exist, create a new KPIEmployee with this data.
+     */
+    create: XOR<KPIEmployeeCreateInput, KPIEmployeeUncheckedCreateInput>
+    /**
+     * In case the KPIEmployee was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<KPIEmployeeUpdateInput, KPIEmployeeUncheckedUpdateInput>
+  }
+
+  /**
+   * KPIEmployee delete
+   */
+  export type KPIEmployeeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEmployee
+     */
+    select?: KPIEmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEmployee
+     */
+    omit?: KPIEmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEmployeeInclude<ExtArgs> | null
+    /**
+     * Filter which KPIEmployee to delete.
+     */
+    where: KPIEmployeeWhereUniqueInput
+  }
+
+  /**
+   * KPIEmployee deleteMany
+   */
+  export type KPIEmployeeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which KPIEmployees to delete
+     */
+    where?: KPIEmployeeWhereInput
+    /**
+     * Limit how many KPIEmployees to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * KPIEmployee.entries
+   */
+  export type KPIEmployee$entriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEntry
+     */
+    select?: KPIEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEntry
+     */
+    omit?: KPIEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEntryInclude<ExtArgs> | null
+    where?: KPIEntryWhereInput
+    orderBy?: KPIEntryOrderByWithRelationInput | KPIEntryOrderByWithRelationInput[]
+    cursor?: KPIEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: KPIEntryScalarFieldEnum | KPIEntryScalarFieldEnum[]
+  }
+
+  /**
+   * KPIEmployee without action
+   */
+  export type KPIEmployeeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEmployee
+     */
+    select?: KPIEmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEmployee
+     */
+    omit?: KPIEmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEmployeeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model KPIEntry
+   */
+
+  export type AggregateKPIEntry = {
+    _count: KPIEntryCountAggregateOutputType | null
+    _avg: KPIEntryAvgAggregateOutputType | null
+    _sum: KPIEntrySumAggregateOutputType | null
+    _min: KPIEntryMinAggregateOutputType | null
+    _max: KPIEntryMaxAggregateOutputType | null
+  }
+
+  export type KPIEntryAvgAggregateOutputType = {
+    id: number | null
+    kpiEmployeeId: number | null
+    targetValue: number | null
+    achievedValue: number | null
+  }
+
+  export type KPIEntrySumAggregateOutputType = {
+    id: number | null
+    kpiEmployeeId: number | null
+    targetValue: number | null
+    achievedValue: number | null
+  }
+
+  export type KPIEntryMinAggregateOutputType = {
+    id: number | null
+    kpiEmployeeId: number | null
+    name: string | null
+    targetValue: number | null
+    achievedValue: number | null
+    isAchieved: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type KPIEntryMaxAggregateOutputType = {
+    id: number | null
+    kpiEmployeeId: number | null
+    name: string | null
+    targetValue: number | null
+    achievedValue: number | null
+    isAchieved: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type KPIEntryCountAggregateOutputType = {
+    id: number
+    kpiEmployeeId: number
+    name: number
+    targetValue: number
+    achievedValue: number
+    isAchieved: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type KPIEntryAvgAggregateInputType = {
+    id?: true
+    kpiEmployeeId?: true
+    targetValue?: true
+    achievedValue?: true
+  }
+
+  export type KPIEntrySumAggregateInputType = {
+    id?: true
+    kpiEmployeeId?: true
+    targetValue?: true
+    achievedValue?: true
+  }
+
+  export type KPIEntryMinAggregateInputType = {
+    id?: true
+    kpiEmployeeId?: true
+    name?: true
+    targetValue?: true
+    achievedValue?: true
+    isAchieved?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type KPIEntryMaxAggregateInputType = {
+    id?: true
+    kpiEmployeeId?: true
+    name?: true
+    targetValue?: true
+    achievedValue?: true
+    isAchieved?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type KPIEntryCountAggregateInputType = {
+    id?: true
+    kpiEmployeeId?: true
+    name?: true
+    targetValue?: true
+    achievedValue?: true
+    isAchieved?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type KPIEntryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which KPIEntry to aggregate.
+     */
+    where?: KPIEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KPIEntries to fetch.
+     */
+    orderBy?: KPIEntryOrderByWithRelationInput | KPIEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: KPIEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KPIEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KPIEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned KPIEntries
+    **/
+    _count?: true | KPIEntryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: KPIEntryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: KPIEntrySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: KPIEntryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: KPIEntryMaxAggregateInputType
+  }
+
+  export type GetKPIEntryAggregateType<T extends KPIEntryAggregateArgs> = {
+        [P in keyof T & keyof AggregateKPIEntry]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateKPIEntry[P]>
+      : GetScalarType<T[P], AggregateKPIEntry[P]>
+  }
+
+
+
+
+  export type KPIEntryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KPIEntryWhereInput
+    orderBy?: KPIEntryOrderByWithAggregationInput | KPIEntryOrderByWithAggregationInput[]
+    by: KPIEntryScalarFieldEnum[] | KPIEntryScalarFieldEnum
+    having?: KPIEntryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: KPIEntryCountAggregateInputType | true
+    _avg?: KPIEntryAvgAggregateInputType
+    _sum?: KPIEntrySumAggregateInputType
+    _min?: KPIEntryMinAggregateInputType
+    _max?: KPIEntryMaxAggregateInputType
+  }
+
+  export type KPIEntryGroupByOutputType = {
+    id: number
+    kpiEmployeeId: number
+    name: string
+    targetValue: number
+    achievedValue: number
+    isAchieved: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: KPIEntryCountAggregateOutputType | null
+    _avg: KPIEntryAvgAggregateOutputType | null
+    _sum: KPIEntrySumAggregateOutputType | null
+    _min: KPIEntryMinAggregateOutputType | null
+    _max: KPIEntryMaxAggregateOutputType | null
+  }
+
+  type GetKPIEntryGroupByPayload<T extends KPIEntryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<KPIEntryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof KPIEntryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], KPIEntryGroupByOutputType[P]>
+            : GetScalarType<T[P], KPIEntryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type KPIEntrySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    kpiEmployeeId?: boolean
+    name?: boolean
+    targetValue?: boolean
+    achievedValue?: boolean
+    isAchieved?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    kpiEmployee?: boolean | KPIEmployeeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["kPIEntry"]>
+
+  export type KPIEntrySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    kpiEmployeeId?: boolean
+    name?: boolean
+    targetValue?: boolean
+    achievedValue?: boolean
+    isAchieved?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    kpiEmployee?: boolean | KPIEmployeeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["kPIEntry"]>
+
+  export type KPIEntrySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    kpiEmployeeId?: boolean
+    name?: boolean
+    targetValue?: boolean
+    achievedValue?: boolean
+    isAchieved?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    kpiEmployee?: boolean | KPIEmployeeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["kPIEntry"]>
+
+  export type KPIEntrySelectScalar = {
+    id?: boolean
+    kpiEmployeeId?: boolean
+    name?: boolean
+    targetValue?: boolean
+    achievedValue?: boolean
+    isAchieved?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type KPIEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "kpiEmployeeId" | "name" | "targetValue" | "achievedValue" | "isAchieved" | "createdAt" | "updatedAt", ExtArgs["result"]["kPIEntry"]>
+  export type KPIEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    kpiEmployee?: boolean | KPIEmployeeDefaultArgs<ExtArgs>
+  }
+  export type KPIEntryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    kpiEmployee?: boolean | KPIEmployeeDefaultArgs<ExtArgs>
+  }
+  export type KPIEntryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    kpiEmployee?: boolean | KPIEmployeeDefaultArgs<ExtArgs>
+  }
+
+  export type $KPIEntryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "KPIEntry"
+    objects: {
+      kpiEmployee: Prisma.$KPIEmployeePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      kpiEmployeeId: number
+      name: string
+      targetValue: number
+      achievedValue: number
+      isAchieved: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["kPIEntry"]>
+    composites: {}
+  }
+
+  type KPIEntryGetPayload<S extends boolean | null | undefined | KPIEntryDefaultArgs> = $Result.GetResult<Prisma.$KPIEntryPayload, S>
+
+  type KPIEntryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<KPIEntryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: KPIEntryCountAggregateInputType | true
+    }
+
+  export interface KPIEntryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['KPIEntry'], meta: { name: 'KPIEntry' } }
+    /**
+     * Find zero or one KPIEntry that matches the filter.
+     * @param {KPIEntryFindUniqueArgs} args - Arguments to find a KPIEntry
+     * @example
+     * // Get one KPIEntry
+     * const kPIEntry = await prisma.kPIEntry.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends KPIEntryFindUniqueArgs>(args: SelectSubset<T, KPIEntryFindUniqueArgs<ExtArgs>>): Prisma__KPIEntryClient<$Result.GetResult<Prisma.$KPIEntryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one KPIEntry that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {KPIEntryFindUniqueOrThrowArgs} args - Arguments to find a KPIEntry
+     * @example
+     * // Get one KPIEntry
+     * const kPIEntry = await prisma.kPIEntry.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends KPIEntryFindUniqueOrThrowArgs>(args: SelectSubset<T, KPIEntryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__KPIEntryClient<$Result.GetResult<Prisma.$KPIEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first KPIEntry that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIEntryFindFirstArgs} args - Arguments to find a KPIEntry
+     * @example
+     * // Get one KPIEntry
+     * const kPIEntry = await prisma.kPIEntry.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends KPIEntryFindFirstArgs>(args?: SelectSubset<T, KPIEntryFindFirstArgs<ExtArgs>>): Prisma__KPIEntryClient<$Result.GetResult<Prisma.$KPIEntryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first KPIEntry that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIEntryFindFirstOrThrowArgs} args - Arguments to find a KPIEntry
+     * @example
+     * // Get one KPIEntry
+     * const kPIEntry = await prisma.kPIEntry.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends KPIEntryFindFirstOrThrowArgs>(args?: SelectSubset<T, KPIEntryFindFirstOrThrowArgs<ExtArgs>>): Prisma__KPIEntryClient<$Result.GetResult<Prisma.$KPIEntryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more KPIEntries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIEntryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all KPIEntries
+     * const kPIEntries = await prisma.kPIEntry.findMany()
+     * 
+     * // Get first 10 KPIEntries
+     * const kPIEntries = await prisma.kPIEntry.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const kPIEntryWithIdOnly = await prisma.kPIEntry.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends KPIEntryFindManyArgs>(args?: SelectSubset<T, KPIEntryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KPIEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a KPIEntry.
+     * @param {KPIEntryCreateArgs} args - Arguments to create a KPIEntry.
+     * @example
+     * // Create one KPIEntry
+     * const KPIEntry = await prisma.kPIEntry.create({
+     *   data: {
+     *     // ... data to create a KPIEntry
+     *   }
+     * })
+     * 
+     */
+    create<T extends KPIEntryCreateArgs>(args: SelectSubset<T, KPIEntryCreateArgs<ExtArgs>>): Prisma__KPIEntryClient<$Result.GetResult<Prisma.$KPIEntryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many KPIEntries.
+     * @param {KPIEntryCreateManyArgs} args - Arguments to create many KPIEntries.
+     * @example
+     * // Create many KPIEntries
+     * const kPIEntry = await prisma.kPIEntry.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends KPIEntryCreateManyArgs>(args?: SelectSubset<T, KPIEntryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many KPIEntries and returns the data saved in the database.
+     * @param {KPIEntryCreateManyAndReturnArgs} args - Arguments to create many KPIEntries.
+     * @example
+     * // Create many KPIEntries
+     * const kPIEntry = await prisma.kPIEntry.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many KPIEntries and only return the `id`
+     * const kPIEntryWithIdOnly = await prisma.kPIEntry.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends KPIEntryCreateManyAndReturnArgs>(args?: SelectSubset<T, KPIEntryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KPIEntryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a KPIEntry.
+     * @param {KPIEntryDeleteArgs} args - Arguments to delete one KPIEntry.
+     * @example
+     * // Delete one KPIEntry
+     * const KPIEntry = await prisma.kPIEntry.delete({
+     *   where: {
+     *     // ... filter to delete one KPIEntry
+     *   }
+     * })
+     * 
+     */
+    delete<T extends KPIEntryDeleteArgs>(args: SelectSubset<T, KPIEntryDeleteArgs<ExtArgs>>): Prisma__KPIEntryClient<$Result.GetResult<Prisma.$KPIEntryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one KPIEntry.
+     * @param {KPIEntryUpdateArgs} args - Arguments to update one KPIEntry.
+     * @example
+     * // Update one KPIEntry
+     * const kPIEntry = await prisma.kPIEntry.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends KPIEntryUpdateArgs>(args: SelectSubset<T, KPIEntryUpdateArgs<ExtArgs>>): Prisma__KPIEntryClient<$Result.GetResult<Prisma.$KPIEntryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more KPIEntries.
+     * @param {KPIEntryDeleteManyArgs} args - Arguments to filter KPIEntries to delete.
+     * @example
+     * // Delete a few KPIEntries
+     * const { count } = await prisma.kPIEntry.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends KPIEntryDeleteManyArgs>(args?: SelectSubset<T, KPIEntryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more KPIEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIEntryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many KPIEntries
+     * const kPIEntry = await prisma.kPIEntry.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends KPIEntryUpdateManyArgs>(args: SelectSubset<T, KPIEntryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more KPIEntries and returns the data updated in the database.
+     * @param {KPIEntryUpdateManyAndReturnArgs} args - Arguments to update many KPIEntries.
+     * @example
+     * // Update many KPIEntries
+     * const kPIEntry = await prisma.kPIEntry.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more KPIEntries and only return the `id`
+     * const kPIEntryWithIdOnly = await prisma.kPIEntry.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends KPIEntryUpdateManyAndReturnArgs>(args: SelectSubset<T, KPIEntryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KPIEntryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one KPIEntry.
+     * @param {KPIEntryUpsertArgs} args - Arguments to update or create a KPIEntry.
+     * @example
+     * // Update or create a KPIEntry
+     * const kPIEntry = await prisma.kPIEntry.upsert({
+     *   create: {
+     *     // ... data to create a KPIEntry
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the KPIEntry we want to update
+     *   }
+     * })
+     */
+    upsert<T extends KPIEntryUpsertArgs>(args: SelectSubset<T, KPIEntryUpsertArgs<ExtArgs>>): Prisma__KPIEntryClient<$Result.GetResult<Prisma.$KPIEntryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of KPIEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIEntryCountArgs} args - Arguments to filter KPIEntries to count.
+     * @example
+     * // Count the number of KPIEntries
+     * const count = await prisma.kPIEntry.count({
+     *   where: {
+     *     // ... the filter for the KPIEntries we want to count
+     *   }
+     * })
+    **/
+    count<T extends KPIEntryCountArgs>(
+      args?: Subset<T, KPIEntryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], KPIEntryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a KPIEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIEntryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends KPIEntryAggregateArgs>(args: Subset<T, KPIEntryAggregateArgs>): Prisma.PrismaPromise<GetKPIEntryAggregateType<T>>
+
+    /**
+     * Group by KPIEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KPIEntryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends KPIEntryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: KPIEntryGroupByArgs['orderBy'] }
+        : { orderBy?: KPIEntryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, KPIEntryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetKPIEntryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the KPIEntry model
+   */
+  readonly fields: KPIEntryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for KPIEntry.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__KPIEntryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    kpiEmployee<T extends KPIEmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, KPIEmployeeDefaultArgs<ExtArgs>>): Prisma__KPIEmployeeClient<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the KPIEntry model
+   */
+  interface KPIEntryFieldRefs {
+    readonly id: FieldRef<"KPIEntry", 'Int'>
+    readonly kpiEmployeeId: FieldRef<"KPIEntry", 'Int'>
+    readonly name: FieldRef<"KPIEntry", 'String'>
+    readonly targetValue: FieldRef<"KPIEntry", 'Float'>
+    readonly achievedValue: FieldRef<"KPIEntry", 'Float'>
+    readonly isAchieved: FieldRef<"KPIEntry", 'Boolean'>
+    readonly createdAt: FieldRef<"KPIEntry", 'DateTime'>
+    readonly updatedAt: FieldRef<"KPIEntry", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * KPIEntry findUnique
+   */
+  export type KPIEntryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEntry
+     */
+    select?: KPIEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEntry
+     */
+    omit?: KPIEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which KPIEntry to fetch.
+     */
+    where: KPIEntryWhereUniqueInput
+  }
+
+  /**
+   * KPIEntry findUniqueOrThrow
+   */
+  export type KPIEntryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEntry
+     */
+    select?: KPIEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEntry
+     */
+    omit?: KPIEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which KPIEntry to fetch.
+     */
+    where: KPIEntryWhereUniqueInput
+  }
+
+  /**
+   * KPIEntry findFirst
+   */
+  export type KPIEntryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEntry
+     */
+    select?: KPIEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEntry
+     */
+    omit?: KPIEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which KPIEntry to fetch.
+     */
+    where?: KPIEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KPIEntries to fetch.
+     */
+    orderBy?: KPIEntryOrderByWithRelationInput | KPIEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for KPIEntries.
+     */
+    cursor?: KPIEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KPIEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KPIEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of KPIEntries.
+     */
+    distinct?: KPIEntryScalarFieldEnum | KPIEntryScalarFieldEnum[]
+  }
+
+  /**
+   * KPIEntry findFirstOrThrow
+   */
+  export type KPIEntryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEntry
+     */
+    select?: KPIEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEntry
+     */
+    omit?: KPIEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which KPIEntry to fetch.
+     */
+    where?: KPIEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KPIEntries to fetch.
+     */
+    orderBy?: KPIEntryOrderByWithRelationInput | KPIEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for KPIEntries.
+     */
+    cursor?: KPIEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KPIEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KPIEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of KPIEntries.
+     */
+    distinct?: KPIEntryScalarFieldEnum | KPIEntryScalarFieldEnum[]
+  }
+
+  /**
+   * KPIEntry findMany
+   */
+  export type KPIEntryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEntry
+     */
+    select?: KPIEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEntry
+     */
+    omit?: KPIEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which KPIEntries to fetch.
+     */
+    where?: KPIEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of KPIEntries to fetch.
+     */
+    orderBy?: KPIEntryOrderByWithRelationInput | KPIEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing KPIEntries.
+     */
+    cursor?: KPIEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` KPIEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` KPIEntries.
+     */
+    skip?: number
+    distinct?: KPIEntryScalarFieldEnum | KPIEntryScalarFieldEnum[]
+  }
+
+  /**
+   * KPIEntry create
+   */
+  export type KPIEntryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEntry
+     */
+    select?: KPIEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEntry
+     */
+    omit?: KPIEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a KPIEntry.
+     */
+    data: XOR<KPIEntryCreateInput, KPIEntryUncheckedCreateInput>
+  }
+
+  /**
+   * KPIEntry createMany
+   */
+  export type KPIEntryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many KPIEntries.
+     */
+    data: KPIEntryCreateManyInput | KPIEntryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * KPIEntry createManyAndReturn
+   */
+  export type KPIEntryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEntry
+     */
+    select?: KPIEntrySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEntry
+     */
+    omit?: KPIEntryOmit<ExtArgs> | null
+    /**
+     * The data used to create many KPIEntries.
+     */
+    data: KPIEntryCreateManyInput | KPIEntryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEntryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * KPIEntry update
+   */
+  export type KPIEntryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEntry
+     */
+    select?: KPIEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEntry
+     */
+    omit?: KPIEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a KPIEntry.
+     */
+    data: XOR<KPIEntryUpdateInput, KPIEntryUncheckedUpdateInput>
+    /**
+     * Choose, which KPIEntry to update.
+     */
+    where: KPIEntryWhereUniqueInput
+  }
+
+  /**
+   * KPIEntry updateMany
+   */
+  export type KPIEntryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update KPIEntries.
+     */
+    data: XOR<KPIEntryUpdateManyMutationInput, KPIEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which KPIEntries to update
+     */
+    where?: KPIEntryWhereInput
+    /**
+     * Limit how many KPIEntries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * KPIEntry updateManyAndReturn
+   */
+  export type KPIEntryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEntry
+     */
+    select?: KPIEntrySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEntry
+     */
+    omit?: KPIEntryOmit<ExtArgs> | null
+    /**
+     * The data used to update KPIEntries.
+     */
+    data: XOR<KPIEntryUpdateManyMutationInput, KPIEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which KPIEntries to update
+     */
+    where?: KPIEntryWhereInput
+    /**
+     * Limit how many KPIEntries to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEntryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * KPIEntry upsert
+   */
+  export type KPIEntryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEntry
+     */
+    select?: KPIEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEntry
+     */
+    omit?: KPIEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEntryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the KPIEntry to update in case it exists.
+     */
+    where: KPIEntryWhereUniqueInput
+    /**
+     * In case the KPIEntry found by the `where` argument doesn't exist, create a new KPIEntry with this data.
+     */
+    create: XOR<KPIEntryCreateInput, KPIEntryUncheckedCreateInput>
+    /**
+     * In case the KPIEntry was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<KPIEntryUpdateInput, KPIEntryUncheckedUpdateInput>
+  }
+
+  /**
+   * KPIEntry delete
+   */
+  export type KPIEntryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEntry
+     */
+    select?: KPIEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEntry
+     */
+    omit?: KPIEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEntryInclude<ExtArgs> | null
+    /**
+     * Filter which KPIEntry to delete.
+     */
+    where: KPIEntryWhereUniqueInput
+  }
+
+  /**
+   * KPIEntry deleteMany
+   */
+  export type KPIEntryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which KPIEntries to delete
+     */
+    where?: KPIEntryWhereInput
+    /**
+     * Limit how many KPIEntries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * KPIEntry without action
+   */
+  export type KPIEntryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KPIEntry
+     */
+    select?: KPIEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KPIEntry
+     */
+    omit?: KPIEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: KPIEntryInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -12696,6 +16453,42 @@ export namespace Prisma {
   };
 
   export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
+
+
+  export const KPIScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    period: 'period',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type KPIScalarFieldEnum = (typeof KPIScalarFieldEnum)[keyof typeof KPIScalarFieldEnum]
+
+
+  export const KPIEmployeeScalarFieldEnum: {
+    id: 'id',
+    kpiId: 'kpiId',
+    employeeId: 'employeeId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type KPIEmployeeScalarFieldEnum = (typeof KPIEmployeeScalarFieldEnum)[keyof typeof KPIEmployeeScalarFieldEnum]
+
+
+  export const KPIEntryScalarFieldEnum: {
+    id: 'id',
+    kpiEmployeeId: 'kpiEmployeeId',
+    name: 'name',
+    targetValue: 'targetValue',
+    achievedValue: 'achievedValue',
+    isAchieved: 'isAchieved',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type KPIEntryScalarFieldEnum = (typeof KPIEntryScalarFieldEnum)[keyof typeof KPIEntryScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -12851,6 +16644,13 @@ export namespace Prisma {
    */
   export type ListEnumLeaveStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeaveStatus[]'>
     
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
   /**
    * Deep Input Types
    */
@@ -12879,6 +16679,7 @@ export namespace Prisma {
     otherInfo?: XOR<OtherInfoNullableScalarRelationFilter, OtherInfoWhereInput> | null
     LeaveRequest?: LeaveRequestListRelationFilter
     Attendance?: AttendanceListRelationFilter
+    KPIEmployee?: KPIEmployeeListRelationFilter
   }
 
   export type EmployeeOrderByWithRelationInput = {
@@ -12901,6 +16702,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoOrderByWithRelationInput
     LeaveRequest?: LeaveRequestOrderByRelationAggregateInput
     Attendance?: AttendanceOrderByRelationAggregateInput
+    KPIEmployee?: KPIEmployeeOrderByRelationAggregateInput
   }
 
   export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
@@ -12926,6 +16728,7 @@ export namespace Prisma {
     otherInfo?: XOR<OtherInfoNullableScalarRelationFilter, OtherInfoWhereInput> | null
     LeaveRequest?: LeaveRequestListRelationFilter
     Attendance?: AttendanceListRelationFilter
+    KPIEmployee?: KPIEmployeeListRelationFilter
   }, "id" | "employeeCode">
 
   export type EmployeeOrderByWithAggregationInput = {
@@ -13584,6 +17387,200 @@ export namespace Prisma {
     checkOutTime?: DateTimeNullableWithAggregatesFilter<"Attendance"> | Date | string | null
   }
 
+  export type KPIWhereInput = {
+    AND?: KPIWhereInput | KPIWhereInput[]
+    OR?: KPIWhereInput[]
+    NOT?: KPIWhereInput | KPIWhereInput[]
+    id?: IntFilter<"KPI"> | number
+    name?: StringFilter<"KPI"> | string
+    period?: StringFilter<"KPI"> | string
+    createdAt?: DateTimeFilter<"KPI"> | Date | string
+    updatedAt?: DateTimeFilter<"KPI"> | Date | string
+    kpiEmployees?: KPIEmployeeListRelationFilter
+  }
+
+  export type KPIOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    period?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    kpiEmployees?: KPIEmployeeOrderByRelationAggregateInput
+  }
+
+  export type KPIWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: KPIWhereInput | KPIWhereInput[]
+    OR?: KPIWhereInput[]
+    NOT?: KPIWhereInput | KPIWhereInput[]
+    name?: StringFilter<"KPI"> | string
+    period?: StringFilter<"KPI"> | string
+    createdAt?: DateTimeFilter<"KPI"> | Date | string
+    updatedAt?: DateTimeFilter<"KPI"> | Date | string
+    kpiEmployees?: KPIEmployeeListRelationFilter
+  }, "id">
+
+  export type KPIOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    period?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: KPICountOrderByAggregateInput
+    _avg?: KPIAvgOrderByAggregateInput
+    _max?: KPIMaxOrderByAggregateInput
+    _min?: KPIMinOrderByAggregateInput
+    _sum?: KPISumOrderByAggregateInput
+  }
+
+  export type KPIScalarWhereWithAggregatesInput = {
+    AND?: KPIScalarWhereWithAggregatesInput | KPIScalarWhereWithAggregatesInput[]
+    OR?: KPIScalarWhereWithAggregatesInput[]
+    NOT?: KPIScalarWhereWithAggregatesInput | KPIScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"KPI"> | number
+    name?: StringWithAggregatesFilter<"KPI"> | string
+    period?: StringWithAggregatesFilter<"KPI"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"KPI"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"KPI"> | Date | string
+  }
+
+  export type KPIEmployeeWhereInput = {
+    AND?: KPIEmployeeWhereInput | KPIEmployeeWhereInput[]
+    OR?: KPIEmployeeWhereInput[]
+    NOT?: KPIEmployeeWhereInput | KPIEmployeeWhereInput[]
+    id?: IntFilter<"KPIEmployee"> | number
+    kpiId?: IntFilter<"KPIEmployee"> | number
+    employeeId?: IntFilter<"KPIEmployee"> | number
+    createdAt?: DateTimeFilter<"KPIEmployee"> | Date | string
+    updatedAt?: DateTimeFilter<"KPIEmployee"> | Date | string
+    kpi?: XOR<KPIScalarRelationFilter, KPIWhereInput>
+    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    entries?: KPIEntryListRelationFilter
+  }
+
+  export type KPIEmployeeOrderByWithRelationInput = {
+    id?: SortOrder
+    kpiId?: SortOrder
+    employeeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    kpi?: KPIOrderByWithRelationInput
+    employee?: EmployeeOrderByWithRelationInput
+    entries?: KPIEntryOrderByRelationAggregateInput
+  }
+
+  export type KPIEmployeeWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    kpi_employee_unique?: KPIEmployeeKpi_employee_uniqueCompoundUniqueInput
+    AND?: KPIEmployeeWhereInput | KPIEmployeeWhereInput[]
+    OR?: KPIEmployeeWhereInput[]
+    NOT?: KPIEmployeeWhereInput | KPIEmployeeWhereInput[]
+    kpiId?: IntFilter<"KPIEmployee"> | number
+    employeeId?: IntFilter<"KPIEmployee"> | number
+    createdAt?: DateTimeFilter<"KPIEmployee"> | Date | string
+    updatedAt?: DateTimeFilter<"KPIEmployee"> | Date | string
+    kpi?: XOR<KPIScalarRelationFilter, KPIWhereInput>
+    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    entries?: KPIEntryListRelationFilter
+  }, "id" | "kpi_employee_unique">
+
+  export type KPIEmployeeOrderByWithAggregationInput = {
+    id?: SortOrder
+    kpiId?: SortOrder
+    employeeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: KPIEmployeeCountOrderByAggregateInput
+    _avg?: KPIEmployeeAvgOrderByAggregateInput
+    _max?: KPIEmployeeMaxOrderByAggregateInput
+    _min?: KPIEmployeeMinOrderByAggregateInput
+    _sum?: KPIEmployeeSumOrderByAggregateInput
+  }
+
+  export type KPIEmployeeScalarWhereWithAggregatesInput = {
+    AND?: KPIEmployeeScalarWhereWithAggregatesInput | KPIEmployeeScalarWhereWithAggregatesInput[]
+    OR?: KPIEmployeeScalarWhereWithAggregatesInput[]
+    NOT?: KPIEmployeeScalarWhereWithAggregatesInput | KPIEmployeeScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"KPIEmployee"> | number
+    kpiId?: IntWithAggregatesFilter<"KPIEmployee"> | number
+    employeeId?: IntWithAggregatesFilter<"KPIEmployee"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"KPIEmployee"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"KPIEmployee"> | Date | string
+  }
+
+  export type KPIEntryWhereInput = {
+    AND?: KPIEntryWhereInput | KPIEntryWhereInput[]
+    OR?: KPIEntryWhereInput[]
+    NOT?: KPIEntryWhereInput | KPIEntryWhereInput[]
+    id?: IntFilter<"KPIEntry"> | number
+    kpiEmployeeId?: IntFilter<"KPIEntry"> | number
+    name?: StringFilter<"KPIEntry"> | string
+    targetValue?: FloatFilter<"KPIEntry"> | number
+    achievedValue?: FloatFilter<"KPIEntry"> | number
+    isAchieved?: BoolFilter<"KPIEntry"> | boolean
+    createdAt?: DateTimeFilter<"KPIEntry"> | Date | string
+    updatedAt?: DateTimeFilter<"KPIEntry"> | Date | string
+    kpiEmployee?: XOR<KPIEmployeeScalarRelationFilter, KPIEmployeeWhereInput>
+  }
+
+  export type KPIEntryOrderByWithRelationInput = {
+    id?: SortOrder
+    kpiEmployeeId?: SortOrder
+    name?: SortOrder
+    targetValue?: SortOrder
+    achievedValue?: SortOrder
+    isAchieved?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    kpiEmployee?: KPIEmployeeOrderByWithRelationInput
+  }
+
+  export type KPIEntryWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    kpi_entry_unique?: KPIEntryKpi_entry_uniqueCompoundUniqueInput
+    AND?: KPIEntryWhereInput | KPIEntryWhereInput[]
+    OR?: KPIEntryWhereInput[]
+    NOT?: KPIEntryWhereInput | KPIEntryWhereInput[]
+    kpiEmployeeId?: IntFilter<"KPIEntry"> | number
+    name?: StringFilter<"KPIEntry"> | string
+    targetValue?: FloatFilter<"KPIEntry"> | number
+    achievedValue?: FloatFilter<"KPIEntry"> | number
+    isAchieved?: BoolFilter<"KPIEntry"> | boolean
+    createdAt?: DateTimeFilter<"KPIEntry"> | Date | string
+    updatedAt?: DateTimeFilter<"KPIEntry"> | Date | string
+    kpiEmployee?: XOR<KPIEmployeeScalarRelationFilter, KPIEmployeeWhereInput>
+  }, "id" | "kpi_entry_unique">
+
+  export type KPIEntryOrderByWithAggregationInput = {
+    id?: SortOrder
+    kpiEmployeeId?: SortOrder
+    name?: SortOrder
+    targetValue?: SortOrder
+    achievedValue?: SortOrder
+    isAchieved?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: KPIEntryCountOrderByAggregateInput
+    _avg?: KPIEntryAvgOrderByAggregateInput
+    _max?: KPIEntryMaxOrderByAggregateInput
+    _min?: KPIEntryMinOrderByAggregateInput
+    _sum?: KPIEntrySumOrderByAggregateInput
+  }
+
+  export type KPIEntryScalarWhereWithAggregatesInput = {
+    AND?: KPIEntryScalarWhereWithAggregatesInput | KPIEntryScalarWhereWithAggregatesInput[]
+    OR?: KPIEntryScalarWhereWithAggregatesInput[]
+    NOT?: KPIEntryScalarWhereWithAggregatesInput | KPIEntryScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"KPIEntry"> | number
+    kpiEmployeeId?: IntWithAggregatesFilter<"KPIEntry"> | number
+    name?: StringWithAggregatesFilter<"KPIEntry"> | string
+    targetValue?: FloatWithAggregatesFilter<"KPIEntry"> | number
+    achievedValue?: FloatWithAggregatesFilter<"KPIEntry"> | number
+    isAchieved?: BoolWithAggregatesFilter<"KPIEntry"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"KPIEntry"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"KPIEntry"> | Date | string
+  }
+
   export type EmployeeCreateInput = {
     employeeCode: string
     name: string
@@ -13602,6 +17599,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateInput = {
@@ -13623,6 +17621,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUpdateInput = {
@@ -13643,6 +17642,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateInput = {
@@ -13664,6 +17664,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeCreateManyInput = {
@@ -14335,6 +18336,191 @@ export namespace Prisma {
     checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type KPICreateInput = {
+    name: string
+    period: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    kpiEmployees?: KPIEmployeeCreateNestedManyWithoutKpiInput
+  }
+
+  export type KPIUncheckedCreateInput = {
+    id?: number
+    name: string
+    period: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    kpiEmployees?: KPIEmployeeUncheckedCreateNestedManyWithoutKpiInput
+  }
+
+  export type KPIUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    kpiEmployees?: KPIEmployeeUpdateManyWithoutKpiNestedInput
+  }
+
+  export type KPIUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    kpiEmployees?: KPIEmployeeUncheckedUpdateManyWithoutKpiNestedInput
+  }
+
+  export type KPICreateManyInput = {
+    id?: number
+    name: string
+    period: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KPIUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KPIUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KPIEmployeeCreateInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    kpi: KPICreateNestedOneWithoutKpiEmployeesInput
+    employee: EmployeeCreateNestedOneWithoutKPIEmployeeInput
+    entries?: KPIEntryCreateNestedManyWithoutKpiEmployeeInput
+  }
+
+  export type KPIEmployeeUncheckedCreateInput = {
+    id?: number
+    kpiId: number
+    employeeId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    entries?: KPIEntryUncheckedCreateNestedManyWithoutKpiEmployeeInput
+  }
+
+  export type KPIEmployeeUpdateInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    kpi?: KPIUpdateOneRequiredWithoutKpiEmployeesNestedInput
+    employee?: EmployeeUpdateOneRequiredWithoutKPIEmployeeNestedInput
+    entries?: KPIEntryUpdateManyWithoutKpiEmployeeNestedInput
+  }
+
+  export type KPIEmployeeUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    kpiId?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: KPIEntryUncheckedUpdateManyWithoutKpiEmployeeNestedInput
+  }
+
+  export type KPIEmployeeCreateManyInput = {
+    id?: number
+    kpiId: number
+    employeeId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KPIEmployeeUpdateManyMutationInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KPIEmployeeUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    kpiId?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KPIEntryCreateInput = {
+    name: string
+    targetValue: number
+    achievedValue?: number
+    isAchieved?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    kpiEmployee: KPIEmployeeCreateNestedOneWithoutEntriesInput
+  }
+
+  export type KPIEntryUncheckedCreateInput = {
+    id?: number
+    kpiEmployeeId: number
+    name: string
+    targetValue: number
+    achievedValue?: number
+    isAchieved?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KPIEntryUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    targetValue?: FloatFieldUpdateOperationsInput | number
+    achievedValue?: FloatFieldUpdateOperationsInput | number
+    isAchieved?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    kpiEmployee?: KPIEmployeeUpdateOneRequiredWithoutEntriesNestedInput
+  }
+
+  export type KPIEntryUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    kpiEmployeeId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    targetValue?: FloatFieldUpdateOperationsInput | number
+    achievedValue?: FloatFieldUpdateOperationsInput | number
+    isAchieved?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KPIEntryCreateManyInput = {
+    id?: number
+    kpiEmployeeId: number
+    name: string
+    targetValue: number
+    achievedValue?: number
+    isAchieved?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KPIEntryUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    targetValue?: FloatFieldUpdateOperationsInput | number
+    achievedValue?: FloatFieldUpdateOperationsInput | number
+    isAchieved?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KPIEntryUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    kpiEmployeeId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    targetValue?: FloatFieldUpdateOperationsInput | number
+    achievedValue?: FloatFieldUpdateOperationsInput | number
+    isAchieved?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -14460,6 +18646,12 @@ export namespace Prisma {
     none?: AttendanceWhereInput
   }
 
+  export type KPIEmployeeListRelationFilter = {
+    every?: KPIEmployeeWhereInput
+    some?: KPIEmployeeWhereInput
+    none?: KPIEmployeeWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -14474,6 +18666,10 @@ export namespace Prisma {
   }
 
   export type AttendanceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type KPIEmployeeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -15137,6 +19333,191 @@ export namespace Prisma {
     employeeId?: SortOrder
   }
 
+  export type KPICountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    period?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KPIAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type KPIMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    period?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KPIMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    period?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KPISumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type KPIScalarRelationFilter = {
+    is?: KPIWhereInput
+    isNot?: KPIWhereInput
+  }
+
+  export type KPIEntryListRelationFilter = {
+    every?: KPIEntryWhereInput
+    some?: KPIEntryWhereInput
+    none?: KPIEntryWhereInput
+  }
+
+  export type KPIEntryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type KPIEmployeeKpi_employee_uniqueCompoundUniqueInput = {
+    kpiId: number
+    employeeId: number
+  }
+
+  export type KPIEmployeeCountOrderByAggregateInput = {
+    id?: SortOrder
+    kpiId?: SortOrder
+    employeeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KPIEmployeeAvgOrderByAggregateInput = {
+    id?: SortOrder
+    kpiId?: SortOrder
+    employeeId?: SortOrder
+  }
+
+  export type KPIEmployeeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    kpiId?: SortOrder
+    employeeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KPIEmployeeMinOrderByAggregateInput = {
+    id?: SortOrder
+    kpiId?: SortOrder
+    employeeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KPIEmployeeSumOrderByAggregateInput = {
+    id?: SortOrder
+    kpiId?: SortOrder
+    employeeId?: SortOrder
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type KPIEmployeeScalarRelationFilter = {
+    is?: KPIEmployeeWhereInput
+    isNot?: KPIEmployeeWhereInput
+  }
+
+  export type KPIEntryKpi_entry_uniqueCompoundUniqueInput = {
+    kpiEmployeeId: number
+    name: string
+  }
+
+  export type KPIEntryCountOrderByAggregateInput = {
+    id?: SortOrder
+    kpiEmployeeId?: SortOrder
+    name?: SortOrder
+    targetValue?: SortOrder
+    achievedValue?: SortOrder
+    isAchieved?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KPIEntryAvgOrderByAggregateInput = {
+    id?: SortOrder
+    kpiEmployeeId?: SortOrder
+    targetValue?: SortOrder
+    achievedValue?: SortOrder
+  }
+
+  export type KPIEntryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    kpiEmployeeId?: SortOrder
+    name?: SortOrder
+    targetValue?: SortOrder
+    achievedValue?: SortOrder
+    isAchieved?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KPIEntryMinOrderByAggregateInput = {
+    id?: SortOrder
+    kpiEmployeeId?: SortOrder
+    name?: SortOrder
+    targetValue?: SortOrder
+    achievedValue?: SortOrder
+    isAchieved?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KPIEntrySumOrderByAggregateInput = {
+    id?: SortOrder
+    kpiEmployeeId?: SortOrder
+    targetValue?: SortOrder
+    achievedValue?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type EmployeeCreateNestedOneWithoutSubordinatesInput = {
     create?: XOR<EmployeeCreateWithoutSubordinatesInput, EmployeeUncheckedCreateWithoutSubordinatesInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutSubordinatesInput
@@ -15200,6 +19581,13 @@ export namespace Prisma {
     connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
   }
 
+  export type KPIEmployeeCreateNestedManyWithoutEmployeeInput = {
+    create?: XOR<KPIEmployeeCreateWithoutEmployeeInput, KPIEmployeeUncheckedCreateWithoutEmployeeInput> | KPIEmployeeCreateWithoutEmployeeInput[] | KPIEmployeeUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: KPIEmployeeCreateOrConnectWithoutEmployeeInput | KPIEmployeeCreateOrConnectWithoutEmployeeInput[]
+    createMany?: KPIEmployeeCreateManyEmployeeInputEnvelope
+    connect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+  }
+
   export type EmployeeUncheckedCreateNestedManyWithoutManagerInput = {
     create?: XOR<EmployeeCreateWithoutManagerInput, EmployeeUncheckedCreateWithoutManagerInput> | EmployeeCreateWithoutManagerInput[] | EmployeeUncheckedCreateWithoutManagerInput[]
     connectOrCreate?: EmployeeCreateOrConnectWithoutManagerInput | EmployeeCreateOrConnectWithoutManagerInput[]
@@ -15255,6 +19643,13 @@ export namespace Prisma {
     connectOrCreate?: AttendanceCreateOrConnectWithoutEmployeeInput | AttendanceCreateOrConnectWithoutEmployeeInput[]
     createMany?: AttendanceCreateManyEmployeeInputEnvelope
     connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+  }
+
+  export type KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput = {
+    create?: XOR<KPIEmployeeCreateWithoutEmployeeInput, KPIEmployeeUncheckedCreateWithoutEmployeeInput> | KPIEmployeeCreateWithoutEmployeeInput[] | KPIEmployeeUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: KPIEmployeeCreateOrConnectWithoutEmployeeInput | KPIEmployeeCreateOrConnectWithoutEmployeeInput[]
+    createMany?: KPIEmployeeCreateManyEmployeeInputEnvelope
+    connect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -15389,6 +19784,20 @@ export namespace Prisma {
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
   }
 
+  export type KPIEmployeeUpdateManyWithoutEmployeeNestedInput = {
+    create?: XOR<KPIEmployeeCreateWithoutEmployeeInput, KPIEmployeeUncheckedCreateWithoutEmployeeInput> | KPIEmployeeCreateWithoutEmployeeInput[] | KPIEmployeeUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: KPIEmployeeCreateOrConnectWithoutEmployeeInput | KPIEmployeeCreateOrConnectWithoutEmployeeInput[]
+    upsert?: KPIEmployeeUpsertWithWhereUniqueWithoutEmployeeInput | KPIEmployeeUpsertWithWhereUniqueWithoutEmployeeInput[]
+    createMany?: KPIEmployeeCreateManyEmployeeInputEnvelope
+    set?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    disconnect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    delete?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    connect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    update?: KPIEmployeeUpdateWithWhereUniqueWithoutEmployeeInput | KPIEmployeeUpdateWithWhereUniqueWithoutEmployeeInput[]
+    updateMany?: KPIEmployeeUpdateManyWithWhereWithoutEmployeeInput | KPIEmployeeUpdateManyWithWhereWithoutEmployeeInput[]
+    deleteMany?: KPIEmployeeScalarWhereInput | KPIEmployeeScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -15505,6 +19914,20 @@ export namespace Prisma {
     update?: AttendanceUpdateWithWhereUniqueWithoutEmployeeInput | AttendanceUpdateWithWhereUniqueWithoutEmployeeInput[]
     updateMany?: AttendanceUpdateManyWithWhereWithoutEmployeeInput | AttendanceUpdateManyWithWhereWithoutEmployeeInput[]
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+  }
+
+  export type KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput = {
+    create?: XOR<KPIEmployeeCreateWithoutEmployeeInput, KPIEmployeeUncheckedCreateWithoutEmployeeInput> | KPIEmployeeCreateWithoutEmployeeInput[] | KPIEmployeeUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: KPIEmployeeCreateOrConnectWithoutEmployeeInput | KPIEmployeeCreateOrConnectWithoutEmployeeInput[]
+    upsert?: KPIEmployeeUpsertWithWhereUniqueWithoutEmployeeInput | KPIEmployeeUpsertWithWhereUniqueWithoutEmployeeInput[]
+    createMany?: KPIEmployeeCreateManyEmployeeInputEnvelope
+    set?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    disconnect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    delete?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    connect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    update?: KPIEmployeeUpdateWithWhereUniqueWithoutEmployeeInput | KPIEmployeeUpdateWithWhereUniqueWithoutEmployeeInput[]
+    updateMany?: KPIEmployeeUpdateManyWithWhereWithoutEmployeeInput | KPIEmployeeUpdateManyWithWhereWithoutEmployeeInput[]
+    deleteMany?: KPIEmployeeScalarWhereInput | KPIEmployeeScalarWhereInput[]
   }
 
   export type PositionCreateNestedManyWithoutDepartmentInput = {
@@ -15819,6 +20242,144 @@ export namespace Prisma {
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutAttendanceInput, EmployeeUpdateWithoutAttendanceInput>, EmployeeUncheckedUpdateWithoutAttendanceInput>
   }
 
+  export type KPIEmployeeCreateNestedManyWithoutKpiInput = {
+    create?: XOR<KPIEmployeeCreateWithoutKpiInput, KPIEmployeeUncheckedCreateWithoutKpiInput> | KPIEmployeeCreateWithoutKpiInput[] | KPIEmployeeUncheckedCreateWithoutKpiInput[]
+    connectOrCreate?: KPIEmployeeCreateOrConnectWithoutKpiInput | KPIEmployeeCreateOrConnectWithoutKpiInput[]
+    createMany?: KPIEmployeeCreateManyKpiInputEnvelope
+    connect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+  }
+
+  export type KPIEmployeeUncheckedCreateNestedManyWithoutKpiInput = {
+    create?: XOR<KPIEmployeeCreateWithoutKpiInput, KPIEmployeeUncheckedCreateWithoutKpiInput> | KPIEmployeeCreateWithoutKpiInput[] | KPIEmployeeUncheckedCreateWithoutKpiInput[]
+    connectOrCreate?: KPIEmployeeCreateOrConnectWithoutKpiInput | KPIEmployeeCreateOrConnectWithoutKpiInput[]
+    createMany?: KPIEmployeeCreateManyKpiInputEnvelope
+    connect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+  }
+
+  export type KPIEmployeeUpdateManyWithoutKpiNestedInput = {
+    create?: XOR<KPIEmployeeCreateWithoutKpiInput, KPIEmployeeUncheckedCreateWithoutKpiInput> | KPIEmployeeCreateWithoutKpiInput[] | KPIEmployeeUncheckedCreateWithoutKpiInput[]
+    connectOrCreate?: KPIEmployeeCreateOrConnectWithoutKpiInput | KPIEmployeeCreateOrConnectWithoutKpiInput[]
+    upsert?: KPIEmployeeUpsertWithWhereUniqueWithoutKpiInput | KPIEmployeeUpsertWithWhereUniqueWithoutKpiInput[]
+    createMany?: KPIEmployeeCreateManyKpiInputEnvelope
+    set?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    disconnect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    delete?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    connect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    update?: KPIEmployeeUpdateWithWhereUniqueWithoutKpiInput | KPIEmployeeUpdateWithWhereUniqueWithoutKpiInput[]
+    updateMany?: KPIEmployeeUpdateManyWithWhereWithoutKpiInput | KPIEmployeeUpdateManyWithWhereWithoutKpiInput[]
+    deleteMany?: KPIEmployeeScalarWhereInput | KPIEmployeeScalarWhereInput[]
+  }
+
+  export type KPIEmployeeUncheckedUpdateManyWithoutKpiNestedInput = {
+    create?: XOR<KPIEmployeeCreateWithoutKpiInput, KPIEmployeeUncheckedCreateWithoutKpiInput> | KPIEmployeeCreateWithoutKpiInput[] | KPIEmployeeUncheckedCreateWithoutKpiInput[]
+    connectOrCreate?: KPIEmployeeCreateOrConnectWithoutKpiInput | KPIEmployeeCreateOrConnectWithoutKpiInput[]
+    upsert?: KPIEmployeeUpsertWithWhereUniqueWithoutKpiInput | KPIEmployeeUpsertWithWhereUniqueWithoutKpiInput[]
+    createMany?: KPIEmployeeCreateManyKpiInputEnvelope
+    set?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    disconnect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    delete?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    connect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    update?: KPIEmployeeUpdateWithWhereUniqueWithoutKpiInput | KPIEmployeeUpdateWithWhereUniqueWithoutKpiInput[]
+    updateMany?: KPIEmployeeUpdateManyWithWhereWithoutKpiInput | KPIEmployeeUpdateManyWithWhereWithoutKpiInput[]
+    deleteMany?: KPIEmployeeScalarWhereInput | KPIEmployeeScalarWhereInput[]
+  }
+
+  export type KPICreateNestedOneWithoutKpiEmployeesInput = {
+    create?: XOR<KPICreateWithoutKpiEmployeesInput, KPIUncheckedCreateWithoutKpiEmployeesInput>
+    connectOrCreate?: KPICreateOrConnectWithoutKpiEmployeesInput
+    connect?: KPIWhereUniqueInput
+  }
+
+  export type EmployeeCreateNestedOneWithoutKPIEmployeeInput = {
+    create?: XOR<EmployeeCreateWithoutKPIEmployeeInput, EmployeeUncheckedCreateWithoutKPIEmployeeInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutKPIEmployeeInput
+    connect?: EmployeeWhereUniqueInput
+  }
+
+  export type KPIEntryCreateNestedManyWithoutKpiEmployeeInput = {
+    create?: XOR<KPIEntryCreateWithoutKpiEmployeeInput, KPIEntryUncheckedCreateWithoutKpiEmployeeInput> | KPIEntryCreateWithoutKpiEmployeeInput[] | KPIEntryUncheckedCreateWithoutKpiEmployeeInput[]
+    connectOrCreate?: KPIEntryCreateOrConnectWithoutKpiEmployeeInput | KPIEntryCreateOrConnectWithoutKpiEmployeeInput[]
+    createMany?: KPIEntryCreateManyKpiEmployeeInputEnvelope
+    connect?: KPIEntryWhereUniqueInput | KPIEntryWhereUniqueInput[]
+  }
+
+  export type KPIEntryUncheckedCreateNestedManyWithoutKpiEmployeeInput = {
+    create?: XOR<KPIEntryCreateWithoutKpiEmployeeInput, KPIEntryUncheckedCreateWithoutKpiEmployeeInput> | KPIEntryCreateWithoutKpiEmployeeInput[] | KPIEntryUncheckedCreateWithoutKpiEmployeeInput[]
+    connectOrCreate?: KPIEntryCreateOrConnectWithoutKpiEmployeeInput | KPIEntryCreateOrConnectWithoutKpiEmployeeInput[]
+    createMany?: KPIEntryCreateManyKpiEmployeeInputEnvelope
+    connect?: KPIEntryWhereUniqueInput | KPIEntryWhereUniqueInput[]
+  }
+
+  export type KPIUpdateOneRequiredWithoutKpiEmployeesNestedInput = {
+    create?: XOR<KPICreateWithoutKpiEmployeesInput, KPIUncheckedCreateWithoutKpiEmployeesInput>
+    connectOrCreate?: KPICreateOrConnectWithoutKpiEmployeesInput
+    upsert?: KPIUpsertWithoutKpiEmployeesInput
+    connect?: KPIWhereUniqueInput
+    update?: XOR<XOR<KPIUpdateToOneWithWhereWithoutKpiEmployeesInput, KPIUpdateWithoutKpiEmployeesInput>, KPIUncheckedUpdateWithoutKpiEmployeesInput>
+  }
+
+  export type EmployeeUpdateOneRequiredWithoutKPIEmployeeNestedInput = {
+    create?: XOR<EmployeeCreateWithoutKPIEmployeeInput, EmployeeUncheckedCreateWithoutKPIEmployeeInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutKPIEmployeeInput
+    upsert?: EmployeeUpsertWithoutKPIEmployeeInput
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutKPIEmployeeInput, EmployeeUpdateWithoutKPIEmployeeInput>, EmployeeUncheckedUpdateWithoutKPIEmployeeInput>
+  }
+
+  export type KPIEntryUpdateManyWithoutKpiEmployeeNestedInput = {
+    create?: XOR<KPIEntryCreateWithoutKpiEmployeeInput, KPIEntryUncheckedCreateWithoutKpiEmployeeInput> | KPIEntryCreateWithoutKpiEmployeeInput[] | KPIEntryUncheckedCreateWithoutKpiEmployeeInput[]
+    connectOrCreate?: KPIEntryCreateOrConnectWithoutKpiEmployeeInput | KPIEntryCreateOrConnectWithoutKpiEmployeeInput[]
+    upsert?: KPIEntryUpsertWithWhereUniqueWithoutKpiEmployeeInput | KPIEntryUpsertWithWhereUniqueWithoutKpiEmployeeInput[]
+    createMany?: KPIEntryCreateManyKpiEmployeeInputEnvelope
+    set?: KPIEntryWhereUniqueInput | KPIEntryWhereUniqueInput[]
+    disconnect?: KPIEntryWhereUniqueInput | KPIEntryWhereUniqueInput[]
+    delete?: KPIEntryWhereUniqueInput | KPIEntryWhereUniqueInput[]
+    connect?: KPIEntryWhereUniqueInput | KPIEntryWhereUniqueInput[]
+    update?: KPIEntryUpdateWithWhereUniqueWithoutKpiEmployeeInput | KPIEntryUpdateWithWhereUniqueWithoutKpiEmployeeInput[]
+    updateMany?: KPIEntryUpdateManyWithWhereWithoutKpiEmployeeInput | KPIEntryUpdateManyWithWhereWithoutKpiEmployeeInput[]
+    deleteMany?: KPIEntryScalarWhereInput | KPIEntryScalarWhereInput[]
+  }
+
+  export type KPIEntryUncheckedUpdateManyWithoutKpiEmployeeNestedInput = {
+    create?: XOR<KPIEntryCreateWithoutKpiEmployeeInput, KPIEntryUncheckedCreateWithoutKpiEmployeeInput> | KPIEntryCreateWithoutKpiEmployeeInput[] | KPIEntryUncheckedCreateWithoutKpiEmployeeInput[]
+    connectOrCreate?: KPIEntryCreateOrConnectWithoutKpiEmployeeInput | KPIEntryCreateOrConnectWithoutKpiEmployeeInput[]
+    upsert?: KPIEntryUpsertWithWhereUniqueWithoutKpiEmployeeInput | KPIEntryUpsertWithWhereUniqueWithoutKpiEmployeeInput[]
+    createMany?: KPIEntryCreateManyKpiEmployeeInputEnvelope
+    set?: KPIEntryWhereUniqueInput | KPIEntryWhereUniqueInput[]
+    disconnect?: KPIEntryWhereUniqueInput | KPIEntryWhereUniqueInput[]
+    delete?: KPIEntryWhereUniqueInput | KPIEntryWhereUniqueInput[]
+    connect?: KPIEntryWhereUniqueInput | KPIEntryWhereUniqueInput[]
+    update?: KPIEntryUpdateWithWhereUniqueWithoutKpiEmployeeInput | KPIEntryUpdateWithWhereUniqueWithoutKpiEmployeeInput[]
+    updateMany?: KPIEntryUpdateManyWithWhereWithoutKpiEmployeeInput | KPIEntryUpdateManyWithWhereWithoutKpiEmployeeInput[]
+    deleteMany?: KPIEntryScalarWhereInput | KPIEntryScalarWhereInput[]
+  }
+
+  export type KPIEmployeeCreateNestedOneWithoutEntriesInput = {
+    create?: XOR<KPIEmployeeCreateWithoutEntriesInput, KPIEmployeeUncheckedCreateWithoutEntriesInput>
+    connectOrCreate?: KPIEmployeeCreateOrConnectWithoutEntriesInput
+    connect?: KPIEmployeeWhereUniqueInput
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type KPIEmployeeUpdateOneRequiredWithoutEntriesNestedInput = {
+    create?: XOR<KPIEmployeeCreateWithoutEntriesInput, KPIEmployeeUncheckedCreateWithoutEntriesInput>
+    connectOrCreate?: KPIEmployeeCreateOrConnectWithoutEntriesInput
+    upsert?: KPIEmployeeUpsertWithoutEntriesInput
+    connect?: KPIEmployeeWhereUniqueInput
+    update?: XOR<XOR<KPIEmployeeUpdateToOneWithWhereWithoutEntriesInput, KPIEmployeeUpdateWithoutEntriesInput>, KPIEmployeeUncheckedUpdateWithoutEntriesInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -16108,6 +20669,35 @@ export namespace Prisma {
     _max?: NestedEnumLeaveStatusFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type EmployeeCreateWithoutSubordinatesInput = {
     employeeCode: string
     name: string
@@ -16125,6 +20715,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutSubordinatesInput = {
@@ -16145,6 +20736,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutSubordinatesInput = {
@@ -16169,6 +20761,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutManagerInput = {
@@ -16189,6 +20782,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutManagerInput = {
@@ -16425,6 +21019,31 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type KPIEmployeeCreateWithoutEmployeeInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    kpi: KPICreateNestedOneWithoutKpiEmployeesInput
+    entries?: KPIEntryCreateNestedManyWithoutKpiEmployeeInput
+  }
+
+  export type KPIEmployeeUncheckedCreateWithoutEmployeeInput = {
+    id?: number
+    kpiId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    entries?: KPIEntryUncheckedCreateNestedManyWithoutKpiEmployeeInput
+  }
+
+  export type KPIEmployeeCreateOrConnectWithoutEmployeeInput = {
+    where: KPIEmployeeWhereUniqueInput
+    create: XOR<KPIEmployeeCreateWithoutEmployeeInput, KPIEmployeeUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type KPIEmployeeCreateManyEmployeeInputEnvelope = {
+    data: KPIEmployeeCreateManyEmployeeInput | KPIEmployeeCreateManyEmployeeInput[]
+    skipDuplicates?: boolean
+  }
+
   export type EmployeeUpsertWithoutSubordinatesInput = {
     update: XOR<EmployeeUpdateWithoutSubordinatesInput, EmployeeUncheckedUpdateWithoutSubordinatesInput>
     create: XOR<EmployeeCreateWithoutSubordinatesInput, EmployeeUncheckedCreateWithoutSubordinatesInput>
@@ -16453,6 +21072,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutSubordinatesInput = {
@@ -16473,6 +21093,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUpsertWithWhereUniqueWithoutManagerInput = {
@@ -16768,6 +21389,33 @@ export namespace Prisma {
     checkOutTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
   }
 
+  export type KPIEmployeeUpsertWithWhereUniqueWithoutEmployeeInput = {
+    where: KPIEmployeeWhereUniqueInput
+    update: XOR<KPIEmployeeUpdateWithoutEmployeeInput, KPIEmployeeUncheckedUpdateWithoutEmployeeInput>
+    create: XOR<KPIEmployeeCreateWithoutEmployeeInput, KPIEmployeeUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type KPIEmployeeUpdateWithWhereUniqueWithoutEmployeeInput = {
+    where: KPIEmployeeWhereUniqueInput
+    data: XOR<KPIEmployeeUpdateWithoutEmployeeInput, KPIEmployeeUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type KPIEmployeeUpdateManyWithWhereWithoutEmployeeInput = {
+    where: KPIEmployeeScalarWhereInput
+    data: XOR<KPIEmployeeUpdateManyMutationInput, KPIEmployeeUncheckedUpdateManyWithoutEmployeeInput>
+  }
+
+  export type KPIEmployeeScalarWhereInput = {
+    AND?: KPIEmployeeScalarWhereInput | KPIEmployeeScalarWhereInput[]
+    OR?: KPIEmployeeScalarWhereInput[]
+    NOT?: KPIEmployeeScalarWhereInput | KPIEmployeeScalarWhereInput[]
+    id?: IntFilter<"KPIEmployee"> | number
+    kpiId?: IntFilter<"KPIEmployee"> | number
+    employeeId?: IntFilter<"KPIEmployee"> | number
+    createdAt?: DateTimeFilter<"KPIEmployee"> | Date | string
+    updatedAt?: DateTimeFilter<"KPIEmployee"> | Date | string
+  }
+
   export type PositionCreateWithoutDepartmentInput = {
     name: string
     level?: number
@@ -16812,6 +21460,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutDepartmentHeadOfInput = {
@@ -16832,6 +21481,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutDepartmentHeadOfInput = {
@@ -16856,6 +21506,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutDepartmentDirectorOfInput = {
@@ -16876,6 +21527,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutDepartmentDirectorOfInput = {
@@ -16978,6 +21630,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutDepartmentHeadOfInput = {
@@ -16998,6 +21651,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUpsertWithoutDepartmentDirectorOfInput = {
@@ -17028,6 +21682,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutDepartmentDirectorOfInput = {
@@ -17048,6 +21703,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type WorkInfoUpsertWithWhereUniqueWithoutDepartmentInput = {
@@ -17263,6 +21919,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutWorkInfoInput = {
@@ -17283,6 +21940,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutWorkInfoInput = {
@@ -17378,6 +22036,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutWorkInfoInput = {
@@ -17398,6 +22057,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeCreateWithoutPersonalInfoInput = {
@@ -17417,6 +22077,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutPersonalInfoInput = {
@@ -17437,6 +22098,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutPersonalInfoInput = {
@@ -17472,6 +22134,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutPersonalInfoInput = {
@@ -17492,6 +22155,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeCreateWithoutContactInfoInput = {
@@ -17511,6 +22175,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutContactInfoInput = {
@@ -17531,6 +22196,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutContactInfoInput = {
@@ -17566,6 +22232,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutContactInfoInput = {
@@ -17586,6 +22253,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeCreateWithoutOtherInfoInput = {
@@ -17605,6 +22273,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutOtherInfoInput = {
@@ -17625,6 +22294,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutOtherInfoInput = {
@@ -17660,6 +22330,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutOtherInfoInput = {
@@ -17680,6 +22351,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeCreateWithoutLeaveRequestInput = {
@@ -17699,6 +22371,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutLeaveRequestInput = {
@@ -17719,6 +22392,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutLeaveRequestInput = {
@@ -17754,6 +22428,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutLeaveRequestInput = {
@@ -17774,6 +22449,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeCreateWithoutAttendanceInput = {
@@ -17793,6 +22469,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutAttendanceInput = {
@@ -17813,6 +22490,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutAttendanceInput = {
@@ -17848,6 +22526,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutAttendanceInput = {
@@ -17868,6 +22547,297 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type KPIEmployeeCreateWithoutKpiInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    employee: EmployeeCreateNestedOneWithoutKPIEmployeeInput
+    entries?: KPIEntryCreateNestedManyWithoutKpiEmployeeInput
+  }
+
+  export type KPIEmployeeUncheckedCreateWithoutKpiInput = {
+    id?: number
+    employeeId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    entries?: KPIEntryUncheckedCreateNestedManyWithoutKpiEmployeeInput
+  }
+
+  export type KPIEmployeeCreateOrConnectWithoutKpiInput = {
+    where: KPIEmployeeWhereUniqueInput
+    create: XOR<KPIEmployeeCreateWithoutKpiInput, KPIEmployeeUncheckedCreateWithoutKpiInput>
+  }
+
+  export type KPIEmployeeCreateManyKpiInputEnvelope = {
+    data: KPIEmployeeCreateManyKpiInput | KPIEmployeeCreateManyKpiInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type KPIEmployeeUpsertWithWhereUniqueWithoutKpiInput = {
+    where: KPIEmployeeWhereUniqueInput
+    update: XOR<KPIEmployeeUpdateWithoutKpiInput, KPIEmployeeUncheckedUpdateWithoutKpiInput>
+    create: XOR<KPIEmployeeCreateWithoutKpiInput, KPIEmployeeUncheckedCreateWithoutKpiInput>
+  }
+
+  export type KPIEmployeeUpdateWithWhereUniqueWithoutKpiInput = {
+    where: KPIEmployeeWhereUniqueInput
+    data: XOR<KPIEmployeeUpdateWithoutKpiInput, KPIEmployeeUncheckedUpdateWithoutKpiInput>
+  }
+
+  export type KPIEmployeeUpdateManyWithWhereWithoutKpiInput = {
+    where: KPIEmployeeScalarWhereInput
+    data: XOR<KPIEmployeeUpdateManyMutationInput, KPIEmployeeUncheckedUpdateManyWithoutKpiInput>
+  }
+
+  export type KPICreateWithoutKpiEmployeesInput = {
+    name: string
+    period: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KPIUncheckedCreateWithoutKpiEmployeesInput = {
+    id?: number
+    name: string
+    period: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KPICreateOrConnectWithoutKpiEmployeesInput = {
+    where: KPIWhereUniqueInput
+    create: XOR<KPICreateWithoutKpiEmployeesInput, KPIUncheckedCreateWithoutKpiEmployeesInput>
+  }
+
+  export type EmployeeCreateWithoutKPIEmployeeInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
+    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutKPIEmployeeInput = {
+    id?: number
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    managerId?: number | null
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutKPIEmployeeInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutKPIEmployeeInput, EmployeeUncheckedCreateWithoutKPIEmployeeInput>
+  }
+
+  export type KPIEntryCreateWithoutKpiEmployeeInput = {
+    name: string
+    targetValue: number
+    achievedValue?: number
+    isAchieved?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KPIEntryUncheckedCreateWithoutKpiEmployeeInput = {
+    id?: number
+    name: string
+    targetValue: number
+    achievedValue?: number
+    isAchieved?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KPIEntryCreateOrConnectWithoutKpiEmployeeInput = {
+    where: KPIEntryWhereUniqueInput
+    create: XOR<KPIEntryCreateWithoutKpiEmployeeInput, KPIEntryUncheckedCreateWithoutKpiEmployeeInput>
+  }
+
+  export type KPIEntryCreateManyKpiEmployeeInputEnvelope = {
+    data: KPIEntryCreateManyKpiEmployeeInput | KPIEntryCreateManyKpiEmployeeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type KPIUpsertWithoutKpiEmployeesInput = {
+    update: XOR<KPIUpdateWithoutKpiEmployeesInput, KPIUncheckedUpdateWithoutKpiEmployeesInput>
+    create: XOR<KPICreateWithoutKpiEmployeesInput, KPIUncheckedCreateWithoutKpiEmployeesInput>
+    where?: KPIWhereInput
+  }
+
+  export type KPIUpdateToOneWithWhereWithoutKpiEmployeesInput = {
+    where?: KPIWhereInput
+    data: XOR<KPIUpdateWithoutKpiEmployeesInput, KPIUncheckedUpdateWithoutKpiEmployeesInput>
+  }
+
+  export type KPIUpdateWithoutKpiEmployeesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KPIUncheckedUpdateWithoutKpiEmployeesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmployeeUpsertWithoutKPIEmployeeInput = {
+    update: XOR<EmployeeUpdateWithoutKPIEmployeeInput, EmployeeUncheckedUpdateWithoutKPIEmployeeInput>
+    create: XOR<EmployeeCreateWithoutKPIEmployeeInput, EmployeeUncheckedCreateWithoutKPIEmployeeInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutKPIEmployeeInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutKPIEmployeeInput, EmployeeUncheckedUpdateWithoutKPIEmployeeInput>
+  }
+
+  export type EmployeeUpdateWithoutKPIEmployeeInput = {
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutKPIEmployeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type KPIEntryUpsertWithWhereUniqueWithoutKpiEmployeeInput = {
+    where: KPIEntryWhereUniqueInput
+    update: XOR<KPIEntryUpdateWithoutKpiEmployeeInput, KPIEntryUncheckedUpdateWithoutKpiEmployeeInput>
+    create: XOR<KPIEntryCreateWithoutKpiEmployeeInput, KPIEntryUncheckedCreateWithoutKpiEmployeeInput>
+  }
+
+  export type KPIEntryUpdateWithWhereUniqueWithoutKpiEmployeeInput = {
+    where: KPIEntryWhereUniqueInput
+    data: XOR<KPIEntryUpdateWithoutKpiEmployeeInput, KPIEntryUncheckedUpdateWithoutKpiEmployeeInput>
+  }
+
+  export type KPIEntryUpdateManyWithWhereWithoutKpiEmployeeInput = {
+    where: KPIEntryScalarWhereInput
+    data: XOR<KPIEntryUpdateManyMutationInput, KPIEntryUncheckedUpdateManyWithoutKpiEmployeeInput>
+  }
+
+  export type KPIEntryScalarWhereInput = {
+    AND?: KPIEntryScalarWhereInput | KPIEntryScalarWhereInput[]
+    OR?: KPIEntryScalarWhereInput[]
+    NOT?: KPIEntryScalarWhereInput | KPIEntryScalarWhereInput[]
+    id?: IntFilter<"KPIEntry"> | number
+    kpiEmployeeId?: IntFilter<"KPIEntry"> | number
+    name?: StringFilter<"KPIEntry"> | string
+    targetValue?: FloatFilter<"KPIEntry"> | number
+    achievedValue?: FloatFilter<"KPIEntry"> | number
+    isAchieved?: BoolFilter<"KPIEntry"> | boolean
+    createdAt?: DateTimeFilter<"KPIEntry"> | Date | string
+    updatedAt?: DateTimeFilter<"KPIEntry"> | Date | string
+  }
+
+  export type KPIEmployeeCreateWithoutEntriesInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    kpi: KPICreateNestedOneWithoutKpiEmployeesInput
+    employee: EmployeeCreateNestedOneWithoutKPIEmployeeInput
+  }
+
+  export type KPIEmployeeUncheckedCreateWithoutEntriesInput = {
+    id?: number
+    kpiId: number
+    employeeId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KPIEmployeeCreateOrConnectWithoutEntriesInput = {
+    where: KPIEmployeeWhereUniqueInput
+    create: XOR<KPIEmployeeCreateWithoutEntriesInput, KPIEmployeeUncheckedCreateWithoutEntriesInput>
+  }
+
+  export type KPIEmployeeUpsertWithoutEntriesInput = {
+    update: XOR<KPIEmployeeUpdateWithoutEntriesInput, KPIEmployeeUncheckedUpdateWithoutEntriesInput>
+    create: XOR<KPIEmployeeCreateWithoutEntriesInput, KPIEmployeeUncheckedCreateWithoutEntriesInput>
+    where?: KPIEmployeeWhereInput
+  }
+
+  export type KPIEmployeeUpdateToOneWithWhereWithoutEntriesInput = {
+    where?: KPIEmployeeWhereInput
+    data: XOR<KPIEmployeeUpdateWithoutEntriesInput, KPIEmployeeUncheckedUpdateWithoutEntriesInput>
+  }
+
+  export type KPIEmployeeUpdateWithoutEntriesInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    kpi?: KPIUpdateOneRequiredWithoutKpiEmployeesNestedInput
+    employee?: EmployeeUpdateOneRequiredWithoutKPIEmployeeNestedInput
+  }
+
+  export type KPIEmployeeUncheckedUpdateWithoutEntriesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    kpiId?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EmployeeCreateManyManagerInput = {
@@ -17901,6 +22871,13 @@ export namespace Prisma {
     checkOutTime?: Date | string | null
   }
 
+  export type KPIEmployeeCreateManyEmployeeInput = {
+    id?: number
+    kpiId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type EmployeeUpdateWithoutManagerInput = {
     employeeCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -17918,6 +22895,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutManagerInput = {
@@ -17938,6 +22916,7 @@ export namespace Prisma {
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateManyWithoutManagerInput = {
@@ -18007,6 +22986,28 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type KPIEmployeeUpdateWithoutEmployeeInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    kpi?: KPIUpdateOneRequiredWithoutKpiEmployeesNestedInput
+    entries?: KPIEntryUpdateManyWithoutKpiEmployeeNestedInput
+  }
+
+  export type KPIEmployeeUncheckedUpdateWithoutEmployeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    kpiId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: KPIEntryUncheckedUpdateManyWithoutKpiEmployeeNestedInput
+  }
+
+  export type KPIEmployeeUncheckedUpdateManyWithoutEmployeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    kpiId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PositionCreateManyDepartmentInput = {
@@ -18158,6 +23159,74 @@ export namespace Prisma {
     contractType?: NullableStringFieldUpdateOperationsInput | string | null
     contractEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     employeeId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type KPIEmployeeCreateManyKpiInput = {
+    id?: number
+    employeeId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KPIEmployeeUpdateWithoutKpiInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    employee?: EmployeeUpdateOneRequiredWithoutKPIEmployeeNestedInput
+    entries?: KPIEntryUpdateManyWithoutKpiEmployeeNestedInput
+  }
+
+  export type KPIEmployeeUncheckedUpdateWithoutKpiInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: KPIEntryUncheckedUpdateManyWithoutKpiEmployeeNestedInput
+  }
+
+  export type KPIEmployeeUncheckedUpdateManyWithoutKpiInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KPIEntryCreateManyKpiEmployeeInput = {
+    id?: number
+    name: string
+    targetValue: number
+    achievedValue?: number
+    isAchieved?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KPIEntryUpdateWithoutKpiEmployeeInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    targetValue?: FloatFieldUpdateOperationsInput | number
+    achievedValue?: FloatFieldUpdateOperationsInput | number
+    isAchieved?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KPIEntryUncheckedUpdateWithoutKpiEmployeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    targetValue?: FloatFieldUpdateOperationsInput | number
+    achievedValue?: FloatFieldUpdateOperationsInput | number
+    isAchieved?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KPIEntryUncheckedUpdateManyWithoutKpiEmployeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    targetValue?: FloatFieldUpdateOperationsInput | number
+    achievedValue?: FloatFieldUpdateOperationsInput | number
+    isAchieved?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

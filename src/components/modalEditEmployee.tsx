@@ -225,8 +225,8 @@ const ModalEditEmployee = ({
       avatarBase64: data.avatar ?? null,
 
       // workInfo
-      department: data.workInfo?.department?.name ?? "",
-      position: data.workInfo?.position?.name ?? "",
+      department: data.workInfo?.department?.id ?? "",
+      position: data.workInfo?.position?.id ?? "",
       specialization: data.workInfo?.specialization ?? "",
       joinedTBD: data.workInfo?.joinedTBD
         ? dayjs(data.workInfo?.joinedTBD, "DD/MM/YYYY")
@@ -557,7 +557,7 @@ const ModalEditEmployee = ({
                     placeholder="Bộ phận"
                     disabled={localUser?.role === "MANAGER"}
                     allowClear
-                    onChange={(e) => setSelectedDepartmentId(e)}
+                    onChange={(e) => setSelectedDepartmentId(e.target.value)}
                     options={departments.map((d) => ({
                       value: d.id,
                       label: d.name,

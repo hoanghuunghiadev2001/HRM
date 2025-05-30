@@ -74,6 +74,8 @@ model Employee {
 
   LeaveRequest LeaveRequest[]
   Attendance   Attendance[]
+
+  KPIEmployee KPIEmployee[]
 }
 
 model Department {
@@ -196,4 +198,46 @@ model Attendance {
   employee Employee @relation(fields: [employeeId], references: [id])
 
   @@index([employeeId, date])
+}
+
+model KPI {
+  id        Int      @id @default(autoincrement())
+  name      String
+  period    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  kpiEmployees KPIEmployee[]
+}
+
+model KPIEmployee {
+  id         Int @id @default(autoincrement())
+  kpiId      Int
+  employeeId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  kpi      KPI      @relation(fields: [kpiId], references: [id], onDelete: Cascade)
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  entries KPIEntry[]
+
+  @@unique([kpiId, employeeId], name: "kpi_employee_unique")
+}
+
+model KPIEntry {
+  id            Int     @id @default(autoincrement())
+  kpiEmployeeId Int
+  name          String
+  targetValue   Float
+  achievedValue Float   @default(0)
+  isAchieved    Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  kpiEmployee KPIEmployee @relation(fields: [kpiEmployeeId], references: [id], onDelete: Cascade)
+
+  @@unique([kpiEmployeeId, name], name: "kpi_entry_unique")
 }

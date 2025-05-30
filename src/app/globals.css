@@ -47,7 +47,8 @@ nextjs-portal {
   box-shadow: none;
 }
 
-.ant-menu-item {
+.ant-menu-item,
+.ant-menu-submenu-title {
   margin: 0 !important;
   width: 100% !important;
   color: white !important;
@@ -55,11 +56,24 @@ nextjs-portal {
   border-radius: 0 !important;
   border-bottom: 1px solid white;
 }
+
+.ant-menu-submenu > ul > li {
+  border-bottom: 1px solid transparent !important;
+}
+
 .ant-menu-item:hover {
   border-radius: 0 !important;
   background-color: #600101 !important;
 }
 .ant-menu-item.ant-menu-item-selected {
+  border-radius: 0 !important;
+  background-color: #600101 !important;
+}
+.ant-menu-submenu-title:hover {
+  border-radius: 0 !important;
+  background-color: #600101 !important;
+}
+.ant-menu-submenu-selected .ant-menu-submenu-title {
   border-radius: 0 !important;
   background-color: #600101 !important;
 }

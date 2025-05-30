@@ -226,6 +226,33 @@ exports.Prisma.AttendanceScalarFieldEnum = {
   checkOutTime: 'checkOutTime'
 };
 
+exports.Prisma.KPIScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  period: 'period',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.KPIEmployeeScalarFieldEnum = {
+  id: 'id',
+  kpiId: 'kpiId',
+  employeeId: 'employeeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.KPIEntryScalarFieldEnum = {
+  id: 'id',
+  kpiEmployeeId: 'kpiEmployeeId',
+  name: 'name',
+  targetValue: 'targetValue',
+  achievedValue: 'achievedValue',
+  isAchieved: 'isAchieved',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -283,7 +310,10 @@ exports.Prisma.ModelName = {
   ContactInfo: 'ContactInfo',
   OtherInfo: 'OtherInfo',
   LeaveRequest: 'LeaveRequest',
-  Attendance: 'Attendance'
+  Attendance: 'Attendance',
+  KPI: 'KPI',
+  KPIEmployee: 'KPIEmployee',
+  KPIEntry: 'KPIEntry'
 };
 
 /**
