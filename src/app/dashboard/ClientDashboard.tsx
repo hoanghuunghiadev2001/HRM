@@ -2,14 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  ChartNoAxesCombined,
   ClipboardPlus,
   FileStack,
   FileText,
   Fingerprint,
   LogOut,
   Network,
-  Proportions,
   UserCog,
   UserRoundPen,
   UsersRound,
@@ -96,23 +94,6 @@ export default function ClientDashboard({
     { key: "/dashboard/request", icon: <FileText />, label: "Phiếu yêu cầu" },
     ...(isAdmin === "ADMIN" || isAdmin === "MANAGER"
       ? [
-          {
-            key: "kpi",
-            icon: <FileStack />,
-            label: "KPI",
-            children: [
-              {
-                key: "/dashboard/kpi",
-                icon: <ChartNoAxesCombined />,
-                label: "KPI",
-              },
-              {
-                key: "/dashboard/reportKPI",
-                icon: <Proportions />,
-                label: "Report KPI",
-              },
-            ],
-          },
           {
             key: "/dashboard/allRequests",
             icon: <FileStack />,

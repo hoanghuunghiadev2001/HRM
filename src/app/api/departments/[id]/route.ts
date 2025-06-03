@@ -1,15 +1,23 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-interface Params {
-  id: string;
-}
+export async function GET(request: NextRequest) {
+  const url = new URL(request.url);
+  const parts = url.pathname.split("/");
+  // Ví dụ pathname = /api/departments/8 => parts = ["", "api", "departments", "8"]
 
-export async function GET(request: Request, { params }: { params: Params }) {
-  const id = Number(params.id);
-  if (isNaN(id))
+  // Lấy phần thứ 3 (index 3) là '8' trong ví dụ trên
+  const idStr = parts[3];
+
+  if (!idStr) {
+    return NextResponse.json({ error: "ID not found in URL" }, { status: 400 });
+  }
+
+  const id = Number(idStr);
+
+  if (isNaN(id)) {
     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+  }
 
   const department = await prisma.department.findUnique({
     where: { id },
@@ -26,10 +34,19 @@ export async function GET(request: Request, { params }: { params: Params }) {
   return NextResponse.json(department);
 }
 
-export async function PATCH(request: Request, { params }: { params: Params }) {
-  const id = Number(params.id);
-  if (isNaN(id))
+export async function PATCH(request: NextRequest) {
+  const url = new URL(request.url);
+  const idStr = url.pathname.split("/")[3];
+
+  if (!idStr) {
+    return NextResponse.json({ error: "ID not found in URL" }, { status: 400 });
+  }
+
+  const id = Number(idStr);
+
+  if (isNaN(id)) {
     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+  }
 
   const body = await request.json();
   const { name, abbreviation } = body;
@@ -46,25 +63,33 @@ export async function PATCH(request: Request, { params }: { params: Params }) {
         ...(abbreviation && { abbreviation }),
       },
     });
-
     return NextResponse.json(updated);
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: "Update failed" }, { status: 500 });
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: Params }) {
-  const id = Number(params.id);
-  if (isNaN(id))
+export async function DELETE(request: NextRequest) {
+  const url = new URL(request.url);
+  const idStr = url.pathname.split("/")[3];
+
+  if (!idStr) {
+    return NextResponse.json({ error: "ID not found in URL" }, { status: 400 });
+  }
+
+  const id = Number(idStr);
+
+  if (isNaN(id)) {
     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+  }
 
   try {
-    // Có thể xóa các position trước hoặc dùng cascade nếu thiết lập
     await prisma.position.deleteMany({ where: { departmentId: id } });
-
     await prisma.department.delete({ where: { id } });
     return NextResponse.json({ message: "Deleted successfully" });
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: "Delete failed" }, { status: 500 });
   }
 }

@@ -35,6 +35,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (!employee.isActive) {
+      // Trả về lỗi nếu chưa kích hoạt
+      return NextResponse.json(
+        {
+          message: "Tài khoản chưa được kích hoạt. Vui lòng liên hệ quản trị.",
+        },
+        { status: 403 }
+      );
+    }
+
     const payload = {
       id: employee.id,
       employeeCode: employee.employeeCode,

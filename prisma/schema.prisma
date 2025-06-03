@@ -59,6 +59,7 @@ model Employee {
   password     String
   role         Role      @default(USER)
   avatar       String?
+  isActive     Boolean   @default(false)
 
   managerId    Int?
   manager      Employee?  @relation("EmployeeManager", fields: [managerId], references: [id])

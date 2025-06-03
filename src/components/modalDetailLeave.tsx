@@ -69,11 +69,11 @@ const ModalDetailLeave = ({
           />
           <InfoPersonal
             titleValue="Bộ phận"
-            value={infoRequetLeave?.employee.workInfo.department}
+            value={infoRequetLeave?.employee.workInfo.department?.name}
           />
           <InfoPersonal
             titleValue="Chức vụ"
-            value={infoRequetLeave?.employee.workInfo.position}
+            value={infoRequetLeave?.employee.workInfo.position?.name}
           />
         </div>
       </div>

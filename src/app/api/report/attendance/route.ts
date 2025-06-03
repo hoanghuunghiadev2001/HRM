@@ -24,7 +24,7 @@ export async function GET(request: Request) {
     const employeeId = searchParams.get("employeeId");
     const department = searchParams.get("department");
 
-    const where: Prisma.AttendanceWhereInput = {}; // 👈 Đây là chỗ duy nhất còn dùng `any` vì Prisma chưa hỗ trợ strongly-typed `where` phức tạp (có thể dùng Zod nếu muốn chắc chắn hơn).
+    const where: Prisma.AttendanceWhereInput = {};
 
     if (startDate && endDate) {
       where.date = {
@@ -45,40 +45,52 @@ export async function GET(request: Request) {
       where.employeeId = Number.parseInt(employeeId);
     }
 
-    let attendanceData: AttendanceWithEmployee[] = [];
-
-    if (department) {
-      attendanceData = await prisma.attendance.findMany({
-        where,
-        include: {
-          employee: {
-            select: {
-              id: true,
-              name: true,
-              employeeCode: true,
-              workInfo: true,
+    // Query attendance cùng employee + workInfo và include cả department relation
+    const attendanceDataRaw = await prisma.attendance.findMany({
+      where,
+      include: {
+        employee: {
+          select: {
+            id: true,
+            name: true,
+            employeeCode: true,
+            workInfo: {
+              select: {
+                // Chỉ lấy trường department.name thôi
+                department: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
             },
           },
         },
-      });
+      },
+    });
 
+    // Map lại dữ liệu để phù hợp với kiểu AttendanceWithEmployee
+    let attendanceData: AttendanceWithEmployee[] = attendanceDataRaw.map(
+      (record) => {
+        return {
+          ...record,
+          employee: {
+            ...record.employee,
+            workInfo: record.employee.workInfo
+              ? {
+                  department: record.employee.workInfo.department?.name ?? null,
+                }
+              : null,
+          },
+        };
+      }
+    );
+
+    // Nếu lọc theo department thì filter tiếp
+    if (department) {
       attendanceData = attendanceData.filter(
         (record) => record.employee.workInfo?.department === department
       );
-    } else {
-      attendanceData = await prisma.attendance.findMany({
-        where,
-        include: {
-          employee: {
-            select: {
-              id: true,
-              name: true,
-              employeeCode: true,
-              workInfo: true,
-            },
-          },
-        },
-      });
     }
 
     const stats = calculateAttendanceStats(attendanceData);

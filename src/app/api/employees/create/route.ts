@@ -19,6 +19,8 @@ export const config = {
 
 // Hàm parse ngày bắt buộc, throw lỗi nếu thiếu hoặc sai định dạng
 function parseDateRequired(dateStr: unknown, fieldName: string): Date {
+  console.log(dateStr);
+
   if (dateStr === null || dateStr === undefined) {
     throw new Error(`Missing required date field: ${fieldName}`);
   }
@@ -124,8 +126,8 @@ export async function POST(req: NextRequest) {
     // Xử lý workInfo
     const workInfoData = workInfo
       ? {
-          department: workInfo.department,
-          position: workInfo.position,
+          departmentId: workInfo.departmentId,
+          positionId: workInfo.positionId,
           specialization: workInfo.specialization,
           joinedTBD: parseDateNullable(workInfo.joinedTBD),
           joinedTeSCC: parseDateNullable(workInfo.joinedTeSCC),
@@ -187,6 +189,7 @@ export async function POST(req: NextRequest) {
         birthDate: parseDateRequired(birthDate, "birthDate"),
         password: hashedPassword,
         role,
+        isActive: false,
         avatar: avatarPath,
 
         workInfo: workInfoData ? { create: workInfoData } : undefined,

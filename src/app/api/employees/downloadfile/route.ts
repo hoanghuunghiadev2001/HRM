@@ -6,7 +6,12 @@ export async function GET() {
   try {
     const employees = await prisma.employee.findMany({
       include: {
-        workInfo: true,
+        workInfo: {
+          include: {
+            department: true,
+            position: true,
+          },
+        },
         personalInfo: true,
         contactInfo: true,
         otherInfo: true,
@@ -68,8 +73,8 @@ export async function GET() {
         stt: index++,
         employeeCode: emp.employeeCode,
         name: emp.name,
-        department: emp.workInfo?.department,
-        position: emp.workInfo?.position,
+        department: emp.workInfo?.department?.name,
+        position: emp.workInfo?.position?.name,
         joinedTBD: formatDate(emp.workInfo?.joinedTBD),
         joinedTeSCC: formatDate(emp.workInfo?.joinedTeSCC),
         seniorityStart: formatDate(emp.workInfo?.seniorityStart),

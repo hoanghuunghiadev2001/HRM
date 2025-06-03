@@ -170,11 +170,11 @@ const Profile = ({ dataProfile, updateProfile }: ProfileProps) => {
 
           <InfoPersonal
             titleValue="Bộ phận"
-            value={dataProfile?.workInfo.department}
+            value={dataProfile?.workInfo.department?.name}
           />
           <InfoPersonal
             titleValue="Chức vụ"
-            value={dataProfile?.workInfo.position}
+            value={dataProfile?.workInfo.position?.name}
           />
           <InfoPersonal
             titleValue="Số CCCD"
@@ -271,11 +271,11 @@ const Profile = ({ dataProfile, updateProfile }: ProfileProps) => {
         <div className="grid grid-cols-3 mt-1 w-full pl-10  pr-6 gap-4">
           <InfoPersonal
             titleValue="Bộ phận"
-            value={dataProfile?.workInfo.department}
+            value={dataProfile?.workInfo.department?.name}
           />
           <InfoPersonal
             titleValue="Chức vụ"
-            value={dataProfile?.workInfo.position}
+            value={dataProfile?.workInfo.position?.name}
           />
           <InfoPersonal
             titleValue="Ngành"

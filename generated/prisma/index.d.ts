@@ -2165,6 +2165,7 @@ export namespace Prisma {
     password: string | null
     role: $Enums.Role | null
     avatar: string | null
+    isActive: boolean | null
     managerId: number | null
   }
 
@@ -2177,6 +2178,7 @@ export namespace Prisma {
     password: string | null
     role: $Enums.Role | null
     avatar: string | null
+    isActive: boolean | null
     managerId: number | null
   }
 
@@ -2189,6 +2191,7 @@ export namespace Prisma {
     password: number
     role: number
     avatar: number
+    isActive: number
     managerId: number
     _all: number
   }
@@ -2213,6 +2216,7 @@ export namespace Prisma {
     password?: true
     role?: true
     avatar?: true
+    isActive?: true
     managerId?: true
   }
 
@@ -2225,6 +2229,7 @@ export namespace Prisma {
     password?: true
     role?: true
     avatar?: true
+    isActive?: true
     managerId?: true
   }
 
@@ -2237,6 +2242,7 @@ export namespace Prisma {
     password?: true
     role?: true
     avatar?: true
+    isActive?: true
     managerId?: true
     _all?: true
   }
@@ -2336,6 +2342,7 @@ export namespace Prisma {
     password: string
     role: $Enums.Role
     avatar: string | null
+    isActive: boolean
     managerId: number | null
     _count: EmployeeCountAggregateOutputType | null
     _avg: EmployeeAvgAggregateOutputType | null
@@ -2367,6 +2374,7 @@ export namespace Prisma {
     password?: boolean
     role?: boolean
     avatar?: boolean
+    isActive?: boolean
     managerId?: boolean
     manager?: boolean | Employee$managerArgs<ExtArgs>
     subordinates?: boolean | Employee$subordinatesArgs<ExtArgs>
@@ -2391,6 +2399,7 @@ export namespace Prisma {
     password?: boolean
     role?: boolean
     avatar?: boolean
+    isActive?: boolean
     managerId?: boolean
     manager?: boolean | Employee$managerArgs<ExtArgs>
   }, ExtArgs["result"]["employee"]>
@@ -2404,6 +2413,7 @@ export namespace Prisma {
     password?: boolean
     role?: boolean
     avatar?: boolean
+    isActive?: boolean
     managerId?: boolean
     manager?: boolean | Employee$managerArgs<ExtArgs>
   }, ExtArgs["result"]["employee"]>
@@ -2417,10 +2427,11 @@ export namespace Prisma {
     password?: boolean
     role?: boolean
     avatar?: boolean
+    isActive?: boolean
     managerId?: boolean
   }
 
-  export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeCode" | "name" | "gender" | "birthDate" | "password" | "role" | "avatar" | "managerId", ExtArgs["result"]["employee"]>
+  export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeCode" | "name" | "gender" | "birthDate" | "password" | "role" | "avatar" | "isActive" | "managerId", ExtArgs["result"]["employee"]>
   export type EmployeeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     manager?: boolean | Employee$managerArgs<ExtArgs>
     subordinates?: boolean | Employee$subordinatesArgs<ExtArgs>
@@ -2466,6 +2477,7 @@ export namespace Prisma {
       password: string
       role: $Enums.Role
       avatar: string | null
+      isActive: boolean
       managerId: number | null
     }, ExtArgs["result"]["employee"]>
     composites: {}
@@ -2909,6 +2921,7 @@ export namespace Prisma {
     readonly password: FieldRef<"Employee", 'String'>
     readonly role: FieldRef<"Employee", 'Role'>
     readonly avatar: FieldRef<"Employee", 'String'>
+    readonly isActive: FieldRef<"Employee", 'Boolean'>
     readonly managerId: FieldRef<"Employee", 'Int'>
   }
     
@@ -16331,6 +16344,7 @@ export namespace Prisma {
     password: 'password',
     role: 'role',
     avatar: 'avatar',
+    isActive: 'isActive',
     managerId: 'managerId'
   };
 
@@ -16591,6 +16605,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'WorkStatus'
    */
   export type EnumWorkStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WorkStatus'>
@@ -16644,13 +16665,6 @@ export namespace Prisma {
    */
   export type ListEnumLeaveStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeaveStatus[]'>
     
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
   /**
    * Deep Input Types
    */
@@ -16668,6 +16682,7 @@ export namespace Prisma {
     password?: StringFilter<"Employee"> | string
     role?: EnumRoleFilter<"Employee"> | $Enums.Role
     avatar?: StringNullableFilter<"Employee"> | string | null
+    isActive?: BoolFilter<"Employee"> | boolean
     managerId?: IntNullableFilter<"Employee"> | number | null
     manager?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
     subordinates?: EmployeeListRelationFilter
@@ -16691,6 +16706,7 @@ export namespace Prisma {
     password?: SortOrder
     role?: SortOrder
     avatar?: SortOrderInput | SortOrder
+    isActive?: SortOrder
     managerId?: SortOrderInput | SortOrder
     manager?: EmployeeOrderByWithRelationInput
     subordinates?: EmployeeOrderByRelationAggregateInput
@@ -16717,6 +16733,7 @@ export namespace Prisma {
     password?: StringFilter<"Employee"> | string
     role?: EnumRoleFilter<"Employee"> | $Enums.Role
     avatar?: StringNullableFilter<"Employee"> | string | null
+    isActive?: BoolFilter<"Employee"> | boolean
     managerId?: IntNullableFilter<"Employee"> | number | null
     manager?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
     subordinates?: EmployeeListRelationFilter
@@ -16740,6 +16757,7 @@ export namespace Prisma {
     password?: SortOrder
     role?: SortOrder
     avatar?: SortOrderInput | SortOrder
+    isActive?: SortOrder
     managerId?: SortOrderInput | SortOrder
     _count?: EmployeeCountOrderByAggregateInput
     _avg?: EmployeeAvgOrderByAggregateInput
@@ -16760,6 +16778,7 @@ export namespace Prisma {
     password?: StringWithAggregatesFilter<"Employee"> | string
     role?: EnumRoleWithAggregatesFilter<"Employee"> | $Enums.Role
     avatar?: StringNullableWithAggregatesFilter<"Employee"> | string | null
+    isActive?: BoolWithAggregatesFilter<"Employee"> | boolean
     managerId?: IntNullableWithAggregatesFilter<"Employee"> | number | null
   }
 
@@ -17589,6 +17608,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
@@ -17611,6 +17631,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     managerId?: number | null
     subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
@@ -17632,6 +17653,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
@@ -17654,6 +17676,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
@@ -17676,6 +17699,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     managerId?: number | null
   }
 
@@ -17687,6 +17711,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type EmployeeUncheckedUpdateManyInput = {
@@ -17698,6 +17723,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -18587,6 +18613,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -18682,6 +18713,7 @@ export namespace Prisma {
     password?: SortOrder
     role?: SortOrder
     avatar?: SortOrder
+    isActive?: SortOrder
     managerId?: SortOrder
   }
 
@@ -18699,6 +18731,7 @@ export namespace Prisma {
     password?: SortOrder
     role?: SortOrder
     avatar?: SortOrder
+    isActive?: SortOrder
     managerId?: SortOrder
   }
 
@@ -18711,6 +18744,7 @@ export namespace Prisma {
     password?: SortOrder
     role?: SortOrder
     avatar?: SortOrder
+    isActive?: SortOrder
     managerId?: SortOrder
   }
 
@@ -18803,6 +18837,14 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -19432,11 +19474,6 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type KPIEmployeeScalarRelationFilter = {
     is?: KPIEmployeeWhereInput
     isNot?: KPIEmployeeWhereInput
@@ -19508,14 +19545,6 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EmployeeCreateNestedOneWithoutSubordinatesInput = {
@@ -19670,6 +19699,10 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type EmployeeUpdateOneWithoutSubordinatesNestedInput = {
@@ -20368,10 +20401,6 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
   export type KPIEmployeeUpdateOneRequiredWithoutEntriesNestedInput = {
     create?: XOR<KPIEmployeeCreateWithoutEntriesInput, KPIEmployeeUncheckedCreateWithoutEntriesInput>
     connectOrCreate?: KPIEmployeeCreateOrConnectWithoutEntriesInput
@@ -20442,6 +20471,11 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedIntNullableFilter<$PrismaModel = never> = {
@@ -20548,6 +20582,14 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -20669,11 +20711,6 @@ export namespace Prisma {
     _max?: NestedEnumLeaveStatusFilter<$PrismaModel>
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -20690,14 +20727,6 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type EmployeeCreateWithoutSubordinatesInput = {
     employeeCode: string
     name: string
@@ -20706,6 +20735,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -20727,6 +20757,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     managerId?: number | null
     departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -20752,6 +20783,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -20773,6 +20805,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -21063,6 +21096,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -21084,6 +21118,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -21124,6 +21159,7 @@ export namespace Prisma {
     password?: StringFilter<"Employee"> | string
     role?: EnumRoleFilter<"Employee"> | $Enums.Role
     avatar?: StringNullableFilter<"Employee"> | string | null
+    isActive?: BoolFilter<"Employee"> | boolean
     managerId?: IntNullableFilter<"Employee"> | number | null
   }
 
@@ -21451,6 +21487,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -21472,6 +21509,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     managerId?: number | null
     subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -21497,6 +21535,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
@@ -21518,6 +21557,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     managerId?: number | null
     subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
@@ -21621,6 +21661,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -21642,6 +21683,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -21673,6 +21715,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
@@ -21694,6 +21737,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
@@ -21910,6 +21954,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
@@ -21931,6 +21976,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     managerId?: number | null
     subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
@@ -22027,6 +22073,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
@@ -22048,6 +22095,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
@@ -22068,6 +22116,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
@@ -22089,6 +22138,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     managerId?: number | null
     subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
@@ -22125,6 +22175,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
@@ -22146,6 +22197,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
@@ -22166,6 +22218,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
@@ -22187,6 +22240,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     managerId?: number | null
     subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
@@ -22223,6 +22277,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
@@ -22244,6 +22299,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
@@ -22264,6 +22320,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
@@ -22285,6 +22342,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     managerId?: number | null
     subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
@@ -22321,6 +22379,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
@@ -22342,6 +22401,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
@@ -22362,6 +22422,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
@@ -22383,6 +22444,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     managerId?: number | null
     subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
@@ -22419,6 +22481,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
@@ -22440,6 +22503,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
@@ -22460,6 +22524,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
@@ -22481,6 +22546,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     managerId?: number | null
     subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
@@ -22517,6 +22583,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
@@ -22538,6 +22605,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
@@ -22619,6 +22687,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
@@ -22640,6 +22709,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
     managerId?: number | null
     subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
@@ -22731,6 +22801,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
@@ -22752,6 +22823,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
@@ -22849,6 +22921,7 @@ export namespace Prisma {
     password: string
     role?: $Enums.Role
     avatar?: string | null
+    isActive?: boolean
   }
 
   export type LeaveRequestCreateManyEmployeeInput = {
@@ -22886,6 +22959,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -22907,6 +22981,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -22928,6 +23003,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type LeaveRequestUpdateWithoutEmployeeInput = {

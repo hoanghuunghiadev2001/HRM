@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Prisma } from "../../../../../generated/prisma";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "../../../../../generated/prisma";
 
 export async function GET(req: NextRequest) {
   try {
@@ -11,10 +11,13 @@ export async function GET(req: NextRequest) {
     const employeeFilter: Prisma.EmployeeWhereInput = {};
 
     if ((role === "MANAGER" || role === "ADMIN") && department) {
+      const parts = department.split("-");
+      const departmentId = parts[0] ? parseInt(parts[0], 10) : undefined;
+      const positionId = parts[1] ? parseInt(parts[1], 10) : undefined;
+
       employeeFilter.workInfo = {
-        is: {
-          department,
-        },
+        ...(departmentId && { departmentId }),
+        ...(positionId && { positionId }),
       };
     }
 

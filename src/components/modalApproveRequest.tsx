@@ -87,13 +87,13 @@ const ModalApproveRequest = ({
           <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             <p className="shrink-0">Bộ phận:</p>
             <p className="inline font-medium text-[#3a3a3a]">
-              {requestApprove?.employee?.workInfo.department}
+              {requestApprove?.employee?.workInfo.department?.name}
             </p>
           </div>
           <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             <p className="shrink-0">Chức vụ:</p>
             <p className="inline font-medium text-[#3a3a3a]">
-              {requestApprove?.employee?.workInfo.position}
+              {requestApprove?.employee?.workInfo.position?.name}
             </p>
           </div>
         </div>

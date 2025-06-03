@@ -304,7 +304,6 @@ const ModalEditEmployee = ({
   };
 
   useEffect(() => {
-    console.log(selectedDepartmentId);
     if (selectedDepartmentId) {
       listPosition();
     }
@@ -312,6 +311,8 @@ const ModalEditEmployee = ({
   }, [selectedDepartmentId]);
 
   const fetchData = async () => {
+    console.log(selectedDepartmentId);
+
     try {
       const [positionsData] = await Promise.all([
         selectedDepartmentId
@@ -557,7 +558,10 @@ const ModalEditEmployee = ({
                     placeholder="Bộ phận"
                     disabled={localUser?.role === "MANAGER"}
                     allowClear
-                    onChange={(e) => setSelectedDepartmentId(e.target.value)}
+                    onChange={(value) => {
+                      setSelectedDepartmentId(value);
+                      form.setFieldValue("position", undefined);
+                    }}
                     options={departments.map((d) => ({
                       value: d.id,
                       label: d.name,
@@ -570,10 +574,9 @@ const ModalEditEmployee = ({
                   rules={[{ required: true }]}
                 >
                   <Select
-                    placeholder="Bộ phận"
+                    placeholder="Chức vụ"
                     disabled={localUser?.role === "MANAGER"}
                     allowClear
-                    onChange={(e) => setSelectedDepartmentId(e.target.value)}
                     options={positions.map((d) => ({
                       value: d.id,
                       label: d.name,

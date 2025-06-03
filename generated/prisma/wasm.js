@@ -129,6 +129,7 @@ exports.Prisma.EmployeeScalarFieldEnum = {
   password: 'password',
   role: 'role',
   avatar: 'avatar',
+  isActive: 'isActive',
   managerId: 'managerId'
 };
 

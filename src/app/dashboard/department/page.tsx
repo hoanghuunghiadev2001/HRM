@@ -186,14 +186,11 @@ export default function DepartmentPositionCRUD() {
           setLoading(false);
         } else if (modalMode === "edit" && editItemId !== null) {
           // Gọi API sửa chức vụ
-          const res = await fetch(
-            `/api/departments/${currentDeptIdForPos}/positions/${editItemId}`,
-            {
-              method: "PATCH",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ name: newName }),
-            }
-          );
+          const res = await fetch(`/api/positions/?posId=${editItemId}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: newName }),
+          });
           if (!res.ok) {
             setLoading(false);
             throw new Error("Cập nhật chức vụ thất bại");
@@ -223,10 +220,9 @@ export default function DepartmentPositionCRUD() {
   const onDeletePosition = async () => {
     setLoading(true);
     try {
-      const res = await fetch(
-        `/api/departments/${currentDeptIdForPos}/positions/${editItemId}`,
-        { method: "DELETE" }
-      );
+      const res = await fetch(`/api/positions/${editItemId}`, {
+        method: "DELETE",
+      });
       if (!res.ok) {
         setLoading(false);
         throw new Error("Xóa chức vụ thất bại");
@@ -398,7 +394,7 @@ export default function DepartmentPositionCRUD() {
         open={modalOpen}
         onOk={onModalOk}
         onCancel={onModalCancel}
-        destroyOnClose
+        destroyOnHidden
       >
         <Form form={form} layout="vertical" name="modalForm">
           <Form.Item

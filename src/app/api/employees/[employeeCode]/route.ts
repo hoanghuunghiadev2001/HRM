@@ -78,8 +78,8 @@ export async function GET(req: NextRequest) {
       workInfo: employee.workInfo
         ? {
             ...employee.workInfo,
-            department: employee.workInfo.department || null, // Lấy tên bộ phận
-            position: employee.workInfo.position || null,
+            department: employee.workInfo.department?.name || null, // Lấy tên bộ phận
+            position: employee.workInfo.position?.name || null,
             joinedTBD: formatDate(employee.workInfo.joinedTBD),
             joinedTeSCC: formatDate(employee.workInfo.joinedTeSCC),
             seniorityStart: formatDate(employee.workInfo.seniorityStart),
