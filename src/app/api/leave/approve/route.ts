@@ -265,15 +265,29 @@ export async function PUT(req: NextRequest) {
             to: [email],
             subject: `Bạn có đơn nghỉ phép cần duyệt #${leaveRequestId}`,
             html: `
-          <p>Xin chào <strong>${approver.name}</strong>,</p>
-          <p>Bạn có một đơn nghỉ phép mới cần phê duyệt với thông tin:</p>
-          <ul>
-            <li>Nhân viên: ${leaveRequest.employee.name}</li>
-            <li>Thời gian: ${startVN} - ${endVN}</li>
-            <li>Lý do: ${leaveRequest.reason}</li>
-          </ul>
-          <p>Vui lòng đăng nhập hệ thống để xử lý.</p>
-        `,
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
+      <p style="font-size: 16px; color: #333;">Xin chào <strong style="color: #2a7ae2;">${approver.name}</strong>,</p>
+      <p style="font-size: 14px; color: #555;">Bạn có một đơn nghỉ phép mới cần phê duyệt với thông tin:</p>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+        <tbody>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ddd; background-color: #fff; font-weight: 600; width: 120px;">Nhân viên</td>
+            <td style="padding: 8px; border: 1px solid #ddd; background-color: #fff;">${leaveRequest.employee.name}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ddd; background-color: #fff; font-weight: 600;">Thời gian</td>
+            <td style="padding: 8px; border: 1px solid #ddd; background-color: #fff;">${startVN} - ${endVN}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ddd; background-color: #fff; font-weight: 600;">Lý do</td>
+            <td style="padding: 8px; border: 1px solid #ddd; background-color: #fff;">${leaveRequest.reason}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="font-size: 14px; color: #555; margin-top: 20px;">Vui lòng đăng nhập hệ thống để xử lý.</p>
+      <p style="font-size: 14px; color: #888;">Trân trọng,<br/>Phòng Nhân sự</p>
+    </div>
+  `,
           });
         }
       }
