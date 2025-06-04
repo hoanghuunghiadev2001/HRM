@@ -40,6 +40,39 @@ function generateRejectionEmail(
   `;
 }
 
+async function approveStep(stepApproverId: number) {
+  return await prisma.$transaction(async (tx) => {
+    // Lấy thông tin stepApprover và step liên quan
+    const stepApprover = await tx.leaveApprovalStepApprover.findUnique({
+      where: { id: stepApproverId },
+      include: { leaveApprovalStep: { include: { approvers: true } } },
+    });
+
+    if (!stepApprover) throw new Error("Step Approver not found");
+
+    // Kiểm tra xem có ai trong cùng bước đã duyệt chưa
+    const someoneApproved = stepApprover.leaveApprovalStep.approvers.some(
+      (a) => a.status === "approved"
+    );
+
+    if (someoneApproved) {
+      // Đã có người duyệt rồi, không cho duyệt nữa
+      throw new Error("Bước duyệt này đã có người duyệt rồi");
+    }
+
+    // Nếu chưa ai duyệt, cho phép cập nhật trạng thái người duyệt hiện tại
+    const updated = await tx.leaveApprovalStepApprover.update({
+      where: { id: stepApproverId, status: "pending" },
+      data: {
+        status: "approved",
+        approvedAt: new Date(),
+      },
+    });
+
+    return updated;
+  });
+}
+
 export async function PUT(req: NextRequest) {
   try {
     const token = req.cookies.get("token")?.value;
@@ -86,6 +119,15 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json(
         { message: "Không tìm thấy bước duyệt đang chờ cho người duyệt này" },
         { status: 404 }
+      );
+    }
+
+    try {
+      await approveStep(stepApprover.id);
+    } catch (error) {
+      return NextResponse.json(
+        { message: (error as Error).message },
+        { status: 400 }
       );
     }
 
