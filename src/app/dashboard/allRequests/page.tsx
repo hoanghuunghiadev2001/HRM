@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import React from "react";
-import { Form, Input, Pagination, Space, Table } from "antd";
+import { Form, Input, message, Pagination, Space, Table } from "antd";
 import type { TableProps, TreeSelectProps } from "antd";
 import {
   AllRequests,
@@ -143,6 +143,7 @@ export default function AllRequestPage() {
   >([]);
   const localUser = getUserFromLocalStorage();
   const [departments, setDepartments] = useState<Department[]>([]);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const [filterName, setFilterName] = useState("");
   const [filterMSNV, setFilterMSNV] = useState("");
@@ -321,11 +322,15 @@ export default function AllRequestPage() {
     setLoading(true);
     try {
       await approveLeaveRequest(id, statusRequest, localUser.name);
-      await getApiAllRequestsApproved(pageTable, pageSize);
-      await getApiAllRequestsNeed();
+
       setLoading(false);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Lỗi:", err);
+      messageApi.open({
+        type: "error",
+        content: `${err}`,
+      });
+      getApiAllRequestsNeed();
       setLoading(false);
     }
   };
@@ -360,7 +365,11 @@ export default function AllRequestPage() {
   return (
     <div>
       <ModalNeedApproved
-        onClose={() => setModalNeedApproved(false)}
+        onClose={() => {
+          setModalNeedApproved(false);
+          getApiAllRequestsApproved(pageTable, pageSize);
+          getApiAllRequestsNeed();
+        }}
         open={modalNeedApproved}
         allRequestsApproved={requestsNeedApprove}
         putApprovedRequest={putApprovedRequest}
@@ -372,7 +381,7 @@ export default function AllRequestPage() {
         title="Chi Tiết Đơn Xin Phép"
       />
       <ModalLoading isOpen={loading} />
-
+      {contextHolder}
       <div className="w-full">
         <p className="font-bold  text-2xl text-[#4a4a6a]">
           Danh sách phiếu yêu cầu:
