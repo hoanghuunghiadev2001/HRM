@@ -2,6 +2,19 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
+function getLevelFromPositionName(name: string): number {
+  const lowerName = name.toLowerCase();
+  if (lowerName.includes("tổ trưởng")) return 2;
+  if (lowerName.includes("trưởng phòng")) return 3;
+  if (
+    lowerName.includes("phó tổng giám đốc") ||
+    lowerName.includes("tổng giám đốc")
+  )
+    return 5;
+  if (lowerName.includes("giám đốc")) return 4;
+  return 1; // mặc định nhân viên thường
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -16,6 +29,7 @@ export async function POST(req: NextRequest) {
             positions: {
               create: dept.positions.map((pos: any) => ({
                 name: pos.name,
+                level: getLevelFromPositionName(pos.name),
               })),
             },
           },

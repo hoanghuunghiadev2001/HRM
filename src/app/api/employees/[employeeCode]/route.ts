@@ -78,8 +78,6 @@ export async function GET(req: NextRequest) {
       workInfo: employee.workInfo
         ? {
             ...employee.workInfo,
-            department: employee.workInfo.department?.name || null, // Lấy tên bộ phận
-            position: employee.workInfo.position?.name || null,
             joinedTBD: formatDate(employee.workInfo.joinedTBD),
             joinedTeSCC: formatDate(employee.workInfo.joinedTeSCC),
             seniorityStart: formatDate(employee.workInfo.seniorityStart),
@@ -184,23 +182,57 @@ export async function PATCH(req: NextRequest) {
       avatar = undefined;
     }
 
+    // Nếu có workInfo.position thì xử lý cập nhật level cho Position tương ứng
+    if (body.workInfo?.position) {
+      const position = await prisma.position.findUnique({
+        where: { id: body.workInfo.position },
+      });
+
+      if (position?.name) {
+        let newLevel = 1;
+        const posName = position.name.toLowerCase();
+
+        if (posName.includes("tổ trưởng")) {
+          newLevel = 2;
+        } else if (posName.includes("trưởng phòng")) {
+          newLevel = 3;
+        } else if (
+          posName.includes("tổng giám đốc") ||
+          posName.includes("phó tổng giám đốc")
+        ) {
+          newLevel = 5;
+        } else if (posName.includes("giám đốc")) {
+          newLevel = 4;
+        }
+
+        if (newLevel !== position.level) {
+          await prisma.position.update({
+            where: { id: body.workInfo.position },
+            data: { level: newLevel },
+          });
+        }
+      }
+    }
+
+    // Cập nhật thông tin nhân viên chính
     await prisma.employee.update({
       where: { id: employee.id },
       data: {
         avatar: avatar,
         name: body.name,
-        birthDate: body.birthDate,
+        birthDate: body.birthDate ? new Date(body.birthDate) : undefined,
         role: body.role,
         gender: body.gender,
       },
     });
+
+    // Cập nhật workInfo nếu có
     if (body.workInfo) {
       await prisma.workInfo.update({
         where: { employeeId: employee.id },
         data: {
-          departmentId: body.workInfo.department, // 🟢 Thay vì department: 1
+          departmentId: body.workInfo.department, // chú ý tên đúng với schema
           positionId: body.workInfo.position,
-
           specialization: body.workInfo.specialization,
           joinedTBD: body.workInfo.joinedTBD
             ? new Date(body.workInfo.joinedTBD)
@@ -224,6 +256,7 @@ export async function PATCH(req: NextRequest) {
       });
     }
 
+    // Cập nhật personalInfo nếu có
     if (body.personalInfo) {
       await prisma.personalInfo.update({
         where: { employeeId: employee.id },
@@ -245,6 +278,7 @@ export async function PATCH(req: NextRequest) {
       });
     }
 
+    // Cập nhật contactInfo nếu có
     if (body.contactInfo) {
       await prisma.contactInfo.update({
         where: { employeeId: employee.id },
@@ -257,6 +291,7 @@ export async function PATCH(req: NextRequest) {
       });
     }
 
+    // Cập nhật otherInfo nếu có
     if (body.otherInfo) {
       await prisma.otherInfo.update({
         where: { employeeId: employee.id },

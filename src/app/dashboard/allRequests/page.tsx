@@ -28,6 +28,75 @@ import { Department } from "@/lib/interface";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+export interface dataNeedApprove {
+  leaveRequest: LeaveRequestNeedApprove;
+  approversWhoApproved: ApproversWhoApproved[];
+}
+export interface ApproversWhoApproved {
+  name: string;
+  employeeCode: string;
+  approvedAt: string;
+  stepLevel: number;
+  departmentName: string;
+  positionName: string;
+}
+
+export interface LeaveRequestNeedApprove {
+  id: number;
+  employeeId: number;
+  leaveType: string;
+  startDate: string;
+  endDate: string;
+  totalHours: number;
+  reason: string;
+  status: string;
+  approvedBy: any;
+  approvedAt: any;
+  createdAt: string;
+  approvalSteps: ApprovalStepNeedApprove[];
+  employee: EmployeeNeedApprove;
+}
+
+export interface ApprovalStepNeedApprove {
+  id: number;
+  leaveRequestId: number;
+  level: number;
+  status: string;
+  approvedAt: any;
+  approvers: any[];
+}
+
+export interface EmployeeNeedApprove {
+  id: number;
+  name: string;
+  employeeCode: string;
+  workInfo: WorkInfoNeedApprove;
+}
+
+export interface WorkInfoNeedApprove {
+  department: Department;
+  position: PositionNeedApprove;
+}
+
+export interface DepartmentNeedApprove {
+  id: number;
+  name: string;
+  abbreviation: string;
+  createdAt: string;
+  updatedAt: string;
+  headId: any;
+  directorId: any;
+}
+
+export interface PositionNeedApprove {
+  id: number;
+  name: string;
+  level: number;
+  departmentId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface DataType {
   key: string;
   id: number;
@@ -70,7 +139,7 @@ export default function AllRequestPage() {
   const [pageTable, setPageTable] = useState(1);
   const [totalTable, setTotalTable] = useState();
   const [requestsNeedApprove, setRequestsNeedApprove] = useState<
-    RequestLeave[]
+    dataNeedApprove[]
   >([]);
   const localUser = getUserFromLocalStorage();
   const [departments, setDepartments] = useState<Department[]>([]);
@@ -132,6 +201,8 @@ export default function AllRequestPage() {
   };
 
   const getApiAllRequestsNeed = async () => {
+    console.log(localUser);
+
     setLoading(true);
     try {
       const res = await getApiAllRequestsNeedApprove({
@@ -139,7 +210,7 @@ export default function AllRequestPage() {
         department:
           localUser.role === "ADMIN" ? "" : localUser.workInfo.department,
         name: "",
-        employeeCode: "",
+        employeeCode: localUser.id,
       });
 
       const data = await res;

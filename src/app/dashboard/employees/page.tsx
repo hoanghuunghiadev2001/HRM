@@ -26,7 +26,6 @@ import { ListCollapse, PlusIcon } from "lucide-react";
 import { createStyles } from "antd-style";
 import ModalAddNewEmployee from "@/components/addNewEmployee";
 import {
-  changeEmployeePassword,
   deleteEmployeeApi,
   fetchEmployeeByCode,
   updateEmployee,
@@ -39,10 +38,8 @@ import {
   DeleteOutlined,
   DownloadOutlined,
   InfoCircleOutlined,
-  LockOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import ModalChangePassEmployee from "@/components/modalChangePassEmployee";
 
 interface DataType {
   key: string;
@@ -85,9 +82,7 @@ export default function EmployeesPage() {
   const localUser = getUserFromLocalStorage();
   const [departments, setDepartments] = useState<Department[]>([]);
   const [modalEditEmployee, setModalEditEmployee] = useState<boolean>(false);
-  const [modalChangePassEmployee, setModalChangePassEmployee] =
-    useState<boolean>(false);
-  const [employeeCodeChoose, setEmployeeCodeChoose] = useState("");
+
   const [modal, contextHolder] = Modal.useModal();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [batchSize, setBatchSize] = useState(10);
@@ -126,8 +121,6 @@ export default function EmployeesPage() {
     errors: Array<{ row: number; message: string }>;
     total: number;
   } | null>(null);
-
-  const [form] = Form.useForm();
 
   const { styles } = useStyle();
 
@@ -231,16 +224,6 @@ export default function EmployeesPage() {
       render: (_, record) => {
         // Tạo items menu với callback có thể dùng record
         const items: MenuProps["items"] = [
-          {
-            key: "1",
-            label: "Đổi mật khẩu",
-            icon: <LockOutlined />,
-            onClick: () => {
-              // Ví dụ: bạn dùng record để mở modal đổi mật khẩu của nhân viên này
-              setEmployeeCodeChoose(record.MSNV);
-              setModalChangePassEmployee(true);
-            },
-          },
           {
             key: "2",
             label: "Chi tiết",
@@ -373,49 +356,49 @@ export default function EmployeesPage() {
   };
 
   //show modal thành công
-  const countDown = () => {
-    let secondsToGo = 3;
+  // const countDown = () => {
+  //   let secondsToGo = 3;
 
-    const instance = modal.success({
-      title: "Đổi mật khẩu thành công",
-    });
+  //   const instance = modal.success({
+  //     title: "Đổi mật khẩu thành công",
+  //   });
 
-    const timer = setInterval(() => {
-      secondsToGo -= 1;
-    }, 1000);
+  //   const timer = setInterval(() => {
+  //     secondsToGo -= 1;
+  //   }, 1000);
 
-    setTimeout(() => {
-      clearInterval(timer);
-      instance.destroy();
-    }, secondsToGo * 1000);
-  };
+  //   setTimeout(() => {
+  //     clearInterval(timer);
+  //     instance.destroy();
+  //   }, secondsToGo * 1000);
+  // };
 
   //Đổi mật khẩu cho nhân viên
-  const handleChangePassword = async (newPassword: string) => {
-    setLoading(true);
-    const result = await changeEmployeePassword(
-      employeeCodeChoose,
-      newPassword
-    );
+  // const handleChangePassword = async (newPassword: string) => {
+  //   setLoading(true);
+  //   const result = await changeEmployeePassword(
+  //     employeeCodeChoose,
+  //     newPassword
+  //   );
 
-    if (result.status === 1) {
-      setLoading(false);
-      setModalChangePassEmployee(false);
-      countDown();
-    } else {
-      setLoading(false);
-      form.setFields([
-        {
-          name: "newPassword",
-          errors: ["Không thành công"],
-        },
-        {
-          name: "renewPassword",
-          errors: ["Không thành công"],
-        },
-      ]);
-    }
-  };
+  //   if (result.status === 1) {
+  //     setLoading(false);
+  //     setModalChangePassEmployee(false);
+  //     countDown();
+  //   } else {
+  //     setLoading(false);
+  //     form.setFields([
+  //       {
+  //         name: "newPassword",
+  //         errors: ["Không thành công"],
+  //       },
+  //       {
+  //         name: "renewPassword",
+  //         errors: ["Không thành công"],
+  //       },
+  //     ]);
+  //   }
+  // };
 
   //Tải danh sách nhân viên
   const handleExportExcel = async () => {
@@ -630,11 +613,6 @@ export default function EmployeesPage() {
 
   return (
     <div>
-      <ModalChangePassEmployee
-        handleChangPass={handleChangePassword}
-        onClose={() => setModalChangePassEmployee(false)}
-        open={modalChangePassEmployee}
-      />
       <ModalLoading isOpen={loading} />
       <ModalEditEmployee
         department={departments ?? []}
@@ -646,6 +624,7 @@ export default function EmployeesPage() {
         open={modalEditEmployee}
       />
       <ModalAddNewEmployee
+        department={departments ?? []}
         onClose={() => setModalAddEmployee(false)}
         open={modalAddEmployee}
       />

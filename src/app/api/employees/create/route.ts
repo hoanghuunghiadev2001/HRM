@@ -1,4 +1,3 @@
-// /app/api/employee/route.ts
 import "server-only";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
@@ -19,8 +18,6 @@ export const config = {
 
 // Hàm parse ngày bắt buộc, throw lỗi nếu thiếu hoặc sai định dạng
 function parseDateRequired(dateStr: unknown, fieldName: string): Date {
-  console.log(dateStr);
-
   if (dateStr === null || dateStr === undefined) {
     throw new Error(`Missing required date field: ${fieldName}`);
   }
@@ -54,7 +51,7 @@ function parseDateNullable(dateStr: unknown): Date | null {
 
 export async function POST(req: NextRequest) {
   try {
-    // Phải đọc JSON thủ công từ request.body()
+    // Đọc JSON từ request
     const body = await req.json();
 
     const {
@@ -101,9 +98,8 @@ export async function POST(req: NextRequest) {
     // Mã hoá password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Xử lý avatar upload lên Cloudinary (nếu có)
     let avatarPath: string | undefined = undefined;
-
-    // Xử lý ảnh base64 nếu có
     if (avatar) {
       const matches = avatar.match(/^data:(image\/\w+);base64,(.+)$/);
       if (!matches) {
@@ -118,12 +114,44 @@ export async function POST(req: NextRequest) {
           public_id: `employee-${employeeCode}-${Date.now()}`,
         });
         avatarPath = res.secure_url;
-      } catch {
-        console.log("that bai");
+      } catch (error) {
+        console.error("Cloudinary upload failed:", error);
       }
     }
 
-    // Xử lý workInfo
+    // Nếu có workInfo.positionId thì lấy Position, tính level và cập nhật level nếu cần
+    if (workInfo?.positionId) {
+      const position = await prisma.position.findUnique({
+        where: { id: workInfo.positionId },
+      });
+
+      if (position?.name) {
+        let newLevel = 1;
+        const posName = position.name.toLowerCase();
+
+        if (posName.includes("tổ trưởng")) {
+          newLevel = 2;
+        } else if (posName.includes("trưởng phòng")) {
+          newLevel = 3;
+        } else if (
+          posName.includes("tổng giám đốc") ||
+          posName.includes("phó tổng giám đốc")
+        ) {
+          newLevel = 5;
+        } else if (posName.includes("giám đốc")) {
+          newLevel = 4;
+        }
+
+        if (newLevel !== position.level) {
+          await prisma.position.update({
+            where: { id: workInfo.positionId },
+            data: { level: newLevel },
+          });
+        }
+      }
+    }
+
+    // Xử lý workInfo (không có level nữa)
     const workInfoData = workInfo
       ? {
           departmentId: workInfo.departmentId,

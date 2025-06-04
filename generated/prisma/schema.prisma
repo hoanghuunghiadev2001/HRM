@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider      = "prisma-client-js"
   output        = "../generated/prisma"
@@ -16,38 +10,37 @@ datasource db {
 }
 
 enum Role {
-  USER // Nhân viên
-  MANAGER // Quản lý
-  ADMIN // Quản trị viên
+  USER
+  MANAGER
+  ADMIN
 }
 
 enum Sex {
-  MALE // Nam
-  FEMALE // Nữ
+  MALE
+  FEMALE
 }
 
 enum WorkStatus {
-  OFFICIAL // Chính thức
-  PROBATION // Học việc
-  RESIGNED // Nghỉ việc
+  OFFICIAL
+  PROBATION
+  RESIGNED
 }
 
 enum LeaveTypeEnum {
-  PN // Phép năm
-  NB // Nghỉ bù
-  PC // Phép cưới
-  PT // Phép tang
-  Cgt // Công tác
-  PB // Phép bệnh (không hưởng lương)
-  TS // Thai sản (không hưởng lương)
-  PR // Phép riêng (không hưởng lương)
+  PN
+  NB
+  PC
+  PT
+  Cgt
+  PB
+  TS
+  PR
 }
 
-// Định nghĩa enum trạng thái đơn nghỉ
 enum LeaveStatus {
-  pending // Đang chờ duyệt
-  approved // Đã chấp thuận
-  rejected // Đã từ chối
+  pending
+  approved
+  rejected
 }
 
 model Employee {
@@ -73,19 +66,19 @@ model Employee {
   contactInfo  ContactInfo?
   otherInfo    OtherInfo?
 
-  LeaveRequest LeaveRequest[]
-  Attendance   Attendance[]
+  LeaveRequest       LeaveRequest[]
+  LeaveApprovalSteps LeaveApprovalStepApprover[] @relation("ApproverSteps")
 
+  Attendance  Attendance[]
   KPIEmployee KPIEmployee[]
 }
 
 model Department {
-  id           Int        @id @default(autoincrement())
-  name         String     @unique
-  positions    Position[]
-  abbreviation String     @unique
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  id           Int      @id @default(autoincrement())
+  name         String   @unique
+  abbreviation String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   headId     Int? @unique
   directorId Int? @unique
@@ -93,37 +86,38 @@ model Department {
   head     Employee? @relation("DepartmentHead", fields: [headId], references: [id])
   director Employee? @relation("DepartmentDirector", fields: [directorId], references: [id])
 
+  positions Position[]
   workInfos WorkInfo[]
 }
 
 model Position {
   id           Int        @id @default(autoincrement())
-  name         String // Tên chức vụ (ví dụ: Trưởng phòng, Nhân viên)
-  level        Int        @default(1) // Thêm mặc định cho level
+  name         String
+  level        Int        @default(1)
   departmentId Int
   department   Department @relation(fields: [departmentId], references: [id])
-  employees    WorkInfo[] // Liên kết với nhân viên (WorkInfo)
+  employees    WorkInfo[]
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 }
 
 model WorkInfo {
   id           Int  @id @default(autoincrement())
-  departmentId Int? // Khóa ngoại bộ phận
-  positionId   Int? // Khóa ngoại chức vụ
+  departmentId Int?
+  positionId   Int?
 
   department Department? @relation(fields: [departmentId], references: [id])
   position   Position?   @relation(fields: [positionId], references: [id])
 
-  specialization  String? // Ngành
-  joinedTBD       DateTime? // Ngày vào TBD
-  joinedTeSCC     DateTime? // Ngày vào TeSCC
-  seniorityStart  DateTime? // Ngày tính thâm niên
-  seniority       String? // Thâm niên
-  contractNumber  String? // Số hợp đồng
-  contractDate    DateTime? // Ngày ký hợp đồng
-  contractType    String? // Loại hợp đồng
-  contractEndDate DateTime? // Ngày hết hạn
+  specialization  String?
+  joinedTBD       DateTime?
+  joinedTeSCC     DateTime?
+  seniorityStart  DateTime?
+  seniority       String?
+  contractNumber  String?
+  contractDate    DateTime?
+  contractType    String?
+  contractEndDate DateTime?
 
   employeeId Int      @unique
   employee   Employee @relation(fields: [employeeId], references: [id], map: "WorkInfo_employee_fkey")
@@ -131,17 +125,17 @@ model WorkInfo {
 
 model PersonalInfo {
   id                Int       @id @default(autoincrement())
-  identityNumber    String? // Số CMND
-  issueDate         DateTime? // Ngày cấp
-  issuePlace        String? // Nơi cấp
-  hometown          String? // Nguyên quán
-  idAddress         String? // Địa chỉ theo CMND
-  education         String? // Trình độ
-  drivingLicense    String? // Giấy phép lái xe
-  toyotaCertificate String? // Chứng chỉ Toyota
-  taxCode           String? // Mã số thuế
-  insuranceNumber   String? // Số sổ BH
-  insuranceSalary   Int? // Lương đóng BH
+  identityNumber    String?
+  issueDate         DateTime?
+  issuePlace        String?
+  hometown          String?
+  idAddress         String?
+  education         String?
+  drivingLicense    String?
+  toyotaCertificate String?
+  taxCode           String?
+  insuranceNumber   String?
+  insuranceSalary   Int?
 
   employeeId Int      @unique
   employee   Employee @relation(fields: [employeeId], references: [id], map: "PersonalInfo_employee_fkey")
@@ -149,10 +143,10 @@ model PersonalInfo {
 
 model ContactInfo {
   id            Int     @id @default(autoincrement())
-  phoneNumber   String? // Số điện thoại
-  relativePhone String? // Số điện thoại người thân
-  companyPhone  String? // Điện thoại công ty
-  email         String? // Email
+  phoneNumber   String?
+  relativePhone String?
+  companyPhone  String?
+  email         String?
 
   employeeId Int      @unique
   employee   Employee @relation(fields: [employeeId], references: [id], map: "ContactInfo_employee_fkey")
@@ -160,41 +154,68 @@ model ContactInfo {
 
 model OtherInfo {
   id               Int        @id @default(autoincrement())
-  workStatus       WorkStatus @default(OFFICIAL) // Trạng thái làm việc
-  resignedDate     DateTime? // Ngày nghỉ
-  documentsChecked String? // Đã kiểm tra hồ sơ
-  updatedAt        DateTime? // Thời gian cập nhật
-  VCB              String? // Ngân hàng VCB
-  MTCV             String? // MTCV (nếu có thể là hệ thống nội bộ)
-  PNJ              String? // PNJ (tuỳ chỉnh)
+  workStatus       WorkStatus @default(OFFICIAL)
+  resignedDate     DateTime?
+  documentsChecked String?
+  updatedAt        DateTime?
+  VCB              String?
+  MTCV             String?
+  PNJ              String?
 
   employeeId Int      @unique
   employee   Employee @relation(fields: [employeeId], references: [id], map: "OtherInfo_employee_fkey")
 }
 
 model LeaveRequest {
-  id         Int           @id @default(autoincrement()) // ID đơn xin nghỉ
-  employeeId Int // ID nhân viên
-  leaveType  LeaveTypeEnum // Loại phép (enum)
-  startDate  DateTime // Ngày bắt đầu nghỉ
-  endDate    DateTime // Ngày kết thúc nghỉ
-  totalHours Float? // Tổng giờ nghỉ (có thể tính toán)
-  reason     String? // Lý do nghỉ (có thể null)
-  status     LeaveStatus   @default(pending) // trạng thái nghỉ việc
-  approvedBy String? // Người phê duyệt (có thể null)
-  approvedAt DateTime? // Thời điểm đơn được duyệt (approved/rejected)
+  id         Int           @id @default(autoincrement())
+  employeeId Int
+  leaveType  LeaveTypeEnum
+  startDate  DateTime
+  endDate    DateTime
+  totalHours Float?
+  reason     String?
+  status     LeaveStatus   @default(pending)
+  approvedBy String?
+  approvedAt DateTime?
+  createdAt  DateTime      @default(now())
 
-  // Quan hệ với nhân viên
-  employee  Employee @relation(fields: [employeeId], references: [id])
-  createdAt DateTime @default(now()) // <- cần có dòng này
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  approvalSteps LeaveApprovalStep[]
+}
+
+model LeaveApprovalStep {
+  id             Int         @id @default(autoincrement())
+  leaveRequestId Int
+  level          Int
+  status         LeaveStatus @default(pending)
+  approvedAt     DateTime?
+
+  leaveRequest LeaveRequest                @relation(fields: [leaveRequestId], references: [id])
+  approvers    LeaveApprovalStepApprover[]
+
+  @@unique([leaveRequestId, level])
+}
+
+model LeaveApprovalStepApprover {
+  id                  Int         @id @default(autoincrement())
+  leaveApprovalStepId Int
+  approverId          Int
+  status              LeaveStatus @default(pending)
+  approvedAt          DateTime?
+
+  leaveApprovalStep LeaveApprovalStep @relation(fields: [leaveApprovalStepId], references: [id])
+  approver          Employee          @relation("ApproverSteps", fields: [approverId], references: [id])
+
+  @@unique([leaveApprovalStepId, approverId])
 }
 
 model Attendance {
   id           Int       @id @default(autoincrement())
   employeeId   Int
   date         DateTime
-  checkInTime  DateTime? // giờ vào, có thể null
-  checkOutTime DateTime? // giờ ra, có thể null
+  checkInTime  DateTime?
+  checkOutTime DateTime?
 
   employee Employee @relation(fields: [employeeId], references: [id])
 
@@ -224,7 +245,7 @@ model KPIEmployee {
 
   entries KPIEntry[]
 
-  @@unique([kpiId, employeeId], name: "kpi_employee_unique")
+  @@unique([kpiId, employeeId])
 }
 
 model KPIEntry {
@@ -240,5 +261,5 @@ model KPIEntry {
 
   kpiEmployee KPIEmployee @relation(fields: [kpiEmployeeId], references: [id], onDelete: Cascade)
 
-  @@unique([kpiEmployeeId, name], name: "kpi_entry_unique")
+  @@unique([kpiEmployeeId, name])
 }

@@ -54,6 +54,16 @@ export type OtherInfo = $Result.DefaultSelection<Prisma.$OtherInfoPayload>
  */
 export type LeaveRequest = $Result.DefaultSelection<Prisma.$LeaveRequestPayload>
 /**
+ * Model LeaveApprovalStep
+ * 
+ */
+export type LeaveApprovalStep = $Result.DefaultSelection<Prisma.$LeaveApprovalStepPayload>
+/**
+ * Model LeaveApprovalStepApprover
+ * 
+ */
+export type LeaveApprovalStepApprover = $Result.DefaultSelection<Prisma.$LeaveApprovalStepApproverPayload>
+/**
  * Model Attendance
  * 
  */
@@ -352,6 +362,26 @@ export class PrismaClient<
     * ```
     */
   get leaveRequest(): Prisma.LeaveRequestDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.leaveApprovalStep`: Exposes CRUD operations for the **LeaveApprovalStep** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LeaveApprovalSteps
+    * const leaveApprovalSteps = await prisma.leaveApprovalStep.findMany()
+    * ```
+    */
+  get leaveApprovalStep(): Prisma.LeaveApprovalStepDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.leaveApprovalStepApprover`: Exposes CRUD operations for the **LeaveApprovalStepApprover** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LeaveApprovalStepApprovers
+    * const leaveApprovalStepApprovers = await prisma.leaveApprovalStepApprover.findMany()
+    * ```
+    */
+  get leaveApprovalStepApprover(): Prisma.LeaveApprovalStepApproverDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.attendance`: Exposes CRUD operations for the **Attendance** model.
@@ -840,6 +870,8 @@ export namespace Prisma {
     ContactInfo: 'ContactInfo',
     OtherInfo: 'OtherInfo',
     LeaveRequest: 'LeaveRequest',
+    LeaveApprovalStep: 'LeaveApprovalStep',
+    LeaveApprovalStepApprover: 'LeaveApprovalStepApprover',
     Attendance: 'Attendance',
     KPI: 'KPI',
     KPIEmployee: 'KPIEmployee',
@@ -862,7 +894,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "employee" | "department" | "position" | "workInfo" | "personalInfo" | "contactInfo" | "otherInfo" | "leaveRequest" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry"
+      modelProps: "employee" | "department" | "position" | "workInfo" | "personalInfo" | "contactInfo" | "otherInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1458,6 +1490,154 @@ export namespace Prisma {
           }
         }
       }
+      LeaveApprovalStep: {
+        payload: Prisma.$LeaveApprovalStepPayload<ExtArgs>
+        fields: Prisma.LeaveApprovalStepFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LeaveApprovalStepFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LeaveApprovalStepFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepPayload>
+          }
+          findFirst: {
+            args: Prisma.LeaveApprovalStepFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LeaveApprovalStepFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepPayload>
+          }
+          findMany: {
+            args: Prisma.LeaveApprovalStepFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepPayload>[]
+          }
+          create: {
+            args: Prisma.LeaveApprovalStepCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepPayload>
+          }
+          createMany: {
+            args: Prisma.LeaveApprovalStepCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LeaveApprovalStepCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepPayload>[]
+          }
+          delete: {
+            args: Prisma.LeaveApprovalStepDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepPayload>
+          }
+          update: {
+            args: Prisma.LeaveApprovalStepUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepPayload>
+          }
+          deleteMany: {
+            args: Prisma.LeaveApprovalStepDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LeaveApprovalStepUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LeaveApprovalStepUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepPayload>[]
+          }
+          upsert: {
+            args: Prisma.LeaveApprovalStepUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepPayload>
+          }
+          aggregate: {
+            args: Prisma.LeaveApprovalStepAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLeaveApprovalStep>
+          }
+          groupBy: {
+            args: Prisma.LeaveApprovalStepGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LeaveApprovalStepGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LeaveApprovalStepCountArgs<ExtArgs>
+            result: $Utils.Optional<LeaveApprovalStepCountAggregateOutputType> | number
+          }
+        }
+      }
+      LeaveApprovalStepApprover: {
+        payload: Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>
+        fields: Prisma.LeaveApprovalStepApproverFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LeaveApprovalStepApproverFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepApproverPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LeaveApprovalStepApproverFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepApproverPayload>
+          }
+          findFirst: {
+            args: Prisma.LeaveApprovalStepApproverFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepApproverPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LeaveApprovalStepApproverFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepApproverPayload>
+          }
+          findMany: {
+            args: Prisma.LeaveApprovalStepApproverFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepApproverPayload>[]
+          }
+          create: {
+            args: Prisma.LeaveApprovalStepApproverCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepApproverPayload>
+          }
+          createMany: {
+            args: Prisma.LeaveApprovalStepApproverCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LeaveApprovalStepApproverCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepApproverPayload>[]
+          }
+          delete: {
+            args: Prisma.LeaveApprovalStepApproverDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepApproverPayload>
+          }
+          update: {
+            args: Prisma.LeaveApprovalStepApproverUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepApproverPayload>
+          }
+          deleteMany: {
+            args: Prisma.LeaveApprovalStepApproverDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LeaveApprovalStepApproverUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LeaveApprovalStepApproverUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepApproverPayload>[]
+          }
+          upsert: {
+            args: Prisma.LeaveApprovalStepApproverUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeaveApprovalStepApproverPayload>
+          }
+          aggregate: {
+            args: Prisma.LeaveApprovalStepApproverAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLeaveApprovalStepApprover>
+          }
+          groupBy: {
+            args: Prisma.LeaveApprovalStepApproverGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LeaveApprovalStepApproverGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LeaveApprovalStepApproverCountArgs<ExtArgs>
+            result: $Utils.Optional<LeaveApprovalStepApproverCountAggregateOutputType> | number
+          }
+        }
+      }
       Attendance: {
         payload: Prisma.$AttendancePayload<ExtArgs>
         fields: Prisma.AttendanceFieldRefs
@@ -1846,6 +2026,8 @@ export namespace Prisma {
     contactInfo?: ContactInfoOmit
     otherInfo?: OtherInfoOmit
     leaveRequest?: LeaveRequestOmit
+    leaveApprovalStep?: LeaveApprovalStepOmit
+    leaveApprovalStepApprover?: LeaveApprovalStepApproverOmit
     attendance?: AttendanceOmit
     kPI?: KPIOmit
     kPIEmployee?: KPIEmployeeOmit
@@ -1946,6 +2128,7 @@ export namespace Prisma {
   export type EmployeeCountOutputType = {
     subordinates: number
     LeaveRequest: number
+    LeaveApprovalSteps: number
     Attendance: number
     KPIEmployee: number
   }
@@ -1953,6 +2136,7 @@ export namespace Prisma {
   export type EmployeeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subordinates?: boolean | EmployeeCountOutputTypeCountSubordinatesArgs
     LeaveRequest?: boolean | EmployeeCountOutputTypeCountLeaveRequestArgs
+    LeaveApprovalSteps?: boolean | EmployeeCountOutputTypeCountLeaveApprovalStepsArgs
     Attendance?: boolean | EmployeeCountOutputTypeCountAttendanceArgs
     KPIEmployee?: boolean | EmployeeCountOutputTypeCountKPIEmployeeArgs
   }
@@ -1980,6 +2164,13 @@ export namespace Prisma {
    */
   export type EmployeeCountOutputTypeCountLeaveRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LeaveRequestWhereInput
+  }
+
+  /**
+   * EmployeeCountOutputType without action
+   */
+  export type EmployeeCountOutputTypeCountLeaveApprovalStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeaveApprovalStepApproverWhereInput
   }
 
   /**
@@ -2065,6 +2256,68 @@ export namespace Prisma {
    */
   export type PositionCountOutputTypeCountEmployeesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WorkInfoWhereInput
+  }
+
+
+  /**
+   * Count Type LeaveRequestCountOutputType
+   */
+
+  export type LeaveRequestCountOutputType = {
+    approvalSteps: number
+  }
+
+  export type LeaveRequestCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    approvalSteps?: boolean | LeaveRequestCountOutputTypeCountApprovalStepsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * LeaveRequestCountOutputType without action
+   */
+  export type LeaveRequestCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveRequestCountOutputType
+     */
+    select?: LeaveRequestCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * LeaveRequestCountOutputType without action
+   */
+  export type LeaveRequestCountOutputTypeCountApprovalStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeaveApprovalStepWhereInput
+  }
+
+
+  /**
+   * Count Type LeaveApprovalStepCountOutputType
+   */
+
+  export type LeaveApprovalStepCountOutputType = {
+    approvers: number
+  }
+
+  export type LeaveApprovalStepCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    approvers?: boolean | LeaveApprovalStepCountOutputTypeCountApproversArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * LeaveApprovalStepCountOutputType without action
+   */
+  export type LeaveApprovalStepCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStepCountOutputType
+     */
+    select?: LeaveApprovalStepCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * LeaveApprovalStepCountOutputType without action
+   */
+  export type LeaveApprovalStepCountOutputTypeCountApproversArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeaveApprovalStepApproverWhereInput
   }
 
 
@@ -2385,6 +2638,7 @@ export namespace Prisma {
     contactInfo?: boolean | Employee$contactInfoArgs<ExtArgs>
     otherInfo?: boolean | Employee$otherInfoArgs<ExtArgs>
     LeaveRequest?: boolean | Employee$LeaveRequestArgs<ExtArgs>
+    LeaveApprovalSteps?: boolean | Employee$LeaveApprovalStepsArgs<ExtArgs>
     Attendance?: boolean | Employee$AttendanceArgs<ExtArgs>
     KPIEmployee?: boolean | Employee$KPIEmployeeArgs<ExtArgs>
     _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
@@ -2442,6 +2696,7 @@ export namespace Prisma {
     contactInfo?: boolean | Employee$contactInfoArgs<ExtArgs>
     otherInfo?: boolean | Employee$otherInfoArgs<ExtArgs>
     LeaveRequest?: boolean | Employee$LeaveRequestArgs<ExtArgs>
+    LeaveApprovalSteps?: boolean | Employee$LeaveApprovalStepsArgs<ExtArgs>
     Attendance?: boolean | Employee$AttendanceArgs<ExtArgs>
     KPIEmployee?: boolean | Employee$KPIEmployeeArgs<ExtArgs>
     _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
@@ -2465,6 +2720,7 @@ export namespace Prisma {
       contactInfo: Prisma.$ContactInfoPayload<ExtArgs> | null
       otherInfo: Prisma.$OtherInfoPayload<ExtArgs> | null
       LeaveRequest: Prisma.$LeaveRequestPayload<ExtArgs>[]
+      LeaveApprovalSteps: Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>[]
       Attendance: Prisma.$AttendancePayload<ExtArgs>[]
       KPIEmployee: Prisma.$KPIEmployeePayload<ExtArgs>[]
     }
@@ -2882,6 +3138,7 @@ export namespace Prisma {
     contactInfo<T extends Employee$contactInfoArgs<ExtArgs> = {}>(args?: Subset<T, Employee$contactInfoArgs<ExtArgs>>): Prisma__ContactInfoClient<$Result.GetResult<Prisma.$ContactInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     otherInfo<T extends Employee$otherInfoArgs<ExtArgs> = {}>(args?: Subset<T, Employee$otherInfoArgs<ExtArgs>>): Prisma__OtherInfoClient<$Result.GetResult<Prisma.$OtherInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     LeaveRequest<T extends Employee$LeaveRequestArgs<ExtArgs> = {}>(args?: Subset<T, Employee$LeaveRequestArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    LeaveApprovalSteps<T extends Employee$LeaveApprovalStepsArgs<ExtArgs> = {}>(args?: Subset<T, Employee$LeaveApprovalStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Attendance<T extends Employee$AttendanceArgs<ExtArgs> = {}>(args?: Subset<T, Employee$AttendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     KPIEmployee<T extends Employee$KPIEmployeeArgs<ExtArgs> = {}>(args?: Subset<T, Employee$KPIEmployeeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -3500,6 +3757,30 @@ export namespace Prisma {
   }
 
   /**
+   * Employee.LeaveApprovalSteps
+   */
+  export type Employee$LeaveApprovalStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStepApprover
+     */
+    select?: LeaveApprovalStepApproverSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStepApprover
+     */
+    omit?: LeaveApprovalStepApproverOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepApproverInclude<ExtArgs> | null
+    where?: LeaveApprovalStepApproverWhereInput
+    orderBy?: LeaveApprovalStepApproverOrderByWithRelationInput | LeaveApprovalStepApproverOrderByWithRelationInput[]
+    cursor?: LeaveApprovalStepApproverWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LeaveApprovalStepApproverScalarFieldEnum | LeaveApprovalStepApproverScalarFieldEnum[]
+  }
+
+  /**
    * Employee.Attendance
    */
   export type Employee$AttendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3788,9 +4069,9 @@ export namespace Prisma {
     updatedAt?: boolean
     headId?: boolean
     directorId?: boolean
-    positions?: boolean | Department$positionsArgs<ExtArgs>
     head?: boolean | Department$headArgs<ExtArgs>
     director?: boolean | Department$directorArgs<ExtArgs>
+    positions?: boolean | Department$positionsArgs<ExtArgs>
     workInfos?: boolean | Department$workInfosArgs<ExtArgs>
     _count?: boolean | DepartmentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["department"]>
@@ -3831,9 +4112,9 @@ export namespace Prisma {
 
   export type DepartmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "abbreviation" | "createdAt" | "updatedAt" | "headId" | "directorId", ExtArgs["result"]["department"]>
   export type DepartmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    positions?: boolean | Department$positionsArgs<ExtArgs>
     head?: boolean | Department$headArgs<ExtArgs>
     director?: boolean | Department$directorArgs<ExtArgs>
+    positions?: boolean | Department$positionsArgs<ExtArgs>
     workInfos?: boolean | Department$workInfosArgs<ExtArgs>
     _count?: boolean | DepartmentCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -3849,9 +4130,9 @@ export namespace Prisma {
   export type $DepartmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Department"
     objects: {
-      positions: Prisma.$PositionPayload<ExtArgs>[]
       head: Prisma.$EmployeePayload<ExtArgs> | null
       director: Prisma.$EmployeePayload<ExtArgs> | null
+      positions: Prisma.$PositionPayload<ExtArgs>[]
       workInfos: Prisma.$WorkInfoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -4256,9 +4537,9 @@ export namespace Prisma {
    */
   export interface Prisma__DepartmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    positions<T extends Department$positionsArgs<ExtArgs> = {}>(args?: Subset<T, Department$positionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PositionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     head<T extends Department$headArgs<ExtArgs> = {}>(args?: Subset<T, Department$headArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     director<T extends Department$directorArgs<ExtArgs> = {}>(args?: Subset<T, Department$directorArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    positions<T extends Department$positionsArgs<ExtArgs> = {}>(args?: Subset<T, Department$positionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PositionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     workInfos<T extends Department$workInfosArgs<ExtArgs> = {}>(args?: Subset<T, Department$workInfosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkInfoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4692,30 +4973,6 @@ export namespace Prisma {
   }
 
   /**
-   * Department.positions
-   */
-  export type Department$positionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Position
-     */
-    select?: PositionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Position
-     */
-    omit?: PositionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PositionInclude<ExtArgs> | null
-    where?: PositionWhereInput
-    orderBy?: PositionOrderByWithRelationInput | PositionOrderByWithRelationInput[]
-    cursor?: PositionWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PositionScalarFieldEnum | PositionScalarFieldEnum[]
-  }
-
-  /**
    * Department.head
    */
   export type Department$headArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4751,6 +5008,30 @@ export namespace Prisma {
      */
     include?: EmployeeInclude<ExtArgs> | null
     where?: EmployeeWhereInput
+  }
+
+  /**
+   * Department.positions
+   */
+  export type Department$positionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Position
+     */
+    select?: PositionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Position
+     */
+    omit?: PositionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PositionInclude<ExtArgs> | null
+    where?: PositionWhereInput
+    orderBy?: PositionOrderByWithRelationInput | PositionOrderByWithRelationInput[]
+    cursor?: PositionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PositionScalarFieldEnum | PositionScalarFieldEnum[]
   }
 
   /**
@@ -10917,6 +11198,8 @@ export namespace Prisma {
     approvedAt?: boolean
     createdAt?: boolean
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    approvalSteps?: boolean | LeaveRequest$approvalStepsArgs<ExtArgs>
+    _count?: boolean | LeaveRequestCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["leaveRequest"]>
 
   export type LeaveRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10966,6 +11249,8 @@ export namespace Prisma {
   export type LeaveRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "leaveType" | "startDate" | "endDate" | "totalHours" | "reason" | "status" | "approvedBy" | "approvedAt" | "createdAt", ExtArgs["result"]["leaveRequest"]>
   export type LeaveRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    approvalSteps?: boolean | LeaveRequest$approvalStepsArgs<ExtArgs>
+    _count?: boolean | LeaveRequestCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LeaveRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
@@ -10978,6 +11263,7 @@ export namespace Prisma {
     name: "LeaveRequest"
     objects: {
       employee: Prisma.$EmployeePayload<ExtArgs>
+      approvalSteps: Prisma.$LeaveApprovalStepPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -11386,6 +11672,7 @@ export namespace Prisma {
   export interface Prisma__LeaveRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    approvalSteps<T extends LeaveRequest$approvalStepsArgs<ExtArgs> = {}>(args?: Subset<T, LeaveRequest$approvalStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11822,6 +12109,30 @@ export namespace Prisma {
   }
 
   /**
+   * LeaveRequest.approvalSteps
+   */
+  export type LeaveRequest$approvalStepsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStep
+     */
+    select?: LeaveApprovalStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStep
+     */
+    omit?: LeaveApprovalStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepInclude<ExtArgs> | null
+    where?: LeaveApprovalStepWhereInput
+    orderBy?: LeaveApprovalStepOrderByWithRelationInput | LeaveApprovalStepOrderByWithRelationInput[]
+    cursor?: LeaveApprovalStepWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LeaveApprovalStepScalarFieldEnum | LeaveApprovalStepScalarFieldEnum[]
+  }
+
+  /**
    * LeaveRequest without action
    */
   export type LeaveRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11837,6 +12148,2244 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: LeaveRequestInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LeaveApprovalStep
+   */
+
+  export type AggregateLeaveApprovalStep = {
+    _count: LeaveApprovalStepCountAggregateOutputType | null
+    _avg: LeaveApprovalStepAvgAggregateOutputType | null
+    _sum: LeaveApprovalStepSumAggregateOutputType | null
+    _min: LeaveApprovalStepMinAggregateOutputType | null
+    _max: LeaveApprovalStepMaxAggregateOutputType | null
+  }
+
+  export type LeaveApprovalStepAvgAggregateOutputType = {
+    id: number | null
+    leaveRequestId: number | null
+    level: number | null
+  }
+
+  export type LeaveApprovalStepSumAggregateOutputType = {
+    id: number | null
+    leaveRequestId: number | null
+    level: number | null
+  }
+
+  export type LeaveApprovalStepMinAggregateOutputType = {
+    id: number | null
+    leaveRequestId: number | null
+    level: number | null
+    status: $Enums.LeaveStatus | null
+    approvedAt: Date | null
+  }
+
+  export type LeaveApprovalStepMaxAggregateOutputType = {
+    id: number | null
+    leaveRequestId: number | null
+    level: number | null
+    status: $Enums.LeaveStatus | null
+    approvedAt: Date | null
+  }
+
+  export type LeaveApprovalStepCountAggregateOutputType = {
+    id: number
+    leaveRequestId: number
+    level: number
+    status: number
+    approvedAt: number
+    _all: number
+  }
+
+
+  export type LeaveApprovalStepAvgAggregateInputType = {
+    id?: true
+    leaveRequestId?: true
+    level?: true
+  }
+
+  export type LeaveApprovalStepSumAggregateInputType = {
+    id?: true
+    leaveRequestId?: true
+    level?: true
+  }
+
+  export type LeaveApprovalStepMinAggregateInputType = {
+    id?: true
+    leaveRequestId?: true
+    level?: true
+    status?: true
+    approvedAt?: true
+  }
+
+  export type LeaveApprovalStepMaxAggregateInputType = {
+    id?: true
+    leaveRequestId?: true
+    level?: true
+    status?: true
+    approvedAt?: true
+  }
+
+  export type LeaveApprovalStepCountAggregateInputType = {
+    id?: true
+    leaveRequestId?: true
+    level?: true
+    status?: true
+    approvedAt?: true
+    _all?: true
+  }
+
+  export type LeaveApprovalStepAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LeaveApprovalStep to aggregate.
+     */
+    where?: LeaveApprovalStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeaveApprovalSteps to fetch.
+     */
+    orderBy?: LeaveApprovalStepOrderByWithRelationInput | LeaveApprovalStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LeaveApprovalStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeaveApprovalSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeaveApprovalSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LeaveApprovalSteps
+    **/
+    _count?: true | LeaveApprovalStepCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LeaveApprovalStepAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LeaveApprovalStepSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LeaveApprovalStepMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LeaveApprovalStepMaxAggregateInputType
+  }
+
+  export type GetLeaveApprovalStepAggregateType<T extends LeaveApprovalStepAggregateArgs> = {
+        [P in keyof T & keyof AggregateLeaveApprovalStep]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLeaveApprovalStep[P]>
+      : GetScalarType<T[P], AggregateLeaveApprovalStep[P]>
+  }
+
+
+
+
+  export type LeaveApprovalStepGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeaveApprovalStepWhereInput
+    orderBy?: LeaveApprovalStepOrderByWithAggregationInput | LeaveApprovalStepOrderByWithAggregationInput[]
+    by: LeaveApprovalStepScalarFieldEnum[] | LeaveApprovalStepScalarFieldEnum
+    having?: LeaveApprovalStepScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LeaveApprovalStepCountAggregateInputType | true
+    _avg?: LeaveApprovalStepAvgAggregateInputType
+    _sum?: LeaveApprovalStepSumAggregateInputType
+    _min?: LeaveApprovalStepMinAggregateInputType
+    _max?: LeaveApprovalStepMaxAggregateInputType
+  }
+
+  export type LeaveApprovalStepGroupByOutputType = {
+    id: number
+    leaveRequestId: number
+    level: number
+    status: $Enums.LeaveStatus
+    approvedAt: Date | null
+    _count: LeaveApprovalStepCountAggregateOutputType | null
+    _avg: LeaveApprovalStepAvgAggregateOutputType | null
+    _sum: LeaveApprovalStepSumAggregateOutputType | null
+    _min: LeaveApprovalStepMinAggregateOutputType | null
+    _max: LeaveApprovalStepMaxAggregateOutputType | null
+  }
+
+  type GetLeaveApprovalStepGroupByPayload<T extends LeaveApprovalStepGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LeaveApprovalStepGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LeaveApprovalStepGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LeaveApprovalStepGroupByOutputType[P]>
+            : GetScalarType<T[P], LeaveApprovalStepGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LeaveApprovalStepSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    leaveRequestId?: boolean
+    level?: boolean
+    status?: boolean
+    approvedAt?: boolean
+    leaveRequest?: boolean | LeaveRequestDefaultArgs<ExtArgs>
+    approvers?: boolean | LeaveApprovalStep$approversArgs<ExtArgs>
+    _count?: boolean | LeaveApprovalStepCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["leaveApprovalStep"]>
+
+  export type LeaveApprovalStepSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    leaveRequestId?: boolean
+    level?: boolean
+    status?: boolean
+    approvedAt?: boolean
+    leaveRequest?: boolean | LeaveRequestDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["leaveApprovalStep"]>
+
+  export type LeaveApprovalStepSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    leaveRequestId?: boolean
+    level?: boolean
+    status?: boolean
+    approvedAt?: boolean
+    leaveRequest?: boolean | LeaveRequestDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["leaveApprovalStep"]>
+
+  export type LeaveApprovalStepSelectScalar = {
+    id?: boolean
+    leaveRequestId?: boolean
+    level?: boolean
+    status?: boolean
+    approvedAt?: boolean
+  }
+
+  export type LeaveApprovalStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "leaveRequestId" | "level" | "status" | "approvedAt", ExtArgs["result"]["leaveApprovalStep"]>
+  export type LeaveApprovalStepInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    leaveRequest?: boolean | LeaveRequestDefaultArgs<ExtArgs>
+    approvers?: boolean | LeaveApprovalStep$approversArgs<ExtArgs>
+    _count?: boolean | LeaveApprovalStepCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type LeaveApprovalStepIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    leaveRequest?: boolean | LeaveRequestDefaultArgs<ExtArgs>
+  }
+  export type LeaveApprovalStepIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    leaveRequest?: boolean | LeaveRequestDefaultArgs<ExtArgs>
+  }
+
+  export type $LeaveApprovalStepPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LeaveApprovalStep"
+    objects: {
+      leaveRequest: Prisma.$LeaveRequestPayload<ExtArgs>
+      approvers: Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      leaveRequestId: number
+      level: number
+      status: $Enums.LeaveStatus
+      approvedAt: Date | null
+    }, ExtArgs["result"]["leaveApprovalStep"]>
+    composites: {}
+  }
+
+  type LeaveApprovalStepGetPayload<S extends boolean | null | undefined | LeaveApprovalStepDefaultArgs> = $Result.GetResult<Prisma.$LeaveApprovalStepPayload, S>
+
+  type LeaveApprovalStepCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LeaveApprovalStepFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LeaveApprovalStepCountAggregateInputType | true
+    }
+
+  export interface LeaveApprovalStepDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LeaveApprovalStep'], meta: { name: 'LeaveApprovalStep' } }
+    /**
+     * Find zero or one LeaveApprovalStep that matches the filter.
+     * @param {LeaveApprovalStepFindUniqueArgs} args - Arguments to find a LeaveApprovalStep
+     * @example
+     * // Get one LeaveApprovalStep
+     * const leaveApprovalStep = await prisma.leaveApprovalStep.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LeaveApprovalStepFindUniqueArgs>(args: SelectSubset<T, LeaveApprovalStepFindUniqueArgs<ExtArgs>>): Prisma__LeaveApprovalStepClient<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LeaveApprovalStep that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LeaveApprovalStepFindUniqueOrThrowArgs} args - Arguments to find a LeaveApprovalStep
+     * @example
+     * // Get one LeaveApprovalStep
+     * const leaveApprovalStep = await prisma.leaveApprovalStep.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LeaveApprovalStepFindUniqueOrThrowArgs>(args: SelectSubset<T, LeaveApprovalStepFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LeaveApprovalStepClient<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LeaveApprovalStep that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeaveApprovalStepFindFirstArgs} args - Arguments to find a LeaveApprovalStep
+     * @example
+     * // Get one LeaveApprovalStep
+     * const leaveApprovalStep = await prisma.leaveApprovalStep.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LeaveApprovalStepFindFirstArgs>(args?: SelectSubset<T, LeaveApprovalStepFindFirstArgs<ExtArgs>>): Prisma__LeaveApprovalStepClient<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LeaveApprovalStep that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeaveApprovalStepFindFirstOrThrowArgs} args - Arguments to find a LeaveApprovalStep
+     * @example
+     * // Get one LeaveApprovalStep
+     * const leaveApprovalStep = await prisma.leaveApprovalStep.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LeaveApprovalStepFindFirstOrThrowArgs>(args?: SelectSubset<T, LeaveApprovalStepFindFirstOrThrowArgs<ExtArgs>>): Prisma__LeaveApprovalStepClient<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LeaveApprovalSteps that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeaveApprovalStepFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LeaveApprovalSteps
+     * const leaveApprovalSteps = await prisma.leaveApprovalStep.findMany()
+     * 
+     * // Get first 10 LeaveApprovalSteps
+     * const leaveApprovalSteps = await prisma.leaveApprovalStep.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const leaveApprovalStepWithIdOnly = await prisma.leaveApprovalStep.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LeaveApprovalStepFindManyArgs>(args?: SelectSubset<T, LeaveApprovalStepFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LeaveApprovalStep.
+     * @param {LeaveApprovalStepCreateArgs} args - Arguments to create a LeaveApprovalStep.
+     * @example
+     * // Create one LeaveApprovalStep
+     * const LeaveApprovalStep = await prisma.leaveApprovalStep.create({
+     *   data: {
+     *     // ... data to create a LeaveApprovalStep
+     *   }
+     * })
+     * 
+     */
+    create<T extends LeaveApprovalStepCreateArgs>(args: SelectSubset<T, LeaveApprovalStepCreateArgs<ExtArgs>>): Prisma__LeaveApprovalStepClient<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LeaveApprovalSteps.
+     * @param {LeaveApprovalStepCreateManyArgs} args - Arguments to create many LeaveApprovalSteps.
+     * @example
+     * // Create many LeaveApprovalSteps
+     * const leaveApprovalStep = await prisma.leaveApprovalStep.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LeaveApprovalStepCreateManyArgs>(args?: SelectSubset<T, LeaveApprovalStepCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LeaveApprovalSteps and returns the data saved in the database.
+     * @param {LeaveApprovalStepCreateManyAndReturnArgs} args - Arguments to create many LeaveApprovalSteps.
+     * @example
+     * // Create many LeaveApprovalSteps
+     * const leaveApprovalStep = await prisma.leaveApprovalStep.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LeaveApprovalSteps and only return the `id`
+     * const leaveApprovalStepWithIdOnly = await prisma.leaveApprovalStep.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LeaveApprovalStepCreateManyAndReturnArgs>(args?: SelectSubset<T, LeaveApprovalStepCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LeaveApprovalStep.
+     * @param {LeaveApprovalStepDeleteArgs} args - Arguments to delete one LeaveApprovalStep.
+     * @example
+     * // Delete one LeaveApprovalStep
+     * const LeaveApprovalStep = await prisma.leaveApprovalStep.delete({
+     *   where: {
+     *     // ... filter to delete one LeaveApprovalStep
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LeaveApprovalStepDeleteArgs>(args: SelectSubset<T, LeaveApprovalStepDeleteArgs<ExtArgs>>): Prisma__LeaveApprovalStepClient<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LeaveApprovalStep.
+     * @param {LeaveApprovalStepUpdateArgs} args - Arguments to update one LeaveApprovalStep.
+     * @example
+     * // Update one LeaveApprovalStep
+     * const leaveApprovalStep = await prisma.leaveApprovalStep.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LeaveApprovalStepUpdateArgs>(args: SelectSubset<T, LeaveApprovalStepUpdateArgs<ExtArgs>>): Prisma__LeaveApprovalStepClient<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LeaveApprovalSteps.
+     * @param {LeaveApprovalStepDeleteManyArgs} args - Arguments to filter LeaveApprovalSteps to delete.
+     * @example
+     * // Delete a few LeaveApprovalSteps
+     * const { count } = await prisma.leaveApprovalStep.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LeaveApprovalStepDeleteManyArgs>(args?: SelectSubset<T, LeaveApprovalStepDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LeaveApprovalSteps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeaveApprovalStepUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LeaveApprovalSteps
+     * const leaveApprovalStep = await prisma.leaveApprovalStep.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LeaveApprovalStepUpdateManyArgs>(args: SelectSubset<T, LeaveApprovalStepUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LeaveApprovalSteps and returns the data updated in the database.
+     * @param {LeaveApprovalStepUpdateManyAndReturnArgs} args - Arguments to update many LeaveApprovalSteps.
+     * @example
+     * // Update many LeaveApprovalSteps
+     * const leaveApprovalStep = await prisma.leaveApprovalStep.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LeaveApprovalSteps and only return the `id`
+     * const leaveApprovalStepWithIdOnly = await prisma.leaveApprovalStep.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LeaveApprovalStepUpdateManyAndReturnArgs>(args: SelectSubset<T, LeaveApprovalStepUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LeaveApprovalStep.
+     * @param {LeaveApprovalStepUpsertArgs} args - Arguments to update or create a LeaveApprovalStep.
+     * @example
+     * // Update or create a LeaveApprovalStep
+     * const leaveApprovalStep = await prisma.leaveApprovalStep.upsert({
+     *   create: {
+     *     // ... data to create a LeaveApprovalStep
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LeaveApprovalStep we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LeaveApprovalStepUpsertArgs>(args: SelectSubset<T, LeaveApprovalStepUpsertArgs<ExtArgs>>): Prisma__LeaveApprovalStepClient<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LeaveApprovalSteps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeaveApprovalStepCountArgs} args - Arguments to filter LeaveApprovalSteps to count.
+     * @example
+     * // Count the number of LeaveApprovalSteps
+     * const count = await prisma.leaveApprovalStep.count({
+     *   where: {
+     *     // ... the filter for the LeaveApprovalSteps we want to count
+     *   }
+     * })
+    **/
+    count<T extends LeaveApprovalStepCountArgs>(
+      args?: Subset<T, LeaveApprovalStepCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LeaveApprovalStepCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LeaveApprovalStep.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeaveApprovalStepAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LeaveApprovalStepAggregateArgs>(args: Subset<T, LeaveApprovalStepAggregateArgs>): Prisma.PrismaPromise<GetLeaveApprovalStepAggregateType<T>>
+
+    /**
+     * Group by LeaveApprovalStep.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeaveApprovalStepGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LeaveApprovalStepGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LeaveApprovalStepGroupByArgs['orderBy'] }
+        : { orderBy?: LeaveApprovalStepGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LeaveApprovalStepGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLeaveApprovalStepGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LeaveApprovalStep model
+   */
+  readonly fields: LeaveApprovalStepFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LeaveApprovalStep.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LeaveApprovalStepClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    leaveRequest<T extends LeaveRequestDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LeaveRequestDefaultArgs<ExtArgs>>): Prisma__LeaveRequestClient<$Result.GetResult<Prisma.$LeaveRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    approvers<T extends LeaveApprovalStep$approversArgs<ExtArgs> = {}>(args?: Subset<T, LeaveApprovalStep$approversArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LeaveApprovalStep model
+   */
+  interface LeaveApprovalStepFieldRefs {
+    readonly id: FieldRef<"LeaveApprovalStep", 'Int'>
+    readonly leaveRequestId: FieldRef<"LeaveApprovalStep", 'Int'>
+    readonly level: FieldRef<"LeaveApprovalStep", 'Int'>
+    readonly status: FieldRef<"LeaveApprovalStep", 'LeaveStatus'>
+    readonly approvedAt: FieldRef<"LeaveApprovalStep", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LeaveApprovalStep findUnique
+   */
+  export type LeaveApprovalStepFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStep
+     */
+    select?: LeaveApprovalStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStep
+     */
+    omit?: LeaveApprovalStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepInclude<ExtArgs> | null
+    /**
+     * Filter, which LeaveApprovalStep to fetch.
+     */
+    where: LeaveApprovalStepWhereUniqueInput
+  }
+
+  /**
+   * LeaveApprovalStep findUniqueOrThrow
+   */
+  export type LeaveApprovalStepFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStep
+     */
+    select?: LeaveApprovalStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStep
+     */
+    omit?: LeaveApprovalStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepInclude<ExtArgs> | null
+    /**
+     * Filter, which LeaveApprovalStep to fetch.
+     */
+    where: LeaveApprovalStepWhereUniqueInput
+  }
+
+  /**
+   * LeaveApprovalStep findFirst
+   */
+  export type LeaveApprovalStepFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStep
+     */
+    select?: LeaveApprovalStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStep
+     */
+    omit?: LeaveApprovalStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepInclude<ExtArgs> | null
+    /**
+     * Filter, which LeaveApprovalStep to fetch.
+     */
+    where?: LeaveApprovalStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeaveApprovalSteps to fetch.
+     */
+    orderBy?: LeaveApprovalStepOrderByWithRelationInput | LeaveApprovalStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LeaveApprovalSteps.
+     */
+    cursor?: LeaveApprovalStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeaveApprovalSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeaveApprovalSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LeaveApprovalSteps.
+     */
+    distinct?: LeaveApprovalStepScalarFieldEnum | LeaveApprovalStepScalarFieldEnum[]
+  }
+
+  /**
+   * LeaveApprovalStep findFirstOrThrow
+   */
+  export type LeaveApprovalStepFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStep
+     */
+    select?: LeaveApprovalStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStep
+     */
+    omit?: LeaveApprovalStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepInclude<ExtArgs> | null
+    /**
+     * Filter, which LeaveApprovalStep to fetch.
+     */
+    where?: LeaveApprovalStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeaveApprovalSteps to fetch.
+     */
+    orderBy?: LeaveApprovalStepOrderByWithRelationInput | LeaveApprovalStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LeaveApprovalSteps.
+     */
+    cursor?: LeaveApprovalStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeaveApprovalSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeaveApprovalSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LeaveApprovalSteps.
+     */
+    distinct?: LeaveApprovalStepScalarFieldEnum | LeaveApprovalStepScalarFieldEnum[]
+  }
+
+  /**
+   * LeaveApprovalStep findMany
+   */
+  export type LeaveApprovalStepFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStep
+     */
+    select?: LeaveApprovalStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStep
+     */
+    omit?: LeaveApprovalStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepInclude<ExtArgs> | null
+    /**
+     * Filter, which LeaveApprovalSteps to fetch.
+     */
+    where?: LeaveApprovalStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeaveApprovalSteps to fetch.
+     */
+    orderBy?: LeaveApprovalStepOrderByWithRelationInput | LeaveApprovalStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LeaveApprovalSteps.
+     */
+    cursor?: LeaveApprovalStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeaveApprovalSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeaveApprovalSteps.
+     */
+    skip?: number
+    distinct?: LeaveApprovalStepScalarFieldEnum | LeaveApprovalStepScalarFieldEnum[]
+  }
+
+  /**
+   * LeaveApprovalStep create
+   */
+  export type LeaveApprovalStepCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStep
+     */
+    select?: LeaveApprovalStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStep
+     */
+    omit?: LeaveApprovalStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LeaveApprovalStep.
+     */
+    data: XOR<LeaveApprovalStepCreateInput, LeaveApprovalStepUncheckedCreateInput>
+  }
+
+  /**
+   * LeaveApprovalStep createMany
+   */
+  export type LeaveApprovalStepCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LeaveApprovalSteps.
+     */
+    data: LeaveApprovalStepCreateManyInput | LeaveApprovalStepCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LeaveApprovalStep createManyAndReturn
+   */
+  export type LeaveApprovalStepCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStep
+     */
+    select?: LeaveApprovalStepSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStep
+     */
+    omit?: LeaveApprovalStepOmit<ExtArgs> | null
+    /**
+     * The data used to create many LeaveApprovalSteps.
+     */
+    data: LeaveApprovalStepCreateManyInput | LeaveApprovalStepCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LeaveApprovalStep update
+   */
+  export type LeaveApprovalStepUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStep
+     */
+    select?: LeaveApprovalStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStep
+     */
+    omit?: LeaveApprovalStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LeaveApprovalStep.
+     */
+    data: XOR<LeaveApprovalStepUpdateInput, LeaveApprovalStepUncheckedUpdateInput>
+    /**
+     * Choose, which LeaveApprovalStep to update.
+     */
+    where: LeaveApprovalStepWhereUniqueInput
+  }
+
+  /**
+   * LeaveApprovalStep updateMany
+   */
+  export type LeaveApprovalStepUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LeaveApprovalSteps.
+     */
+    data: XOR<LeaveApprovalStepUpdateManyMutationInput, LeaveApprovalStepUncheckedUpdateManyInput>
+    /**
+     * Filter which LeaveApprovalSteps to update
+     */
+    where?: LeaveApprovalStepWhereInput
+    /**
+     * Limit how many LeaveApprovalSteps to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LeaveApprovalStep updateManyAndReturn
+   */
+  export type LeaveApprovalStepUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStep
+     */
+    select?: LeaveApprovalStepSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStep
+     */
+    omit?: LeaveApprovalStepOmit<ExtArgs> | null
+    /**
+     * The data used to update LeaveApprovalSteps.
+     */
+    data: XOR<LeaveApprovalStepUpdateManyMutationInput, LeaveApprovalStepUncheckedUpdateManyInput>
+    /**
+     * Filter which LeaveApprovalSteps to update
+     */
+    where?: LeaveApprovalStepWhereInput
+    /**
+     * Limit how many LeaveApprovalSteps to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LeaveApprovalStep upsert
+   */
+  export type LeaveApprovalStepUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStep
+     */
+    select?: LeaveApprovalStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStep
+     */
+    omit?: LeaveApprovalStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LeaveApprovalStep to update in case it exists.
+     */
+    where: LeaveApprovalStepWhereUniqueInput
+    /**
+     * In case the LeaveApprovalStep found by the `where` argument doesn't exist, create a new LeaveApprovalStep with this data.
+     */
+    create: XOR<LeaveApprovalStepCreateInput, LeaveApprovalStepUncheckedCreateInput>
+    /**
+     * In case the LeaveApprovalStep was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LeaveApprovalStepUpdateInput, LeaveApprovalStepUncheckedUpdateInput>
+  }
+
+  /**
+   * LeaveApprovalStep delete
+   */
+  export type LeaveApprovalStepDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStep
+     */
+    select?: LeaveApprovalStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStep
+     */
+    omit?: LeaveApprovalStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepInclude<ExtArgs> | null
+    /**
+     * Filter which LeaveApprovalStep to delete.
+     */
+    where: LeaveApprovalStepWhereUniqueInput
+  }
+
+  /**
+   * LeaveApprovalStep deleteMany
+   */
+  export type LeaveApprovalStepDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LeaveApprovalSteps to delete
+     */
+    where?: LeaveApprovalStepWhereInput
+    /**
+     * Limit how many LeaveApprovalSteps to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LeaveApprovalStep.approvers
+   */
+  export type LeaveApprovalStep$approversArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStepApprover
+     */
+    select?: LeaveApprovalStepApproverSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStepApprover
+     */
+    omit?: LeaveApprovalStepApproverOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepApproverInclude<ExtArgs> | null
+    where?: LeaveApprovalStepApproverWhereInput
+    orderBy?: LeaveApprovalStepApproverOrderByWithRelationInput | LeaveApprovalStepApproverOrderByWithRelationInput[]
+    cursor?: LeaveApprovalStepApproverWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LeaveApprovalStepApproverScalarFieldEnum | LeaveApprovalStepApproverScalarFieldEnum[]
+  }
+
+  /**
+   * LeaveApprovalStep without action
+   */
+  export type LeaveApprovalStepDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStep
+     */
+    select?: LeaveApprovalStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStep
+     */
+    omit?: LeaveApprovalStepOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LeaveApprovalStepApprover
+   */
+
+  export type AggregateLeaveApprovalStepApprover = {
+    _count: LeaveApprovalStepApproverCountAggregateOutputType | null
+    _avg: LeaveApprovalStepApproverAvgAggregateOutputType | null
+    _sum: LeaveApprovalStepApproverSumAggregateOutputType | null
+    _min: LeaveApprovalStepApproverMinAggregateOutputType | null
+    _max: LeaveApprovalStepApproverMaxAggregateOutputType | null
+  }
+
+  export type LeaveApprovalStepApproverAvgAggregateOutputType = {
+    id: number | null
+    leaveApprovalStepId: number | null
+    approverId: number | null
+  }
+
+  export type LeaveApprovalStepApproverSumAggregateOutputType = {
+    id: number | null
+    leaveApprovalStepId: number | null
+    approverId: number | null
+  }
+
+  export type LeaveApprovalStepApproverMinAggregateOutputType = {
+    id: number | null
+    leaveApprovalStepId: number | null
+    approverId: number | null
+    status: $Enums.LeaveStatus | null
+    approvedAt: Date | null
+  }
+
+  export type LeaveApprovalStepApproverMaxAggregateOutputType = {
+    id: number | null
+    leaveApprovalStepId: number | null
+    approverId: number | null
+    status: $Enums.LeaveStatus | null
+    approvedAt: Date | null
+  }
+
+  export type LeaveApprovalStepApproverCountAggregateOutputType = {
+    id: number
+    leaveApprovalStepId: number
+    approverId: number
+    status: number
+    approvedAt: number
+    _all: number
+  }
+
+
+  export type LeaveApprovalStepApproverAvgAggregateInputType = {
+    id?: true
+    leaveApprovalStepId?: true
+    approverId?: true
+  }
+
+  export type LeaveApprovalStepApproverSumAggregateInputType = {
+    id?: true
+    leaveApprovalStepId?: true
+    approverId?: true
+  }
+
+  export type LeaveApprovalStepApproverMinAggregateInputType = {
+    id?: true
+    leaveApprovalStepId?: true
+    approverId?: true
+    status?: true
+    approvedAt?: true
+  }
+
+  export type LeaveApprovalStepApproverMaxAggregateInputType = {
+    id?: true
+    leaveApprovalStepId?: true
+    approverId?: true
+    status?: true
+    approvedAt?: true
+  }
+
+  export type LeaveApprovalStepApproverCountAggregateInputType = {
+    id?: true
+    leaveApprovalStepId?: true
+    approverId?: true
+    status?: true
+    approvedAt?: true
+    _all?: true
+  }
+
+  export type LeaveApprovalStepApproverAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LeaveApprovalStepApprover to aggregate.
+     */
+    where?: LeaveApprovalStepApproverWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeaveApprovalStepApprovers to fetch.
+     */
+    orderBy?: LeaveApprovalStepApproverOrderByWithRelationInput | LeaveApprovalStepApproverOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LeaveApprovalStepApproverWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeaveApprovalStepApprovers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeaveApprovalStepApprovers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LeaveApprovalStepApprovers
+    **/
+    _count?: true | LeaveApprovalStepApproverCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LeaveApprovalStepApproverAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LeaveApprovalStepApproverSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LeaveApprovalStepApproverMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LeaveApprovalStepApproverMaxAggregateInputType
+  }
+
+  export type GetLeaveApprovalStepApproverAggregateType<T extends LeaveApprovalStepApproverAggregateArgs> = {
+        [P in keyof T & keyof AggregateLeaveApprovalStepApprover]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLeaveApprovalStepApprover[P]>
+      : GetScalarType<T[P], AggregateLeaveApprovalStepApprover[P]>
+  }
+
+
+
+
+  export type LeaveApprovalStepApproverGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeaveApprovalStepApproverWhereInput
+    orderBy?: LeaveApprovalStepApproverOrderByWithAggregationInput | LeaveApprovalStepApproverOrderByWithAggregationInput[]
+    by: LeaveApprovalStepApproverScalarFieldEnum[] | LeaveApprovalStepApproverScalarFieldEnum
+    having?: LeaveApprovalStepApproverScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LeaveApprovalStepApproverCountAggregateInputType | true
+    _avg?: LeaveApprovalStepApproverAvgAggregateInputType
+    _sum?: LeaveApprovalStepApproverSumAggregateInputType
+    _min?: LeaveApprovalStepApproverMinAggregateInputType
+    _max?: LeaveApprovalStepApproverMaxAggregateInputType
+  }
+
+  export type LeaveApprovalStepApproverGroupByOutputType = {
+    id: number
+    leaveApprovalStepId: number
+    approverId: number
+    status: $Enums.LeaveStatus
+    approvedAt: Date | null
+    _count: LeaveApprovalStepApproverCountAggregateOutputType | null
+    _avg: LeaveApprovalStepApproverAvgAggregateOutputType | null
+    _sum: LeaveApprovalStepApproverSumAggregateOutputType | null
+    _min: LeaveApprovalStepApproverMinAggregateOutputType | null
+    _max: LeaveApprovalStepApproverMaxAggregateOutputType | null
+  }
+
+  type GetLeaveApprovalStepApproverGroupByPayload<T extends LeaveApprovalStepApproverGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LeaveApprovalStepApproverGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LeaveApprovalStepApproverGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LeaveApprovalStepApproverGroupByOutputType[P]>
+            : GetScalarType<T[P], LeaveApprovalStepApproverGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LeaveApprovalStepApproverSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    leaveApprovalStepId?: boolean
+    approverId?: boolean
+    status?: boolean
+    approvedAt?: boolean
+    leaveApprovalStep?: boolean | LeaveApprovalStepDefaultArgs<ExtArgs>
+    approver?: boolean | EmployeeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["leaveApprovalStepApprover"]>
+
+  export type LeaveApprovalStepApproverSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    leaveApprovalStepId?: boolean
+    approverId?: boolean
+    status?: boolean
+    approvedAt?: boolean
+    leaveApprovalStep?: boolean | LeaveApprovalStepDefaultArgs<ExtArgs>
+    approver?: boolean | EmployeeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["leaveApprovalStepApprover"]>
+
+  export type LeaveApprovalStepApproverSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    leaveApprovalStepId?: boolean
+    approverId?: boolean
+    status?: boolean
+    approvedAt?: boolean
+    leaveApprovalStep?: boolean | LeaveApprovalStepDefaultArgs<ExtArgs>
+    approver?: boolean | EmployeeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["leaveApprovalStepApprover"]>
+
+  export type LeaveApprovalStepApproverSelectScalar = {
+    id?: boolean
+    leaveApprovalStepId?: boolean
+    approverId?: boolean
+    status?: boolean
+    approvedAt?: boolean
+  }
+
+  export type LeaveApprovalStepApproverOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "leaveApprovalStepId" | "approverId" | "status" | "approvedAt", ExtArgs["result"]["leaveApprovalStepApprover"]>
+  export type LeaveApprovalStepApproverInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    leaveApprovalStep?: boolean | LeaveApprovalStepDefaultArgs<ExtArgs>
+    approver?: boolean | EmployeeDefaultArgs<ExtArgs>
+  }
+  export type LeaveApprovalStepApproverIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    leaveApprovalStep?: boolean | LeaveApprovalStepDefaultArgs<ExtArgs>
+    approver?: boolean | EmployeeDefaultArgs<ExtArgs>
+  }
+  export type LeaveApprovalStepApproverIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    leaveApprovalStep?: boolean | LeaveApprovalStepDefaultArgs<ExtArgs>
+    approver?: boolean | EmployeeDefaultArgs<ExtArgs>
+  }
+
+  export type $LeaveApprovalStepApproverPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LeaveApprovalStepApprover"
+    objects: {
+      leaveApprovalStep: Prisma.$LeaveApprovalStepPayload<ExtArgs>
+      approver: Prisma.$EmployeePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      leaveApprovalStepId: number
+      approverId: number
+      status: $Enums.LeaveStatus
+      approvedAt: Date | null
+    }, ExtArgs["result"]["leaveApprovalStepApprover"]>
+    composites: {}
+  }
+
+  type LeaveApprovalStepApproverGetPayload<S extends boolean | null | undefined | LeaveApprovalStepApproverDefaultArgs> = $Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload, S>
+
+  type LeaveApprovalStepApproverCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LeaveApprovalStepApproverFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LeaveApprovalStepApproverCountAggregateInputType | true
+    }
+
+  export interface LeaveApprovalStepApproverDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LeaveApprovalStepApprover'], meta: { name: 'LeaveApprovalStepApprover' } }
+    /**
+     * Find zero or one LeaveApprovalStepApprover that matches the filter.
+     * @param {LeaveApprovalStepApproverFindUniqueArgs} args - Arguments to find a LeaveApprovalStepApprover
+     * @example
+     * // Get one LeaveApprovalStepApprover
+     * const leaveApprovalStepApprover = await prisma.leaveApprovalStepApprover.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LeaveApprovalStepApproverFindUniqueArgs>(args: SelectSubset<T, LeaveApprovalStepApproverFindUniqueArgs<ExtArgs>>): Prisma__LeaveApprovalStepApproverClient<$Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LeaveApprovalStepApprover that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LeaveApprovalStepApproverFindUniqueOrThrowArgs} args - Arguments to find a LeaveApprovalStepApprover
+     * @example
+     * // Get one LeaveApprovalStepApprover
+     * const leaveApprovalStepApprover = await prisma.leaveApprovalStepApprover.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LeaveApprovalStepApproverFindUniqueOrThrowArgs>(args: SelectSubset<T, LeaveApprovalStepApproverFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LeaveApprovalStepApproverClient<$Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LeaveApprovalStepApprover that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeaveApprovalStepApproverFindFirstArgs} args - Arguments to find a LeaveApprovalStepApprover
+     * @example
+     * // Get one LeaveApprovalStepApprover
+     * const leaveApprovalStepApprover = await prisma.leaveApprovalStepApprover.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LeaveApprovalStepApproverFindFirstArgs>(args?: SelectSubset<T, LeaveApprovalStepApproverFindFirstArgs<ExtArgs>>): Prisma__LeaveApprovalStepApproverClient<$Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LeaveApprovalStepApprover that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeaveApprovalStepApproverFindFirstOrThrowArgs} args - Arguments to find a LeaveApprovalStepApprover
+     * @example
+     * // Get one LeaveApprovalStepApprover
+     * const leaveApprovalStepApprover = await prisma.leaveApprovalStepApprover.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LeaveApprovalStepApproverFindFirstOrThrowArgs>(args?: SelectSubset<T, LeaveApprovalStepApproverFindFirstOrThrowArgs<ExtArgs>>): Prisma__LeaveApprovalStepApproverClient<$Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LeaveApprovalStepApprovers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeaveApprovalStepApproverFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LeaveApprovalStepApprovers
+     * const leaveApprovalStepApprovers = await prisma.leaveApprovalStepApprover.findMany()
+     * 
+     * // Get first 10 LeaveApprovalStepApprovers
+     * const leaveApprovalStepApprovers = await prisma.leaveApprovalStepApprover.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const leaveApprovalStepApproverWithIdOnly = await prisma.leaveApprovalStepApprover.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LeaveApprovalStepApproverFindManyArgs>(args?: SelectSubset<T, LeaveApprovalStepApproverFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LeaveApprovalStepApprover.
+     * @param {LeaveApprovalStepApproverCreateArgs} args - Arguments to create a LeaveApprovalStepApprover.
+     * @example
+     * // Create one LeaveApprovalStepApprover
+     * const LeaveApprovalStepApprover = await prisma.leaveApprovalStepApprover.create({
+     *   data: {
+     *     // ... data to create a LeaveApprovalStepApprover
+     *   }
+     * })
+     * 
+     */
+    create<T extends LeaveApprovalStepApproverCreateArgs>(args: SelectSubset<T, LeaveApprovalStepApproverCreateArgs<ExtArgs>>): Prisma__LeaveApprovalStepApproverClient<$Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LeaveApprovalStepApprovers.
+     * @param {LeaveApprovalStepApproverCreateManyArgs} args - Arguments to create many LeaveApprovalStepApprovers.
+     * @example
+     * // Create many LeaveApprovalStepApprovers
+     * const leaveApprovalStepApprover = await prisma.leaveApprovalStepApprover.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LeaveApprovalStepApproverCreateManyArgs>(args?: SelectSubset<T, LeaveApprovalStepApproverCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LeaveApprovalStepApprovers and returns the data saved in the database.
+     * @param {LeaveApprovalStepApproverCreateManyAndReturnArgs} args - Arguments to create many LeaveApprovalStepApprovers.
+     * @example
+     * // Create many LeaveApprovalStepApprovers
+     * const leaveApprovalStepApprover = await prisma.leaveApprovalStepApprover.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LeaveApprovalStepApprovers and only return the `id`
+     * const leaveApprovalStepApproverWithIdOnly = await prisma.leaveApprovalStepApprover.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LeaveApprovalStepApproverCreateManyAndReturnArgs>(args?: SelectSubset<T, LeaveApprovalStepApproverCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LeaveApprovalStepApprover.
+     * @param {LeaveApprovalStepApproverDeleteArgs} args - Arguments to delete one LeaveApprovalStepApprover.
+     * @example
+     * // Delete one LeaveApprovalStepApprover
+     * const LeaveApprovalStepApprover = await prisma.leaveApprovalStepApprover.delete({
+     *   where: {
+     *     // ... filter to delete one LeaveApprovalStepApprover
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LeaveApprovalStepApproverDeleteArgs>(args: SelectSubset<T, LeaveApprovalStepApproverDeleteArgs<ExtArgs>>): Prisma__LeaveApprovalStepApproverClient<$Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LeaveApprovalStepApprover.
+     * @param {LeaveApprovalStepApproverUpdateArgs} args - Arguments to update one LeaveApprovalStepApprover.
+     * @example
+     * // Update one LeaveApprovalStepApprover
+     * const leaveApprovalStepApprover = await prisma.leaveApprovalStepApprover.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LeaveApprovalStepApproverUpdateArgs>(args: SelectSubset<T, LeaveApprovalStepApproverUpdateArgs<ExtArgs>>): Prisma__LeaveApprovalStepApproverClient<$Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LeaveApprovalStepApprovers.
+     * @param {LeaveApprovalStepApproverDeleteManyArgs} args - Arguments to filter LeaveApprovalStepApprovers to delete.
+     * @example
+     * // Delete a few LeaveApprovalStepApprovers
+     * const { count } = await prisma.leaveApprovalStepApprover.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LeaveApprovalStepApproverDeleteManyArgs>(args?: SelectSubset<T, LeaveApprovalStepApproverDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LeaveApprovalStepApprovers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeaveApprovalStepApproverUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LeaveApprovalStepApprovers
+     * const leaveApprovalStepApprover = await prisma.leaveApprovalStepApprover.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LeaveApprovalStepApproverUpdateManyArgs>(args: SelectSubset<T, LeaveApprovalStepApproverUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LeaveApprovalStepApprovers and returns the data updated in the database.
+     * @param {LeaveApprovalStepApproverUpdateManyAndReturnArgs} args - Arguments to update many LeaveApprovalStepApprovers.
+     * @example
+     * // Update many LeaveApprovalStepApprovers
+     * const leaveApprovalStepApprover = await prisma.leaveApprovalStepApprover.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LeaveApprovalStepApprovers and only return the `id`
+     * const leaveApprovalStepApproverWithIdOnly = await prisma.leaveApprovalStepApprover.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LeaveApprovalStepApproverUpdateManyAndReturnArgs>(args: SelectSubset<T, LeaveApprovalStepApproverUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LeaveApprovalStepApprover.
+     * @param {LeaveApprovalStepApproverUpsertArgs} args - Arguments to update or create a LeaveApprovalStepApprover.
+     * @example
+     * // Update or create a LeaveApprovalStepApprover
+     * const leaveApprovalStepApprover = await prisma.leaveApprovalStepApprover.upsert({
+     *   create: {
+     *     // ... data to create a LeaveApprovalStepApprover
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LeaveApprovalStepApprover we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LeaveApprovalStepApproverUpsertArgs>(args: SelectSubset<T, LeaveApprovalStepApproverUpsertArgs<ExtArgs>>): Prisma__LeaveApprovalStepApproverClient<$Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LeaveApprovalStepApprovers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeaveApprovalStepApproverCountArgs} args - Arguments to filter LeaveApprovalStepApprovers to count.
+     * @example
+     * // Count the number of LeaveApprovalStepApprovers
+     * const count = await prisma.leaveApprovalStepApprover.count({
+     *   where: {
+     *     // ... the filter for the LeaveApprovalStepApprovers we want to count
+     *   }
+     * })
+    **/
+    count<T extends LeaveApprovalStepApproverCountArgs>(
+      args?: Subset<T, LeaveApprovalStepApproverCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LeaveApprovalStepApproverCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LeaveApprovalStepApprover.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeaveApprovalStepApproverAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LeaveApprovalStepApproverAggregateArgs>(args: Subset<T, LeaveApprovalStepApproverAggregateArgs>): Prisma.PrismaPromise<GetLeaveApprovalStepApproverAggregateType<T>>
+
+    /**
+     * Group by LeaveApprovalStepApprover.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeaveApprovalStepApproverGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LeaveApprovalStepApproverGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LeaveApprovalStepApproverGroupByArgs['orderBy'] }
+        : { orderBy?: LeaveApprovalStepApproverGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LeaveApprovalStepApproverGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLeaveApprovalStepApproverGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LeaveApprovalStepApprover model
+   */
+  readonly fields: LeaveApprovalStepApproverFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LeaveApprovalStepApprover.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LeaveApprovalStepApproverClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    leaveApprovalStep<T extends LeaveApprovalStepDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LeaveApprovalStepDefaultArgs<ExtArgs>>): Prisma__LeaveApprovalStepClient<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    approver<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LeaveApprovalStepApprover model
+   */
+  interface LeaveApprovalStepApproverFieldRefs {
+    readonly id: FieldRef<"LeaveApprovalStepApprover", 'Int'>
+    readonly leaveApprovalStepId: FieldRef<"LeaveApprovalStepApprover", 'Int'>
+    readonly approverId: FieldRef<"LeaveApprovalStepApprover", 'Int'>
+    readonly status: FieldRef<"LeaveApprovalStepApprover", 'LeaveStatus'>
+    readonly approvedAt: FieldRef<"LeaveApprovalStepApprover", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LeaveApprovalStepApprover findUnique
+   */
+  export type LeaveApprovalStepApproverFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStepApprover
+     */
+    select?: LeaveApprovalStepApproverSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStepApprover
+     */
+    omit?: LeaveApprovalStepApproverOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepApproverInclude<ExtArgs> | null
+    /**
+     * Filter, which LeaveApprovalStepApprover to fetch.
+     */
+    where: LeaveApprovalStepApproverWhereUniqueInput
+  }
+
+  /**
+   * LeaveApprovalStepApprover findUniqueOrThrow
+   */
+  export type LeaveApprovalStepApproverFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStepApprover
+     */
+    select?: LeaveApprovalStepApproverSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStepApprover
+     */
+    omit?: LeaveApprovalStepApproverOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepApproverInclude<ExtArgs> | null
+    /**
+     * Filter, which LeaveApprovalStepApprover to fetch.
+     */
+    where: LeaveApprovalStepApproverWhereUniqueInput
+  }
+
+  /**
+   * LeaveApprovalStepApprover findFirst
+   */
+  export type LeaveApprovalStepApproverFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStepApprover
+     */
+    select?: LeaveApprovalStepApproverSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStepApprover
+     */
+    omit?: LeaveApprovalStepApproverOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepApproverInclude<ExtArgs> | null
+    /**
+     * Filter, which LeaveApprovalStepApprover to fetch.
+     */
+    where?: LeaveApprovalStepApproverWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeaveApprovalStepApprovers to fetch.
+     */
+    orderBy?: LeaveApprovalStepApproverOrderByWithRelationInput | LeaveApprovalStepApproverOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LeaveApprovalStepApprovers.
+     */
+    cursor?: LeaveApprovalStepApproverWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeaveApprovalStepApprovers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeaveApprovalStepApprovers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LeaveApprovalStepApprovers.
+     */
+    distinct?: LeaveApprovalStepApproverScalarFieldEnum | LeaveApprovalStepApproverScalarFieldEnum[]
+  }
+
+  /**
+   * LeaveApprovalStepApprover findFirstOrThrow
+   */
+  export type LeaveApprovalStepApproverFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStepApprover
+     */
+    select?: LeaveApprovalStepApproverSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStepApprover
+     */
+    omit?: LeaveApprovalStepApproverOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepApproverInclude<ExtArgs> | null
+    /**
+     * Filter, which LeaveApprovalStepApprover to fetch.
+     */
+    where?: LeaveApprovalStepApproverWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeaveApprovalStepApprovers to fetch.
+     */
+    orderBy?: LeaveApprovalStepApproverOrderByWithRelationInput | LeaveApprovalStepApproverOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LeaveApprovalStepApprovers.
+     */
+    cursor?: LeaveApprovalStepApproverWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeaveApprovalStepApprovers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeaveApprovalStepApprovers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LeaveApprovalStepApprovers.
+     */
+    distinct?: LeaveApprovalStepApproverScalarFieldEnum | LeaveApprovalStepApproverScalarFieldEnum[]
+  }
+
+  /**
+   * LeaveApprovalStepApprover findMany
+   */
+  export type LeaveApprovalStepApproverFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStepApprover
+     */
+    select?: LeaveApprovalStepApproverSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStepApprover
+     */
+    omit?: LeaveApprovalStepApproverOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepApproverInclude<ExtArgs> | null
+    /**
+     * Filter, which LeaveApprovalStepApprovers to fetch.
+     */
+    where?: LeaveApprovalStepApproverWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LeaveApprovalStepApprovers to fetch.
+     */
+    orderBy?: LeaveApprovalStepApproverOrderByWithRelationInput | LeaveApprovalStepApproverOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LeaveApprovalStepApprovers.
+     */
+    cursor?: LeaveApprovalStepApproverWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LeaveApprovalStepApprovers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LeaveApprovalStepApprovers.
+     */
+    skip?: number
+    distinct?: LeaveApprovalStepApproverScalarFieldEnum | LeaveApprovalStepApproverScalarFieldEnum[]
+  }
+
+  /**
+   * LeaveApprovalStepApprover create
+   */
+  export type LeaveApprovalStepApproverCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStepApprover
+     */
+    select?: LeaveApprovalStepApproverSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStepApprover
+     */
+    omit?: LeaveApprovalStepApproverOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepApproverInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LeaveApprovalStepApprover.
+     */
+    data: XOR<LeaveApprovalStepApproverCreateInput, LeaveApprovalStepApproverUncheckedCreateInput>
+  }
+
+  /**
+   * LeaveApprovalStepApprover createMany
+   */
+  export type LeaveApprovalStepApproverCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LeaveApprovalStepApprovers.
+     */
+    data: LeaveApprovalStepApproverCreateManyInput | LeaveApprovalStepApproverCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LeaveApprovalStepApprover createManyAndReturn
+   */
+  export type LeaveApprovalStepApproverCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStepApprover
+     */
+    select?: LeaveApprovalStepApproverSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStepApprover
+     */
+    omit?: LeaveApprovalStepApproverOmit<ExtArgs> | null
+    /**
+     * The data used to create many LeaveApprovalStepApprovers.
+     */
+    data: LeaveApprovalStepApproverCreateManyInput | LeaveApprovalStepApproverCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepApproverIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LeaveApprovalStepApprover update
+   */
+  export type LeaveApprovalStepApproverUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStepApprover
+     */
+    select?: LeaveApprovalStepApproverSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStepApprover
+     */
+    omit?: LeaveApprovalStepApproverOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepApproverInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LeaveApprovalStepApprover.
+     */
+    data: XOR<LeaveApprovalStepApproverUpdateInput, LeaveApprovalStepApproverUncheckedUpdateInput>
+    /**
+     * Choose, which LeaveApprovalStepApprover to update.
+     */
+    where: LeaveApprovalStepApproverWhereUniqueInput
+  }
+
+  /**
+   * LeaveApprovalStepApprover updateMany
+   */
+  export type LeaveApprovalStepApproverUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LeaveApprovalStepApprovers.
+     */
+    data: XOR<LeaveApprovalStepApproverUpdateManyMutationInput, LeaveApprovalStepApproverUncheckedUpdateManyInput>
+    /**
+     * Filter which LeaveApprovalStepApprovers to update
+     */
+    where?: LeaveApprovalStepApproverWhereInput
+    /**
+     * Limit how many LeaveApprovalStepApprovers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LeaveApprovalStepApprover updateManyAndReturn
+   */
+  export type LeaveApprovalStepApproverUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStepApprover
+     */
+    select?: LeaveApprovalStepApproverSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStepApprover
+     */
+    omit?: LeaveApprovalStepApproverOmit<ExtArgs> | null
+    /**
+     * The data used to update LeaveApprovalStepApprovers.
+     */
+    data: XOR<LeaveApprovalStepApproverUpdateManyMutationInput, LeaveApprovalStepApproverUncheckedUpdateManyInput>
+    /**
+     * Filter which LeaveApprovalStepApprovers to update
+     */
+    where?: LeaveApprovalStepApproverWhereInput
+    /**
+     * Limit how many LeaveApprovalStepApprovers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepApproverIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LeaveApprovalStepApprover upsert
+   */
+  export type LeaveApprovalStepApproverUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStepApprover
+     */
+    select?: LeaveApprovalStepApproverSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStepApprover
+     */
+    omit?: LeaveApprovalStepApproverOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepApproverInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LeaveApprovalStepApprover to update in case it exists.
+     */
+    where: LeaveApprovalStepApproverWhereUniqueInput
+    /**
+     * In case the LeaveApprovalStepApprover found by the `where` argument doesn't exist, create a new LeaveApprovalStepApprover with this data.
+     */
+    create: XOR<LeaveApprovalStepApproverCreateInput, LeaveApprovalStepApproverUncheckedCreateInput>
+    /**
+     * In case the LeaveApprovalStepApprover was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LeaveApprovalStepApproverUpdateInput, LeaveApprovalStepApproverUncheckedUpdateInput>
+  }
+
+  /**
+   * LeaveApprovalStepApprover delete
+   */
+  export type LeaveApprovalStepApproverDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStepApprover
+     */
+    select?: LeaveApprovalStepApproverSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStepApprover
+     */
+    omit?: LeaveApprovalStepApproverOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepApproverInclude<ExtArgs> | null
+    /**
+     * Filter which LeaveApprovalStepApprover to delete.
+     */
+    where: LeaveApprovalStepApproverWhereUniqueInput
+  }
+
+  /**
+   * LeaveApprovalStepApprover deleteMany
+   */
+  export type LeaveApprovalStepApproverDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LeaveApprovalStepApprovers to delete
+     */
+    where?: LeaveApprovalStepApproverWhereInput
+    /**
+     * Limit how many LeaveApprovalStepApprovers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LeaveApprovalStepApprover without action
+   */
+  export type LeaveApprovalStepApproverDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveApprovalStepApprover
+     */
+    select?: LeaveApprovalStepApproverSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveApprovalStepApprover
+     */
+    omit?: LeaveApprovalStepApproverOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveApprovalStepApproverInclude<ExtArgs> | null
   }
 
 
@@ -16458,6 +19007,28 @@ export namespace Prisma {
   export type LeaveRequestScalarFieldEnum = (typeof LeaveRequestScalarFieldEnum)[keyof typeof LeaveRequestScalarFieldEnum]
 
 
+  export const LeaveApprovalStepScalarFieldEnum: {
+    id: 'id',
+    leaveRequestId: 'leaveRequestId',
+    level: 'level',
+    status: 'status',
+    approvedAt: 'approvedAt'
+  };
+
+  export type LeaveApprovalStepScalarFieldEnum = (typeof LeaveApprovalStepScalarFieldEnum)[keyof typeof LeaveApprovalStepScalarFieldEnum]
+
+
+  export const LeaveApprovalStepApproverScalarFieldEnum: {
+    id: 'id',
+    leaveApprovalStepId: 'leaveApprovalStepId',
+    approverId: 'approverId',
+    status: 'status',
+    approvedAt: 'approvedAt'
+  };
+
+  export type LeaveApprovalStepApproverScalarFieldEnum = (typeof LeaveApprovalStepApproverScalarFieldEnum)[keyof typeof LeaveApprovalStepApproverScalarFieldEnum]
+
+
   export const AttendanceScalarFieldEnum: {
     id: 'id',
     employeeId: 'employeeId',
@@ -16693,6 +19264,7 @@ export namespace Prisma {
     contactInfo?: XOR<ContactInfoNullableScalarRelationFilter, ContactInfoWhereInput> | null
     otherInfo?: XOR<OtherInfoNullableScalarRelationFilter, OtherInfoWhereInput> | null
     LeaveRequest?: LeaveRequestListRelationFilter
+    LeaveApprovalSteps?: LeaveApprovalStepApproverListRelationFilter
     Attendance?: AttendanceListRelationFilter
     KPIEmployee?: KPIEmployeeListRelationFilter
   }
@@ -16717,6 +19289,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoOrderByWithRelationInput
     otherInfo?: OtherInfoOrderByWithRelationInput
     LeaveRequest?: LeaveRequestOrderByRelationAggregateInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverOrderByRelationAggregateInput
     Attendance?: AttendanceOrderByRelationAggregateInput
     KPIEmployee?: KPIEmployeeOrderByRelationAggregateInput
   }
@@ -16744,6 +19317,7 @@ export namespace Prisma {
     contactInfo?: XOR<ContactInfoNullableScalarRelationFilter, ContactInfoWhereInput> | null
     otherInfo?: XOR<OtherInfoNullableScalarRelationFilter, OtherInfoWhereInput> | null
     LeaveRequest?: LeaveRequestListRelationFilter
+    LeaveApprovalSteps?: LeaveApprovalStepApproverListRelationFilter
     Attendance?: AttendanceListRelationFilter
     KPIEmployee?: KPIEmployeeListRelationFilter
   }, "id" | "employeeCode">
@@ -16793,9 +19367,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Department"> | Date | string
     headId?: IntNullableFilter<"Department"> | number | null
     directorId?: IntNullableFilter<"Department"> | number | null
-    positions?: PositionListRelationFilter
     head?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
     director?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
+    positions?: PositionListRelationFilter
     workInfos?: WorkInfoListRelationFilter
   }
 
@@ -16807,9 +19381,9 @@ export namespace Prisma {
     updatedAt?: SortOrder
     headId?: SortOrderInput | SortOrder
     directorId?: SortOrderInput | SortOrder
-    positions?: PositionOrderByRelationAggregateInput
     head?: EmployeeOrderByWithRelationInput
     director?: EmployeeOrderByWithRelationInput
+    positions?: PositionOrderByRelationAggregateInput
     workInfos?: WorkInfoOrderByRelationAggregateInput
   }
 
@@ -16824,9 +19398,9 @@ export namespace Prisma {
     NOT?: DepartmentWhereInput | DepartmentWhereInput[]
     createdAt?: DateTimeFilter<"Department"> | Date | string
     updatedAt?: DateTimeFilter<"Department"> | Date | string
-    positions?: PositionListRelationFilter
     head?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
     director?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
+    positions?: PositionListRelationFilter
     workInfos?: WorkInfoListRelationFilter
   }, "id" | "name" | "abbreviation" | "headId" | "directorId">
 
@@ -17278,6 +19852,7 @@ export namespace Prisma {
     approvedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    approvalSteps?: LeaveApprovalStepListRelationFilter
   }
 
   export type LeaveRequestOrderByWithRelationInput = {
@@ -17293,6 +19868,7 @@ export namespace Prisma {
     approvedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     employee?: EmployeeOrderByWithRelationInput
+    approvalSteps?: LeaveApprovalStepOrderByRelationAggregateInput
   }
 
   export type LeaveRequestWhereUniqueInput = Prisma.AtLeast<{
@@ -17311,6 +19887,7 @@ export namespace Prisma {
     approvedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    approvalSteps?: LeaveApprovalStepListRelationFilter
   }, "id">
 
   export type LeaveRequestOrderByWithAggregationInput = {
@@ -17347,6 +19924,128 @@ export namespace Prisma {
     approvedBy?: StringNullableWithAggregatesFilter<"LeaveRequest"> | string | null
     approvedAt?: DateTimeNullableWithAggregatesFilter<"LeaveRequest"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"LeaveRequest"> | Date | string
+  }
+
+  export type LeaveApprovalStepWhereInput = {
+    AND?: LeaveApprovalStepWhereInput | LeaveApprovalStepWhereInput[]
+    OR?: LeaveApprovalStepWhereInput[]
+    NOT?: LeaveApprovalStepWhereInput | LeaveApprovalStepWhereInput[]
+    id?: IntFilter<"LeaveApprovalStep"> | number
+    leaveRequestId?: IntFilter<"LeaveApprovalStep"> | number
+    level?: IntFilter<"LeaveApprovalStep"> | number
+    status?: EnumLeaveStatusFilter<"LeaveApprovalStep"> | $Enums.LeaveStatus
+    approvedAt?: DateTimeNullableFilter<"LeaveApprovalStep"> | Date | string | null
+    leaveRequest?: XOR<LeaveRequestScalarRelationFilter, LeaveRequestWhereInput>
+    approvers?: LeaveApprovalStepApproverListRelationFilter
+  }
+
+  export type LeaveApprovalStepOrderByWithRelationInput = {
+    id?: SortOrder
+    leaveRequestId?: SortOrder
+    level?: SortOrder
+    status?: SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    leaveRequest?: LeaveRequestOrderByWithRelationInput
+    approvers?: LeaveApprovalStepApproverOrderByRelationAggregateInput
+  }
+
+  export type LeaveApprovalStepWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    leaveRequestId_level?: LeaveApprovalStepLeaveRequestIdLevelCompoundUniqueInput
+    AND?: LeaveApprovalStepWhereInput | LeaveApprovalStepWhereInput[]
+    OR?: LeaveApprovalStepWhereInput[]
+    NOT?: LeaveApprovalStepWhereInput | LeaveApprovalStepWhereInput[]
+    leaveRequestId?: IntFilter<"LeaveApprovalStep"> | number
+    level?: IntFilter<"LeaveApprovalStep"> | number
+    status?: EnumLeaveStatusFilter<"LeaveApprovalStep"> | $Enums.LeaveStatus
+    approvedAt?: DateTimeNullableFilter<"LeaveApprovalStep"> | Date | string | null
+    leaveRequest?: XOR<LeaveRequestScalarRelationFilter, LeaveRequestWhereInput>
+    approvers?: LeaveApprovalStepApproverListRelationFilter
+  }, "id" | "leaveRequestId_level">
+
+  export type LeaveApprovalStepOrderByWithAggregationInput = {
+    id?: SortOrder
+    leaveRequestId?: SortOrder
+    level?: SortOrder
+    status?: SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    _count?: LeaveApprovalStepCountOrderByAggregateInput
+    _avg?: LeaveApprovalStepAvgOrderByAggregateInput
+    _max?: LeaveApprovalStepMaxOrderByAggregateInput
+    _min?: LeaveApprovalStepMinOrderByAggregateInput
+    _sum?: LeaveApprovalStepSumOrderByAggregateInput
+  }
+
+  export type LeaveApprovalStepScalarWhereWithAggregatesInput = {
+    AND?: LeaveApprovalStepScalarWhereWithAggregatesInput | LeaveApprovalStepScalarWhereWithAggregatesInput[]
+    OR?: LeaveApprovalStepScalarWhereWithAggregatesInput[]
+    NOT?: LeaveApprovalStepScalarWhereWithAggregatesInput | LeaveApprovalStepScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"LeaveApprovalStep"> | number
+    leaveRequestId?: IntWithAggregatesFilter<"LeaveApprovalStep"> | number
+    level?: IntWithAggregatesFilter<"LeaveApprovalStep"> | number
+    status?: EnumLeaveStatusWithAggregatesFilter<"LeaveApprovalStep"> | $Enums.LeaveStatus
+    approvedAt?: DateTimeNullableWithAggregatesFilter<"LeaveApprovalStep"> | Date | string | null
+  }
+
+  export type LeaveApprovalStepApproverWhereInput = {
+    AND?: LeaveApprovalStepApproverWhereInput | LeaveApprovalStepApproverWhereInput[]
+    OR?: LeaveApprovalStepApproverWhereInput[]
+    NOT?: LeaveApprovalStepApproverWhereInput | LeaveApprovalStepApproverWhereInput[]
+    id?: IntFilter<"LeaveApprovalStepApprover"> | number
+    leaveApprovalStepId?: IntFilter<"LeaveApprovalStepApprover"> | number
+    approverId?: IntFilter<"LeaveApprovalStepApprover"> | number
+    status?: EnumLeaveStatusFilter<"LeaveApprovalStepApprover"> | $Enums.LeaveStatus
+    approvedAt?: DateTimeNullableFilter<"LeaveApprovalStepApprover"> | Date | string | null
+    leaveApprovalStep?: XOR<LeaveApprovalStepScalarRelationFilter, LeaveApprovalStepWhereInput>
+    approver?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+  }
+
+  export type LeaveApprovalStepApproverOrderByWithRelationInput = {
+    id?: SortOrder
+    leaveApprovalStepId?: SortOrder
+    approverId?: SortOrder
+    status?: SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    leaveApprovalStep?: LeaveApprovalStepOrderByWithRelationInput
+    approver?: EmployeeOrderByWithRelationInput
+  }
+
+  export type LeaveApprovalStepApproverWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    leaveApprovalStepId_approverId?: LeaveApprovalStepApproverLeaveApprovalStepIdApproverIdCompoundUniqueInput
+    AND?: LeaveApprovalStepApproverWhereInput | LeaveApprovalStepApproverWhereInput[]
+    OR?: LeaveApprovalStepApproverWhereInput[]
+    NOT?: LeaveApprovalStepApproverWhereInput | LeaveApprovalStepApproverWhereInput[]
+    leaveApprovalStepId?: IntFilter<"LeaveApprovalStepApprover"> | number
+    approverId?: IntFilter<"LeaveApprovalStepApprover"> | number
+    status?: EnumLeaveStatusFilter<"LeaveApprovalStepApprover"> | $Enums.LeaveStatus
+    approvedAt?: DateTimeNullableFilter<"LeaveApprovalStepApprover"> | Date | string | null
+    leaveApprovalStep?: XOR<LeaveApprovalStepScalarRelationFilter, LeaveApprovalStepWhereInput>
+    approver?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+  }, "id" | "leaveApprovalStepId_approverId">
+
+  export type LeaveApprovalStepApproverOrderByWithAggregationInput = {
+    id?: SortOrder
+    leaveApprovalStepId?: SortOrder
+    approverId?: SortOrder
+    status?: SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    _count?: LeaveApprovalStepApproverCountOrderByAggregateInput
+    _avg?: LeaveApprovalStepApproverAvgOrderByAggregateInput
+    _max?: LeaveApprovalStepApproverMaxOrderByAggregateInput
+    _min?: LeaveApprovalStepApproverMinOrderByAggregateInput
+    _sum?: LeaveApprovalStepApproverSumOrderByAggregateInput
+  }
+
+  export type LeaveApprovalStepApproverScalarWhereWithAggregatesInput = {
+    AND?: LeaveApprovalStepApproverScalarWhereWithAggregatesInput | LeaveApprovalStepApproverScalarWhereWithAggregatesInput[]
+    OR?: LeaveApprovalStepApproverScalarWhereWithAggregatesInput[]
+    NOT?: LeaveApprovalStepApproverScalarWhereWithAggregatesInput | LeaveApprovalStepApproverScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"LeaveApprovalStepApprover"> | number
+    leaveApprovalStepId?: IntWithAggregatesFilter<"LeaveApprovalStepApprover"> | number
+    approverId?: IntWithAggregatesFilter<"LeaveApprovalStepApprover"> | number
+    status?: EnumLeaveStatusWithAggregatesFilter<"LeaveApprovalStepApprover"> | $Enums.LeaveStatus
+    approvedAt?: DateTimeNullableWithAggregatesFilter<"LeaveApprovalStepApprover"> | Date | string | null
   }
 
   export type AttendanceWhereInput = {
@@ -17490,7 +20189,7 @@ export namespace Prisma {
 
   export type KPIEmployeeWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    kpi_employee_unique?: KPIEmployeeKpi_employee_uniqueCompoundUniqueInput
+    kpiId_employeeId?: KPIEmployeeKpiIdEmployeeIdCompoundUniqueInput
     AND?: KPIEmployeeWhereInput | KPIEmployeeWhereInput[]
     OR?: KPIEmployeeWhereInput[]
     NOT?: KPIEmployeeWhereInput | KPIEmployeeWhereInput[]
@@ -17501,7 +20200,7 @@ export namespace Prisma {
     kpi?: XOR<KPIScalarRelationFilter, KPIWhereInput>
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     entries?: KPIEntryListRelationFilter
-  }, "id" | "kpi_employee_unique">
+  }, "id" | "kpiId_employeeId">
 
   export type KPIEmployeeOrderByWithAggregationInput = {
     id?: SortOrder
@@ -17556,7 +20255,7 @@ export namespace Prisma {
 
   export type KPIEntryWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    kpi_entry_unique?: KPIEntryKpi_entry_uniqueCompoundUniqueInput
+    kpiEmployeeId_name?: KPIEntryKpiEmployeeIdNameCompoundUniqueInput
     AND?: KPIEntryWhereInput | KPIEntryWhereInput[]
     OR?: KPIEntryWhereInput[]
     NOT?: KPIEntryWhereInput | KPIEntryWhereInput[]
@@ -17568,7 +20267,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"KPIEntry"> | Date | string
     updatedAt?: DateTimeFilter<"KPIEntry"> | Date | string
     kpiEmployee?: XOR<KPIEmployeeScalarRelationFilter, KPIEmployeeWhereInput>
-  }, "id" | "kpi_entry_unique">
+  }, "id" | "kpiEmployeeId_name">
 
   export type KPIEntryOrderByWithAggregationInput = {
     id?: SortOrder
@@ -17618,6 +20317,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
@@ -17641,6 +20341,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
@@ -17663,6 +20364,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
@@ -17686,6 +20388,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
@@ -17732,9 +20435,9 @@ export namespace Prisma {
     abbreviation: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    positions?: PositionCreateNestedManyWithoutDepartmentInput
     head?: EmployeeCreateNestedOneWithoutDepartmentHeadOfInput
     director?: EmployeeCreateNestedOneWithoutDepartmentDirectorOfInput
+    positions?: PositionCreateNestedManyWithoutDepartmentInput
     workInfos?: WorkInfoCreateNestedManyWithoutDepartmentInput
   }
 
@@ -17755,9 +20458,9 @@ export namespace Prisma {
     abbreviation?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    positions?: PositionUpdateManyWithoutDepartmentNestedInput
     head?: EmployeeUpdateOneWithoutDepartmentHeadOfNestedInput
     director?: EmployeeUpdateOneWithoutDepartmentDirectorOfNestedInput
+    positions?: PositionUpdateManyWithoutDepartmentNestedInput
     workInfos?: WorkInfoUpdateManyWithoutDepartmentNestedInput
   }
 
@@ -18227,6 +20930,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     employee: EmployeeCreateNestedOneWithoutLeaveRequestInput
+    approvalSteps?: LeaveApprovalStepCreateNestedManyWithoutLeaveRequestInput
   }
 
   export type LeaveRequestUncheckedCreateInput = {
@@ -18241,6 +20945,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     createdAt?: Date | string
+    approvalSteps?: LeaveApprovalStepUncheckedCreateNestedManyWithoutLeaveRequestInput
   }
 
   export type LeaveRequestUpdateInput = {
@@ -18254,6 +20959,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     employee?: EmployeeUpdateOneRequiredWithoutLeaveRequestNestedInput
+    approvalSteps?: LeaveApprovalStepUpdateManyWithoutLeaveRequestNestedInput
   }
 
   export type LeaveRequestUncheckedUpdateInput = {
@@ -18268,6 +20974,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvalSteps?: LeaveApprovalStepUncheckedUpdateManyWithoutLeaveRequestNestedInput
   }
 
   export type LeaveRequestCreateManyInput = {
@@ -18308,6 +21015,113 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeaveApprovalStepCreateInput = {
+    level: number
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+    leaveRequest: LeaveRequestCreateNestedOneWithoutApprovalStepsInput
+    approvers?: LeaveApprovalStepApproverCreateNestedManyWithoutLeaveApprovalStepInput
+  }
+
+  export type LeaveApprovalStepUncheckedCreateInput = {
+    id?: number
+    leaveRequestId: number
+    level: number
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+    approvers?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutLeaveApprovalStepInput
+  }
+
+  export type LeaveApprovalStepUpdateInput = {
+    level?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leaveRequest?: LeaveRequestUpdateOneRequiredWithoutApprovalStepsNestedInput
+    approvers?: LeaveApprovalStepApproverUpdateManyWithoutLeaveApprovalStepNestedInput
+  }
+
+  export type LeaveApprovalStepUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    leaveRequestId?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvers?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutLeaveApprovalStepNestedInput
+  }
+
+  export type LeaveApprovalStepCreateManyInput = {
+    id?: number
+    leaveRequestId: number
+    level: number
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+  }
+
+  export type LeaveApprovalStepUpdateManyMutationInput = {
+    level?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LeaveApprovalStepUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    leaveRequestId?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LeaveApprovalStepApproverCreateInput = {
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+    leaveApprovalStep: LeaveApprovalStepCreateNestedOneWithoutApproversInput
+    approver: EmployeeCreateNestedOneWithoutLeaveApprovalStepsInput
+  }
+
+  export type LeaveApprovalStepApproverUncheckedCreateInput = {
+    id?: number
+    leaveApprovalStepId: number
+    approverId: number
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+  }
+
+  export type LeaveApprovalStepApproverUpdateInput = {
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leaveApprovalStep?: LeaveApprovalStepUpdateOneRequiredWithoutApproversNestedInput
+    approver?: EmployeeUpdateOneRequiredWithoutLeaveApprovalStepsNestedInput
+  }
+
+  export type LeaveApprovalStepApproverUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    leaveApprovalStepId?: IntFieldUpdateOperationsInput | number
+    approverId?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LeaveApprovalStepApproverCreateManyInput = {
+    id?: number
+    leaveApprovalStepId: number
+    approverId: number
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+  }
+
+  export type LeaveApprovalStepApproverUpdateManyMutationInput = {
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LeaveApprovalStepApproverUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    leaveApprovalStepId?: IntFieldUpdateOperationsInput | number
+    approverId?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type AttendanceCreateInput = {
@@ -18671,6 +21485,12 @@ export namespace Prisma {
     none?: LeaveRequestWhereInput
   }
 
+  export type LeaveApprovalStepApproverListRelationFilter = {
+    every?: LeaveApprovalStepApproverWhereInput
+    some?: LeaveApprovalStepApproverWhereInput
+    none?: LeaveApprovalStepApproverWhereInput
+  }
+
   export type AttendanceListRelationFilter = {
     every?: AttendanceWhereInput
     some?: AttendanceWhereInput
@@ -18693,6 +21513,10 @@ export namespace Prisma {
   }
 
   export type LeaveRequestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LeaveApprovalStepApproverOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -19251,6 +22075,16 @@ export namespace Prisma {
     not?: NestedEnumLeaveStatusFilter<$PrismaModel> | $Enums.LeaveStatus
   }
 
+  export type LeaveApprovalStepListRelationFilter = {
+    every?: LeaveApprovalStepWhereInput
+    some?: LeaveApprovalStepWhereInput
+    none?: LeaveApprovalStepWhereInput
+  }
+
+  export type LeaveApprovalStepOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type LeaveRequestCountOrderByAggregateInput = {
     id?: SortOrder
     employeeId?: SortOrder
@@ -19341,6 +22175,98 @@ export namespace Prisma {
     _max?: NestedEnumLeaveStatusFilter<$PrismaModel>
   }
 
+  export type LeaveRequestScalarRelationFilter = {
+    is?: LeaveRequestWhereInput
+    isNot?: LeaveRequestWhereInput
+  }
+
+  export type LeaveApprovalStepLeaveRequestIdLevelCompoundUniqueInput = {
+    leaveRequestId: number
+    level: number
+  }
+
+  export type LeaveApprovalStepCountOrderByAggregateInput = {
+    id?: SortOrder
+    leaveRequestId?: SortOrder
+    level?: SortOrder
+    status?: SortOrder
+    approvedAt?: SortOrder
+  }
+
+  export type LeaveApprovalStepAvgOrderByAggregateInput = {
+    id?: SortOrder
+    leaveRequestId?: SortOrder
+    level?: SortOrder
+  }
+
+  export type LeaveApprovalStepMaxOrderByAggregateInput = {
+    id?: SortOrder
+    leaveRequestId?: SortOrder
+    level?: SortOrder
+    status?: SortOrder
+    approvedAt?: SortOrder
+  }
+
+  export type LeaveApprovalStepMinOrderByAggregateInput = {
+    id?: SortOrder
+    leaveRequestId?: SortOrder
+    level?: SortOrder
+    status?: SortOrder
+    approvedAt?: SortOrder
+  }
+
+  export type LeaveApprovalStepSumOrderByAggregateInput = {
+    id?: SortOrder
+    leaveRequestId?: SortOrder
+    level?: SortOrder
+  }
+
+  export type LeaveApprovalStepScalarRelationFilter = {
+    is?: LeaveApprovalStepWhereInput
+    isNot?: LeaveApprovalStepWhereInput
+  }
+
+  export type LeaveApprovalStepApproverLeaveApprovalStepIdApproverIdCompoundUniqueInput = {
+    leaveApprovalStepId: number
+    approverId: number
+  }
+
+  export type LeaveApprovalStepApproverCountOrderByAggregateInput = {
+    id?: SortOrder
+    leaveApprovalStepId?: SortOrder
+    approverId?: SortOrder
+    status?: SortOrder
+    approvedAt?: SortOrder
+  }
+
+  export type LeaveApprovalStepApproverAvgOrderByAggregateInput = {
+    id?: SortOrder
+    leaveApprovalStepId?: SortOrder
+    approverId?: SortOrder
+  }
+
+  export type LeaveApprovalStepApproverMaxOrderByAggregateInput = {
+    id?: SortOrder
+    leaveApprovalStepId?: SortOrder
+    approverId?: SortOrder
+    status?: SortOrder
+    approvedAt?: SortOrder
+  }
+
+  export type LeaveApprovalStepApproverMinOrderByAggregateInput = {
+    id?: SortOrder
+    leaveApprovalStepId?: SortOrder
+    approverId?: SortOrder
+    status?: SortOrder
+    approvedAt?: SortOrder
+  }
+
+  export type LeaveApprovalStepApproverSumOrderByAggregateInput = {
+    id?: SortOrder
+    leaveApprovalStepId?: SortOrder
+    approverId?: SortOrder
+  }
+
   export type AttendanceCountOrderByAggregateInput = {
     id?: SortOrder
     employeeId?: SortOrder
@@ -19422,7 +22348,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type KPIEmployeeKpi_employee_uniqueCompoundUniqueInput = {
+  export type KPIEmployeeKpiIdEmployeeIdCompoundUniqueInput = {
     kpiId: number
     employeeId: number
   }
@@ -19479,7 +22405,7 @@ export namespace Prisma {
     isNot?: KPIEmployeeWhereInput
   }
 
-  export type KPIEntryKpi_entry_uniqueCompoundUniqueInput = {
+  export type KPIEntryKpiEmployeeIdNameCompoundUniqueInput = {
     kpiEmployeeId: number
     name: string
   }
@@ -19603,6 +22529,13 @@ export namespace Prisma {
     connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
   }
 
+  export type LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput = {
+    create?: XOR<LeaveApprovalStepApproverCreateWithoutApproverInput, LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput> | LeaveApprovalStepApproverCreateWithoutApproverInput[] | LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput[]
+    connectOrCreate?: LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput | LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput[]
+    createMany?: LeaveApprovalStepApproverCreateManyApproverInputEnvelope
+    connect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+  }
+
   export type AttendanceCreateNestedManyWithoutEmployeeInput = {
     create?: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput> | AttendanceCreateWithoutEmployeeInput[] | AttendanceUncheckedCreateWithoutEmployeeInput[]
     connectOrCreate?: AttendanceCreateOrConnectWithoutEmployeeInput | AttendanceCreateOrConnectWithoutEmployeeInput[]
@@ -19665,6 +22598,13 @@ export namespace Prisma {
     connectOrCreate?: LeaveRequestCreateOrConnectWithoutEmployeeInput | LeaveRequestCreateOrConnectWithoutEmployeeInput[]
     createMany?: LeaveRequestCreateManyEmployeeInputEnvelope
     connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+  }
+
+  export type LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput = {
+    create?: XOR<LeaveApprovalStepApproverCreateWithoutApproverInput, LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput> | LeaveApprovalStepApproverCreateWithoutApproverInput[] | LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput[]
+    connectOrCreate?: LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput | LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput[]
+    createMany?: LeaveApprovalStepApproverCreateManyApproverInputEnvelope
+    connect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
   }
 
   export type AttendanceUncheckedCreateNestedManyWithoutEmployeeInput = {
@@ -19803,6 +22743,20 @@ export namespace Prisma {
     deleteMany?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
   }
 
+  export type LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput = {
+    create?: XOR<LeaveApprovalStepApproverCreateWithoutApproverInput, LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput> | LeaveApprovalStepApproverCreateWithoutApproverInput[] | LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput[]
+    connectOrCreate?: LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput | LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput[]
+    upsert?: LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutApproverInput | LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutApproverInput[]
+    createMany?: LeaveApprovalStepApproverCreateManyApproverInputEnvelope
+    set?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    disconnect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    delete?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    connect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    update?: LeaveApprovalStepApproverUpdateWithWhereUniqueWithoutApproverInput | LeaveApprovalStepApproverUpdateWithWhereUniqueWithoutApproverInput[]
+    updateMany?: LeaveApprovalStepApproverUpdateManyWithWhereWithoutApproverInput | LeaveApprovalStepApproverUpdateManyWithWhereWithoutApproverInput[]
+    deleteMany?: LeaveApprovalStepApproverScalarWhereInput | LeaveApprovalStepApproverScalarWhereInput[]
+  }
+
   export type AttendanceUpdateManyWithoutEmployeeNestedInput = {
     create?: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput> | AttendanceCreateWithoutEmployeeInput[] | AttendanceUncheckedCreateWithoutEmployeeInput[]
     connectOrCreate?: AttendanceCreateOrConnectWithoutEmployeeInput | AttendanceCreateOrConnectWithoutEmployeeInput[]
@@ -19935,6 +22889,20 @@ export namespace Prisma {
     deleteMany?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
   }
 
+  export type LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput = {
+    create?: XOR<LeaveApprovalStepApproverCreateWithoutApproverInput, LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput> | LeaveApprovalStepApproverCreateWithoutApproverInput[] | LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput[]
+    connectOrCreate?: LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput | LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput[]
+    upsert?: LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutApproverInput | LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutApproverInput[]
+    createMany?: LeaveApprovalStepApproverCreateManyApproverInputEnvelope
+    set?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    disconnect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    delete?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    connect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    update?: LeaveApprovalStepApproverUpdateWithWhereUniqueWithoutApproverInput | LeaveApprovalStepApproverUpdateWithWhereUniqueWithoutApproverInput[]
+    updateMany?: LeaveApprovalStepApproverUpdateManyWithWhereWithoutApproverInput | LeaveApprovalStepApproverUpdateManyWithWhereWithoutApproverInput[]
+    deleteMany?: LeaveApprovalStepApproverScalarWhereInput | LeaveApprovalStepApproverScalarWhereInput[]
+  }
+
   export type AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput = {
     create?: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput> | AttendanceCreateWithoutEmployeeInput[] | AttendanceUncheckedCreateWithoutEmployeeInput[]
     connectOrCreate?: AttendanceCreateOrConnectWithoutEmployeeInput | AttendanceCreateOrConnectWithoutEmployeeInput[]
@@ -19963,13 +22931,6 @@ export namespace Prisma {
     deleteMany?: KPIEmployeeScalarWhereInput | KPIEmployeeScalarWhereInput[]
   }
 
-  export type PositionCreateNestedManyWithoutDepartmentInput = {
-    create?: XOR<PositionCreateWithoutDepartmentInput, PositionUncheckedCreateWithoutDepartmentInput> | PositionCreateWithoutDepartmentInput[] | PositionUncheckedCreateWithoutDepartmentInput[]
-    connectOrCreate?: PositionCreateOrConnectWithoutDepartmentInput | PositionCreateOrConnectWithoutDepartmentInput[]
-    createMany?: PositionCreateManyDepartmentInputEnvelope
-    connect?: PositionWhereUniqueInput | PositionWhereUniqueInput[]
-  }
-
   export type EmployeeCreateNestedOneWithoutDepartmentHeadOfInput = {
     create?: XOR<EmployeeCreateWithoutDepartmentHeadOfInput, EmployeeUncheckedCreateWithoutDepartmentHeadOfInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutDepartmentHeadOfInput
@@ -19980,6 +22941,13 @@ export namespace Prisma {
     create?: XOR<EmployeeCreateWithoutDepartmentDirectorOfInput, EmployeeUncheckedCreateWithoutDepartmentDirectorOfInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutDepartmentDirectorOfInput
     connect?: EmployeeWhereUniqueInput
+  }
+
+  export type PositionCreateNestedManyWithoutDepartmentInput = {
+    create?: XOR<PositionCreateWithoutDepartmentInput, PositionUncheckedCreateWithoutDepartmentInput> | PositionCreateWithoutDepartmentInput[] | PositionUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: PositionCreateOrConnectWithoutDepartmentInput | PositionCreateOrConnectWithoutDepartmentInput[]
+    createMany?: PositionCreateManyDepartmentInputEnvelope
+    connect?: PositionWhereUniqueInput | PositionWhereUniqueInput[]
   }
 
   export type WorkInfoCreateNestedManyWithoutDepartmentInput = {
@@ -20007,20 +22975,6 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type PositionUpdateManyWithoutDepartmentNestedInput = {
-    create?: XOR<PositionCreateWithoutDepartmentInput, PositionUncheckedCreateWithoutDepartmentInput> | PositionCreateWithoutDepartmentInput[] | PositionUncheckedCreateWithoutDepartmentInput[]
-    connectOrCreate?: PositionCreateOrConnectWithoutDepartmentInput | PositionCreateOrConnectWithoutDepartmentInput[]
-    upsert?: PositionUpsertWithWhereUniqueWithoutDepartmentInput | PositionUpsertWithWhereUniqueWithoutDepartmentInput[]
-    createMany?: PositionCreateManyDepartmentInputEnvelope
-    set?: PositionWhereUniqueInput | PositionWhereUniqueInput[]
-    disconnect?: PositionWhereUniqueInput | PositionWhereUniqueInput[]
-    delete?: PositionWhereUniqueInput | PositionWhereUniqueInput[]
-    connect?: PositionWhereUniqueInput | PositionWhereUniqueInput[]
-    update?: PositionUpdateWithWhereUniqueWithoutDepartmentInput | PositionUpdateWithWhereUniqueWithoutDepartmentInput[]
-    updateMany?: PositionUpdateManyWithWhereWithoutDepartmentInput | PositionUpdateManyWithWhereWithoutDepartmentInput[]
-    deleteMany?: PositionScalarWhereInput | PositionScalarWhereInput[]
-  }
-
   export type EmployeeUpdateOneWithoutDepartmentHeadOfNestedInput = {
     create?: XOR<EmployeeCreateWithoutDepartmentHeadOfInput, EmployeeUncheckedCreateWithoutDepartmentHeadOfInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutDepartmentHeadOfInput
@@ -20039,6 +22993,20 @@ export namespace Prisma {
     delete?: EmployeeWhereInput | boolean
     connect?: EmployeeWhereUniqueInput
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutDepartmentDirectorOfInput, EmployeeUpdateWithoutDepartmentDirectorOfInput>, EmployeeUncheckedUpdateWithoutDepartmentDirectorOfInput>
+  }
+
+  export type PositionUpdateManyWithoutDepartmentNestedInput = {
+    create?: XOR<PositionCreateWithoutDepartmentInput, PositionUncheckedCreateWithoutDepartmentInput> | PositionCreateWithoutDepartmentInput[] | PositionUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: PositionCreateOrConnectWithoutDepartmentInput | PositionCreateOrConnectWithoutDepartmentInput[]
+    upsert?: PositionUpsertWithWhereUniqueWithoutDepartmentInput | PositionUpsertWithWhereUniqueWithoutDepartmentInput[]
+    createMany?: PositionCreateManyDepartmentInputEnvelope
+    set?: PositionWhereUniqueInput | PositionWhereUniqueInput[]
+    disconnect?: PositionWhereUniqueInput | PositionWhereUniqueInput[]
+    delete?: PositionWhereUniqueInput | PositionWhereUniqueInput[]
+    connect?: PositionWhereUniqueInput | PositionWhereUniqueInput[]
+    update?: PositionUpdateWithWhereUniqueWithoutDepartmentInput | PositionUpdateWithWhereUniqueWithoutDepartmentInput[]
+    updateMany?: PositionUpdateManyWithWhereWithoutDepartmentInput | PositionUpdateManyWithWhereWithoutDepartmentInput[]
+    deleteMany?: PositionScalarWhereInput | PositionScalarWhereInput[]
   }
 
   export type WorkInfoUpdateManyWithoutDepartmentNestedInput = {
@@ -20237,6 +23205,20 @@ export namespace Prisma {
     connect?: EmployeeWhereUniqueInput
   }
 
+  export type LeaveApprovalStepCreateNestedManyWithoutLeaveRequestInput = {
+    create?: XOR<LeaveApprovalStepCreateWithoutLeaveRequestInput, LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput> | LeaveApprovalStepCreateWithoutLeaveRequestInput[] | LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput[]
+    connectOrCreate?: LeaveApprovalStepCreateOrConnectWithoutLeaveRequestInput | LeaveApprovalStepCreateOrConnectWithoutLeaveRequestInput[]
+    createMany?: LeaveApprovalStepCreateManyLeaveRequestInputEnvelope
+    connect?: LeaveApprovalStepWhereUniqueInput | LeaveApprovalStepWhereUniqueInput[]
+  }
+
+  export type LeaveApprovalStepUncheckedCreateNestedManyWithoutLeaveRequestInput = {
+    create?: XOR<LeaveApprovalStepCreateWithoutLeaveRequestInput, LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput> | LeaveApprovalStepCreateWithoutLeaveRequestInput[] | LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput[]
+    connectOrCreate?: LeaveApprovalStepCreateOrConnectWithoutLeaveRequestInput | LeaveApprovalStepCreateOrConnectWithoutLeaveRequestInput[]
+    createMany?: LeaveApprovalStepCreateManyLeaveRequestInputEnvelope
+    connect?: LeaveApprovalStepWhereUniqueInput | LeaveApprovalStepWhereUniqueInput[]
+  }
+
   export type EnumLeaveTypeEnumFieldUpdateOperationsInput = {
     set?: $Enums.LeaveTypeEnum
   }
@@ -20259,6 +23241,118 @@ export namespace Prisma {
     upsert?: EmployeeUpsertWithoutLeaveRequestInput
     connect?: EmployeeWhereUniqueInput
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutLeaveRequestInput, EmployeeUpdateWithoutLeaveRequestInput>, EmployeeUncheckedUpdateWithoutLeaveRequestInput>
+  }
+
+  export type LeaveApprovalStepUpdateManyWithoutLeaveRequestNestedInput = {
+    create?: XOR<LeaveApprovalStepCreateWithoutLeaveRequestInput, LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput> | LeaveApprovalStepCreateWithoutLeaveRequestInput[] | LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput[]
+    connectOrCreate?: LeaveApprovalStepCreateOrConnectWithoutLeaveRequestInput | LeaveApprovalStepCreateOrConnectWithoutLeaveRequestInput[]
+    upsert?: LeaveApprovalStepUpsertWithWhereUniqueWithoutLeaveRequestInput | LeaveApprovalStepUpsertWithWhereUniqueWithoutLeaveRequestInput[]
+    createMany?: LeaveApprovalStepCreateManyLeaveRequestInputEnvelope
+    set?: LeaveApprovalStepWhereUniqueInput | LeaveApprovalStepWhereUniqueInput[]
+    disconnect?: LeaveApprovalStepWhereUniqueInput | LeaveApprovalStepWhereUniqueInput[]
+    delete?: LeaveApprovalStepWhereUniqueInput | LeaveApprovalStepWhereUniqueInput[]
+    connect?: LeaveApprovalStepWhereUniqueInput | LeaveApprovalStepWhereUniqueInput[]
+    update?: LeaveApprovalStepUpdateWithWhereUniqueWithoutLeaveRequestInput | LeaveApprovalStepUpdateWithWhereUniqueWithoutLeaveRequestInput[]
+    updateMany?: LeaveApprovalStepUpdateManyWithWhereWithoutLeaveRequestInput | LeaveApprovalStepUpdateManyWithWhereWithoutLeaveRequestInput[]
+    deleteMany?: LeaveApprovalStepScalarWhereInput | LeaveApprovalStepScalarWhereInput[]
+  }
+
+  export type LeaveApprovalStepUncheckedUpdateManyWithoutLeaveRequestNestedInput = {
+    create?: XOR<LeaveApprovalStepCreateWithoutLeaveRequestInput, LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput> | LeaveApprovalStepCreateWithoutLeaveRequestInput[] | LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput[]
+    connectOrCreate?: LeaveApprovalStepCreateOrConnectWithoutLeaveRequestInput | LeaveApprovalStepCreateOrConnectWithoutLeaveRequestInput[]
+    upsert?: LeaveApprovalStepUpsertWithWhereUniqueWithoutLeaveRequestInput | LeaveApprovalStepUpsertWithWhereUniqueWithoutLeaveRequestInput[]
+    createMany?: LeaveApprovalStepCreateManyLeaveRequestInputEnvelope
+    set?: LeaveApprovalStepWhereUniqueInput | LeaveApprovalStepWhereUniqueInput[]
+    disconnect?: LeaveApprovalStepWhereUniqueInput | LeaveApprovalStepWhereUniqueInput[]
+    delete?: LeaveApprovalStepWhereUniqueInput | LeaveApprovalStepWhereUniqueInput[]
+    connect?: LeaveApprovalStepWhereUniqueInput | LeaveApprovalStepWhereUniqueInput[]
+    update?: LeaveApprovalStepUpdateWithWhereUniqueWithoutLeaveRequestInput | LeaveApprovalStepUpdateWithWhereUniqueWithoutLeaveRequestInput[]
+    updateMany?: LeaveApprovalStepUpdateManyWithWhereWithoutLeaveRequestInput | LeaveApprovalStepUpdateManyWithWhereWithoutLeaveRequestInput[]
+    deleteMany?: LeaveApprovalStepScalarWhereInput | LeaveApprovalStepScalarWhereInput[]
+  }
+
+  export type LeaveRequestCreateNestedOneWithoutApprovalStepsInput = {
+    create?: XOR<LeaveRequestCreateWithoutApprovalStepsInput, LeaveRequestUncheckedCreateWithoutApprovalStepsInput>
+    connectOrCreate?: LeaveRequestCreateOrConnectWithoutApprovalStepsInput
+    connect?: LeaveRequestWhereUniqueInput
+  }
+
+  export type LeaveApprovalStepApproverCreateNestedManyWithoutLeaveApprovalStepInput = {
+    create?: XOR<LeaveApprovalStepApproverCreateWithoutLeaveApprovalStepInput, LeaveApprovalStepApproverUncheckedCreateWithoutLeaveApprovalStepInput> | LeaveApprovalStepApproverCreateWithoutLeaveApprovalStepInput[] | LeaveApprovalStepApproverUncheckedCreateWithoutLeaveApprovalStepInput[]
+    connectOrCreate?: LeaveApprovalStepApproverCreateOrConnectWithoutLeaveApprovalStepInput | LeaveApprovalStepApproverCreateOrConnectWithoutLeaveApprovalStepInput[]
+    createMany?: LeaveApprovalStepApproverCreateManyLeaveApprovalStepInputEnvelope
+    connect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+  }
+
+  export type LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutLeaveApprovalStepInput = {
+    create?: XOR<LeaveApprovalStepApproverCreateWithoutLeaveApprovalStepInput, LeaveApprovalStepApproverUncheckedCreateWithoutLeaveApprovalStepInput> | LeaveApprovalStepApproverCreateWithoutLeaveApprovalStepInput[] | LeaveApprovalStepApproverUncheckedCreateWithoutLeaveApprovalStepInput[]
+    connectOrCreate?: LeaveApprovalStepApproverCreateOrConnectWithoutLeaveApprovalStepInput | LeaveApprovalStepApproverCreateOrConnectWithoutLeaveApprovalStepInput[]
+    createMany?: LeaveApprovalStepApproverCreateManyLeaveApprovalStepInputEnvelope
+    connect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+  }
+
+  export type LeaveRequestUpdateOneRequiredWithoutApprovalStepsNestedInput = {
+    create?: XOR<LeaveRequestCreateWithoutApprovalStepsInput, LeaveRequestUncheckedCreateWithoutApprovalStepsInput>
+    connectOrCreate?: LeaveRequestCreateOrConnectWithoutApprovalStepsInput
+    upsert?: LeaveRequestUpsertWithoutApprovalStepsInput
+    connect?: LeaveRequestWhereUniqueInput
+    update?: XOR<XOR<LeaveRequestUpdateToOneWithWhereWithoutApprovalStepsInput, LeaveRequestUpdateWithoutApprovalStepsInput>, LeaveRequestUncheckedUpdateWithoutApprovalStepsInput>
+  }
+
+  export type LeaveApprovalStepApproverUpdateManyWithoutLeaveApprovalStepNestedInput = {
+    create?: XOR<LeaveApprovalStepApproverCreateWithoutLeaveApprovalStepInput, LeaveApprovalStepApproverUncheckedCreateWithoutLeaveApprovalStepInput> | LeaveApprovalStepApproverCreateWithoutLeaveApprovalStepInput[] | LeaveApprovalStepApproverUncheckedCreateWithoutLeaveApprovalStepInput[]
+    connectOrCreate?: LeaveApprovalStepApproverCreateOrConnectWithoutLeaveApprovalStepInput | LeaveApprovalStepApproverCreateOrConnectWithoutLeaveApprovalStepInput[]
+    upsert?: LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutLeaveApprovalStepInput | LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutLeaveApprovalStepInput[]
+    createMany?: LeaveApprovalStepApproverCreateManyLeaveApprovalStepInputEnvelope
+    set?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    disconnect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    delete?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    connect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    update?: LeaveApprovalStepApproverUpdateWithWhereUniqueWithoutLeaveApprovalStepInput | LeaveApprovalStepApproverUpdateWithWhereUniqueWithoutLeaveApprovalStepInput[]
+    updateMany?: LeaveApprovalStepApproverUpdateManyWithWhereWithoutLeaveApprovalStepInput | LeaveApprovalStepApproverUpdateManyWithWhereWithoutLeaveApprovalStepInput[]
+    deleteMany?: LeaveApprovalStepApproverScalarWhereInput | LeaveApprovalStepApproverScalarWhereInput[]
+  }
+
+  export type LeaveApprovalStepApproverUncheckedUpdateManyWithoutLeaveApprovalStepNestedInput = {
+    create?: XOR<LeaveApprovalStepApproverCreateWithoutLeaveApprovalStepInput, LeaveApprovalStepApproverUncheckedCreateWithoutLeaveApprovalStepInput> | LeaveApprovalStepApproverCreateWithoutLeaveApprovalStepInput[] | LeaveApprovalStepApproverUncheckedCreateWithoutLeaveApprovalStepInput[]
+    connectOrCreate?: LeaveApprovalStepApproverCreateOrConnectWithoutLeaveApprovalStepInput | LeaveApprovalStepApproverCreateOrConnectWithoutLeaveApprovalStepInput[]
+    upsert?: LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutLeaveApprovalStepInput | LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutLeaveApprovalStepInput[]
+    createMany?: LeaveApprovalStepApproverCreateManyLeaveApprovalStepInputEnvelope
+    set?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    disconnect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    delete?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    connect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    update?: LeaveApprovalStepApproverUpdateWithWhereUniqueWithoutLeaveApprovalStepInput | LeaveApprovalStepApproverUpdateWithWhereUniqueWithoutLeaveApprovalStepInput[]
+    updateMany?: LeaveApprovalStepApproverUpdateManyWithWhereWithoutLeaveApprovalStepInput | LeaveApprovalStepApproverUpdateManyWithWhereWithoutLeaveApprovalStepInput[]
+    deleteMany?: LeaveApprovalStepApproverScalarWhereInput | LeaveApprovalStepApproverScalarWhereInput[]
+  }
+
+  export type LeaveApprovalStepCreateNestedOneWithoutApproversInput = {
+    create?: XOR<LeaveApprovalStepCreateWithoutApproversInput, LeaveApprovalStepUncheckedCreateWithoutApproversInput>
+    connectOrCreate?: LeaveApprovalStepCreateOrConnectWithoutApproversInput
+    connect?: LeaveApprovalStepWhereUniqueInput
+  }
+
+  export type EmployeeCreateNestedOneWithoutLeaveApprovalStepsInput = {
+    create?: XOR<EmployeeCreateWithoutLeaveApprovalStepsInput, EmployeeUncheckedCreateWithoutLeaveApprovalStepsInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutLeaveApprovalStepsInput
+    connect?: EmployeeWhereUniqueInput
+  }
+
+  export type LeaveApprovalStepUpdateOneRequiredWithoutApproversNestedInput = {
+    create?: XOR<LeaveApprovalStepCreateWithoutApproversInput, LeaveApprovalStepUncheckedCreateWithoutApproversInput>
+    connectOrCreate?: LeaveApprovalStepCreateOrConnectWithoutApproversInput
+    upsert?: LeaveApprovalStepUpsertWithoutApproversInput
+    connect?: LeaveApprovalStepWhereUniqueInput
+    update?: XOR<XOR<LeaveApprovalStepUpdateToOneWithWhereWithoutApproversInput, LeaveApprovalStepUpdateWithoutApproversInput>, LeaveApprovalStepUncheckedUpdateWithoutApproversInput>
+  }
+
+  export type EmployeeUpdateOneRequiredWithoutLeaveApprovalStepsNestedInput = {
+    create?: XOR<EmployeeCreateWithoutLeaveApprovalStepsInput, EmployeeUncheckedCreateWithoutLeaveApprovalStepsInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutLeaveApprovalStepsInput
+    upsert?: EmployeeUpsertWithoutLeaveApprovalStepsInput
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutLeaveApprovalStepsInput, EmployeeUpdateWithoutLeaveApprovalStepsInput>, EmployeeUncheckedUpdateWithoutLeaveApprovalStepsInput>
   }
 
   export type EmployeeCreateNestedOneWithoutAttendanceInput = {
@@ -20744,6 +23838,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
@@ -20766,6 +23861,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
@@ -20792,6 +23888,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
@@ -20814,6 +23911,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
@@ -20833,8 +23931,8 @@ export namespace Prisma {
     abbreviation: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    positions?: PositionCreateNestedManyWithoutDepartmentInput
     director?: EmployeeCreateNestedOneWithoutDepartmentDirectorOfInput
+    positions?: PositionCreateNestedManyWithoutDepartmentInput
     workInfos?: WorkInfoCreateNestedManyWithoutDepartmentInput
   }
 
@@ -20859,8 +23957,8 @@ export namespace Prisma {
     abbreviation: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    positions?: PositionCreateNestedManyWithoutDepartmentInput
     head?: EmployeeCreateNestedOneWithoutDepartmentHeadOfInput
+    positions?: PositionCreateNestedManyWithoutDepartmentInput
     workInfos?: WorkInfoCreateNestedManyWithoutDepartmentInput
   }
 
@@ -21004,6 +24102,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     createdAt?: Date | string
+    approvalSteps?: LeaveApprovalStepCreateNestedManyWithoutLeaveRequestInput
   }
 
   export type LeaveRequestUncheckedCreateWithoutEmployeeInput = {
@@ -21017,6 +24116,7 @@ export namespace Prisma {
     approvedBy?: string | null
     approvedAt?: Date | string | null
     createdAt?: Date | string
+    approvalSteps?: LeaveApprovalStepUncheckedCreateNestedManyWithoutLeaveRequestInput
   }
 
   export type LeaveRequestCreateOrConnectWithoutEmployeeInput = {
@@ -21026,6 +24126,29 @@ export namespace Prisma {
 
   export type LeaveRequestCreateManyEmployeeInputEnvelope = {
     data: LeaveRequestCreateManyEmployeeInput | LeaveRequestCreateManyEmployeeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LeaveApprovalStepApproverCreateWithoutApproverInput = {
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+    leaveApprovalStep: LeaveApprovalStepCreateNestedOneWithoutApproversInput
+  }
+
+  export type LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput = {
+    id?: number
+    leaveApprovalStepId: number
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+  }
+
+  export type LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput = {
+    where: LeaveApprovalStepApproverWhereUniqueInput
+    create: XOR<LeaveApprovalStepApproverCreateWithoutApproverInput, LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput>
+  }
+
+  export type LeaveApprovalStepApproverCreateManyApproverInputEnvelope = {
+    data: LeaveApprovalStepApproverCreateManyApproverInput | LeaveApprovalStepApproverCreateManyApproverInput[]
     skipDuplicates?: boolean
   }
 
@@ -21105,6 +24228,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
@@ -21127,6 +24251,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
@@ -21179,8 +24304,8 @@ export namespace Prisma {
     abbreviation?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    positions?: PositionUpdateManyWithoutDepartmentNestedInput
     director?: EmployeeUpdateOneWithoutDepartmentDirectorOfNestedInput
+    positions?: PositionUpdateManyWithoutDepartmentNestedInput
     workInfos?: WorkInfoUpdateManyWithoutDepartmentNestedInput
   }
 
@@ -21211,8 +24336,8 @@ export namespace Prisma {
     abbreviation?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    positions?: PositionUpdateManyWithoutDepartmentNestedInput
     head?: EmployeeUpdateOneWithoutDepartmentHeadOfNestedInput
+    positions?: PositionUpdateManyWithoutDepartmentNestedInput
     workInfos?: WorkInfoUpdateManyWithoutDepartmentNestedInput
   }
 
@@ -21398,6 +24523,33 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
   }
 
+  export type LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutApproverInput = {
+    where: LeaveApprovalStepApproverWhereUniqueInput
+    update: XOR<LeaveApprovalStepApproverUpdateWithoutApproverInput, LeaveApprovalStepApproverUncheckedUpdateWithoutApproverInput>
+    create: XOR<LeaveApprovalStepApproverCreateWithoutApproverInput, LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput>
+  }
+
+  export type LeaveApprovalStepApproverUpdateWithWhereUniqueWithoutApproverInput = {
+    where: LeaveApprovalStepApproverWhereUniqueInput
+    data: XOR<LeaveApprovalStepApproverUpdateWithoutApproverInput, LeaveApprovalStepApproverUncheckedUpdateWithoutApproverInput>
+  }
+
+  export type LeaveApprovalStepApproverUpdateManyWithWhereWithoutApproverInput = {
+    where: LeaveApprovalStepApproverScalarWhereInput
+    data: XOR<LeaveApprovalStepApproverUpdateManyMutationInput, LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverInput>
+  }
+
+  export type LeaveApprovalStepApproverScalarWhereInput = {
+    AND?: LeaveApprovalStepApproverScalarWhereInput | LeaveApprovalStepApproverScalarWhereInput[]
+    OR?: LeaveApprovalStepApproverScalarWhereInput[]
+    NOT?: LeaveApprovalStepApproverScalarWhereInput | LeaveApprovalStepApproverScalarWhereInput[]
+    id?: IntFilter<"LeaveApprovalStepApprover"> | number
+    leaveApprovalStepId?: IntFilter<"LeaveApprovalStepApprover"> | number
+    approverId?: IntFilter<"LeaveApprovalStepApprover"> | number
+    status?: EnumLeaveStatusFilter<"LeaveApprovalStepApprover"> | $Enums.LeaveStatus
+    approvedAt?: DateTimeNullableFilter<"LeaveApprovalStepApprover"> | Date | string | null
+  }
+
   export type AttendanceUpsertWithWhereUniqueWithoutEmployeeInput = {
     where: AttendanceWhereUniqueInput
     update: XOR<AttendanceUpdateWithoutEmployeeInput, AttendanceUncheckedUpdateWithoutEmployeeInput>
@@ -21452,33 +24604,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"KPIEmployee"> | Date | string
   }
 
-  export type PositionCreateWithoutDepartmentInput = {
-    name: string
-    level?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    employees?: WorkInfoCreateNestedManyWithoutPositionInput
-  }
-
-  export type PositionUncheckedCreateWithoutDepartmentInput = {
-    id?: number
-    name: string
-    level?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    employees?: WorkInfoUncheckedCreateNestedManyWithoutPositionInput
-  }
-
-  export type PositionCreateOrConnectWithoutDepartmentInput = {
-    where: PositionWhereUniqueInput
-    create: XOR<PositionCreateWithoutDepartmentInput, PositionUncheckedCreateWithoutDepartmentInput>
-  }
-
-  export type PositionCreateManyDepartmentInputEnvelope = {
-    data: PositionCreateManyDepartmentInput | PositionCreateManyDepartmentInput[]
-    skipDuplicates?: boolean
-  }
-
   export type EmployeeCreateWithoutDepartmentHeadOfInput = {
     employeeCode: string
     name: string
@@ -21496,6 +24621,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
@@ -21518,6 +24644,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
@@ -21544,6 +24671,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
@@ -21566,6 +24694,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
@@ -21573,6 +24702,33 @@ export namespace Prisma {
   export type EmployeeCreateOrConnectWithoutDepartmentDirectorOfInput = {
     where: EmployeeWhereUniqueInput
     create: XOR<EmployeeCreateWithoutDepartmentDirectorOfInput, EmployeeUncheckedCreateWithoutDepartmentDirectorOfInput>
+  }
+
+  export type PositionCreateWithoutDepartmentInput = {
+    name: string
+    level?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    employees?: WorkInfoCreateNestedManyWithoutPositionInput
+  }
+
+  export type PositionUncheckedCreateWithoutDepartmentInput = {
+    id?: number
+    name: string
+    level?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    employees?: WorkInfoUncheckedCreateNestedManyWithoutPositionInput
+  }
+
+  export type PositionCreateOrConnectWithoutDepartmentInput = {
+    where: PositionWhereUniqueInput
+    create: XOR<PositionCreateWithoutDepartmentInput, PositionUncheckedCreateWithoutDepartmentInput>
+  }
+
+  export type PositionCreateManyDepartmentInputEnvelope = {
+    data: PositionCreateManyDepartmentInput | PositionCreateManyDepartmentInput[]
+    skipDuplicates?: boolean
   }
 
   export type WorkInfoCreateWithoutDepartmentInput = {
@@ -21614,34 +24770,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type PositionUpsertWithWhereUniqueWithoutDepartmentInput = {
-    where: PositionWhereUniqueInput
-    update: XOR<PositionUpdateWithoutDepartmentInput, PositionUncheckedUpdateWithoutDepartmentInput>
-    create: XOR<PositionCreateWithoutDepartmentInput, PositionUncheckedCreateWithoutDepartmentInput>
-  }
-
-  export type PositionUpdateWithWhereUniqueWithoutDepartmentInput = {
-    where: PositionWhereUniqueInput
-    data: XOR<PositionUpdateWithoutDepartmentInput, PositionUncheckedUpdateWithoutDepartmentInput>
-  }
-
-  export type PositionUpdateManyWithWhereWithoutDepartmentInput = {
-    where: PositionScalarWhereInput
-    data: XOR<PositionUpdateManyMutationInput, PositionUncheckedUpdateManyWithoutDepartmentInput>
-  }
-
-  export type PositionScalarWhereInput = {
-    AND?: PositionScalarWhereInput | PositionScalarWhereInput[]
-    OR?: PositionScalarWhereInput[]
-    NOT?: PositionScalarWhereInput | PositionScalarWhereInput[]
-    id?: IntFilter<"Position"> | number
-    name?: StringFilter<"Position"> | string
-    level?: IntFilter<"Position"> | number
-    departmentId?: IntFilter<"Position"> | number
-    createdAt?: DateTimeFilter<"Position"> | Date | string
-    updatedAt?: DateTimeFilter<"Position"> | Date | string
-  }
-
   export type EmployeeUpsertWithoutDepartmentHeadOfInput = {
     update: XOR<EmployeeUpdateWithoutDepartmentHeadOfInput, EmployeeUncheckedUpdateWithoutDepartmentHeadOfInput>
     create: XOR<EmployeeCreateWithoutDepartmentHeadOfInput, EmployeeUncheckedCreateWithoutDepartmentHeadOfInput>
@@ -21670,6 +24798,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
@@ -21692,6 +24821,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
@@ -21724,6 +24854,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
@@ -21746,8 +24877,37 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type PositionUpsertWithWhereUniqueWithoutDepartmentInput = {
+    where: PositionWhereUniqueInput
+    update: XOR<PositionUpdateWithoutDepartmentInput, PositionUncheckedUpdateWithoutDepartmentInput>
+    create: XOR<PositionCreateWithoutDepartmentInput, PositionUncheckedCreateWithoutDepartmentInput>
+  }
+
+  export type PositionUpdateWithWhereUniqueWithoutDepartmentInput = {
+    where: PositionWhereUniqueInput
+    data: XOR<PositionUpdateWithoutDepartmentInput, PositionUncheckedUpdateWithoutDepartmentInput>
+  }
+
+  export type PositionUpdateManyWithWhereWithoutDepartmentInput = {
+    where: PositionScalarWhereInput
+    data: XOR<PositionUpdateManyMutationInput, PositionUncheckedUpdateManyWithoutDepartmentInput>
+  }
+
+  export type PositionScalarWhereInput = {
+    AND?: PositionScalarWhereInput | PositionScalarWhereInput[]
+    OR?: PositionScalarWhereInput[]
+    NOT?: PositionScalarWhereInput | PositionScalarWhereInput[]
+    id?: IntFilter<"Position"> | number
+    name?: StringFilter<"Position"> | string
+    level?: IntFilter<"Position"> | number
+    departmentId?: IntFilter<"Position"> | number
+    createdAt?: DateTimeFilter<"Position"> | Date | string
+    updatedAt?: DateTimeFilter<"Position"> | Date | string
   }
 
   export type WorkInfoUpsertWithWhereUniqueWithoutDepartmentInput = {
@@ -21903,9 +25063,9 @@ export namespace Prisma {
     abbreviation: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    positions?: PositionCreateNestedManyWithoutDepartmentInput
     head?: EmployeeCreateNestedOneWithoutDepartmentHeadOfInput
     director?: EmployeeCreateNestedOneWithoutDepartmentDirectorOfInput
+    positions?: PositionCreateNestedManyWithoutDepartmentInput
   }
 
   export type DepartmentUncheckedCreateWithoutWorkInfosInput = {
@@ -21963,6 +25123,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
@@ -21985,6 +25146,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
@@ -22010,9 +25172,9 @@ export namespace Prisma {
     abbreviation?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    positions?: PositionUpdateManyWithoutDepartmentNestedInput
     head?: EmployeeUpdateOneWithoutDepartmentHeadOfNestedInput
     director?: EmployeeUpdateOneWithoutDepartmentDirectorOfNestedInput
+    positions?: PositionUpdateManyWithoutDepartmentNestedInput
   }
 
   export type DepartmentUncheckedUpdateWithoutWorkInfosInput = {
@@ -22082,6 +25244,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
@@ -22104,6 +25267,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
@@ -22125,6 +25289,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
@@ -22147,6 +25312,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
@@ -22184,6 +25350,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
@@ -22206,6 +25373,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
@@ -22227,6 +25395,7 @@ export namespace Prisma {
     personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
@@ -22249,6 +25418,7 @@ export namespace Prisma {
     personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
@@ -22286,6 +25456,7 @@ export namespace Prisma {
     personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
@@ -22308,6 +25479,7 @@ export namespace Prisma {
     personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
@@ -22329,6 +25501,7 @@ export namespace Prisma {
     personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
@@ -22351,6 +25524,7 @@ export namespace Prisma {
     personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
@@ -22388,6 +25562,7 @@ export namespace Prisma {
     personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
@@ -22410,6 +25585,7 @@ export namespace Prisma {
     personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
@@ -22431,6 +25607,7 @@ export namespace Prisma {
     personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
@@ -22453,6 +25630,7 @@ export namespace Prisma {
     personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
@@ -22460,6 +25638,31 @@ export namespace Prisma {
   export type EmployeeCreateOrConnectWithoutLeaveRequestInput = {
     where: EmployeeWhereUniqueInput
     create: XOR<EmployeeCreateWithoutLeaveRequestInput, EmployeeUncheckedCreateWithoutLeaveRequestInput>
+  }
+
+  export type LeaveApprovalStepCreateWithoutLeaveRequestInput = {
+    level: number
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+    approvers?: LeaveApprovalStepApproverCreateNestedManyWithoutLeaveApprovalStepInput
+  }
+
+  export type LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput = {
+    id?: number
+    level: number
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+    approvers?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutLeaveApprovalStepInput
+  }
+
+  export type LeaveApprovalStepCreateOrConnectWithoutLeaveRequestInput = {
+    where: LeaveApprovalStepWhereUniqueInput
+    create: XOR<LeaveApprovalStepCreateWithoutLeaveRequestInput, LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput>
+  }
+
+  export type LeaveApprovalStepCreateManyLeaveRequestInputEnvelope = {
+    data: LeaveApprovalStepCreateManyLeaveRequestInput | LeaveApprovalStepCreateManyLeaveRequestInput[]
+    skipDuplicates?: boolean
   }
 
   export type EmployeeUpsertWithoutLeaveRequestInput = {
@@ -22490,6 +25693,7 @@ export namespace Prisma {
     personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
@@ -22512,6 +25716,295 @@ export namespace Prisma {
     personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type LeaveApprovalStepUpsertWithWhereUniqueWithoutLeaveRequestInput = {
+    where: LeaveApprovalStepWhereUniqueInput
+    update: XOR<LeaveApprovalStepUpdateWithoutLeaveRequestInput, LeaveApprovalStepUncheckedUpdateWithoutLeaveRequestInput>
+    create: XOR<LeaveApprovalStepCreateWithoutLeaveRequestInput, LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput>
+  }
+
+  export type LeaveApprovalStepUpdateWithWhereUniqueWithoutLeaveRequestInput = {
+    where: LeaveApprovalStepWhereUniqueInput
+    data: XOR<LeaveApprovalStepUpdateWithoutLeaveRequestInput, LeaveApprovalStepUncheckedUpdateWithoutLeaveRequestInput>
+  }
+
+  export type LeaveApprovalStepUpdateManyWithWhereWithoutLeaveRequestInput = {
+    where: LeaveApprovalStepScalarWhereInput
+    data: XOR<LeaveApprovalStepUpdateManyMutationInput, LeaveApprovalStepUncheckedUpdateManyWithoutLeaveRequestInput>
+  }
+
+  export type LeaveApprovalStepScalarWhereInput = {
+    AND?: LeaveApprovalStepScalarWhereInput | LeaveApprovalStepScalarWhereInput[]
+    OR?: LeaveApprovalStepScalarWhereInput[]
+    NOT?: LeaveApprovalStepScalarWhereInput | LeaveApprovalStepScalarWhereInput[]
+    id?: IntFilter<"LeaveApprovalStep"> | number
+    leaveRequestId?: IntFilter<"LeaveApprovalStep"> | number
+    level?: IntFilter<"LeaveApprovalStep"> | number
+    status?: EnumLeaveStatusFilter<"LeaveApprovalStep"> | $Enums.LeaveStatus
+    approvedAt?: DateTimeNullableFilter<"LeaveApprovalStep"> | Date | string | null
+  }
+
+  export type LeaveRequestCreateWithoutApprovalStepsInput = {
+    leaveType: $Enums.LeaveTypeEnum
+    startDate: Date | string
+    endDate: Date | string
+    totalHours?: number | null
+    reason?: string | null
+    status?: $Enums.LeaveStatus
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    createdAt?: Date | string
+    employee: EmployeeCreateNestedOneWithoutLeaveRequestInput
+  }
+
+  export type LeaveRequestUncheckedCreateWithoutApprovalStepsInput = {
+    id?: number
+    employeeId: number
+    leaveType: $Enums.LeaveTypeEnum
+    startDate: Date | string
+    endDate: Date | string
+    totalHours?: number | null
+    reason?: string | null
+    status?: $Enums.LeaveStatus
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type LeaveRequestCreateOrConnectWithoutApprovalStepsInput = {
+    where: LeaveRequestWhereUniqueInput
+    create: XOR<LeaveRequestCreateWithoutApprovalStepsInput, LeaveRequestUncheckedCreateWithoutApprovalStepsInput>
+  }
+
+  export type LeaveApprovalStepApproverCreateWithoutLeaveApprovalStepInput = {
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+    approver: EmployeeCreateNestedOneWithoutLeaveApprovalStepsInput
+  }
+
+  export type LeaveApprovalStepApproverUncheckedCreateWithoutLeaveApprovalStepInput = {
+    id?: number
+    approverId: number
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+  }
+
+  export type LeaveApprovalStepApproverCreateOrConnectWithoutLeaveApprovalStepInput = {
+    where: LeaveApprovalStepApproverWhereUniqueInput
+    create: XOR<LeaveApprovalStepApproverCreateWithoutLeaveApprovalStepInput, LeaveApprovalStepApproverUncheckedCreateWithoutLeaveApprovalStepInput>
+  }
+
+  export type LeaveApprovalStepApproverCreateManyLeaveApprovalStepInputEnvelope = {
+    data: LeaveApprovalStepApproverCreateManyLeaveApprovalStepInput | LeaveApprovalStepApproverCreateManyLeaveApprovalStepInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LeaveRequestUpsertWithoutApprovalStepsInput = {
+    update: XOR<LeaveRequestUpdateWithoutApprovalStepsInput, LeaveRequestUncheckedUpdateWithoutApprovalStepsInput>
+    create: XOR<LeaveRequestCreateWithoutApprovalStepsInput, LeaveRequestUncheckedCreateWithoutApprovalStepsInput>
+    where?: LeaveRequestWhereInput
+  }
+
+  export type LeaveRequestUpdateToOneWithWhereWithoutApprovalStepsInput = {
+    where?: LeaveRequestWhereInput
+    data: XOR<LeaveRequestUpdateWithoutApprovalStepsInput, LeaveRequestUncheckedUpdateWithoutApprovalStepsInput>
+  }
+
+  export type LeaveRequestUpdateWithoutApprovalStepsInput = {
+    leaveType?: EnumLeaveTypeEnumFieldUpdateOperationsInput | $Enums.LeaveTypeEnum
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    employee?: EmployeeUpdateOneRequiredWithoutLeaveRequestNestedInput
+  }
+
+  export type LeaveRequestUncheckedUpdateWithoutApprovalStepsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    leaveType?: EnumLeaveTypeEnumFieldUpdateOperationsInput | $Enums.LeaveTypeEnum
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutLeaveApprovalStepInput = {
+    where: LeaveApprovalStepApproverWhereUniqueInput
+    update: XOR<LeaveApprovalStepApproverUpdateWithoutLeaveApprovalStepInput, LeaveApprovalStepApproverUncheckedUpdateWithoutLeaveApprovalStepInput>
+    create: XOR<LeaveApprovalStepApproverCreateWithoutLeaveApprovalStepInput, LeaveApprovalStepApproverUncheckedCreateWithoutLeaveApprovalStepInput>
+  }
+
+  export type LeaveApprovalStepApproverUpdateWithWhereUniqueWithoutLeaveApprovalStepInput = {
+    where: LeaveApprovalStepApproverWhereUniqueInput
+    data: XOR<LeaveApprovalStepApproverUpdateWithoutLeaveApprovalStepInput, LeaveApprovalStepApproverUncheckedUpdateWithoutLeaveApprovalStepInput>
+  }
+
+  export type LeaveApprovalStepApproverUpdateManyWithWhereWithoutLeaveApprovalStepInput = {
+    where: LeaveApprovalStepApproverScalarWhereInput
+    data: XOR<LeaveApprovalStepApproverUpdateManyMutationInput, LeaveApprovalStepApproverUncheckedUpdateManyWithoutLeaveApprovalStepInput>
+  }
+
+  export type LeaveApprovalStepCreateWithoutApproversInput = {
+    level: number
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+    leaveRequest: LeaveRequestCreateNestedOneWithoutApprovalStepsInput
+  }
+
+  export type LeaveApprovalStepUncheckedCreateWithoutApproversInput = {
+    id?: number
+    leaveRequestId: number
+    level: number
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+  }
+
+  export type LeaveApprovalStepCreateOrConnectWithoutApproversInput = {
+    where: LeaveApprovalStepWhereUniqueInput
+    create: XOR<LeaveApprovalStepCreateWithoutApproversInput, LeaveApprovalStepUncheckedCreateWithoutApproversInput>
+  }
+
+  export type EmployeeCreateWithoutLeaveApprovalStepsInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
+    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutLeaveApprovalStepsInput = {
+    id?: number
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutLeaveApprovalStepsInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutLeaveApprovalStepsInput, EmployeeUncheckedCreateWithoutLeaveApprovalStepsInput>
+  }
+
+  export type LeaveApprovalStepUpsertWithoutApproversInput = {
+    update: XOR<LeaveApprovalStepUpdateWithoutApproversInput, LeaveApprovalStepUncheckedUpdateWithoutApproversInput>
+    create: XOR<LeaveApprovalStepCreateWithoutApproversInput, LeaveApprovalStepUncheckedCreateWithoutApproversInput>
+    where?: LeaveApprovalStepWhereInput
+  }
+
+  export type LeaveApprovalStepUpdateToOneWithWhereWithoutApproversInput = {
+    where?: LeaveApprovalStepWhereInput
+    data: XOR<LeaveApprovalStepUpdateWithoutApproversInput, LeaveApprovalStepUncheckedUpdateWithoutApproversInput>
+  }
+
+  export type LeaveApprovalStepUpdateWithoutApproversInput = {
+    level?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leaveRequest?: LeaveRequestUpdateOneRequiredWithoutApprovalStepsNestedInput
+  }
+
+  export type LeaveApprovalStepUncheckedUpdateWithoutApproversInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    leaveRequestId?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type EmployeeUpsertWithoutLeaveApprovalStepsInput = {
+    update: XOR<EmployeeUpdateWithoutLeaveApprovalStepsInput, EmployeeUncheckedUpdateWithoutLeaveApprovalStepsInput>
+    create: XOR<EmployeeCreateWithoutLeaveApprovalStepsInput, EmployeeUncheckedCreateWithoutLeaveApprovalStepsInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutLeaveApprovalStepsInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutLeaveApprovalStepsInput, EmployeeUncheckedUpdateWithoutLeaveApprovalStepsInput>
+  }
+
+  export type EmployeeUpdateWithoutLeaveApprovalStepsInput = {
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutLeaveApprovalStepsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
@@ -22534,6 +26027,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
   }
 
@@ -22556,6 +26050,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
@@ -22593,6 +26088,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
 
@@ -22615,6 +26111,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
@@ -22697,6 +26194,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
@@ -22719,6 +26217,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
@@ -22811,6 +26310,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
@@ -22833,6 +26333,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
@@ -22937,6 +26438,13 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type LeaveApprovalStepApproverCreateManyApproverInput = {
+    id?: number
+    leaveApprovalStepId: number
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+  }
+
   export type AttendanceCreateManyEmployeeInput = {
     id?: number
     date: Date | string
@@ -22968,6 +26476,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
   }
@@ -22990,6 +26499,7 @@ export namespace Prisma {
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
   }
@@ -23016,6 +26526,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvalSteps?: LeaveApprovalStepUpdateManyWithoutLeaveRequestNestedInput
   }
 
   export type LeaveRequestUncheckedUpdateWithoutEmployeeInput = {
@@ -23029,6 +26540,7 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvalSteps?: LeaveApprovalStepUncheckedUpdateManyWithoutLeaveRequestNestedInput
   }
 
   export type LeaveRequestUncheckedUpdateManyWithoutEmployeeInput = {
@@ -23042,6 +26554,26 @@ export namespace Prisma {
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeaveApprovalStepApproverUpdateWithoutApproverInput = {
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leaveApprovalStep?: LeaveApprovalStepUpdateOneRequiredWithoutApproversNestedInput
+  }
+
+  export type LeaveApprovalStepApproverUncheckedUpdateWithoutApproverInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    leaveApprovalStepId?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    leaveApprovalStepId?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type AttendanceUpdateWithoutEmployeeInput = {
@@ -23235,6 +26767,62 @@ export namespace Prisma {
     contractType?: NullableStringFieldUpdateOperationsInput | string | null
     contractEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     employeeId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type LeaveApprovalStepCreateManyLeaveRequestInput = {
+    id?: number
+    level: number
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+  }
+
+  export type LeaveApprovalStepUpdateWithoutLeaveRequestInput = {
+    level?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvers?: LeaveApprovalStepApproverUpdateManyWithoutLeaveApprovalStepNestedInput
+  }
+
+  export type LeaveApprovalStepUncheckedUpdateWithoutLeaveRequestInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvers?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutLeaveApprovalStepNestedInput
+  }
+
+  export type LeaveApprovalStepUncheckedUpdateManyWithoutLeaveRequestInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LeaveApprovalStepApproverCreateManyLeaveApprovalStepInput = {
+    id?: number
+    approverId: number
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+  }
+
+  export type LeaveApprovalStepApproverUpdateWithoutLeaveApprovalStepInput = {
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approver?: EmployeeUpdateOneRequiredWithoutLeaveApprovalStepsNestedInput
+  }
+
+  export type LeaveApprovalStepApproverUncheckedUpdateWithoutLeaveApprovalStepInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    approverId?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LeaveApprovalStepApproverUncheckedUpdateManyWithoutLeaveApprovalStepInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    approverId?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type KPIEmployeeCreateManyKpiInput = {

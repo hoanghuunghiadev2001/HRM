@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Drawer, Space, Table, TableProps } from "antd";
 import { createStyles } from "antd-style";
-import { RequestLeave } from "./api";
 import ModalApproveRequest from "./modalApproveRequest";
 import ModalLoading from "./modalLoading";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { dataNeedApprove } from "@/app/dashboard/allRequests/page";
 
 // Extend plugin
 dayjs.extend(utc);
@@ -15,7 +15,7 @@ dayjs.extend(timezone);
 interface ModalNeedApprovedProps {
   open: boolean;
   onClose: () => void;
-  allRequestsApproved: RequestLeave[];
+  allRequestsApproved: dataNeedApprove[];
   putApprovedRequest: (id: number | string, statusRequest: string) => void;
 }
 interface DataType {
@@ -56,28 +56,28 @@ const ModalNeedApproved = ({
   putApprovedRequest,
 }: ModalNeedApprovedProps) => {
   const [approvedRequest, setApproveRequest] = useState(false);
-  const [requestApprove, setRequestApprove] = useState<RequestLeave>();
+  const [requestApprove, setRequestApprove] = useState<dataNeedApprove>();
   const [loading, setLoading] = useState<boolean>(false);
   const { styles } = useStyle();
 
   const formatted: DataType[] =
     allRequestsApproved?.map((item, index) => ({
       key: (index + 1).toString(),
-      id: item.id,
-      MSNV: item.employee.employeeCode,
-      name: item.employee.name,
-      department: item.employee.workInfo.department,
+      id: item.leaveRequest.id,
+      MSNV: item.leaveRequest.employee.employeeCode,
+      name: item.leaveRequest.employee.name,
+      department: item.leaveRequest.employee.workInfo.department,
       startDate: dayjs
-        .utc(item?.startDate)
+        .utc(item?.leaveRequest.startDate)
         .tz("Asia/Ho_Chi_Minh")
         .format("DD/MM/YYYY HH:mm"),
       endDate: dayjs
-        .utc(item?.endDate)
+        .utc(item?.leaveRequest.endDate)
         .tz("Asia/Ho_Chi_Minh")
         .format("DD/MM/YYYY HH:mm"),
-      totalHours: item.totalHours.toString(),
-      leaveType: item.leaveType,
-      status: item.status,
+      totalHours: item.leaveRequest.totalHours.toString(),
+      leaveType: item.leaveRequest.leaveType,
+      status: item.leaveRequest.status,
     })) || [];
 
   const columns: TableProps<DataType>["columns"] = [
@@ -131,7 +131,7 @@ const ModalNeedApproved = ({
 
   const handleOpenRequest = (msnv: string) => {
     const requests = allRequestsApproved.find(
-      (emp) => emp.employee.employeeCode === msnv
+      (emp) => emp.leaveRequest.employee.employeeCode === msnv
     );
     setRequestApprove(requests);
     setApproveRequest(true);

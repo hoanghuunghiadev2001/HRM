@@ -7,48 +7,127 @@ export async function GET(req: NextRequest) {
     const url = new URL(req.url);
     const role = url.searchParams.get("role");
     const department = url.searchParams.get("department");
+    const userId = url.searchParams.get("userId");
 
+    if (!userId) {
+      return NextResponse.json({ message: "Missing userId" }, { status: 400 });
+    }
+
+    // Tạo filter cho employee nếu là MANAGER hoặc ADMIN
     const employeeFilter: Prisma.EmployeeWhereInput = {};
-
     if ((role === "MANAGER" || role === "ADMIN") && department) {
-      const parts = department.split("-");
-      const departmentId = parts[0] ? parseInt(parts[0], 10) : undefined;
-      const positionId = parts[1] ? parseInt(parts[1], 10) : undefined;
-
+      const [departmentIdStr, positionIdStr] = department.split("-");
+      const departmentId = parseInt(departmentIdStr, 10);
+      const positionId = parseInt(positionIdStr, 10);
       employeeFilter.workInfo = {
         ...(departmentId && { departmentId }),
         ...(positionId && { positionId }),
       };
     }
 
-    const whereClause: Prisma.LeaveRequestWhereInput = {
-      status: "pending",
-      employee: employeeFilter,
-    };
-
-    const pendingRequests = await prisma.leaveRequest.findMany({
-      where: whereClause,
+    // Lấy danh sách các bước duyệt pending của người này, kèm theo các bước duyệt của đơn, và approvers của từng bước
+    const pendingApprovals = await prisma.leaveApprovalStepApprover.findMany({
+      where: {
+        approverId: parseInt(userId, 10),
+        approvedAt: null,
+        status: "pending",
+        leaveApprovalStep: {
+          leaveRequest: {
+            employee: employeeFilter,
+          },
+        },
+      },
       include: {
-        employee: {
-          select: {
-            id: true,
-            name: true,
-            employeeCode: true,
-            workInfo: {
-              select: {
-                department: true,
-                position: true,
+        leaveApprovalStep: {
+          include: {
+            leaveRequest: {
+              include: {
+                approvalSteps: {
+                  include: {
+                    approvers: {
+                      where: { status: "approved" },
+                      include: {
+                        approver: {
+                          include: {
+                            workInfo: {
+                              include: {
+                                department: true,
+                                position: true,
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                employee: {
+                  select: {
+                    id: true,
+                    name: true,
+                    employeeCode: true,
+                    workInfo: {
+                      select: {
+                        department: true,
+                        position: true,
+                      },
+                    },
+                  },
+                },
               },
             },
           },
         },
       },
       orderBy: {
-        createdAt: "desc",
+        leaveApprovalStep: {
+          leaveRequest: {
+            createdAt: "desc",
+          },
+        },
       },
     });
 
-    return NextResponse.json(pendingRequests);
+    // Lọc các bước duyệt mà các bước thấp hơn đã được duyệt hết
+    const filteredApprovals = pendingApprovals.filter((stepApprover) => {
+      const currentLevel = stepApprover.leaveApprovalStep.level;
+      const allLowerStepsApproved =
+        stepApprover.leaveApprovalStep.leaveRequest.approvalSteps
+          .filter((s) => s.level < currentLevel)
+          .every((s) => s.status === "approved");
+      return allLowerStepsApproved;
+    });
+
+    // Chuẩn bị dữ liệu trả về kèm danh sách người đã duyệt các bước thấp hơn
+    const results = filteredApprovals.map((stepApprover) => {
+      const leaveRequest = stepApprover.leaveApprovalStep.leaveRequest;
+
+      // Lấy các bước thấp hơn đã được duyệt
+      const approvedLowerSteps = leaveRequest.approvalSteps.filter(
+        (s) =>
+          s.level < stepApprover.leaveApprovalStep.level &&
+          s.status === "approved"
+      );
+
+      // Lấy danh sách người đã duyệt ở các bước thấp hơn
+      const approversWhoApproved = approvedLowerSteps.flatMap((step) =>
+        step.approvers.map((a) => ({
+          name: a.approver.name,
+          employeeCode: a.approver.employeeCode, // sửa key 'postion' thành 'employeeCode' nếu muốn mã nhân viên
+          approvedAt: a.approvedAt,
+          stepLevel: step.level,
+          departmentName: a.approver.workInfo?.department?.name || null,
+          positionName: a.approver.workInfo?.position?.name || null,
+        }))
+      );
+
+      return {
+        leaveRequest,
+        approversWhoApproved,
+      };
+    });
+
+    return NextResponse.json(results);
   } catch (error) {
     console.error("Lỗi khi lấy danh sách đơn nghỉ đang chờ duyệt:", error);
     return NextResponse.json(

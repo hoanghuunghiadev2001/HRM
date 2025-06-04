@@ -1,12 +1,12 @@
 import React from "react";
 import { Button, DatePicker, Form, Modal, Select } from "antd";
-import { RequestLeave } from "./api";
 import dayjs from "dayjs";
 import TextArea from "antd/es/input/TextArea";
 import { NumericInput } from "./function";
 
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { dataNeedApprove } from "@/app/dashboard/allRequests/page";
 
 // Kích hoạt plugin
 dayjs.extend(utc);
@@ -15,7 +15,7 @@ dayjs.extend(timezone);
 interface ModalApproveRequestProps {
   open: boolean;
   onClose: () => void;
-  requestApprove?: RequestLeave;
+  requestApprove?: dataNeedApprove;
   putApprovedRequest: (id: number | string, statusRequest: string) => void;
 }
 const ModalApproveRequest = ({
@@ -32,8 +32,8 @@ const ModalApproveRequest = ({
   };
 
   const rangeValue: [dayjs.Dayjs, dayjs.Dayjs] = [
-    dayjs.utc(requestApprove?.startDate).tz("Asia/Ho_Chi_Minh"),
-    dayjs.utc(requestApprove?.endDate).tz("Asia/Ho_Chi_Minh"),
+    dayjs.utc(requestApprove?.leaveRequest.startDate).tz("Asia/Ho_Chi_Minh"),
+    dayjs.utc(requestApprove?.leaveRequest.endDate).tz("Asia/Ho_Chi_Minh"),
   ];
 
   return (
@@ -54,7 +54,10 @@ const ModalApproveRequest = ({
           <Button
             key="reject"
             onClick={() =>
-              putApprovedRequest(requestApprove?.id ?? "", "rejected")
+              putApprovedRequest(
+                requestApprove?.leaveRequest.id ?? "",
+                "rejected"
+              )
             }
           >
             Từ chối
@@ -63,7 +66,10 @@ const ModalApproveRequest = ({
             key="approve"
             type="primary"
             onClick={() =>
-              putApprovedRequest(requestApprove?.id ?? "", "approved")
+              putApprovedRequest(
+                requestApprove?.leaveRequest.id ?? "",
+                "approved"
+              )
             }
           >
             Chấp nhận
@@ -75,25 +81,25 @@ const ModalApproveRequest = ({
           <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             <p className="shrink-0">Họ và tên:</p>
             <p className="inline font-medium text-[#3a3a3a]">
-              {requestApprove?.employee.name}
+              {requestApprove?.leaveRequest.employee.name}
             </p>
           </div>
           <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             <p className="shrink-0">MSNV:</p>
             <p className="inline font-medium text-[#3a3a3a]">
-              {requestApprove?.employee?.employeeCode}
+              {requestApprove?.leaveRequest.employee?.employeeCode}
             </p>
           </div>
           <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             <p className="shrink-0">Bộ phận:</p>
             <p className="inline font-medium text-[#3a3a3a]">
-              {requestApprove?.employee?.workInfo.department?.name}
+              {requestApprove?.leaveRequest.employee?.workInfo.department?.name}
             </p>
           </div>
           <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             <p className="shrink-0">Chức vụ:</p>
             <p className="inline font-medium text-[#3a3a3a]">
-              {requestApprove?.employee?.workInfo.position?.name}
+              {requestApprove?.leaveRequest.employee?.workInfo.position?.name}
             </p>
           </div>
         </div>
@@ -104,7 +110,7 @@ const ModalApproveRequest = ({
             rules={[{ required: true, message: "Vui lòng chọn loại phép" }]}
           >
             <Select
-              value={requestApprove?.leaveType}
+              value={requestApprove?.leaveRequest.leaveType}
               disabled
               options={[
                 { value: "PN", label: "PN-Phép năm" },
@@ -121,7 +127,7 @@ const ModalApproveRequest = ({
             <p className="font-bold text-[#242424]">Tổng giờ:</p>
             <NumericInput
               style={{ width: 60 }}
-              value={String(requestApprove?.totalHours)}
+              value={String(requestApprove?.leaveRequest.totalHours)}
               onChange={() => {}}
               disable
             />
@@ -151,9 +157,21 @@ const ModalApproveRequest = ({
           <TextArea
             rows={4}
             placeholder="Nhập lý do"
-            value={requestApprove?.reason}
+            value={requestApprove?.leaveRequest.reason}
             disabled={true}
           />
+        </div>
+        <div>
+          <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center mt-3">
+            Nhũng người phê duyệt trước:{" "}
+          </p>
+          <div className="font-medium text-[#242424] px-4 ">
+            {requestApprove?.approversWhoApproved.map((item, index) => (
+              <div className="" key={index}>
+                - {item.name}({item.positionName})
+              </div>
+            ))}
+          </div>
         </div>
       </Modal>
     </>

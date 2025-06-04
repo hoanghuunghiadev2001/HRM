@@ -342,9 +342,10 @@ const ModalEditEmployee = ({
       console.log(date.format("DD/MM/YYYY"));
 
       form.setFieldsValue(transformEmployeeDataToFormData(employeeInfo));
-      if (employeeInfo) {
-        setSelectedDepartmentId(employeeInfo.workInfo.department?.id ?? 0);
+      if (employeeInfo.workInfo.department?.id) {
+        setSelectedDepartmentId(employeeInfo.workInfo.department?.id);
       }
+      console.log(employeeInfo.workInfo.department?.id ?? 0);
     }
     setDepartments(department);
 

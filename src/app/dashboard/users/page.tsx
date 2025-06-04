@@ -2,7 +2,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useEffect, useState } from "react";
-import { Table, Switch, Button, message, Typography, Spin } from "antd";
+import {
+  Table,
+  Switch,
+  Button,
+  message,
+  Typography,
+  Spin,
+  Dropdown,
+  Modal,
+} from "antd";
+import { MenuProps } from "antd/lib";
+import { DeleteOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { ListCollapse } from "lucide-react";
+import { deleteEmployeeApi } from "@/lib/api";
+import ModalLoading from "@/components/modalLoading";
 
 message.config({
   top: 80,
@@ -24,7 +38,6 @@ export default function EmployeeList() {
   const [isActiveFilter, setIsActiveFilter] = useState(true);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(false);
-  const [loadingId, setLoadingId] = useState<number | null>(null);
   const [messageApi, contextHolder] = message.useMessage();
 
   const messError = () => {
@@ -37,6 +50,34 @@ export default function EmployeeList() {
   useEffect(() => {
     fetchEmployees(isActiveFilter);
   }, [isActiveFilter]);
+
+  const countDownDelete = () => {
+    let secondsToGo = 3;
+
+    const instance = Modal.success({
+      title: "Xóa nhân sự thành công",
+    });
+
+    const timer = setInterval(() => {
+      secondsToGo -= 1;
+    }, 1000);
+
+    setTimeout(() => {
+      clearInterval(timer);
+      instance.destroy();
+    }, secondsToGo * 1000);
+  };
+
+  const handleDeleteEmployee = async (employeeCode: string) => {
+    setLoading(true);
+    const res = await deleteEmployeeApi(employeeCode);
+    if (res.status === 1) {
+      countDownDelete();
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+  };
 
   async function fetchEmployees(active: boolean) {
     setLoading(true);
@@ -58,7 +99,6 @@ export default function EmployeeList() {
   }
 
   async function toggleActive(empId: number, currentActive: boolean) {
-    setLoadingId(empId);
     try {
       const res = await fetch(`/api/user/activeUser`, {
         method: "PATCH",
@@ -86,7 +126,38 @@ export default function EmployeeList() {
         (typeof error === "string" ? error : "Cập nhật thất bại");
       message.error(msg);
     } finally {
-      setLoadingId(null);
+    }
+  }
+
+  async function resetPassword(employeeCode: string) {
+    try {
+      const res = await fetch("/api/user/resetPassword", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ employeeCode }),
+      });
+      if (res.ok) {
+        messageApi.open({
+          type: "success",
+          content: "Reset mật khẩu thành công!.",
+        });
+      }
+      const data = await res.json();
+
+      if (!res.ok) {
+        messageApi.open({
+          type: "error",
+          content: "Reset mật khẩu thất bại.",
+        });
+        throw new Error(data.error || "Reset failed");
+      }
+    } catch (error: any) {
+      messageApi.open({
+        type: "error",
+        content: "Reset mật khẩu thất bại.",
+      });
     }
   }
 
@@ -120,22 +191,49 @@ export default function EmployeeList() {
       render: (text: string | null) => text || "-",
     },
     {
-      title: "Kích hoạt",
-      dataIndex: "isActive",
-      key: "isActive",
-      render: (_: any, record: Employee) => (
-        <Switch
-          checked={record.isActive}
-          onChange={() => toggleActive(record.id, record.isActive)}
-          loading={loadingId === record.id}
-        />
-      ),
-      width: 100,
+      title: "Tùy chọn",
+      key: "action",
+      width: "100px",
+      render: (_: any, record: Employee) => {
+        // Tạo items menu với callback có thể dùng record
+        const items: MenuProps["items"] = [
+          {
+            key: "1",
+            label: "Reset mật khẩu",
+            icon: <InfoCircleOutlined />,
+            onClick: () => resetPassword(record.employeeCode), // Giả sử bạn tạo state để lưu nhân viên đang thao tác,
+          },
+          {
+            key: "2",
+            label: "Xóa nhân sự",
+            icon: <DeleteOutlined />,
+            onClick: () => handleDeleteEmployee(record.employeeCode), // Giả sử bạn tạo state để lưu nhân viên đang thao tác,
+          },
+          {
+            key: "3",
+            label: "Tắt hoạt động",
+            icon: <DeleteOutlined />,
+            onClick: () => toggleActive(record.id, record.isActive), // Giả sử bạn tạo state để lưu nhân viên đang thao tác,
+          },
+        ];
+
+        return (
+          <Dropdown menu={{ items }}>
+            <div
+              className="flex items-center gap-3 cursor-pointer justify-center"
+              onClick={(e) => e.preventDefault()}
+            >
+              <ListCollapse className="text-blue-500" />
+            </div>
+          </Dropdown>
+        );
+      },
     },
   ];
 
   return (
     <div style={{ padding: 24 }}>
+      <ModalLoading isOpen={loading} />
       {contextHolder}
       <div className="flex justify-between items-center">
         <Title level={2}>Danh sách nhân viên</Title>
@@ -147,16 +245,13 @@ export default function EmployeeList() {
           {isActiveFilter ? "chưa kích hoạt" : "đã kích hoạt"}
         </Button>
       </div>
-      {loading ? (
-        <Spin size="large" />
-      ) : (
-        <Table
-          columns={columns}
-          dataSource={employees}
-          rowKey="id"
-          pagination={{ pageSize: 10 }}
-        />
-      )}
+
+      <Table
+        columns={columns}
+        dataSource={employees}
+        rowKey="id"
+        pagination={{ pageSize: 10 }}
+      />
     </div>
   );
 }

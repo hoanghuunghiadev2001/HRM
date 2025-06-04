@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { prisma } from "@/lib/prisma";
-import { sendEmail } from "@/lib/mail"; // Import hàm sendEmail
+import { sendEmail } from "@/lib/mail";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -10,6 +10,37 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+
+function generateRejectionEmail(
+  employeeName: string,
+  approvers: { name: string; approvedAt: Date }[],
+  leaveRequestId: number
+) {
+  const approvedListHtml = approvers.length
+    ? `<ul>${approvers
+        .map(
+          (a) =>
+            `<li><strong>${a.name}</strong> – ${dayjs(a.approvedAt)
+              .tz("Asia/Ho_Chi_Minh")
+              .format("DD/MM/YYYY HH:mm")}</li>`
+        )
+        .join("")}</ul>`
+    : "<p><em>Không có người nào duyệt trước đó</em></p>";
+
+  return `
+  <div style="font-family: Arial, sans-serif; padding: 16px; color: #333;">
+    <h2 style="color: #d32f2f;">❌ Đơn nghỉ phép bị từ chối</h2>
+    <p>Xin chào <strong>${employeeName}</strong>,</p>
+    <p>Đơn nghỉ phép <strong>#${leaveRequestId}</strong> của bạn đã bị <strong>từ chối</strong>.</p>
+
+    <h3>🔍 Người đã duyệt trước:</h3>
+    ${approvedListHtml}
+
+    <p style="margin-top: 16px;">Vui lòng liên hệ quản lý để biết thêm chi tiết.</p>
+    <p style="color: #888; font-size: 12px;">Email được gửi tự động từ hệ thống quản lý đơn nghỉ.</p>
+  </div>
+  `;
+}
 
 export async function PUT(req: NextRequest) {
   try {
@@ -24,112 +55,248 @@ export async function PUT(req: NextRequest) {
       role: string;
     };
 
-    if (!["ADMIN", "MANAGER"].includes(decoded.role)) {
-      return NextResponse.json(
-        { message: "Không có quyền phê duyệt" },
-        { status: 403 }
-      );
-    }
-
     const body = await req.json();
-    const { leaveRequestId, status, approvedBy } = body;
+    const { leaveRequestId, status } = body;
 
-    if (!leaveRequestId || !status || !approvedBy) {
+    if (
+      typeof leaveRequestId !== "number" ||
+      !["approved", "rejected"].includes(status)
+    ) {
       return NextResponse.json(
-        { message: "Thiếu dữ liệu bắt buộc" },
+        { message: "Invalid parameters" },
         { status: 400 }
       );
     }
 
-    if (!["approved", "rejected"].includes(status)) {
+    const approverId = decoded.id;
+    const approve = status === "approved";
+
+    const stepApprover = await prisma.leaveApprovalStepApprover.findFirst({
+      where: {
+        approverId,
+        status: "pending",
+        leaveApprovalStep: {
+          leaveRequestId,
+        },
+      },
+      include: {
+        leaveApprovalStep: true,
+      },
+    });
+
+    if (!stepApprover) {
       return NextResponse.json(
-        { message: "Trạng thái không hợp lệ" },
-        { status: 400 }
+        { message: "Không tìm thấy bước duyệt đang chờ cho người duyệt này" },
+        { status: 404 }
       );
     }
 
-    // Lấy thông tin đơn nghỉ và nhân viên
     const leaveRequest = await prisma.leaveRequest.findUnique({
       where: { id: leaveRequestId },
       include: {
         employee: {
-          include: {
-            contactInfo: true, // Nạp thêm thông tin liên hệ
-          },
+          include: { contactInfo: true },
         },
       },
     });
 
-    if (!leaveRequest || !leaveRequest.employee) {
+    if (!leaveRequest) {
       return NextResponse.json(
         { message: "Không tìm thấy đơn nghỉ" },
         { status: 404 }
       );
     }
 
-    // Cập nhật đơn nghỉ
-    const updated = await prisma.leaveRequest.update({
-      where: { id: leaveRequestId },
+    // Cập nhật trạng thái duyệt
+    await prisma.leaveApprovalStepApprover.update({
+      where: { id: stepApprover.id },
       data: {
-        status,
-        approvedBy,
+        status: approve ? "approved" : "rejected",
         approvedAt: new Date(),
       },
     });
 
-    const statusColor = status === "approved" ? "#28a745" : "#dc3545"; // Màu xanh lá hoặc đỏ
-    const startVN = dayjs(leaveRequest.startDate)
-      .tz("Asia/Ho_Chi_Minh")
-      .format("DD/MM/YYYY HH:mm");
-    const endVN = dayjs(leaveRequest.endDate)
-      .tz("Asia/Ho_Chi_Minh")
-      .format("DD/MM/YYYY HH:mm");
-    await sendEmail({
-      to: [leaveRequest.employee.contactInfo?.email ?? ""],
-      subject: `Kết quả đơn nghỉ phép #${leaveRequestId}`,
-      html: `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 8px; background: #fafafa;">
-      <h2 style="color: #4a90e2; text-align: center;">Thông báo kết quả đơn nghỉ phép</h2>
-      <p>Xin chào <strong>${leaveRequest.employee.name}</strong>,</p>
-      <p>Đơn nghỉ phép của bạn đã được xử lý với kết quả như sau:</p>
+    if (!approve) {
+      await prisma.leaveRequest.update({
+        where: { id: leaveRequestId },
+        data: {
+          status: "rejected",
+          approvedBy: decoded.name,
+          approvedAt: new Date(),
+        },
+      });
 
-      <table style="width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 20px;">
-        <tr>
-          <td style="padding: 8px; font-weight: bold; background: #f0f0f0;">Trạng thái</td>
-          <td style="padding: 8px; color: ${statusColor}; font-weight: bold; text-transform: uppercase;">${
-        status === "approved" ? "Phê duyệt" : "Từ chối"
-      }</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; font-weight: bold; background: #f0f0f0;">Ngày nghỉ</td>
-          <td style="padding: 8px;">${startVN} - ${endVN}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; font-weight: bold; background: #f0f0f0;">Lý do</td>
-          <td style="padding: 8px;">${leaveRequest.reason}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; font-weight: bold; background: #f0f0f0;">Phê duyệt bởi</td>
-          <td style="padding: 8px;">${approvedBy}</td>
-        </tr>
-      </table>
+      const approvedApprovers = await prisma.leaveApprovalStepApprover.findMany(
+        {
+          where: {
+            leaveApprovalStep: {
+              leaveRequestId,
+            },
+            status: "approved",
+          },
+          include: {
+            approver: true,
+          },
+        }
+      );
 
-      <p>Vui lòng đăng nhập vào hệ thống để xem chi tiết.</p>
+      const approversList = approvedApprovers.map((a) => ({
+        name: a.approver.name,
+        approvedAt: a.approvedAt!,
+      }));
 
-      <div style="text-align: center; margin-top: 30px;">
-        <a href="${
-          process.env.NEXT_PUBLIC_API_URL
-        }dashboard/request" style="display: inline-block; padding: 10px 20px; background: #4a90e2; color: #fff; text-decoration: none; border-radius: 4px;">Truy cập hệ thống</a>
-      </div>
+      if (leaveRequest.employee.contactInfo?.email) {
+        await sendEmail({
+          to: [leaveRequest.employee.contactInfo.email],
+          subject: `Đơn nghỉ phép #${leaveRequestId} bị từ chối`,
+          html: generateRejectionEmail(
+            leaveRequest.employee.name,
+            approversList,
+            leaveRequestId
+          ),
+        });
+      }
 
-      <p style="margin-top: 40px; font-size: 12px; color: #999; text-align: center; font-style: italic">
-        Email được gửi tự động từ hệ thống HRM. Vui lòng không trả lời email này.
-      </p>
-    </div>
-  `,
+      return NextResponse.json({ message: "Đơn đã bị từ chối" });
+    }
+
+    // Lấy level của bước duyệt hiện tại
+    const currentStep = await prisma.leaveApprovalStep.findUnique({
+      where: { id: stepApprover.leaveApprovalStepId },
     });
 
-    return NextResponse.json(updated);
+    let stepFullyApproved = false;
+
+    if (currentStep?.level === 5) {
+      // Nếu là level 5 → duyệt luôn bước
+      await prisma.leaveApprovalStep.update({
+        where: { id: currentStep.id },
+        data: {
+          status: "approved",
+          approvedAt: new Date(),
+        },
+      });
+      stepFullyApproved = true;
+    } else {
+      // Các level khác → kiểm tra tất cả approvers đã duyệt chưa
+      const pendingApprovers = await prisma.leaveApprovalStepApprover.count({
+        where: {
+          leaveApprovalStepId: stepApprover.leaveApprovalStepId,
+          status: "pending",
+        },
+      });
+
+      if (pendingApprovers === 0) {
+        await prisma.leaveApprovalStep.update({
+          where: { id: currentStep?.id },
+          data: {
+            status: "approved",
+            approvedAt: new Date(),
+          },
+        });
+        stepFullyApproved = true;
+      }
+    }
+
+    if (!stepFullyApproved) {
+      return NextResponse.json({
+        message: "Đã duyệt bước này, chờ các approver khác duyệt",
+      });
+    }
+
+    // Tìm bước tiếp theo
+    const nextStep = await prisma.leaveApprovalStep.findFirst({
+      where: {
+        leaveRequestId,
+        status: "pending",
+        level: {
+          gt: currentStep?.level,
+        },
+      },
+      orderBy: {
+        level: "asc",
+      },
+      include: {
+        approvers: {
+          include: {
+            approver: {
+              include: {
+                contactInfo: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (nextStep) {
+      for (const approverRel of nextStep.approvers) {
+        const email = approverRel.approver.contactInfo?.email;
+        if (email) {
+          const startVN = dayjs(leaveRequest.startDate)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY HH:mm");
+          const endVN = dayjs(leaveRequest.endDate)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY HH:mm");
+
+          await sendEmail({
+            to: [email],
+            subject: `Bạn có đơn nghỉ phép cần duyệt #${leaveRequestId}`,
+            html: `
+              <p>Xin chào <strong>${approverRel.approver.name}</strong>,</p>
+              <p>Bạn có một đơn nghỉ phép mới cần phê duyệt với thông tin:</p>
+              <ul>
+                <li>Nhân viên: ${leaveRequest.employee.name}</li>
+                <li>Thời gian: ${startVN} - ${endVN}</li>
+                <li>Lý do: ${leaveRequest.reason}</li>
+              </ul>
+              <p>Vui lòng đăng nhập hệ thống để xử lý.</p>
+            `,
+          });
+        }
+      }
+
+      return NextResponse.json({
+        message: "Đã duyệt bước này, chờ bước tiếp theo duyệt",
+      });
+    } else {
+      // Không còn bước nào → duyệt hoàn toàn
+      await prisma.leaveRequest.update({
+        where: { id: leaveRequestId },
+        data: {
+          status: "approved",
+          approvedBy: decoded.name,
+          approvedAt: new Date(),
+        },
+      });
+
+      if (leaveRequest.employee.contactInfo?.email) {
+        const startVN = dayjs(leaveRequest.startDate)
+          .tz("Asia/Ho_Chi_Minh")
+          .format("DD/MM/YYYY HH:mm");
+        const endVN = dayjs(leaveRequest.endDate)
+          .tz("Asia/Ho_Chi_Minh")
+          .format("DD/MM/YYYY HH:mm");
+
+        await sendEmail({
+          to: [leaveRequest.employee.contactInfo.email],
+          subject: `Đơn nghỉ phép #${leaveRequestId} đã được phê duyệt`,
+          html: `
+            <p>Xin chào <strong>${leaveRequest.employee.name}</strong>,</p>
+            <p>Đơn nghỉ phép của bạn đã được <strong>phê duyệt</strong>.</p>
+            <p>Thông tin nghỉ phép:</p>
+            <ul>
+              <li>Thời gian: ${startVN} - ${endVN}</li>
+              <li>Lý do: ${leaveRequest.reason}</li>
+            </ul>
+            <p>Cảm ơn bạn đã sử dụng hệ thống.</p>
+          `,
+        });
+      }
+
+      return NextResponse.json({ message: "Đơn đã được duyệt hoàn toàn" });
+    }
   } catch (error) {
     console.error("Approve leave request error:", error);
     return NextResponse.json({ message: "Lỗi máy chủ" }, { status: 500 });

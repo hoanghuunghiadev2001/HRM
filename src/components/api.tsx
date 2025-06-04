@@ -316,8 +316,7 @@ export async function getApiAllRequestsNeedApprove(
   if (filters.role) queryParams.append("role", filters.role);
   if (filters.department) queryParams.append("department", filters.department);
   if (filters.name) queryParams.append("name", filters.name);
-  if (filters.employeeCode)
-    queryParams.append("employeeCode", filters.employeeCode);
+  if (filters.employeeCode) queryParams.append("userId", filters.employeeCode);
 
   const res = await fetch(
     `/api/leave/all-requests-need-approve?${queryParams.toString()}`

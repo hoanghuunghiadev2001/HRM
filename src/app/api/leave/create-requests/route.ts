@@ -1,8 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// app/api/create-leaves/route.ts
-import { NextRequest, NextResponse } from "next/server";
+// /app/api/leave-request/route.ts
 import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
+import { differenceInCalendarDays } from "date-fns";
+import { LeaveStatus } from "../../../../../generated/prisma";
 import { sendEmail } from "@/lib/mail";
+
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -10,122 +12,189 @@ import timezone from "dayjs/plugin/timezone";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export async function POST(request: NextRequest) {
+export async function POST(req: Request) {
   try {
-    const body = await request.json();
+    const body = await req.json();
     const {
-      employeeId,
-      leaveType,
       startDateTime,
       endDateTime,
+      leaveType,
       reason,
+      employeeId,
       totalHours,
     } = body;
 
-    if (
-      !employeeId?.toString().trim() ||
-      !leaveType?.toString().trim() ||
-      !startDateTime?.toString().trim() ||
-      !endDateTime?.toString().trim() ||
-      totalHours === undefined
-    ) {
+    const start = new Date(startDateTime);
+    const end = new Date(endDateTime);
+    const totalDays = differenceInCalendarDays(end, start) + 1;
+    console.log(totalDays);
+
+    if (totalDays <= 0) {
       return NextResponse.json(
-        { message: "Thiếu trường dữ liệu bắt buộc" },
+        { error: "Thời gian nghỉ không hợp lệ." },
         { status: 400 }
       );
     }
 
-    const start = dayjs(startDateTime, "DD/MM/YYYY HH:mm:ss", true);
-    const end = dayjs(endDateTime, "DD/MM/YYYY HH:mm:ss", true);
-
-    if (!start.isValid() || !end.isValid()) {
-      return NextResponse.json(
-        { message: "Định dạng ngày giờ không hợp lệ" },
-        { status: 400 }
-      );
-    }
-
-    if (start.isAfter(end) || start.isSame(end)) {
-      return NextResponse.json(
-        { message: "Ngày bắt đầu phải nhỏ hơn ngày kết thúc" },
-        { status: 400 }
-      );
-    }
-
-    // Tạo đơn nghỉ
+    // 1. Tạo LeaveRequest
     const leaveRequest = await prisma.leaveRequest.create({
       data: {
         employeeId,
-        leaveType,
-        startDate: start.toDate(),
-        endDate: end.toDate(),
+        startDate: start,
+        endDate: end,
         totalHours: Number(totalHours),
-        reason: reason?.toString() || "",
+        leaveType,
+        reason,
+        status: LeaveStatus.pending,
       },
     });
 
-    // Lấy thông tin nhân viên và phòng ban
-    const employee = await prisma.employee.findUnique({
-      where: { id: employeeId },
+    // 2. Lấy thông tin nhân viên (để biết department)
+    const workInfo = await prisma.workInfo.findUnique({
+      where: { employeeId },
       include: {
-        workInfo: {
-          include: {
-            department: true,
-            position: true,
-          },
-        },
+        department: true,
+        position: true,
+        employee: true,
       },
     });
 
-    const department = employee?.workInfo?.department;
-    const position = employee?.workInfo?.position;
+    if (!workInfo?.departmentId) {
+      return NextResponse.json(
+        { error: "Không tìm thấy bộ phận nhân viên." },
+        { status: 404 }
+      );
+    }
 
-    if (!employee || !department) {
-      console.warn("Không tìm thấy thông tin phòng ban hoặc nhân viên");
+    const departmentId = workInfo.departmentId;
+
+    // 3. Xác định các cấp cần duyệt ban đầu (ví dụ)
+    let levelsToApprove: number[] = [];
+    if (totalDays < 1) {
+      levelsToApprove = [2]; // tổ trưởng
+    } else if (totalDays < 7) {
+      levelsToApprove = [2, 3, 4]; // tổ trưởng + trưởng phòng + cấp khác
     } else {
-      // Lấy các manager của cùng bộ phận
-      const managers = await prisma.employee.findMany({
-        where: {
-          role: "MANAGER",
-          workInfo: {
-            department,
+      levelsToApprove = [2, 3, 4, 5]; // + giám đốc (cấp 5)
+    }
+
+    // 4. Phân nhóm cấp duyệt:
+    const levelsWithDept = [2, 3, 4];
+    const levelsWithoutDept = [5];
+
+    // Lấy người duyệt cùng phòng ban (cấp 2,3,4)
+    const approversInDept = await prisma.workInfo.findMany({
+      where: {
+        departmentId,
+        position: {
+          level: {
+            in: levelsWithDept.filter((l) => levelsToApprove.includes(l)),
+          },
+        },
+      },
+      include: {
+        position: true,
+        employee: {
+          include: { contactInfo: true },
+        },
+      },
+      orderBy: {
+        position: { level: "asc" },
+      },
+    });
+
+    // Lấy người duyệt không cần cùng phòng ban (cấp 5)
+    const approversOutDept = await prisma.workInfo.findMany({
+      where: {
+        position: {
+          level: {
+            in: levelsWithoutDept.filter((l) => levelsToApprove.includes(l)),
+          },
+        },
+      },
+      include: {
+        position: true,
+        employee: {
+          include: { contactInfo: true },
+        },
+      },
+      orderBy: {
+        position: { level: "asc" },
+      },
+    });
+
+    // Ghép 2 danh sách lại
+    const approvers = [...approversInDept, ...approversOutDept];
+
+    if (approvers.length === 0) {
+      return NextResponse.json(
+        { error: "Không tìm thấy người duyệt phù hợp." },
+        { status: 404 }
+      );
+    }
+
+    // Sắp xếp lại theo level (tăng dần)
+    approvers.sort(
+      (a, b) => (a.position?.level ?? 0) - (b.position?.level ?? 0)
+    );
+
+    // 5. Nhóm approvers theo cấp độ (level)
+    const approversByLevel = approvers.reduce((acc, approver) => {
+      const level = approver.position?.level ?? 0;
+      if (!acc[level]) acc[level] = [];
+      acc[level].push(approver);
+      return acc;
+    }, {} as Record<number, typeof approvers>);
+
+    // 6. Tạo từng bước duyệt (LeaveApprovalStep) và approvers trong bước đó
+    const createdSteps = [];
+
+    for (const levelStr of Object.keys(approversByLevel).sort(
+      (a, b) => Number(a) - Number(b)
+    )) {
+      const level = Number(levelStr);
+      const approversAtLevel = approversByLevel[level];
+
+      const step = await prisma.leaveApprovalStep.create({
+        data: {
+          leaveRequestId: leaveRequest.id,
+          level,
+          status: LeaveStatus.pending,
+          approvers: {
+            create: approversAtLevel.map((approver) => ({
+              approverId: approver.employeeId,
+              status: LeaveStatus.pending,
+            })),
           },
         },
         include: {
-          contactInfo: true,
+          approvers: true,
         },
       });
 
-      // Lấy tất cả admin
-      const admins = await prisma.employee.findMany({
-        where: {
-          role: "ADMIN",
-        },
-        include: {
-          contactInfo: true,
-        },
-      });
+      createdSteps.push(step);
+    }
 
-      const emails = [
-        ...managers
-          .map((m: any) => m.contactInfo?.email)
-          .filter((e: any): e is string => typeof e === "string"),
-        ...admins
-          .map((a: any) => a.contactInfo?.email)
-          .filter((e: any): e is string => typeof e === "string"),
-      ];
+    // 7. Gửi mail cho người duyệt đầu tiên của bước đầu tiên (cấp thấp nhất)
+    const firstStep = createdSteps[0];
+    const firstApproverId = firstStep.approvers[0]?.approverId;
+    const firstApprover = approvers.find(
+      (a) => a.employeeId === firstApproverId
+    );
+    const approverEmail = firstApprover?.employee.contactInfo?.email;
 
-      const startVN = dayjs(start)
-        .tz("Asia/Ho_Chi_Minh")
-        .format("DD/MM/YYYY HH:mm");
-      const endVN = dayjs(end)
-        .tz("Asia/Ho_Chi_Minh")
-        .format("DD/MM/YYYY HH:mm");
+    const startVN = dayjs(start)
+      .tz("Asia/Ho_Chi_Minh")
+      .format("DD/MM/YYYY HH:mm");
+    const endVN = dayjs(end).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm");
 
-      if (emails.length > 0) {
-        const html = `
+    if (!approverEmail) {
+      console.warn("Không tìm thấy email người duyệt đầu tiên");
+    } else {
+      const employeeName = workInfo.employee?.name || "Nhân viên";
+      const subject = `[Thông báo] Đơn nghỉ phép mới từ ${employeeName}`;
+      const html = `
       <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 16px; border: 1px solid #e0e0e0; border-radius: 8px;">
-        <!-- Logo -->
         <div style="text-align: center; margin-bottom: 24px;">
           <h2 style="color: #4a4a6a; margin-bottom: 8px;">TOYOTA BÌNH DƯƠNG</h2>
         </div>
@@ -137,17 +206,17 @@ export async function POST(request: NextRequest) {
         <table style="width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px;">
           <tr>
             <td style="padding: 8px; font-weight: bold; width: 120px;">👤 Nhân viên:</td>
-            <td style="padding: 8px;">${employee.name} (${
-          employee.employeeCode
-        })</td>
+            <td style="padding: 8px;">${workInfo.employee?.name} (${
+        workInfo.employee?.employeeCode
+      })</td>
           </tr>
           <tr style="background-color: #f9f9f9;">
             <td style="padding: 8px; font-weight: bold;">💼 Chức vụ:</td>
-            <td style="padding: 8px;">${position}</td>
+            <td style="padding: 8px;">${workInfo.position?.name}</td>
           </tr>
           <tr>
             <td style="padding: 8px; font-weight: bold;">🏢 Bộ phận:</td>
-            <td style="padding: 8px;">${department}</td>
+            <td style="padding: 8px;">${workInfo.department?.name}</td>
           </tr>
           <tr style="background-color: #f9f9f9;">
             <td style="padding: 8px; font-weight: bold;">📝 Loại phép:</td>
@@ -156,6 +225,10 @@ export async function POST(request: NextRequest) {
           <tr>
             <td style="padding: 8px; font-weight: bold;">🕒 Thời gian:</td>
             <td style="padding: 8px;">${startVN} - ${endVN}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; font-weight: bold;">⏳ Tổng giờ:</td>
+            <td style="padding: 8px;">${totalHours} tiếng</td>
           </tr>
           <tr style="background-color: #f9f9f9;">
             <td style="padding: 8px; font-weight: bold;">📄 Lý do:</td>
@@ -186,22 +259,26 @@ export async function POST(request: NextRequest) {
           Email được gửi tự động từ hệ thống HRM. Vui lòng không trả lời email này.
         </p>
       </div>
-    `;
+      `;
 
+      try {
         await sendEmail({
-          to: emails,
-          subject: "📝 Thông báo đơn xin nghỉ mới",
+          to: [approverEmail],
+          subject,
           html,
         });
+      } catch (emailError) {
+        console.error("Lỗi gửi mail:", emailError);
       }
     }
 
-    return NextResponse.json(leaveRequest, { status: 201 });
+    return NextResponse.json({
+      message: "Tạo đơn nghỉ phép thành công",
+      leaveRequest,
+      approvalSteps: createdSteps,
+    });
   } catch (error) {
-    console.error("Lỗi khi tạo đơn nghỉ:", error);
-    return NextResponse.json(
-      { message: "Tạo đơn nghỉ thất bại" },
-      { status: 500 }
-    );
+    console.error(error);
+    return NextResponse.json({ error: "Lỗi server" }, { status: 500 });
   }
 }

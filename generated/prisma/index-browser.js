@@ -219,6 +219,22 @@ exports.Prisma.LeaveRequestScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.LeaveApprovalStepScalarFieldEnum = {
+  id: 'id',
+  leaveRequestId: 'leaveRequestId',
+  level: 'level',
+  status: 'status',
+  approvedAt: 'approvedAt'
+};
+
+exports.Prisma.LeaveApprovalStepApproverScalarFieldEnum = {
+  id: 'id',
+  leaveApprovalStepId: 'leaveApprovalStepId',
+  approverId: 'approverId',
+  status: 'status',
+  approvedAt: 'approvedAt'
+};
+
 exports.Prisma.AttendanceScalarFieldEnum = {
   id: 'id',
   employeeId: 'employeeId',
@@ -311,6 +327,8 @@ exports.Prisma.ModelName = {
   ContactInfo: 'ContactInfo',
   OtherInfo: 'OtherInfo',
   LeaveRequest: 'LeaveRequest',
+  LeaveApprovalStep: 'LeaveApprovalStep',
+  LeaveApprovalStepApprover: 'LeaveApprovalStepApprover',
   Attendance: 'Attendance',
   KPI: 'KPI',
   KPIEmployee: 'KPIEmployee',
