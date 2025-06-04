@@ -35,8 +35,15 @@ export async function GET(req: NextRequest) {
           leaveRequest: {
             employee: employeeFilter,
           },
+          // Thêm điều kiện: trong bước này chưa có approver nào được duyệt
+          approvers: {
+            none: {
+              status: "approved",
+            },
+          },
         },
       },
+      // phần include giữ nguyên
       include: {
         leaveApprovalStep: {
           include: {
