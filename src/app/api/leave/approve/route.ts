@@ -95,7 +95,7 @@ export async function PUT(req: NextRequest) {
       where: { id: leaveRequestId },
       include: {
         employee: {
-          include: { contactInfo: true },
+          include: { contactInfo: true, workInfo: true }, // thêm workInfo
         },
       },
     });
@@ -222,6 +222,11 @@ export async function PUT(req: NextRequest) {
             approver: {
               include: {
                 contactInfo: true,
+                workInfo: {
+                  include: {
+                    department: true,
+                  },
+                },
               },
             },
           },
@@ -230,8 +235,24 @@ export async function PUT(req: NextRequest) {
     });
 
     if (nextStep) {
-      for (const approverRel of nextStep.approvers) {
-        const email = approverRel.approver.contactInfo?.email;
+      const requesterDepartmentId =
+        leaveRequest.employee.workInfo?.departmentId;
+      const filteredApprovers = nextStep.approvers.filter((approverRel) => {
+        const approver = approverRel.approver;
+
+        // Nếu level là 2-3-4 → chỉ cho phép cùng phòng ban
+        if ([2, 3, 4].includes(nextStep.level)) {
+          return approver.workInfo?.departmentId === requesterDepartmentId;
+        }
+
+        // Các level khác (ví dụ 1 hoặc 5) thì không cần kiểm tra
+        return true;
+      });
+
+      for (const approverRel of filteredApprovers) {
+        const approver = approverRel.approver;
+        const email = approver.contactInfo?.email;
+
         if (email) {
           const startVN = dayjs(leaveRequest.startDate)
             .tz("Asia/Ho_Chi_Minh")
@@ -244,15 +265,15 @@ export async function PUT(req: NextRequest) {
             to: [email],
             subject: `Bạn có đơn nghỉ phép cần duyệt #${leaveRequestId}`,
             html: `
-              <p>Xin chào <strong>${approverRel.approver.name}</strong>,</p>
-              <p>Bạn có một đơn nghỉ phép mới cần phê duyệt với thông tin:</p>
-              <ul>
-                <li>Nhân viên: ${leaveRequest.employee.name}</li>
-                <li>Thời gian: ${startVN} - ${endVN}</li>
-                <li>Lý do: ${leaveRequest.reason}</li>
-              </ul>
-              <p>Vui lòng đăng nhập hệ thống để xử lý.</p>
-            `,
+          <p>Xin chào <strong>${approver.name}</strong>,</p>
+          <p>Bạn có một đơn nghỉ phép mới cần phê duyệt với thông tin:</p>
+          <ul>
+            <li>Nhân viên: ${leaveRequest.employee.name}</li>
+            <li>Thời gian: ${startVN} - ${endVN}</li>
+            <li>Lý do: ${leaveRequest.reason}</li>
+          </ul>
+          <p>Vui lòng đăng nhập hệ thống để xử lý.</p>
+        `,
           });
         }
       }
