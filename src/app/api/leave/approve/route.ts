@@ -10,32 +10,39 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
-
 function generateRejectionEmail(
   employeeName: string,
   approvers: { name: string; approvedAt: Date }[],
   leaveRequestId: number
 ) {
   const approvedListHtml = approvers.length
-    ? `<ul>${approvers
-        .map(
-          (a) =>
-            `<li><strong>${a.name}</strong> – ${dayjs(a.approvedAt)
-              .tz("Asia/Ho_Chi_Minh")
-              .format("DD/MM/YYYY HH:mm")}</li>`
-        )
-        .join("")}</ul>`
-    : "<p><em>Không có người nào duyệt trước đó</em></p>";
+    ? `<ul style="padding-left: 20px; color: #444;">
+        ${approvers
+          .map(
+            (a) =>
+              `<li><strong>${a.name}</strong> – ${dayjs(a.approvedAt)
+                .tz("Asia/Ho_Chi_Minh")
+                .format("DD/MM/YYYY HH:mm")}</li>`
+          )
+          .join("")}
+       </ul>`
+    : `<p style="font-style: italic; color: #888;">Không có người nào duyệt trước đó</p>`;
 
   return `
-    <div style="font-family: Arial, sans-serif; padding: 16px; color: #333;">
-      <h2 style="color: #d32f2f;">❌ Đơn nghỉ phép bị từ chối</h2>
-      <p>Xin chào <strong>${employeeName}</strong>,</p>
-      <p>Đơn nghỉ phép <strong>#${leaveRequestId}</strong> của bạn đã bị <strong>từ chối</strong>.</p>
-      <h3>🔍 Người đã duyệt trước:</h3>
-      ${approvedListHtml}
-      <p style="margin-top: 16px;">Vui lòng liên hệ quản lý để biết thêm chi tiết.</p>
-      <p style="color: #888; font-size: 12px;">Email được gửi tự động từ hệ thống quản lý đơn nghỉ.</p>
+    <div style="font-family: 'Segoe UI', Roboto, sans-serif; padding: 24px; background-color: #fffbe6; border: 1px solid #f0c14b; border-radius: 8px; max-width: 600px; margin: auto; color: #333;">
+      <h2 style="color: #d32f2f; margin-bottom: 8px;">❌ Đơn nghỉ phép bị từ chối</h2>
+      <p style="font-size: 16px;">Xin chào <strong>${employeeName}</strong>,</p>
+      <p style="font-size: 15px;">Đơn nghỉ phép <strong>#${leaveRequestId}</strong> của bạn đã bị <span style="color: #d32f2f;"><strong>từ chối</strong></span>.</p>
+      
+      <div style="margin-top: 20px;">
+        <h3 style="color: #555; margin-bottom: 6px;">🔍 Người đã duyệt trước:</h3>
+        ${approvedListHtml}
+      </div>
+
+      <p style="margin-top: 24px; font-size: 15px;">Vui lòng liên hệ quản lý để biết thêm chi tiết.</p>
+
+      <hr style="margin: 24px 0; border: none; border-top: 1px solid #eee;" />
+      <p style="font-size: 12px; color: #999;">📧 Email được gửi tự động từ hệ thống quản lý đơn nghỉ.</p>
     </div>
   `;
 }
@@ -86,8 +93,10 @@ export async function PUT(req: NextRequest) {
       role: string;
     };
 
+    console.log(decoded);
+
     const body = await req.json();
-    const { leaveRequestId, status } = body;
+    const { leaveRequestId, status, approvedByName } = body;
 
     if (
       typeof leaveRequestId !== "number" ||
@@ -161,7 +170,7 @@ export async function PUT(req: NextRequest) {
         where: { id: leaveRequestId },
         data: {
           status: "rejected",
-          approvedBy: decoded.name,
+          approvedBy: approvedByName,
           approvedAt: new Date(),
         },
       });
@@ -310,10 +319,42 @@ export async function PUT(req: NextRequest) {
         where: { id: leaveRequestId },
         data: {
           status: "approved",
-          approvedBy: decoded.name,
+          approvedBy: approvedByName,
           approvedAt: new Date(),
         },
       });
+      if (leaveRequest.employee.contactInfo?.email) {
+        const startVN = dayjs(leaveRequest.startDate)
+          .tz("Asia/Ho_Chi_Minh")
+          .format("DD/MM/YYYY HH:mm");
+        const endVN = dayjs(leaveRequest.endDate)
+          .tz("Asia/Ho_Chi_Minh")
+          .format("DD/MM/YYYY HH:mm");
+
+        await sendEmail({
+          to: [leaveRequest.employee.contactInfo.email],
+          subject: `✅ Đơn nghỉ phép #${leaveRequestId} đã được duyệt`,
+          html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #c8e6c9; border-radius: 8px; background-color: #e8f5e9;">
+        <h2 style="color: #388e3c;">✅ Đơn nghỉ phép đã được duyệt</h2>
+        <p>Xin chào <strong>${leaveRequest.employee.name}</strong>,</p>
+        <p>Đơn nghỉ phép <strong>#${leaveRequestId}</strong> của bạn đã được duyệt thành công.</p>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ddd; background-color: #fff; font-weight: 600; width: 120px;">Thời gian</td>
+            <td style="padding: 8px; border: 1px solid #ddd; background-color: #fff;">${startVN} đến ${endVN}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ddd; background-color: #fff; font-weight: 600;">Lý do</td>
+            <td style="padding: 8px; border: 1px solid #ddd; background-color: #fff;">${leaveRequest.reason}</td>
+          </tr>
+        </table>
+        <p style="margin-top: 16px;">Chúc bạn kỳ nghỉ vui vẻ!</p>
+        <p style="font-size: 12px; color: #888;">Email được gửi tự động từ hệ thống quản lý đơn nghỉ.</p>
+      </div>
+    `,
+        });
+      }
     }
 
     return NextResponse.json({ message: "Duyệt đơn thành công" });

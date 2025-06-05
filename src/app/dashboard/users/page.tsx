@@ -11,12 +11,23 @@ import {
   Spin,
   Dropdown,
   Modal,
+  Form,
+  Input,
+  TreeSelect,
+  TreeSelectProps,
+  Pagination,
 } from "antd";
 import { MenuProps } from "antd/lib";
 import { DeleteOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { ListCollapse } from "lucide-react";
-import { deleteEmployeeApi } from "@/lib/api";
+import {
+  deleteEmployeeApi,
+  fetchEmployeeByCode,
+  updateEmployee,
+} from "@/lib/api";
 import ModalLoading from "@/components/modalLoading";
+import { Department, InfoEmployee } from "@/lib/interface";
+import ModalEditEmployee from "@/components/modalEditEmployee";
 
 message.config({
   top: 80,
@@ -39,6 +50,15 @@ export default function EmployeeList() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const [filterName, setFilterName] = useState("");
+  const [filterMSNV, setFilterMSNV] = useState("");
+  const [filterDepartment, setDepartment] = useState<string>();
+  const [pageSize, setPageSize] = useState(10);
+  const [pageTable, setPageTable] = useState(1);
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const [totalTable, setTotalTable] = useState();
+  const [infoEmployee, setInfoEmployee] = useState<InfoEmployee>();
+  const [modalEditEmployee, setModalEditEmployee] = useState<boolean>(false);
 
   const messError = () => {
     messageApi.open({
@@ -47,8 +67,37 @@ export default function EmployeeList() {
     });
   };
 
+  const listDepartment = async () => {
+    const res = await fetch("/api/departments");
+    if (!res.ok) throw new Error("Lấy dữ liệu thất bại");
+    const departmentsData = await res.json(); //
+    setDepartments(departmentsData);
+  };
+
+  const treeData = departments.map((dept) => ({
+    value: dept.id.toString(),
+    title: dept.name.toString(),
+    key: dept.id,
+    children: dept.positions.map((pos: any) => ({
+      value: `${dept.id}-${pos.id}`,
+      title: ` ${pos.name}`,
+      key: `${dept.id}-${pos.id}`,
+    })),
+  }));
+
+  const onPageChange = (page: number, pageSizeEnter?: number) => {
+    if (pageSizeEnter) {
+      setPageSize(pageSizeEnter);
+      fetchEmployees(page, pageSizeEnter);
+    } else {
+      setPageTable(page);
+      fetchEmployees(page, pageSize);
+    }
+  };
+
   useEffect(() => {
-    fetchEmployees(isActiveFilter);
+    fetchEmployees(pageSize, pageTable);
+    listDepartment();
   }, [isActiveFilter]);
 
   const countDownDelete = () => {
@@ -79,13 +128,36 @@ export default function EmployeeList() {
     }
   };
 
-  async function fetchEmployees(active: boolean) {
+  const onChangeSelectDepartment = (newValue: string) => {
+    setDepartment(newValue);
+    console.log(newValue);
+  };
+
+  const onPopupScroll: TreeSelectProps["onPopupScroll"] = (e) => {
+    console.log("onPopupScroll", e);
+  };
+
+  async function fetchEmployees(pageSize?: number, page?: number) {
     setLoading(true);
     try {
-      const res = await fetch(`/api/user?isActive=${active}`);
+      const params = new URLSearchParams({
+        isActive: String(isActiveFilter),
+        employeeCode: filterMSNV,
+        name: filterName,
+        department: filterDepartment ?? "",
+        page: String(page) ?? "",
+        pageSize: String(pageSize) ?? "",
+      });
+
+      const res = await fetch(`/api/user?${params.toString()}`);
+
       if (!res.ok) throw new Error("Lấy danh sách nhân viên thất bại");
-      const data: Employee[] = await res.json();
-      setEmployees(data);
+
+      const json = await res.json();
+
+      // Ví dụ phản hồi: { data: Employee[], total: number, page: number, pageSize: number }
+      setEmployees(json.data);
+      setTotalTable(json.total); // Nếu bạn cần hiển thị phân trang
     } catch (error: any) {
       const msg =
         error?.message ||
@@ -118,7 +190,7 @@ export default function EmployeeList() {
         throw error;
       }
       message.success("Cập nhật thành công");
-      fetchEmployees(isActiveFilter);
+      fetchEmployees(pageSize, pageTable);
       console.log(res.status);
     } catch (error: any) {
       const msg =
@@ -177,6 +249,14 @@ export default function EmployeeList() {
       title: "Tên",
       dataIndex: "name",
       key: "name",
+      render: (_: any, record: Employee) => (
+        <p
+          className="text-blue-600 cursor-pointer"
+          onClick={() => getInforEmployee(record.employeeCode)}
+        >
+          {record.name}
+        </p>
+      ),
     },
     {
       title: "Bộ phận",
@@ -199,19 +279,25 @@ export default function EmployeeList() {
         const items: MenuProps["items"] = [
           {
             key: "1",
+            label: "Chi tiết",
+            icon: <InfoCircleOutlined />,
+            onClick: () => getInforEmployee(record.employeeCode), // Giả sử bạn tạo state để lưu nhân viên đang thao tác,
+          },
+          {
+            key: "2",
             label: "Reset mật khẩu",
             icon: <InfoCircleOutlined />,
             onClick: () => resetPassword(record.employeeCode), // Giả sử bạn tạo state để lưu nhân viên đang thao tác,
           },
           {
-            key: "2",
+            key: "3",
             label: "Xóa nhân sự",
             icon: <DeleteOutlined />,
             onClick: () => handleDeleteEmployee(record.employeeCode), // Giả sử bạn tạo state để lưu nhân viên đang thao tác,
           },
           {
-            key: "3",
-            label: "Tắt hoạt động",
+            key: "4",
+            label: isActiveFilter ? "Tắt hoạt động" : "Bật hoạt động",
             icon: <DeleteOutlined />,
             onClick: () => toggleActive(record.id, record.isActive), // Giả sử bạn tạo state để lưu nhân viên đang thao tác,
           },
@@ -231,8 +317,44 @@ export default function EmployeeList() {
     },
   ];
 
+  const getInforEmployee = async (employeeCode: string) => {
+    setLoading(true);
+    const res = await fetchEmployeeByCode(employeeCode);
+    if (res.status === 1) {
+      setInfoEmployee(res.data);
+      setModalEditEmployee(true);
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateEmployee = async (
+    employeeCode: string,
+    infoEmployee: any
+  ) => {
+    setLoading(true);
+    const res = await updateEmployee(employeeCode, infoEmployee);
+    if (res.status === 1) {
+      fetchEmployees(pageSize, pageTable);
+      setModalEditEmployee(false);
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+  };
+
   return (
     <div style={{ padding: 24 }}>
+      <ModalEditEmployee
+        department={departments ?? []}
+        handleUpdateEmployee={handleUpdateEmployee}
+        employeeInfo={infoEmployee}
+        onClose={() => {
+          setModalEditEmployee(false);
+        }}
+        open={modalEditEmployee}
+      />
       <ModalLoading isOpen={loading} />
       {contextHolder}
       <div className="flex justify-between items-center">
@@ -245,12 +367,103 @@ export default function EmployeeList() {
           {isActiveFilter ? "chưa kích hoạt" : "đã kích hoạt"}
         </Button>
       </div>
+      <div className="grid grid-cols-2 md:flex md:items-center gap-4 mb-4 w-full flex-wrap">
+        <p className="font-bold  text-2xl text-[#4a4a6a] hidden md:block">
+          Lọc:
+        </p>
+        <div className="flex gap-2 items-center flex-wrap">
+          <Form.Item
+            label={
+              <p className="font-bold text-[#242424] hidden sm:block">MSNV</p>
+            }
+          >
+            <Input
+              className="w-full md:!w-[100px]"
+              placeholder="MSNV"
+              onChange={(e) => setFilterMSNV(e.target.value)}
+              allowClear
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  fetchEmployees(pageSize, pageTable);
+                }
+              }}
+            />
+          </Form.Item>
+        </div>
+        <div className="flex gap-2 items-center ">
+          {/* <p className="text-sm text-[#4a4a6a] shrink-0">Tên NV:</p> */}
+          <Form.Item
+            label={
+              <p className="font-bold text-[#242424] hidden sm:block">Tên NV</p>
+            }
+          >
+            <Input
+              className="w-full md:!w-[100px]"
+              placeholder="Tên NV"
+              allowClear
+              onChange={(e) => setFilterName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  fetchEmployees(pageSize, pageTable);
+                }
+              }}
+            />
+          </Form.Item>
+        </div>
+
+        <div className="!flex gap-2 items-center ">
+          <Form.Item
+            className=""
+            label={
+              <p className="font-bold text-[#242424] hidden sm:block">
+                Bộ phận
+              </p>
+            }
+          >
+            <TreeSelect
+              showSearch
+              style={{ width: "200px" }}
+              value={filterDepartment}
+              styles={{
+                popup: { root: { maxHeight: 400, overflow: "auto" } },
+              }}
+              placeholder="Phòng ban"
+              allowClear
+              listItemScrollOffset={200}
+              onChange={onChangeSelectDepartment}
+              showCheckedStrategy="SHOW_ALL"
+              treeData={treeData}
+              onPopupScroll={onPopupScroll}
+            />
+          </Form.Item>
+        </div>
+
+        <div className="flex items-center w-fit">
+          <Button
+            className="w-full sm:w-fit flex  gap-2 items-center h-8 px-4 rounded-lg justify-center !bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer !text-white font-semibold"
+            onClick={() => fetchEmployees(pageSize, pageTable)}
+          >
+            Tìm kiếm
+          </Button>
+        </div>
+      </div>
 
       <Table
         columns={columns}
         dataSource={employees}
         rowKey="id"
-        pagination={{ pageSize: 10 }}
+        pagination={false}
+        size="small"
+      />
+      <Pagination
+        align="center"
+        // current={pageTable}
+        pageSize={pageSize}
+        total={totalTable}
+        onChange={onPageChange}
+        showSizeChanger
+        onShowSizeChange={onPageChange}
+        className="!mt-3"
       />
     </div>
   );

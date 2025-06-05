@@ -4,13 +4,35 @@ import bcrypt from "bcrypt";
 import { sendEmail } from "@/lib/mail";
 
 function generateRandomPassword(length = 10) {
-  const chars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
-  let result = "";
-  for (let i = 0; i < length; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const lower = "abcdefghijklmnopqrstuvwxyz";
+  const numbers = "0123456789";
+  const specials = "!@#$%^&*()_+";
+  const all = upper + lower + numbers + specials;
+
+  if (length < 4) {
+    throw new Error("Độ dài mật khẩu phải >= 4 để đảm bảo đủ các loại ký tự");
   }
-  return result;
+
+  // Chọn ít nhất 1 ký tự mỗi loại
+  let password = "";
+  password += upper.charAt(Math.floor(Math.random() * upper.length));
+  password += lower.charAt(Math.floor(Math.random() * lower.length));
+  password += numbers.charAt(Math.floor(Math.random() * numbers.length));
+  password += specials.charAt(Math.floor(Math.random() * specials.length));
+
+  // Phần còn lại lấy ngẫu nhiên từ tất cả
+  for (let i = 4; i < length; i++) {
+    password += all.charAt(Math.floor(Math.random() * all.length));
+  }
+
+  // Xáo trộn chuỗi để không bị theo thứ tự cố định
+  password = password
+    .split("")
+    .sort(() => Math.random() - 0.5)
+    .join("");
+
+  return password;
 }
 
 export async function PATCH(req: NextRequest) {

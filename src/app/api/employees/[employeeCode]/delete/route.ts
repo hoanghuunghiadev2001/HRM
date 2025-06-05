@@ -34,6 +34,34 @@ export async function DELETE(request: NextRequest) {
     const employeeId = employee.id;
 
     // Xoá dữ liệu liên quan trước
+
+    // 1. Xoá các approver trước
+    await prisma.leaveApprovalStepApprover.deleteMany({
+      where: {
+        leaveApprovalStep: {
+          leaveRequest: {
+            employeeId,
+          },
+        },
+      },
+    });
+
+    // 2. Xoá các approval step
+    await prisma.leaveApprovalStep.deleteMany({
+      where: {
+        leaveRequest: {
+          employeeId,
+        },
+      },
+    });
+
+    // 3. Xoá các đơn xin nghỉ
+    await prisma.leaveRequest.deleteMany({ where: { employeeId } });
+
+    // Xoá dữ liệu liên quan trước
+    await prisma.leaveApprovalStepApprover.deleteMany({
+      where: { approverId: employeeId },
+    }); // <- thêm dòng này
     await prisma.leaveRequest.deleteMany({ where: { employeeId } });
     await prisma.attendance.deleteMany({ where: { employeeId } });
     await prisma.workInfo.deleteMany({ where: { employeeId } });

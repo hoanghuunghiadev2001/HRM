@@ -353,14 +353,14 @@ export async function getApiAllRequestsNeedApprove(
 export async function approveLeaveRequest(
   id: number | string,
   status: string,
-  approvedBy: string
+  approvedByName: string
 ) {
   const res = await fetch("/api/leave/approve", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ leaveRequestId: id, status, approvedBy }),
+    body: JSON.stringify({ leaveRequestId: id, status, approvedByName }),
   });
 
   if (!res.ok) {

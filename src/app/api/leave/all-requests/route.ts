@@ -67,7 +67,7 @@ export async function GET(req: NextRequest) {
       prisma.leaveRequest.findMany({
         where: baseWhere,
         orderBy: {
-          approvedAt: "desc",
+          createdAt: "desc",
         },
         skip: (page - 1) * pageSize,
         take: pageSize,

@@ -322,7 +322,7 @@ export default function AllRequestPage() {
     setLoading(true);
     try {
       await approveLeaveRequest(id, statusRequest, localUser.name);
-
+      getApiAllRequestsNeed();
       setLoading(false);
     } catch (err: any) {
       console.error("Lỗi:", err);
@@ -485,6 +485,7 @@ export default function AllRequestPage() {
           dataSource={formatted ?? []}
           scroll={{ y: "calc(100vh - 335px)", x: "100%" }}
           pagination={false}
+          size="small"
         />
         <Pagination
           align="center"

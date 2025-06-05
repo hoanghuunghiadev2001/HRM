@@ -64,6 +64,7 @@ export default function RequestPage() {
   const [createRequest, setCreateRequest] = useState<boolean>(false);
   const isMobile = useSelector((state: RootState) => state.responsive.isMobile);
   const { styles } = useStyle();
+  const [messageApi, contextHolder] = message.useMessage();
 
   // API lấy thông tin nghỉ
   const getRequestsLeave = async () => {
@@ -100,15 +101,17 @@ export default function RequestPage() {
   // Cấu hình cột table
   const columns: TableProps<DataType>["columns"] = [
     { title: "STT", dataIndex: "key", width: "60px" },
-    { title: "Tên", dataIndex: "name" },
-    { title: "Ngày nghỉ", dataIndex: "startDate" },
-    { title: "Loại phép", dataIndex: "leaveType" },
+    { title: "Tên", dataIndex: "name", width: "150px" },
+    { title: "Ngày nghỉ", dataIndex: "startDate", width: "120px" },
+    { title: "Loại phép", dataIndex: "leaveType", width: "100px" },
     {
       title: "Trạng thái",
       dataIndex: "status",
+      width: "120px",
       render: (status) => <StatusLeave status={status} />,
     },
     {
+      width: "60px",
       title: "Chi tiết",
       render: (_, record) => (
         <a onClick={() => DetailRequetsLeave(record.id)}>Chi tiết</a>
@@ -149,14 +152,28 @@ export default function RequestPage() {
 
       const data = await res.json();
       if (!res.ok) {
+        console.log(res);
+
         message.error(data.message || "Gửi đơn nghỉ thất bại");
+        messageApi.open({
+          type: "error",
+          content: "Gửi đơn nghỉ thất bại",
+        });
       } else {
         message.success("Gửi đơn nghỉ thành công");
+        messageApi.open({
+          type: "success",
+          content: "Gửi đơn nghỉ thành công",
+        });
         setCreateRequest(false);
         getRequestsLeave();
       }
     } catch {
       message.error("Lỗi gửi đơn nghỉ");
+      messageApi.open({
+        type: "success",
+        content: "Lỗi gửi đơn nghỉ",
+      });
     } finally {
       setLoading(false);
     }
@@ -168,6 +185,7 @@ export default function RequestPage() {
 
   return (
     <div className="w-full p-4">
+      {contextHolder}
       {/* Modal */}
       <ModalCreateNewRequest
         onClose={() => setCreateRequest(false)}
@@ -255,6 +273,7 @@ export default function RequestPage() {
             dataSource={formatted}
             pagination={{ pageSize: 12 }}
             scroll={{ y: "calc(100vh - 320px)", x: "100%" }}
+            size="small"
           />
         </div>
       )}

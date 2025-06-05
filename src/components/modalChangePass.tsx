@@ -1,6 +1,6 @@
 // import { LockOutlined } from "@ant-design/icons";
 import { interfaceChangePassword } from "@/lib/interface";
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, message, Modal } from "antd";
 import { useEffect, useState } from "react";
 
 interface ModalChangePassProps {
@@ -15,6 +15,7 @@ const ModalChangePass = ({
 }: ModalChangePassProps) => {
   const [form] = Form.useForm();
   const [clientReady, setClientReady] = useState<boolean>(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
   type FieldType = {
     currentPassword?: string;
@@ -22,8 +23,23 @@ const ModalChangePass = ({
     renewPassword?: string;
   };
 
+  const isValidPassword = (password: string) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
+    return regex.test(password);
+  };
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onFinish = async (values: any) => {
+    const valid = isValidPassword(values.newPassword);
+    if (!valid) {
+      messageApi.open({
+        type: "error",
+        content:
+          "Mật khẩu phải trên 6 ký tự và bao gồm chữ hoa, chữ thường, số, ký tự đặc biệt",
+      });
+      return;
+    }
+
     const change: interfaceChangePassword = {
       currentPassword: values.currentPassword!,
       newPassword: values.newPassword!,
@@ -50,6 +66,7 @@ const ModalChangePass = ({
       onCancel={onClose}
       footer={null}
     >
+      {contextHolder}
       <Form
         form={form}
         name="horizontal_login"
@@ -70,7 +87,18 @@ const ModalChangePass = ({
           className="!mt-2"
           rules={[
             { required: true, message: "Nhập mật khẩu mới!" },
-            { min: 6, message: "Mật khẩu phải có ít nhất 6 ký tự!" },
+            {
+              validator(_, value) {
+                if (!value || isValidPassword(value)) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error(
+                    "Mật khẩu phải trên 6 ký tự và bao gồm chữ hoa, chữ thường, số, ký tự đặc biệt"
+                  )
+                );
+              },
+            },
           ]}
           hasFeedback
         >

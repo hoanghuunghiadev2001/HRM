@@ -423,6 +423,7 @@ export default function AttendancePage() {
           dataSource={formatted ?? []}
           scroll={{ y: "calc(100vh - 335px)", x: "100%" }}
           pagination={false}
+          size="small"
         />
         <Pagination
           align="center"

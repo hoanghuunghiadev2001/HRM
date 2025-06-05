@@ -223,6 +223,7 @@ export async function PATCH(req: NextRequest) {
         birthDate: body.birthDate ? new Date(body.birthDate) : undefined,
         role: body.role,
         gender: body.gender,
+        employeeCode: body.employeeCode,
       },
     });
 

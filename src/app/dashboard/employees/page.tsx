@@ -180,7 +180,10 @@ export default function EmployeesPage() {
       key: "name",
       width: "200px",
       render: (_, record) => (
-        <div className="flex gap-2 items-center">
+        <div
+          className="flex gap-2 items-center"
+          onClick={() => getInforEmployee(record.MSNV)}
+        >
           <Image
             loading="lazy"
             src={record.avatar ? record.avatar : "/storage/avt-default.webp"}
@@ -681,6 +684,7 @@ export default function EmployeesPage() {
               <Input
                 className="w-full md:!w-[100px]"
                 placeholder="MSNV"
+                allowClear
                 onChange={(e) => setFilterMSNV(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -702,6 +706,7 @@ export default function EmployeesPage() {
               <Input
                 className="w-full md:!w-[100px]"
                 placeholder="Tên NV"
+                allowClear
                 onChange={(e) => setFilterName(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -755,6 +760,7 @@ export default function EmployeesPage() {
           dataSource={formatted ?? []}
           scroll={{ y: "calc(100vh - 335px)", x: "100%" }}
           pagination={false}
+          size="small"
         />
         <Pagination
           align="center"
