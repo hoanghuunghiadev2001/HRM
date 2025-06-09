@@ -358,7 +358,10 @@ export default function EmployeeList() {
       <ModalLoading isOpen={loading} />
       {contextHolder}
       <div className="flex justify-between items-center">
-        <Title level={2}>Danh sách nhân viên</Title>
+        <Title level={2}>
+          Danh sách nhân viên{" "}
+          {isActiveFilter ? "đã kích hoạt" : " chưa kích hoạt"}
+        </Title>
         <Button
           style={{ marginBottom: 16 }}
           onClick={() => setIsActiveFilter((prev) => !prev)}

@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient, Prisma } from "../../../../../generated/prisma";
 
 const prisma = new PrismaClient();
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -11,17 +12,29 @@ export async function GET(req: NextRequest) {
     const department = searchParams.get("department") || "";
     const name = searchParams.get("name") || "";
     const employeeCode = searchParams.get("employeeCode") || "";
+    const workStatus = searchParams.get("workStatus") || ""; // OFFICIAL | PROBATION | RESIGNED
     const pageSizeParam = searchParams.get("pageSize");
-    const pageSize = pageSizeParam ? parseInt(pageSizeParam, 10) : undefined; // undefined nếu không truyền
-
     const pageParam = searchParams.get("page");
+
+    const pageSize = pageSizeParam ? parseInt(pageSizeParam, 10) : undefined;
     const page = pageParam ? parseInt(pageParam, 10) : 1;
+
     if (role === "USER") {
       return NextResponse.json(
         { message: "Bạn không có quyền truy cập" },
         { status: 401 }
       );
     }
+
+    // Xử lý lọc phòng ban
+    let departmentId: number | undefined;
+    let positionId: number | undefined;
+    if (department) {
+      const parts = department.split("-");
+      departmentId = parts[0] ? parseInt(parts[0], 10) : undefined;
+      positionId = parts[1] ? parseInt(parts[1], 10) : undefined;
+    }
+
     // Bộ lọc chung
     const whereFilter: Prisma.EmployeeWhereInput = {
       AND: [
@@ -41,22 +54,30 @@ export async function GET(req: NextRequest) {
               },
             }
           : {},
+        departmentId || positionId
+          ? {
+              workInfo: {
+                ...(departmentId && { departmentId }),
+                ...(positionId && { positionId }),
+              },
+            }
+          : {},
+        workStatus
+          ? {
+              otherInfo: {
+                workStatus: workStatus as any,
+              },
+            }
+          : {
+              otherInfo: {
+                workStatus: {
+                  in: ["OFFICIAL", "PROBATION"],
+                },
+              },
+            },
       ],
     };
 
-    // Lọc phòng ban
-    if (department) {
-      const parts = department.split("-");
-      const departmentId = parts[0] ? parseInt(parts[0], 10) : undefined;
-      const positionId = parts[1] ? parseInt(parts[1], 10) : undefined;
-
-      whereFilter.workInfo = {
-        ...(departmentId && { departmentId }),
-        ...(positionId && { positionId }),
-      };
-    }
-
-    // Nếu cần logic riêng cho role MANAGER giới hạn phòng ban, bạn có thể mở rộng logic ở đây
     const findManyOptions: any = {
       where: whereFilter,
       orderBy: {
@@ -74,6 +95,11 @@ export async function GET(req: NextRequest) {
             position: true,
           },
         },
+        otherInfo: {
+          select: {
+            workStatus: true,
+          },
+        },
       },
     };
 
@@ -82,32 +108,10 @@ export async function GET(req: NextRequest) {
       findManyOptions.take = pageSize;
     }
 
-    const data = await prisma.employee.findMany(findManyOptions);
-    const total = await prisma.employee.count({ where: whereFilter });
-    // const [data, total] = await Promise.all([
-    //   prisma.employee.findMany({
-    //     where: whereFilter,
-    //     skip: (page - 1) * pageSize,
-    //     take: pageSize,
-    //     orderBy: {
-    //       name: "asc",
-    //     },
-    //     select: {
-    //       id: true,
-    //       employeeCode: true,
-    //       name: true,
-    //       gender: true,
-    //       avatar: true,
-    //       workInfo: {
-    //         select: {
-    //           department: true,
-    //           position: true,
-    //         },
-    //       },
-    //     },
-    //   }),
-    //   prisma.employee.count({ where: whereFilter }),
-    // ]);
+    const [data, total] = await Promise.all([
+      prisma.employee.findMany(findManyOptions),
+      prisma.employee.count({ where: whereFilter }),
+    ]);
 
     return NextResponse.json({
       data,
@@ -116,7 +120,7 @@ export async function GET(req: NextRequest) {
       pageSize,
     });
   } catch (error) {
-    console.error("Lỗi lấy danh sách nhân viên rút gọn:", error);
+    console.error("Lỗi lấy danh sách nhân viên:", error);
     return NextResponse.json(
       { message: "Không lấy được danh sách nhân viên" },
       { status: 500 }

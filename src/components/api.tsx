@@ -270,6 +270,7 @@ type LeavePendingFilters = {
 };
 
 type EmployeeFilters = {
+  workStatus?: string;
   page?: number;
   pageSize?: number;
   role: string; // "ADMIN" | "MANAGER"
@@ -374,6 +375,7 @@ export async function approveLeaveRequest(
 // lấy danh sách nhân sự
 export async function fetchEmployeeSummary(
   filters: EmployeeFilters = {
+    workStatus: "",
     role: "MANAGER",
     department: "",
     name: "",
@@ -383,6 +385,8 @@ export async function fetchEmployeeSummary(
   }
 ) {
   const queryParams = new URLSearchParams();
+  if (filters.workStatus)
+    queryParams.append("workStatus", filters.workStatus.toString());
 
   if (filters.page) queryParams.append("page", filters.page.toString());
   if (filters.pageSize)

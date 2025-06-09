@@ -109,11 +109,7 @@ export default function ClientDashboard({
             icon: <Fingerprint />,
             label: "Chấm công",
           },
-          {
-            key: "/dashboard/department",
-            icon: <Network />,
-            label: "Phòng ban",
-          },
+
           {
             key: "/dashboard/report",
             icon: <ClipboardPlus />,
@@ -123,6 +119,11 @@ export default function ClientDashboard({
       : []),
     ...(isAdmin === "ADMIN"
       ? [
+          {
+            key: "/dashboard/department",
+            icon: <Network />,
+            label: "Phòng ban",
+          },
           {
             key: "/dashboard/users",
             icon: <UserCog />,

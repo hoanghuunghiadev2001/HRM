@@ -10,6 +10,7 @@ import {
   Input,
   Modal,
   Pagination,
+  Select,
   // Select,
   Table,
   TreeSelect,
@@ -82,6 +83,7 @@ export default function EmployeesPage() {
   const localUser = getUserFromLocalStorage();
   const [departments, setDepartments] = useState<Department[]>([]);
   const [modalEditEmployee, setModalEditEmployee] = useState<boolean>(false);
+  const [workStatus, setWorkStatus] = useState<string>();
 
   const [modal, contextHolder] = Modal.useModal();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -129,6 +131,7 @@ export default function EmployeesPage() {
     setLoading(true);
     try {
       const res = await fetchEmployeeSummary({
+        workStatus: workStatus ?? "",
         role: localUser.role,
         department:
           localUser.role === "ADMIN"
@@ -609,6 +612,10 @@ export default function EmployeesPage() {
   };
 
   useEffect(() => {
+    getEmployeeSumary(1, 10);
+  }, [workStatus]);
+
+  useEffect(() => {
     getEmployeeSumary(pageTable, pageSize);
     listDepartment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -633,10 +640,35 @@ export default function EmployeesPage() {
       />
       <ModalLoading isOpen={loading} />
       {contextHolder}
-      <div className="w-full">
+      <div className="w-full flex justify-between items-center">
         <p className="font-bold  text-2xl text-[#4a4a6a]">
-          Danh sách nhân viên:
+          Danh sách nhân viên{" "}
+          {workStatus === "OFFICIAL"
+            ? "chính thức"
+            : workStatus === "PROBATION"
+            ? "học việc"
+            : workStatus === "RESIGNED"
+            ? "nghỉ việc"
+            : "đang làm việc"}{" "}
+          :
         </p>
+
+        <Select
+          showSearch
+          placeholder="Trạng thái"
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+          }
+          allowClear
+          onChange={(e) => {
+            setWorkStatus(e);
+          }}
+          options={[
+            { value: "OFFICIAL", label: "Chính thức" },
+            { value: "PROBATION", label: "Học việc" },
+            { value: "RESIGNED", label: "Nghỉ việc" },
+          ]}
+        />
       </div>
       <div className="w-full  mt-4 ">
         <div className="flex justify-end items-start mb-3 gap-4  w-full flex-wrap">

@@ -5,7 +5,13 @@ import { prisma } from "@/lib/prisma";
 function getLevelFromPositionName(name: string): number {
   const lower = name.toLowerCase();
   if (lower.includes("tổ trưởng")) return 2;
-  if (lower.includes("trưởng phòng")) return 3;
+  if (
+    lower.includes("trưởng phòng") ||
+    lower.includes("TP.") ||
+    lower.includes("Phó") ||
+    lower.includes("PP.")
+  )
+    return 3;
   if (lower.includes("phó tổng giám đốc") || lower.includes("tổng giám đốc"))
     return 5;
   if (lower.includes("giám đốc")) return 4;
