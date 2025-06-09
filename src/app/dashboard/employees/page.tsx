@@ -236,12 +236,6 @@ export default function EmployeesPage() {
             icon: <InfoCircleOutlined />,
             onClick: () => getInforEmployee(record.MSNV), // Giả sử bạn tạo state để lưu nhân viên đang thao tác,
           },
-          {
-            key: "3",
-            label: "Xóa nhân sự",
-            icon: <DeleteOutlined />,
-            onClick: () => handleDeleteEmployee(record.MSNV), // Giả sử bạn tạo state để lưu nhân viên đang thao tác,
-          },
         ];
 
         return (
