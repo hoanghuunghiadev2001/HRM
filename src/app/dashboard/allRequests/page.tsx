@@ -147,7 +147,7 @@ export default function AllRequestPage() {
 
   const [filterName, setFilterName] = useState("");
   const [filterMSNV, setFilterMSNV] = useState("");
-  const [filterDepartment, setDepartment] = useState("");
+  const [filterDepartment, setDepartment] = useState<string>();
 
   const onChangeSelectDepartment = (newValue: string) => {
     setDepartment(newValue);
@@ -412,7 +412,10 @@ export default function AllRequestPage() {
             Lọc:
           </p>
           <div className="flex gap-2 items-center shrink-0">
-            <Form.Item label={<p className="font-bold text-[#242424]">MSNV</p>}>
+            <Form.Item
+              layout="horizontal"
+              label={<p className="font-bold text-[#242424]">MSNV</p>}
+            >
               <Input
                 className="!w-[80px]"
                 placeholder="MSNV"
@@ -428,6 +431,7 @@ export default function AllRequestPage() {
           <div className="flex gap-2 items-center shrink-0">
             {/* <p className="text-sm text-[#4a4a6a] shrink-0">Tên NV:</p> */}
             <Form.Item
+              layout="horizontal"
               label={<p className="font-bold text-[#242424]">Tên NV</p>}
             >
               <Input
@@ -445,6 +449,7 @@ export default function AllRequestPage() {
           {localUser?.role === "ADMIN" && (
             <div className="!flex gap-2 items-center ">
               <Form.Item
+                layout="horizontal"
                 className=""
                 label={
                   <p className="font-bold text-[#242424] hidden sm:block">
@@ -454,7 +459,7 @@ export default function AllRequestPage() {
               >
                 <TreeSelect
                   showSearch
-                  style={{ width: "200px" }}
+                  style={{ minWidth: "150px", maxWidth: "200px" }}
                   value={filterDepartment}
                   styles={{
                     popup: { root: { maxHeight: 400, overflow: "auto" } },

@@ -22,7 +22,7 @@ import dayjs from "dayjs";
 import { fetchAttendances } from "@/lib/api";
 import { AttendanceResponse, Department } from "@/lib/interface";
 import Image from "next/image";
-import { UploadOutlined } from "@ant-design/icons";
+import { DownloadOutlined } from "@ant-design/icons";
 import { TreeSelectProps } from "antd/lib";
 
 interface DataType {
@@ -77,7 +77,7 @@ export default function AttendancePage() {
   const localUser = getUserFromLocalStorage();
   const [filterName, setFilterName] = useState("");
   const [filterMSNV, setFilterMSNV] = useState("");
-  const [filterDepartment, setFilterDepartment] = useState("");
+  const [filterDepartment, setFilterDepartment] = useState<string>();
   const todayVN = getTodayVNDateString();
 
   const [timeStart, setTimeStart] = useState("");
@@ -313,7 +313,7 @@ export default function AttendancePage() {
         <Button
           onClick={handleExportExcel}
           type="primary"
-          icon={<UploadOutlined />}
+          icon={<DownloadOutlined />}
         >
           <p className="hidden sm:block">Xuất file tuần này</p>
         </Button>
@@ -323,6 +323,7 @@ export default function AttendancePage() {
         <div className="grid grid-cols-2 md:flex md:items-center gap-4 mb-4 w-full mt-2 px-4 flex-wrap">
           <div className="flex gap-2 items-center">
             <Form.Item
+              layout="horizontal"
               label={
                 <p className="font-bold text-[#242424] hidden md:block">MSNV</p>
               }
@@ -342,6 +343,7 @@ export default function AttendancePage() {
           <div className="flex gap-2 items-center ">
             {/* <p className="text-sm text-[#4a4a6a] shrink-0">Tên NV:</p> */}
             <Form.Item
+              layout="horizontal"
               label={
                 <p className="font-bold text-[#242424] hidden md:block">
                   Tên NV
@@ -362,7 +364,9 @@ export default function AttendancePage() {
           </div>
           <div className="!flex gap-2 items-center col-span-2">
             <Form.Item
+              layout="horizontal"
               name="range-picker"
+              className="w-full"
               label={
                 <p className="font-bold text-[#242424] hidden md:block">
                   Theo ngày
@@ -371,6 +375,7 @@ export default function AttendancePage() {
             >
               <RangePicker
                 format={"DD/MM/YYYY"}
+                className="w-full"
                 lang="vn"
                 onChange={changeDate}
                 disabledDate={(current) => {
@@ -382,6 +387,7 @@ export default function AttendancePage() {
           {localUser?.role === "ADMIN" ? (
             <div className="!flex gap-2 items-center ">
               <Form.Item
+                layout="horizontal"
                 label={
                   <p className="font-bold text-[#242424] hidden md:block">
                     Bộ phận
@@ -390,7 +396,7 @@ export default function AttendancePage() {
               >
                 <TreeSelect
                   showSearch
-                  style={{ width: "200px" }}
+                  style={{ minWidth: "150px", maxWidth: "200px" }}
                   value={filterDepartment}
                   styles={{
                     popup: { root: { maxHeight: 400, overflow: "auto" } },

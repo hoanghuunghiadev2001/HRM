@@ -241,14 +241,16 @@ export default function EmployeeList() {
       width: 60,
     },
     {
-      title: "Mã nhân viên",
+      title: "MSNV",
       dataIndex: "employeeCode",
       key: "employeeCode",
+      width: "80px",
     },
     {
       title: "Tên",
       dataIndex: "name",
       key: "name",
+      width: "150px",
       render: (_: any, record: Employee) => (
         <p
           className="text-blue-600 cursor-pointer"
@@ -263,12 +265,14 @@ export default function EmployeeList() {
       dataIndex: "department",
       key: "department",
       render: (text: string | null) => text || "-",
+      width: "120px",
     },
     {
       title: "Chức vụ",
       dataIndex: "position",
       key: "position",
       render: (text: string | null) => text || "-",
+      width: "120px",
     },
     {
       title: "Tùy chọn",
@@ -357,7 +361,7 @@ export default function EmployeeList() {
       />
       <ModalLoading isOpen={loading} />
       {contextHolder}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center flex-wrap">
         <Title level={2}>
           Danh sách nhân viên{" "}
           {isActiveFilter ? "đã kích hoạt" : " chưa kích hoạt"}
@@ -376,6 +380,7 @@ export default function EmployeeList() {
         </p>
         <div className="flex gap-2 items-center flex-wrap">
           <Form.Item
+            layout="horizontal"
             label={
               <p className="font-bold text-[#242424] hidden sm:block">MSNV</p>
             }
@@ -396,6 +401,7 @@ export default function EmployeeList() {
         <div className="flex gap-2 items-center ">
           {/* <p className="text-sm text-[#4a4a6a] shrink-0">Tên NV:</p> */}
           <Form.Item
+            layout="horizontal"
             label={
               <p className="font-bold text-[#242424] hidden sm:block">Tên NV</p>
             }
@@ -416,6 +422,7 @@ export default function EmployeeList() {
 
         <div className="!flex gap-2 items-center ">
           <Form.Item
+            layout="horizontal"
             className=""
             label={
               <p className="font-bold text-[#242424] hidden sm:block">
@@ -425,7 +432,7 @@ export default function EmployeeList() {
           >
             <TreeSelect
               showSearch
-              style={{ width: "200px" }}
+              style={{ minWidth: "150px", maxWidth: "200px" }}
               value={filterDepartment}
               styles={{
                 popup: { root: { maxHeight: 400, overflow: "auto" } },
@@ -457,6 +464,7 @@ export default function EmployeeList() {
         rowKey="id"
         pagination={false}
         size="small"
+        scroll={{ y: "100%" }}
       />
       <Pagination
         align="center"

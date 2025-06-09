@@ -709,6 +709,7 @@ export default function EmployeesPage() {
           </p>
           <div className="flex gap-2 items-center flex-wrap">
             <Form.Item
+              layout="horizontal"
               label={
                 <p className="font-bold text-[#242424] hidden sm:block">MSNV</p>
               }
@@ -729,6 +730,7 @@ export default function EmployeesPage() {
           <div className="flex gap-2 items-center ">
             {/* <p className="text-sm text-[#4a4a6a] shrink-0">Tên NV:</p> */}
             <Form.Item
+              layout="horizontal"
               label={
                 <p className="font-bold text-[#242424] hidden sm:block">
                   Tên NV
@@ -752,6 +754,7 @@ export default function EmployeesPage() {
             <div className="!flex gap-2 items-center ">
               <Form.Item
                 className=""
+                layout="horizontal"
                 label={
                   <p className="font-bold text-[#242424] hidden sm:block">
                     Bộ phận
@@ -760,7 +763,7 @@ export default function EmployeesPage() {
               >
                 <TreeSelect
                   showSearch
-                  style={{ width: "200px" }}
+                  style={{ minWidth: "150px", maxWidth: "200px" }}
                   value={filterDepartment}
                   styles={{
                     popup: { root: { maxHeight: 400, overflow: "auto" } },
@@ -777,7 +780,7 @@ export default function EmployeesPage() {
             </div>
           )}
 
-          <div className="flex items-center w-fit">
+          <div className="flex items-start w-fit">
             <Button
               className="w-full sm:w-fit flex  gap-2 items-center h-8 px-4 rounded-lg justify-center !bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer !text-white font-semibold"
               onClick={() => getEmployeeSumary(pageTable, pageSize)}
