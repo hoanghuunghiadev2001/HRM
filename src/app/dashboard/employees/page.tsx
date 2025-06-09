@@ -26,17 +26,12 @@ import ModalLoading from "@/components/modalLoading";
 import { ListCollapse, PlusIcon } from "lucide-react";
 import { createStyles } from "antd-style";
 import ModalAddNewEmployee from "@/components/addNewEmployee";
-import {
-  deleteEmployeeApi,
-  fetchEmployeeByCode,
-  updateEmployee,
-} from "@/lib/api";
+import { fetchEmployeeByCode, updateEmployee } from "@/lib/api";
 import { Department, InfoEmployee } from "@/lib/interface";
 import ModalEditEmployee from "@/components/modalEditEmployee";
 import Image from "next/image";
 import { MenuProps } from "antd/lib";
 import {
-  DeleteOutlined,
   DownloadOutlined,
   InfoCircleOutlined,
   UploadOutlined,
@@ -275,18 +270,18 @@ export default function EmployeesPage() {
     }
   };
 
-  //Xóa nhân sự
-  const handleDeleteEmployee = async (employeeCode: string) => {
-    setLoading(true);
-    const res = await deleteEmployeeApi(employeeCode);
-    if (res.status === 1) {
-      getEmployeeSumary(pageTable, pageSize);
-      countDownDelete();
-      setLoading(false);
-    } else {
-      setLoading(false);
-    }
-  };
+  // //Xóa nhân sự
+  // const handleDeleteEmployee = async (employeeCode: string) => {
+  //   setLoading(true);
+  //   const res = await deleteEmployeeApi(employeeCode);
+  //   if (res.status === 1) {
+  //     getEmployeeSumary(pageTable, pageSize);
+  //     countDownDelete();
+  //     setLoading(false);
+  //   } else {
+  //     setLoading(false);
+  //   }
+  // };
 
   //cập nhật nhân viên
   const handleUpdateEmployee = async (
@@ -338,22 +333,22 @@ export default function EmployeesPage() {
     }, secondsToGo * 1000);
   };
 
-  const countDownDelete = () => {
-    let secondsToGo = 3;
+  // const countDownDelete = () => {
+  //   let secondsToGo = 3;
 
-    const instance = modal.success({
-      title: "Xóa nhân sự thành công",
-    });
+  //   const instance = modal.success({
+  //     title: "Xóa nhân sự thành công",
+  //   });
 
-    const timer = setInterval(() => {
-      secondsToGo -= 1;
-    }, 1000);
+  //   const timer = setInterval(() => {
+  //     secondsToGo -= 1;
+  //   }, 1000);
 
-    setTimeout(() => {
-      clearInterval(timer);
-      instance.destroy();
-    }, secondsToGo * 1000);
-  };
+  //   setTimeout(() => {
+  //     clearInterval(timer);
+  //     instance.destroy();
+  //   }, secondsToGo * 1000);
+  // };
 
   //show modal thành công
   // const countDown = () => {

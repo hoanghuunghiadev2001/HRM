@@ -71,16 +71,16 @@ export async function POST(req: Request) {
     subject: "Thay đổi mật khẩu",
     html: `
    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 8px; background-color: #f9f9f9;">
-      <h2 style="color: #2E86C1;">Thông báo kích hoạt tài khoản</h2>
+      <h2 style="color: #2E86C1;">Thông báo mật khẩu mới</h2>
       <p>Xin chào <strong>${employee.name}</strong>,</p>
-      <p>Tài khoản của bạn đã được <span style="color: green; font-weight: bold;">kích hoạt thành công</span>.</p>
+      <p>Tài khoản của bạn đã được <span style="color: green; font-weight: bold;">đổi mật khẩu mới</span>.</p>
       <p>Mật khẩu mới của bạn là:</p>
       <p style="font-size: 24px; font-weight: bold; color: #D35400; background: #FDEBD0; padding: 10px 15px; border-radius: 5px; display: inline-block;">
         ${newPassword}
       </p>
       <p>Vui lòng đăng nhập và đổi mật khẩu để bảo mật thông tin.</p>
       <hr style="margin: 20px 0;" />
-      <p style="font-size: 12px; color: #888;">Nếu bạn không yêu cầu thay đổi này, vui lòng liên hệ bộ phận hỗ trợ ngay lập tức.</p>
+      <p style="font-size: 12px; color: #888;">Nếu bạn không yêu cầu thay đổi này, vui lòng liên hệ bộ phận IT để hỗ trợ ngay lập tức.</p>
       <p style="font-size: 12px; color: #888;">HRM Team</p>
     </div>
 `,
