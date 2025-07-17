@@ -202,7 +202,6 @@ export default function AllRequestPage() {
   };
 
   const getApiAllRequestsNeed = async () => {
-    console.log(localUser);
 
     setLoading(true);
     try {

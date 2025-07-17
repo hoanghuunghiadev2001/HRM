@@ -138,7 +138,6 @@ export default function KpiDetailModalPage({
 
   const handleUpdate = async (record: any) => {
     // updateKPIEmployee.ts
-    console.log(record);
 
     const res = await fetch(`/api/kpis/${idKPI}/update-employee`, {
       method: "PUT",

@@ -130,7 +130,6 @@ export default function EmployeeList() {
 
   const onChangeSelectDepartment = (newValue: string) => {
     setDepartment(newValue);
-    console.log(newValue);
   };
 
   const onPopupScroll: TreeSelectProps["onPopupScroll"] = (e) => {
@@ -183,7 +182,6 @@ export default function EmployeeList() {
       if (!res.ok) {
         // Tạo một lỗi mới, đính kèm cả message và status từ response
         const error = new Error(data.message || "Cập nhật thất bại");
-        console.log(data.status);
         if (data.status === 2) {
           messError();
         }
@@ -191,7 +189,6 @@ export default function EmployeeList() {
       }
       message.success("Cập nhật thành công");
       fetchEmployees(pageSize, pageTable);
-      console.log(res.status);
     } catch (error: any) {
       const msg =
         error?.message ||

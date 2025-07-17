@@ -93,7 +93,6 @@ export async function PUT(req: NextRequest) {
       role: string;
     };
 
-    console.log(decoded);
 
     const body = await req.json();
     const { leaveRequestId, status, approvedByName } = body;

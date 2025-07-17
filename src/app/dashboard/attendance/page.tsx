@@ -87,7 +87,6 @@ export default function AttendancePage() {
   const [departments, setDepartments] = useState<Department[]>([]);
   const onChangeSelectDepartment = (newValue: string) => {
     setFilterDepartment(newValue);
-    console.log(newValue);
   };
 
   const treeData = departments.map((dept) => ({

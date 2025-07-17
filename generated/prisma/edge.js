@@ -317,7 +317,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\ANG\\Desktop\\NGHIA\\HRM\\hrm-project\\generated\\prisma",
+      "value": "C:\\Users\\HUUNGHIA\\Desktop\\TBD\\HRM\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -343,12 +343,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\ANG\\Desktop\\NGHIA\\HRM\\hrm-project\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\HUUNGHIA\\Desktop\\TBD\\HRM\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.8.1",

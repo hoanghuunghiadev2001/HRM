@@ -103,7 +103,6 @@ export default function EmployeesPage() {
 
   const onChangeSelectDepartment = (newValue: string) => {
     setDepartment(newValue);
-    console.log(newValue);
   };
 
   const onPopupScroll: TreeSelectProps["onPopupScroll"] = (e) => {
