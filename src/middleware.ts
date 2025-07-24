@@ -10,7 +10,9 @@ export function middleware(req: NextRequest) {
     pathname.startsWith("/_next") ||
     pathname.startsWith("/favicon.ico") ||
     pathname.startsWith("/icons")||
-    pathname.startsWith("/storage") // nếu bạn dùng ảnh public
+    pathname.startsWith("/storage")||
+    pathname.startsWith("/api") // nếu bạn dùng ảnh public
+     // nếu bạn dùng ảnh public
      // nếu bạn dùng ảnh public
   ) {
     return NextResponse.next();

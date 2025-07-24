@@ -24,6 +24,7 @@ import { AttendanceResponse, Department } from "@/lib/interface";
 import Image from "next/image";
 import { DownloadOutlined } from "@ant-design/icons";
 import { TreeSelectProps } from "antd/lib";
+import { useAppSelector } from "@/store/hook";
 
 interface DataType {
   key: string;
@@ -70,6 +71,7 @@ function getTodayVNDateString() {
 }
 
 export default function AttendancePage() {
+  const { role } = useAppSelector((state) => state.user);
   const [loading, setLoading] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState(10);
   const [pageTable, setPageTable] = useState(1);
@@ -88,6 +90,8 @@ export default function AttendancePage() {
   const onChangeSelectDepartment = (newValue: string) => {
     setFilterDepartment(newValue);
   };
+
+  
 
   const treeData = departments.map((dept) => ({
     value: dept.id.toString(),
@@ -183,7 +187,7 @@ export default function AttendancePage() {
       msnv: filterMSNV,
       name: filterName,
       department:
-        localUser.role === "ADMIN"
+        role
           ? filterDepartment
           : localUser.workInfo.department,
       fromDate: timeStart,
@@ -251,7 +255,7 @@ export default function AttendancePage() {
   //   {
   //     msnv: filterMSNV,
   //     name: filterName,
-  //     deparment: localUser.role === "ADMIN" ? "" : localUser.deparment,
+  //     deparment: role ? "" : localUser.deparment,
   //     fromDate: timeStart,
   //     toDate: timeEnd,
   //     page: pageTable,
@@ -288,7 +292,7 @@ export default function AttendancePage() {
       method: "POST",
       body: JSON.stringify({
         week: todayVN, // Ngày bất kỳ trong tuần muốn xuất
-        department: localUser.role === "ADMIN" ? "" : localUser.department, // Hoặc bỏ trống nếu xuất toàn bộ
+        department: role ? "" : localUser.department, // Hoặc bỏ trống nếu xuất toàn bộ
       }),
       headers: { "Content-Type": "application/json" },
     });

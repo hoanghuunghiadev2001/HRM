@@ -28,6 +28,8 @@ import {
 import ModalLoading from "@/components/modalLoading";
 import { Department, InfoEmployee } from "@/lib/interface";
 import ModalEditEmployee from "@/components/modalEditEmployee";
+import { setUser } from "@/store/slices/userSlice";
+import { useAppDispatch } from "@/store/hook";
 
 message.config({
   top: 80,
@@ -59,6 +61,7 @@ export default function EmployeeList() {
   const [totalTable, setTotalTable] = useState();
   const [infoEmployee, setInfoEmployee] = useState<InfoEmployee>();
   const [modalEditEmployee, setModalEditEmployee] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
   const messError = () => {
     messageApi.open({
@@ -337,6 +340,8 @@ export default function EmployeeList() {
     setLoading(true);
     const res = await updateEmployee(employeeCode, infoEmployee);
     if (res.status === 1) {
+    dispatch(setUser({ name:infoEmployee.name, avatar: infoEmployee.avatar, employeeCode: infoEmployee.employeeCode, id: infoEmployee.id })) // nên là URL
+
       fetchEmployees(pageSize, pageTable);
       setModalEditEmployee(false);
       setLoading(false);

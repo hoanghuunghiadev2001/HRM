@@ -171,6 +171,50 @@ export interface Employee {
   workInfo: WorkInfo;
 }
 
+export interface FormattedEmployee {
+  id: string;
+  name: string;
+  avatar: string | null;
+  email: string | null;
+  position: string | null;
+}
+
+export interface CreateProposalRequest {
+  name: string
+  title: string
+  description?: string
+  file?: File // Thay đổi từ fileUrl thành file
+  proposerId: number
+  signerIds: number[]
+  approverIds: number[]
+}
+
+// Thêm interface cho form data
+export interface CreateProposalFormData {
+  name: string
+  title: string
+  description?: string
+  proposerId: number
+  signerIds: number[]
+  approverIds: number[]
+}
+
+export interface ProposalResponse {
+  id: number
+  name: string
+  title: string
+  status: string
+  createdAt: string
+}
+
+export interface SignApproveRequest {
+  proposalId: number
+  employeeId: number
+  action: "sign" | "approve"
+  status: "approved" | "rejected"
+}
+
+
 export type ListRequestLeave = RequestLeave[];
 
 export const fetchUser = async () => {

@@ -5,7 +5,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -43,6 +43,29 @@ enum LeaveStatus {
   rejected
 }
 
+enum ProposalStatus {
+  pending_signatures
+  waiting_approval
+  approved
+  rejected
+}
+
+// Model mới để lưu file trực tiếp vào DB
+model File {
+  id        Int      @id @default(autoincrement())
+  filename  String // Tên file gốc
+  mimeType  String // Loại file (application/pdf, etc.)
+  fileSize  Int // Kích thước file (bytes)
+  data      Bytes // Dữ liệu file nhị phân
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  proposals Proposal[]
+
+  @@index([createdAt])
+}
+
 model Employee {
   id           Int       @id @default(autoincrement())
   employeeCode String    @unique
@@ -52,9 +75,11 @@ model Employee {
   password     String
   role         Role      @default(USER)
   avatar       String?
-  isActive     Boolean   @default(false)
-
+  isActive     Boolean   @default(true)
   managerId    Int?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
   manager      Employee?  @relation("EmployeeManager", fields: [managerId], references: [id])
   subordinates Employee[] @relation("EmployeeManager")
 
@@ -68,15 +93,23 @@ model Employee {
 
   LeaveRequest       LeaveRequest[]
   LeaveApprovalSteps LeaveApprovalStepApprover[] @relation("ApproverSteps")
+  Attendance         Attendance[]
+  KPIEmployee        KPIEmployee[]
 
-  Attendance  Attendance[]
-  KPIEmployee KPIEmployee[]
+  proposalsCreated   Proposal[]         @relation("ProposalCreatedBy")
+  proposalsProposed  Proposal[]         @relation("ProposalProposer")
+  proposalSignatures ProposalSigner[]
+  proposalApprovals  ProposalApprover[]
+
+  @@index([employeeCode])
+  @@index([managerId])
 }
 
 model Department {
   id           Int      @id @default(autoincrement())
   name         String   @unique
   abbreviation String   @unique
+  description  String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -91,14 +124,19 @@ model Department {
 }
 
 model Position {
-  id           Int        @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   name         String
-  level        Int        @default(1)
+  level        Int     @default(1)
+  description  String?
   departmentId Int
-  department   Department @relation(fields: [departmentId], references: [id])
-  employees    WorkInfo[]
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+
+  department Department @relation(fields: [departmentId], references: [id])
+  employees  WorkInfo[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([departmentId])
 }
 
 model WorkInfo {
@@ -120,12 +158,15 @@ model WorkInfo {
   contractEndDate DateTime?
 
   employeeId Int      @unique
-  employee   Employee @relation(fields: [employeeId], references: [id], map: "WorkInfo_employee_fkey")
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@index([departmentId])
+  @@index([positionId])
 }
 
 model PersonalInfo {
   id                Int       @id @default(autoincrement())
-  identityNumber    String?
+  identityNumber    String?   @unique
   issueDate         DateTime?
   issuePlace        String?
   hometown          String?
@@ -133,23 +174,23 @@ model PersonalInfo {
   education         String?
   drivingLicense    String?
   toyotaCertificate String?
-  taxCode           String?
-  insuranceNumber   String?
+  taxCode           String?   @unique
+  insuranceNumber   String?   @unique
   insuranceSalary   Int?
 
   employeeId Int      @unique
-  employee   Employee @relation(fields: [employeeId], references: [id], map: "PersonalInfo_employee_fkey")
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 }
 
 model ContactInfo {
   id            Int     @id @default(autoincrement())
-  phoneNumber   String?
+  phoneNumber   String? @unique
   relativePhone String?
   companyPhone  String?
-  email         String?
+  email         String? @unique
 
   employeeId Int      @unique
-  employee   Employee @relation(fields: [employeeId], references: [id], map: "ContactInfo_employee_fkey")
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 }
 
 model OtherInfo {
@@ -157,13 +198,13 @@ model OtherInfo {
   workStatus       WorkStatus @default(OFFICIAL)
   resignedDate     DateTime?
   documentsChecked String?
-  updatedAt        DateTime?
+  updatedAt        DateTime   @updatedAt
   VCB              String?
   MTCV             String?
   PNJ              String?
 
   employeeId Int      @unique
-  employee   Employee @relation(fields: [employeeId], references: [id], map: "OtherInfo_employee_fkey")
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 }
 
 model LeaveRequest {
@@ -178,10 +219,14 @@ model LeaveRequest {
   approvedBy String?
   approvedAt DateTime?
   createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
 
-  employee Employee @relation(fields: [employeeId], references: [id])
-
+  employee      Employee            @relation(fields: [employeeId], references: [id])
   approvalSteps LeaveApprovalStep[]
+
+  @@index([employeeId])
+  @@index([status])
+  @@index([startDate, endDate])
 }
 
 model LeaveApprovalStep {
@@ -191,7 +236,7 @@ model LeaveApprovalStep {
   status         LeaveStatus @default(pending)
   approvedAt     DateTime?
 
-  leaveRequest LeaveRequest                @relation(fields: [leaveRequestId], references: [id])
+  leaveRequest LeaveRequest                @relation(fields: [leaveRequestId], references: [id], onDelete: Cascade)
   approvers    LeaveApprovalStepApprover[]
 
   @@unique([leaveRequestId, level])
@@ -204,7 +249,7 @@ model LeaveApprovalStepApprover {
   status              LeaveStatus @default(pending)
   approvedAt          DateTime?
 
-  leaveApprovalStep LeaveApprovalStep @relation(fields: [leaveApprovalStepId], references: [id])
+  leaveApprovalStep LeaveApprovalStep @relation(fields: [leaveApprovalStepId], references: [id], onDelete: Cascade)
   approver          Employee          @relation("ApproverSteps", fields: [approverId], references: [id])
 
   @@unique([leaveApprovalStepId, approverId])
@@ -213,19 +258,23 @@ model LeaveApprovalStepApprover {
 model Attendance {
   id           Int       @id @default(autoincrement())
   employeeId   Int
-  date         DateTime
+  date         DateTime  @db.Date
   checkInTime  DateTime?
   checkOutTime DateTime?
+  workingHours Float?
 
   employee Employee @relation(fields: [employeeId], references: [id])
 
-  @@index([employeeId, date])
+  @@unique([employeeId, date])
+  @@index([date])
 }
 
 model KPI {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String   @unique
   period    String
+  startDate DateTime
+  endDate   DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -233,33 +282,82 @@ model KPI {
 }
 
 model KPIEmployee {
-  id         Int @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   kpiId      Int
   employeeId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  kpi      KPI      @relation(fields: [kpiId], references: [id], onDelete: Cascade)
-  employee Employee @relation(fields: [employeeId], references: [id])
-
-  entries KPIEntry[]
+  kpi      KPI        @relation(fields: [kpiId], references: [id], onDelete: Cascade)
+  employee Employee   @relation(fields: [employeeId], references: [id])
+  entries  KPIEntry[]
 
   @@unique([kpiId, employeeId])
 }
 
 model KPIEntry {
-  id            Int     @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   kpiEmployeeId Int
   name          String
   targetValue   Float
-  achievedValue Float   @default(0)
-  isAchieved    Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  achievedValue Float    @default(0)
+  isAchieved    Boolean  @default(false)
+  weight        Float    @default(1.0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   kpiEmployee KPIEmployee @relation(fields: [kpiEmployeeId], references: [id], onDelete: Cascade)
 
   @@unique([kpiEmployeeId, name])
+}
+
+model Proposal {
+  id          Int            @id @default(autoincrement())
+  name        String
+  title       String
+  description String?
+  fileId      Int? // Liên kết với model File mới
+  status      ProposalStatus @default(pending_signatures)
+  proposerId  Int
+  createdById Int
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  proposer  Employee @relation("ProposalProposer", fields: [proposerId], references: [id])
+  createdBy Employee @relation("ProposalCreatedBy", fields: [createdById], references: [id])
+  file      File?    @relation(fields: [fileId], references: [id]) // Relation với File
+
+  signers   ProposalSigner[]
+  approvers ProposalApprover[]
+
+  @@index([status])
+  @@index([proposerId])
+  @@index([createdById])
+  @@index([fileId])
+}
+
+model ProposalSigner {
+  id         Int         @id @default(autoincrement())
+  proposalId Int
+  signerId   Int
+  status     LeaveStatus @default(pending)
+  signedAt   DateTime?
+
+  proposal Proposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  signer   Employee @relation(fields: [signerId], references: [id])
+
+  @@unique([proposalId, signerId])
+}
+
+model ProposalApprover {
+  id         Int         @id @default(autoincrement())
+  proposalId Int
+  approverId Int
+  status     LeaveStatus @default(pending)
+  approvedAt DateTime?
+
+  proposal Proposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  approver Employee @relation(fields: [approverId], references: [id])
+
+  @@unique([proposalId, approverId])
 }

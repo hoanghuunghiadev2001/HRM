@@ -10,6 +10,8 @@ import { Button, Checkbox, CheckboxProps, Input, Tooltip } from "antd";
 import ModalLoading from "@/components/modalLoading";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { setUser, setUserRole } from "@/store/slices/userSlice";
+import { useAppDispatch } from "@/store/hook";
 
 export default function LoginClient() {
   const [employeeCode, setEmployeeCode] = useState("");
@@ -18,6 +20,7 @@ export default function LoginClient() {
   const [showLoading, setShowLoading] = useState(false);
   const [err, setErr] = useState("");
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const handleSubmit = async () => {
     if (!employeeCode || !password) {
@@ -38,6 +41,8 @@ export default function LoginClient() {
 
     if (res.ok) {
       localStorage.setItem("token", data.token);
+  dispatch(setUser({ name: data.name, avatar: data.avt, id: data.id, employeeCode: data.employeeCode }));
+  dispatch(setUserRole(data.role)) // nên là URL
       router.push("/dashboard"); // thay vì redirect từ server
     } else {
       setErr(data.message || "Đăng nhập thất bại");

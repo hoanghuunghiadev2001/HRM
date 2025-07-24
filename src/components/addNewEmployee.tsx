@@ -86,10 +86,7 @@ const ModalAddNewEmployee = ({
         avatar: imageUrl ?? null,
 
         workInfo: {
-          departmentId:
-            localUser?.role === "ADMIN"
-              ? formData.department
-              : localUser.department,
+          departmentId:formData.department,
           positionId: formData.position,
           specialization: formData.specialization,
           joinedTBD: formData.joinedTBD,
@@ -277,7 +274,7 @@ const ModalAddNewEmployee = ({
               labelAlign="left"
               labelWrap
               validateMessages={validateMessages}
-              //   style={{ maxWidth: 600 }}
+            //   style={{ maxWidth: 600 }}
             >
               <div className="flex justify-center">
                 <Form.Item
@@ -415,21 +412,21 @@ const ModalAddNewEmployee = ({
                 <Form.Item
                   name="phoneNumber"
                   label="Số DT"
-                  //   rules={[{ required: true }]}
+                //   rules={[{ required: true }]}
                 >
                   <Input type="number" />
                 </Form.Item>
                 <Form.Item
                   name="relativePhone"
                   label="SĐT người thân"
-                  //   rules={[{ required: true }]}
+                //   rules={[{ required: true }]}
                 >
                   <Input type="number" />
                 </Form.Item>
                 <Form.Item
                   name="companyPhone"
                   label="SĐT Cty"
-                  //   rules={[{ required: true }]}
+                //   rules={[{ required: true }]}
                 >
                   <Input type="number" />
                 </Form.Item>
@@ -516,7 +513,7 @@ const ModalAddNewEmployee = ({
                   name="seniority"
                   label="Thâm niên"
                   valuePropName={seniorityText}
-                  //   rules={[{ required: true }]}
+                //   rules={[{ required: true }]}
                 >
                   <Input
                     disabled
@@ -527,7 +524,7 @@ const ModalAddNewEmployee = ({
                 <Form.Item
                   name="contractNumber"
                   label="Số HĐ"
-                  //   rules={[{ required: true }]}
+                //   rules={[{ required: true }]}
                 >
                   <Input />
                 </Form.Item>

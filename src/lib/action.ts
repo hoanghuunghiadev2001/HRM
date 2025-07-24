@@ -379,7 +379,6 @@ export async function importEmployees(formData: FormData) {
               : WorkStatus.RESIGNED,
           resignedDate: parseExcelDate(row["Ngày nghỉ"]),
           documentsChecked: row["Check hồ sơ"]?.toString(),
-          updatedAt: parseExcelDate(row["Thời gian update"]),
           VCB: row["VCB"]?.toString(),
           MTCV: row["Bảng MTCV"]?.toString(),
           PNJ: row["PNJ"]?.toString(),

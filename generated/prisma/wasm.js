@@ -120,6 +120,16 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.FileScalarFieldEnum = {
+  id: 'id',
+  filename: 'filename',
+  mimeType: 'mimeType',
+  fileSize: 'fileSize',
+  data: 'data',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.EmployeeScalarFieldEnum = {
   id: 'id',
   employeeCode: 'employeeCode',
@@ -130,13 +140,16 @@ exports.Prisma.EmployeeScalarFieldEnum = {
   role: 'role',
   avatar: 'avatar',
   isActive: 'isActive',
-  managerId: 'managerId'
+  managerId: 'managerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.DepartmentScalarFieldEnum = {
   id: 'id',
   name: 'name',
   abbreviation: 'abbreviation',
+  description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   headId: 'headId',
@@ -147,6 +160,7 @@ exports.Prisma.PositionScalarFieldEnum = {
   id: 'id',
   name: 'name',
   level: 'level',
+  description: 'description',
   departmentId: 'departmentId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -216,7 +230,8 @@ exports.Prisma.LeaveRequestScalarFieldEnum = {
   status: 'status',
   approvedBy: 'approvedBy',
   approvedAt: 'approvedAt',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.LeaveApprovalStepScalarFieldEnum = {
@@ -240,13 +255,16 @@ exports.Prisma.AttendanceScalarFieldEnum = {
   employeeId: 'employeeId',
   date: 'date',
   checkInTime: 'checkInTime',
-  checkOutTime: 'checkOutTime'
+  checkOutTime: 'checkOutTime',
+  workingHours: 'workingHours'
 };
 
 exports.Prisma.KPIScalarFieldEnum = {
   id: 'id',
   name: 'name',
   period: 'period',
+  startDate: 'startDate',
+  endDate: 'endDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -266,8 +284,38 @@ exports.Prisma.KPIEntryScalarFieldEnum = {
   targetValue: 'targetValue',
   achievedValue: 'achievedValue',
   isAchieved: 'isAchieved',
+  weight: 'weight',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProposalScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  title: 'title',
+  description: 'description',
+  fileId: 'fileId',
+  status: 'status',
+  proposerId: 'proposerId',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProposalSignerScalarFieldEnum = {
+  id: 'id',
+  proposalId: 'proposalId',
+  signerId: 'signerId',
+  status: 'status',
+  signedAt: 'signedAt'
+};
+
+exports.Prisma.ProposalApproverScalarFieldEnum = {
+  id: 'id',
+  proposalId: 'proposalId',
+  approverId: 'approverId',
+  status: 'status',
+  approvedAt: 'approvedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -275,14 +323,85 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
+exports.Prisma.FileOrderByRelevanceFieldEnum = {
+  filename: 'filename',
+  mimeType: 'mimeType'
 };
 
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.EmployeeOrderByRelevanceFieldEnum = {
+  employeeCode: 'employeeCode',
+  name: 'name',
+  password: 'password',
+  avatar: 'avatar'
+};
+
+exports.Prisma.DepartmentOrderByRelevanceFieldEnum = {
+  name: 'name',
+  abbreviation: 'abbreviation',
+  description: 'description'
+};
+
+exports.Prisma.PositionOrderByRelevanceFieldEnum = {
+  name: 'name',
+  description: 'description'
+};
+
+exports.Prisma.WorkInfoOrderByRelevanceFieldEnum = {
+  specialization: 'specialization',
+  seniority: 'seniority',
+  contractNumber: 'contractNumber',
+  contractType: 'contractType'
+};
+
+exports.Prisma.PersonalInfoOrderByRelevanceFieldEnum = {
+  identityNumber: 'identityNumber',
+  issuePlace: 'issuePlace',
+  hometown: 'hometown',
+  idAddress: 'idAddress',
+  education: 'education',
+  drivingLicense: 'drivingLicense',
+  toyotaCertificate: 'toyotaCertificate',
+  taxCode: 'taxCode',
+  insuranceNumber: 'insuranceNumber'
+};
+
+exports.Prisma.ContactInfoOrderByRelevanceFieldEnum = {
+  phoneNumber: 'phoneNumber',
+  relativePhone: 'relativePhone',
+  companyPhone: 'companyPhone',
+  email: 'email'
+};
+
+exports.Prisma.OtherInfoOrderByRelevanceFieldEnum = {
+  documentsChecked: 'documentsChecked',
+  VCB: 'VCB',
+  MTCV: 'MTCV',
+  PNJ: 'PNJ'
+};
+
+exports.Prisma.LeaveRequestOrderByRelevanceFieldEnum = {
+  reason: 'reason',
+  approvedBy: 'approvedBy'
+};
+
+exports.Prisma.KPIOrderByRelevanceFieldEnum = {
+  name: 'name',
+  period: 'period'
+};
+
+exports.Prisma.KPIEntryOrderByRelevanceFieldEnum = {
+  name: 'name'
+};
+
+exports.Prisma.ProposalOrderByRelevanceFieldEnum = {
+  name: 'name',
+  title: 'title',
+  description: 'description'
 };
 exports.Sex = exports.$Enums.Sex = {
   MALE: 'MALE',
@@ -318,7 +437,15 @@ exports.LeaveStatus = exports.$Enums.LeaveStatus = {
   rejected: 'rejected'
 };
 
+exports.ProposalStatus = exports.$Enums.ProposalStatus = {
+  pending_signatures: 'pending_signatures',
+  waiting_approval: 'waiting_approval',
+  approved: 'approved',
+  rejected: 'rejected'
+};
+
 exports.Prisma.ModelName = {
+  File: 'File',
   Employee: 'Employee',
   Department: 'Department',
   Position: 'Position',
@@ -332,7 +459,10 @@ exports.Prisma.ModelName = {
   Attendance: 'Attendance',
   KPI: 'KPI',
   KPIEmployee: 'KPIEmployee',
-  KPIEntry: 'KPIEntry'
+  KPIEntry: 'KPIEntry',
+  Proposal: 'Proposal',
+  ProposalSigner: 'ProposalSigner',
+  ProposalApprover: 'ProposalApprover'
 };
 
 /**

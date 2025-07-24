@@ -17,6 +17,8 @@ import { formatCurrency } from "@/components/function";
 import ModalLoading from "@/components/modalLoading";
 import Image from "next/image";
 import InfoPersonal from "@/components/infoPersonal";
+import { setUser, setUserAvatar } from "@/store/slices/userSlice";
+import { useAppDispatch } from "@/store/hook";
 
 const Profile = () => {
   const [loading, setLoading] = useState(false);
@@ -24,6 +26,7 @@ const Profile = () => {
   const [dataProfile, setDataProfile] = useState<ProfileInfo>();
   const [modal, contextHolder] = Modal.useModal();
   const [form] = Form.useForm();
+  const dispatch = useAppDispatch();
 
   // Optimized fetch functions using Promise.all
   const fetchAllData = async () => {
@@ -77,13 +80,13 @@ const Profile = () => {
     if (dataProfile) {
       // Set giá trị ban đầu cho form
       form.setFieldsValue({
-        phoneNumber: dataProfile.contactInfo.phoneNumber,
-        relativePhone: dataProfile.contactInfo.relativePhone,
-        companyPhone: dataProfile.contactInfo.companyPhone,
-        email: dataProfile.contactInfo.email,
+        phoneNumber: dataProfile?.contactInfo?.phoneNumber ?? '',
+        relativePhone: dataProfile?.contactInfo?.relativePhone ?? '',
+        companyPhone: dataProfile?.contactInfo?.companyPhone ?? '',
+        email: dataProfile?.contactInfo?.email ?? '',
       });
 
-      setImageUrl(dataProfile.avatar);
+      setImageUrl(dataProfile?.avatar);
     }
   }, [dataProfile, form]);
 
@@ -140,6 +143,8 @@ const Profile = () => {
       });
 
       if (req.ok) {
+            dispatch(setUserAvatar(avt )) // nên là URL
+
         // Thực hiện các operations sau update song song
         await Promise.all([
           fetchProfile(), // Refresh profile data
@@ -269,48 +274,48 @@ const Profile = () => {
           <InfoPersonal titleValue="Mã NV" value={dataProfile?.employeeCode} />
           <InfoPersonal
             titleValue="Bộ phận"
-            value={dataProfile?.workInfo.department?.name}
+            value={dataProfile?.workInfo?.department?.name ?? 'Chưa cập nhật'}
           />
           <InfoPersonal
             titleValue="Chức vụ"
-            value={dataProfile?.workInfo.position?.name}
+            value={dataProfile?.workInfo?.position?.name}
           />
           <InfoPersonal
             titleValue="Số CCCD"
-            value={dataProfile?.personalInfo.identityNumber}
+            value={dataProfile?.personalInfo?.identityNumber}
           />
           <InfoPersonal
             titleValue="Ngày cấp"
-            value={dataProfile?.personalInfo.issueDate}
+            value={dataProfile?.personalInfo?.issueDate}
           />
           <InfoPersonal
             titleValue="Nơi cấp"
-            value={dataProfile?.personalInfo.issuePlace}
+            value={dataProfile?.personalInfo?.issuePlace}
           />
           <InfoPersonal
             titleValue="Số điện thoại"
-            value={dataProfile?.contactInfo.phoneNumber}
+            value={dataProfile?.contactInfo?.phoneNumber}
           />
           <InfoPersonal
             titleValue="Nguyên quán"
-            value={dataProfile?.personalInfo.hometown}
+            value={dataProfile?.personalInfo?.hometown}
           />
           <InfoPersonal
             titleValue="Địa chỉ"
-            value={dataProfile?.personalInfo.idAddress}
+            value={dataProfile?.personalInfo?.idAddress}
           />
           <InfoPersonal
             titleValue="Mã số thuế"
-            value={dataProfile?.personalInfo.taxCode}
+            value={dataProfile?.personalInfo?.taxCode}
           />
           <InfoPersonal
             titleValue="Số sổ BH"
-            value={dataProfile?.personalInfo.insuranceNumber}
+            value={dataProfile?.personalInfo?.insuranceNumber}
           />
           <InfoPersonal
             titleValue="Lương đóng BH"
             value={formatCurrency(
-              dataProfile?.personalInfo.insuranceSalary ?? 0
+              dataProfile?.personalInfo?.insuranceSalary ?? 0
             )}
           />
         </div>
@@ -346,12 +351,12 @@ const Profile = () => {
           </Form.Item>
           <Form.Item
             name="companyPhone"
+            
             label={
               <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
                 SĐT công ty
               </p>
             }
-            vertical={true}
           >
             <Input maxLength={14} inputMode="numeric" type="number" />
           </Form.Item>
@@ -375,47 +380,47 @@ const Profile = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4 pr-4 gap-4 border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
           <InfoPersonal
             titleValue="Bộ phận"
-            value={dataProfile?.workInfo.department?.name}
+            value={dataProfile?.workInfo?.department?.name}
           />
           <InfoPersonal
             titleValue="Chức vụ"
-            value={dataProfile?.workInfo.position?.name}
+            value={dataProfile?.workInfo?.position?.name}
           />
           <InfoPersonal
             titleValue="Ngành"
-            value={dataProfile?.workInfo.specialization}
+            value={dataProfile?.workInfo?.specialization}
           />
           <InfoPersonal
             titleValue="Ngày vào TBD"
-            value={dataProfile?.workInfo.joinedTBD}
+            value={dataProfile?.workInfo?.joinedTBD}
           />
           <InfoPersonal
             titleValue="Ngày vào TeSCC"
-            value={dataProfile?.workInfo.joinedTeSCC}
+            value={dataProfile?.workInfo?.joinedTeSCC}
           />
           <InfoPersonal
             titleValue="Ngày tính thâm niên"
-            value={dataProfile?.workInfo.seniorityStart}
+            value={dataProfile?.workInfo?.seniorityStart}
           />
           <InfoPersonal
             titleValue="Thâm niên"
-            value={dataProfile?.workInfo.seniority}
+            value={dataProfile?.workInfo?.seniority}
           />
           <InfoPersonal
             titleValue="Số hợp đồng"
-            value={dataProfile?.workInfo.contractNumber}
+            value={dataProfile?.workInfo?.contractNumber}
           />
           <InfoPersonal
             titleValue="Ngày ký HĐ"
-            value={dataProfile?.workInfo.contractDate}
+            value={dataProfile?.workInfo?.contractDate}
           />
           <InfoPersonal
             titleValue="Loại hợp đồng"
-            value={dataProfile?.workInfo.contractType}
+            value={dataProfile?.workInfo?.contractType}
           />
           <InfoPersonal
             titleValue="Ngày hết hạn HĐ"
-            value={dataProfile?.workInfo.contractEndDate}
+            value={dataProfile?.workInfo?.contractEndDate}
           />
         </div>
       </div>
@@ -426,15 +431,15 @@ const Profile = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4 pr-4 gap-4 border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
           <InfoPersonal
             titleValue="Trình độ học vấn"
-            value={dataProfile?.personalInfo.education}
+            value={dataProfile?.personalInfo?.education}
           />
           <InfoPersonal
             titleValue="Bằng lái xe"
-            value={dataProfile?.personalInfo.drivingLicense}
+            value={dataProfile?.personalInfo?.drivingLicense}
           />
           <InfoPersonal
             titleValue="Chứng chỉ Toyota"
-            value={dataProfile?.personalInfo.toyotaCertificate}
+            value={dataProfile?.personalInfo?.toyotaCertificate}
           />
         </div>
       </div>
@@ -445,16 +450,16 @@ const Profile = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4 pr-4 gap-4 border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
           <InfoPersonal
             titleValue="Mã số thuế"
-            value={dataProfile?.personalInfo.taxCode}
+            value={dataProfile?.personalInfo?.taxCode}
           />
           <InfoPersonal
             titleValue="Số sổ BHXH"
-            value={dataProfile?.personalInfo.insuranceNumber}
+            value={dataProfile?.personalInfo?.insuranceNumber}
           />
           <InfoPersonal
             titleValue="Lương đóng BH"
             value={formatCurrency(
-              dataProfile?.personalInfo.insuranceSalary ?? 0
+              dataProfile?.personalInfo?.insuranceSalary ?? 0
             )}
           />
         </div>
@@ -467,40 +472,40 @@ const Profile = () => {
           <InfoPersonal
             titleValue="Trạng thái làm việc"
             value={
-              dataProfile?.otherInfo.workStatus === "OFFICIAL"
+              dataProfile?.otherInfo?.workStatus === "OFFICIAL"
                 ? "Chính thức"
-                : dataProfile?.otherInfo.workStatus === "PROBATION"
+                : dataProfile?.otherInfo?.workStatus === "PROBATION"
                 ? "Thử việc"
                 : "Nghỉ việc"
             }
           />
           <InfoPersonal
             titleValue="Ngày nghỉ"
-            value={dataProfile?.otherInfo.resignedDate ?? ""}
+            value={dataProfile?.otherInfo?.resignedDate ?? ""}
           />
           <InfoPersonal
             titleValue="Đã kiểm tra hồ sơ"
             value={
-              dataProfile?.otherInfo.documentsChecked
+              dataProfile?.otherInfo?.documentsChecked
                 ? "Đã kiểm tra"
                 : "Chưa kiểm tra"
             }
           />
           <InfoPersonal
             titleValue="Ngân hàng VCB"
-            value={dataProfile?.otherInfo.VCB}
+            value={dataProfile?.otherInfo?.VCB}
           />
           <InfoPersonal
             titleValue="MTCV"
             value={
-              dataProfile?.otherInfo.MTCV
+              dataProfile?.otherInfo?.MTCV
                 ? "Có bảng MTCV"
                 : "Không có bảng MTCV"
             }
           />
           <InfoPersonal
             titleValue="PNJ"
-            value={dataProfile?.otherInfo.PNJ ? "R" : ""}
+            value={dataProfile?.otherInfo?.PNJ ? "R" : ""}
           />
         </div>
       </div>

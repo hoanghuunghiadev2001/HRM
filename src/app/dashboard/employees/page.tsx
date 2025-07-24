@@ -36,6 +36,8 @@ import {
   InfoCircleOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { setUser } from "@/store/slices/userSlice";
 
 interface DataType {
   key: string;
@@ -79,6 +81,8 @@ export default function EmployeesPage() {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [modalEditEmployee, setModalEditEmployee] = useState<boolean>(false);
   const [workStatus, setWorkStatus] = useState<string>();
+  const dispatch = useAppDispatch();
+  const { role } = useAppSelector((state) => state.user);
 
   const [modal, contextHolder] = Modal.useModal();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -126,9 +130,9 @@ export default function EmployeesPage() {
     try {
       const res = await fetchEmployeeSummary({
         workStatus: workStatus ?? "",
-        role: localUser.role,
+        role: role,
         department:
-          localUser.role === "ADMIN"
+          role === "ADMIN"
             ? filterDepartment
             : localUser.workInfo.department,
         name: filterName,
@@ -290,6 +294,7 @@ export default function EmployeesPage() {
     setLoading(true);
     const res = await updateEmployee(employeeCode, infoEmployee);
     if (res.status === 1) {
+      dispatch(setUser({ name: infoEmployee.name, avatar: infoEmployee.avatar, employeeCode: infoEmployee.employeeCode, id: infoEmployee.id })) // nên là URL
       getEmployeeSumary(pageTable, pageSize);
       setModalEditEmployee(false);
       setLoading(false);
@@ -618,12 +623,13 @@ export default function EmployeesPage() {
         employeeInfo={infoEmployee}
         onClose={() => {
           setModalEditEmployee(false);
+          getEmployeeSumary(pageTable, pageSize);
         }}
         open={modalEditEmployee}
       />
       <ModalAddNewEmployee
         department={departments ?? []}
-        onClose={() => setModalAddEmployee(false)}
+        onClose={() => { setModalAddEmployee(false); getEmployeeSumary(pageTable, pageSize); }}
         open={modalAddEmployee}
       />
       <ModalLoading isOpen={loading} />
@@ -634,10 +640,10 @@ export default function EmployeesPage() {
           {workStatus === "OFFICIAL"
             ? "chính thức"
             : workStatus === "PROBATION"
-            ? "học việc"
-            : workStatus === "RESIGNED"
-            ? "nghỉ việc"
-            : "đang làm việc"}{" "}
+              ? "học việc"
+              : workStatus === "RESIGNED"
+                ? "nghỉ việc"
+                : "đang làm việc"}{" "}
           :
         </p>
 

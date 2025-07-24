@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient, Prisma } from "../../../../../generated/prisma";
+import { prisma } from "@/lib/prisma";
+import { Prisma } from "../../../../../generated/prisma";
 
-const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
   try {
@@ -42,7 +42,6 @@ export async function GET(req: NextRequest) {
           ? {
               name: {
                 contains: name,
-                mode: "insensitive",
               },
             }
           : {},
@@ -50,7 +49,6 @@ export async function GET(req: NextRequest) {
           ? {
               employeeCode: {
                 contains: employeeCode,
-                mode: "insensitive",
               },
             }
           : {},

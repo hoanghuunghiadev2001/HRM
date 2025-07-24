@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
       path: "/",
     });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, name: employee.name, avt: employee.avatar, role: employee.role, id: employee.id, employeeCode: employee.employeeCode });
   } catch (err) {
     console.error("Login error:", err);
     return NextResponse.json(

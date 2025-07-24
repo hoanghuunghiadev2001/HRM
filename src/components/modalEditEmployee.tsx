@@ -80,10 +80,7 @@ const ModalEditEmployee = ({
       avatar: imageUrl ?? null,
 
       workInfo: {
-        department:
-          localUser?.role === "MANAGER"
-            ? localUser.department
-            : formData.department,
+        department: formData.department,
         position: formData.position,
         specialization: formData.specialization,
         joinedTBD: formData.joinedTBD,
@@ -337,15 +334,15 @@ const ModalEditEmployee = ({
       setImageUrl(employeeInfo.avatar);
 
       const date = dayjs
-        .utc(employeeInfo.workInfo.joinedTBD)
+        .utc(employeeInfo.workInfo?.joinedTBD)
         .tz("Asia/Ho_Chi_Minh");
       console.log(date.format("DD/MM/YYYY"));
 
       form.setFieldsValue(transformEmployeeDataToFormData(employeeInfo));
-      if (employeeInfo.workInfo.department?.id) {
-        setSelectedDepartmentId(employeeInfo.workInfo.department?.id);
+      if (employeeInfo.workInfo?.department?.id) {
+        setSelectedDepartmentId(employeeInfo.workInfo?.department?.id);
       }
-      console.log(employeeInfo.workInfo.department?.id ?? 0);
+      console.log(employeeInfo.workInfo?.department?.id ?? 0);
     }
     setDepartments(department);
 

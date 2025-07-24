@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -6,17 +7,18 @@ import {
   FileStack,
   FileText,
   Fingerprint,
-  LogOut,
   Network,
   UserCog,
   UserRoundPen,
   UsersRound,
 } from "lucide-react";
 import {
+  EllipsisOutlined,
+  LeftCircleFilled,
   LockOutlined,
   LogoutOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
+  RightCircleFilled,
+
 } from "@ant-design/icons";
 import { Button, Dropdown, Form, Menu, Modal } from "antd";
 import type { MenuProps } from "antd";
@@ -30,12 +32,15 @@ import { interfaceChangePassword } from "@/lib/interface";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsMobile } from "@/store/slices/responsiveSlice";
 import { RootState } from "@/store";
+import { useAppSelector } from "@/store/hook";
 
-interface User {
-  name: string;
-  avatar?: string;
-  employeeCode: string;
-}
+// interface User {
+//   name: string;
+//   avatar?: string;
+//   employeeCode: string;
+// }
+
+
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -49,13 +54,22 @@ export default function ClientDashboard({
   const router = useRouter();
   const pathname = usePathname();
 
-  const [user, setUser] = useState<User | null>(null);
+  // const [user, setUser] = useState<User | null>(null);
   const [collapsed, setCollapsed] = useState(false); // Trạng thái thu gọn menu
   const [loading, setLoading] = useState(false);
   const [modalChangePass, setModalChangePass] = useState(false);
   const [form] = Form.useForm();
   const [modal, contextHolder] = Modal.useModal();
   const isMobile = useSelector((state: RootState) => state.responsive.isMobile);
+  const [avt, setAvt] = useState("/storage/avt-default.webp");
+  const { name, avatar } = useAppSelector((state) => state.user);
+
+
+
+  useEffect(() => {
+    setAvt(avatar ? avatar : '/storage/logo-toyota.webp')
+  }, [avatar])
+
 
   // Hàm toggle menu thu gọn
   const toggleCollapsed = () => setCollapsed(!collapsed);
@@ -92,44 +106,64 @@ export default function ClientDashboard({
   const Menus: MenuItem[] = [
     { key: "/dashboard", icon: <UserRoundPen />, label: "Hồ sơ" },
     { key: "/dashboard/request", icon: <FileText />, label: "Phiếu yêu cầu" },
+    {
+          key: "/dashboard/proposal",
+          icon: <FileStack />,
+          label: "Đề xuất",
+          children: [
+            {
+              key: "/dashboard/proposal",
+                   icon: <FileStack  className="ml-4"/>,
+              label: "Tạo đề xuất",
+            },
+            {
+              key: "/dashboard/proposal/my-proposals",
+                   icon: <FileStack className="ml-4"/>,
+              label: "Quản lý đề xuất",
+              
+            },
+             
+          ],
+        },
+
     ...(isAdmin === "ADMIN" || isAdmin === "MANAGER"
       ? [
-          {
-            key: "/dashboard/allRequests",
-            icon: <FileStack />,
-            label: "DS yêu cầu",
-          },
-          {
-            key: "/dashboard/employees",
-            icon: <UsersRound />,
-            label: "Nhân sự",
-          },
-          {
-            key: "/dashboard/attendance",
-            icon: <Fingerprint />,
-            label: "Chấm công",
-          },
+        {
+          key: "/dashboard/allRequests",
+          icon: <FileStack />,
+          label: "DS yêu cầu",
+        },
+        {
+          key: "/dashboard/employees",
+          icon: <UsersRound />,
+          label: "Nhân sự",
+        },
+        {
+          key: "/dashboard/attendance",
+          icon: <Fingerprint />,
+          label: "Chấm công",
+        },
 
-          {
-            key: "/dashboard/report",
-            icon: <ClipboardPlus />,
-            label: "Báo cáo",
-          },
-        ]
+        {
+          key: "/dashboard/report",
+          icon: <ClipboardPlus />,
+          label: "Báo cáo",
+        },
+      ]
       : []),
     ...(isAdmin === "ADMIN"
       ? [
-          {
-            key: "/dashboard/department",
-            icon: <Network />,
-            label: "Phòng ban",
-          },
-          {
-            key: "/dashboard/users",
-            icon: <UserCog />,
-            label: "Người dùng",
-          },
-        ]
+        {
+          key: "/dashboard/department",
+          icon: <Network />,
+          label: "Phòng ban",
+        },
+        {
+          key: "/dashboard/users",
+          icon: <UserCog />,
+          label: "Người dùng",
+        },
+      ]
       : []),
   ];
 
@@ -163,24 +197,24 @@ export default function ClientDashboard({
   };
 
   // Fetch user info
-  const fetchUser = async () => {
-    const controller = new AbortController();
-    try {
-      const res = await fetch("/api/me", { signal: controller.signal });
-      if (res.ok) {
-        const data = await res.json();
-        localStorage.setItem("user", JSON.stringify(data));
-        setUser(data);
-      } else {
-        console.error("Không lấy được dữ liệu user");
-        window.location.href = "/login";
-      }
-    } catch (error) {
-      console.error("Lỗi khi gọi API /api/me:", error);
-      window.location.href = "/login";
-    }
-    return () => controller.abort();
-  };
+  // const fetchUser = async () => {
+  //   const controller = new AbortController();
+  //   try {
+  //     const res = await fetch("/api/me", { signal: controller.signal });
+  //     if (res.ok) {
+  //       const data = await res.json();
+  //       localStorage.setItem("user", JSON.stringify(data));
+  //       setUser(data);
+  //     } else {
+  //       console.error("Không lấy được dữ liệu user");
+  //       window.location.href = "/login";
+  //     }
+  //   } catch (error) {
+  //     console.error("Lỗi khi gọi API /api/me:", error);
+  //     window.location.href = "/login";
+  //   }
+  //   return () => controller.abort();
+  // };
 
   // Xử lý resize màn hình để nhận biết mobile
   const dispatch = useDispatch();
@@ -199,7 +233,7 @@ export default function ClientDashboard({
 
   useEffect(() => {
     setLoading(false);
-    fetchUser();
+    // fetchUser();
   }, [pathname]);
 
   // Menu user (đổi mật khẩu / đăng xuất)
@@ -218,6 +252,10 @@ export default function ClientDashboard({
     },
   ];
 
+  console.log(isMobile);
+
+
+
   return (
     <>
       <ModalLoading isOpen={loading} />
@@ -230,60 +268,36 @@ export default function ClientDashboard({
 
       <title>TOYOTA</title>
 
-      <div className="w-full h-[100vh] overflow-hidden">
+      <div className="w-full h-[100vh] overflow-hidden ">
         {/* Header */}
-        <div className="h-15 flex items-center justify-between px-3 border-b border-[#999999] bg-[#aa0404]">
+        <div className={`${isMobile ? '' : 'hidden'} h-14 w-full bg-[#ffffff] flex items-center justify-between px-4 border-b border-[#cecece] z-50`}>
+          <Button
+            type="primary"
+            onClick={toggleCollapsed}
+            className="!border-none !shadow-none sm:hidden !p-0 !bg-transparent hover:!bg-transparent !text-[#ff511a] hover:!text-[#ff511a]"
+          >
+            {collapsed ? (
+              <LeftCircleFilled className="text-2xl !text-[#ff511a]" />
+
+            ) : (
+
+              <RightCircleFilled className="text-2xl !text-[#ff511a]" />
+
+            )}
+          </Button>
           <div className="flex items-center gap-2">
-            <Button
-              type="primary"
-              onClick={toggleCollapsed}
-              className="!bg-transparent border !border-white mr-2"
-            >
-              {collapsed ? (
-                <MenuUnfoldOutlined className="text-2xl" />
-              ) : (
-                <MenuFoldOutlined className="text-2xl" />
-              )}
-            </Button>
+            <h1 className="text-xl font-semibold text-[#070d10]">HRM</h1>
             <Image
               loading="lazy"
               src="/storage/logo-toyota.webp"
               alt="logo"
-              className="w-14 invert-100"
+              className="w-14 "
               width={56}
               height={50}
               quality={70} // giảm chất lượng xuống chút để nhẹ hơn
               priority={false}
             />
-            <p className="text-2xl font-bold text-white hidden sm:block">
-              TOYOTA BÌNH DƯƠNG
-            </p>
           </div>
-
-          <Dropdown menu={{ items }}>
-            <div
-              className="flex items-center gap-3"
-              onClick={(e) => e.preventDefault()}
-            >
-              <p className="text-base font-semibold text-white hidden sm:block">
-                Hi!, {user?.name}
-              </p>
-              <Image
-                loading="lazy"
-                src={user?.avatar || "/storage/avt-default.webp"}
-                alt="avatar"
-                className="h-9 w-9 border-2 bg-white border-[#c4c4c4] rounded-full object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    "/storage/avt-default.webp";
-                }}
-                width={36}
-                height={36}
-                quality={70} // giảm chất lượng xuống chút để nhẹ hơn
-                priority={false}
-              />
-            </div>
-          </Dropdown>
         </div>
 
         {/* Overlay mờ khi mở menu ở mobile */}
@@ -295,41 +309,89 @@ export default function ClientDashboard({
         )} */}
 
         {/* Layout chính */}
-        <div className="w-full h-[calc(100vh-60px)] flex relative">
-          {/* Sidebar menu */}
-          <div
-            className={`
-              ${!isMobile && collapsed ? "sm:w-[80px]" : "sm:w-[250px]"}
-              ${isMobile && !collapsed ? "hidden " : ""}
-              w-full  shrink-0 border-r bg-[#aa0404] border-[#999999] h-full flex flex-col justify-between
-              transition-all duration-300 ease-in-out
-            `}
-          >
-            <div className="bg-[#aa0404] overflow-y-auto overflow-x-hidden">
-              <Menu
-                selectedKeys={[pathname ?? ""]}
-                mode="inline"
-                inlineCollapsed={isMobile ? !collapsed : collapsed}
-                items={Menus}
-                className="bg-transparent text-white"
-                onClick={handleClick}
-              />
-            </div>
+        <div className="w-full h-[100vh] flex relative">
 
+
+          {/* Sidebar menu */}
+
+          <div className="py-5">
             <div
-              className={`h-10 flex gap-2 items-center p-4 border-t border-[#999999] cursor-pointer ${
-                collapsed && !isMobile ? "justify-center" : "justify-between"
-              } bg-[#aa0404] transition-all duration-300 ease-in-out`}
-              onClick={handleLogout}
+              className={`
+              ${!isMobile && collapsed ? "sm:!w-[70px]" : "sm:w-[250px]"}
+              ${isMobile && !collapsed ? "hidden " : " "}
+              ${collapsed && isMobile ? "!w-full fixed !h-[calc(100vh-56px)] top-14 !rounded-none right-0 z-10" : ""}
+               shrink-0  h-full flex flex-col justify-between
+              transition-all duration-300 ease-in-out shadow-2xl rounded-4xl py-6 px-4 border bg-[#e8f4fd] border-[#cecece]
+            `}
             >
-              <p
-                className={`${
-                  collapsed && !isMobile ? "hidden" : ""
-                } font-semibold text-white`}
+              <div className="relative w-full ">
+                <Button
+                  type="primary"
+                  onClick={toggleCollapsed}
+                  className={`!border-none !shadow-none !absolute top-[55px] right-[-28px] sm:hidden !p-0 !bg-transparent hover:!bg-transparent !text-[#ff511a] hover:!text-[#ff511a] z-50 ${isMobile ? "!hidden" : ""}`}
+                >
+                  {collapsed ? (
+                    <RightCircleFilled className="text-2xl !text-[#ff511a]" />
+                  ) : (
+                    <LeftCircleFilled className="text-2xl !text-[#ff511a]" />
+                  )}
+                </Button>
+                <div className="flex flex-col items-center justify-center w-full  py-2">
+                  <Image
+                    loading="lazy"
+                    src="/storage/logo-toyota.webp"
+                    alt="logo"
+                    className="w-14 "
+                    width={56}
+                    height={50}
+                    quality={70} // giảm chất lượng xuống chút để nhẹ hơn
+                    priority={false}
+                  />
+                  <p className={`font-medium text-[#070d10] mt-2 text-nowrap transition-opacity ${collapsed ? 'hidden' : ''}`}>TOYOTA BÌNH DƯƠNG</p>
+                </div>
+                <div className="bg-transparent overflow-y-auto overflow-x-hidden">
+                  <Menu
+                    selectedKeys={[pathname ?? ""]}
+                    mode="inline"
+                    inlineCollapsed={isMobile ? !collapsed : collapsed}
+                    items={Menus}
+                    className="bg-transparent !text-[#4a4a6a]"
+                    onClick={handleClick}
+                  />
+                </div>
+              </div>
+
+              <div
+                className={`h-14 flex gap-2 items-center ${collapsed ? '' : 'p-4 border-[1px] border-[#bebebe]'}  rounded-2xl cursor-pointer ${collapsed && !isMobile ? "justify-center" : "justify-between"
+                  } transition-all duration-300 ease-in-out`}
               >
-                Đăng xuất
-              </p>
-              <LogOut className="text-white" />
+                  <Dropdown menu={{ items }}>
+
+                <div
+                  className="flex items-center gap-3 justify-between w-full"
+                >
+
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={avt}
+                      alt="avatar"
+                      className="h-9 w-9 border-2 border-[#999999] bg-white rounded-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src =
+                          "/storage/avt-default.webp";
+                      }}
+                    />
+
+                    <p className={`text-base font-normal italic text-[#070d10]  ${collapsed && !isMobile ? 'hidden' : ''} `}>
+                      {name}
+                    </p>
+                  </div>
+                    <EllipsisOutlined className={`${collapsed && !isMobile ? '!hidden' : ''} text-3xl`} onClick={(e) => e.preventDefault()} />
+
+                </div>
+                  </Dropdown>
+
+              </div>
             </div>
           </div>
 

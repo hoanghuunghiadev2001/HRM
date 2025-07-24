@@ -48,7 +48,6 @@ const ModalApproveRequest = ({
         // loading={loading}
         open={open}
         closable={{ "aria-label": "Close Button" }}
-        onClose={onClose}
         onCancel={onClose}
         footer={[
           <Button

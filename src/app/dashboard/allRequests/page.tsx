@@ -23,6 +23,7 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { TreeSelect } from "antd/lib";
 import { Department } from "@/lib/interface";
+import { useAppSelector } from "@/store/hook";
 
 // Extend plugin
 dayjs.extend(utc);
@@ -141,6 +142,8 @@ export default function AllRequestPage() {
   const [requestsNeedApprove, setRequestsNeedApprove] = useState<
     dataNeedApprove[]
   >([]);
+const { role } = useAppSelector((state) => state.user);
+
   const localUser = getUserFromLocalStorage();
   const [departments, setDepartments] = useState<Department[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
@@ -182,9 +185,9 @@ export default function AllRequestPage() {
 
         page: page,
         pageSize: pageSize,
-        role: localUser.role,
+        role: role,
         department:
-          localUser.role === "ADMIN"
+          role === "ADMIN"
             ? filterDepartment
             : localUser.workInfo.department,
         employeeCode: filterMSNV,
@@ -206,9 +209,9 @@ export default function AllRequestPage() {
     setLoading(true);
     try {
       const res = await getApiAllRequestsNeedApprove({
-        role: localUser.role,
+        role: role,
         department:
-          localUser.role === "ADMIN" ? "" : localUser.workInfo.department,
+          role === "ADMIN" ? "" : localUser.workInfo.department,
         name: "",
         employeeCode: localUser.id,
       });

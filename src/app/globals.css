@@ -46,15 +46,19 @@ nextjs-portal {
   background: transparent;
   box-shadow: none;
 }
+.ant-menu{
+  border: none !important;
+}
 
 .ant-menu-item,
 .ant-menu-submenu-title {
   margin: 0 !important;
   width: 100% !important;
-  color: white !important;
+  color: #070d10 !important;
   font-size: 18px !important;
   border-radius: 0 !important;
-  border-bottom: 1px solid white;
+  border-bottom: none;
+  padding: 0 !important;
 }
 
 .ant-menu-submenu > ul > li {
@@ -63,19 +67,27 @@ nextjs-portal {
 
 .ant-menu-item:hover {
   border-radius: 0 !important;
-  background-color: #600101 !important;
+color: #ff511a !important;
+  background-color: transparent !important;
+  font-weight: bold;
 }
 .ant-menu-item.ant-menu-item-selected {
   border-radius: 0 !important;
-  background-color: #600101 !important;
+color: #ff511a !important;
+  background-color: transparent !important;
+  font-weight: bold;
 }
 .ant-menu-submenu-title:hover {
   border-radius: 0 !important;
-  background-color: #600101 !important;
+color: #ff511a !important;
+  background-color: transparent !important;
+  font-weight: bold;
 }
 .ant-menu-submenu-selected .ant-menu-submenu-title {
   border-radius: 0 !important;
-  background-color: #600101 !important;
+color: #ff511a !important;
+  background-color: transparent !important;
+  font-weight: bold;
 }
 .ant-menu {
   background-color: transparent;

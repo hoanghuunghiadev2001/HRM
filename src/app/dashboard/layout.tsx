@@ -3,9 +3,12 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import ClientDashboard from "./ClientDashboard";
 import { redirect } from "next/navigation";
+import { App as AntdApp, ConfigProvider } from "antd";
+import viVN from "antd/locale/vi_VN";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 export const experimental_ppr = true;
+
 export default async function DashboardLayout({
   children,
 }: {
@@ -20,10 +23,19 @@ export default async function DashboardLayout({
       const decoded = jwt.verify(token, JWT_SECRET) as { role: string };
       isAdmin = decoded.role;
     } catch {
-      // Nếu token sai hoặc hết hạn, có thể xử lý redirect bằng middleware
       redirect("/login");
     }
   }
 
-  return <ClientDashboard isAdmin={isAdmin}>{children}</ClientDashboard>;
+  return (
+    <ConfigProvider
+      locale={viVN}
+      theme={{ cssVar: true }}
+      warning={{ strict: false }}
+    >
+      <AntdApp>
+        <ClientDashboard isAdmin={isAdmin}>{children}</ClientDashboard>
+      </AntdApp>
+    </ConfigProvider>
+  );
 }

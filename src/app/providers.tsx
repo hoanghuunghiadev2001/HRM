@@ -5,16 +5,20 @@ import { ConfigProvider } from "antd";
 import { ReactNode, useState } from "react";
 import vnVN from "antd/locale/vi_VN";
 import { Provider } from "react-redux";
-import { store } from "@/store";
+import { persistor, store } from "@/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 export default function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
+         <PersistGate loading={null} persistor={persistor}>
+<QueryClientProvider client={queryClient}>
         <ConfigProvider locale={vnVN}>{children}</ConfigProvider>
       </QueryClientProvider>
+         </PersistGate>
+      
     </Provider>
   );
 }
