@@ -447,7 +447,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\HUUNGHIA\\Desktop\\TBD\\HRM\\generated\\prisma",
+      "value": "C:\\Users\\01375\\Desktop\\TBD\\HRM\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -473,12 +473,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\HUUNGHIA\\Desktop\\TBD\\HRM\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\01375\\Desktop\\TBD\\HRM\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.8.1",

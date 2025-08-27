@@ -413,12 +413,12 @@ export default function DepartmentPositionCRUD() {
           </Form.Item>
           {modalType === "department" && (
             <Form.Item
-              label={"Viết tắt"}
+              label={"Mã phòng ban"}
               name="abbreviation"
               className="!mt-3"
               rules={[{ required: true, message: "Vui lòng nhập tên" }]}
             >
-              <Input placeholder={"Nhập tên viết tắt phòng ban"} />
+              <Input placeholder={"Nhập mã phòng ban"} />
             </Form.Item>
           )}
         </Form>

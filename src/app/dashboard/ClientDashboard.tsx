@@ -314,7 +314,7 @@ export default function ClientDashboard({
 
           {/* Sidebar menu */}
 
-          <div className="py-5">
+          <div className="py-5 pl-4">
             <div
               className={`
               ${!isMobile && collapsed ? "sm:!w-[70px]" : "sm:w-[250px]"}
@@ -396,7 +396,7 @@ export default function ClientDashboard({
           </div>
 
           {/* Nội dung chính */}
-          <div className="w-full h-full overflow-y-auto">
+          <div className="w-full h-[calc(100vh-50px)] overflow-y-auto  lg:h-full">
             <main className="flex-1 p-4">{children}</main>
           </div>
         </div>

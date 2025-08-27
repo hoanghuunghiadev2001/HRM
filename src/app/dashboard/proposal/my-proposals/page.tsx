@@ -191,6 +191,7 @@ export default function MyProposalsPage() {
   }
 
   const handleViewDetail = (proposalId: number) => {
+    setLoading(true)
     router.push(`/dashboard/proposal/my-proposals/${proposalId}`)
   }
 

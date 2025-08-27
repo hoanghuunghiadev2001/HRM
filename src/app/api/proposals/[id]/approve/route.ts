@@ -5,10 +5,10 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
-export async function POST(request: NextRequest,  { params }: { params: Promise<{ id: number }> }) {
+export async function POST(request: NextRequest,  { params }: { params: Promise<{ id: string }> }) {
   try {
     // 1. Validate proposal ID
-    const proposalId = (await params).id;
+    const proposalId = Number((await params).id);
     if (isNaN(proposalId)) {
       return NextResponse.json({ error: "ID đề xuất không hợp lệ" }, { status: 400 });
     }

@@ -20,6 +20,14 @@ import InfoPersonal from "@/components/infoPersonal";
 import { setUser, setUserAvatar } from "@/store/slices/userSlice";
 import { useAppDispatch } from "@/store/hook";
 
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import dayjs from "dayjs";
+
+// Extend plugin
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
@@ -27,6 +35,24 @@ const Profile = () => {
   const [modal, contextHolder] = Modal.useModal();
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
+
+
+  function formatSeniorityText(months: number): string {
+    const years = Math.floor(months / 12);
+    const m = months % 12;
+    return (
+      `${years > 0 ? `${years} năm ` : ""}${m > 0 ? `${m} tháng` : ""
+        }`.trim() || "0 tháng"
+    );
+  }
+  function handleDateChange(date: dayjs.Dayjs | null): number {
+    if (!date) return 0;
+    const today = dayjs();
+    let totalMonths =
+      (today.year() - date.year()) * 12 + (today.month() - date.month());
+    if (today.date() < date.date()) totalMonths -= 1;
+    return totalMonths;
+  }
 
   // Optimized fetch functions using Promise.all
   const fetchAllData = async () => {
@@ -143,7 +169,7 @@ const Profile = () => {
       });
 
       if (req.ok) {
-            dispatch(setUserAvatar(avt )) // nên là URL
+        dispatch(setUserAvatar(avt)) // nên là URL
 
         // Thực hiện các operations sau update song song
         await Promise.all([
@@ -351,7 +377,7 @@ const Profile = () => {
           </Form.Item>
           <Form.Item
             name="companyPhone"
-            
+
             label={
               <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
                 SĐT công ty
@@ -404,7 +430,7 @@ const Profile = () => {
           />
           <InfoPersonal
             titleValue="Thâm niên"
-            value={dataProfile?.workInfo?.seniority}
+            value={formatSeniorityText(handleDateChange(dayjs(dataProfile?.workInfo?.seniorityStart, "DD/MM/YYYY")))}
           />
           <InfoPersonal
             titleValue="Số hợp đồng"
@@ -475,8 +501,8 @@ const Profile = () => {
               dataProfile?.otherInfo?.workStatus === "OFFICIAL"
                 ? "Chính thức"
                 : dataProfile?.otherInfo?.workStatus === "PROBATION"
-                ? "Thử việc"
-                : "Nghỉ việc"
+                  ? "Thử việc"
+                  : "Nghỉ việc"
             }
           />
           <InfoPersonal
