@@ -286,7 +286,7 @@ export default function ClientDashboard({
             )}
           </Button>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-semibold text-[#070d10]">HRM</h1>
+            <p className="text-xl font-semibold text-[#4a4a6a] italic">{name}</p>
             <Image
               loading="lazy"
               src="/storage/logo-toyota.webp"

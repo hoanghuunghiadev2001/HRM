@@ -20,9 +20,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const employee = await prisma.employee.findUnique({
-      where: { employeeCode },
-    });
+   const employee = await prisma.employee.findUnique({
+  where: { employeeCode },
+  include: {
+    workInfo: {
+      include: {
+        department: true,
+        position: true,
+      },
+    },
+  },
+});
 
     if (
       !employee ||
@@ -59,7 +67,7 @@ export async function POST(req: NextRequest) {
     // ✅ Ghi token vào cookie
     (
       await // ✅ Ghi token vào cookie
-      cookies()
+        cookies()
     ).set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -68,7 +76,7 @@ export async function POST(req: NextRequest) {
       path: "/",
     });
 
-    return NextResponse.json({ success: true, name: employee.name, avt: employee.avatar, role: employee.role, id: employee.id, employeeCode: employee.employeeCode });
+    return NextResponse.json({ success: true, name: employee.name, avt: employee.avatar, role: employee.role, id: employee.id, employeeCode: employee.employeeCode, department: employee.workInfo?.department?.name, position:  employee.workInfo?.position?.name,});
   } catch (err) {
     console.error("Login error:", err);
     return NextResponse.json(

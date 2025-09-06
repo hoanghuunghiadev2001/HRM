@@ -4,6 +4,7 @@ import { getUserFromLocalStorage } from "./api";
 import dayjs from "dayjs";
 import TextArea from "antd/es/input/TextArea";
 import { NumericInput } from "./function";
+import { useAppSelector } from "@/store/hook";
 
 interface ModalCreateNewRequestProps {
   open: boolean;
@@ -34,6 +35,8 @@ const ModalCreateNewRequest = ({
   const [timeStartObj, setTimeStartObj] = useState<dayjs.Dayjs | null>(null);
   const [timeEndObj, setTimeEndObj] = useState<dayjs.Dayjs | null>(null);
 
+  const { name, avatar, id, role, employeeCode, department,position } = useAppSelector((state) => state.user);
+
   // const onChange = (value: any, dateString: any) => {
   //   setTimeStart(dateString[0]);
   //   setTimeEnd(dateString[1]);
@@ -46,7 +49,7 @@ const ModalCreateNewRequest = ({
 
   const handleCreateNewRequest = () => {
     if (
-      !localUser?.id ||
+      !id ||
       !typeLeave ||
       !timeStartObj ||
       !timeEndObj ||
@@ -57,7 +60,7 @@ const ModalCreateNewRequest = ({
       return;
     }
     createRequestLeave(
-      localUser?.id,
+      id,
       typeLeave,
       timeStartObj!.toISOString(), // dấu "!" nói với TS là: tôi chắc chắn biến này không null
       timeEndObj!.toISOString(),
@@ -94,25 +97,25 @@ const ModalCreateNewRequest = ({
           <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             <p className="shrink-0">Họ và tên:</p>
             <p className="inline font-medium text-[#3a3a3a]">
-              {localUser?.name}
+              {name}
             </p>
           </div>
           <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             <p className="shrink-0">MSNV:</p>
             <p className="inline font-medium text-[#3a3a3a]">
-              {localUser?.employeeCode}
+              {employeeCode}
             </p>
           </div>
           <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             <p className="shrink-0">Bộ phận:</p>
             <p className="inline font-medium text-[#3a3a3a]">
-              {localUser?.workInfo.department.name}
+              {department}
             </p>
           </div>
           <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             <p className="shrink-0">Chức vụ:</p>
             <p className="inline font-medium text-[#3a3a3a]">
-              {localUser?.workInfo.position.name}
+              {position}
             </p>
           </div>
         </div>

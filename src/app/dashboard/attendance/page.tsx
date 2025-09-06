@@ -323,7 +323,7 @@ export default function AttendancePage() {
       </div>
       <div className="w-full">
         <p className="font-bold  text-xl text-[#4a4a6a]">Tìm kiếm:</p>
-        <div className="grid grid-cols-2 md:flex md:items-center gap-4 mb-4 w-full mt-2 px-4 flex-wrap">
+        <div className="grid grid-cols-2 md:flex md:items-center gap-4 mb-4 w-full mt-2 pl-0 md:px-4 flex-wrap">
           <div className="flex gap-2 items-center">
             <Form.Item
               layout="horizontal"
@@ -418,7 +418,7 @@ export default function AttendancePage() {
             ""
           )}
           <button
-            className="flex shrink-0 gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
+            className="flex ml-4 md:ml-0 shrink-0 gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
             onClick={() => {
               handleFetchAttendances(pageTable, pageSize);
             }}
