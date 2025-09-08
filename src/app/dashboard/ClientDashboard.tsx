@@ -349,7 +349,7 @@ export default function ClientDashboard({
                   />
                   <p className={`font-medium text-[#070d10] mt-2 text-nowrap transition-opacity ${collapsed ? 'hidden' : ''}`}>TOYOTA BÌNH DƯƠNG</p>
                 </div>
-                <div className="bg-transparent overflow-y-auto overflow-x-hidden">
+                <div className="bg-transparent overflow-y-auto overflow-x-hidden h-[calc(100vh-255px)]">
                   <Menu
                     selectedKeys={[pathname ?? ""]}
                     mode="inline"

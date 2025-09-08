@@ -23,7 +23,6 @@ const ModalCreateNewRequest = ({
   open,
   createRequestLeave,
 }: ModalCreateNewRequestProps) => {
-  const localUser = getUserFromLocalStorage();
 
   const { RangePicker } = DatePicker;
 
@@ -35,7 +34,7 @@ const ModalCreateNewRequest = ({
   const [timeStartObj, setTimeStartObj] = useState<dayjs.Dayjs | null>(null);
   const [timeEndObj, setTimeEndObj] = useState<dayjs.Dayjs | null>(null);
 
-  const { name, avatar, id, role, employeeCode, department,position } = useAppSelector((state) => state.user);
+  const { name, id,  employeeCode, department,position } = useAppSelector((state) => state.user);
 
   // const onChange = (value: any, dateString: any) => {
   //   setTimeStart(dateString[0]);
