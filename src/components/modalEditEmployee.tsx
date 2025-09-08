@@ -352,7 +352,7 @@ const ModalEditEmployee = ({
   return (
     <>
       <Drawer
-        title={<p className="text-2xl">Thêm nhân sự</p>}
+        title={<p className="text-2xl">Chỉnh Sửa Nhân Sự</p>}
         placement="right"
         // size={"large"}
         onClose={onClose}
