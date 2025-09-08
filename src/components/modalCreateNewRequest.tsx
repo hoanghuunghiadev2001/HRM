@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { DatePicker, Form, Modal, Select } from "antd";
-import { getUserFromLocalStorage } from "./api";
 import dayjs from "dayjs";
 import TextArea from "antd/es/input/TextArea";
 import { NumericInput } from "./function";
