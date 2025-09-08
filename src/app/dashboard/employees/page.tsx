@@ -36,8 +36,7 @@ import {
   InfoCircleOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { setUser } from "@/store/slices/userSlice";
+import {  useAppSelector } from "@/store/hook";
 
 interface DataType {
   key: string;
@@ -81,7 +80,6 @@ export default function EmployeesPage() {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [modalEditEmployee, setModalEditEmployee] = useState<boolean>(false);
   const [workStatus, setWorkStatus] = useState<string>();
-  const dispatch = useAppDispatch();
   const { role } = useAppSelector((state) => state.user);
 
   const [modal, contextHolder] = Modal.useModal();
