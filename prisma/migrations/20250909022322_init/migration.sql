@@ -1,17 +1,14 @@
 -- CreateTable
-CREATE TABLE `EncryptedFile` (
+CREATE TABLE `File` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `filename` VARCHAR(191) NOT NULL,
     `mimeType` VARCHAR(191) NOT NULL,
     `fileSize` INTEGER NOT NULL,
-    `encryptedData` LONGBLOB NOT NULL,
-    `encryptionKey` VARCHAR(191) NOT NULL,
-    `checksum` VARCHAR(191) NOT NULL,
+    `data` LONGBLOB NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
-    INDEX `EncryptedFile_filename_idx`(`filename`),
-    INDEX `EncryptedFile_createdAt_idx`(`createdAt`),
+    INDEX `File_createdAt_idx`(`createdAt`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -185,6 +182,7 @@ CREATE TABLE `LeaveApprovalStepApprover` (
     `status` ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',
     `approvedAt` DATETIME(3) NULL,
 
+    INDEX `LeaveApprovalStepApprover_approverId_fkey`(`approverId`),
     UNIQUE INDEX `LeaveApprovalStepApprover_leaveApprovalStepId_approverId_key`(`leaveApprovalStepId`, `approverId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -225,6 +223,7 @@ CREATE TABLE `KPIEmployee` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
+    INDEX `KPIEmployee_employeeId_fkey`(`employeeId`),
     UNIQUE INDEX `KPIEmployee_kpiId_employeeId_key`(`kpiId`, `employeeId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -237,7 +236,7 @@ CREATE TABLE `KPIEntry` (
     `targetValue` DOUBLE NOT NULL,
     `achievedValue` DOUBLE NOT NULL DEFAULT 0,
     `isAchieved` BOOLEAN NOT NULL DEFAULT false,
-    `weight` DOUBLE NOT NULL DEFAULT 1.0,
+    `weight` DOUBLE NOT NULL DEFAULT 1,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -272,7 +271,9 @@ CREATE TABLE `ProposalSigner` (
     `signerId` INTEGER NOT NULL,
     `status` ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',
     `signedAt` DATETIME(3) NULL,
+    `level` INTEGER NOT NULL,
 
+    INDEX `ProposalSigner_signerId_fkey`(`signerId`),
     UNIQUE INDEX `ProposalSigner_proposalId_signerId_key`(`proposalId`, `signerId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -284,7 +285,9 @@ CREATE TABLE `ProposalApprover` (
     `approverId` INTEGER NOT NULL,
     `status` ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',
     `approvedAt` DATETIME(3) NULL,
+    `level` INTEGER NOT NULL,
 
+    INDEX `ProposalApprover_approverId_fkey`(`approverId`),
     UNIQUE INDEX `ProposalApprover_proposalId_approverId_key`(`proposalId`, `approverId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -293,10 +296,10 @@ CREATE TABLE `ProposalApprover` (
 ALTER TABLE `Employee` ADD CONSTRAINT `Employee_managerId_fkey` FOREIGN KEY (`managerId`) REFERENCES `Employee`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Department` ADD CONSTRAINT `Department_headId_fkey` FOREIGN KEY (`headId`) REFERENCES `Employee`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Department` ADD CONSTRAINT `Department_directorId_fkey` FOREIGN KEY (`directorId`) REFERENCES `Employee`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Department` ADD CONSTRAINT `Department_directorId_fkey` FOREIGN KEY (`directorId`) REFERENCES `Employee`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Department` ADD CONSTRAINT `Department_headId_fkey` FOREIGN KEY (`headId`) REFERENCES `Employee`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Position` ADD CONSTRAINT `Position_departmentId_fkey` FOREIGN KEY (`departmentId`) REFERENCES `Department`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -305,10 +308,10 @@ ALTER TABLE `Position` ADD CONSTRAINT `Position_departmentId_fkey` FOREIGN KEY (
 ALTER TABLE `WorkInfo` ADD CONSTRAINT `WorkInfo_departmentId_fkey` FOREIGN KEY (`departmentId`) REFERENCES `Department`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `WorkInfo` ADD CONSTRAINT `WorkInfo_positionId_fkey` FOREIGN KEY (`positionId`) REFERENCES `Position`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `WorkInfo` ADD CONSTRAINT `WorkInfo_employeeId_fkey` FOREIGN KEY (`employeeId`) REFERENCES `Employee`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `WorkInfo` ADD CONSTRAINT `WorkInfo_employeeId_fkey` FOREIGN KEY (`employeeId`) REFERENCES `Employee`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `WorkInfo` ADD CONSTRAINT `WorkInfo_positionId_fkey` FOREIGN KEY (`positionId`) REFERENCES `Position`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `PersonalInfo` ADD CONSTRAINT `PersonalInfo_employeeId_fkey` FOREIGN KEY (`employeeId`) REFERENCES `Employee`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -326,31 +329,31 @@ ALTER TABLE `LeaveRequest` ADD CONSTRAINT `LeaveRequest_employeeId_fkey` FOREIGN
 ALTER TABLE `LeaveApprovalStep` ADD CONSTRAINT `LeaveApprovalStep_leaveRequestId_fkey` FOREIGN KEY (`leaveRequestId`) REFERENCES `LeaveRequest`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `LeaveApprovalStepApprover` ADD CONSTRAINT `LeaveApprovalStepApprover_leaveApprovalStepId_fkey` FOREIGN KEY (`leaveApprovalStepId`) REFERENCES `LeaveApprovalStep`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `LeaveApprovalStepApprover` ADD CONSTRAINT `LeaveApprovalStepApprover_approverId_fkey` FOREIGN KEY (`approverId`) REFERENCES `Employee`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `LeaveApprovalStepApprover` ADD CONSTRAINT `LeaveApprovalStepApprover_approverId_fkey` FOREIGN KEY (`approverId`) REFERENCES `Employee`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `LeaveApprovalStepApprover` ADD CONSTRAINT `LeaveApprovalStepApprover_leaveApprovalStepId_fkey` FOREIGN KEY (`leaveApprovalStepId`) REFERENCES `LeaveApprovalStep`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Attendance` ADD CONSTRAINT `Attendance_employeeId_fkey` FOREIGN KEY (`employeeId`) REFERENCES `Employee`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `KPIEmployee` ADD CONSTRAINT `KPIEmployee_kpiId_fkey` FOREIGN KEY (`kpiId`) REFERENCES `KPI`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `KPIEmployee` ADD CONSTRAINT `KPIEmployee_employeeId_fkey` FOREIGN KEY (`employeeId`) REFERENCES `Employee`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `KPIEmployee` ADD CONSTRAINT `KPIEmployee_employeeId_fkey` FOREIGN KEY (`employeeId`) REFERENCES `Employee`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `KPIEmployee` ADD CONSTRAINT `KPIEmployee_kpiId_fkey` FOREIGN KEY (`kpiId`) REFERENCES `KPI`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `KPIEntry` ADD CONSTRAINT `KPIEntry_kpiEmployeeId_fkey` FOREIGN KEY (`kpiEmployeeId`) REFERENCES `KPIEmployee`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Proposal` ADD CONSTRAINT `Proposal_proposerId_fkey` FOREIGN KEY (`proposerId`) REFERENCES `Employee`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE `Proposal` ADD CONSTRAINT `Proposal_createdById_fkey` FOREIGN KEY (`createdById`) REFERENCES `Employee`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Proposal` ADD CONSTRAINT `Proposal_fileId_fkey` FOREIGN KEY (`fileId`) REFERENCES `EncryptedFile`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Proposal` ADD CONSTRAINT `Proposal_fileId_fkey` FOREIGN KEY (`fileId`) REFERENCES `File`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Proposal` ADD CONSTRAINT `Proposal_proposerId_fkey` FOREIGN KEY (`proposerId`) REFERENCES `Employee`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ProposalSigner` ADD CONSTRAINT `ProposalSigner_proposalId_fkey` FOREIGN KEY (`proposalId`) REFERENCES `Proposal`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -359,7 +362,7 @@ ALTER TABLE `ProposalSigner` ADD CONSTRAINT `ProposalSigner_proposalId_fkey` FOR
 ALTER TABLE `ProposalSigner` ADD CONSTRAINT `ProposalSigner_signerId_fkey` FOREIGN KEY (`signerId`) REFERENCES `Employee`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ProposalApprover` ADD CONSTRAINT `ProposalApprover_proposalId_fkey` FOREIGN KEY (`proposalId`) REFERENCES `Proposal`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `ProposalApprover` ADD CONSTRAINT `ProposalApprover_approverId_fkey` FOREIGN KEY (`approverId`) REFERENCES `Employee`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ProposalApprover` ADD CONSTRAINT `ProposalApprover_approverId_fkey` FOREIGN KEY (`approverId`) REFERENCES `Employee`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ProposalApprover` ADD CONSTRAINT `ProposalApprover_proposalId_fkey` FOREIGN KEY (`proposalId`) REFERENCES `Proposal`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

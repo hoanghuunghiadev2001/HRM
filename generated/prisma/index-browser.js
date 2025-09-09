@@ -307,7 +307,8 @@ exports.Prisma.ProposalSignerScalarFieldEnum = {
   proposalId: 'proposalId',
   signerId: 'signerId',
   status: 'status',
-  signedAt: 'signedAt'
+  signedAt: 'signedAt',
+  level: 'level'
 };
 
 exports.Prisma.ProposalApproverScalarFieldEnum = {
@@ -315,7 +316,8 @@ exports.Prisma.ProposalApproverScalarFieldEnum = {
   proposalId: 'proposalId',
   approverId: 'approverId',
   status: 'status',
-  approvedAt: 'approvedAt'
+  approvedAt: 'approvedAt',
+  level: 'level'
 };
 
 exports.Prisma.SortOrder = {

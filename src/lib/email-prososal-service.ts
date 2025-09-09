@@ -124,7 +124,7 @@ export class EmailService {
   static async sendStatusUpdate(employee: any, proposal: any, status: string) {
     const statusConfig = {
       approved: {
-        text: "đã đ��ợc phê duyệt",
+        text: "đã được phê duyệt",
         color: "#28a745",
         icon: "✅",
         bgColor: "#d4edda",

@@ -179,9 +179,9 @@ export async function POST(req: NextRequest) {
           education: personalInfo.education ?? null,
           drivingLicense: personalInfo.drivingLicense ?? null,
           toyotaCertificate: personalInfo.toyotaCertificate ?? null,
-          taxCode: personalInfo.taxCode,
-          insuranceNumber: personalInfo.insuranceNumber,
-          insuranceSalary: personalInfo.insuranceSalary,
+          taxCode: personalInfo.taxCode ?? "Tax"+employeeCode,
+          insuranceNumber: personalInfo.insuranceNumber ?? "insurance"+employeeCode,
+          insuranceSalary: personalInfo.insuranceSalary ?? "insurance"+employeeCode,
         }
       : undefined;
 

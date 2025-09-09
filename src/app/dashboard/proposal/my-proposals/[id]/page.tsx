@@ -839,7 +839,7 @@ export default function ProposalDetailPage() {
 
         <Col xs={24} lg={8}>
           {/* Thao tác */}
-          {(canSign || canApprove) && (
+          {/* {(canSign || canApprove) && (
             <Card title="🎯 Thao tác của bạn" style={{ marginBottom: 24 }}>
               <Space direction="vertical" style={{ width: "100%" }} size="middle">
                 {canSign && (
@@ -894,7 +894,7 @@ export default function ProposalDetailPage() {
                 )}
               </Space>
             </Card>
-          )}
+          )} */}
 
           {/* Timeline lịch sử */}
           <Card title="📋 Lịch sử xử lý">

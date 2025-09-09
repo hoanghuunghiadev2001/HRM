@@ -2391,27 +2391,27 @@ export namespace Prisma {
    */
 
   export type EmployeeCountOutputType = {
-    subordinates: number
-    LeaveRequest: number
-    LeaveApprovalSteps: number
     Attendance: number
+    subordinates: number
     KPIEmployee: number
+    LeaveApprovalSteps: number
+    LeaveRequest: number
     proposalsCreated: number
     proposalsProposed: number
-    proposalSignatures: number
     proposalApprovals: number
+    proposalSignatures: number
   }
 
   export type EmployeeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    subordinates?: boolean | EmployeeCountOutputTypeCountSubordinatesArgs
-    LeaveRequest?: boolean | EmployeeCountOutputTypeCountLeaveRequestArgs
-    LeaveApprovalSteps?: boolean | EmployeeCountOutputTypeCountLeaveApprovalStepsArgs
     Attendance?: boolean | EmployeeCountOutputTypeCountAttendanceArgs
+    subordinates?: boolean | EmployeeCountOutputTypeCountSubordinatesArgs
     KPIEmployee?: boolean | EmployeeCountOutputTypeCountKPIEmployeeArgs
+    LeaveApprovalSteps?: boolean | EmployeeCountOutputTypeCountLeaveApprovalStepsArgs
+    LeaveRequest?: boolean | EmployeeCountOutputTypeCountLeaveRequestArgs
     proposalsCreated?: boolean | EmployeeCountOutputTypeCountProposalsCreatedArgs
     proposalsProposed?: boolean | EmployeeCountOutputTypeCountProposalsProposedArgs
-    proposalSignatures?: boolean | EmployeeCountOutputTypeCountProposalSignaturesArgs
     proposalApprovals?: boolean | EmployeeCountOutputTypeCountProposalApprovalsArgs
+    proposalSignatures?: boolean | EmployeeCountOutputTypeCountProposalSignaturesArgs
   }
 
   // Custom InputTypes
@@ -2428,6 +2428,13 @@ export namespace Prisma {
   /**
    * EmployeeCountOutputType without action
    */
+  export type EmployeeCountOutputTypeCountAttendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AttendanceWhereInput
+  }
+
+  /**
+   * EmployeeCountOutputType without action
+   */
   export type EmployeeCountOutputTypeCountSubordinatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EmployeeWhereInput
   }
@@ -2435,8 +2442,8 @@ export namespace Prisma {
   /**
    * EmployeeCountOutputType without action
    */
-  export type EmployeeCountOutputTypeCountLeaveRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: LeaveRequestWhereInput
+  export type EmployeeCountOutputTypeCountKPIEmployeeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KPIEmployeeWhereInput
   }
 
   /**
@@ -2449,15 +2456,8 @@ export namespace Prisma {
   /**
    * EmployeeCountOutputType without action
    */
-  export type EmployeeCountOutputTypeCountAttendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AttendanceWhereInput
-  }
-
-  /**
-   * EmployeeCountOutputType without action
-   */
-  export type EmployeeCountOutputTypeCountKPIEmployeeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: KPIEmployeeWhereInput
+  export type EmployeeCountOutputTypeCountLeaveRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeaveRequestWhereInput
   }
 
   /**
@@ -2477,15 +2477,15 @@ export namespace Prisma {
   /**
    * EmployeeCountOutputType without action
    */
-  export type EmployeeCountOutputTypeCountProposalSignaturesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProposalSignerWhereInput
+  export type EmployeeCountOutputTypeCountProposalApprovalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProposalApproverWhereInput
   }
 
   /**
    * EmployeeCountOutputType without action
    */
-  export type EmployeeCountOutputTypeCountProposalApprovalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProposalApproverWhereInput
+  export type EmployeeCountOutputTypeCountProposalSignaturesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProposalSignerWhereInput
   }
 
 
@@ -2689,13 +2689,13 @@ export namespace Prisma {
    */
 
   export type ProposalCountOutputType = {
-    signers: number
     approvers: number
+    signers: number
   }
 
   export type ProposalCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    signers?: boolean | ProposalCountOutputTypeCountSignersArgs
     approvers?: boolean | ProposalCountOutputTypeCountApproversArgs
+    signers?: boolean | ProposalCountOutputTypeCountSignersArgs
   }
 
   // Custom InputTypes
@@ -2712,15 +2712,15 @@ export namespace Prisma {
   /**
    * ProposalCountOutputType without action
    */
-  export type ProposalCountOutputTypeCountSignersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProposalSignerWhereInput
+  export type ProposalCountOutputTypeCountApproversArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProposalApproverWhereInput
   }
 
   /**
    * ProposalCountOutputType without action
    */
-  export type ProposalCountOutputTypeCountApproversArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProposalApproverWhereInput
+  export type ProposalCountOutputTypeCountSignersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProposalSignerWhereInput
   }
 
 
@@ -4001,22 +4001,22 @@ export namespace Prisma {
     managerId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    Attendance?: boolean | Employee$AttendanceArgs<ExtArgs>
+    contactInfo?: boolean | Employee$contactInfoArgs<ExtArgs>
+    departmentDirectorOf?: boolean | Employee$departmentDirectorOfArgs<ExtArgs>
+    departmentHeadOf?: boolean | Employee$departmentHeadOfArgs<ExtArgs>
     manager?: boolean | Employee$managerArgs<ExtArgs>
     subordinates?: boolean | Employee$subordinatesArgs<ExtArgs>
-    departmentHeadOf?: boolean | Employee$departmentHeadOfArgs<ExtArgs>
-    departmentDirectorOf?: boolean | Employee$departmentDirectorOfArgs<ExtArgs>
-    workInfo?: boolean | Employee$workInfoArgs<ExtArgs>
-    personalInfo?: boolean | Employee$personalInfoArgs<ExtArgs>
-    contactInfo?: boolean | Employee$contactInfoArgs<ExtArgs>
-    otherInfo?: boolean | Employee$otherInfoArgs<ExtArgs>
-    LeaveRequest?: boolean | Employee$LeaveRequestArgs<ExtArgs>
-    LeaveApprovalSteps?: boolean | Employee$LeaveApprovalStepsArgs<ExtArgs>
-    Attendance?: boolean | Employee$AttendanceArgs<ExtArgs>
     KPIEmployee?: boolean | Employee$KPIEmployeeArgs<ExtArgs>
+    LeaveApprovalSteps?: boolean | Employee$LeaveApprovalStepsArgs<ExtArgs>
+    LeaveRequest?: boolean | Employee$LeaveRequestArgs<ExtArgs>
+    otherInfo?: boolean | Employee$otherInfoArgs<ExtArgs>
+    personalInfo?: boolean | Employee$personalInfoArgs<ExtArgs>
     proposalsCreated?: boolean | Employee$proposalsCreatedArgs<ExtArgs>
     proposalsProposed?: boolean | Employee$proposalsProposedArgs<ExtArgs>
-    proposalSignatures?: boolean | Employee$proposalSignaturesArgs<ExtArgs>
     proposalApprovals?: boolean | Employee$proposalApprovalsArgs<ExtArgs>
+    proposalSignatures?: boolean | Employee$proposalSignaturesArgs<ExtArgs>
+    workInfo?: boolean | Employee$workInfoArgs<ExtArgs>
     _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["employee"]>
 
@@ -4039,44 +4039,44 @@ export namespace Prisma {
 
   export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeCode" | "name" | "gender" | "birthDate" | "password" | "role" | "avatar" | "isActive" | "managerId" | "createdAt" | "updatedAt", ExtArgs["result"]["employee"]>
   export type EmployeeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Attendance?: boolean | Employee$AttendanceArgs<ExtArgs>
+    contactInfo?: boolean | Employee$contactInfoArgs<ExtArgs>
+    departmentDirectorOf?: boolean | Employee$departmentDirectorOfArgs<ExtArgs>
+    departmentHeadOf?: boolean | Employee$departmentHeadOfArgs<ExtArgs>
     manager?: boolean | Employee$managerArgs<ExtArgs>
     subordinates?: boolean | Employee$subordinatesArgs<ExtArgs>
-    departmentHeadOf?: boolean | Employee$departmentHeadOfArgs<ExtArgs>
-    departmentDirectorOf?: boolean | Employee$departmentDirectorOfArgs<ExtArgs>
-    workInfo?: boolean | Employee$workInfoArgs<ExtArgs>
-    personalInfo?: boolean | Employee$personalInfoArgs<ExtArgs>
-    contactInfo?: boolean | Employee$contactInfoArgs<ExtArgs>
-    otherInfo?: boolean | Employee$otherInfoArgs<ExtArgs>
-    LeaveRequest?: boolean | Employee$LeaveRequestArgs<ExtArgs>
-    LeaveApprovalSteps?: boolean | Employee$LeaveApprovalStepsArgs<ExtArgs>
-    Attendance?: boolean | Employee$AttendanceArgs<ExtArgs>
     KPIEmployee?: boolean | Employee$KPIEmployeeArgs<ExtArgs>
+    LeaveApprovalSteps?: boolean | Employee$LeaveApprovalStepsArgs<ExtArgs>
+    LeaveRequest?: boolean | Employee$LeaveRequestArgs<ExtArgs>
+    otherInfo?: boolean | Employee$otherInfoArgs<ExtArgs>
+    personalInfo?: boolean | Employee$personalInfoArgs<ExtArgs>
     proposalsCreated?: boolean | Employee$proposalsCreatedArgs<ExtArgs>
     proposalsProposed?: boolean | Employee$proposalsProposedArgs<ExtArgs>
-    proposalSignatures?: boolean | Employee$proposalSignaturesArgs<ExtArgs>
     proposalApprovals?: boolean | Employee$proposalApprovalsArgs<ExtArgs>
+    proposalSignatures?: boolean | Employee$proposalSignaturesArgs<ExtArgs>
+    workInfo?: boolean | Employee$workInfoArgs<ExtArgs>
     _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $EmployeePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Employee"
     objects: {
+      Attendance: Prisma.$AttendancePayload<ExtArgs>[]
+      contactInfo: Prisma.$ContactInfoPayload<ExtArgs> | null
+      departmentDirectorOf: Prisma.$DepartmentPayload<ExtArgs> | null
+      departmentHeadOf: Prisma.$DepartmentPayload<ExtArgs> | null
       manager: Prisma.$EmployeePayload<ExtArgs> | null
       subordinates: Prisma.$EmployeePayload<ExtArgs>[]
-      departmentHeadOf: Prisma.$DepartmentPayload<ExtArgs> | null
-      departmentDirectorOf: Prisma.$DepartmentPayload<ExtArgs> | null
-      workInfo: Prisma.$WorkInfoPayload<ExtArgs> | null
-      personalInfo: Prisma.$PersonalInfoPayload<ExtArgs> | null
-      contactInfo: Prisma.$ContactInfoPayload<ExtArgs> | null
-      otherInfo: Prisma.$OtherInfoPayload<ExtArgs> | null
-      LeaveRequest: Prisma.$LeaveRequestPayload<ExtArgs>[]
-      LeaveApprovalSteps: Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>[]
-      Attendance: Prisma.$AttendancePayload<ExtArgs>[]
       KPIEmployee: Prisma.$KPIEmployeePayload<ExtArgs>[]
+      LeaveApprovalSteps: Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>[]
+      LeaveRequest: Prisma.$LeaveRequestPayload<ExtArgs>[]
+      otherInfo: Prisma.$OtherInfoPayload<ExtArgs> | null
+      personalInfo: Prisma.$PersonalInfoPayload<ExtArgs> | null
       proposalsCreated: Prisma.$ProposalPayload<ExtArgs>[]
       proposalsProposed: Prisma.$ProposalPayload<ExtArgs>[]
-      proposalSignatures: Prisma.$ProposalSignerPayload<ExtArgs>[]
       proposalApprovals: Prisma.$ProposalApproverPayload<ExtArgs>[]
+      proposalSignatures: Prisma.$ProposalSignerPayload<ExtArgs>[]
+      workInfo: Prisma.$WorkInfoPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -4431,22 +4431,22 @@ export namespace Prisma {
    */
   export interface Prisma__EmployeeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    Attendance<T extends Employee$AttendanceArgs<ExtArgs> = {}>(args?: Subset<T, Employee$AttendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    contactInfo<T extends Employee$contactInfoArgs<ExtArgs> = {}>(args?: Subset<T, Employee$contactInfoArgs<ExtArgs>>): Prisma__ContactInfoClient<$Result.GetResult<Prisma.$ContactInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    departmentDirectorOf<T extends Employee$departmentDirectorOfArgs<ExtArgs> = {}>(args?: Subset<T, Employee$departmentDirectorOfArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    departmentHeadOf<T extends Employee$departmentHeadOfArgs<ExtArgs> = {}>(args?: Subset<T, Employee$departmentHeadOfArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     manager<T extends Employee$managerArgs<ExtArgs> = {}>(args?: Subset<T, Employee$managerArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     subordinates<T extends Employee$subordinatesArgs<ExtArgs> = {}>(args?: Subset<T, Employee$subordinatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    departmentHeadOf<T extends Employee$departmentHeadOfArgs<ExtArgs> = {}>(args?: Subset<T, Employee$departmentHeadOfArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    departmentDirectorOf<T extends Employee$departmentDirectorOfArgs<ExtArgs> = {}>(args?: Subset<T, Employee$departmentDirectorOfArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    workInfo<T extends Employee$workInfoArgs<ExtArgs> = {}>(args?: Subset<T, Employee$workInfoArgs<ExtArgs>>): Prisma__WorkInfoClient<$Result.GetResult<Prisma.$WorkInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    personalInfo<T extends Employee$personalInfoArgs<ExtArgs> = {}>(args?: Subset<T, Employee$personalInfoArgs<ExtArgs>>): Prisma__PersonalInfoClient<$Result.GetResult<Prisma.$PersonalInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    contactInfo<T extends Employee$contactInfoArgs<ExtArgs> = {}>(args?: Subset<T, Employee$contactInfoArgs<ExtArgs>>): Prisma__ContactInfoClient<$Result.GetResult<Prisma.$ContactInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    otherInfo<T extends Employee$otherInfoArgs<ExtArgs> = {}>(args?: Subset<T, Employee$otherInfoArgs<ExtArgs>>): Prisma__OtherInfoClient<$Result.GetResult<Prisma.$OtherInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    LeaveRequest<T extends Employee$LeaveRequestArgs<ExtArgs> = {}>(args?: Subset<T, Employee$LeaveRequestArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    LeaveApprovalSteps<T extends Employee$LeaveApprovalStepsArgs<ExtArgs> = {}>(args?: Subset<T, Employee$LeaveApprovalStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    Attendance<T extends Employee$AttendanceArgs<ExtArgs> = {}>(args?: Subset<T, Employee$AttendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     KPIEmployee<T extends Employee$KPIEmployeeArgs<ExtArgs> = {}>(args?: Subset<T, Employee$KPIEmployeeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    LeaveApprovalSteps<T extends Employee$LeaveApprovalStepsArgs<ExtArgs> = {}>(args?: Subset<T, Employee$LeaveApprovalStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    LeaveRequest<T extends Employee$LeaveRequestArgs<ExtArgs> = {}>(args?: Subset<T, Employee$LeaveRequestArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    otherInfo<T extends Employee$otherInfoArgs<ExtArgs> = {}>(args?: Subset<T, Employee$otherInfoArgs<ExtArgs>>): Prisma__OtherInfoClient<$Result.GetResult<Prisma.$OtherInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    personalInfo<T extends Employee$personalInfoArgs<ExtArgs> = {}>(args?: Subset<T, Employee$personalInfoArgs<ExtArgs>>): Prisma__PersonalInfoClient<$Result.GetResult<Prisma.$PersonalInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     proposalsCreated<T extends Employee$proposalsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, Employee$proposalsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     proposalsProposed<T extends Employee$proposalsProposedArgs<ExtArgs> = {}>(args?: Subset<T, Employee$proposalsProposedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    proposalSignatures<T extends Employee$proposalSignaturesArgs<ExtArgs> = {}>(args?: Subset<T, Employee$proposalSignaturesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalSignerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     proposalApprovals<T extends Employee$proposalApprovalsArgs<ExtArgs> = {}>(args?: Subset<T, Employee$proposalApprovalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalApproverPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    proposalSignatures<T extends Employee$proposalSignaturesArgs<ExtArgs> = {}>(args?: Subset<T, Employee$proposalSignaturesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalSignerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    workInfo<T extends Employee$workInfoArgs<ExtArgs> = {}>(args?: Subset<T, Employee$workInfoArgs<ExtArgs>>): Prisma__WorkInfoClient<$Result.GetResult<Prisma.$WorkInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4831,6 +4831,87 @@ export namespace Prisma {
   }
 
   /**
+   * Employee.Attendance
+   */
+  export type Employee$AttendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attendance
+     */
+    select?: AttendanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attendance
+     */
+    omit?: AttendanceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceInclude<ExtArgs> | null
+    where?: AttendanceWhereInput
+    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
+    cursor?: AttendanceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
+  }
+
+  /**
+   * Employee.contactInfo
+   */
+  export type Employee$contactInfoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactInfo
+     */
+    select?: ContactInfoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactInfo
+     */
+    omit?: ContactInfoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactInfoInclude<ExtArgs> | null
+    where?: ContactInfoWhereInput
+  }
+
+  /**
+   * Employee.departmentDirectorOf
+   */
+  export type Employee$departmentDirectorOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Department
+     */
+    select?: DepartmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Department
+     */
+    omit?: DepartmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartmentInclude<ExtArgs> | null
+    where?: DepartmentWhereInput
+  }
+
+  /**
+   * Employee.departmentHeadOf
+   */
+  export type Employee$departmentHeadOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Department
+     */
+    select?: DepartmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Department
+     */
+    omit?: DepartmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartmentInclude<ExtArgs> | null
+    where?: DepartmentWhereInput
+  }
+
+  /**
    * Employee.manager
    */
   export type Employee$managerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4874,141 +4955,27 @@ export namespace Prisma {
   }
 
   /**
-   * Employee.departmentHeadOf
+   * Employee.KPIEmployee
    */
-  export type Employee$departmentHeadOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Employee$KPIEmployeeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Department
+     * Select specific fields to fetch from the KPIEmployee
      */
-    select?: DepartmentSelect<ExtArgs> | null
+    select?: KPIEmployeeSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Department
+     * Omit specific fields from the KPIEmployee
      */
-    omit?: DepartmentOmit<ExtArgs> | null
+    omit?: KPIEmployeeOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: DepartmentInclude<ExtArgs> | null
-    where?: DepartmentWhereInput
-  }
-
-  /**
-   * Employee.departmentDirectorOf
-   */
-  export type Employee$departmentDirectorOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Department
-     */
-    select?: DepartmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Department
-     */
-    omit?: DepartmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DepartmentInclude<ExtArgs> | null
-    where?: DepartmentWhereInput
-  }
-
-  /**
-   * Employee.workInfo
-   */
-  export type Employee$workInfoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the WorkInfo
-     */
-    select?: WorkInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the WorkInfo
-     */
-    omit?: WorkInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: WorkInfoInclude<ExtArgs> | null
-    where?: WorkInfoWhereInput
-  }
-
-  /**
-   * Employee.personalInfo
-   */
-  export type Employee$personalInfoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PersonalInfo
-     */
-    select?: PersonalInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PersonalInfo
-     */
-    omit?: PersonalInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PersonalInfoInclude<ExtArgs> | null
-    where?: PersonalInfoWhereInput
-  }
-
-  /**
-   * Employee.contactInfo
-   */
-  export type Employee$contactInfoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ContactInfo
-     */
-    select?: ContactInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ContactInfo
-     */
-    omit?: ContactInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ContactInfoInclude<ExtArgs> | null
-    where?: ContactInfoWhereInput
-  }
-
-  /**
-   * Employee.otherInfo
-   */
-  export type Employee$otherInfoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the OtherInfo
-     */
-    select?: OtherInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the OtherInfo
-     */
-    omit?: OtherInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: OtherInfoInclude<ExtArgs> | null
-    where?: OtherInfoWhereInput
-  }
-
-  /**
-   * Employee.LeaveRequest
-   */
-  export type Employee$LeaveRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the LeaveRequest
-     */
-    select?: LeaveRequestSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the LeaveRequest
-     */
-    omit?: LeaveRequestOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LeaveRequestInclude<ExtArgs> | null
-    where?: LeaveRequestWhereInput
-    orderBy?: LeaveRequestOrderByWithRelationInput | LeaveRequestOrderByWithRelationInput[]
-    cursor?: LeaveRequestWhereUniqueInput
+    include?: KPIEmployeeInclude<ExtArgs> | null
+    where?: KPIEmployeeWhereInput
+    orderBy?: KPIEmployeeOrderByWithRelationInput | KPIEmployeeOrderByWithRelationInput[]
+    cursor?: KPIEmployeeWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: LeaveRequestScalarFieldEnum | LeaveRequestScalarFieldEnum[]
+    distinct?: KPIEmployeeScalarFieldEnum | KPIEmployeeScalarFieldEnum[]
   }
 
   /**
@@ -5036,51 +5003,65 @@ export namespace Prisma {
   }
 
   /**
-   * Employee.Attendance
+   * Employee.LeaveRequest
    */
-  export type Employee$AttendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Employee$LeaveRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Attendance
+     * Select specific fields to fetch from the LeaveRequest
      */
-    select?: AttendanceSelect<ExtArgs> | null
+    select?: LeaveRequestSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Attendance
+     * Omit specific fields from the LeaveRequest
      */
-    omit?: AttendanceOmit<ExtArgs> | null
+    omit?: LeaveRequestOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AttendanceInclude<ExtArgs> | null
-    where?: AttendanceWhereInput
-    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
-    cursor?: AttendanceWhereUniqueInput
+    include?: LeaveRequestInclude<ExtArgs> | null
+    where?: LeaveRequestWhereInput
+    orderBy?: LeaveRequestOrderByWithRelationInput | LeaveRequestOrderByWithRelationInput[]
+    cursor?: LeaveRequestWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
+    distinct?: LeaveRequestScalarFieldEnum | LeaveRequestScalarFieldEnum[]
   }
 
   /**
-   * Employee.KPIEmployee
+   * Employee.otherInfo
    */
-  export type Employee$KPIEmployeeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Employee$otherInfoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the KPIEmployee
+     * Select specific fields to fetch from the OtherInfo
      */
-    select?: KPIEmployeeSelect<ExtArgs> | null
+    select?: OtherInfoSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the KPIEmployee
+     * Omit specific fields from the OtherInfo
      */
-    omit?: KPIEmployeeOmit<ExtArgs> | null
+    omit?: OtherInfoOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: KPIEmployeeInclude<ExtArgs> | null
-    where?: KPIEmployeeWhereInput
-    orderBy?: KPIEmployeeOrderByWithRelationInput | KPIEmployeeOrderByWithRelationInput[]
-    cursor?: KPIEmployeeWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: KPIEmployeeScalarFieldEnum | KPIEmployeeScalarFieldEnum[]
+    include?: OtherInfoInclude<ExtArgs> | null
+    where?: OtherInfoWhereInput
+  }
+
+  /**
+   * Employee.personalInfo
+   */
+  export type Employee$personalInfoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PersonalInfo
+     */
+    select?: PersonalInfoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PersonalInfo
+     */
+    omit?: PersonalInfoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PersonalInfoInclude<ExtArgs> | null
+    where?: PersonalInfoWhereInput
   }
 
   /**
@@ -5132,6 +5113,30 @@ export namespace Prisma {
   }
 
   /**
+   * Employee.proposalApprovals
+   */
+  export type Employee$proposalApprovalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProposalApprover
+     */
+    select?: ProposalApproverSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProposalApprover
+     */
+    omit?: ProposalApproverOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalApproverInclude<ExtArgs> | null
+    where?: ProposalApproverWhereInput
+    orderBy?: ProposalApproverOrderByWithRelationInput | ProposalApproverOrderByWithRelationInput[]
+    cursor?: ProposalApproverWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProposalApproverScalarFieldEnum | ProposalApproverScalarFieldEnum[]
+  }
+
+  /**
    * Employee.proposalSignatures
    */
   export type Employee$proposalSignaturesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5156,27 +5161,22 @@ export namespace Prisma {
   }
 
   /**
-   * Employee.proposalApprovals
+   * Employee.workInfo
    */
-  export type Employee$proposalApprovalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Employee$workInfoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ProposalApprover
+     * Select specific fields to fetch from the WorkInfo
      */
-    select?: ProposalApproverSelect<ExtArgs> | null
+    select?: WorkInfoSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ProposalApprover
+     * Omit specific fields from the WorkInfo
      */
-    omit?: ProposalApproverOmit<ExtArgs> | null
+    omit?: WorkInfoOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ProposalApproverInclude<ExtArgs> | null
-    where?: ProposalApproverWhereInput
-    orderBy?: ProposalApproverOrderByWithRelationInput | ProposalApproverOrderByWithRelationInput[]
-    cursor?: ProposalApproverWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProposalApproverScalarFieldEnum | ProposalApproverScalarFieldEnum[]
+    include?: WorkInfoInclude<ExtArgs> | null
+    where?: WorkInfoWhereInput
   }
 
   /**
@@ -5428,8 +5428,8 @@ export namespace Prisma {
     updatedAt?: boolean
     headId?: boolean
     directorId?: boolean
-    head?: boolean | Department$headArgs<ExtArgs>
     director?: boolean | Department$directorArgs<ExtArgs>
+    head?: boolean | Department$headArgs<ExtArgs>
     positions?: boolean | Department$positionsArgs<ExtArgs>
     workInfos?: boolean | Department$workInfosArgs<ExtArgs>
     _count?: boolean | DepartmentCountOutputTypeDefaultArgs<ExtArgs>
@@ -5450,8 +5450,8 @@ export namespace Prisma {
 
   export type DepartmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "abbreviation" | "description" | "createdAt" | "updatedAt" | "headId" | "directorId", ExtArgs["result"]["department"]>
   export type DepartmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    head?: boolean | Department$headArgs<ExtArgs>
     director?: boolean | Department$directorArgs<ExtArgs>
+    head?: boolean | Department$headArgs<ExtArgs>
     positions?: boolean | Department$positionsArgs<ExtArgs>
     workInfos?: boolean | Department$workInfosArgs<ExtArgs>
     _count?: boolean | DepartmentCountOutputTypeDefaultArgs<ExtArgs>
@@ -5460,8 +5460,8 @@ export namespace Prisma {
   export type $DepartmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Department"
     objects: {
-      head: Prisma.$EmployeePayload<ExtArgs> | null
       director: Prisma.$EmployeePayload<ExtArgs> | null
+      head: Prisma.$EmployeePayload<ExtArgs> | null
       positions: Prisma.$PositionPayload<ExtArgs>[]
       workInfos: Prisma.$WorkInfoPayload<ExtArgs>[]
     }
@@ -5814,8 +5814,8 @@ export namespace Prisma {
    */
   export interface Prisma__DepartmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    head<T extends Department$headArgs<ExtArgs> = {}>(args?: Subset<T, Department$headArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     director<T extends Department$directorArgs<ExtArgs> = {}>(args?: Subset<T, Department$directorArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    head<T extends Department$headArgs<ExtArgs> = {}>(args?: Subset<T, Department$headArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     positions<T extends Department$positionsArgs<ExtArgs> = {}>(args?: Subset<T, Department$positionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PositionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     workInfos<T extends Department$workInfosArgs<ExtArgs> = {}>(args?: Subset<T, Department$workInfosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkInfoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -6198,9 +6198,9 @@ export namespace Prisma {
   }
 
   /**
-   * Department.head
+   * Department.director
    */
-  export type Department$headArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Department$directorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Employee
      */
@@ -6217,9 +6217,9 @@ export namespace Prisma {
   }
 
   /**
-   * Department.director
+   * Department.head
    */
-  export type Department$directorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Department$headArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Employee
      */
@@ -7600,8 +7600,8 @@ export namespace Prisma {
     contractEndDate?: boolean
     employeeId?: boolean
     department?: boolean | WorkInfo$departmentArgs<ExtArgs>
-    position?: boolean | WorkInfo$positionArgs<ExtArgs>
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    position?: boolean | WorkInfo$positionArgs<ExtArgs>
   }, ExtArgs["result"]["workInfo"]>
 
 
@@ -7625,16 +7625,16 @@ export namespace Prisma {
   export type WorkInfoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "departmentId" | "positionId" | "specialization" | "joinedTBD" | "joinedTeSCC" | "seniorityStart" | "seniority" | "contractNumber" | "contractDate" | "contractType" | "contractEndDate" | "employeeId", ExtArgs["result"]["workInfo"]>
   export type WorkInfoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     department?: boolean | WorkInfo$departmentArgs<ExtArgs>
-    position?: boolean | WorkInfo$positionArgs<ExtArgs>
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    position?: boolean | WorkInfo$positionArgs<ExtArgs>
   }
 
   export type $WorkInfoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "WorkInfo"
     objects: {
       department: Prisma.$DepartmentPayload<ExtArgs> | null
-      position: Prisma.$PositionPayload<ExtArgs> | null
       employee: Prisma.$EmployeePayload<ExtArgs>
+      position: Prisma.$PositionPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -7991,8 +7991,8 @@ export namespace Prisma {
   export interface Prisma__WorkInfoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     department<T extends WorkInfo$departmentArgs<ExtArgs> = {}>(args?: Subset<T, WorkInfo$departmentArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    position<T extends WorkInfo$positionArgs<ExtArgs> = {}>(args?: Subset<T, WorkInfo$positionArgs<ExtArgs>>): Prisma__PositionClient<$Result.GetResult<Prisma.$PositionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    position<T extends WorkInfo$positionArgs<ExtArgs> = {}>(args?: Subset<T, WorkInfo$positionArgs<ExtArgs>>): Prisma__PositionClient<$Result.GetResult<Prisma.$PositionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11744,8 +11744,8 @@ export namespace Prisma {
     approvedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
     approvalSteps?: boolean | LeaveRequest$approvalStepsArgs<ExtArgs>
+    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
     _count?: boolean | LeaveRequestCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["leaveRequest"]>
 
@@ -11768,16 +11768,16 @@ export namespace Prisma {
 
   export type LeaveRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "leaveType" | "startDate" | "endDate" | "totalHours" | "reason" | "status" | "approvedBy" | "approvedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["leaveRequest"]>
   export type LeaveRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
     approvalSteps?: boolean | LeaveRequest$approvalStepsArgs<ExtArgs>
+    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
     _count?: boolean | LeaveRequestCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $LeaveRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "LeaveRequest"
     objects: {
-      employee: Prisma.$EmployeePayload<ExtArgs>
       approvalSteps: Prisma.$LeaveApprovalStepPayload<ExtArgs>[]
+      employee: Prisma.$EmployeePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -12132,8 +12132,8 @@ export namespace Prisma {
    */
   export interface Prisma__LeaveRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     approvalSteps<T extends LeaveRequest$approvalStepsArgs<ExtArgs> = {}>(args?: Subset<T, LeaveRequest$approvalStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13767,8 +13767,8 @@ export namespace Prisma {
     approverId?: boolean
     status?: boolean
     approvedAt?: boolean
-    leaveApprovalStep?: boolean | LeaveApprovalStepDefaultArgs<ExtArgs>
     approver?: boolean | EmployeeDefaultArgs<ExtArgs>
+    leaveApprovalStep?: boolean | LeaveApprovalStepDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["leaveApprovalStepApprover"]>
 
 
@@ -13783,15 +13783,15 @@ export namespace Prisma {
 
   export type LeaveApprovalStepApproverOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "leaveApprovalStepId" | "approverId" | "status" | "approvedAt", ExtArgs["result"]["leaveApprovalStepApprover"]>
   export type LeaveApprovalStepApproverInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    leaveApprovalStep?: boolean | LeaveApprovalStepDefaultArgs<ExtArgs>
     approver?: boolean | EmployeeDefaultArgs<ExtArgs>
+    leaveApprovalStep?: boolean | LeaveApprovalStepDefaultArgs<ExtArgs>
   }
 
   export type $LeaveApprovalStepApproverPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "LeaveApprovalStepApprover"
     objects: {
-      leaveApprovalStep: Prisma.$LeaveApprovalStepPayload<ExtArgs>
       approver: Prisma.$EmployeePayload<ExtArgs>
+      leaveApprovalStep: Prisma.$LeaveApprovalStepPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -14139,8 +14139,8 @@ export namespace Prisma {
    */
   export interface Prisma__LeaveApprovalStepApproverClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    leaveApprovalStep<T extends LeaveApprovalStepDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LeaveApprovalStepDefaultArgs<ExtArgs>>): Prisma__LeaveApprovalStepClient<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     approver<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    leaveApprovalStep<T extends LeaveApprovalStepDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LeaveApprovalStepDefaultArgs<ExtArgs>>): Prisma__LeaveApprovalStepClient<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16735,8 +16735,8 @@ export namespace Prisma {
     employeeId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    kpi?: boolean | KPIDefaultArgs<ExtArgs>
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    kpi?: boolean | KPIDefaultArgs<ExtArgs>
     entries?: boolean | KPIEmployee$entriesArgs<ExtArgs>
     _count?: boolean | KPIEmployeeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["kPIEmployee"]>
@@ -16753,8 +16753,8 @@ export namespace Prisma {
 
   export type KPIEmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "kpiId" | "employeeId" | "createdAt" | "updatedAt", ExtArgs["result"]["kPIEmployee"]>
   export type KPIEmployeeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    kpi?: boolean | KPIDefaultArgs<ExtArgs>
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    kpi?: boolean | KPIDefaultArgs<ExtArgs>
     entries?: boolean | KPIEmployee$entriesArgs<ExtArgs>
     _count?: boolean | KPIEmployeeCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -16762,8 +16762,8 @@ export namespace Prisma {
   export type $KPIEmployeePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "KPIEmployee"
     objects: {
-      kpi: Prisma.$KPIPayload<ExtArgs>
       employee: Prisma.$EmployeePayload<ExtArgs>
+      kpi: Prisma.$KPIPayload<ExtArgs>
       entries: Prisma.$KPIEntryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -17112,8 +17112,8 @@ export namespace Prisma {
    */
   export interface Prisma__KPIEmployeeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    kpi<T extends KPIDefaultArgs<ExtArgs> = {}>(args?: Subset<T, KPIDefaultArgs<ExtArgs>>): Prisma__KPIClient<$Result.GetResult<Prisma.$KPIPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    kpi<T extends KPIDefaultArgs<ExtArgs> = {}>(args?: Subset<T, KPIDefaultArgs<ExtArgs>>): Prisma__KPIClient<$Result.GetResult<Prisma.$KPIPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     entries<T extends KPIEmployee$entriesArgs<ExtArgs> = {}>(args?: Subset<T, KPIEmployee$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KPIEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -18807,11 +18807,11 @@ export namespace Prisma {
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    proposer?: boolean | EmployeeDefaultArgs<ExtArgs>
     createdBy?: boolean | EmployeeDefaultArgs<ExtArgs>
     file?: boolean | Proposal$fileArgs<ExtArgs>
-    signers?: boolean | Proposal$signersArgs<ExtArgs>
+    proposer?: boolean | EmployeeDefaultArgs<ExtArgs>
     approvers?: boolean | Proposal$approversArgs<ExtArgs>
+    signers?: boolean | Proposal$signersArgs<ExtArgs>
     _count?: boolean | ProposalCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["proposal"]>
 
@@ -18832,22 +18832,22 @@ export namespace Prisma {
 
   export type ProposalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "title" | "description" | "fileId" | "status" | "proposerId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["proposal"]>
   export type ProposalInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    proposer?: boolean | EmployeeDefaultArgs<ExtArgs>
     createdBy?: boolean | EmployeeDefaultArgs<ExtArgs>
     file?: boolean | Proposal$fileArgs<ExtArgs>
-    signers?: boolean | Proposal$signersArgs<ExtArgs>
+    proposer?: boolean | EmployeeDefaultArgs<ExtArgs>
     approvers?: boolean | Proposal$approversArgs<ExtArgs>
+    signers?: boolean | Proposal$signersArgs<ExtArgs>
     _count?: boolean | ProposalCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $ProposalPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Proposal"
     objects: {
-      proposer: Prisma.$EmployeePayload<ExtArgs>
       createdBy: Prisma.$EmployeePayload<ExtArgs>
       file: Prisma.$FilePayload<ExtArgs> | null
-      signers: Prisma.$ProposalSignerPayload<ExtArgs>[]
+      proposer: Prisma.$EmployeePayload<ExtArgs>
       approvers: Prisma.$ProposalApproverPayload<ExtArgs>[]
+      signers: Prisma.$ProposalSignerPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -19200,11 +19200,11 @@ export namespace Prisma {
    */
   export interface Prisma__ProposalClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    proposer<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     createdBy<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     file<T extends Proposal$fileArgs<ExtArgs> = {}>(args?: Subset<T, Proposal$fileArgs<ExtArgs>>): Prisma__FileClient<$Result.GetResult<Prisma.$FilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    signers<T extends Proposal$signersArgs<ExtArgs> = {}>(args?: Subset<T, Proposal$signersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalSignerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    proposer<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     approvers<T extends Proposal$approversArgs<ExtArgs> = {}>(args?: Subset<T, Proposal$approversArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalApproverPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    signers<T extends Proposal$signersArgs<ExtArgs> = {}>(args?: Subset<T, Proposal$signersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalSignerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19606,30 +19606,6 @@ export namespace Prisma {
   }
 
   /**
-   * Proposal.signers
-   */
-  export type Proposal$signersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProposalSigner
-     */
-    select?: ProposalSignerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ProposalSigner
-     */
-    omit?: ProposalSignerOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProposalSignerInclude<ExtArgs> | null
-    where?: ProposalSignerWhereInput
-    orderBy?: ProposalSignerOrderByWithRelationInput | ProposalSignerOrderByWithRelationInput[]
-    cursor?: ProposalSignerWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProposalSignerScalarFieldEnum | ProposalSignerScalarFieldEnum[]
-  }
-
-  /**
    * Proposal.approvers
    */
   export type Proposal$approversArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19651,6 +19627,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProposalApproverScalarFieldEnum | ProposalApproverScalarFieldEnum[]
+  }
+
+  /**
+   * Proposal.signers
+   */
+  export type Proposal$signersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProposalSigner
+     */
+    select?: ProposalSignerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProposalSigner
+     */
+    omit?: ProposalSignerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalSignerInclude<ExtArgs> | null
+    where?: ProposalSignerWhereInput
+    orderBy?: ProposalSignerOrderByWithRelationInput | ProposalSignerOrderByWithRelationInput[]
+    cursor?: ProposalSignerWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProposalSignerScalarFieldEnum | ProposalSignerScalarFieldEnum[]
   }
 
   /**
@@ -19688,12 +19688,14 @@ export namespace Prisma {
     id: number | null
     proposalId: number | null
     signerId: number | null
+    level: number | null
   }
 
   export type ProposalSignerSumAggregateOutputType = {
     id: number | null
     proposalId: number | null
     signerId: number | null
+    level: number | null
   }
 
   export type ProposalSignerMinAggregateOutputType = {
@@ -19702,6 +19704,7 @@ export namespace Prisma {
     signerId: number | null
     status: $Enums.LeaveStatus | null
     signedAt: Date | null
+    level: number | null
   }
 
   export type ProposalSignerMaxAggregateOutputType = {
@@ -19710,6 +19713,7 @@ export namespace Prisma {
     signerId: number | null
     status: $Enums.LeaveStatus | null
     signedAt: Date | null
+    level: number | null
   }
 
   export type ProposalSignerCountAggregateOutputType = {
@@ -19718,6 +19722,7 @@ export namespace Prisma {
     signerId: number
     status: number
     signedAt: number
+    level: number
     _all: number
   }
 
@@ -19726,12 +19731,14 @@ export namespace Prisma {
     id?: true
     proposalId?: true
     signerId?: true
+    level?: true
   }
 
   export type ProposalSignerSumAggregateInputType = {
     id?: true
     proposalId?: true
     signerId?: true
+    level?: true
   }
 
   export type ProposalSignerMinAggregateInputType = {
@@ -19740,6 +19747,7 @@ export namespace Prisma {
     signerId?: true
     status?: true
     signedAt?: true
+    level?: true
   }
 
   export type ProposalSignerMaxAggregateInputType = {
@@ -19748,6 +19756,7 @@ export namespace Prisma {
     signerId?: true
     status?: true
     signedAt?: true
+    level?: true
   }
 
   export type ProposalSignerCountAggregateInputType = {
@@ -19756,6 +19765,7 @@ export namespace Prisma {
     signerId?: true
     status?: true
     signedAt?: true
+    level?: true
     _all?: true
   }
 
@@ -19851,6 +19861,7 @@ export namespace Prisma {
     signerId: number
     status: $Enums.LeaveStatus
     signedAt: Date | null
+    level: number
     _count: ProposalSignerCountAggregateOutputType | null
     _avg: ProposalSignerAvgAggregateOutputType | null
     _sum: ProposalSignerSumAggregateOutputType | null
@@ -19878,6 +19889,7 @@ export namespace Prisma {
     signerId?: boolean
     status?: boolean
     signedAt?: boolean
+    level?: boolean
     proposal?: boolean | ProposalDefaultArgs<ExtArgs>
     signer?: boolean | EmployeeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["proposalSigner"]>
@@ -19890,9 +19902,10 @@ export namespace Prisma {
     signerId?: boolean
     status?: boolean
     signedAt?: boolean
+    level?: boolean
   }
 
-  export type ProposalSignerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "proposalId" | "signerId" | "status" | "signedAt", ExtArgs["result"]["proposalSigner"]>
+  export type ProposalSignerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "proposalId" | "signerId" | "status" | "signedAt" | "level", ExtArgs["result"]["proposalSigner"]>
   export type ProposalSignerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     proposal?: boolean | ProposalDefaultArgs<ExtArgs>
     signer?: boolean | EmployeeDefaultArgs<ExtArgs>
@@ -19910,6 +19923,7 @@ export namespace Prisma {
       signerId: number
       status: $Enums.LeaveStatus
       signedAt: Date | null
+      level: number
     }, ExtArgs["result"]["proposalSigner"]>
     composites: {}
   }
@@ -20286,6 +20300,7 @@ export namespace Prisma {
     readonly signerId: FieldRef<"ProposalSigner", 'Int'>
     readonly status: FieldRef<"ProposalSigner", 'LeaveStatus'>
     readonly signedAt: FieldRef<"ProposalSigner", 'DateTime'>
+    readonly level: FieldRef<"ProposalSigner", 'Int'>
   }
     
 
@@ -20663,12 +20678,14 @@ export namespace Prisma {
     id: number | null
     proposalId: number | null
     approverId: number | null
+    level: number | null
   }
 
   export type ProposalApproverSumAggregateOutputType = {
     id: number | null
     proposalId: number | null
     approverId: number | null
+    level: number | null
   }
 
   export type ProposalApproverMinAggregateOutputType = {
@@ -20677,6 +20694,7 @@ export namespace Prisma {
     approverId: number | null
     status: $Enums.LeaveStatus | null
     approvedAt: Date | null
+    level: number | null
   }
 
   export type ProposalApproverMaxAggregateOutputType = {
@@ -20685,6 +20703,7 @@ export namespace Prisma {
     approverId: number | null
     status: $Enums.LeaveStatus | null
     approvedAt: Date | null
+    level: number | null
   }
 
   export type ProposalApproverCountAggregateOutputType = {
@@ -20693,6 +20712,7 @@ export namespace Prisma {
     approverId: number
     status: number
     approvedAt: number
+    level: number
     _all: number
   }
 
@@ -20701,12 +20721,14 @@ export namespace Prisma {
     id?: true
     proposalId?: true
     approverId?: true
+    level?: true
   }
 
   export type ProposalApproverSumAggregateInputType = {
     id?: true
     proposalId?: true
     approverId?: true
+    level?: true
   }
 
   export type ProposalApproverMinAggregateInputType = {
@@ -20715,6 +20737,7 @@ export namespace Prisma {
     approverId?: true
     status?: true
     approvedAt?: true
+    level?: true
   }
 
   export type ProposalApproverMaxAggregateInputType = {
@@ -20723,6 +20746,7 @@ export namespace Prisma {
     approverId?: true
     status?: true
     approvedAt?: true
+    level?: true
   }
 
   export type ProposalApproverCountAggregateInputType = {
@@ -20731,6 +20755,7 @@ export namespace Prisma {
     approverId?: true
     status?: true
     approvedAt?: true
+    level?: true
     _all?: true
   }
 
@@ -20826,6 +20851,7 @@ export namespace Prisma {
     approverId: number
     status: $Enums.LeaveStatus
     approvedAt: Date | null
+    level: number
     _count: ProposalApproverCountAggregateOutputType | null
     _avg: ProposalApproverAvgAggregateOutputType | null
     _sum: ProposalApproverSumAggregateOutputType | null
@@ -20853,8 +20879,9 @@ export namespace Prisma {
     approverId?: boolean
     status?: boolean
     approvedAt?: boolean
-    proposal?: boolean | ProposalDefaultArgs<ExtArgs>
+    level?: boolean
     approver?: boolean | EmployeeDefaultArgs<ExtArgs>
+    proposal?: boolean | ProposalDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["proposalApprover"]>
 
 
@@ -20865,19 +20892,20 @@ export namespace Prisma {
     approverId?: boolean
     status?: boolean
     approvedAt?: boolean
+    level?: boolean
   }
 
-  export type ProposalApproverOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "proposalId" | "approverId" | "status" | "approvedAt", ExtArgs["result"]["proposalApprover"]>
+  export type ProposalApproverOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "proposalId" | "approverId" | "status" | "approvedAt" | "level", ExtArgs["result"]["proposalApprover"]>
   export type ProposalApproverInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    proposal?: boolean | ProposalDefaultArgs<ExtArgs>
     approver?: boolean | EmployeeDefaultArgs<ExtArgs>
+    proposal?: boolean | ProposalDefaultArgs<ExtArgs>
   }
 
   export type $ProposalApproverPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ProposalApprover"
     objects: {
-      proposal: Prisma.$ProposalPayload<ExtArgs>
       approver: Prisma.$EmployeePayload<ExtArgs>
+      proposal: Prisma.$ProposalPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -20885,6 +20913,7 @@ export namespace Prisma {
       approverId: number
       status: $Enums.LeaveStatus
       approvedAt: Date | null
+      level: number
     }, ExtArgs["result"]["proposalApprover"]>
     composites: {}
   }
@@ -21225,8 +21254,8 @@ export namespace Prisma {
    */
   export interface Prisma__ProposalApproverClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    proposal<T extends ProposalDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProposalDefaultArgs<ExtArgs>>): Prisma__ProposalClient<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     approver<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    proposal<T extends ProposalDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProposalDefaultArgs<ExtArgs>>): Prisma__ProposalClient<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -21261,6 +21290,7 @@ export namespace Prisma {
     readonly approverId: FieldRef<"ProposalApprover", 'Int'>
     readonly status: FieldRef<"ProposalApprover", 'LeaveStatus'>
     readonly approvedAt: FieldRef<"ProposalApprover", 'DateTime'>
+    readonly level: FieldRef<"ProposalApprover", 'Int'>
   }
     
 
@@ -21871,7 +21901,8 @@ export namespace Prisma {
     proposalId: 'proposalId',
     signerId: 'signerId',
     status: 'status',
-    signedAt: 'signedAt'
+    signedAt: 'signedAt',
+    level: 'level'
   };
 
   export type ProposalSignerScalarFieldEnum = (typeof ProposalSignerScalarFieldEnum)[keyof typeof ProposalSignerScalarFieldEnum]
@@ -21882,7 +21913,8 @@ export namespace Prisma {
     proposalId: 'proposalId',
     approverId: 'approverId',
     status: 'status',
-    approvedAt: 'approvedAt'
+    approvedAt: 'approvedAt',
+    level: 'level'
   };
 
   export type ProposalApproverScalarFieldEnum = (typeof ProposalApproverScalarFieldEnum)[keyof typeof ProposalApproverScalarFieldEnum]
@@ -22192,22 +22224,22 @@ export namespace Prisma {
     managerId?: IntNullableFilter<"Employee"> | number | null
     createdAt?: DateTimeFilter<"Employee"> | Date | string
     updatedAt?: DateTimeFilter<"Employee"> | Date | string
+    Attendance?: AttendanceListRelationFilter
+    contactInfo?: XOR<ContactInfoNullableScalarRelationFilter, ContactInfoWhereInput> | null
+    departmentDirectorOf?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
+    departmentHeadOf?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
     manager?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
     subordinates?: EmployeeListRelationFilter
-    departmentHeadOf?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
-    departmentDirectorOf?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
-    workInfo?: XOR<WorkInfoNullableScalarRelationFilter, WorkInfoWhereInput> | null
-    personalInfo?: XOR<PersonalInfoNullableScalarRelationFilter, PersonalInfoWhereInput> | null
-    contactInfo?: XOR<ContactInfoNullableScalarRelationFilter, ContactInfoWhereInput> | null
-    otherInfo?: XOR<OtherInfoNullableScalarRelationFilter, OtherInfoWhereInput> | null
-    LeaveRequest?: LeaveRequestListRelationFilter
-    LeaveApprovalSteps?: LeaveApprovalStepApproverListRelationFilter
-    Attendance?: AttendanceListRelationFilter
     KPIEmployee?: KPIEmployeeListRelationFilter
+    LeaveApprovalSteps?: LeaveApprovalStepApproverListRelationFilter
+    LeaveRequest?: LeaveRequestListRelationFilter
+    otherInfo?: XOR<OtherInfoNullableScalarRelationFilter, OtherInfoWhereInput> | null
+    personalInfo?: XOR<PersonalInfoNullableScalarRelationFilter, PersonalInfoWhereInput> | null
     proposalsCreated?: ProposalListRelationFilter
     proposalsProposed?: ProposalListRelationFilter
-    proposalSignatures?: ProposalSignerListRelationFilter
     proposalApprovals?: ProposalApproverListRelationFilter
+    proposalSignatures?: ProposalSignerListRelationFilter
+    workInfo?: XOR<WorkInfoNullableScalarRelationFilter, WorkInfoWhereInput> | null
   }
 
   export type EmployeeOrderByWithRelationInput = {
@@ -22223,22 +22255,22 @@ export namespace Prisma {
     managerId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    Attendance?: AttendanceOrderByRelationAggregateInput
+    contactInfo?: ContactInfoOrderByWithRelationInput
+    departmentDirectorOf?: DepartmentOrderByWithRelationInput
+    departmentHeadOf?: DepartmentOrderByWithRelationInput
     manager?: EmployeeOrderByWithRelationInput
     subordinates?: EmployeeOrderByRelationAggregateInput
-    departmentHeadOf?: DepartmentOrderByWithRelationInput
-    departmentDirectorOf?: DepartmentOrderByWithRelationInput
-    workInfo?: WorkInfoOrderByWithRelationInput
-    personalInfo?: PersonalInfoOrderByWithRelationInput
-    contactInfo?: ContactInfoOrderByWithRelationInput
-    otherInfo?: OtherInfoOrderByWithRelationInput
-    LeaveRequest?: LeaveRequestOrderByRelationAggregateInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverOrderByRelationAggregateInput
-    Attendance?: AttendanceOrderByRelationAggregateInput
     KPIEmployee?: KPIEmployeeOrderByRelationAggregateInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverOrderByRelationAggregateInput
+    LeaveRequest?: LeaveRequestOrderByRelationAggregateInput
+    otherInfo?: OtherInfoOrderByWithRelationInput
+    personalInfo?: PersonalInfoOrderByWithRelationInput
     proposalsCreated?: ProposalOrderByRelationAggregateInput
     proposalsProposed?: ProposalOrderByRelationAggregateInput
-    proposalSignatures?: ProposalSignerOrderByRelationAggregateInput
     proposalApprovals?: ProposalApproverOrderByRelationAggregateInput
+    proposalSignatures?: ProposalSignerOrderByRelationAggregateInput
+    workInfo?: WorkInfoOrderByWithRelationInput
     _relevance?: EmployeeOrderByRelevanceInput
   }
 
@@ -22258,22 +22290,22 @@ export namespace Prisma {
     managerId?: IntNullableFilter<"Employee"> | number | null
     createdAt?: DateTimeFilter<"Employee"> | Date | string
     updatedAt?: DateTimeFilter<"Employee"> | Date | string
+    Attendance?: AttendanceListRelationFilter
+    contactInfo?: XOR<ContactInfoNullableScalarRelationFilter, ContactInfoWhereInput> | null
+    departmentDirectorOf?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
+    departmentHeadOf?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
     manager?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
     subordinates?: EmployeeListRelationFilter
-    departmentHeadOf?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
-    departmentDirectorOf?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
-    workInfo?: XOR<WorkInfoNullableScalarRelationFilter, WorkInfoWhereInput> | null
-    personalInfo?: XOR<PersonalInfoNullableScalarRelationFilter, PersonalInfoWhereInput> | null
-    contactInfo?: XOR<ContactInfoNullableScalarRelationFilter, ContactInfoWhereInput> | null
-    otherInfo?: XOR<OtherInfoNullableScalarRelationFilter, OtherInfoWhereInput> | null
-    LeaveRequest?: LeaveRequestListRelationFilter
-    LeaveApprovalSteps?: LeaveApprovalStepApproverListRelationFilter
-    Attendance?: AttendanceListRelationFilter
     KPIEmployee?: KPIEmployeeListRelationFilter
+    LeaveApprovalSteps?: LeaveApprovalStepApproverListRelationFilter
+    LeaveRequest?: LeaveRequestListRelationFilter
+    otherInfo?: XOR<OtherInfoNullableScalarRelationFilter, OtherInfoWhereInput> | null
+    personalInfo?: XOR<PersonalInfoNullableScalarRelationFilter, PersonalInfoWhereInput> | null
     proposalsCreated?: ProposalListRelationFilter
     proposalsProposed?: ProposalListRelationFilter
-    proposalSignatures?: ProposalSignerListRelationFilter
     proposalApprovals?: ProposalApproverListRelationFilter
+    proposalSignatures?: ProposalSignerListRelationFilter
+    workInfo?: XOR<WorkInfoNullableScalarRelationFilter, WorkInfoWhereInput> | null
   }, "id" | "employeeCode">
 
   export type EmployeeOrderByWithAggregationInput = {
@@ -22326,8 +22358,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Department"> | Date | string
     headId?: IntNullableFilter<"Department"> | number | null
     directorId?: IntNullableFilter<"Department"> | number | null
-    head?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
     director?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
+    head?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
     positions?: PositionListRelationFilter
     workInfos?: WorkInfoListRelationFilter
   }
@@ -22341,8 +22373,8 @@ export namespace Prisma {
     updatedAt?: SortOrder
     headId?: SortOrderInput | SortOrder
     directorId?: SortOrderInput | SortOrder
-    head?: EmployeeOrderByWithRelationInput
     director?: EmployeeOrderByWithRelationInput
+    head?: EmployeeOrderByWithRelationInput
     positions?: PositionOrderByRelationAggregateInput
     workInfos?: WorkInfoOrderByRelationAggregateInput
     _relevance?: DepartmentOrderByRelevanceInput
@@ -22360,8 +22392,8 @@ export namespace Prisma {
     description?: StringNullableFilter<"Department"> | string | null
     createdAt?: DateTimeFilter<"Department"> | Date | string
     updatedAt?: DateTimeFilter<"Department"> | Date | string
-    head?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
     director?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
+    head?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
     positions?: PositionListRelationFilter
     workInfos?: WorkInfoListRelationFilter
   }, "id" | "name" | "abbreviation" | "headId" | "directorId">
@@ -22485,8 +22517,8 @@ export namespace Prisma {
     contractEndDate?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
     employeeId?: IntFilter<"WorkInfo"> | number
     department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
-    position?: XOR<PositionNullableScalarRelationFilter, PositionWhereInput> | null
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    position?: XOR<PositionNullableScalarRelationFilter, PositionWhereInput> | null
   }
 
   export type WorkInfoOrderByWithRelationInput = {
@@ -22504,8 +22536,8 @@ export namespace Prisma {
     contractEndDate?: SortOrderInput | SortOrder
     employeeId?: SortOrder
     department?: DepartmentOrderByWithRelationInput
-    position?: PositionOrderByWithRelationInput
     employee?: EmployeeOrderByWithRelationInput
+    position?: PositionOrderByWithRelationInput
     _relevance?: WorkInfoOrderByRelevanceInput
   }
 
@@ -22527,8 +22559,8 @@ export namespace Prisma {
     contractType?: StringNullableFilter<"WorkInfo"> | string | null
     contractEndDate?: DateTimeNullableFilter<"WorkInfo"> | Date | string | null
     department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
-    position?: XOR<PositionNullableScalarRelationFilter, PositionWhereInput> | null
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    position?: XOR<PositionNullableScalarRelationFilter, PositionWhereInput> | null
   }, "id" | "employeeId">
 
   export type WorkInfoOrderByWithAggregationInput = {
@@ -22826,8 +22858,8 @@ export namespace Prisma {
     approvedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
     updatedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     approvalSteps?: LeaveApprovalStepListRelationFilter
+    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
   }
 
   export type LeaveRequestOrderByWithRelationInput = {
@@ -22843,8 +22875,8 @@ export namespace Prisma {
     approvedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    employee?: EmployeeOrderByWithRelationInput
     approvalSteps?: LeaveApprovalStepOrderByRelationAggregateInput
+    employee?: EmployeeOrderByWithRelationInput
     _relevance?: LeaveRequestOrderByRelevanceInput
   }
 
@@ -22864,8 +22896,8 @@ export namespace Prisma {
     approvedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
     updatedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     approvalSteps?: LeaveApprovalStepListRelationFilter
+    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
   }, "id">
 
   export type LeaveRequestOrderByWithAggregationInput = {
@@ -22976,8 +23008,8 @@ export namespace Prisma {
     approverId?: IntFilter<"LeaveApprovalStepApprover"> | number
     status?: EnumLeaveStatusFilter<"LeaveApprovalStepApprover"> | $Enums.LeaveStatus
     approvedAt?: DateTimeNullableFilter<"LeaveApprovalStepApprover"> | Date | string | null
-    leaveApprovalStep?: XOR<LeaveApprovalStepScalarRelationFilter, LeaveApprovalStepWhereInput>
     approver?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    leaveApprovalStep?: XOR<LeaveApprovalStepScalarRelationFilter, LeaveApprovalStepWhereInput>
   }
 
   export type LeaveApprovalStepApproverOrderByWithRelationInput = {
@@ -22986,8 +23018,8 @@ export namespace Prisma {
     approverId?: SortOrder
     status?: SortOrder
     approvedAt?: SortOrderInput | SortOrder
-    leaveApprovalStep?: LeaveApprovalStepOrderByWithRelationInput
     approver?: EmployeeOrderByWithRelationInput
+    leaveApprovalStep?: LeaveApprovalStepOrderByWithRelationInput
   }
 
   export type LeaveApprovalStepApproverWhereUniqueInput = Prisma.AtLeast<{
@@ -23000,8 +23032,8 @@ export namespace Prisma {
     approverId?: IntFilter<"LeaveApprovalStepApprover"> | number
     status?: EnumLeaveStatusFilter<"LeaveApprovalStepApprover"> | $Enums.LeaveStatus
     approvedAt?: DateTimeNullableFilter<"LeaveApprovalStepApprover"> | Date | string | null
-    leaveApprovalStep?: XOR<LeaveApprovalStepScalarRelationFilter, LeaveApprovalStepWhereInput>
     approver?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    leaveApprovalStep?: XOR<LeaveApprovalStepScalarRelationFilter, LeaveApprovalStepWhereInput>
   }, "id" | "leaveApprovalStepId_approverId">
 
   export type LeaveApprovalStepApproverOrderByWithAggregationInput = {
@@ -23168,8 +23200,8 @@ export namespace Prisma {
     employeeId?: IntFilter<"KPIEmployee"> | number
     createdAt?: DateTimeFilter<"KPIEmployee"> | Date | string
     updatedAt?: DateTimeFilter<"KPIEmployee"> | Date | string
-    kpi?: XOR<KPIScalarRelationFilter, KPIWhereInput>
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    kpi?: XOR<KPIScalarRelationFilter, KPIWhereInput>
     entries?: KPIEntryListRelationFilter
   }
 
@@ -23179,8 +23211,8 @@ export namespace Prisma {
     employeeId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    kpi?: KPIOrderByWithRelationInput
     employee?: EmployeeOrderByWithRelationInput
+    kpi?: KPIOrderByWithRelationInput
     entries?: KPIEntryOrderByRelationAggregateInput
   }
 
@@ -23194,8 +23226,8 @@ export namespace Prisma {
     employeeId?: IntFilter<"KPIEmployee"> | number
     createdAt?: DateTimeFilter<"KPIEmployee"> | Date | string
     updatedAt?: DateTimeFilter<"KPIEmployee"> | Date | string
-    kpi?: XOR<KPIScalarRelationFilter, KPIWhereInput>
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    kpi?: XOR<KPIScalarRelationFilter, KPIWhereInput>
     entries?: KPIEntryListRelationFilter
   }, "id" | "kpiId_employeeId">
 
@@ -23316,11 +23348,11 @@ export namespace Prisma {
     createdById?: IntFilter<"Proposal"> | number
     createdAt?: DateTimeFilter<"Proposal"> | Date | string
     updatedAt?: DateTimeFilter<"Proposal"> | Date | string
-    proposer?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     createdBy?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     file?: XOR<FileNullableScalarRelationFilter, FileWhereInput> | null
-    signers?: ProposalSignerListRelationFilter
+    proposer?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     approvers?: ProposalApproverListRelationFilter
+    signers?: ProposalSignerListRelationFilter
   }
 
   export type ProposalOrderByWithRelationInput = {
@@ -23334,11 +23366,11 @@ export namespace Prisma {
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    proposer?: EmployeeOrderByWithRelationInput
     createdBy?: EmployeeOrderByWithRelationInput
     file?: FileOrderByWithRelationInput
-    signers?: ProposalSignerOrderByRelationAggregateInput
+    proposer?: EmployeeOrderByWithRelationInput
     approvers?: ProposalApproverOrderByRelationAggregateInput
+    signers?: ProposalSignerOrderByRelationAggregateInput
     _relevance?: ProposalOrderByRelevanceInput
   }
 
@@ -23356,11 +23388,11 @@ export namespace Prisma {
     createdById?: IntFilter<"Proposal"> | number
     createdAt?: DateTimeFilter<"Proposal"> | Date | string
     updatedAt?: DateTimeFilter<"Proposal"> | Date | string
-    proposer?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     createdBy?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     file?: XOR<FileNullableScalarRelationFilter, FileWhereInput> | null
-    signers?: ProposalSignerListRelationFilter
+    proposer?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     approvers?: ProposalApproverListRelationFilter
+    signers?: ProposalSignerListRelationFilter
   }, "id">
 
   export type ProposalOrderByWithAggregationInput = {
@@ -23406,6 +23438,7 @@ export namespace Prisma {
     signerId?: IntFilter<"ProposalSigner"> | number
     status?: EnumLeaveStatusFilter<"ProposalSigner"> | $Enums.LeaveStatus
     signedAt?: DateTimeNullableFilter<"ProposalSigner"> | Date | string | null
+    level?: IntFilter<"ProposalSigner"> | number
     proposal?: XOR<ProposalScalarRelationFilter, ProposalWhereInput>
     signer?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
   }
@@ -23416,6 +23449,7 @@ export namespace Prisma {
     signerId?: SortOrder
     status?: SortOrder
     signedAt?: SortOrderInput | SortOrder
+    level?: SortOrder
     proposal?: ProposalOrderByWithRelationInput
     signer?: EmployeeOrderByWithRelationInput
   }
@@ -23430,6 +23464,7 @@ export namespace Prisma {
     signerId?: IntFilter<"ProposalSigner"> | number
     status?: EnumLeaveStatusFilter<"ProposalSigner"> | $Enums.LeaveStatus
     signedAt?: DateTimeNullableFilter<"ProposalSigner"> | Date | string | null
+    level?: IntFilter<"ProposalSigner"> | number
     proposal?: XOR<ProposalScalarRelationFilter, ProposalWhereInput>
     signer?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
   }, "id" | "proposalId_signerId">
@@ -23440,6 +23475,7 @@ export namespace Prisma {
     signerId?: SortOrder
     status?: SortOrder
     signedAt?: SortOrderInput | SortOrder
+    level?: SortOrder
     _count?: ProposalSignerCountOrderByAggregateInput
     _avg?: ProposalSignerAvgOrderByAggregateInput
     _max?: ProposalSignerMaxOrderByAggregateInput
@@ -23456,6 +23492,7 @@ export namespace Prisma {
     signerId?: IntWithAggregatesFilter<"ProposalSigner"> | number
     status?: EnumLeaveStatusWithAggregatesFilter<"ProposalSigner"> | $Enums.LeaveStatus
     signedAt?: DateTimeNullableWithAggregatesFilter<"ProposalSigner"> | Date | string | null
+    level?: IntWithAggregatesFilter<"ProposalSigner"> | number
   }
 
   export type ProposalApproverWhereInput = {
@@ -23467,8 +23504,9 @@ export namespace Prisma {
     approverId?: IntFilter<"ProposalApprover"> | number
     status?: EnumLeaveStatusFilter<"ProposalApprover"> | $Enums.LeaveStatus
     approvedAt?: DateTimeNullableFilter<"ProposalApprover"> | Date | string | null
-    proposal?: XOR<ProposalScalarRelationFilter, ProposalWhereInput>
+    level?: IntFilter<"ProposalApprover"> | number
     approver?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    proposal?: XOR<ProposalScalarRelationFilter, ProposalWhereInput>
   }
 
   export type ProposalApproverOrderByWithRelationInput = {
@@ -23477,8 +23515,9 @@ export namespace Prisma {
     approverId?: SortOrder
     status?: SortOrder
     approvedAt?: SortOrderInput | SortOrder
-    proposal?: ProposalOrderByWithRelationInput
+    level?: SortOrder
     approver?: EmployeeOrderByWithRelationInput
+    proposal?: ProposalOrderByWithRelationInput
   }
 
   export type ProposalApproverWhereUniqueInput = Prisma.AtLeast<{
@@ -23491,8 +23530,9 @@ export namespace Prisma {
     approverId?: IntFilter<"ProposalApprover"> | number
     status?: EnumLeaveStatusFilter<"ProposalApprover"> | $Enums.LeaveStatus
     approvedAt?: DateTimeNullableFilter<"ProposalApprover"> | Date | string | null
-    proposal?: XOR<ProposalScalarRelationFilter, ProposalWhereInput>
+    level?: IntFilter<"ProposalApprover"> | number
     approver?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    proposal?: XOR<ProposalScalarRelationFilter, ProposalWhereInput>
   }, "id" | "proposalId_approverId">
 
   export type ProposalApproverOrderByWithAggregationInput = {
@@ -23501,6 +23541,7 @@ export namespace Prisma {
     approverId?: SortOrder
     status?: SortOrder
     approvedAt?: SortOrderInput | SortOrder
+    level?: SortOrder
     _count?: ProposalApproverCountOrderByAggregateInput
     _avg?: ProposalApproverAvgOrderByAggregateInput
     _max?: ProposalApproverMaxOrderByAggregateInput
@@ -23517,6 +23558,7 @@ export namespace Prisma {
     approverId?: IntWithAggregatesFilter<"ProposalApprover"> | number
     status?: EnumLeaveStatusWithAggregatesFilter<"ProposalApprover"> | $Enums.LeaveStatus
     approvedAt?: DateTimeNullableWithAggregatesFilter<"ProposalApprover"> | Date | string | null
+    level?: IntWithAggregatesFilter<"ProposalApprover"> | number
   }
 
   export type FileCreateInput = {
@@ -23601,22 +23643,22 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateInput = {
@@ -23632,21 +23674,21 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
   }
 
   export type EmployeeUpdateInput = {
@@ -23660,22 +23702,22 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateInput = {
@@ -23691,21 +23733,21 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
   }
 
   export type EmployeeCreateManyInput = {
@@ -23757,8 +23799,8 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    head?: EmployeeCreateNestedOneWithoutDepartmentHeadOfInput
     director?: EmployeeCreateNestedOneWithoutDepartmentDirectorOfInput
+    head?: EmployeeCreateNestedOneWithoutDepartmentHeadOfInput
     positions?: PositionCreateNestedManyWithoutDepartmentInput
     workInfos?: WorkInfoCreateNestedManyWithoutDepartmentInput
   }
@@ -23782,8 +23824,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    head?: EmployeeUpdateOneWithoutDepartmentHeadOfNestedInput
     director?: EmployeeUpdateOneWithoutDepartmentDirectorOfNestedInput
+    head?: EmployeeUpdateOneWithoutDepartmentHeadOfNestedInput
     positions?: PositionUpdateManyWithoutDepartmentNestedInput
     workInfos?: WorkInfoUpdateManyWithoutDepartmentNestedInput
   }
@@ -23912,8 +23954,8 @@ export namespace Prisma {
     contractType?: string | null
     contractEndDate?: Date | string | null
     department?: DepartmentCreateNestedOneWithoutWorkInfosInput
-    position?: PositionCreateNestedOneWithoutEmployeesInput
     employee: EmployeeCreateNestedOneWithoutWorkInfoInput
+    position?: PositionCreateNestedOneWithoutEmployeesInput
   }
 
   export type WorkInfoUncheckedCreateInput = {
@@ -23943,8 +23985,8 @@ export namespace Prisma {
     contractType?: NullableStringFieldUpdateOperationsInput | string | null
     contractEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     department?: DepartmentUpdateOneWithoutWorkInfosNestedInput
-    position?: PositionUpdateOneWithoutEmployeesNestedInput
     employee?: EmployeeUpdateOneRequiredWithoutWorkInfoNestedInput
+    position?: PositionUpdateOneWithoutEmployeesNestedInput
   }
 
   export type WorkInfoUncheckedUpdateInput = {
@@ -24265,8 +24307,8 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    employee: EmployeeCreateNestedOneWithoutLeaveRequestInput
     approvalSteps?: LeaveApprovalStepCreateNestedManyWithoutLeaveRequestInput
+    employee: EmployeeCreateNestedOneWithoutLeaveRequestInput
   }
 
   export type LeaveRequestUncheckedCreateInput = {
@@ -24296,8 +24338,8 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    employee?: EmployeeUpdateOneRequiredWithoutLeaveRequestNestedInput
     approvalSteps?: LeaveApprovalStepUpdateManyWithoutLeaveRequestNestedInput
+    employee?: EmployeeUpdateOneRequiredWithoutLeaveRequestNestedInput
   }
 
   export type LeaveRequestUncheckedUpdateInput = {
@@ -24418,8 +24460,8 @@ export namespace Prisma {
   export type LeaveApprovalStepApproverCreateInput = {
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
-    leaveApprovalStep: LeaveApprovalStepCreateNestedOneWithoutApproversInput
     approver: EmployeeCreateNestedOneWithoutLeaveApprovalStepsInput
+    leaveApprovalStep: LeaveApprovalStepCreateNestedOneWithoutApproversInput
   }
 
   export type LeaveApprovalStepApproverUncheckedCreateInput = {
@@ -24433,8 +24475,8 @@ export namespace Prisma {
   export type LeaveApprovalStepApproverUpdateInput = {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    leaveApprovalStep?: LeaveApprovalStepUpdateOneRequiredWithoutApproversNestedInput
     approver?: EmployeeUpdateOneRequiredWithoutLeaveApprovalStepsNestedInput
+    leaveApprovalStep?: LeaveApprovalStepUpdateOneRequiredWithoutApproversNestedInput
   }
 
   export type LeaveApprovalStepApproverUncheckedUpdateInput = {
@@ -24599,8 +24641,8 @@ export namespace Prisma {
   export type KPIEmployeeCreateInput = {
     createdAt?: Date | string
     updatedAt?: Date | string
-    kpi: KPICreateNestedOneWithoutKpiEmployeesInput
     employee: EmployeeCreateNestedOneWithoutKPIEmployeeInput
+    kpi: KPICreateNestedOneWithoutKpiEmployeesInput
     entries?: KPIEntryCreateNestedManyWithoutKpiEmployeeInput
   }
 
@@ -24616,8 +24658,8 @@ export namespace Prisma {
   export type KPIEmployeeUpdateInput = {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    kpi?: KPIUpdateOneRequiredWithoutKpiEmployeesNestedInput
     employee?: EmployeeUpdateOneRequiredWithoutKPIEmployeeNestedInput
+    kpi?: KPIUpdateOneRequiredWithoutKpiEmployeesNestedInput
     entries?: KPIEntryUpdateManyWithoutKpiEmployeeNestedInput
   }
 
@@ -24738,11 +24780,11 @@ export namespace Prisma {
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
-    proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
     file?: FileCreateNestedOneWithoutProposalsInput
-    signers?: ProposalSignerCreateNestedManyWithoutProposalInput
+    proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     approvers?: ProposalApproverCreateNestedManyWithoutProposalInput
+    signers?: ProposalSignerCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalUncheckedCreateInput = {
@@ -24756,8 +24798,8 @@ export namespace Prisma {
     createdById: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
+    signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalUpdateInput = {
@@ -24767,11 +24809,11 @@ export namespace Prisma {
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
     file?: FileUpdateOneWithoutProposalsNestedInput
-    signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
+    proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
     approvers?: ProposalApproverUpdateManyWithoutProposalNestedInput
+    signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalUncheckedUpdateInput = {
@@ -24785,8 +24827,8 @@ export namespace Prisma {
     createdById?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
+    signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalCreateManyInput = {
@@ -24827,6 +24869,7 @@ export namespace Prisma {
   export type ProposalSignerCreateInput = {
     status?: $Enums.LeaveStatus
     signedAt?: Date | string | null
+    level: number
     proposal: ProposalCreateNestedOneWithoutSignersInput
     signer: EmployeeCreateNestedOneWithoutProposalSignaturesInput
   }
@@ -24837,11 +24880,13 @@ export namespace Prisma {
     signerId: number
     status?: $Enums.LeaveStatus
     signedAt?: Date | string | null
+    level: number
   }
 
   export type ProposalSignerUpdateInput = {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
     proposal?: ProposalUpdateOneRequiredWithoutSignersNestedInput
     signer?: EmployeeUpdateOneRequiredWithoutProposalSignaturesNestedInput
   }
@@ -24852,6 +24897,7 @@ export namespace Prisma {
     signerId?: IntFieldUpdateOperationsInput | number
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProposalSignerCreateManyInput = {
@@ -24860,11 +24906,13 @@ export namespace Prisma {
     signerId: number
     status?: $Enums.LeaveStatus
     signedAt?: Date | string | null
+    level: number
   }
 
   export type ProposalSignerUpdateManyMutationInput = {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProposalSignerUncheckedUpdateManyInput = {
@@ -24873,13 +24921,15 @@ export namespace Prisma {
     signerId?: IntFieldUpdateOperationsInput | number
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProposalApproverCreateInput = {
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
-    proposal: ProposalCreateNestedOneWithoutApproversInput
+    level: number
     approver: EmployeeCreateNestedOneWithoutProposalApprovalsInput
+    proposal: ProposalCreateNestedOneWithoutApproversInput
   }
 
   export type ProposalApproverUncheckedCreateInput = {
@@ -24888,13 +24938,15 @@ export namespace Prisma {
     approverId: number
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
+    level: number
   }
 
   export type ProposalApproverUpdateInput = {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    proposal?: ProposalUpdateOneRequiredWithoutApproversNestedInput
+    level?: IntFieldUpdateOperationsInput | number
     approver?: EmployeeUpdateOneRequiredWithoutProposalApprovalsNestedInput
+    proposal?: ProposalUpdateOneRequiredWithoutApproversNestedInput
   }
 
   export type ProposalApproverUncheckedUpdateInput = {
@@ -24903,6 +24955,7 @@ export namespace Prisma {
     approverId?: IntFieldUpdateOperationsInput | number
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProposalApproverCreateManyInput = {
@@ -24911,11 +24964,13 @@ export namespace Prisma {
     approverId: number
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
+    level: number
   }
 
   export type ProposalApproverUpdateManyMutationInput = {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProposalApproverUncheckedUpdateManyInput = {
@@ -24924,6 +24979,7 @@ export namespace Prisma {
     approverId?: IntFieldUpdateOperationsInput | number
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -25140,6 +25196,22 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type AttendanceListRelationFilter = {
+    every?: AttendanceWhereInput
+    some?: AttendanceWhereInput
+    none?: AttendanceWhereInput
+  }
+
+  export type ContactInfoNullableScalarRelationFilter = {
+    is?: ContactInfoWhereInput | null
+    isNot?: ContactInfoWhereInput | null
+  }
+
+  export type DepartmentNullableScalarRelationFilter = {
+    is?: DepartmentWhereInput | null
+    isNot?: DepartmentWhereInput | null
+  }
+
   export type EmployeeNullableScalarRelationFilter = {
     is?: EmployeeWhereInput | null
     isNot?: EmployeeWhereInput | null
@@ -25151,35 +25223,10 @@ export namespace Prisma {
     none?: EmployeeWhereInput
   }
 
-  export type DepartmentNullableScalarRelationFilter = {
-    is?: DepartmentWhereInput | null
-    isNot?: DepartmentWhereInput | null
-  }
-
-  export type WorkInfoNullableScalarRelationFilter = {
-    is?: WorkInfoWhereInput | null
-    isNot?: WorkInfoWhereInput | null
-  }
-
-  export type PersonalInfoNullableScalarRelationFilter = {
-    is?: PersonalInfoWhereInput | null
-    isNot?: PersonalInfoWhereInput | null
-  }
-
-  export type ContactInfoNullableScalarRelationFilter = {
-    is?: ContactInfoWhereInput | null
-    isNot?: ContactInfoWhereInput | null
-  }
-
-  export type OtherInfoNullableScalarRelationFilter = {
-    is?: OtherInfoWhereInput | null
-    isNot?: OtherInfoWhereInput | null
-  }
-
-  export type LeaveRequestListRelationFilter = {
-    every?: LeaveRequestWhereInput
-    some?: LeaveRequestWhereInput
-    none?: LeaveRequestWhereInput
+  export type KPIEmployeeListRelationFilter = {
+    every?: KPIEmployeeWhereInput
+    some?: KPIEmployeeWhereInput
+    none?: KPIEmployeeWhereInput
   }
 
   export type LeaveApprovalStepApproverListRelationFilter = {
@@ -25188,22 +25235,20 @@ export namespace Prisma {
     none?: LeaveApprovalStepApproverWhereInput
   }
 
-  export type AttendanceListRelationFilter = {
-    every?: AttendanceWhereInput
-    some?: AttendanceWhereInput
-    none?: AttendanceWhereInput
+  export type LeaveRequestListRelationFilter = {
+    every?: LeaveRequestWhereInput
+    some?: LeaveRequestWhereInput
+    none?: LeaveRequestWhereInput
   }
 
-  export type KPIEmployeeListRelationFilter = {
-    every?: KPIEmployeeWhereInput
-    some?: KPIEmployeeWhereInput
-    none?: KPIEmployeeWhereInput
+  export type OtherInfoNullableScalarRelationFilter = {
+    is?: OtherInfoWhereInput | null
+    isNot?: OtherInfoWhereInput | null
   }
 
-  export type ProposalSignerListRelationFilter = {
-    every?: ProposalSignerWhereInput
-    some?: ProposalSignerWhereInput
-    none?: ProposalSignerWhereInput
+  export type PersonalInfoNullableScalarRelationFilter = {
+    is?: PersonalInfoWhereInput | null
+    isNot?: PersonalInfoWhereInput | null
   }
 
   export type ProposalApproverListRelationFilter = {
@@ -25212,24 +25257,27 @@ export namespace Prisma {
     none?: ProposalApproverWhereInput
   }
 
+  export type ProposalSignerListRelationFilter = {
+    every?: ProposalSignerWhereInput
+    some?: ProposalSignerWhereInput
+    none?: ProposalSignerWhereInput
+  }
+
+  export type WorkInfoNullableScalarRelationFilter = {
+    is?: WorkInfoWhereInput | null
+    isNot?: WorkInfoWhereInput | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
   }
 
-  export type EmployeeOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type LeaveRequestOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type LeaveApprovalStepApproverOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type AttendanceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EmployeeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -25237,11 +25285,19 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type ProposalSignerOrderByRelationAggregateInput = {
+  export type LeaveApprovalStepApproverOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LeaveRequestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type ProposalApproverOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProposalSignerOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -25506,14 +25562,14 @@ export namespace Prisma {
     departmentId?: SortOrder
   }
 
-  export type PositionNullableScalarRelationFilter = {
-    is?: PositionWhereInput | null
-    isNot?: PositionWhereInput | null
-  }
-
   export type EmployeeScalarRelationFilter = {
     is?: EmployeeWhereInput
     isNot?: EmployeeWhereInput
+  }
+
+  export type PositionNullableScalarRelationFilter = {
+    is?: PositionWhereInput | null
+    isNot?: PositionWhereInput | null
   }
 
   export type WorkInfoOrderByRelevanceInput = {
@@ -26324,12 +26380,14 @@ export namespace Prisma {
     signerId?: SortOrder
     status?: SortOrder
     signedAt?: SortOrder
+    level?: SortOrder
   }
 
   export type ProposalSignerAvgOrderByAggregateInput = {
     id?: SortOrder
     proposalId?: SortOrder
     signerId?: SortOrder
+    level?: SortOrder
   }
 
   export type ProposalSignerMaxOrderByAggregateInput = {
@@ -26338,6 +26396,7 @@ export namespace Prisma {
     signerId?: SortOrder
     status?: SortOrder
     signedAt?: SortOrder
+    level?: SortOrder
   }
 
   export type ProposalSignerMinOrderByAggregateInput = {
@@ -26346,12 +26405,14 @@ export namespace Prisma {
     signerId?: SortOrder
     status?: SortOrder
     signedAt?: SortOrder
+    level?: SortOrder
   }
 
   export type ProposalSignerSumOrderByAggregateInput = {
     id?: SortOrder
     proposalId?: SortOrder
     signerId?: SortOrder
+    level?: SortOrder
   }
 
   export type ProposalApproverProposalIdApproverIdCompoundUniqueInput = {
@@ -26365,12 +26426,14 @@ export namespace Prisma {
     approverId?: SortOrder
     status?: SortOrder
     approvedAt?: SortOrder
+    level?: SortOrder
   }
 
   export type ProposalApproverAvgOrderByAggregateInput = {
     id?: SortOrder
     proposalId?: SortOrder
     approverId?: SortOrder
+    level?: SortOrder
   }
 
   export type ProposalApproverMaxOrderByAggregateInput = {
@@ -26379,6 +26442,7 @@ export namespace Prisma {
     approverId?: SortOrder
     status?: SortOrder
     approvedAt?: SortOrder
+    level?: SortOrder
   }
 
   export type ProposalApproverMinOrderByAggregateInput = {
@@ -26387,12 +26451,14 @@ export namespace Prisma {
     approverId?: SortOrder
     status?: SortOrder
     approvedAt?: SortOrder
+    level?: SortOrder
   }
 
   export type ProposalApproverSumOrderByAggregateInput = {
     id?: SortOrder
     proposalId?: SortOrder
     approverId?: SortOrder
+    level?: SortOrder
   }
 
   export type ProposalCreateNestedManyWithoutFileInput = {
@@ -26457,6 +26523,31 @@ export namespace Prisma {
     deleteMany?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
   }
 
+  export type AttendanceCreateNestedManyWithoutEmployeeInput = {
+    create?: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput> | AttendanceCreateWithoutEmployeeInput[] | AttendanceUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: AttendanceCreateOrConnectWithoutEmployeeInput | AttendanceCreateOrConnectWithoutEmployeeInput[]
+    createMany?: AttendanceCreateManyEmployeeInputEnvelope
+    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+  }
+
+  export type ContactInfoCreateNestedOneWithoutEmployeeInput = {
+    create?: XOR<ContactInfoCreateWithoutEmployeeInput, ContactInfoUncheckedCreateWithoutEmployeeInput>
+    connectOrCreate?: ContactInfoCreateOrConnectWithoutEmployeeInput
+    connect?: ContactInfoWhereUniqueInput
+  }
+
+  export type DepartmentCreateNestedOneWithoutDirectorInput = {
+    create?: XOR<DepartmentCreateWithoutDirectorInput, DepartmentUncheckedCreateWithoutDirectorInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutDirectorInput
+    connect?: DepartmentWhereUniqueInput
+  }
+
+  export type DepartmentCreateNestedOneWithoutHeadInput = {
+    create?: XOR<DepartmentCreateWithoutHeadInput, DepartmentUncheckedCreateWithoutHeadInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutHeadInput
+    connect?: DepartmentWhereUniqueInput
+  }
+
   export type EmployeeCreateNestedOneWithoutSubordinatesInput = {
     create?: XOR<EmployeeCreateWithoutSubordinatesInput, EmployeeUncheckedCreateWithoutSubordinatesInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutSubordinatesInput
@@ -26470,47 +26561,11 @@ export namespace Prisma {
     connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
   }
 
-  export type DepartmentCreateNestedOneWithoutHeadInput = {
-    create?: XOR<DepartmentCreateWithoutHeadInput, DepartmentUncheckedCreateWithoutHeadInput>
-    connectOrCreate?: DepartmentCreateOrConnectWithoutHeadInput
-    connect?: DepartmentWhereUniqueInput
-  }
-
-  export type DepartmentCreateNestedOneWithoutDirectorInput = {
-    create?: XOR<DepartmentCreateWithoutDirectorInput, DepartmentUncheckedCreateWithoutDirectorInput>
-    connectOrCreate?: DepartmentCreateOrConnectWithoutDirectorInput
-    connect?: DepartmentWhereUniqueInput
-  }
-
-  export type WorkInfoCreateNestedOneWithoutEmployeeInput = {
-    create?: XOR<WorkInfoCreateWithoutEmployeeInput, WorkInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: WorkInfoCreateOrConnectWithoutEmployeeInput
-    connect?: WorkInfoWhereUniqueInput
-  }
-
-  export type PersonalInfoCreateNestedOneWithoutEmployeeInput = {
-    create?: XOR<PersonalInfoCreateWithoutEmployeeInput, PersonalInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: PersonalInfoCreateOrConnectWithoutEmployeeInput
-    connect?: PersonalInfoWhereUniqueInput
-  }
-
-  export type ContactInfoCreateNestedOneWithoutEmployeeInput = {
-    create?: XOR<ContactInfoCreateWithoutEmployeeInput, ContactInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: ContactInfoCreateOrConnectWithoutEmployeeInput
-    connect?: ContactInfoWhereUniqueInput
-  }
-
-  export type OtherInfoCreateNestedOneWithoutEmployeeInput = {
-    create?: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: OtherInfoCreateOrConnectWithoutEmployeeInput
-    connect?: OtherInfoWhereUniqueInput
-  }
-
-  export type LeaveRequestCreateNestedManyWithoutEmployeeInput = {
-    create?: XOR<LeaveRequestCreateWithoutEmployeeInput, LeaveRequestUncheckedCreateWithoutEmployeeInput> | LeaveRequestCreateWithoutEmployeeInput[] | LeaveRequestUncheckedCreateWithoutEmployeeInput[]
-    connectOrCreate?: LeaveRequestCreateOrConnectWithoutEmployeeInput | LeaveRequestCreateOrConnectWithoutEmployeeInput[]
-    createMany?: LeaveRequestCreateManyEmployeeInputEnvelope
-    connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+  export type KPIEmployeeCreateNestedManyWithoutEmployeeInput = {
+    create?: XOR<KPIEmployeeCreateWithoutEmployeeInput, KPIEmployeeUncheckedCreateWithoutEmployeeInput> | KPIEmployeeCreateWithoutEmployeeInput[] | KPIEmployeeUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: KPIEmployeeCreateOrConnectWithoutEmployeeInput | KPIEmployeeCreateOrConnectWithoutEmployeeInput[]
+    createMany?: KPIEmployeeCreateManyEmployeeInputEnvelope
+    connect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
   }
 
   export type LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput = {
@@ -26520,18 +26575,23 @@ export namespace Prisma {
     connect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
   }
 
-  export type AttendanceCreateNestedManyWithoutEmployeeInput = {
-    create?: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput> | AttendanceCreateWithoutEmployeeInput[] | AttendanceUncheckedCreateWithoutEmployeeInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutEmployeeInput | AttendanceCreateOrConnectWithoutEmployeeInput[]
-    createMany?: AttendanceCreateManyEmployeeInputEnvelope
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+  export type LeaveRequestCreateNestedManyWithoutEmployeeInput = {
+    create?: XOR<LeaveRequestCreateWithoutEmployeeInput, LeaveRequestUncheckedCreateWithoutEmployeeInput> | LeaveRequestCreateWithoutEmployeeInput[] | LeaveRequestUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: LeaveRequestCreateOrConnectWithoutEmployeeInput | LeaveRequestCreateOrConnectWithoutEmployeeInput[]
+    createMany?: LeaveRequestCreateManyEmployeeInputEnvelope
+    connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
   }
 
-  export type KPIEmployeeCreateNestedManyWithoutEmployeeInput = {
-    create?: XOR<KPIEmployeeCreateWithoutEmployeeInput, KPIEmployeeUncheckedCreateWithoutEmployeeInput> | KPIEmployeeCreateWithoutEmployeeInput[] | KPIEmployeeUncheckedCreateWithoutEmployeeInput[]
-    connectOrCreate?: KPIEmployeeCreateOrConnectWithoutEmployeeInput | KPIEmployeeCreateOrConnectWithoutEmployeeInput[]
-    createMany?: KPIEmployeeCreateManyEmployeeInputEnvelope
-    connect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+  export type OtherInfoCreateNestedOneWithoutEmployeeInput = {
+    create?: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
+    connectOrCreate?: OtherInfoCreateOrConnectWithoutEmployeeInput
+    connect?: OtherInfoWhereUniqueInput
+  }
+
+  export type PersonalInfoCreateNestedOneWithoutEmployeeInput = {
+    create?: XOR<PersonalInfoCreateWithoutEmployeeInput, PersonalInfoUncheckedCreateWithoutEmployeeInput>
+    connectOrCreate?: PersonalInfoCreateOrConnectWithoutEmployeeInput
+    connect?: PersonalInfoWhereUniqueInput
   }
 
   export type ProposalCreateNestedManyWithoutCreatedByInput = {
@@ -26548,13 +26608,6 @@ export namespace Prisma {
     connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
   }
 
-  export type ProposalSignerCreateNestedManyWithoutSignerInput = {
-    create?: XOR<ProposalSignerCreateWithoutSignerInput, ProposalSignerUncheckedCreateWithoutSignerInput> | ProposalSignerCreateWithoutSignerInput[] | ProposalSignerUncheckedCreateWithoutSignerInput[]
-    connectOrCreate?: ProposalSignerCreateOrConnectWithoutSignerInput | ProposalSignerCreateOrConnectWithoutSignerInput[]
-    createMany?: ProposalSignerCreateManySignerInputEnvelope
-    connect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
-  }
-
   export type ProposalApproverCreateNestedManyWithoutApproverInput = {
     create?: XOR<ProposalApproverCreateWithoutApproverInput, ProposalApproverUncheckedCreateWithoutApproverInput> | ProposalApproverCreateWithoutApproverInput[] | ProposalApproverUncheckedCreateWithoutApproverInput[]
     connectOrCreate?: ProposalApproverCreateOrConnectWithoutApproverInput | ProposalApproverCreateOrConnectWithoutApproverInput[]
@@ -26562,61 +26615,17 @@ export namespace Prisma {
     connect?: ProposalApproverWhereUniqueInput | ProposalApproverWhereUniqueInput[]
   }
 
-  export type EmployeeUncheckedCreateNestedManyWithoutManagerInput = {
-    create?: XOR<EmployeeCreateWithoutManagerInput, EmployeeUncheckedCreateWithoutManagerInput> | EmployeeCreateWithoutManagerInput[] | EmployeeUncheckedCreateWithoutManagerInput[]
-    connectOrCreate?: EmployeeCreateOrConnectWithoutManagerInput | EmployeeCreateOrConnectWithoutManagerInput[]
-    createMany?: EmployeeCreateManyManagerInputEnvelope
-    connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+  export type ProposalSignerCreateNestedManyWithoutSignerInput = {
+    create?: XOR<ProposalSignerCreateWithoutSignerInput, ProposalSignerUncheckedCreateWithoutSignerInput> | ProposalSignerCreateWithoutSignerInput[] | ProposalSignerUncheckedCreateWithoutSignerInput[]
+    connectOrCreate?: ProposalSignerCreateOrConnectWithoutSignerInput | ProposalSignerCreateOrConnectWithoutSignerInput[]
+    createMany?: ProposalSignerCreateManySignerInputEnvelope
+    connect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
   }
 
-  export type DepartmentUncheckedCreateNestedOneWithoutHeadInput = {
-    create?: XOR<DepartmentCreateWithoutHeadInput, DepartmentUncheckedCreateWithoutHeadInput>
-    connectOrCreate?: DepartmentCreateOrConnectWithoutHeadInput
-    connect?: DepartmentWhereUniqueInput
-  }
-
-  export type DepartmentUncheckedCreateNestedOneWithoutDirectorInput = {
-    create?: XOR<DepartmentCreateWithoutDirectorInput, DepartmentUncheckedCreateWithoutDirectorInput>
-    connectOrCreate?: DepartmentCreateOrConnectWithoutDirectorInput
-    connect?: DepartmentWhereUniqueInput
-  }
-
-  export type WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput = {
+  export type WorkInfoCreateNestedOneWithoutEmployeeInput = {
     create?: XOR<WorkInfoCreateWithoutEmployeeInput, WorkInfoUncheckedCreateWithoutEmployeeInput>
     connectOrCreate?: WorkInfoCreateOrConnectWithoutEmployeeInput
     connect?: WorkInfoWhereUniqueInput
-  }
-
-  export type PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput = {
-    create?: XOR<PersonalInfoCreateWithoutEmployeeInput, PersonalInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: PersonalInfoCreateOrConnectWithoutEmployeeInput
-    connect?: PersonalInfoWhereUniqueInput
-  }
-
-  export type ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput = {
-    create?: XOR<ContactInfoCreateWithoutEmployeeInput, ContactInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: ContactInfoCreateOrConnectWithoutEmployeeInput
-    connect?: ContactInfoWhereUniqueInput
-  }
-
-  export type OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput = {
-    create?: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: OtherInfoCreateOrConnectWithoutEmployeeInput
-    connect?: OtherInfoWhereUniqueInput
-  }
-
-  export type LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput = {
-    create?: XOR<LeaveRequestCreateWithoutEmployeeInput, LeaveRequestUncheckedCreateWithoutEmployeeInput> | LeaveRequestCreateWithoutEmployeeInput[] | LeaveRequestUncheckedCreateWithoutEmployeeInput[]
-    connectOrCreate?: LeaveRequestCreateOrConnectWithoutEmployeeInput | LeaveRequestCreateOrConnectWithoutEmployeeInput[]
-    createMany?: LeaveRequestCreateManyEmployeeInputEnvelope
-    connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
-  }
-
-  export type LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput = {
-    create?: XOR<LeaveApprovalStepApproverCreateWithoutApproverInput, LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput> | LeaveApprovalStepApproverCreateWithoutApproverInput[] | LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput[]
-    connectOrCreate?: LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput | LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput[]
-    createMany?: LeaveApprovalStepApproverCreateManyApproverInputEnvelope
-    connect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
   }
 
   export type AttendanceUncheckedCreateNestedManyWithoutEmployeeInput = {
@@ -26626,11 +26635,62 @@ export namespace Prisma {
     connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
   }
 
+  export type ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput = {
+    create?: XOR<ContactInfoCreateWithoutEmployeeInput, ContactInfoUncheckedCreateWithoutEmployeeInput>
+    connectOrCreate?: ContactInfoCreateOrConnectWithoutEmployeeInput
+    connect?: ContactInfoWhereUniqueInput
+  }
+
+  export type DepartmentUncheckedCreateNestedOneWithoutDirectorInput = {
+    create?: XOR<DepartmentCreateWithoutDirectorInput, DepartmentUncheckedCreateWithoutDirectorInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutDirectorInput
+    connect?: DepartmentWhereUniqueInput
+  }
+
+  export type DepartmentUncheckedCreateNestedOneWithoutHeadInput = {
+    create?: XOR<DepartmentCreateWithoutHeadInput, DepartmentUncheckedCreateWithoutHeadInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutHeadInput
+    connect?: DepartmentWhereUniqueInput
+  }
+
+  export type EmployeeUncheckedCreateNestedManyWithoutManagerInput = {
+    create?: XOR<EmployeeCreateWithoutManagerInput, EmployeeUncheckedCreateWithoutManagerInput> | EmployeeCreateWithoutManagerInput[] | EmployeeUncheckedCreateWithoutManagerInput[]
+    connectOrCreate?: EmployeeCreateOrConnectWithoutManagerInput | EmployeeCreateOrConnectWithoutManagerInput[]
+    createMany?: EmployeeCreateManyManagerInputEnvelope
+    connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+  }
+
   export type KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput = {
     create?: XOR<KPIEmployeeCreateWithoutEmployeeInput, KPIEmployeeUncheckedCreateWithoutEmployeeInput> | KPIEmployeeCreateWithoutEmployeeInput[] | KPIEmployeeUncheckedCreateWithoutEmployeeInput[]
     connectOrCreate?: KPIEmployeeCreateOrConnectWithoutEmployeeInput | KPIEmployeeCreateOrConnectWithoutEmployeeInput[]
     createMany?: KPIEmployeeCreateManyEmployeeInputEnvelope
     connect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+  }
+
+  export type LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput = {
+    create?: XOR<LeaveApprovalStepApproverCreateWithoutApproverInput, LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput> | LeaveApprovalStepApproverCreateWithoutApproverInput[] | LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput[]
+    connectOrCreate?: LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput | LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput[]
+    createMany?: LeaveApprovalStepApproverCreateManyApproverInputEnvelope
+    connect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+  }
+
+  export type LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput = {
+    create?: XOR<LeaveRequestCreateWithoutEmployeeInput, LeaveRequestUncheckedCreateWithoutEmployeeInput> | LeaveRequestCreateWithoutEmployeeInput[] | LeaveRequestUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: LeaveRequestCreateOrConnectWithoutEmployeeInput | LeaveRequestCreateOrConnectWithoutEmployeeInput[]
+    createMany?: LeaveRequestCreateManyEmployeeInputEnvelope
+    connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+  }
+
+  export type OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput = {
+    create?: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
+    connectOrCreate?: OtherInfoCreateOrConnectWithoutEmployeeInput
+    connect?: OtherInfoWhereUniqueInput
+  }
+
+  export type PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput = {
+    create?: XOR<PersonalInfoCreateWithoutEmployeeInput, PersonalInfoUncheckedCreateWithoutEmployeeInput>
+    connectOrCreate?: PersonalInfoCreateOrConnectWithoutEmployeeInput
+    connect?: PersonalInfoWhereUniqueInput
   }
 
   export type ProposalUncheckedCreateNestedManyWithoutCreatedByInput = {
@@ -26647,6 +26707,13 @@ export namespace Prisma {
     connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
   }
 
+  export type ProposalApproverUncheckedCreateNestedManyWithoutApproverInput = {
+    create?: XOR<ProposalApproverCreateWithoutApproverInput, ProposalApproverUncheckedCreateWithoutApproverInput> | ProposalApproverCreateWithoutApproverInput[] | ProposalApproverUncheckedCreateWithoutApproverInput[]
+    connectOrCreate?: ProposalApproverCreateOrConnectWithoutApproverInput | ProposalApproverCreateOrConnectWithoutApproverInput[]
+    createMany?: ProposalApproverCreateManyApproverInputEnvelope
+    connect?: ProposalApproverWhereUniqueInput | ProposalApproverWhereUniqueInput[]
+  }
+
   export type ProposalSignerUncheckedCreateNestedManyWithoutSignerInput = {
     create?: XOR<ProposalSignerCreateWithoutSignerInput, ProposalSignerUncheckedCreateWithoutSignerInput> | ProposalSignerCreateWithoutSignerInput[] | ProposalSignerUncheckedCreateWithoutSignerInput[]
     connectOrCreate?: ProposalSignerCreateOrConnectWithoutSignerInput | ProposalSignerCreateOrConnectWithoutSignerInput[]
@@ -26654,11 +26721,10 @@ export namespace Prisma {
     connect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
   }
 
-  export type ProposalApproverUncheckedCreateNestedManyWithoutApproverInput = {
-    create?: XOR<ProposalApproverCreateWithoutApproverInput, ProposalApproverUncheckedCreateWithoutApproverInput> | ProposalApproverCreateWithoutApproverInput[] | ProposalApproverUncheckedCreateWithoutApproverInput[]
-    connectOrCreate?: ProposalApproverCreateOrConnectWithoutApproverInput | ProposalApproverCreateOrConnectWithoutApproverInput[]
-    createMany?: ProposalApproverCreateManyApproverInputEnvelope
-    connect?: ProposalApproverWhereUniqueInput | ProposalApproverWhereUniqueInput[]
+  export type WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput = {
+    create?: XOR<WorkInfoCreateWithoutEmployeeInput, WorkInfoUncheckedCreateWithoutEmployeeInput>
+    connectOrCreate?: WorkInfoCreateOrConnectWithoutEmployeeInput
+    connect?: WorkInfoWhereUniqueInput
   }
 
   export type EnumSexFieldUpdateOperationsInput = {
@@ -26679,6 +26745,50 @@ export namespace Prisma {
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type AttendanceUpdateManyWithoutEmployeeNestedInput = {
+    create?: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput> | AttendanceCreateWithoutEmployeeInput[] | AttendanceUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: AttendanceCreateOrConnectWithoutEmployeeInput | AttendanceCreateOrConnectWithoutEmployeeInput[]
+    upsert?: AttendanceUpsertWithWhereUniqueWithoutEmployeeInput | AttendanceUpsertWithWhereUniqueWithoutEmployeeInput[]
+    createMany?: AttendanceCreateManyEmployeeInputEnvelope
+    set?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    disconnect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    delete?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    update?: AttendanceUpdateWithWhereUniqueWithoutEmployeeInput | AttendanceUpdateWithWhereUniqueWithoutEmployeeInput[]
+    updateMany?: AttendanceUpdateManyWithWhereWithoutEmployeeInput | AttendanceUpdateManyWithWhereWithoutEmployeeInput[]
+    deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+  }
+
+  export type ContactInfoUpdateOneWithoutEmployeeNestedInput = {
+    create?: XOR<ContactInfoCreateWithoutEmployeeInput, ContactInfoUncheckedCreateWithoutEmployeeInput>
+    connectOrCreate?: ContactInfoCreateOrConnectWithoutEmployeeInput
+    upsert?: ContactInfoUpsertWithoutEmployeeInput
+    disconnect?: ContactInfoWhereInput | boolean
+    delete?: ContactInfoWhereInput | boolean
+    connect?: ContactInfoWhereUniqueInput
+    update?: XOR<XOR<ContactInfoUpdateToOneWithWhereWithoutEmployeeInput, ContactInfoUpdateWithoutEmployeeInput>, ContactInfoUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type DepartmentUpdateOneWithoutDirectorNestedInput = {
+    create?: XOR<DepartmentCreateWithoutDirectorInput, DepartmentUncheckedCreateWithoutDirectorInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutDirectorInput
+    upsert?: DepartmentUpsertWithoutDirectorInput
+    disconnect?: DepartmentWhereInput | boolean
+    delete?: DepartmentWhereInput | boolean
+    connect?: DepartmentWhereUniqueInput
+    update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutDirectorInput, DepartmentUpdateWithoutDirectorInput>, DepartmentUncheckedUpdateWithoutDirectorInput>
+  }
+
+  export type DepartmentUpdateOneWithoutHeadNestedInput = {
+    create?: XOR<DepartmentCreateWithoutHeadInput, DepartmentUncheckedCreateWithoutHeadInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutHeadInput
+    upsert?: DepartmentUpsertWithoutHeadInput
+    disconnect?: DepartmentWhereInput | boolean
+    delete?: DepartmentWhereInput | boolean
+    connect?: DepartmentWhereUniqueInput
+    update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutHeadInput, DepartmentUpdateWithoutHeadInput>, DepartmentUncheckedUpdateWithoutHeadInput>
   }
 
   export type EmployeeUpdateOneWithoutSubordinatesNestedInput = {
@@ -26705,78 +26815,18 @@ export namespace Prisma {
     deleteMany?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
   }
 
-  export type DepartmentUpdateOneWithoutHeadNestedInput = {
-    create?: XOR<DepartmentCreateWithoutHeadInput, DepartmentUncheckedCreateWithoutHeadInput>
-    connectOrCreate?: DepartmentCreateOrConnectWithoutHeadInput
-    upsert?: DepartmentUpsertWithoutHeadInput
-    disconnect?: DepartmentWhereInput | boolean
-    delete?: DepartmentWhereInput | boolean
-    connect?: DepartmentWhereUniqueInput
-    update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutHeadInput, DepartmentUpdateWithoutHeadInput>, DepartmentUncheckedUpdateWithoutHeadInput>
-  }
-
-  export type DepartmentUpdateOneWithoutDirectorNestedInput = {
-    create?: XOR<DepartmentCreateWithoutDirectorInput, DepartmentUncheckedCreateWithoutDirectorInput>
-    connectOrCreate?: DepartmentCreateOrConnectWithoutDirectorInput
-    upsert?: DepartmentUpsertWithoutDirectorInput
-    disconnect?: DepartmentWhereInput | boolean
-    delete?: DepartmentWhereInput | boolean
-    connect?: DepartmentWhereUniqueInput
-    update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutDirectorInput, DepartmentUpdateWithoutDirectorInput>, DepartmentUncheckedUpdateWithoutDirectorInput>
-  }
-
-  export type WorkInfoUpdateOneWithoutEmployeeNestedInput = {
-    create?: XOR<WorkInfoCreateWithoutEmployeeInput, WorkInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: WorkInfoCreateOrConnectWithoutEmployeeInput
-    upsert?: WorkInfoUpsertWithoutEmployeeInput
-    disconnect?: WorkInfoWhereInput | boolean
-    delete?: WorkInfoWhereInput | boolean
-    connect?: WorkInfoWhereUniqueInput
-    update?: XOR<XOR<WorkInfoUpdateToOneWithWhereWithoutEmployeeInput, WorkInfoUpdateWithoutEmployeeInput>, WorkInfoUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type PersonalInfoUpdateOneWithoutEmployeeNestedInput = {
-    create?: XOR<PersonalInfoCreateWithoutEmployeeInput, PersonalInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: PersonalInfoCreateOrConnectWithoutEmployeeInput
-    upsert?: PersonalInfoUpsertWithoutEmployeeInput
-    disconnect?: PersonalInfoWhereInput | boolean
-    delete?: PersonalInfoWhereInput | boolean
-    connect?: PersonalInfoWhereUniqueInput
-    update?: XOR<XOR<PersonalInfoUpdateToOneWithWhereWithoutEmployeeInput, PersonalInfoUpdateWithoutEmployeeInput>, PersonalInfoUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type ContactInfoUpdateOneWithoutEmployeeNestedInput = {
-    create?: XOR<ContactInfoCreateWithoutEmployeeInput, ContactInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: ContactInfoCreateOrConnectWithoutEmployeeInput
-    upsert?: ContactInfoUpsertWithoutEmployeeInput
-    disconnect?: ContactInfoWhereInput | boolean
-    delete?: ContactInfoWhereInput | boolean
-    connect?: ContactInfoWhereUniqueInput
-    update?: XOR<XOR<ContactInfoUpdateToOneWithWhereWithoutEmployeeInput, ContactInfoUpdateWithoutEmployeeInput>, ContactInfoUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type OtherInfoUpdateOneWithoutEmployeeNestedInput = {
-    create?: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: OtherInfoCreateOrConnectWithoutEmployeeInput
-    upsert?: OtherInfoUpsertWithoutEmployeeInput
-    disconnect?: OtherInfoWhereInput | boolean
-    delete?: OtherInfoWhereInput | boolean
-    connect?: OtherInfoWhereUniqueInput
-    update?: XOR<XOR<OtherInfoUpdateToOneWithWhereWithoutEmployeeInput, OtherInfoUpdateWithoutEmployeeInput>, OtherInfoUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type LeaveRequestUpdateManyWithoutEmployeeNestedInput = {
-    create?: XOR<LeaveRequestCreateWithoutEmployeeInput, LeaveRequestUncheckedCreateWithoutEmployeeInput> | LeaveRequestCreateWithoutEmployeeInput[] | LeaveRequestUncheckedCreateWithoutEmployeeInput[]
-    connectOrCreate?: LeaveRequestCreateOrConnectWithoutEmployeeInput | LeaveRequestCreateOrConnectWithoutEmployeeInput[]
-    upsert?: LeaveRequestUpsertWithWhereUniqueWithoutEmployeeInput | LeaveRequestUpsertWithWhereUniqueWithoutEmployeeInput[]
-    createMany?: LeaveRequestCreateManyEmployeeInputEnvelope
-    set?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
-    disconnect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
-    delete?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
-    connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
-    update?: LeaveRequestUpdateWithWhereUniqueWithoutEmployeeInput | LeaveRequestUpdateWithWhereUniqueWithoutEmployeeInput[]
-    updateMany?: LeaveRequestUpdateManyWithWhereWithoutEmployeeInput | LeaveRequestUpdateManyWithWhereWithoutEmployeeInput[]
-    deleteMany?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
+  export type KPIEmployeeUpdateManyWithoutEmployeeNestedInput = {
+    create?: XOR<KPIEmployeeCreateWithoutEmployeeInput, KPIEmployeeUncheckedCreateWithoutEmployeeInput> | KPIEmployeeCreateWithoutEmployeeInput[] | KPIEmployeeUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: KPIEmployeeCreateOrConnectWithoutEmployeeInput | KPIEmployeeCreateOrConnectWithoutEmployeeInput[]
+    upsert?: KPIEmployeeUpsertWithWhereUniqueWithoutEmployeeInput | KPIEmployeeUpsertWithWhereUniqueWithoutEmployeeInput[]
+    createMany?: KPIEmployeeCreateManyEmployeeInputEnvelope
+    set?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    disconnect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    delete?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    connect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
+    update?: KPIEmployeeUpdateWithWhereUniqueWithoutEmployeeInput | KPIEmployeeUpdateWithWhereUniqueWithoutEmployeeInput[]
+    updateMany?: KPIEmployeeUpdateManyWithWhereWithoutEmployeeInput | KPIEmployeeUpdateManyWithWhereWithoutEmployeeInput[]
+    deleteMany?: KPIEmployeeScalarWhereInput | KPIEmployeeScalarWhereInput[]
   }
 
   export type LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput = {
@@ -26793,32 +26843,38 @@ export namespace Prisma {
     deleteMany?: LeaveApprovalStepApproverScalarWhereInput | LeaveApprovalStepApproverScalarWhereInput[]
   }
 
-  export type AttendanceUpdateManyWithoutEmployeeNestedInput = {
-    create?: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput> | AttendanceCreateWithoutEmployeeInput[] | AttendanceUncheckedCreateWithoutEmployeeInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutEmployeeInput | AttendanceCreateOrConnectWithoutEmployeeInput[]
-    upsert?: AttendanceUpsertWithWhereUniqueWithoutEmployeeInput | AttendanceUpsertWithWhereUniqueWithoutEmployeeInput[]
-    createMany?: AttendanceCreateManyEmployeeInputEnvelope
-    set?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    disconnect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    delete?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    update?: AttendanceUpdateWithWhereUniqueWithoutEmployeeInput | AttendanceUpdateWithWhereUniqueWithoutEmployeeInput[]
-    updateMany?: AttendanceUpdateManyWithWhereWithoutEmployeeInput | AttendanceUpdateManyWithWhereWithoutEmployeeInput[]
-    deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+  export type LeaveRequestUpdateManyWithoutEmployeeNestedInput = {
+    create?: XOR<LeaveRequestCreateWithoutEmployeeInput, LeaveRequestUncheckedCreateWithoutEmployeeInput> | LeaveRequestCreateWithoutEmployeeInput[] | LeaveRequestUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: LeaveRequestCreateOrConnectWithoutEmployeeInput | LeaveRequestCreateOrConnectWithoutEmployeeInput[]
+    upsert?: LeaveRequestUpsertWithWhereUniqueWithoutEmployeeInput | LeaveRequestUpsertWithWhereUniqueWithoutEmployeeInput[]
+    createMany?: LeaveRequestCreateManyEmployeeInputEnvelope
+    set?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+    disconnect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+    delete?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+    connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+    update?: LeaveRequestUpdateWithWhereUniqueWithoutEmployeeInput | LeaveRequestUpdateWithWhereUniqueWithoutEmployeeInput[]
+    updateMany?: LeaveRequestUpdateManyWithWhereWithoutEmployeeInput | LeaveRequestUpdateManyWithWhereWithoutEmployeeInput[]
+    deleteMany?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
   }
 
-  export type KPIEmployeeUpdateManyWithoutEmployeeNestedInput = {
-    create?: XOR<KPIEmployeeCreateWithoutEmployeeInput, KPIEmployeeUncheckedCreateWithoutEmployeeInput> | KPIEmployeeCreateWithoutEmployeeInput[] | KPIEmployeeUncheckedCreateWithoutEmployeeInput[]
-    connectOrCreate?: KPIEmployeeCreateOrConnectWithoutEmployeeInput | KPIEmployeeCreateOrConnectWithoutEmployeeInput[]
-    upsert?: KPIEmployeeUpsertWithWhereUniqueWithoutEmployeeInput | KPIEmployeeUpsertWithWhereUniqueWithoutEmployeeInput[]
-    createMany?: KPIEmployeeCreateManyEmployeeInputEnvelope
-    set?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
-    disconnect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
-    delete?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
-    connect?: KPIEmployeeWhereUniqueInput | KPIEmployeeWhereUniqueInput[]
-    update?: KPIEmployeeUpdateWithWhereUniqueWithoutEmployeeInput | KPIEmployeeUpdateWithWhereUniqueWithoutEmployeeInput[]
-    updateMany?: KPIEmployeeUpdateManyWithWhereWithoutEmployeeInput | KPIEmployeeUpdateManyWithWhereWithoutEmployeeInput[]
-    deleteMany?: KPIEmployeeScalarWhereInput | KPIEmployeeScalarWhereInput[]
+  export type OtherInfoUpdateOneWithoutEmployeeNestedInput = {
+    create?: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
+    connectOrCreate?: OtherInfoCreateOrConnectWithoutEmployeeInput
+    upsert?: OtherInfoUpsertWithoutEmployeeInput
+    disconnect?: OtherInfoWhereInput | boolean
+    delete?: OtherInfoWhereInput | boolean
+    connect?: OtherInfoWhereUniqueInput
+    update?: XOR<XOR<OtherInfoUpdateToOneWithWhereWithoutEmployeeInput, OtherInfoUpdateWithoutEmployeeInput>, OtherInfoUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type PersonalInfoUpdateOneWithoutEmployeeNestedInput = {
+    create?: XOR<PersonalInfoCreateWithoutEmployeeInput, PersonalInfoUncheckedCreateWithoutEmployeeInput>
+    connectOrCreate?: PersonalInfoCreateOrConnectWithoutEmployeeInput
+    upsert?: PersonalInfoUpsertWithoutEmployeeInput
+    disconnect?: PersonalInfoWhereInput | boolean
+    delete?: PersonalInfoWhereInput | boolean
+    connect?: PersonalInfoWhereUniqueInput
+    update?: XOR<XOR<PersonalInfoUpdateToOneWithWhereWithoutEmployeeInput, PersonalInfoUpdateWithoutEmployeeInput>, PersonalInfoUncheckedUpdateWithoutEmployeeInput>
   }
 
   export type ProposalUpdateManyWithoutCreatedByNestedInput = {
@@ -26849,20 +26905,6 @@ export namespace Prisma {
     deleteMany?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
   }
 
-  export type ProposalSignerUpdateManyWithoutSignerNestedInput = {
-    create?: XOR<ProposalSignerCreateWithoutSignerInput, ProposalSignerUncheckedCreateWithoutSignerInput> | ProposalSignerCreateWithoutSignerInput[] | ProposalSignerUncheckedCreateWithoutSignerInput[]
-    connectOrCreate?: ProposalSignerCreateOrConnectWithoutSignerInput | ProposalSignerCreateOrConnectWithoutSignerInput[]
-    upsert?: ProposalSignerUpsertWithWhereUniqueWithoutSignerInput | ProposalSignerUpsertWithWhereUniqueWithoutSignerInput[]
-    createMany?: ProposalSignerCreateManySignerInputEnvelope
-    set?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
-    disconnect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
-    delete?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
-    connect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
-    update?: ProposalSignerUpdateWithWhereUniqueWithoutSignerInput | ProposalSignerUpdateWithWhereUniqueWithoutSignerInput[]
-    updateMany?: ProposalSignerUpdateManyWithWhereWithoutSignerInput | ProposalSignerUpdateManyWithWhereWithoutSignerInput[]
-    deleteMany?: ProposalSignerScalarWhereInput | ProposalSignerScalarWhereInput[]
-  }
-
   export type ProposalApproverUpdateManyWithoutApproverNestedInput = {
     create?: XOR<ProposalApproverCreateWithoutApproverInput, ProposalApproverUncheckedCreateWithoutApproverInput> | ProposalApproverCreateWithoutApproverInput[] | ProposalApproverUncheckedCreateWithoutApproverInput[]
     connectOrCreate?: ProposalApproverCreateOrConnectWithoutApproverInput | ProposalApproverCreateOrConnectWithoutApproverInput[]
@@ -26877,49 +26919,21 @@ export namespace Prisma {
     deleteMany?: ProposalApproverScalarWhereInput | ProposalApproverScalarWhereInput[]
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type ProposalSignerUpdateManyWithoutSignerNestedInput = {
+    create?: XOR<ProposalSignerCreateWithoutSignerInput, ProposalSignerUncheckedCreateWithoutSignerInput> | ProposalSignerCreateWithoutSignerInput[] | ProposalSignerUncheckedCreateWithoutSignerInput[]
+    connectOrCreate?: ProposalSignerCreateOrConnectWithoutSignerInput | ProposalSignerCreateOrConnectWithoutSignerInput[]
+    upsert?: ProposalSignerUpsertWithWhereUniqueWithoutSignerInput | ProposalSignerUpsertWithWhereUniqueWithoutSignerInput[]
+    createMany?: ProposalSignerCreateManySignerInputEnvelope
+    set?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
+    disconnect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
+    delete?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
+    connect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
+    update?: ProposalSignerUpdateWithWhereUniqueWithoutSignerInput | ProposalSignerUpdateWithWhereUniqueWithoutSignerInput[]
+    updateMany?: ProposalSignerUpdateManyWithWhereWithoutSignerInput | ProposalSignerUpdateManyWithWhereWithoutSignerInput[]
+    deleteMany?: ProposalSignerScalarWhereInput | ProposalSignerScalarWhereInput[]
   }
 
-  export type EmployeeUncheckedUpdateManyWithoutManagerNestedInput = {
-    create?: XOR<EmployeeCreateWithoutManagerInput, EmployeeUncheckedCreateWithoutManagerInput> | EmployeeCreateWithoutManagerInput[] | EmployeeUncheckedCreateWithoutManagerInput[]
-    connectOrCreate?: EmployeeCreateOrConnectWithoutManagerInput | EmployeeCreateOrConnectWithoutManagerInput[]
-    upsert?: EmployeeUpsertWithWhereUniqueWithoutManagerInput | EmployeeUpsertWithWhereUniqueWithoutManagerInput[]
-    createMany?: EmployeeCreateManyManagerInputEnvelope
-    set?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
-    disconnect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
-    delete?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
-    connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
-    update?: EmployeeUpdateWithWhereUniqueWithoutManagerInput | EmployeeUpdateWithWhereUniqueWithoutManagerInput[]
-    updateMany?: EmployeeUpdateManyWithWhereWithoutManagerInput | EmployeeUpdateManyWithWhereWithoutManagerInput[]
-    deleteMany?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
-  }
-
-  export type DepartmentUncheckedUpdateOneWithoutHeadNestedInput = {
-    create?: XOR<DepartmentCreateWithoutHeadInput, DepartmentUncheckedCreateWithoutHeadInput>
-    connectOrCreate?: DepartmentCreateOrConnectWithoutHeadInput
-    upsert?: DepartmentUpsertWithoutHeadInput
-    disconnect?: DepartmentWhereInput | boolean
-    delete?: DepartmentWhereInput | boolean
-    connect?: DepartmentWhereUniqueInput
-    update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutHeadInput, DepartmentUpdateWithoutHeadInput>, DepartmentUncheckedUpdateWithoutHeadInput>
-  }
-
-  export type DepartmentUncheckedUpdateOneWithoutDirectorNestedInput = {
-    create?: XOR<DepartmentCreateWithoutDirectorInput, DepartmentUncheckedCreateWithoutDirectorInput>
-    connectOrCreate?: DepartmentCreateOrConnectWithoutDirectorInput
-    upsert?: DepartmentUpsertWithoutDirectorInput
-    disconnect?: DepartmentWhereInput | boolean
-    delete?: DepartmentWhereInput | boolean
-    connect?: DepartmentWhereUniqueInput
-    update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutDirectorInput, DepartmentUpdateWithoutDirectorInput>, DepartmentUncheckedUpdateWithoutDirectorInput>
-  }
-
-  export type WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput = {
+  export type WorkInfoUpdateOneWithoutEmployeeNestedInput = {
     create?: XOR<WorkInfoCreateWithoutEmployeeInput, WorkInfoUncheckedCreateWithoutEmployeeInput>
     connectOrCreate?: WorkInfoCreateOrConnectWithoutEmployeeInput
     upsert?: WorkInfoUpsertWithoutEmployeeInput
@@ -26929,62 +26943,12 @@ export namespace Prisma {
     update?: XOR<XOR<WorkInfoUpdateToOneWithWhereWithoutEmployeeInput, WorkInfoUpdateWithoutEmployeeInput>, WorkInfoUncheckedUpdateWithoutEmployeeInput>
   }
 
-  export type PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput = {
-    create?: XOR<PersonalInfoCreateWithoutEmployeeInput, PersonalInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: PersonalInfoCreateOrConnectWithoutEmployeeInput
-    upsert?: PersonalInfoUpsertWithoutEmployeeInput
-    disconnect?: PersonalInfoWhereInput | boolean
-    delete?: PersonalInfoWhereInput | boolean
-    connect?: PersonalInfoWhereUniqueInput
-    update?: XOR<XOR<PersonalInfoUpdateToOneWithWhereWithoutEmployeeInput, PersonalInfoUpdateWithoutEmployeeInput>, PersonalInfoUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput = {
-    create?: XOR<ContactInfoCreateWithoutEmployeeInput, ContactInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: ContactInfoCreateOrConnectWithoutEmployeeInput
-    upsert?: ContactInfoUpsertWithoutEmployeeInput
-    disconnect?: ContactInfoWhereInput | boolean
-    delete?: ContactInfoWhereInput | boolean
-    connect?: ContactInfoWhereUniqueInput
-    update?: XOR<XOR<ContactInfoUpdateToOneWithWhereWithoutEmployeeInput, ContactInfoUpdateWithoutEmployeeInput>, ContactInfoUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput = {
-    create?: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: OtherInfoCreateOrConnectWithoutEmployeeInput
-    upsert?: OtherInfoUpsertWithoutEmployeeInput
-    disconnect?: OtherInfoWhereInput | boolean
-    delete?: OtherInfoWhereInput | boolean
-    connect?: OtherInfoWhereUniqueInput
-    update?: XOR<XOR<OtherInfoUpdateToOneWithWhereWithoutEmployeeInput, OtherInfoUpdateWithoutEmployeeInput>, OtherInfoUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput = {
-    create?: XOR<LeaveRequestCreateWithoutEmployeeInput, LeaveRequestUncheckedCreateWithoutEmployeeInput> | LeaveRequestCreateWithoutEmployeeInput[] | LeaveRequestUncheckedCreateWithoutEmployeeInput[]
-    connectOrCreate?: LeaveRequestCreateOrConnectWithoutEmployeeInput | LeaveRequestCreateOrConnectWithoutEmployeeInput[]
-    upsert?: LeaveRequestUpsertWithWhereUniqueWithoutEmployeeInput | LeaveRequestUpsertWithWhereUniqueWithoutEmployeeInput[]
-    createMany?: LeaveRequestCreateManyEmployeeInputEnvelope
-    set?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
-    disconnect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
-    delete?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
-    connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
-    update?: LeaveRequestUpdateWithWhereUniqueWithoutEmployeeInput | LeaveRequestUpdateWithWhereUniqueWithoutEmployeeInput[]
-    updateMany?: LeaveRequestUpdateManyWithWhereWithoutEmployeeInput | LeaveRequestUpdateManyWithWhereWithoutEmployeeInput[]
-    deleteMany?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
-  }
-
-  export type LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput = {
-    create?: XOR<LeaveApprovalStepApproverCreateWithoutApproverInput, LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput> | LeaveApprovalStepApproverCreateWithoutApproverInput[] | LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput[]
-    connectOrCreate?: LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput | LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput[]
-    upsert?: LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutApproverInput | LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutApproverInput[]
-    createMany?: LeaveApprovalStepApproverCreateManyApproverInputEnvelope
-    set?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
-    disconnect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
-    delete?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
-    connect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
-    update?: LeaveApprovalStepApproverUpdateWithWhereUniqueWithoutApproverInput | LeaveApprovalStepApproverUpdateWithWhereUniqueWithoutApproverInput[]
-    updateMany?: LeaveApprovalStepApproverUpdateManyWithWhereWithoutApproverInput | LeaveApprovalStepApproverUpdateManyWithWhereWithoutApproverInput[]
-    deleteMany?: LeaveApprovalStepApproverScalarWhereInput | LeaveApprovalStepApproverScalarWhereInput[]
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput = {
@@ -27001,6 +26965,50 @@ export namespace Prisma {
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
   }
 
+  export type ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput = {
+    create?: XOR<ContactInfoCreateWithoutEmployeeInput, ContactInfoUncheckedCreateWithoutEmployeeInput>
+    connectOrCreate?: ContactInfoCreateOrConnectWithoutEmployeeInput
+    upsert?: ContactInfoUpsertWithoutEmployeeInput
+    disconnect?: ContactInfoWhereInput | boolean
+    delete?: ContactInfoWhereInput | boolean
+    connect?: ContactInfoWhereUniqueInput
+    update?: XOR<XOR<ContactInfoUpdateToOneWithWhereWithoutEmployeeInput, ContactInfoUpdateWithoutEmployeeInput>, ContactInfoUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type DepartmentUncheckedUpdateOneWithoutDirectorNestedInput = {
+    create?: XOR<DepartmentCreateWithoutDirectorInput, DepartmentUncheckedCreateWithoutDirectorInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutDirectorInput
+    upsert?: DepartmentUpsertWithoutDirectorInput
+    disconnect?: DepartmentWhereInput | boolean
+    delete?: DepartmentWhereInput | boolean
+    connect?: DepartmentWhereUniqueInput
+    update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutDirectorInput, DepartmentUpdateWithoutDirectorInput>, DepartmentUncheckedUpdateWithoutDirectorInput>
+  }
+
+  export type DepartmentUncheckedUpdateOneWithoutHeadNestedInput = {
+    create?: XOR<DepartmentCreateWithoutHeadInput, DepartmentUncheckedCreateWithoutHeadInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutHeadInput
+    upsert?: DepartmentUpsertWithoutHeadInput
+    disconnect?: DepartmentWhereInput | boolean
+    delete?: DepartmentWhereInput | boolean
+    connect?: DepartmentWhereUniqueInput
+    update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutHeadInput, DepartmentUpdateWithoutHeadInput>, DepartmentUncheckedUpdateWithoutHeadInput>
+  }
+
+  export type EmployeeUncheckedUpdateManyWithoutManagerNestedInput = {
+    create?: XOR<EmployeeCreateWithoutManagerInput, EmployeeUncheckedCreateWithoutManagerInput> | EmployeeCreateWithoutManagerInput[] | EmployeeUncheckedCreateWithoutManagerInput[]
+    connectOrCreate?: EmployeeCreateOrConnectWithoutManagerInput | EmployeeCreateOrConnectWithoutManagerInput[]
+    upsert?: EmployeeUpsertWithWhereUniqueWithoutManagerInput | EmployeeUpsertWithWhereUniqueWithoutManagerInput[]
+    createMany?: EmployeeCreateManyManagerInputEnvelope
+    set?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    disconnect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    delete?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    update?: EmployeeUpdateWithWhereUniqueWithoutManagerInput | EmployeeUpdateWithWhereUniqueWithoutManagerInput[]
+    updateMany?: EmployeeUpdateManyWithWhereWithoutManagerInput | EmployeeUpdateManyWithWhereWithoutManagerInput[]
+    deleteMany?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
+  }
+
   export type KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput = {
     create?: XOR<KPIEmployeeCreateWithoutEmployeeInput, KPIEmployeeUncheckedCreateWithoutEmployeeInput> | KPIEmployeeCreateWithoutEmployeeInput[] | KPIEmployeeUncheckedCreateWithoutEmployeeInput[]
     connectOrCreate?: KPIEmployeeCreateOrConnectWithoutEmployeeInput | KPIEmployeeCreateOrConnectWithoutEmployeeInput[]
@@ -27013,6 +27021,54 @@ export namespace Prisma {
     update?: KPIEmployeeUpdateWithWhereUniqueWithoutEmployeeInput | KPIEmployeeUpdateWithWhereUniqueWithoutEmployeeInput[]
     updateMany?: KPIEmployeeUpdateManyWithWhereWithoutEmployeeInput | KPIEmployeeUpdateManyWithWhereWithoutEmployeeInput[]
     deleteMany?: KPIEmployeeScalarWhereInput | KPIEmployeeScalarWhereInput[]
+  }
+
+  export type LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput = {
+    create?: XOR<LeaveApprovalStepApproverCreateWithoutApproverInput, LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput> | LeaveApprovalStepApproverCreateWithoutApproverInput[] | LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput[]
+    connectOrCreate?: LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput | LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput[]
+    upsert?: LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutApproverInput | LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutApproverInput[]
+    createMany?: LeaveApprovalStepApproverCreateManyApproverInputEnvelope
+    set?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    disconnect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    delete?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    connect?: LeaveApprovalStepApproverWhereUniqueInput | LeaveApprovalStepApproverWhereUniqueInput[]
+    update?: LeaveApprovalStepApproverUpdateWithWhereUniqueWithoutApproverInput | LeaveApprovalStepApproverUpdateWithWhereUniqueWithoutApproverInput[]
+    updateMany?: LeaveApprovalStepApproverUpdateManyWithWhereWithoutApproverInput | LeaveApprovalStepApproverUpdateManyWithWhereWithoutApproverInput[]
+    deleteMany?: LeaveApprovalStepApproverScalarWhereInput | LeaveApprovalStepApproverScalarWhereInput[]
+  }
+
+  export type LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput = {
+    create?: XOR<LeaveRequestCreateWithoutEmployeeInput, LeaveRequestUncheckedCreateWithoutEmployeeInput> | LeaveRequestCreateWithoutEmployeeInput[] | LeaveRequestUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: LeaveRequestCreateOrConnectWithoutEmployeeInput | LeaveRequestCreateOrConnectWithoutEmployeeInput[]
+    upsert?: LeaveRequestUpsertWithWhereUniqueWithoutEmployeeInput | LeaveRequestUpsertWithWhereUniqueWithoutEmployeeInput[]
+    createMany?: LeaveRequestCreateManyEmployeeInputEnvelope
+    set?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+    disconnect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+    delete?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+    connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+    update?: LeaveRequestUpdateWithWhereUniqueWithoutEmployeeInput | LeaveRequestUpdateWithWhereUniqueWithoutEmployeeInput[]
+    updateMany?: LeaveRequestUpdateManyWithWhereWithoutEmployeeInput | LeaveRequestUpdateManyWithWhereWithoutEmployeeInput[]
+    deleteMany?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
+  }
+
+  export type OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput = {
+    create?: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
+    connectOrCreate?: OtherInfoCreateOrConnectWithoutEmployeeInput
+    upsert?: OtherInfoUpsertWithoutEmployeeInput
+    disconnect?: OtherInfoWhereInput | boolean
+    delete?: OtherInfoWhereInput | boolean
+    connect?: OtherInfoWhereUniqueInput
+    update?: XOR<XOR<OtherInfoUpdateToOneWithWhereWithoutEmployeeInput, OtherInfoUpdateWithoutEmployeeInput>, OtherInfoUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput = {
+    create?: XOR<PersonalInfoCreateWithoutEmployeeInput, PersonalInfoUncheckedCreateWithoutEmployeeInput>
+    connectOrCreate?: PersonalInfoCreateOrConnectWithoutEmployeeInput
+    upsert?: PersonalInfoUpsertWithoutEmployeeInput
+    disconnect?: PersonalInfoWhereInput | boolean
+    delete?: PersonalInfoWhereInput | boolean
+    connect?: PersonalInfoWhereUniqueInput
+    update?: XOR<XOR<PersonalInfoUpdateToOneWithWhereWithoutEmployeeInput, PersonalInfoUpdateWithoutEmployeeInput>, PersonalInfoUncheckedUpdateWithoutEmployeeInput>
   }
 
   export type ProposalUncheckedUpdateManyWithoutCreatedByNestedInput = {
@@ -27043,20 +27099,6 @@ export namespace Prisma {
     deleteMany?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
   }
 
-  export type ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput = {
-    create?: XOR<ProposalSignerCreateWithoutSignerInput, ProposalSignerUncheckedCreateWithoutSignerInput> | ProposalSignerCreateWithoutSignerInput[] | ProposalSignerUncheckedCreateWithoutSignerInput[]
-    connectOrCreate?: ProposalSignerCreateOrConnectWithoutSignerInput | ProposalSignerCreateOrConnectWithoutSignerInput[]
-    upsert?: ProposalSignerUpsertWithWhereUniqueWithoutSignerInput | ProposalSignerUpsertWithWhereUniqueWithoutSignerInput[]
-    createMany?: ProposalSignerCreateManySignerInputEnvelope
-    set?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
-    disconnect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
-    delete?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
-    connect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
-    update?: ProposalSignerUpdateWithWhereUniqueWithoutSignerInput | ProposalSignerUpdateWithWhereUniqueWithoutSignerInput[]
-    updateMany?: ProposalSignerUpdateManyWithWhereWithoutSignerInput | ProposalSignerUpdateManyWithWhereWithoutSignerInput[]
-    deleteMany?: ProposalSignerScalarWhereInput | ProposalSignerScalarWhereInput[]
-  }
-
   export type ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput = {
     create?: XOR<ProposalApproverCreateWithoutApproverInput, ProposalApproverUncheckedCreateWithoutApproverInput> | ProposalApproverCreateWithoutApproverInput[] | ProposalApproverUncheckedCreateWithoutApproverInput[]
     connectOrCreate?: ProposalApproverCreateOrConnectWithoutApproverInput | ProposalApproverCreateOrConnectWithoutApproverInput[]
@@ -27071,15 +27113,39 @@ export namespace Prisma {
     deleteMany?: ProposalApproverScalarWhereInput | ProposalApproverScalarWhereInput[]
   }
 
-  export type EmployeeCreateNestedOneWithoutDepartmentHeadOfInput = {
-    create?: XOR<EmployeeCreateWithoutDepartmentHeadOfInput, EmployeeUncheckedCreateWithoutDepartmentHeadOfInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutDepartmentHeadOfInput
-    connect?: EmployeeWhereUniqueInput
+  export type ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput = {
+    create?: XOR<ProposalSignerCreateWithoutSignerInput, ProposalSignerUncheckedCreateWithoutSignerInput> | ProposalSignerCreateWithoutSignerInput[] | ProposalSignerUncheckedCreateWithoutSignerInput[]
+    connectOrCreate?: ProposalSignerCreateOrConnectWithoutSignerInput | ProposalSignerCreateOrConnectWithoutSignerInput[]
+    upsert?: ProposalSignerUpsertWithWhereUniqueWithoutSignerInput | ProposalSignerUpsertWithWhereUniqueWithoutSignerInput[]
+    createMany?: ProposalSignerCreateManySignerInputEnvelope
+    set?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
+    disconnect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
+    delete?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
+    connect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
+    update?: ProposalSignerUpdateWithWhereUniqueWithoutSignerInput | ProposalSignerUpdateWithWhereUniqueWithoutSignerInput[]
+    updateMany?: ProposalSignerUpdateManyWithWhereWithoutSignerInput | ProposalSignerUpdateManyWithWhereWithoutSignerInput[]
+    deleteMany?: ProposalSignerScalarWhereInput | ProposalSignerScalarWhereInput[]
+  }
+
+  export type WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput = {
+    create?: XOR<WorkInfoCreateWithoutEmployeeInput, WorkInfoUncheckedCreateWithoutEmployeeInput>
+    connectOrCreate?: WorkInfoCreateOrConnectWithoutEmployeeInput
+    upsert?: WorkInfoUpsertWithoutEmployeeInput
+    disconnect?: WorkInfoWhereInput | boolean
+    delete?: WorkInfoWhereInput | boolean
+    connect?: WorkInfoWhereUniqueInput
+    update?: XOR<XOR<WorkInfoUpdateToOneWithWhereWithoutEmployeeInput, WorkInfoUpdateWithoutEmployeeInput>, WorkInfoUncheckedUpdateWithoutEmployeeInput>
   }
 
   export type EmployeeCreateNestedOneWithoutDepartmentDirectorOfInput = {
     create?: XOR<EmployeeCreateWithoutDepartmentDirectorOfInput, EmployeeUncheckedCreateWithoutDepartmentDirectorOfInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutDepartmentDirectorOfInput
+    connect?: EmployeeWhereUniqueInput
+  }
+
+  export type EmployeeCreateNestedOneWithoutDepartmentHeadOfInput = {
+    create?: XOR<EmployeeCreateWithoutDepartmentHeadOfInput, EmployeeUncheckedCreateWithoutDepartmentHeadOfInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutDepartmentHeadOfInput
     connect?: EmployeeWhereUniqueInput
   }
 
@@ -27111,16 +27177,6 @@ export namespace Prisma {
     connect?: WorkInfoWhereUniqueInput | WorkInfoWhereUniqueInput[]
   }
 
-  export type EmployeeUpdateOneWithoutDepartmentHeadOfNestedInput = {
-    create?: XOR<EmployeeCreateWithoutDepartmentHeadOfInput, EmployeeUncheckedCreateWithoutDepartmentHeadOfInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutDepartmentHeadOfInput
-    upsert?: EmployeeUpsertWithoutDepartmentHeadOfInput
-    disconnect?: EmployeeWhereInput | boolean
-    delete?: EmployeeWhereInput | boolean
-    connect?: EmployeeWhereUniqueInput
-    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutDepartmentHeadOfInput, EmployeeUpdateWithoutDepartmentHeadOfInput>, EmployeeUncheckedUpdateWithoutDepartmentHeadOfInput>
-  }
-
   export type EmployeeUpdateOneWithoutDepartmentDirectorOfNestedInput = {
     create?: XOR<EmployeeCreateWithoutDepartmentDirectorOfInput, EmployeeUncheckedCreateWithoutDepartmentDirectorOfInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutDepartmentDirectorOfInput
@@ -27129,6 +27185,16 @@ export namespace Prisma {
     delete?: EmployeeWhereInput | boolean
     connect?: EmployeeWhereUniqueInput
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutDepartmentDirectorOfInput, EmployeeUpdateWithoutDepartmentDirectorOfInput>, EmployeeUncheckedUpdateWithoutDepartmentDirectorOfInput>
+  }
+
+  export type EmployeeUpdateOneWithoutDepartmentHeadOfNestedInput = {
+    create?: XOR<EmployeeCreateWithoutDepartmentHeadOfInput, EmployeeUncheckedCreateWithoutDepartmentHeadOfInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutDepartmentHeadOfInput
+    upsert?: EmployeeUpsertWithoutDepartmentHeadOfInput
+    disconnect?: EmployeeWhereInput | boolean
+    delete?: EmployeeWhereInput | boolean
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutDepartmentHeadOfInput, EmployeeUpdateWithoutDepartmentHeadOfInput>, EmployeeUncheckedUpdateWithoutDepartmentHeadOfInput>
   }
 
   export type PositionUpdateManyWithoutDepartmentNestedInput = {
@@ -27249,16 +27315,16 @@ export namespace Prisma {
     connect?: DepartmentWhereUniqueInput
   }
 
-  export type PositionCreateNestedOneWithoutEmployeesInput = {
-    create?: XOR<PositionCreateWithoutEmployeesInput, PositionUncheckedCreateWithoutEmployeesInput>
-    connectOrCreate?: PositionCreateOrConnectWithoutEmployeesInput
-    connect?: PositionWhereUniqueInput
-  }
-
   export type EmployeeCreateNestedOneWithoutWorkInfoInput = {
     create?: XOR<EmployeeCreateWithoutWorkInfoInput, EmployeeUncheckedCreateWithoutWorkInfoInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutWorkInfoInput
     connect?: EmployeeWhereUniqueInput
+  }
+
+  export type PositionCreateNestedOneWithoutEmployeesInput = {
+    create?: XOR<PositionCreateWithoutEmployeesInput, PositionUncheckedCreateWithoutEmployeesInput>
+    connectOrCreate?: PositionCreateOrConnectWithoutEmployeesInput
+    connect?: PositionWhereUniqueInput
   }
 
   export type DepartmentUpdateOneWithoutWorkInfosNestedInput = {
@@ -27271,6 +27337,14 @@ export namespace Prisma {
     update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutWorkInfosInput, DepartmentUpdateWithoutWorkInfosInput>, DepartmentUncheckedUpdateWithoutWorkInfosInput>
   }
 
+  export type EmployeeUpdateOneRequiredWithoutWorkInfoNestedInput = {
+    create?: XOR<EmployeeCreateWithoutWorkInfoInput, EmployeeUncheckedCreateWithoutWorkInfoInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutWorkInfoInput
+    upsert?: EmployeeUpsertWithoutWorkInfoInput
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutWorkInfoInput, EmployeeUpdateWithoutWorkInfoInput>, EmployeeUncheckedUpdateWithoutWorkInfoInput>
+  }
+
   export type PositionUpdateOneWithoutEmployeesNestedInput = {
     create?: XOR<PositionCreateWithoutEmployeesInput, PositionUncheckedCreateWithoutEmployeesInput>
     connectOrCreate?: PositionCreateOrConnectWithoutEmployeesInput
@@ -27279,14 +27353,6 @@ export namespace Prisma {
     delete?: PositionWhereInput | boolean
     connect?: PositionWhereUniqueInput
     update?: XOR<XOR<PositionUpdateToOneWithWhereWithoutEmployeesInput, PositionUpdateWithoutEmployeesInput>, PositionUncheckedUpdateWithoutEmployeesInput>
-  }
-
-  export type EmployeeUpdateOneRequiredWithoutWorkInfoNestedInput = {
-    create?: XOR<EmployeeCreateWithoutWorkInfoInput, EmployeeUncheckedCreateWithoutWorkInfoInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutWorkInfoInput
-    upsert?: EmployeeUpsertWithoutWorkInfoInput
-    connect?: EmployeeWhereUniqueInput
-    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutWorkInfoInput, EmployeeUpdateWithoutWorkInfoInput>, EmployeeUncheckedUpdateWithoutWorkInfoInput>
   }
 
   export type EmployeeCreateNestedOneWithoutPersonalInfoInput = {
@@ -27335,17 +27401,17 @@ export namespace Prisma {
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutOtherInfoInput, EmployeeUpdateWithoutOtherInfoInput>, EmployeeUncheckedUpdateWithoutOtherInfoInput>
   }
 
-  export type EmployeeCreateNestedOneWithoutLeaveRequestInput = {
-    create?: XOR<EmployeeCreateWithoutLeaveRequestInput, EmployeeUncheckedCreateWithoutLeaveRequestInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutLeaveRequestInput
-    connect?: EmployeeWhereUniqueInput
-  }
-
   export type LeaveApprovalStepCreateNestedManyWithoutLeaveRequestInput = {
     create?: XOR<LeaveApprovalStepCreateWithoutLeaveRequestInput, LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput> | LeaveApprovalStepCreateWithoutLeaveRequestInput[] | LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput[]
     connectOrCreate?: LeaveApprovalStepCreateOrConnectWithoutLeaveRequestInput | LeaveApprovalStepCreateOrConnectWithoutLeaveRequestInput[]
     createMany?: LeaveApprovalStepCreateManyLeaveRequestInputEnvelope
     connect?: LeaveApprovalStepWhereUniqueInput | LeaveApprovalStepWhereUniqueInput[]
+  }
+
+  export type EmployeeCreateNestedOneWithoutLeaveRequestInput = {
+    create?: XOR<EmployeeCreateWithoutLeaveRequestInput, EmployeeUncheckedCreateWithoutLeaveRequestInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutLeaveRequestInput
+    connect?: EmployeeWhereUniqueInput
   }
 
   export type LeaveApprovalStepUncheckedCreateNestedManyWithoutLeaveRequestInput = {
@@ -27371,14 +27437,6 @@ export namespace Prisma {
     set?: $Enums.LeaveStatus
   }
 
-  export type EmployeeUpdateOneRequiredWithoutLeaveRequestNestedInput = {
-    create?: XOR<EmployeeCreateWithoutLeaveRequestInput, EmployeeUncheckedCreateWithoutLeaveRequestInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutLeaveRequestInput
-    upsert?: EmployeeUpsertWithoutLeaveRequestInput
-    connect?: EmployeeWhereUniqueInput
-    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutLeaveRequestInput, EmployeeUpdateWithoutLeaveRequestInput>, EmployeeUncheckedUpdateWithoutLeaveRequestInput>
-  }
-
   export type LeaveApprovalStepUpdateManyWithoutLeaveRequestNestedInput = {
     create?: XOR<LeaveApprovalStepCreateWithoutLeaveRequestInput, LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput> | LeaveApprovalStepCreateWithoutLeaveRequestInput[] | LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput[]
     connectOrCreate?: LeaveApprovalStepCreateOrConnectWithoutLeaveRequestInput | LeaveApprovalStepCreateOrConnectWithoutLeaveRequestInput[]
@@ -27391,6 +27449,14 @@ export namespace Prisma {
     update?: LeaveApprovalStepUpdateWithWhereUniqueWithoutLeaveRequestInput | LeaveApprovalStepUpdateWithWhereUniqueWithoutLeaveRequestInput[]
     updateMany?: LeaveApprovalStepUpdateManyWithWhereWithoutLeaveRequestInput | LeaveApprovalStepUpdateManyWithWhereWithoutLeaveRequestInput[]
     deleteMany?: LeaveApprovalStepScalarWhereInput | LeaveApprovalStepScalarWhereInput[]
+  }
+
+  export type EmployeeUpdateOneRequiredWithoutLeaveRequestNestedInput = {
+    create?: XOR<EmployeeCreateWithoutLeaveRequestInput, EmployeeUncheckedCreateWithoutLeaveRequestInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutLeaveRequestInput
+    upsert?: EmployeeUpsertWithoutLeaveRequestInput
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutLeaveRequestInput, EmployeeUpdateWithoutLeaveRequestInput>, EmployeeUncheckedUpdateWithoutLeaveRequestInput>
   }
 
   export type LeaveApprovalStepUncheckedUpdateManyWithoutLeaveRequestNestedInput = {
@@ -27463,24 +27529,16 @@ export namespace Prisma {
     deleteMany?: LeaveApprovalStepApproverScalarWhereInput | LeaveApprovalStepApproverScalarWhereInput[]
   }
 
-  export type LeaveApprovalStepCreateNestedOneWithoutApproversInput = {
-    create?: XOR<LeaveApprovalStepCreateWithoutApproversInput, LeaveApprovalStepUncheckedCreateWithoutApproversInput>
-    connectOrCreate?: LeaveApprovalStepCreateOrConnectWithoutApproversInput
-    connect?: LeaveApprovalStepWhereUniqueInput
-  }
-
   export type EmployeeCreateNestedOneWithoutLeaveApprovalStepsInput = {
     create?: XOR<EmployeeCreateWithoutLeaveApprovalStepsInput, EmployeeUncheckedCreateWithoutLeaveApprovalStepsInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutLeaveApprovalStepsInput
     connect?: EmployeeWhereUniqueInput
   }
 
-  export type LeaveApprovalStepUpdateOneRequiredWithoutApproversNestedInput = {
+  export type LeaveApprovalStepCreateNestedOneWithoutApproversInput = {
     create?: XOR<LeaveApprovalStepCreateWithoutApproversInput, LeaveApprovalStepUncheckedCreateWithoutApproversInput>
     connectOrCreate?: LeaveApprovalStepCreateOrConnectWithoutApproversInput
-    upsert?: LeaveApprovalStepUpsertWithoutApproversInput
     connect?: LeaveApprovalStepWhereUniqueInput
-    update?: XOR<XOR<LeaveApprovalStepUpdateToOneWithWhereWithoutApproversInput, LeaveApprovalStepUpdateWithoutApproversInput>, LeaveApprovalStepUncheckedUpdateWithoutApproversInput>
   }
 
   export type EmployeeUpdateOneRequiredWithoutLeaveApprovalStepsNestedInput = {
@@ -27489,6 +27547,14 @@ export namespace Prisma {
     upsert?: EmployeeUpsertWithoutLeaveApprovalStepsInput
     connect?: EmployeeWhereUniqueInput
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutLeaveApprovalStepsInput, EmployeeUpdateWithoutLeaveApprovalStepsInput>, EmployeeUncheckedUpdateWithoutLeaveApprovalStepsInput>
+  }
+
+  export type LeaveApprovalStepUpdateOneRequiredWithoutApproversNestedInput = {
+    create?: XOR<LeaveApprovalStepCreateWithoutApproversInput, LeaveApprovalStepUncheckedCreateWithoutApproversInput>
+    connectOrCreate?: LeaveApprovalStepCreateOrConnectWithoutApproversInput
+    upsert?: LeaveApprovalStepUpsertWithoutApproversInput
+    connect?: LeaveApprovalStepWhereUniqueInput
+    update?: XOR<XOR<LeaveApprovalStepUpdateToOneWithWhereWithoutApproversInput, LeaveApprovalStepUpdateWithoutApproversInput>, LeaveApprovalStepUncheckedUpdateWithoutApproversInput>
   }
 
   export type EmployeeCreateNestedOneWithoutAttendanceInput = {
@@ -27547,16 +27613,16 @@ export namespace Prisma {
     deleteMany?: KPIEmployeeScalarWhereInput | KPIEmployeeScalarWhereInput[]
   }
 
-  export type KPICreateNestedOneWithoutKpiEmployeesInput = {
-    create?: XOR<KPICreateWithoutKpiEmployeesInput, KPIUncheckedCreateWithoutKpiEmployeesInput>
-    connectOrCreate?: KPICreateOrConnectWithoutKpiEmployeesInput
-    connect?: KPIWhereUniqueInput
-  }
-
   export type EmployeeCreateNestedOneWithoutKPIEmployeeInput = {
     create?: XOR<EmployeeCreateWithoutKPIEmployeeInput, EmployeeUncheckedCreateWithoutKPIEmployeeInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutKPIEmployeeInput
     connect?: EmployeeWhereUniqueInput
+  }
+
+  export type KPICreateNestedOneWithoutKpiEmployeesInput = {
+    create?: XOR<KPICreateWithoutKpiEmployeesInput, KPIUncheckedCreateWithoutKpiEmployeesInput>
+    connectOrCreate?: KPICreateOrConnectWithoutKpiEmployeesInput
+    connect?: KPIWhereUniqueInput
   }
 
   export type KPIEntryCreateNestedManyWithoutKpiEmployeeInput = {
@@ -27573,20 +27639,20 @@ export namespace Prisma {
     connect?: KPIEntryWhereUniqueInput | KPIEntryWhereUniqueInput[]
   }
 
-  export type KPIUpdateOneRequiredWithoutKpiEmployeesNestedInput = {
-    create?: XOR<KPICreateWithoutKpiEmployeesInput, KPIUncheckedCreateWithoutKpiEmployeesInput>
-    connectOrCreate?: KPICreateOrConnectWithoutKpiEmployeesInput
-    upsert?: KPIUpsertWithoutKpiEmployeesInput
-    connect?: KPIWhereUniqueInput
-    update?: XOR<XOR<KPIUpdateToOneWithWhereWithoutKpiEmployeesInput, KPIUpdateWithoutKpiEmployeesInput>, KPIUncheckedUpdateWithoutKpiEmployeesInput>
-  }
-
   export type EmployeeUpdateOneRequiredWithoutKPIEmployeeNestedInput = {
     create?: XOR<EmployeeCreateWithoutKPIEmployeeInput, EmployeeUncheckedCreateWithoutKPIEmployeeInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutKPIEmployeeInput
     upsert?: EmployeeUpsertWithoutKPIEmployeeInput
     connect?: EmployeeWhereUniqueInput
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutKPIEmployeeInput, EmployeeUpdateWithoutKPIEmployeeInput>, EmployeeUncheckedUpdateWithoutKPIEmployeeInput>
+  }
+
+  export type KPIUpdateOneRequiredWithoutKpiEmployeesNestedInput = {
+    create?: XOR<KPICreateWithoutKpiEmployeesInput, KPIUncheckedCreateWithoutKpiEmployeesInput>
+    connectOrCreate?: KPICreateOrConnectWithoutKpiEmployeesInput
+    upsert?: KPIUpsertWithoutKpiEmployeesInput
+    connect?: KPIWhereUniqueInput
+    update?: XOR<XOR<KPIUpdateToOneWithWhereWithoutKpiEmployeesInput, KPIUpdateWithoutKpiEmployeesInput>, KPIUncheckedUpdateWithoutKpiEmployeesInput>
   }
 
   export type KPIEntryUpdateManyWithoutKpiEmployeeNestedInput = {
@@ -27639,12 +27705,6 @@ export namespace Prisma {
     update?: XOR<XOR<KPIEmployeeUpdateToOneWithWhereWithoutEntriesInput, KPIEmployeeUpdateWithoutEntriesInput>, KPIEmployeeUncheckedUpdateWithoutEntriesInput>
   }
 
-  export type EmployeeCreateNestedOneWithoutProposalsProposedInput = {
-    create?: XOR<EmployeeCreateWithoutProposalsProposedInput, EmployeeUncheckedCreateWithoutProposalsProposedInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutProposalsProposedInput
-    connect?: EmployeeWhereUniqueInput
-  }
-
   export type EmployeeCreateNestedOneWithoutProposalsCreatedInput = {
     create?: XOR<EmployeeCreateWithoutProposalsCreatedInput, EmployeeUncheckedCreateWithoutProposalsCreatedInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutProposalsCreatedInput
@@ -27657,11 +27717,10 @@ export namespace Prisma {
     connect?: FileWhereUniqueInput
   }
 
-  export type ProposalSignerCreateNestedManyWithoutProposalInput = {
-    create?: XOR<ProposalSignerCreateWithoutProposalInput, ProposalSignerUncheckedCreateWithoutProposalInput> | ProposalSignerCreateWithoutProposalInput[] | ProposalSignerUncheckedCreateWithoutProposalInput[]
-    connectOrCreate?: ProposalSignerCreateOrConnectWithoutProposalInput | ProposalSignerCreateOrConnectWithoutProposalInput[]
-    createMany?: ProposalSignerCreateManyProposalInputEnvelope
-    connect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
+  export type EmployeeCreateNestedOneWithoutProposalsProposedInput = {
+    create?: XOR<EmployeeCreateWithoutProposalsProposedInput, EmployeeUncheckedCreateWithoutProposalsProposedInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutProposalsProposedInput
+    connect?: EmployeeWhereUniqueInput
   }
 
   export type ProposalApproverCreateNestedManyWithoutProposalInput = {
@@ -27671,7 +27730,7 @@ export namespace Prisma {
     connect?: ProposalApproverWhereUniqueInput | ProposalApproverWhereUniqueInput[]
   }
 
-  export type ProposalSignerUncheckedCreateNestedManyWithoutProposalInput = {
+  export type ProposalSignerCreateNestedManyWithoutProposalInput = {
     create?: XOR<ProposalSignerCreateWithoutProposalInput, ProposalSignerUncheckedCreateWithoutProposalInput> | ProposalSignerCreateWithoutProposalInput[] | ProposalSignerUncheckedCreateWithoutProposalInput[]
     connectOrCreate?: ProposalSignerCreateOrConnectWithoutProposalInput | ProposalSignerCreateOrConnectWithoutProposalInput[]
     createMany?: ProposalSignerCreateManyProposalInputEnvelope
@@ -27685,16 +27744,15 @@ export namespace Prisma {
     connect?: ProposalApproverWhereUniqueInput | ProposalApproverWhereUniqueInput[]
   }
 
-  export type EnumProposalStatusFieldUpdateOperationsInput = {
-    set?: $Enums.ProposalStatus
+  export type ProposalSignerUncheckedCreateNestedManyWithoutProposalInput = {
+    create?: XOR<ProposalSignerCreateWithoutProposalInput, ProposalSignerUncheckedCreateWithoutProposalInput> | ProposalSignerCreateWithoutProposalInput[] | ProposalSignerUncheckedCreateWithoutProposalInput[]
+    connectOrCreate?: ProposalSignerCreateOrConnectWithoutProposalInput | ProposalSignerCreateOrConnectWithoutProposalInput[]
+    createMany?: ProposalSignerCreateManyProposalInputEnvelope
+    connect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
   }
 
-  export type EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput = {
-    create?: XOR<EmployeeCreateWithoutProposalsProposedInput, EmployeeUncheckedCreateWithoutProposalsProposedInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutProposalsProposedInput
-    upsert?: EmployeeUpsertWithoutProposalsProposedInput
-    connect?: EmployeeWhereUniqueInput
-    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutProposalsProposedInput, EmployeeUpdateWithoutProposalsProposedInput>, EmployeeUncheckedUpdateWithoutProposalsProposedInput>
+  export type EnumProposalStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ProposalStatus
   }
 
   export type EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput = {
@@ -27715,18 +27773,12 @@ export namespace Prisma {
     update?: XOR<XOR<FileUpdateToOneWithWhereWithoutProposalsInput, FileUpdateWithoutProposalsInput>, FileUncheckedUpdateWithoutProposalsInput>
   }
 
-  export type ProposalSignerUpdateManyWithoutProposalNestedInput = {
-    create?: XOR<ProposalSignerCreateWithoutProposalInput, ProposalSignerUncheckedCreateWithoutProposalInput> | ProposalSignerCreateWithoutProposalInput[] | ProposalSignerUncheckedCreateWithoutProposalInput[]
-    connectOrCreate?: ProposalSignerCreateOrConnectWithoutProposalInput | ProposalSignerCreateOrConnectWithoutProposalInput[]
-    upsert?: ProposalSignerUpsertWithWhereUniqueWithoutProposalInput | ProposalSignerUpsertWithWhereUniqueWithoutProposalInput[]
-    createMany?: ProposalSignerCreateManyProposalInputEnvelope
-    set?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
-    disconnect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
-    delete?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
-    connect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
-    update?: ProposalSignerUpdateWithWhereUniqueWithoutProposalInput | ProposalSignerUpdateWithWhereUniqueWithoutProposalInput[]
-    updateMany?: ProposalSignerUpdateManyWithWhereWithoutProposalInput | ProposalSignerUpdateManyWithWhereWithoutProposalInput[]
-    deleteMany?: ProposalSignerScalarWhereInput | ProposalSignerScalarWhereInput[]
+  export type EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput = {
+    create?: XOR<EmployeeCreateWithoutProposalsProposedInput, EmployeeUncheckedCreateWithoutProposalsProposedInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutProposalsProposedInput
+    upsert?: EmployeeUpsertWithoutProposalsProposedInput
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutProposalsProposedInput, EmployeeUpdateWithoutProposalsProposedInput>, EmployeeUncheckedUpdateWithoutProposalsProposedInput>
   }
 
   export type ProposalApproverUpdateManyWithoutProposalNestedInput = {
@@ -27743,7 +27795,7 @@ export namespace Prisma {
     deleteMany?: ProposalApproverScalarWhereInput | ProposalApproverScalarWhereInput[]
   }
 
-  export type ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput = {
+  export type ProposalSignerUpdateManyWithoutProposalNestedInput = {
     create?: XOR<ProposalSignerCreateWithoutProposalInput, ProposalSignerUncheckedCreateWithoutProposalInput> | ProposalSignerCreateWithoutProposalInput[] | ProposalSignerUncheckedCreateWithoutProposalInput[]
     connectOrCreate?: ProposalSignerCreateOrConnectWithoutProposalInput | ProposalSignerCreateOrConnectWithoutProposalInput[]
     upsert?: ProposalSignerUpsertWithWhereUniqueWithoutProposalInput | ProposalSignerUpsertWithWhereUniqueWithoutProposalInput[]
@@ -27769,6 +27821,20 @@ export namespace Prisma {
     update?: ProposalApproverUpdateWithWhereUniqueWithoutProposalInput | ProposalApproverUpdateWithWhereUniqueWithoutProposalInput[]
     updateMany?: ProposalApproverUpdateManyWithWhereWithoutProposalInput | ProposalApproverUpdateManyWithWhereWithoutProposalInput[]
     deleteMany?: ProposalApproverScalarWhereInput | ProposalApproverScalarWhereInput[]
+  }
+
+  export type ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput = {
+    create?: XOR<ProposalSignerCreateWithoutProposalInput, ProposalSignerUncheckedCreateWithoutProposalInput> | ProposalSignerCreateWithoutProposalInput[] | ProposalSignerUncheckedCreateWithoutProposalInput[]
+    connectOrCreate?: ProposalSignerCreateOrConnectWithoutProposalInput | ProposalSignerCreateOrConnectWithoutProposalInput[]
+    upsert?: ProposalSignerUpsertWithWhereUniqueWithoutProposalInput | ProposalSignerUpsertWithWhereUniqueWithoutProposalInput[]
+    createMany?: ProposalSignerCreateManyProposalInputEnvelope
+    set?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
+    disconnect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
+    delete?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
+    connect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
+    update?: ProposalSignerUpdateWithWhereUniqueWithoutProposalInput | ProposalSignerUpdateWithWhereUniqueWithoutProposalInput[]
+    updateMany?: ProposalSignerUpdateManyWithWhereWithoutProposalInput | ProposalSignerUpdateManyWithWhereWithoutProposalInput[]
+    deleteMany?: ProposalSignerScalarWhereInput | ProposalSignerScalarWhereInput[]
   }
 
   export type ProposalCreateNestedOneWithoutSignersInput = {
@@ -27799,24 +27865,16 @@ export namespace Prisma {
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutProposalSignaturesInput, EmployeeUpdateWithoutProposalSignaturesInput>, EmployeeUncheckedUpdateWithoutProposalSignaturesInput>
   }
 
-  export type ProposalCreateNestedOneWithoutApproversInput = {
-    create?: XOR<ProposalCreateWithoutApproversInput, ProposalUncheckedCreateWithoutApproversInput>
-    connectOrCreate?: ProposalCreateOrConnectWithoutApproversInput
-    connect?: ProposalWhereUniqueInput
-  }
-
   export type EmployeeCreateNestedOneWithoutProposalApprovalsInput = {
     create?: XOR<EmployeeCreateWithoutProposalApprovalsInput, EmployeeUncheckedCreateWithoutProposalApprovalsInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutProposalApprovalsInput
     connect?: EmployeeWhereUniqueInput
   }
 
-  export type ProposalUpdateOneRequiredWithoutApproversNestedInput = {
+  export type ProposalCreateNestedOneWithoutApproversInput = {
     create?: XOR<ProposalCreateWithoutApproversInput, ProposalUncheckedCreateWithoutApproversInput>
     connectOrCreate?: ProposalCreateOrConnectWithoutApproversInput
-    upsert?: ProposalUpsertWithoutApproversInput
     connect?: ProposalWhereUniqueInput
-    update?: XOR<XOR<ProposalUpdateToOneWithWhereWithoutApproversInput, ProposalUpdateWithoutApproversInput>, ProposalUncheckedUpdateWithoutApproversInput>
   }
 
   export type EmployeeUpdateOneRequiredWithoutProposalApprovalsNestedInput = {
@@ -27825,6 +27883,14 @@ export namespace Prisma {
     upsert?: EmployeeUpsertWithoutProposalApprovalsInput
     connect?: EmployeeWhereUniqueInput
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutProposalApprovalsInput, EmployeeUpdateWithoutProposalApprovalsInput>, EmployeeUncheckedUpdateWithoutProposalApprovalsInput>
+  }
+
+  export type ProposalUpdateOneRequiredWithoutApproversNestedInput = {
+    create?: XOR<ProposalCreateWithoutApproversInput, ProposalUncheckedCreateWithoutApproversInput>
+    connectOrCreate?: ProposalCreateOrConnectWithoutApproversInput
+    upsert?: ProposalUpsertWithoutApproversInput
+    connect?: ProposalWhereUniqueInput
+    update?: XOR<XOR<ProposalUpdateToOneWithWhereWithoutApproversInput, ProposalUpdateWithoutApproversInput>, ProposalUncheckedUpdateWithoutApproversInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -28190,10 +28256,10 @@ export namespace Prisma {
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
-    proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
-    signers?: ProposalSignerCreateNestedManyWithoutProposalInput
+    proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     approvers?: ProposalApproverCreateNestedManyWithoutProposalInput
+    signers?: ProposalSignerCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalUncheckedCreateWithoutFileInput = {
@@ -28206,8 +28272,8 @@ export namespace Prisma {
     createdById: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
+    signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalCreateOrConnectWithoutFileInput = {
@@ -28252,161 +28318,49 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Proposal"> | Date | string
   }
 
-  export type EmployeeCreateWithoutSubordinatesInput = {
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
-    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
-    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+  export type AttendanceCreateWithoutEmployeeInput = {
+    date: Date | string
+    checkInTime?: Date | string | null
+    checkOutTime?: Date | string | null
+    workingHours?: number | null
   }
 
-  export type EmployeeUncheckedCreateWithoutSubordinatesInput = {
+  export type AttendanceUncheckedCreateWithoutEmployeeInput = {
     id?: number
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    managerId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
-    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
-    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    date: Date | string
+    checkInTime?: Date | string | null
+    checkOutTime?: Date | string | null
+    workingHours?: number | null
   }
 
-  export type EmployeeCreateOrConnectWithoutSubordinatesInput = {
-    where: EmployeeWhereUniqueInput
-    create: XOR<EmployeeCreateWithoutSubordinatesInput, EmployeeUncheckedCreateWithoutSubordinatesInput>
+  export type AttendanceCreateOrConnectWithoutEmployeeInput = {
+    where: AttendanceWhereUniqueInput
+    create: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput>
   }
 
-  export type EmployeeCreateWithoutManagerInput = {
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
-    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
-    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
-  }
-
-  export type EmployeeUncheckedCreateWithoutManagerInput = {
-    id?: number
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
-    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
-    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
-  }
-
-  export type EmployeeCreateOrConnectWithoutManagerInput = {
-    where: EmployeeWhereUniqueInput
-    create: XOR<EmployeeCreateWithoutManagerInput, EmployeeUncheckedCreateWithoutManagerInput>
-  }
-
-  export type EmployeeCreateManyManagerInputEnvelope = {
-    data: EmployeeCreateManyManagerInput | EmployeeCreateManyManagerInput[]
+  export type AttendanceCreateManyEmployeeInputEnvelope = {
+    data: AttendanceCreateManyEmployeeInput | AttendanceCreateManyEmployeeInput[]
     skipDuplicates?: boolean
   }
 
-  export type DepartmentCreateWithoutHeadInput = {
-    name: string
-    abbreviation: string
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    director?: EmployeeCreateNestedOneWithoutDepartmentDirectorOfInput
-    positions?: PositionCreateNestedManyWithoutDepartmentInput
-    workInfos?: WorkInfoCreateNestedManyWithoutDepartmentInput
+  export type ContactInfoCreateWithoutEmployeeInput = {
+    phoneNumber?: string | null
+    relativePhone?: string | null
+    companyPhone?: string | null
+    email?: string | null
   }
 
-  export type DepartmentUncheckedCreateWithoutHeadInput = {
+  export type ContactInfoUncheckedCreateWithoutEmployeeInput = {
     id?: number
-    name: string
-    abbreviation: string
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    directorId?: number | null
-    positions?: PositionUncheckedCreateNestedManyWithoutDepartmentInput
-    workInfos?: WorkInfoUncheckedCreateNestedManyWithoutDepartmentInput
+    phoneNumber?: string | null
+    relativePhone?: string | null
+    companyPhone?: string | null
+    email?: string | null
   }
 
-  export type DepartmentCreateOrConnectWithoutHeadInput = {
-    where: DepartmentWhereUniqueInput
-    create: XOR<DepartmentCreateWithoutHeadInput, DepartmentUncheckedCreateWithoutHeadInput>
+  export type ContactInfoCreateOrConnectWithoutEmployeeInput = {
+    where: ContactInfoWhereUniqueInput
+    create: XOR<ContactInfoCreateWithoutEmployeeInput, ContactInfoUncheckedCreateWithoutEmployeeInput>
   }
 
   export type DepartmentCreateWithoutDirectorInput = {
@@ -28437,118 +28391,209 @@ export namespace Prisma {
     create: XOR<DepartmentCreateWithoutDirectorInput, DepartmentUncheckedCreateWithoutDirectorInput>
   }
 
-  export type WorkInfoCreateWithoutEmployeeInput = {
-    specialization?: string | null
-    joinedTBD?: Date | string | null
-    joinedTeSCC?: Date | string | null
-    seniorityStart?: Date | string | null
-    seniority?: string | null
-    contractNumber?: string | null
-    contractDate?: Date | string | null
-    contractType?: string | null
-    contractEndDate?: Date | string | null
-    department?: DepartmentCreateNestedOneWithoutWorkInfosInput
-    position?: PositionCreateNestedOneWithoutEmployeesInput
-  }
-
-  export type WorkInfoUncheckedCreateWithoutEmployeeInput = {
-    id?: number
-    departmentId?: number | null
-    positionId?: number | null
-    specialization?: string | null
-    joinedTBD?: Date | string | null
-    joinedTeSCC?: Date | string | null
-    seniorityStart?: Date | string | null
-    seniority?: string | null
-    contractNumber?: string | null
-    contractDate?: Date | string | null
-    contractType?: string | null
-    contractEndDate?: Date | string | null
-  }
-
-  export type WorkInfoCreateOrConnectWithoutEmployeeInput = {
-    where: WorkInfoWhereUniqueInput
-    create: XOR<WorkInfoCreateWithoutEmployeeInput, WorkInfoUncheckedCreateWithoutEmployeeInput>
-  }
-
-  export type PersonalInfoCreateWithoutEmployeeInput = {
-    identityNumber?: string | null
-    issueDate?: Date | string | null
-    issuePlace?: string | null
-    hometown?: string | null
-    idAddress?: string | null
-    education?: string | null
-    drivingLicense?: string | null
-    toyotaCertificate?: string | null
-    taxCode?: string | null
-    insuranceNumber?: string | null
-    insuranceSalary?: number | null
-  }
-
-  export type PersonalInfoUncheckedCreateWithoutEmployeeInput = {
-    id?: number
-    identityNumber?: string | null
-    issueDate?: Date | string | null
-    issuePlace?: string | null
-    hometown?: string | null
-    idAddress?: string | null
-    education?: string | null
-    drivingLicense?: string | null
-    toyotaCertificate?: string | null
-    taxCode?: string | null
-    insuranceNumber?: string | null
-    insuranceSalary?: number | null
-  }
-
-  export type PersonalInfoCreateOrConnectWithoutEmployeeInput = {
-    where: PersonalInfoWhereUniqueInput
-    create: XOR<PersonalInfoCreateWithoutEmployeeInput, PersonalInfoUncheckedCreateWithoutEmployeeInput>
-  }
-
-  export type ContactInfoCreateWithoutEmployeeInput = {
-    phoneNumber?: string | null
-    relativePhone?: string | null
-    companyPhone?: string | null
-    email?: string | null
-  }
-
-  export type ContactInfoUncheckedCreateWithoutEmployeeInput = {
-    id?: number
-    phoneNumber?: string | null
-    relativePhone?: string | null
-    companyPhone?: string | null
-    email?: string | null
-  }
-
-  export type ContactInfoCreateOrConnectWithoutEmployeeInput = {
-    where: ContactInfoWhereUniqueInput
-    create: XOR<ContactInfoCreateWithoutEmployeeInput, ContactInfoUncheckedCreateWithoutEmployeeInput>
-  }
-
-  export type OtherInfoCreateWithoutEmployeeInput = {
-    workStatus?: $Enums.WorkStatus
-    resignedDate?: Date | string | null
-    documentsChecked?: string | null
+  export type DepartmentCreateWithoutHeadInput = {
+    name: string
+    abbreviation: string
+    description?: string | null
+    createdAt?: Date | string
     updatedAt?: Date | string
-    VCB?: string | null
-    MTCV?: string | null
-    PNJ?: string | null
+    director?: EmployeeCreateNestedOneWithoutDepartmentDirectorOfInput
+    positions?: PositionCreateNestedManyWithoutDepartmentInput
+    workInfos?: WorkInfoCreateNestedManyWithoutDepartmentInput
   }
 
-  export type OtherInfoUncheckedCreateWithoutEmployeeInput = {
+  export type DepartmentUncheckedCreateWithoutHeadInput = {
     id?: number
-    workStatus?: $Enums.WorkStatus
-    resignedDate?: Date | string | null
-    documentsChecked?: string | null
+    name: string
+    abbreviation: string
+    description?: string | null
+    createdAt?: Date | string
     updatedAt?: Date | string
-    VCB?: string | null
-    MTCV?: string | null
-    PNJ?: string | null
+    directorId?: number | null
+    positions?: PositionUncheckedCreateNestedManyWithoutDepartmentInput
+    workInfos?: WorkInfoUncheckedCreateNestedManyWithoutDepartmentInput
   }
 
-  export type OtherInfoCreateOrConnectWithoutEmployeeInput = {
-    where: OtherInfoWhereUniqueInput
-    create: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
+  export type DepartmentCreateOrConnectWithoutHeadInput = {
+    where: DepartmentWhereUniqueInput
+    create: XOR<DepartmentCreateWithoutHeadInput, DepartmentUncheckedCreateWithoutHeadInput>
+  }
+
+  export type EmployeeCreateWithoutSubordinatesInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
+    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutSubordinatesInput = {
+    id?: number
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutSubordinatesInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutSubordinatesInput, EmployeeUncheckedCreateWithoutSubordinatesInput>
+  }
+
+  export type EmployeeCreateWithoutManagerInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutManagerInput = {
+    id?: number
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutManagerInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutManagerInput, EmployeeUncheckedCreateWithoutManagerInput>
+  }
+
+  export type EmployeeCreateManyManagerInputEnvelope = {
+    data: EmployeeCreateManyManagerInput | EmployeeCreateManyManagerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type KPIEmployeeCreateWithoutEmployeeInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    kpi: KPICreateNestedOneWithoutKpiEmployeesInput
+    entries?: KPIEntryCreateNestedManyWithoutKpiEmployeeInput
+  }
+
+  export type KPIEmployeeUncheckedCreateWithoutEmployeeInput = {
+    id?: number
+    kpiId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    entries?: KPIEntryUncheckedCreateNestedManyWithoutKpiEmployeeInput
+  }
+
+  export type KPIEmployeeCreateOrConnectWithoutEmployeeInput = {
+    where: KPIEmployeeWhereUniqueInput
+    create: XOR<KPIEmployeeCreateWithoutEmployeeInput, KPIEmployeeUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type KPIEmployeeCreateManyEmployeeInputEnvelope = {
+    data: KPIEmployeeCreateManyEmployeeInput | KPIEmployeeCreateManyEmployeeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LeaveApprovalStepApproverCreateWithoutApproverInput = {
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+    leaveApprovalStep: LeaveApprovalStepCreateNestedOneWithoutApproversInput
+  }
+
+  export type LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput = {
+    id?: number
+    leaveApprovalStepId: number
+    status?: $Enums.LeaveStatus
+    approvedAt?: Date | string | null
+  }
+
+  export type LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput = {
+    where: LeaveApprovalStepApproverWhereUniqueInput
+    create: XOR<LeaveApprovalStepApproverCreateWithoutApproverInput, LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput>
+  }
+
+  export type LeaveApprovalStepApproverCreateManyApproverInputEnvelope = {
+    data: LeaveApprovalStepApproverCreateManyApproverInput | LeaveApprovalStepApproverCreateManyApproverInput[]
+    skipDuplicates?: boolean
   }
 
   export type LeaveRequestCreateWithoutEmployeeInput = {
@@ -28590,77 +28635,64 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type LeaveApprovalStepApproverCreateWithoutApproverInput = {
-    status?: $Enums.LeaveStatus
-    approvedAt?: Date | string | null
-    leaveApprovalStep: LeaveApprovalStepCreateNestedOneWithoutApproversInput
-  }
-
-  export type LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput = {
-    id?: number
-    leaveApprovalStepId: number
-    status?: $Enums.LeaveStatus
-    approvedAt?: Date | string | null
-  }
-
-  export type LeaveApprovalStepApproverCreateOrConnectWithoutApproverInput = {
-    where: LeaveApprovalStepApproverWhereUniqueInput
-    create: XOR<LeaveApprovalStepApproverCreateWithoutApproverInput, LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput>
-  }
-
-  export type LeaveApprovalStepApproverCreateManyApproverInputEnvelope = {
-    data: LeaveApprovalStepApproverCreateManyApproverInput | LeaveApprovalStepApproverCreateManyApproverInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type AttendanceCreateWithoutEmployeeInput = {
-    date: Date | string
-    checkInTime?: Date | string | null
-    checkOutTime?: Date | string | null
-    workingHours?: number | null
-  }
-
-  export type AttendanceUncheckedCreateWithoutEmployeeInput = {
-    id?: number
-    date: Date | string
-    checkInTime?: Date | string | null
-    checkOutTime?: Date | string | null
-    workingHours?: number | null
-  }
-
-  export type AttendanceCreateOrConnectWithoutEmployeeInput = {
-    where: AttendanceWhereUniqueInput
-    create: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput>
-  }
-
-  export type AttendanceCreateManyEmployeeInputEnvelope = {
-    data: AttendanceCreateManyEmployeeInput | AttendanceCreateManyEmployeeInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type KPIEmployeeCreateWithoutEmployeeInput = {
-    createdAt?: Date | string
+  export type OtherInfoCreateWithoutEmployeeInput = {
+    workStatus?: $Enums.WorkStatus
+    resignedDate?: Date | string | null
+    documentsChecked?: string | null
     updatedAt?: Date | string
-    kpi: KPICreateNestedOneWithoutKpiEmployeesInput
-    entries?: KPIEntryCreateNestedManyWithoutKpiEmployeeInput
+    VCB?: string | null
+    MTCV?: string | null
+    PNJ?: string | null
   }
 
-  export type KPIEmployeeUncheckedCreateWithoutEmployeeInput = {
+  export type OtherInfoUncheckedCreateWithoutEmployeeInput = {
     id?: number
-    kpiId: number
-    createdAt?: Date | string
+    workStatus?: $Enums.WorkStatus
+    resignedDate?: Date | string | null
+    documentsChecked?: string | null
     updatedAt?: Date | string
-    entries?: KPIEntryUncheckedCreateNestedManyWithoutKpiEmployeeInput
+    VCB?: string | null
+    MTCV?: string | null
+    PNJ?: string | null
   }
 
-  export type KPIEmployeeCreateOrConnectWithoutEmployeeInput = {
-    where: KPIEmployeeWhereUniqueInput
-    create: XOR<KPIEmployeeCreateWithoutEmployeeInput, KPIEmployeeUncheckedCreateWithoutEmployeeInput>
+  export type OtherInfoCreateOrConnectWithoutEmployeeInput = {
+    where: OtherInfoWhereUniqueInput
+    create: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
   }
 
-  export type KPIEmployeeCreateManyEmployeeInputEnvelope = {
-    data: KPIEmployeeCreateManyEmployeeInput | KPIEmployeeCreateManyEmployeeInput[]
-    skipDuplicates?: boolean
+  export type PersonalInfoCreateWithoutEmployeeInput = {
+    identityNumber?: string | null
+    issueDate?: Date | string | null
+    issuePlace?: string | null
+    hometown?: string | null
+    idAddress?: string | null
+    education?: string | null
+    drivingLicense?: string | null
+    toyotaCertificate?: string | null
+    taxCode?: string | null
+    insuranceNumber?: string | null
+    insuranceSalary?: number | null
+  }
+
+  export type PersonalInfoUncheckedCreateWithoutEmployeeInput = {
+    id?: number
+    identityNumber?: string | null
+    issueDate?: Date | string | null
+    issuePlace?: string | null
+    hometown?: string | null
+    idAddress?: string | null
+    education?: string | null
+    drivingLicense?: string | null
+    toyotaCertificate?: string | null
+    taxCode?: string | null
+    insuranceNumber?: string | null
+    insuranceSalary?: number | null
+  }
+
+  export type PersonalInfoCreateOrConnectWithoutEmployeeInput = {
+    where: PersonalInfoWhereUniqueInput
+    create: XOR<PersonalInfoCreateWithoutEmployeeInput, PersonalInfoUncheckedCreateWithoutEmployeeInput>
   }
 
   export type ProposalCreateWithoutCreatedByInput = {
@@ -28670,10 +28702,10 @@ export namespace Prisma {
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
-    proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     file?: FileCreateNestedOneWithoutProposalsInput
-    signers?: ProposalSignerCreateNestedManyWithoutProposalInput
+    proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     approvers?: ProposalApproverCreateNestedManyWithoutProposalInput
+    signers?: ProposalSignerCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalUncheckedCreateWithoutCreatedByInput = {
@@ -28686,8 +28718,8 @@ export namespace Prisma {
     proposerId: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
+    signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalCreateOrConnectWithoutCreatedByInput = {
@@ -28709,8 +28741,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
     file?: FileCreateNestedOneWithoutProposalsInput
-    signers?: ProposalSignerCreateNestedManyWithoutProposalInput
     approvers?: ProposalApproverCreateNestedManyWithoutProposalInput
+    signers?: ProposalSignerCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalUncheckedCreateWithoutProposerInput = {
@@ -28723,8 +28755,8 @@ export namespace Prisma {
     createdById: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
+    signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalCreateOrConnectWithoutProposerInput = {
@@ -28737,32 +28769,10 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ProposalSignerCreateWithoutSignerInput = {
-    status?: $Enums.LeaveStatus
-    signedAt?: Date | string | null
-    proposal: ProposalCreateNestedOneWithoutSignersInput
-  }
-
-  export type ProposalSignerUncheckedCreateWithoutSignerInput = {
-    id?: number
-    proposalId: number
-    status?: $Enums.LeaveStatus
-    signedAt?: Date | string | null
-  }
-
-  export type ProposalSignerCreateOrConnectWithoutSignerInput = {
-    where: ProposalSignerWhereUniqueInput
-    create: XOR<ProposalSignerCreateWithoutSignerInput, ProposalSignerUncheckedCreateWithoutSignerInput>
-  }
-
-  export type ProposalSignerCreateManySignerInputEnvelope = {
-    data: ProposalSignerCreateManySignerInput | ProposalSignerCreateManySignerInput[]
-    skipDuplicates?: boolean
-  }
-
   export type ProposalApproverCreateWithoutApproverInput = {
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
+    level: number
     proposal: ProposalCreateNestedOneWithoutApproversInput
   }
 
@@ -28771,6 +28781,7 @@ export namespace Prisma {
     proposalId: number
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
+    level: number
   }
 
   export type ProposalApproverCreateOrConnectWithoutApproverInput = {
@@ -28783,140 +28794,117 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type EmployeeUpsertWithoutSubordinatesInput = {
-    update: XOR<EmployeeUpdateWithoutSubordinatesInput, EmployeeUncheckedUpdateWithoutSubordinatesInput>
-    create: XOR<EmployeeCreateWithoutSubordinatesInput, EmployeeUncheckedCreateWithoutSubordinatesInput>
-    where?: EmployeeWhereInput
+  export type ProposalSignerCreateWithoutSignerInput = {
+    status?: $Enums.LeaveStatus
+    signedAt?: Date | string | null
+    level: number
+    proposal: ProposalCreateNestedOneWithoutSignersInput
   }
 
-  export type EmployeeUpdateToOneWithWhereWithoutSubordinatesInput = {
-    where?: EmployeeWhereInput
-    data: XOR<EmployeeUpdateWithoutSubordinatesInput, EmployeeUncheckedUpdateWithoutSubordinatesInput>
+  export type ProposalSignerUncheckedCreateWithoutSignerInput = {
+    id?: number
+    proposalId: number
+    status?: $Enums.LeaveStatus
+    signedAt?: Date | string | null
+    level: number
   }
 
-  export type EmployeeUpdateWithoutSubordinatesInput = {
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
-    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
-    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+  export type ProposalSignerCreateOrConnectWithoutSignerInput = {
+    where: ProposalSignerWhereUniqueInput
+    create: XOR<ProposalSignerCreateWithoutSignerInput, ProposalSignerUncheckedCreateWithoutSignerInput>
   }
 
-  export type EmployeeUncheckedUpdateWithoutSubordinatesInput = {
+  export type ProposalSignerCreateManySignerInputEnvelope = {
+    data: ProposalSignerCreateManySignerInput | ProposalSignerCreateManySignerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WorkInfoCreateWithoutEmployeeInput = {
+    specialization?: string | null
+    joinedTBD?: Date | string | null
+    joinedTeSCC?: Date | string | null
+    seniorityStart?: Date | string | null
+    seniority?: string | null
+    contractNumber?: string | null
+    contractDate?: Date | string | null
+    contractType?: string | null
+    contractEndDate?: Date | string | null
+    department?: DepartmentCreateNestedOneWithoutWorkInfosInput
+    position?: PositionCreateNestedOneWithoutEmployeesInput
+  }
+
+  export type WorkInfoUncheckedCreateWithoutEmployeeInput = {
+    id?: number
+    departmentId?: number | null
+    positionId?: number | null
+    specialization?: string | null
+    joinedTBD?: Date | string | null
+    joinedTeSCC?: Date | string | null
+    seniorityStart?: Date | string | null
+    seniority?: string | null
+    contractNumber?: string | null
+    contractDate?: Date | string | null
+    contractType?: string | null
+    contractEndDate?: Date | string | null
+  }
+
+  export type WorkInfoCreateOrConnectWithoutEmployeeInput = {
+    where: WorkInfoWhereUniqueInput
+    create: XOR<WorkInfoCreateWithoutEmployeeInput, WorkInfoUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type AttendanceUpsertWithWhereUniqueWithoutEmployeeInput = {
+    where: AttendanceWhereUniqueInput
+    update: XOR<AttendanceUpdateWithoutEmployeeInput, AttendanceUncheckedUpdateWithoutEmployeeInput>
+    create: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type AttendanceUpdateWithWhereUniqueWithoutEmployeeInput = {
+    where: AttendanceWhereUniqueInput
+    data: XOR<AttendanceUpdateWithoutEmployeeInput, AttendanceUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type AttendanceUpdateManyWithWhereWithoutEmployeeInput = {
+    where: AttendanceScalarWhereInput
+    data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyWithoutEmployeeInput>
+  }
+
+  export type AttendanceScalarWhereInput = {
+    AND?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+    OR?: AttendanceScalarWhereInput[]
+    NOT?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+    id?: IntFilter<"Attendance"> | number
+    employeeId?: IntFilter<"Attendance"> | number
+    date?: DateTimeFilter<"Attendance"> | Date | string
+    checkInTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
+    checkOutTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
+    workingHours?: FloatNullableFilter<"Attendance"> | number | null
+  }
+
+  export type ContactInfoUpsertWithoutEmployeeInput = {
+    update: XOR<ContactInfoUpdateWithoutEmployeeInput, ContactInfoUncheckedUpdateWithoutEmployeeInput>
+    create: XOR<ContactInfoCreateWithoutEmployeeInput, ContactInfoUncheckedCreateWithoutEmployeeInput>
+    where?: ContactInfoWhereInput
+  }
+
+  export type ContactInfoUpdateToOneWithWhereWithoutEmployeeInput = {
+    where?: ContactInfoWhereInput
+    data: XOR<ContactInfoUpdateWithoutEmployeeInput, ContactInfoUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type ContactInfoUpdateWithoutEmployeeInput = {
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    relativePhone?: NullableStringFieldUpdateOperationsInput | string | null
+    companyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ContactInfoUncheckedUpdateWithoutEmployeeInput = {
     id?: IntFieldUpdateOperationsInput | number
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    managerId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
-    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
-    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
-  }
-
-  export type EmployeeUpsertWithWhereUniqueWithoutManagerInput = {
-    where: EmployeeWhereUniqueInput
-    update: XOR<EmployeeUpdateWithoutManagerInput, EmployeeUncheckedUpdateWithoutManagerInput>
-    create: XOR<EmployeeCreateWithoutManagerInput, EmployeeUncheckedCreateWithoutManagerInput>
-  }
-
-  export type EmployeeUpdateWithWhereUniqueWithoutManagerInput = {
-    where: EmployeeWhereUniqueInput
-    data: XOR<EmployeeUpdateWithoutManagerInput, EmployeeUncheckedUpdateWithoutManagerInput>
-  }
-
-  export type EmployeeUpdateManyWithWhereWithoutManagerInput = {
-    where: EmployeeScalarWhereInput
-    data: XOR<EmployeeUpdateManyMutationInput, EmployeeUncheckedUpdateManyWithoutManagerInput>
-  }
-
-  export type EmployeeScalarWhereInput = {
-    AND?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
-    OR?: EmployeeScalarWhereInput[]
-    NOT?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
-    id?: IntFilter<"Employee"> | number
-    employeeCode?: StringFilter<"Employee"> | string
-    name?: StringFilter<"Employee"> | string
-    gender?: EnumSexFilter<"Employee"> | $Enums.Sex
-    birthDate?: DateTimeNullableFilter<"Employee"> | Date | string | null
-    password?: StringFilter<"Employee"> | string
-    role?: EnumRoleFilter<"Employee"> | $Enums.Role
-    avatar?: StringNullableFilter<"Employee"> | string | null
-    isActive?: BoolFilter<"Employee"> | boolean
-    managerId?: IntNullableFilter<"Employee"> | number | null
-    createdAt?: DateTimeFilter<"Employee"> | Date | string
-    updatedAt?: DateTimeFilter<"Employee"> | Date | string
-  }
-
-  export type DepartmentUpsertWithoutHeadInput = {
-    update: XOR<DepartmentUpdateWithoutHeadInput, DepartmentUncheckedUpdateWithoutHeadInput>
-    create: XOR<DepartmentCreateWithoutHeadInput, DepartmentUncheckedCreateWithoutHeadInput>
-    where?: DepartmentWhereInput
-  }
-
-  export type DepartmentUpdateToOneWithWhereWithoutHeadInput = {
-    where?: DepartmentWhereInput
-    data: XOR<DepartmentUpdateWithoutHeadInput, DepartmentUncheckedUpdateWithoutHeadInput>
-  }
-
-  export type DepartmentUpdateWithoutHeadInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    abbreviation?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    director?: EmployeeUpdateOneWithoutDepartmentDirectorOfNestedInput
-    positions?: PositionUpdateManyWithoutDepartmentNestedInput
-    workInfos?: WorkInfoUpdateManyWithoutDepartmentNestedInput
-  }
-
-  export type DepartmentUncheckedUpdateWithoutHeadInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    abbreviation?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    directorId?: NullableIntFieldUpdateOperationsInput | number | null
-    positions?: PositionUncheckedUpdateManyWithoutDepartmentNestedInput
-    workInfos?: WorkInfoUncheckedUpdateManyWithoutDepartmentNestedInput
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    relativePhone?: NullableStringFieldUpdateOperationsInput | string | null
+    companyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type DepartmentUpsertWithoutDirectorInput = {
@@ -28953,44 +28941,260 @@ export namespace Prisma {
     workInfos?: WorkInfoUncheckedUpdateManyWithoutDepartmentNestedInput
   }
 
-  export type WorkInfoUpsertWithoutEmployeeInput = {
-    update: XOR<WorkInfoUpdateWithoutEmployeeInput, WorkInfoUncheckedUpdateWithoutEmployeeInput>
-    create: XOR<WorkInfoCreateWithoutEmployeeInput, WorkInfoUncheckedCreateWithoutEmployeeInput>
-    where?: WorkInfoWhereInput
+  export type DepartmentUpsertWithoutHeadInput = {
+    update: XOR<DepartmentUpdateWithoutHeadInput, DepartmentUncheckedUpdateWithoutHeadInput>
+    create: XOR<DepartmentCreateWithoutHeadInput, DepartmentUncheckedCreateWithoutHeadInput>
+    where?: DepartmentWhereInput
   }
 
-  export type WorkInfoUpdateToOneWithWhereWithoutEmployeeInput = {
-    where?: WorkInfoWhereInput
-    data: XOR<WorkInfoUpdateWithoutEmployeeInput, WorkInfoUncheckedUpdateWithoutEmployeeInput>
+  export type DepartmentUpdateToOneWithWhereWithoutHeadInput = {
+    where?: DepartmentWhereInput
+    data: XOR<DepartmentUpdateWithoutHeadInput, DepartmentUncheckedUpdateWithoutHeadInput>
   }
 
-  export type WorkInfoUpdateWithoutEmployeeInput = {
-    specialization?: NullableStringFieldUpdateOperationsInput | string | null
-    joinedTBD?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    joinedTeSCC?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    seniorityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    seniority?: NullableStringFieldUpdateOperationsInput | string | null
-    contractNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    contractType?: NullableStringFieldUpdateOperationsInput | string | null
-    contractEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    department?: DepartmentUpdateOneWithoutWorkInfosNestedInput
-    position?: PositionUpdateOneWithoutEmployeesNestedInput
+  export type DepartmentUpdateWithoutHeadInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    director?: EmployeeUpdateOneWithoutDepartmentDirectorOfNestedInput
+    positions?: PositionUpdateManyWithoutDepartmentNestedInput
+    workInfos?: WorkInfoUpdateManyWithoutDepartmentNestedInput
   }
 
-  export type WorkInfoUncheckedUpdateWithoutEmployeeInput = {
+  export type DepartmentUncheckedUpdateWithoutHeadInput = {
     id?: IntFieldUpdateOperationsInput | number
-    departmentId?: NullableIntFieldUpdateOperationsInput | number | null
-    positionId?: NullableIntFieldUpdateOperationsInput | number | null
-    specialization?: NullableStringFieldUpdateOperationsInput | string | null
-    joinedTBD?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    joinedTeSCC?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    seniorityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    seniority?: NullableStringFieldUpdateOperationsInput | string | null
-    contractNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    contractType?: NullableStringFieldUpdateOperationsInput | string | null
-    contractEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    directorId?: NullableIntFieldUpdateOperationsInput | number | null
+    positions?: PositionUncheckedUpdateManyWithoutDepartmentNestedInput
+    workInfos?: WorkInfoUncheckedUpdateManyWithoutDepartmentNestedInput
+  }
+
+  export type EmployeeUpsertWithoutSubordinatesInput = {
+    update: XOR<EmployeeUpdateWithoutSubordinatesInput, EmployeeUncheckedUpdateWithoutSubordinatesInput>
+    create: XOR<EmployeeCreateWithoutSubordinatesInput, EmployeeUncheckedCreateWithoutSubordinatesInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutSubordinatesInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutSubordinatesInput, EmployeeUncheckedUpdateWithoutSubordinatesInput>
+  }
+
+  export type EmployeeUpdateWithoutSubordinatesInput = {
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
+    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutSubordinatesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUpsertWithWhereUniqueWithoutManagerInput = {
+    where: EmployeeWhereUniqueInput
+    update: XOR<EmployeeUpdateWithoutManagerInput, EmployeeUncheckedUpdateWithoutManagerInput>
+    create: XOR<EmployeeCreateWithoutManagerInput, EmployeeUncheckedCreateWithoutManagerInput>
+  }
+
+  export type EmployeeUpdateWithWhereUniqueWithoutManagerInput = {
+    where: EmployeeWhereUniqueInput
+    data: XOR<EmployeeUpdateWithoutManagerInput, EmployeeUncheckedUpdateWithoutManagerInput>
+  }
+
+  export type EmployeeUpdateManyWithWhereWithoutManagerInput = {
+    where: EmployeeScalarWhereInput
+    data: XOR<EmployeeUpdateManyMutationInput, EmployeeUncheckedUpdateManyWithoutManagerInput>
+  }
+
+  export type EmployeeScalarWhereInput = {
+    AND?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
+    OR?: EmployeeScalarWhereInput[]
+    NOT?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
+    id?: IntFilter<"Employee"> | number
+    employeeCode?: StringFilter<"Employee"> | string
+    name?: StringFilter<"Employee"> | string
+    gender?: EnumSexFilter<"Employee"> | $Enums.Sex
+    birthDate?: DateTimeNullableFilter<"Employee"> | Date | string | null
+    password?: StringFilter<"Employee"> | string
+    role?: EnumRoleFilter<"Employee"> | $Enums.Role
+    avatar?: StringNullableFilter<"Employee"> | string | null
+    isActive?: BoolFilter<"Employee"> | boolean
+    managerId?: IntNullableFilter<"Employee"> | number | null
+    createdAt?: DateTimeFilter<"Employee"> | Date | string
+    updatedAt?: DateTimeFilter<"Employee"> | Date | string
+  }
+
+  export type KPIEmployeeUpsertWithWhereUniqueWithoutEmployeeInput = {
+    where: KPIEmployeeWhereUniqueInput
+    update: XOR<KPIEmployeeUpdateWithoutEmployeeInput, KPIEmployeeUncheckedUpdateWithoutEmployeeInput>
+    create: XOR<KPIEmployeeCreateWithoutEmployeeInput, KPIEmployeeUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type KPIEmployeeUpdateWithWhereUniqueWithoutEmployeeInput = {
+    where: KPIEmployeeWhereUniqueInput
+    data: XOR<KPIEmployeeUpdateWithoutEmployeeInput, KPIEmployeeUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type KPIEmployeeUpdateManyWithWhereWithoutEmployeeInput = {
+    where: KPIEmployeeScalarWhereInput
+    data: XOR<KPIEmployeeUpdateManyMutationInput, KPIEmployeeUncheckedUpdateManyWithoutEmployeeInput>
+  }
+
+  export type KPIEmployeeScalarWhereInput = {
+    AND?: KPIEmployeeScalarWhereInput | KPIEmployeeScalarWhereInput[]
+    OR?: KPIEmployeeScalarWhereInput[]
+    NOT?: KPIEmployeeScalarWhereInput | KPIEmployeeScalarWhereInput[]
+    id?: IntFilter<"KPIEmployee"> | number
+    kpiId?: IntFilter<"KPIEmployee"> | number
+    employeeId?: IntFilter<"KPIEmployee"> | number
+    createdAt?: DateTimeFilter<"KPIEmployee"> | Date | string
+    updatedAt?: DateTimeFilter<"KPIEmployee"> | Date | string
+  }
+
+  export type LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutApproverInput = {
+    where: LeaveApprovalStepApproverWhereUniqueInput
+    update: XOR<LeaveApprovalStepApproverUpdateWithoutApproverInput, LeaveApprovalStepApproverUncheckedUpdateWithoutApproverInput>
+    create: XOR<LeaveApprovalStepApproverCreateWithoutApproverInput, LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput>
+  }
+
+  export type LeaveApprovalStepApproverUpdateWithWhereUniqueWithoutApproverInput = {
+    where: LeaveApprovalStepApproverWhereUniqueInput
+    data: XOR<LeaveApprovalStepApproverUpdateWithoutApproverInput, LeaveApprovalStepApproverUncheckedUpdateWithoutApproverInput>
+  }
+
+  export type LeaveApprovalStepApproverUpdateManyWithWhereWithoutApproverInput = {
+    where: LeaveApprovalStepApproverScalarWhereInput
+    data: XOR<LeaveApprovalStepApproverUpdateManyMutationInput, LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverInput>
+  }
+
+  export type LeaveApprovalStepApproverScalarWhereInput = {
+    AND?: LeaveApprovalStepApproverScalarWhereInput | LeaveApprovalStepApproverScalarWhereInput[]
+    OR?: LeaveApprovalStepApproverScalarWhereInput[]
+    NOT?: LeaveApprovalStepApproverScalarWhereInput | LeaveApprovalStepApproverScalarWhereInput[]
+    id?: IntFilter<"LeaveApprovalStepApprover"> | number
+    leaveApprovalStepId?: IntFilter<"LeaveApprovalStepApprover"> | number
+    approverId?: IntFilter<"LeaveApprovalStepApprover"> | number
+    status?: EnumLeaveStatusFilter<"LeaveApprovalStepApprover"> | $Enums.LeaveStatus
+    approvedAt?: DateTimeNullableFilter<"LeaveApprovalStepApprover"> | Date | string | null
+  }
+
+  export type LeaveRequestUpsertWithWhereUniqueWithoutEmployeeInput = {
+    where: LeaveRequestWhereUniqueInput
+    update: XOR<LeaveRequestUpdateWithoutEmployeeInput, LeaveRequestUncheckedUpdateWithoutEmployeeInput>
+    create: XOR<LeaveRequestCreateWithoutEmployeeInput, LeaveRequestUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type LeaveRequestUpdateWithWhereUniqueWithoutEmployeeInput = {
+    where: LeaveRequestWhereUniqueInput
+    data: XOR<LeaveRequestUpdateWithoutEmployeeInput, LeaveRequestUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type LeaveRequestUpdateManyWithWhereWithoutEmployeeInput = {
+    where: LeaveRequestScalarWhereInput
+    data: XOR<LeaveRequestUpdateManyMutationInput, LeaveRequestUncheckedUpdateManyWithoutEmployeeInput>
+  }
+
+  export type LeaveRequestScalarWhereInput = {
+    AND?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
+    OR?: LeaveRequestScalarWhereInput[]
+    NOT?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
+    id?: IntFilter<"LeaveRequest"> | number
+    employeeId?: IntFilter<"LeaveRequest"> | number
+    leaveType?: EnumLeaveTypeEnumFilter<"LeaveRequest"> | $Enums.LeaveTypeEnum
+    startDate?: DateTimeFilter<"LeaveRequest"> | Date | string
+    endDate?: DateTimeFilter<"LeaveRequest"> | Date | string
+    totalHours?: FloatNullableFilter<"LeaveRequest"> | number | null
+    reason?: StringNullableFilter<"LeaveRequest"> | string | null
+    status?: EnumLeaveStatusFilter<"LeaveRequest"> | $Enums.LeaveStatus
+    approvedBy?: StringNullableFilter<"LeaveRequest"> | string | null
+    approvedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
+    createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
+  }
+
+  export type OtherInfoUpsertWithoutEmployeeInput = {
+    update: XOR<OtherInfoUpdateWithoutEmployeeInput, OtherInfoUncheckedUpdateWithoutEmployeeInput>
+    create: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
+    where?: OtherInfoWhereInput
+  }
+
+  export type OtherInfoUpdateToOneWithWhereWithoutEmployeeInput = {
+    where?: OtherInfoWhereInput
+    data: XOR<OtherInfoUpdateWithoutEmployeeInput, OtherInfoUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type OtherInfoUpdateWithoutEmployeeInput = {
+    workStatus?: EnumWorkStatusFieldUpdateOperationsInput | $Enums.WorkStatus
+    resignedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    documentsChecked?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    VCB?: NullableStringFieldUpdateOperationsInput | string | null
+    MTCV?: NullableStringFieldUpdateOperationsInput | string | null
+    PNJ?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type OtherInfoUncheckedUpdateWithoutEmployeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    workStatus?: EnumWorkStatusFieldUpdateOperationsInput | $Enums.WorkStatus
+    resignedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    documentsChecked?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    VCB?: NullableStringFieldUpdateOperationsInput | string | null
+    MTCV?: NullableStringFieldUpdateOperationsInput | string | null
+    PNJ?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PersonalInfoUpsertWithoutEmployeeInput = {
@@ -29033,180 +29237,6 @@ export namespace Prisma {
     insuranceSalary?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
-  export type ContactInfoUpsertWithoutEmployeeInput = {
-    update: XOR<ContactInfoUpdateWithoutEmployeeInput, ContactInfoUncheckedUpdateWithoutEmployeeInput>
-    create: XOR<ContactInfoCreateWithoutEmployeeInput, ContactInfoUncheckedCreateWithoutEmployeeInput>
-    where?: ContactInfoWhereInput
-  }
-
-  export type ContactInfoUpdateToOneWithWhereWithoutEmployeeInput = {
-    where?: ContactInfoWhereInput
-    data: XOR<ContactInfoUpdateWithoutEmployeeInput, ContactInfoUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type ContactInfoUpdateWithoutEmployeeInput = {
-    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    relativePhone?: NullableStringFieldUpdateOperationsInput | string | null
-    companyPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type ContactInfoUncheckedUpdateWithoutEmployeeInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    relativePhone?: NullableStringFieldUpdateOperationsInput | string | null
-    companyPhone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type OtherInfoUpsertWithoutEmployeeInput = {
-    update: XOR<OtherInfoUpdateWithoutEmployeeInput, OtherInfoUncheckedUpdateWithoutEmployeeInput>
-    create: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
-    where?: OtherInfoWhereInput
-  }
-
-  export type OtherInfoUpdateToOneWithWhereWithoutEmployeeInput = {
-    where?: OtherInfoWhereInput
-    data: XOR<OtherInfoUpdateWithoutEmployeeInput, OtherInfoUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type OtherInfoUpdateWithoutEmployeeInput = {
-    workStatus?: EnumWorkStatusFieldUpdateOperationsInput | $Enums.WorkStatus
-    resignedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    documentsChecked?: NullableStringFieldUpdateOperationsInput | string | null
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    VCB?: NullableStringFieldUpdateOperationsInput | string | null
-    MTCV?: NullableStringFieldUpdateOperationsInput | string | null
-    PNJ?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type OtherInfoUncheckedUpdateWithoutEmployeeInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    workStatus?: EnumWorkStatusFieldUpdateOperationsInput | $Enums.WorkStatus
-    resignedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    documentsChecked?: NullableStringFieldUpdateOperationsInput | string | null
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    VCB?: NullableStringFieldUpdateOperationsInput | string | null
-    MTCV?: NullableStringFieldUpdateOperationsInput | string | null
-    PNJ?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type LeaveRequestUpsertWithWhereUniqueWithoutEmployeeInput = {
-    where: LeaveRequestWhereUniqueInput
-    update: XOR<LeaveRequestUpdateWithoutEmployeeInput, LeaveRequestUncheckedUpdateWithoutEmployeeInput>
-    create: XOR<LeaveRequestCreateWithoutEmployeeInput, LeaveRequestUncheckedCreateWithoutEmployeeInput>
-  }
-
-  export type LeaveRequestUpdateWithWhereUniqueWithoutEmployeeInput = {
-    where: LeaveRequestWhereUniqueInput
-    data: XOR<LeaveRequestUpdateWithoutEmployeeInput, LeaveRequestUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type LeaveRequestUpdateManyWithWhereWithoutEmployeeInput = {
-    where: LeaveRequestScalarWhereInput
-    data: XOR<LeaveRequestUpdateManyMutationInput, LeaveRequestUncheckedUpdateManyWithoutEmployeeInput>
-  }
-
-  export type LeaveRequestScalarWhereInput = {
-    AND?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
-    OR?: LeaveRequestScalarWhereInput[]
-    NOT?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
-    id?: IntFilter<"LeaveRequest"> | number
-    employeeId?: IntFilter<"LeaveRequest"> | number
-    leaveType?: EnumLeaveTypeEnumFilter<"LeaveRequest"> | $Enums.LeaveTypeEnum
-    startDate?: DateTimeFilter<"LeaveRequest"> | Date | string
-    endDate?: DateTimeFilter<"LeaveRequest"> | Date | string
-    totalHours?: FloatNullableFilter<"LeaveRequest"> | number | null
-    reason?: StringNullableFilter<"LeaveRequest"> | string | null
-    status?: EnumLeaveStatusFilter<"LeaveRequest"> | $Enums.LeaveStatus
-    approvedBy?: StringNullableFilter<"LeaveRequest"> | string | null
-    approvedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
-    createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
-    updatedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
-  }
-
-  export type LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutApproverInput = {
-    where: LeaveApprovalStepApproverWhereUniqueInput
-    update: XOR<LeaveApprovalStepApproverUpdateWithoutApproverInput, LeaveApprovalStepApproverUncheckedUpdateWithoutApproverInput>
-    create: XOR<LeaveApprovalStepApproverCreateWithoutApproverInput, LeaveApprovalStepApproverUncheckedCreateWithoutApproverInput>
-  }
-
-  export type LeaveApprovalStepApproverUpdateWithWhereUniqueWithoutApproverInput = {
-    where: LeaveApprovalStepApproverWhereUniqueInput
-    data: XOR<LeaveApprovalStepApproverUpdateWithoutApproverInput, LeaveApprovalStepApproverUncheckedUpdateWithoutApproverInput>
-  }
-
-  export type LeaveApprovalStepApproverUpdateManyWithWhereWithoutApproverInput = {
-    where: LeaveApprovalStepApproverScalarWhereInput
-    data: XOR<LeaveApprovalStepApproverUpdateManyMutationInput, LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverInput>
-  }
-
-  export type LeaveApprovalStepApproverScalarWhereInput = {
-    AND?: LeaveApprovalStepApproverScalarWhereInput | LeaveApprovalStepApproverScalarWhereInput[]
-    OR?: LeaveApprovalStepApproverScalarWhereInput[]
-    NOT?: LeaveApprovalStepApproverScalarWhereInput | LeaveApprovalStepApproverScalarWhereInput[]
-    id?: IntFilter<"LeaveApprovalStepApprover"> | number
-    leaveApprovalStepId?: IntFilter<"LeaveApprovalStepApprover"> | number
-    approverId?: IntFilter<"LeaveApprovalStepApprover"> | number
-    status?: EnumLeaveStatusFilter<"LeaveApprovalStepApprover"> | $Enums.LeaveStatus
-    approvedAt?: DateTimeNullableFilter<"LeaveApprovalStepApprover"> | Date | string | null
-  }
-
-  export type AttendanceUpsertWithWhereUniqueWithoutEmployeeInput = {
-    where: AttendanceWhereUniqueInput
-    update: XOR<AttendanceUpdateWithoutEmployeeInput, AttendanceUncheckedUpdateWithoutEmployeeInput>
-    create: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput>
-  }
-
-  export type AttendanceUpdateWithWhereUniqueWithoutEmployeeInput = {
-    where: AttendanceWhereUniqueInput
-    data: XOR<AttendanceUpdateWithoutEmployeeInput, AttendanceUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type AttendanceUpdateManyWithWhereWithoutEmployeeInput = {
-    where: AttendanceScalarWhereInput
-    data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyWithoutEmployeeInput>
-  }
-
-  export type AttendanceScalarWhereInput = {
-    AND?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
-    OR?: AttendanceScalarWhereInput[]
-    NOT?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
-    id?: IntFilter<"Attendance"> | number
-    employeeId?: IntFilter<"Attendance"> | number
-    date?: DateTimeFilter<"Attendance"> | Date | string
-    checkInTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
-    checkOutTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
-    workingHours?: FloatNullableFilter<"Attendance"> | number | null
-  }
-
-  export type KPIEmployeeUpsertWithWhereUniqueWithoutEmployeeInput = {
-    where: KPIEmployeeWhereUniqueInput
-    update: XOR<KPIEmployeeUpdateWithoutEmployeeInput, KPIEmployeeUncheckedUpdateWithoutEmployeeInput>
-    create: XOR<KPIEmployeeCreateWithoutEmployeeInput, KPIEmployeeUncheckedCreateWithoutEmployeeInput>
-  }
-
-  export type KPIEmployeeUpdateWithWhereUniqueWithoutEmployeeInput = {
-    where: KPIEmployeeWhereUniqueInput
-    data: XOR<KPIEmployeeUpdateWithoutEmployeeInput, KPIEmployeeUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type KPIEmployeeUpdateManyWithWhereWithoutEmployeeInput = {
-    where: KPIEmployeeScalarWhereInput
-    data: XOR<KPIEmployeeUpdateManyMutationInput, KPIEmployeeUncheckedUpdateManyWithoutEmployeeInput>
-  }
-
-  export type KPIEmployeeScalarWhereInput = {
-    AND?: KPIEmployeeScalarWhereInput | KPIEmployeeScalarWhereInput[]
-    OR?: KPIEmployeeScalarWhereInput[]
-    NOT?: KPIEmployeeScalarWhereInput | KPIEmployeeScalarWhereInput[]
-    id?: IntFilter<"KPIEmployee"> | number
-    kpiId?: IntFilter<"KPIEmployee"> | number
-    employeeId?: IntFilter<"KPIEmployee"> | number
-    createdAt?: DateTimeFilter<"KPIEmployee"> | Date | string
-    updatedAt?: DateTimeFilter<"KPIEmployee"> | Date | string
-  }
-
   export type ProposalUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: ProposalWhereUniqueInput
     update: XOR<ProposalUpdateWithoutCreatedByInput, ProposalUncheckedUpdateWithoutCreatedByInput>
@@ -29239,33 +29269,6 @@ export namespace Prisma {
     data: XOR<ProposalUpdateManyMutationInput, ProposalUncheckedUpdateManyWithoutProposerInput>
   }
 
-  export type ProposalSignerUpsertWithWhereUniqueWithoutSignerInput = {
-    where: ProposalSignerWhereUniqueInput
-    update: XOR<ProposalSignerUpdateWithoutSignerInput, ProposalSignerUncheckedUpdateWithoutSignerInput>
-    create: XOR<ProposalSignerCreateWithoutSignerInput, ProposalSignerUncheckedCreateWithoutSignerInput>
-  }
-
-  export type ProposalSignerUpdateWithWhereUniqueWithoutSignerInput = {
-    where: ProposalSignerWhereUniqueInput
-    data: XOR<ProposalSignerUpdateWithoutSignerInput, ProposalSignerUncheckedUpdateWithoutSignerInput>
-  }
-
-  export type ProposalSignerUpdateManyWithWhereWithoutSignerInput = {
-    where: ProposalSignerScalarWhereInput
-    data: XOR<ProposalSignerUpdateManyMutationInput, ProposalSignerUncheckedUpdateManyWithoutSignerInput>
-  }
-
-  export type ProposalSignerScalarWhereInput = {
-    AND?: ProposalSignerScalarWhereInput | ProposalSignerScalarWhereInput[]
-    OR?: ProposalSignerScalarWhereInput[]
-    NOT?: ProposalSignerScalarWhereInput | ProposalSignerScalarWhereInput[]
-    id?: IntFilter<"ProposalSigner"> | number
-    proposalId?: IntFilter<"ProposalSigner"> | number
-    signerId?: IntFilter<"ProposalSigner"> | number
-    status?: EnumLeaveStatusFilter<"ProposalSigner"> | $Enums.LeaveStatus
-    signedAt?: DateTimeNullableFilter<"ProposalSigner"> | Date | string | null
-  }
-
   export type ProposalApproverUpsertWithWhereUniqueWithoutApproverInput = {
     where: ProposalApproverWhereUniqueInput
     update: XOR<ProposalApproverUpdateWithoutApproverInput, ProposalApproverUncheckedUpdateWithoutApproverInput>
@@ -29291,68 +29294,75 @@ export namespace Prisma {
     approverId?: IntFilter<"ProposalApprover"> | number
     status?: EnumLeaveStatusFilter<"ProposalApprover"> | $Enums.LeaveStatus
     approvedAt?: DateTimeNullableFilter<"ProposalApprover"> | Date | string | null
+    level?: IntFilter<"ProposalApprover"> | number
   }
 
-  export type EmployeeCreateWithoutDepartmentHeadOfInput = {
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
-    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
-    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
-    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+  export type ProposalSignerUpsertWithWhereUniqueWithoutSignerInput = {
+    where: ProposalSignerWhereUniqueInput
+    update: XOR<ProposalSignerUpdateWithoutSignerInput, ProposalSignerUncheckedUpdateWithoutSignerInput>
+    create: XOR<ProposalSignerCreateWithoutSignerInput, ProposalSignerUncheckedCreateWithoutSignerInput>
   }
 
-  export type EmployeeUncheckedCreateWithoutDepartmentHeadOfInput = {
-    id?: number
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    managerId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
-    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
-    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+  export type ProposalSignerUpdateWithWhereUniqueWithoutSignerInput = {
+    where: ProposalSignerWhereUniqueInput
+    data: XOR<ProposalSignerUpdateWithoutSignerInput, ProposalSignerUncheckedUpdateWithoutSignerInput>
   }
 
-  export type EmployeeCreateOrConnectWithoutDepartmentHeadOfInput = {
-    where: EmployeeWhereUniqueInput
-    create: XOR<EmployeeCreateWithoutDepartmentHeadOfInput, EmployeeUncheckedCreateWithoutDepartmentHeadOfInput>
+  export type ProposalSignerUpdateManyWithWhereWithoutSignerInput = {
+    where: ProposalSignerScalarWhereInput
+    data: XOR<ProposalSignerUpdateManyMutationInput, ProposalSignerUncheckedUpdateManyWithoutSignerInput>
+  }
+
+  export type ProposalSignerScalarWhereInput = {
+    AND?: ProposalSignerScalarWhereInput | ProposalSignerScalarWhereInput[]
+    OR?: ProposalSignerScalarWhereInput[]
+    NOT?: ProposalSignerScalarWhereInput | ProposalSignerScalarWhereInput[]
+    id?: IntFilter<"ProposalSigner"> | number
+    proposalId?: IntFilter<"ProposalSigner"> | number
+    signerId?: IntFilter<"ProposalSigner"> | number
+    status?: EnumLeaveStatusFilter<"ProposalSigner"> | $Enums.LeaveStatus
+    signedAt?: DateTimeNullableFilter<"ProposalSigner"> | Date | string | null
+    level?: IntFilter<"ProposalSigner"> | number
+  }
+
+  export type WorkInfoUpsertWithoutEmployeeInput = {
+    update: XOR<WorkInfoUpdateWithoutEmployeeInput, WorkInfoUncheckedUpdateWithoutEmployeeInput>
+    create: XOR<WorkInfoCreateWithoutEmployeeInput, WorkInfoUncheckedCreateWithoutEmployeeInput>
+    where?: WorkInfoWhereInput
+  }
+
+  export type WorkInfoUpdateToOneWithWhereWithoutEmployeeInput = {
+    where?: WorkInfoWhereInput
+    data: XOR<WorkInfoUpdateWithoutEmployeeInput, WorkInfoUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type WorkInfoUpdateWithoutEmployeeInput = {
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
+    joinedTBD?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    joinedTeSCC?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    seniorityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    seniority?: NullableStringFieldUpdateOperationsInput | string | null
+    contractNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contractType?: NullableStringFieldUpdateOperationsInput | string | null
+    contractEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    department?: DepartmentUpdateOneWithoutWorkInfosNestedInput
+    position?: PositionUpdateOneWithoutEmployeesNestedInput
+  }
+
+  export type WorkInfoUncheckedUpdateWithoutEmployeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    departmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    positionId?: NullableIntFieldUpdateOperationsInput | number | null
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
+    joinedTBD?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    joinedTeSCC?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    seniorityStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    seniority?: NullableStringFieldUpdateOperationsInput | string | null
+    contractNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contractType?: NullableStringFieldUpdateOperationsInput | string | null
+    contractEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type EmployeeCreateWithoutDepartmentDirectorOfInput = {
@@ -29366,21 +29376,21 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutDepartmentDirectorOfInput = {
@@ -29396,25 +29406,87 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutDepartmentDirectorOfInput = {
     where: EmployeeWhereUniqueInput
     create: XOR<EmployeeCreateWithoutDepartmentDirectorOfInput, EmployeeUncheckedCreateWithoutDepartmentDirectorOfInput>
+  }
+
+  export type EmployeeCreateWithoutDepartmentHeadOfInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
+    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutDepartmentHeadOfInput = {
+    id?: number
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutDepartmentHeadOfInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutDepartmentHeadOfInput, EmployeeUncheckedCreateWithoutDepartmentHeadOfInput>
   }
 
   export type PositionCreateWithoutDepartmentInput = {
@@ -29456,8 +29528,8 @@ export namespace Prisma {
     contractDate?: Date | string | null
     contractType?: string | null
     contractEndDate?: Date | string | null
-    position?: PositionCreateNestedOneWithoutEmployeesInput
     employee: EmployeeCreateNestedOneWithoutWorkInfoInput
+    position?: PositionCreateNestedOneWithoutEmployeesInput
   }
 
   export type WorkInfoUncheckedCreateWithoutDepartmentInput = {
@@ -29485,74 +29557,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type EmployeeUpsertWithoutDepartmentHeadOfInput = {
-    update: XOR<EmployeeUpdateWithoutDepartmentHeadOfInput, EmployeeUncheckedUpdateWithoutDepartmentHeadOfInput>
-    create: XOR<EmployeeCreateWithoutDepartmentHeadOfInput, EmployeeUncheckedCreateWithoutDepartmentHeadOfInput>
-    where?: EmployeeWhereInput
-  }
-
-  export type EmployeeUpdateToOneWithWhereWithoutDepartmentHeadOfInput = {
-    where?: EmployeeWhereInput
-    data: XOR<EmployeeUpdateWithoutDepartmentHeadOfInput, EmployeeUncheckedUpdateWithoutDepartmentHeadOfInput>
-  }
-
-  export type EmployeeUpdateWithoutDepartmentHeadOfInput = {
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
-    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
-    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
-    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
-  }
-
-  export type EmployeeUncheckedUpdateWithoutDepartmentHeadOfInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    managerId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
-    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
-    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
-  }
-
   export type EmployeeUpsertWithoutDepartmentDirectorOfInput = {
     update: XOR<EmployeeUpdateWithoutDepartmentDirectorOfInput, EmployeeUncheckedUpdateWithoutDepartmentDirectorOfInput>
     create: XOR<EmployeeCreateWithoutDepartmentDirectorOfInput, EmployeeUncheckedCreateWithoutDepartmentDirectorOfInput>
@@ -29575,21 +29579,21 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutDepartmentDirectorOfInput = {
@@ -29605,20 +29609,88 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUpsertWithoutDepartmentHeadOfInput = {
+    update: XOR<EmployeeUpdateWithoutDepartmentHeadOfInput, EmployeeUncheckedUpdateWithoutDepartmentHeadOfInput>
+    create: XOR<EmployeeCreateWithoutDepartmentHeadOfInput, EmployeeUncheckedCreateWithoutDepartmentHeadOfInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutDepartmentHeadOfInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutDepartmentHeadOfInput, EmployeeUncheckedUpdateWithoutDepartmentHeadOfInput>
+  }
+
+  export type EmployeeUpdateWithoutDepartmentHeadOfInput = {
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutDepartmentHeadOfInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
   }
 
   export type PositionUpsertWithWhereUniqueWithoutDepartmentInput = {
@@ -29691,8 +29763,8 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    head?: EmployeeCreateNestedOneWithoutDepartmentHeadOfInput
     director?: EmployeeCreateNestedOneWithoutDepartmentDirectorOfInput
+    head?: EmployeeCreateNestedOneWithoutDepartmentHeadOfInput
     workInfos?: WorkInfoCreateNestedManyWithoutDepartmentInput
   }
 
@@ -29769,8 +29841,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    head?: EmployeeUpdateOneWithoutDepartmentHeadOfNestedInput
     director?: EmployeeUpdateOneWithoutDepartmentDirectorOfNestedInput
+    head?: EmployeeUpdateOneWithoutDepartmentHeadOfNestedInput
     workInfos?: WorkInfoUpdateManyWithoutDepartmentNestedInput
   }
 
@@ -29808,8 +29880,8 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    head?: EmployeeCreateNestedOneWithoutDepartmentHeadOfInput
     director?: EmployeeCreateNestedOneWithoutDepartmentDirectorOfInput
+    head?: EmployeeCreateNestedOneWithoutDepartmentHeadOfInput
     positions?: PositionCreateNestedManyWithoutDepartmentInput
   }
 
@@ -29828,6 +29900,68 @@ export namespace Prisma {
   export type DepartmentCreateOrConnectWithoutWorkInfosInput = {
     where: DepartmentWhereUniqueInput
     create: XOR<DepartmentCreateWithoutWorkInfosInput, DepartmentUncheckedCreateWithoutWorkInfosInput>
+  }
+
+  export type EmployeeCreateWithoutWorkInfoInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
+    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
+    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutWorkInfoInput = {
+    id?: number
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutWorkInfoInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutWorkInfoInput, EmployeeUncheckedCreateWithoutWorkInfoInput>
   }
 
   export type PositionCreateWithoutEmployeesInput = {
@@ -29854,68 +29988,6 @@ export namespace Prisma {
     create: XOR<PositionCreateWithoutEmployeesInput, PositionUncheckedCreateWithoutEmployeesInput>
   }
 
-  export type EmployeeCreateWithoutWorkInfoInput = {
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
-    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
-    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
-    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
-  }
-
-  export type EmployeeUncheckedCreateWithoutWorkInfoInput = {
-    id?: number
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    managerId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
-    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
-    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
-  }
-
-  export type EmployeeCreateOrConnectWithoutWorkInfoInput = {
-    where: EmployeeWhereUniqueInput
-    create: XOR<EmployeeCreateWithoutWorkInfoInput, EmployeeUncheckedCreateWithoutWorkInfoInput>
-  }
-
   export type DepartmentUpsertWithoutWorkInfosInput = {
     update: XOR<DepartmentUpdateWithoutWorkInfosInput, DepartmentUncheckedUpdateWithoutWorkInfosInput>
     create: XOR<DepartmentCreateWithoutWorkInfosInput, DepartmentUncheckedCreateWithoutWorkInfosInput>
@@ -29933,8 +30005,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    head?: EmployeeUpdateOneWithoutDepartmentHeadOfNestedInput
     director?: EmployeeUpdateOneWithoutDepartmentDirectorOfNestedInput
+    head?: EmployeeUpdateOneWithoutDepartmentHeadOfNestedInput
     positions?: PositionUpdateManyWithoutDepartmentNestedInput
   }
 
@@ -29948,6 +30020,74 @@ export namespace Prisma {
     headId?: NullableIntFieldUpdateOperationsInput | number | null
     directorId?: NullableIntFieldUpdateOperationsInput | number | null
     positions?: PositionUncheckedUpdateManyWithoutDepartmentNestedInput
+  }
+
+  export type EmployeeUpsertWithoutWorkInfoInput = {
+    update: XOR<EmployeeUpdateWithoutWorkInfoInput, EmployeeUncheckedUpdateWithoutWorkInfoInput>
+    create: XOR<EmployeeCreateWithoutWorkInfoInput, EmployeeUncheckedCreateWithoutWorkInfoInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutWorkInfoInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutWorkInfoInput, EmployeeUncheckedUpdateWithoutWorkInfoInput>
+  }
+
+  export type EmployeeUpdateWithoutWorkInfoInput = {
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
+    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutWorkInfoInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
   }
 
   export type PositionUpsertWithoutEmployeesInput = {
@@ -29980,74 +30120,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type EmployeeUpsertWithoutWorkInfoInput = {
-    update: XOR<EmployeeUpdateWithoutWorkInfoInput, EmployeeUncheckedUpdateWithoutWorkInfoInput>
-    create: XOR<EmployeeCreateWithoutWorkInfoInput, EmployeeUncheckedCreateWithoutWorkInfoInput>
-    where?: EmployeeWhereInput
-  }
-
-  export type EmployeeUpdateToOneWithWhereWithoutWorkInfoInput = {
-    where?: EmployeeWhereInput
-    data: XOR<EmployeeUpdateWithoutWorkInfoInput, EmployeeUncheckedUpdateWithoutWorkInfoInput>
-  }
-
-  export type EmployeeUpdateWithoutWorkInfoInput = {
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
-    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
-    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
-    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
-  }
-
-  export type EmployeeUncheckedUpdateWithoutWorkInfoInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    managerId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
-    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
-    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
-  }
-
   export type EmployeeCreateWithoutPersonalInfoInput = {
     employeeCode: string
     name: string
@@ -30059,21 +30131,21 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutPersonalInfoInput = {
@@ -30089,20 +30161,20 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutPersonalInfoInput = {
@@ -30132,21 +30204,21 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutPersonalInfoInput = {
@@ -30162,20 +30234,20 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
   }
 
   export type EmployeeCreateWithoutContactInfoInput = {
@@ -30189,21 +30261,21 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutContactInfoInput = {
@@ -30219,20 +30291,20 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutContactInfoInput = {
@@ -30262,21 +30334,21 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutContactInfoInput = {
@@ -30292,20 +30364,20 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
   }
 
   export type EmployeeCreateWithoutOtherInfoInput = {
@@ -30319,21 +30391,21 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutOtherInfoInput = {
@@ -30349,20 +30421,20 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutOtherInfoInput = {
@@ -30392,21 +30464,21 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutOtherInfoInput = {
@@ -30422,82 +30494,20 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
-  }
-
-  export type EmployeeCreateWithoutLeaveRequestInput = {
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
-    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
-    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
-    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
-  }
-
-  export type EmployeeUncheckedCreateWithoutLeaveRequestInput = {
-    id?: number
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    managerId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
-    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
-    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
-  }
-
-  export type EmployeeCreateOrConnectWithoutLeaveRequestInput = {
-    where: EmployeeWhereUniqueInput
-    create: XOR<EmployeeCreateWithoutLeaveRequestInput, EmployeeUncheckedCreateWithoutLeaveRequestInput>
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
   }
 
   export type LeaveApprovalStepCreateWithoutLeaveRequestInput = {
@@ -30525,72 +30535,66 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type EmployeeUpsertWithoutLeaveRequestInput = {
-    update: XOR<EmployeeUpdateWithoutLeaveRequestInput, EmployeeUncheckedUpdateWithoutLeaveRequestInput>
+  export type EmployeeCreateWithoutLeaveRequestInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
+    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
+    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutLeaveRequestInput = {
+    id?: number
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutLeaveRequestInput = {
+    where: EmployeeWhereUniqueInput
     create: XOR<EmployeeCreateWithoutLeaveRequestInput, EmployeeUncheckedCreateWithoutLeaveRequestInput>
-    where?: EmployeeWhereInput
-  }
-
-  export type EmployeeUpdateToOneWithWhereWithoutLeaveRequestInput = {
-    where?: EmployeeWhereInput
-    data: XOR<EmployeeUpdateWithoutLeaveRequestInput, EmployeeUncheckedUpdateWithoutLeaveRequestInput>
-  }
-
-  export type EmployeeUpdateWithoutLeaveRequestInput = {
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
-    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
-    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
-    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
-  }
-
-  export type EmployeeUncheckedUpdateWithoutLeaveRequestInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    managerId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
-    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
-    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
   }
 
   export type LeaveApprovalStepUpsertWithWhereUniqueWithoutLeaveRequestInput = {
@@ -30618,6 +30622,74 @@ export namespace Prisma {
     level?: IntFilter<"LeaveApprovalStep"> | number
     status?: EnumLeaveStatusFilter<"LeaveApprovalStep"> | $Enums.LeaveStatus
     approvedAt?: DateTimeNullableFilter<"LeaveApprovalStep"> | Date | string | null
+  }
+
+  export type EmployeeUpsertWithoutLeaveRequestInput = {
+    update: XOR<EmployeeUpdateWithoutLeaveRequestInput, EmployeeUncheckedUpdateWithoutLeaveRequestInput>
+    create: XOR<EmployeeCreateWithoutLeaveRequestInput, EmployeeUncheckedCreateWithoutLeaveRequestInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutLeaveRequestInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutLeaveRequestInput, EmployeeUncheckedUpdateWithoutLeaveRequestInput>
+  }
+
+  export type EmployeeUpdateWithoutLeaveRequestInput = {
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
+    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutLeaveRequestInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
   }
 
   export type LeaveRequestCreateWithoutApprovalStepsInput = {
@@ -30733,6 +30805,68 @@ export namespace Prisma {
     data: XOR<LeaveApprovalStepApproverUpdateManyMutationInput, LeaveApprovalStepApproverUncheckedUpdateManyWithoutLeaveApprovalStepInput>
   }
 
+  export type EmployeeCreateWithoutLeaveApprovalStepsInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
+    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
+    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutLeaveApprovalStepsInput = {
+    id?: number
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutLeaveApprovalStepsInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutLeaveApprovalStepsInput, EmployeeUncheckedCreateWithoutLeaveApprovalStepsInput>
+  }
+
   export type LeaveApprovalStepCreateWithoutApproversInput = {
     level: number
     status?: $Enums.LeaveStatus
@@ -30753,66 +30887,72 @@ export namespace Prisma {
     create: XOR<LeaveApprovalStepCreateWithoutApproversInput, LeaveApprovalStepUncheckedCreateWithoutApproversInput>
   }
 
-  export type EmployeeCreateWithoutLeaveApprovalStepsInput = {
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
-    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
-    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
-    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
-  }
-
-  export type EmployeeUncheckedCreateWithoutLeaveApprovalStepsInput = {
-    id?: number
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    managerId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
-    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
-    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
-  }
-
-  export type EmployeeCreateOrConnectWithoutLeaveApprovalStepsInput = {
-    where: EmployeeWhereUniqueInput
+  export type EmployeeUpsertWithoutLeaveApprovalStepsInput = {
+    update: XOR<EmployeeUpdateWithoutLeaveApprovalStepsInput, EmployeeUncheckedUpdateWithoutLeaveApprovalStepsInput>
     create: XOR<EmployeeCreateWithoutLeaveApprovalStepsInput, EmployeeUncheckedCreateWithoutLeaveApprovalStepsInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutLeaveApprovalStepsInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutLeaveApprovalStepsInput, EmployeeUncheckedUpdateWithoutLeaveApprovalStepsInput>
+  }
+
+  export type EmployeeUpdateWithoutLeaveApprovalStepsInput = {
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
+    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutLeaveApprovalStepsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
   }
 
   export type LeaveApprovalStepUpsertWithoutApproversInput = {
@@ -30841,74 +30981,6 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type EmployeeUpsertWithoutLeaveApprovalStepsInput = {
-    update: XOR<EmployeeUpdateWithoutLeaveApprovalStepsInput, EmployeeUncheckedUpdateWithoutLeaveApprovalStepsInput>
-    create: XOR<EmployeeCreateWithoutLeaveApprovalStepsInput, EmployeeUncheckedCreateWithoutLeaveApprovalStepsInput>
-    where?: EmployeeWhereInput
-  }
-
-  export type EmployeeUpdateToOneWithWhereWithoutLeaveApprovalStepsInput = {
-    where?: EmployeeWhereInput
-    data: XOR<EmployeeUpdateWithoutLeaveApprovalStepsInput, EmployeeUncheckedUpdateWithoutLeaveApprovalStepsInput>
-  }
-
-  export type EmployeeUpdateWithoutLeaveApprovalStepsInput = {
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
-    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
-    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
-    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
-  }
-
-  export type EmployeeUncheckedUpdateWithoutLeaveApprovalStepsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    managerId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
-    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
-    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
-  }
-
   export type EmployeeCreateWithoutAttendanceInput = {
     employeeCode: string
     name: string
@@ -30920,21 +30992,21 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutAttendanceInput = {
@@ -30950,20 +31022,20 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutAttendanceInput = {
@@ -30993,21 +31065,21 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutAttendanceInput = {
@@ -31023,20 +31095,20 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
   }
 
   export type KPIEmployeeCreateWithoutKpiInput = {
@@ -31080,6 +31152,68 @@ export namespace Prisma {
     data: XOR<KPIEmployeeUpdateManyMutationInput, KPIEmployeeUncheckedUpdateManyWithoutKpiInput>
   }
 
+  export type EmployeeCreateWithoutKPIEmployeeInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
+    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
+    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutKPIEmployeeInput = {
+    id?: number
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutKPIEmployeeInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutKPIEmployeeInput, EmployeeUncheckedCreateWithoutKPIEmployeeInput>
+  }
+
   export type KPICreateWithoutKpiEmployeesInput = {
     name: string
     period: string
@@ -31102,68 +31236,6 @@ export namespace Prisma {
   export type KPICreateOrConnectWithoutKpiEmployeesInput = {
     where: KPIWhereUniqueInput
     create: XOR<KPICreateWithoutKpiEmployeesInput, KPIUncheckedCreateWithoutKpiEmployeesInput>
-  }
-
-  export type EmployeeCreateWithoutKPIEmployeeInput = {
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
-    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
-    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
-  }
-
-  export type EmployeeUncheckedCreateWithoutKPIEmployeeInput = {
-    id?: number
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    managerId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
-    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
-  }
-
-  export type EmployeeCreateOrConnectWithoutKPIEmployeeInput = {
-    where: EmployeeWhereUniqueInput
-    create: XOR<EmployeeCreateWithoutKPIEmployeeInput, EmployeeUncheckedCreateWithoutKPIEmployeeInput>
   }
 
   export type KPIEntryCreateWithoutKpiEmployeeInput = {
@@ -31197,6 +31269,74 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EmployeeUpsertWithoutKPIEmployeeInput = {
+    update: XOR<EmployeeUpdateWithoutKPIEmployeeInput, EmployeeUncheckedUpdateWithoutKPIEmployeeInput>
+    create: XOR<EmployeeCreateWithoutKPIEmployeeInput, EmployeeUncheckedCreateWithoutKPIEmployeeInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutKPIEmployeeInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutKPIEmployeeInput, EmployeeUncheckedUpdateWithoutKPIEmployeeInput>
+  }
+
+  export type EmployeeUpdateWithoutKPIEmployeeInput = {
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
+    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutKPIEmployeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+  }
+
   export type KPIUpsertWithoutKpiEmployeesInput = {
     update: XOR<KPIUpdateWithoutKpiEmployeesInput, KPIUncheckedUpdateWithoutKpiEmployeesInput>
     create: XOR<KPICreateWithoutKpiEmployeesInput, KPIUncheckedCreateWithoutKpiEmployeesInput>
@@ -31225,74 +31365,6 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type EmployeeUpsertWithoutKPIEmployeeInput = {
-    update: XOR<EmployeeUpdateWithoutKPIEmployeeInput, EmployeeUncheckedUpdateWithoutKPIEmployeeInput>
-    create: XOR<EmployeeCreateWithoutKPIEmployeeInput, EmployeeUncheckedCreateWithoutKPIEmployeeInput>
-    where?: EmployeeWhereInput
-  }
-
-  export type EmployeeUpdateToOneWithWhereWithoutKPIEmployeeInput = {
-    where?: EmployeeWhereInput
-    data: XOR<EmployeeUpdateWithoutKPIEmployeeInput, EmployeeUncheckedUpdateWithoutKPIEmployeeInput>
-  }
-
-  export type EmployeeUpdateWithoutKPIEmployeeInput = {
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
-    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
-    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
-  }
-
-  export type EmployeeUncheckedUpdateWithoutKPIEmployeeInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    managerId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
-    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
   }
 
   export type KPIEntryUpsertWithWhereUniqueWithoutKpiEmployeeInput = {
@@ -31329,8 +31401,8 @@ export namespace Prisma {
   export type KPIEmployeeCreateWithoutEntriesInput = {
     createdAt?: Date | string
     updatedAt?: Date | string
-    kpi: KPICreateNestedOneWithoutKpiEmployeesInput
     employee: EmployeeCreateNestedOneWithoutKPIEmployeeInput
+    kpi: KPICreateNestedOneWithoutKpiEmployeesInput
   }
 
   export type KPIEmployeeUncheckedCreateWithoutEntriesInput = {
@@ -31360,8 +31432,8 @@ export namespace Prisma {
   export type KPIEmployeeUpdateWithoutEntriesInput = {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    kpi?: KPIUpdateOneRequiredWithoutKpiEmployeesNestedInput
     employee?: EmployeeUpdateOneRequiredWithoutKPIEmployeeNestedInput
+    kpi?: KPIUpdateOneRequiredWithoutKpiEmployeesNestedInput
   }
 
   export type KPIEmployeeUncheckedUpdateWithoutEntriesInput = {
@@ -31370,68 +31442,6 @@ export namespace Prisma {
     employeeId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type EmployeeCreateWithoutProposalsProposedInput = {
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
-    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
-    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
-    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
-  }
-
-  export type EmployeeUncheckedCreateWithoutProposalsProposedInput = {
-    id?: number
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    managerId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
-    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
-    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
-  }
-
-  export type EmployeeCreateOrConnectWithoutProposalsProposedInput = {
-    where: EmployeeWhereUniqueInput
-    create: XOR<EmployeeCreateWithoutProposalsProposedInput, EmployeeUncheckedCreateWithoutProposalsProposedInput>
   }
 
   export type EmployeeCreateWithoutProposalsCreatedInput = {
@@ -31445,21 +31455,21 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalsCreatedInput = {
@@ -31475,20 +31485,20 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalsCreatedInput = {
@@ -31520,32 +31530,72 @@ export namespace Prisma {
     create: XOR<FileCreateWithoutProposalsInput, FileUncheckedCreateWithoutProposalsInput>
   }
 
-  export type ProposalSignerCreateWithoutProposalInput = {
-    status?: $Enums.LeaveStatus
-    signedAt?: Date | string | null
-    signer: EmployeeCreateNestedOneWithoutProposalSignaturesInput
+  export type EmployeeCreateWithoutProposalsProposedInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
+    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
+    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
+    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
   }
 
-  export type ProposalSignerUncheckedCreateWithoutProposalInput = {
+  export type EmployeeUncheckedCreateWithoutProposalsProposedInput = {
     id?: number
-    signerId: number
-    status?: $Enums.LeaveStatus
-    signedAt?: Date | string | null
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
+    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
   }
 
-  export type ProposalSignerCreateOrConnectWithoutProposalInput = {
-    where: ProposalSignerWhereUniqueInput
-    create: XOR<ProposalSignerCreateWithoutProposalInput, ProposalSignerUncheckedCreateWithoutProposalInput>
-  }
-
-  export type ProposalSignerCreateManyProposalInputEnvelope = {
-    data: ProposalSignerCreateManyProposalInput | ProposalSignerCreateManyProposalInput[]
-    skipDuplicates?: boolean
+  export type EmployeeCreateOrConnectWithoutProposalsProposedInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutProposalsProposedInput, EmployeeUncheckedCreateWithoutProposalsProposedInput>
   }
 
   export type ProposalApproverCreateWithoutProposalInput = {
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
+    level: number
     approver: EmployeeCreateNestedOneWithoutProposalApprovalsInput
   }
 
@@ -31554,6 +31604,7 @@ export namespace Prisma {
     approverId: number
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
+    level: number
   }
 
   export type ProposalApproverCreateOrConnectWithoutProposalInput = {
@@ -31566,72 +31617,29 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type EmployeeUpsertWithoutProposalsProposedInput = {
-    update: XOR<EmployeeUpdateWithoutProposalsProposedInput, EmployeeUncheckedUpdateWithoutProposalsProposedInput>
-    create: XOR<EmployeeCreateWithoutProposalsProposedInput, EmployeeUncheckedCreateWithoutProposalsProposedInput>
-    where?: EmployeeWhereInput
+  export type ProposalSignerCreateWithoutProposalInput = {
+    status?: $Enums.LeaveStatus
+    signedAt?: Date | string | null
+    level: number
+    signer: EmployeeCreateNestedOneWithoutProposalSignaturesInput
   }
 
-  export type EmployeeUpdateToOneWithWhereWithoutProposalsProposedInput = {
-    where?: EmployeeWhereInput
-    data: XOR<EmployeeUpdateWithoutProposalsProposedInput, EmployeeUncheckedUpdateWithoutProposalsProposedInput>
+  export type ProposalSignerUncheckedCreateWithoutProposalInput = {
+    id?: number
+    signerId: number
+    status?: $Enums.LeaveStatus
+    signedAt?: Date | string | null
+    level: number
   }
 
-  export type EmployeeUpdateWithoutProposalsProposedInput = {
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
-    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
-    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
-    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+  export type ProposalSignerCreateOrConnectWithoutProposalInput = {
+    where: ProposalSignerWhereUniqueInput
+    create: XOR<ProposalSignerCreateWithoutProposalInput, ProposalSignerUncheckedCreateWithoutProposalInput>
   }
 
-  export type EmployeeUncheckedUpdateWithoutProposalsProposedInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    managerId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
-    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
-    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+  export type ProposalSignerCreateManyProposalInputEnvelope = {
+    data: ProposalSignerCreateManyProposalInput | ProposalSignerCreateManyProposalInput[]
+    skipDuplicates?: boolean
   }
 
   export type EmployeeUpsertWithoutProposalsCreatedInput = {
@@ -31656,21 +31664,21 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalsCreatedInput = {
@@ -31686,20 +31694,20 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
   }
 
   export type FileUpsertWithoutProposalsInput = {
@@ -31732,20 +31740,72 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ProposalSignerUpsertWithWhereUniqueWithoutProposalInput = {
-    where: ProposalSignerWhereUniqueInput
-    update: XOR<ProposalSignerUpdateWithoutProposalInput, ProposalSignerUncheckedUpdateWithoutProposalInput>
-    create: XOR<ProposalSignerCreateWithoutProposalInput, ProposalSignerUncheckedCreateWithoutProposalInput>
+  export type EmployeeUpsertWithoutProposalsProposedInput = {
+    update: XOR<EmployeeUpdateWithoutProposalsProposedInput, EmployeeUncheckedUpdateWithoutProposalsProposedInput>
+    create: XOR<EmployeeCreateWithoutProposalsProposedInput, EmployeeUncheckedCreateWithoutProposalsProposedInput>
+    where?: EmployeeWhereInput
   }
 
-  export type ProposalSignerUpdateWithWhereUniqueWithoutProposalInput = {
-    where: ProposalSignerWhereUniqueInput
-    data: XOR<ProposalSignerUpdateWithoutProposalInput, ProposalSignerUncheckedUpdateWithoutProposalInput>
+  export type EmployeeUpdateToOneWithWhereWithoutProposalsProposedInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutProposalsProposedInput, EmployeeUncheckedUpdateWithoutProposalsProposedInput>
   }
 
-  export type ProposalSignerUpdateManyWithWhereWithoutProposalInput = {
-    where: ProposalSignerScalarWhereInput
-    data: XOR<ProposalSignerUpdateManyMutationInput, ProposalSignerUncheckedUpdateManyWithoutProposalInput>
+  export type EmployeeUpdateWithoutProposalsProposedInput = {
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
+    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
+    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutProposalsProposedInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
+    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
   }
 
   export type ProposalApproverUpsertWithWhereUniqueWithoutProposalInput = {
@@ -31764,6 +31824,22 @@ export namespace Prisma {
     data: XOR<ProposalApproverUpdateManyMutationInput, ProposalApproverUncheckedUpdateManyWithoutProposalInput>
   }
 
+  export type ProposalSignerUpsertWithWhereUniqueWithoutProposalInput = {
+    where: ProposalSignerWhereUniqueInput
+    update: XOR<ProposalSignerUpdateWithoutProposalInput, ProposalSignerUncheckedUpdateWithoutProposalInput>
+    create: XOR<ProposalSignerCreateWithoutProposalInput, ProposalSignerUncheckedCreateWithoutProposalInput>
+  }
+
+  export type ProposalSignerUpdateWithWhereUniqueWithoutProposalInput = {
+    where: ProposalSignerWhereUniqueInput
+    data: XOR<ProposalSignerUpdateWithoutProposalInput, ProposalSignerUncheckedUpdateWithoutProposalInput>
+  }
+
+  export type ProposalSignerUpdateManyWithWhereWithoutProposalInput = {
+    where: ProposalSignerScalarWhereInput
+    data: XOR<ProposalSignerUpdateManyMutationInput, ProposalSignerUncheckedUpdateManyWithoutProposalInput>
+  }
+
   export type ProposalCreateWithoutSignersInput = {
     name: string
     title: string
@@ -31771,9 +31847,9 @@ export namespace Prisma {
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
-    proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
     file?: FileCreateNestedOneWithoutProposalsInput
+    proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     approvers?: ProposalApproverCreateNestedManyWithoutProposalInput
   }
 
@@ -31807,21 +31883,21 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
     manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalSignaturesInput = {
@@ -31837,20 +31913,20 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalSignaturesInput = {
@@ -31876,9 +31952,9 @@ export namespace Prisma {
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
     file?: FileUpdateOneWithoutProposalsNestedInput
+    proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
     approvers?: ProposalApproverUpdateManyWithoutProposalNestedInput
   }
 
@@ -31918,21 +31994,21 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalSignaturesInput = {
@@ -31948,20 +32024,82 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeCreateWithoutProposalApprovalsInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
+    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
+    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutProposalApprovalsInput = {
+    id?: number
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutProposalApprovalsInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutProposalApprovalsInput, EmployeeUncheckedCreateWithoutProposalApprovalsInput>
   }
 
   export type ProposalCreateWithoutApproversInput = {
@@ -31971,9 +32109,9 @@ export namespace Prisma {
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
-    proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
     file?: FileCreateNestedOneWithoutProposalsInput
+    proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     signers?: ProposalSignerCreateNestedManyWithoutProposalInput
   }
 
@@ -31994,106 +32132,6 @@ export namespace Prisma {
   export type ProposalCreateOrConnectWithoutApproversInput = {
     where: ProposalWhereUniqueInput
     create: XOR<ProposalCreateWithoutApproversInput, ProposalUncheckedCreateWithoutApproversInput>
-  }
-
-  export type EmployeeCreateWithoutProposalApprovalsInput = {
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
-    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
-    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
-  }
-
-  export type EmployeeUncheckedCreateWithoutProposalApprovalsInput = {
-    id?: number
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    managerId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
-    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
-    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
-  }
-
-  export type EmployeeCreateOrConnectWithoutProposalApprovalsInput = {
-    where: EmployeeWhereUniqueInput
-    create: XOR<EmployeeCreateWithoutProposalApprovalsInput, EmployeeUncheckedCreateWithoutProposalApprovalsInput>
-  }
-
-  export type ProposalUpsertWithoutApproversInput = {
-    update: XOR<ProposalUpdateWithoutApproversInput, ProposalUncheckedUpdateWithoutApproversInput>
-    create: XOR<ProposalCreateWithoutApproversInput, ProposalUncheckedCreateWithoutApproversInput>
-    where?: ProposalWhereInput
-  }
-
-  export type ProposalUpdateToOneWithWhereWithoutApproversInput = {
-    where?: ProposalWhereInput
-    data: XOR<ProposalUpdateWithoutApproversInput, ProposalUncheckedUpdateWithoutApproversInput>
-  }
-
-  export type ProposalUpdateWithoutApproversInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
-    createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
-    file?: FileUpdateOneWithoutProposalsNestedInput
-    signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
-  }
-
-  export type ProposalUncheckedUpdateWithoutApproversInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    fileId?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
-    proposerId?: IntFieldUpdateOperationsInput | number
-    createdById?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
   }
 
   export type EmployeeUpsertWithoutProposalApprovalsInput = {
@@ -32118,21 +32156,21 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
     manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalApprovalsInput = {
@@ -32148,20 +32186,58 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+  }
+
+  export type ProposalUpsertWithoutApproversInput = {
+    update: XOR<ProposalUpdateWithoutApproversInput, ProposalUncheckedUpdateWithoutApproversInput>
+    create: XOR<ProposalCreateWithoutApproversInput, ProposalUncheckedCreateWithoutApproversInput>
+    where?: ProposalWhereInput
+  }
+
+  export type ProposalUpdateToOneWithWhereWithoutApproversInput = {
+    where?: ProposalWhereInput
+    data: XOR<ProposalUpdateWithoutApproversInput, ProposalUncheckedUpdateWithoutApproversInput>
+  }
+
+  export type ProposalUpdateWithoutApproversInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
+    file?: FileUpdateOneWithoutProposalsNestedInput
+    proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
+    signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
+  }
+
+  export type ProposalUncheckedUpdateWithoutApproversInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileId?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
+    proposerId?: IntFieldUpdateOperationsInput | number
+    createdById?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalCreateManyFileInput = {
@@ -32183,10 +32259,10 @@ export namespace Prisma {
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
-    signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
+    proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
     approvers?: ProposalApproverUpdateManyWithoutProposalNestedInput
+    signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalUncheckedUpdateWithoutFileInput = {
@@ -32199,8 +32275,8 @@ export namespace Prisma {
     createdById?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
+    signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalUncheckedUpdateManyWithoutFileInput = {
@@ -32213,6 +32289,14 @@ export namespace Prisma {
     createdById?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AttendanceCreateManyEmployeeInput = {
+    id?: number
+    date: Date | string
+    checkInTime?: Date | string | null
+    checkOutTime?: Date | string | null
+    workingHours?: number | null
   }
 
   export type EmployeeCreateManyManagerInput = {
@@ -32229,16 +32313,9 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type LeaveRequestCreateManyEmployeeInput = {
+  export type KPIEmployeeCreateManyEmployeeInput = {
     id?: number
-    leaveType: $Enums.LeaveTypeEnum
-    startDate: Date | string
-    endDate: Date | string
-    totalHours?: number | null
-    reason?: string | null
-    status?: $Enums.LeaveStatus
-    approvedBy?: string | null
-    approvedAt?: Date | string | null
+    kpiId: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -32250,17 +32327,16 @@ export namespace Prisma {
     approvedAt?: Date | string | null
   }
 
-  export type AttendanceCreateManyEmployeeInput = {
+  export type LeaveRequestCreateManyEmployeeInput = {
     id?: number
-    date: Date | string
-    checkInTime?: Date | string | null
-    checkOutTime?: Date | string | null
-    workingHours?: number | null
-  }
-
-  export type KPIEmployeeCreateManyEmployeeInput = {
-    id?: number
-    kpiId: number
+    leaveType: $Enums.LeaveTypeEnum
+    startDate: Date | string
+    endDate: Date | string
+    totalHours?: number | null
+    reason?: string | null
+    status?: $Enums.LeaveStatus
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -32289,18 +32365,43 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type ProposalSignerCreateManySignerInput = {
-    id?: number
-    proposalId: number
-    status?: $Enums.LeaveStatus
-    signedAt?: Date | string | null
-  }
-
   export type ProposalApproverCreateManyApproverInput = {
     id?: number
     proposalId: number
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
+    level: number
+  }
+
+  export type ProposalSignerCreateManySignerInput = {
+    id?: number
+    proposalId: number
+    status?: $Enums.LeaveStatus
+    signedAt?: Date | string | null
+    level: number
+  }
+
+  export type AttendanceUpdateWithoutEmployeeInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
+  }
+
+  export type AttendanceUncheckedUpdateWithoutEmployeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
+  }
+
+  export type AttendanceUncheckedUpdateManyWithoutEmployeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type EmployeeUpdateWithoutManagerInput = {
@@ -32314,21 +32415,21 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutManagerInput = {
@@ -32343,21 +32444,21 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateManyWithoutManagerInput = {
@@ -32372,6 +32473,48 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KPIEmployeeUpdateWithoutEmployeeInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    kpi?: KPIUpdateOneRequiredWithoutKpiEmployeesNestedInput
+    entries?: KPIEntryUpdateManyWithoutKpiEmployeeNestedInput
+  }
+
+  export type KPIEmployeeUncheckedUpdateWithoutEmployeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    kpiId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: KPIEntryUncheckedUpdateManyWithoutKpiEmployeeNestedInput
+  }
+
+  export type KPIEmployeeUncheckedUpdateManyWithoutEmployeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    kpiId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeaveApprovalStepApproverUpdateWithoutApproverInput = {
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leaveApprovalStep?: LeaveApprovalStepUpdateOneRequiredWithoutApproversNestedInput
+  }
+
+  export type LeaveApprovalStepApproverUncheckedUpdateWithoutApproverInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    leaveApprovalStepId?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    leaveApprovalStepId?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type LeaveRequestUpdateWithoutEmployeeInput = {
@@ -32417,71 +32560,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type LeaveApprovalStepApproverUpdateWithoutApproverInput = {
-    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
-    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    leaveApprovalStep?: LeaveApprovalStepUpdateOneRequiredWithoutApproversNestedInput
-  }
-
-  export type LeaveApprovalStepApproverUncheckedUpdateWithoutApproverInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    leaveApprovalStepId?: IntFieldUpdateOperationsInput | number
-    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
-    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    leaveApprovalStepId?: IntFieldUpdateOperationsInput | number
-    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
-    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type AttendanceUpdateWithoutEmployeeInput = {
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
-  }
-
-  export type AttendanceUncheckedUpdateWithoutEmployeeInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
-  }
-
-  export type AttendanceUncheckedUpdateManyWithoutEmployeeInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
-  }
-
-  export type KPIEmployeeUpdateWithoutEmployeeInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    kpi?: KPIUpdateOneRequiredWithoutKpiEmployeesNestedInput
-    entries?: KPIEntryUpdateManyWithoutKpiEmployeeNestedInput
-  }
-
-  export type KPIEmployeeUncheckedUpdateWithoutEmployeeInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    kpiId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entries?: KPIEntryUncheckedUpdateManyWithoutKpiEmployeeNestedInput
-  }
-
-  export type KPIEmployeeUncheckedUpdateManyWithoutEmployeeInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    kpiId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type ProposalUpdateWithoutCreatedByInput = {
     name?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -32489,10 +32567,10 @@ export namespace Prisma {
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
     file?: FileUpdateOneWithoutProposalsNestedInput
-    signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
+    proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
     approvers?: ProposalApproverUpdateManyWithoutProposalNestedInput
+    signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalUncheckedUpdateWithoutCreatedByInput = {
@@ -32505,8 +32583,8 @@ export namespace Prisma {
     proposerId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
+    signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalUncheckedUpdateManyWithoutCreatedByInput = {
@@ -32530,8 +32608,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
     file?: FileUpdateOneWithoutProposalsNestedInput
-    signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
     approvers?: ProposalApproverUpdateManyWithoutProposalNestedInput
+    signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalUncheckedUpdateWithoutProposerInput = {
@@ -32544,8 +32622,8 @@ export namespace Prisma {
     createdById?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
+    signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalUncheckedUpdateManyWithoutProposerInput = {
@@ -32560,29 +32638,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ProposalSignerUpdateWithoutSignerInput = {
-    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
-    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    proposal?: ProposalUpdateOneRequiredWithoutSignersNestedInput
-  }
-
-  export type ProposalSignerUncheckedUpdateWithoutSignerInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    proposalId?: IntFieldUpdateOperationsInput | number
-    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
-    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type ProposalSignerUncheckedUpdateManyWithoutSignerInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    proposalId?: IntFieldUpdateOperationsInput | number
-    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
-    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
   export type ProposalApproverUpdateWithoutApproverInput = {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
     proposal?: ProposalUpdateOneRequiredWithoutApproversNestedInput
   }
 
@@ -32591,6 +32650,7 @@ export namespace Prisma {
     proposalId?: IntFieldUpdateOperationsInput | number
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProposalApproverUncheckedUpdateManyWithoutApproverInput = {
@@ -32598,6 +32658,30 @@ export namespace Prisma {
     proposalId?: IntFieldUpdateOperationsInput | number
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ProposalSignerUpdateWithoutSignerInput = {
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
+    proposal?: ProposalUpdateOneRequiredWithoutSignersNestedInput
+  }
+
+  export type ProposalSignerUncheckedUpdateWithoutSignerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    proposalId?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ProposalSignerUncheckedUpdateManyWithoutSignerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    proposalId?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
   }
 
   export type PositionCreateManyDepartmentInput = {
@@ -32662,8 +32746,8 @@ export namespace Prisma {
     contractDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     contractType?: NullableStringFieldUpdateOperationsInput | string | null
     contractEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    position?: PositionUpdateOneWithoutEmployeesNestedInput
     employee?: EmployeeUpdateOneRequiredWithoutWorkInfoNestedInput
+    position?: PositionUpdateOneWithoutEmployeesNestedInput
   }
 
   export type WorkInfoUncheckedUpdateWithoutDepartmentInput = {
@@ -32883,43 +32967,26 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ProposalSignerCreateManyProposalInput = {
-    id?: number
-    signerId: number
-    status?: $Enums.LeaveStatus
-    signedAt?: Date | string | null
-  }
-
   export type ProposalApproverCreateManyProposalInput = {
     id?: number
     approverId: number
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
+    level: number
   }
 
-  export type ProposalSignerUpdateWithoutProposalInput = {
-    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
-    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    signer?: EmployeeUpdateOneRequiredWithoutProposalSignaturesNestedInput
-  }
-
-  export type ProposalSignerUncheckedUpdateWithoutProposalInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    signerId?: IntFieldUpdateOperationsInput | number
-    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
-    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type ProposalSignerUncheckedUpdateManyWithoutProposalInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    signerId?: IntFieldUpdateOperationsInput | number
-    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
-    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  export type ProposalSignerCreateManyProposalInput = {
+    id?: number
+    signerId: number
+    status?: $Enums.LeaveStatus
+    signedAt?: Date | string | null
+    level: number
   }
 
   export type ProposalApproverUpdateWithoutProposalInput = {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
     approver?: EmployeeUpdateOneRequiredWithoutProposalApprovalsNestedInput
   }
 
@@ -32928,6 +32995,7 @@ export namespace Prisma {
     approverId?: IntFieldUpdateOperationsInput | number
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProposalApproverUncheckedUpdateManyWithoutProposalInput = {
@@ -32935,6 +33003,30 @@ export namespace Prisma {
     approverId?: IntFieldUpdateOperationsInput | number
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ProposalSignerUpdateWithoutProposalInput = {
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
+    signer?: EmployeeUpdateOneRequiredWithoutProposalSignaturesNestedInput
+  }
+
+  export type ProposalSignerUncheckedUpdateWithoutProposalInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    signerId?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ProposalSignerUncheckedUpdateManyWithoutProposalInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    signerId?: IntFieldUpdateOperationsInput | number
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    level?: IntFieldUpdateOperationsInput | number
   }
 
 

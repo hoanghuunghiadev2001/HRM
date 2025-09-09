@@ -16,20 +16,20 @@ export async function GET(request: NextRequest) {
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
       employeeId = decoded.id;
-    } catch (err) {
+    } catch {
       return NextResponse.json({ error: "Token không hợp lệ hoặc đã hết hạn" }, { status: 401 });
     }
 
-    // Lấy tham số phân trang
     const { searchParams } = request.nextUrl;
     const page = parseInt(searchParams.get("page") || "1", 10);
     const pageSize = parseInt(searchParams.get("pageSize") || "10", 10);
     const skip = (page - 1) * pageSize;
 
-    // 1. Đề xuất đã tạo (tham gia ký hoặc duyệt)
+    // 1. Proposal đã tạo / tham gia
     const created = await prisma.proposal.findMany({
       where: {
         OR: [
+          { createdById: employeeId },
           { signers: { some: { signerId: employeeId } } },
           { approvers: { some: { approverId: employeeId } } },
         ],
@@ -37,95 +37,57 @@ export async function GET(request: NextRequest) {
       include: defaultInclude(),
       skip,
       take: pageSize,
-       orderBy: {
-    createdAt: "desc",
-  },
+      orderBy: { createdAt: "desc" },
     });
 
     const createdTotal = await prisma.proposal.count({
       where: {
         OR: [
+          { createdById: employeeId },
           { signers: { some: { signerId: employeeId } } },
           { approvers: { some: { approverId: employeeId } } },
         ],
       },
     });
 
-    // 2. Đề xuất cần ký
-    const need_to_sign = await prisma.proposal.findMany({
-      where: {
-        signers: {
-          some: {
-            signerId: employeeId,
-            status: "pending",
-          },
-        },
-      },
-      include: defaultInclude(),
-      skip,
-      take: pageSize,
-       orderBy: {
-     updatedAt: "desc",
-  },
+    // 2. Proposal cần ký – chỉ tới **người ký hiện tại theo thứ tự**
+    const need_to_sign_all = await prisma.proposal.findMany({
+      where: { signers: { some: { status: "pending" } } },
+      include: { ...defaultInclude(), signers: true },
     });
 
-    const needToSignTotal = await prisma.proposal.count({
-      where: {
-        signers: {
-          some: {
-            signerId: employeeId,
-            status: "pending",
-          },
-        },
-      },
+    const need_to_sign_filtered = need_to_sign_all.filter((p) => {
+      const pendingSigners = p.signers.filter((s) => s.status === "pending");
+      const minLevel = Math.min(...pendingSigners.map((s) => s.level));
+      const currentSigner = pendingSigners.find((s) => s.level === minLevel);
+      return currentSigner?.signerId === employeeId;
     });
 
-    // 3. Đề xuất cần phê duyệt
-    const need_to_approve = await prisma.proposal.findMany({
-      where: {
-        approvers: {
-          some: {
-            approverId: employeeId,
-            status: "pending",
-          },
-        },
-        status: "waiting_approval",
-      },
-      include: defaultInclude(),
-      skip,
-      take: pageSize,
-       orderBy: {
-     updatedAt: "desc",
-  },
+    const needToSignTotal = need_to_sign_filtered.length;
+    const need_to_sign = need_to_sign_filtered.slice(skip, skip + pageSize);
+
+    // 3. Proposal cần phê duyệt – chỉ tới **approver hiện tại theo thứ tự**
+    const need_to_approve_all = await prisma.proposal.findMany({
+      where: { status: "waiting_approval", approvers: { some: { status: "pending" } } },
+      include: { ...defaultInclude(), approvers: true },
     });
 
-    const needToApproveTotal = await prisma.proposal.count({
-      where: {
-        approvers: {
-          some: {
-            approverId: employeeId,
-            status: "pending",
-          },
-        },
-        status: "waiting_approval",
-      },
+    const need_to_approve_filtered = need_to_approve_all.filter((p) => {
+      const pendingApprovers = p.approvers.filter((a) => a.status === "pending");
+      const minLevel = Math.min(...pendingApprovers.map((a) => a.level));
+      const currentApprover = pendingApprovers.find((a) => a.level === minLevel);
+      return currentApprover?.approverId === employeeId;
     });
+
+    const needToApproveTotal = need_to_approve_filtered.length;
+    const need_to_approve = need_to_approve_filtered.slice(skip, skip + pageSize);
 
     return NextResponse.json({
       page,
       pageSize,
-      created: {
-        data: created,
-        total: createdTotal,
-      },
-      need_to_sign: {
-        data: need_to_sign,
-        total: needToSignTotal,
-      },
-      need_to_approve: {
-        data: need_to_approve,
-        total: needToApproveTotal,
-      },
+      created: { data: created, total: createdTotal },
+      need_to_sign: { data: need_to_sign, total: needToSignTotal },
+      need_to_approve: { data: need_to_approve, total: needToApproveTotal },
     });
   } catch (error) {
     console.error("Lỗi khi lấy proposal:", error);
@@ -133,45 +95,20 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Hàm include mặc định
+// Include mặc định
 function defaultInclude() {
   return {
-    file: {
-      select: {
-        id: true,
-        filename: true,
-        mimeType: true,
-        fileSize: true,
-        createdAt: true,
-      },
-    },
-    proposer: {
-      select: {
-        id: true,
-        name: true,
-        employeeCode: true,
-      },
-    },
+    file: true,
+    proposer: { select: { id: true, name: true, employeeCode: true } },
+    createdBy: { select: { id: true, name: true, employeeCode: true } },
     signers: {
       include: {
-        signer: {
-          select: {
-            id: true,
-            name: true,
-            employeeCode: true,
-          },
-        },
+        signer: { select: { id: true, name: true, employeeCode: true } },
       },
     },
     approvers: {
       include: {
-        approver: {
-          select: {
-            id: true,
-            name: true,
-            employeeCode: true,
-          },
-        },
+        approver: { select: { id: true, name: true, employeeCode: true } },
       },
     },
   };

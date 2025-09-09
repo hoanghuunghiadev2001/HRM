@@ -6,7 +6,7 @@ import { NumericInput } from "./function";
 
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { dataNeedApprove } from "@/app/dashboard/allRequests/page";
+import {  PendingApprovalItem } from "@/app/dashboard/allRequests/page";
 
 // Kích hoạt plugin
 dayjs.extend(utc);
@@ -15,8 +15,8 @@ dayjs.extend(timezone);
 interface ModalApproveRequestProps {
   open: boolean;
   onClose: () => void;
-  requestApprove?: dataNeedApprove;
-  putApprovedRequest: (id: number | string, statusRequest: string) => void;
+  requestApprove?: PendingApprovalItem;
+  putApprovedRequest: (decision: "approved" | "rejected") => void;
 }
 const ModalApproveRequest = ({
   onClose,
@@ -32,8 +32,8 @@ const ModalApproveRequest = ({
   };
 
   const rangeValue: [dayjs.Dayjs, dayjs.Dayjs] = [
-    dayjs.utc(requestApprove?.leaveRequest.startDate).tz("Asia/Ho_Chi_Minh"),
-    dayjs.utc(requestApprove?.leaveRequest.endDate).tz("Asia/Ho_Chi_Minh"),
+    dayjs.utc(requestApprove?.startDate).tz("Asia/Ho_Chi_Minh"),
+    dayjs.utc(requestApprove?.endDate).tz("Asia/Ho_Chi_Minh"),
   ];
 
   return (
@@ -54,7 +54,7 @@ const ModalApproveRequest = ({
             key="reject"
             onClick={() =>
               putApprovedRequest(
-                requestApprove?.leaveRequest.id ?? "",
+         
                 "rejected"
               )
             }
@@ -66,7 +66,7 @@ const ModalApproveRequest = ({
             type="primary"
             onClick={() =>
               putApprovedRequest(
-                requestApprove?.leaveRequest.id ?? "",
+
                 "approved"
               )
             }
@@ -80,25 +80,25 @@ const ModalApproveRequest = ({
           <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             <p className="shrink-0">Họ và tên:</p>
             <p className="inline font-medium text-[#3a3a3a]">
-              {requestApprove?.leaveRequest.employee.name}
+              {requestApprove?.employeeName}
             </p>
           </div>
           <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             <p className="shrink-0">MSNV:</p>
             <p className="inline font-medium text-[#3a3a3a]">
-              {requestApprove?.leaveRequest.employee?.employeeCode}
+              {requestApprove?.employeeCode}
             </p>
           </div>
           <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             <p className="shrink-0">Bộ phận:</p>
             <p className="inline font-medium text-[#3a3a3a]">
-              {requestApprove?.leaveRequest.employee?.workInfo.department?.name}
+              {requestApprove?.department}
             </p>
           </div>
           <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             <p className="shrink-0">Chức vụ:</p>
             <p className="inline font-medium text-[#3a3a3a]">
-              {requestApprove?.leaveRequest.employee?.workInfo.position?.name}
+              {requestApprove?.position}
             </p>
           </div>
         </div>
@@ -109,7 +109,7 @@ const ModalApproveRequest = ({
             rules={[{ required: true, message: "Vui lòng chọn loại phép" }]}
           >
             <Select
-              value={requestApprove?.leaveRequest.leaveType}
+              value={requestApprove?.leaveType}
               disabled
               options={[
                 { value: "PN", label: "PN-Phép năm" },
@@ -126,7 +126,7 @@ const ModalApproveRequest = ({
             <p className="font-bold text-[#242424]">Tổng giờ:</p>
             <NumericInput
               style={{ width: 60 }}
-              value={String(requestApprove?.leaveRequest.totalHours)}
+              value={String(requestApprove?.totalHours)}
               onChange={() => {}}
               disable
             />
@@ -156,7 +156,7 @@ const ModalApproveRequest = ({
           <TextArea
             rows={4}
             placeholder="Nhập lý do"
-            value={requestApprove?.leaveRequest.reason}
+            value={requestApprove?.reason ?? ''}
             disabled={true}
           />
         </div>
@@ -165,7 +165,7 @@ const ModalApproveRequest = ({
             Nhũng người phê duyệt trước:{" "}
           </p>
           <div className="font-medium text-[#242424] px-4 ">
-            {requestApprove?.approversWhoApproved.map((item, index) => (
+            {requestApprove?.approversWhoApproved?.map((item, index) => (
               <div className="" key={index}>
                 - {item.name}({item.positionName})
               </div>

@@ -25,32 +25,37 @@ export default function ModalApproveProposal({
   const [comment, setComment] = useState("");
 
   const handleSubmit = async () => {
-    if (!decision) {
-      return message.warning("Vui lòng chọn phê duyệt hoặc từ chối.");
-    }
+  if (!decision) {
+    return message.warning("Vui lòng chọn phê duyệt hoặc từ chối.");
+  }
 
-    setLoading(true);
-    try {
-      await axios.post("/api/proposals/approve", {
-        proposalId,
-        status: decision,
-        comment,
-      });
+  setLoading(true);
+  try {
+    const res = await axios.post("/api/proposals/approve", {
+      proposalId,
+      status: decision,
+      comment,
+    });
 
+    if (res.status === 200) {
       message.success(
         decision === "approve" ? "Đã phê duyệt!" : "Đã từ chối đề xuất!"
       );
+      refresh?.(); // chỉ refresh khi thực sự thành công
       onClose();
-      refresh?.();
-    } catch (error) {
-      console.error("Approval error:", error);
-      message.error("Có lỗi xảy ra khi gửi phê duyệt.");
-    } finally {
-      setLoading(false);
-      setDecision(null);
-      setComment("");
+    } else {
+      message.error("Phê duyệt không thành công. Vui lòng thử lại.");
     }
-  };
+  } catch (error) {
+    console.error("Approval error:", error);
+    message.error("Có lỗi xảy ra khi gửi phê duyệt.");
+  } finally {
+    setLoading(false);
+    setDecision(null);
+    setComment("");
+  }
+};
+
 
   return (
     <Modal

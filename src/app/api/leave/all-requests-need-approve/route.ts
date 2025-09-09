@@ -1,145 +1,117 @@
-import { NextRequest, NextResponse } from "next/server";
+// app/api/leaveRequests/pending/route.ts
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "../../../../../generated/prisma";
+import { LeaveStatus } from "../../../../../generated/prisma";
 
-export async function GET(req: NextRequest) {
+export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
-    const role = url.searchParams.get("role");
-    const department = url.searchParams.get("department");
-    const userId = url.searchParams.get("userId");
-
-    if (!userId) {
-      return NextResponse.json({ message: "Missing userId" }, { status: 400 });
+    const userIdStr = url.searchParams.get("userId");
+    if (!userIdStr) {
+      return NextResponse.json({ error: "Thiếu userId" }, { status: 400 });
     }
+    const userId = Number(userIdStr);
 
-    // Tạo filter cho employee nếu là MANAGER hoặc ADMIN
-    const employeeFilter: Prisma.EmployeeWhereInput = {};
-    if ((role === "MANAGER" || role === "ADMIN") && department) {
-      const [departmentIdStr, positionIdStr] = department.split("-");
-      const departmentId = parseInt(departmentIdStr, 10);
-      const positionId = parseInt(positionIdStr, 10);
-      employeeFilter.workInfo = {
-        ...(departmentId && { departmentId }),
-        ...(positionId && { positionId }),
-      };
-    }
-
-    // Lấy danh sách các bước duyệt pending của người này, kèm theo các bước duyệt của đơn, và approvers của từng bước
-    const pendingApprovals = await prisma.leaveApprovalStepApprover.findMany({
+    // Lấy tất cả step pending mà user này là approver
+    const steps = await prisma.leaveApprovalStep.findMany({
       where: {
-        approverId: parseInt(userId, 10),
-        approvedAt: null,
-        status: "pending",
-        leaveApprovalStep: {
-          leaveRequest: {
-            employee: employeeFilter,
-          },
-          // Thêm điều kiện: trong bước này chưa có approver nào được duyệt
-          approvers: {
-            none: {
-              status: "approved",
-            },
+        status: LeaveStatus.pending,
+        approvers: {
+          some: {
+            approverId: userId,
+            status: LeaveStatus.pending, // chỉ lấy approver chưa xử lý
           },
         },
       },
-      // phần include giữ nguyên
       include: {
-        leaveApprovalStep: {
+        leaveRequest: {
           include: {
-            leaveRequest: {
+            employee: {
+              select: {
+                id: true,
+                name: true,
+                employeeCode: true,
+                workInfo: {
+                  select: {
+                    department: { select: { name: true } },
+                    position: { select: { name: true } },
+                  },
+                },
+              },
+            },
+            approvalSteps: {
               include: {
-                approvalSteps: {
+                approvers: {
                   include: {
-                    approvers: {
-                      where: { status: "approved" },
-                      include: {
-                        approver: {
-                          include: {
-                            workInfo: {
-                              include: {
-                                department: true,
-                                position: true,
-                              },
-                            },
+                    approver: {
+                      select: {
+                        name: true,
+                        employeeCode: true,
+                        workInfo: {
+                          select: {
+                            department: { select: { name: true } },
+                            position: { select: { name: true } },
                           },
                         },
                       },
                     },
                   },
                 },
-                employee: {
-                  select: {
-                    id: true,
-                    name: true,
-                    employeeCode: true,
-                    workInfo: {
-                      select: {
-                        department: true,
-                        position: true,
-                      },
-                    },
-                  },
-                },
               },
+              orderBy: { level: "asc" },
             },
           },
         },
       },
-      orderBy: {
-        leaveApprovalStep: {
-          leaveRequest: {
-            createdAt: "desc",
-          },
-        },
-      },
     });
 
-    // Lọc các bước duyệt mà các bước thấp hơn đã được duyệt hết
-    const filteredApprovals = pendingApprovals.filter((stepApprover) => {
-      const currentLevel = stepApprover.leaveApprovalStep.level;
-      const allLowerStepsApproved =
-        stepApprover.leaveApprovalStep.leaveRequest.approvalSteps
-          .filter((s) => s.level < currentLevel)
-          .every((s) => s.status === "approved");
-      return allLowerStepsApproved;
-    });
+    // Chỉ giữ lại step active (step pending có level nhỏ nhất)
+    const formatted = steps
+      .filter((step) => {
+        const leaveReq = step.leaveRequest;
+        const activeStep = leaveReq.approvalSteps.find(
+          (s) => s.status === LeaveStatus.pending
+        );
+        return activeStep?.id === step.id; // chỉ step active mới được trả
+      })
+      .map((step) => {
+        const leaveReq = step.leaveRequest;
 
-    // Chuẩn bị dữ liệu trả về kèm danh sách người đã duyệt các bước thấp hơn
-    const results = filteredApprovals.map((stepApprover) => {
-      const leaveRequest = stepApprover.leaveApprovalStep.leaveRequest;
+        const approversWhoApproved = leaveReq.approvalSteps
+          .filter((s) => s.status === LeaveStatus.approved)
+          .flatMap((s) =>
+            s.approvers.map((a) => ({
+              name: a.approver?.name,
+              employeeCode: a.approver?.employeeCode,
+              stepLevel: s.level,
+              approvedAt: a.approvedAt,
+              departmentName: a.approver?.workInfo?.department?.name,
+              positionName: a.approver?.workInfo?.position?.name,
+            }))
+          );
 
-      // Lấy các bước thấp hơn đã được duyệt
-      const approvedLowerSteps = leaveRequest.approvalSteps.filter(
-        (s) =>
-          s.level < stepApprover.leaveApprovalStep.level &&
-          s.status === "approved"
-      );
+        return {
+          stepId: step.id,
+          leaveRequestId: leaveReq.id,
+          employeeId: leaveReq.employeeId,
+          employeeName: leaveReq.employee?.name,
+          employeeCode: leaveReq.employee?.employeeCode,
+          department: leaveReq.employee?.workInfo?.department?.name,
+          position: leaveReq.employee?.workInfo?.position?.name,
+          leaveType: leaveReq.leaveType,
+          startDate: leaveReq.startDate,
+          endDate: leaveReq.endDate,
+          totalHours: leaveReq.totalHours,
+          reason: leaveReq.reason,
+          currentStepLevel: step.level,
+          status: leaveReq.status,
+          approversWhoApproved,
+        };
+      });
 
-      // Lấy danh sách người đã duyệt ở các bước thấp hơn
-      const approversWhoApproved = approvedLowerSteps.flatMap((step) =>
-        step.approvers.map((a) => ({
-          name: a.approver.name,
-          employeeCode: a.approver.employeeCode, // sửa key 'postion' thành 'employeeCode' nếu muốn mã nhân viên
-          approvedAt: a.approvedAt,
-          stepLevel: step.level,
-          departmentName: a.approver.workInfo?.department?.name || null,
-          positionName: a.approver.workInfo?.position?.name || null,
-        }))
-      );
-
-      return {
-        leaveRequest,
-        approversWhoApproved,
-      };
-    });
-
-    return NextResponse.json(results);
+    return NextResponse.json(formatted);
   } catch (error) {
-    console.error("Lỗi khi lấy danh sách đơn nghỉ đang chờ duyệt:", error);
-    return NextResponse.json(
-      { message: "Lấy danh sách thất bại" },
-      { status: 500 }
-    );
+    console.error("Lỗi lấy danh sách đơn cần duyệt:", error);
+    return NextResponse.json({ error: "Lỗi server" }, { status: 500 });
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
@@ -130,6 +131,41 @@ const useStyle = createStyles((utils) => {
   };
 });
 
+
+export interface ApproverInfo {
+  name: string | null;
+  employeeCode: string | null;
+  departmentName: string | null;
+  positionName: string | null;
+  stepLevel: number;
+  approvedAt: string | null; // ISO string
+}
+
+export interface PendingApprovalItem {
+  stepId: number;               // ID của step hiện tại
+  leaveRequestId: number;       // ID đơn nghỉ phép
+  employeeId: number;           // ID nhân viên gửi đơn
+  employeeName: string | null;  // Tên nhân viên
+  employeeCode: string | null;  // Mã nhân viên
+  leaveType: string;            // Loại phép
+  startDate: string;            // ISO string
+  endDate: string;              // ISO string
+  totalHours: number;
+  reason: string | null;
+  status: string;          // Trạng thái step hiện tại
+  department: string | null;    // Tên phòng ban
+  position: string | null;      // Tên chức vụ
+  currentStepLevel: number;     // Level step hiện tại
+  approversWhoApproved?: ApproverInfo[]; // Danh sách những người đã duyệt trước đó
+}
+
+
+export interface ApproveRequestPayload {
+  stepId: number;           // ID của step hiện tại
+  approverId: number;       // ID của người đang phê duyệt
+  decision: "approved" | "rejected"; // trạng thái phê duyệt
+}
+
 export default function AllRequestPage() {
   const [allRequestsApproved, setAllRequestsApproved] = useState<AllRequests>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -140,9 +176,9 @@ export default function AllRequestPage() {
   const [pageTable, setPageTable] = useState(1);
   const [totalTable, setTotalTable] = useState();
   const [requestsNeedApprove, setRequestsNeedApprove] = useState<
-    dataNeedApprove[]
+    PendingApprovalItem[]
   >([]);
-const { role } = useAppSelector((state) => state.user);
+const { role , id} = useAppSelector((state) => state.user);
 
   const localUser = getUserFromLocalStorage();
   const [departments, setDepartments] = useState<Department[]>([]);
@@ -156,6 +192,21 @@ const { role } = useAppSelector((state) => state.user);
     setDepartment(newValue);
     console.log(newValue);
   };
+
+   const getPendingApprovals = async (userId: number): Promise<PendingApprovalItem[]> => {
+  try {
+    const res = await fetch(`/api/leave/all-requests-need-approve?userId=${userId}`);
+    if (!res.ok) {
+      throw new Error("Lấy danh sách cần phê duyệt thất bại");
+    }
+    const data: PendingApprovalItem[] = await res.json();
+      setRequestsNeedApprove(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
 
   const treeData = departments.map((dept) => ({
     value: dept.id.toString(),
@@ -204,28 +255,26 @@ const { role } = useAppSelector((state) => state.user);
     }
   };
 
-  const getApiAllRequestsNeed = async () => {
+  // const getApiAllRequestsNeed = async () => {
+    
+  //   setLoading(true);
+  //   try {
+  //     const res = await getApiAllRequestsNeedApprove({
+  //       role: role,
+  //       department:
+  //         role === "ADMIN" ? "" : localUser.workInfo.department,
+  //       name: "",
+  //       employeeCode: localUser.id,
+  //     });
 
-    setLoading(true);
-    try {
-      const res = await getApiAllRequestsNeedApprove({
-        role: role,
-        department:
-          role === "ADMIN" ? "" : localUser.workInfo.department,
-        name: "",
-        employeeCode: localUser.id,
-      });
 
-      const data = await res;
-
-      setRequestsNeedApprove(data);
-      setLoading(false);
-    } catch (err) {
-      console.error("Lỗi:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     setLoading(false);
+  //   } catch (err) {
+  //     console.error("Lỗi:", err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const { styles } = useStyle();
 
@@ -317,25 +366,29 @@ const { role } = useAppSelector((state) => state.user);
   };
 
   // chức năng phê duyệt đơn xin nghỉ
-  const putApprovedRequest = async (
-    id: number | string,
-    statusRequest: string
-  ) => {
-    setLoading(true);
-    try {
-      await approveLeaveRequest(id, statusRequest, localUser.name);
-      getApiAllRequestsNeed();
-      setLoading(false);
-    } catch (err: any) {
-      console.error("Lỗi:", err);
-      messageApi.open({
-        type: "error",
-        content: `${err}`,
-      });
-      getApiAllRequestsNeed();
-      setLoading(false);
+const putApprovedRequest = async (payload: ApproveRequestPayload) => {
+  try {
+    const res = await fetch("/api/leave/create-requests", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData?.error || "Phê duyệt thất bại");
+    }else{
+      getPendingApprovals(Number(id)??0)
     }
-  };
+
+    return await res.json();
+  } catch (error) {
+    console.error("Lỗi khi phê duyệt đơn:", error);
+    throw error;
+  }
+};
 
   const onPageChange = (page: number, pageSizeEnter?: number) => {
     if (pageSizeEnter) {
@@ -356,9 +409,9 @@ const { role } = useAppSelector((state) => state.user);
   };
 
   useEffect(() => {
+    getPendingApprovals(Number(id)??0)
     getApiAllRequestsApproved(pageTable, pageSize);
     listDepartment();
-    getApiAllRequestsNeed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -368,9 +421,9 @@ const { role } = useAppSelector((state) => state.user);
     <div>
       <ModalNeedApproved
         onClose={() => {
+        getPendingApprovals(Number(id)??0)
           setModalNeedApproved(false);
           getApiAllRequestsApproved(pageTable, pageSize);
-          getApiAllRequestsNeed();
         }}
         open={modalNeedApproved}
         allRequestsApproved={requestsNeedApprove}
@@ -395,6 +448,7 @@ const { role } = useAppSelector((state) => state.user);
             className="flex mt-4 relative  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
             onClick={() => {
               setModalNeedApproved(true);
+              
             }}
           >
             Phê duyệt

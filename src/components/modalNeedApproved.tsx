@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { Drawer, Space, Table, TableProps } from "antd";
 import { createStyles } from "antd-style";
@@ -6,33 +7,42 @@ import ModalLoading from "./modalLoading";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { dataNeedApprove } from "@/app/dashboard/allRequests/page";
+import { PendingApprovalItem } from "@/app/dashboard/allRequests/page";
+import { useAppSelector } from "@/store/hook";
 
 // Extend plugin
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+export interface ApproveRequestPayload {
+  stepId: number;           // ID của step hiện tại
+  approverId: number;       // ID của người đang phê duyệt
+  decision: "approved" | "rejected"; // trạng thái phê duyệt
+}
+
 interface ModalNeedApprovedProps {
   open: boolean;
   onClose: () => void;
-  allRequestsApproved: dataNeedApprove[];
-  putApprovedRequest: (id: number | string, statusRequest: string) => void;
+  allRequestsApproved: PendingApprovalItem[];
+  putApprovedRequest: (payload: ApproveRequestPayload) => Promise<void>;
 }
+
 interface DataType {
   key: string;
   id: number;
   MSNV: string;
   name: string;
+  department: string;
   startDate: string;
   endDate: string;
   totalHours: string;
   leaveType: string;
   status: string;
 }
+
 const useStyle = createStyles((utils) => {
   const { css, token } = utils;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const antCls = (token as any).antCls || ".ant"; // fallback nếu token.antCls không tồn tại
+  const antCls = (token as any).antCls || ".ant";
 
   return {
     customTable: css`
@@ -49,6 +59,7 @@ const useStyle = createStyles((utils) => {
     `,
   };
 });
+
 const ModalNeedApproved = ({
   onClose,
   open,
@@ -56,42 +67,34 @@ const ModalNeedApproved = ({
   putApprovedRequest,
 }: ModalNeedApprovedProps) => {
   const [approvedRequest, setApproveRequest] = useState(false);
-  const [requestApprove, setRequestApprove] = useState<dataNeedApprove>();
+  const [requestApprove, setRequestApprove] = useState<PendingApprovalItem>();
   const [loading, setLoading] = useState<boolean>(false);
   const { styles } = useStyle();
+  const { id } = useAppSelector((state) => state.user);
 
   const formatted: DataType[] =
     allRequestsApproved?.map((item, index) => ({
       key: (index + 1).toString(),
-      id: item.leaveRequest.id,
-      MSNV: item.leaveRequest.employee.employeeCode,
-      name: item.leaveRequest.employee.name,
-      department: item.leaveRequest.employee.workInfo.department,
+      id: item.leaveRequestId,
+      MSNV: item.employeeCode ?? "",
+      name: item.employeeName ?? "",
+      department: item.department ?? "",
       startDate: dayjs
-        .utc(item?.leaveRequest.startDate)
+        .utc(item.startDate)
         .tz("Asia/Ho_Chi_Minh")
         .format("DD/MM/YYYY HH:mm"),
       endDate: dayjs
-        .utc(item?.leaveRequest.endDate)
+        .utc(item.endDate)
         .tz("Asia/Ho_Chi_Minh")
         .format("DD/MM/YYYY HH:mm"),
-      totalHours: item.leaveRequest.totalHours.toString(),
-      leaveType: item.leaveRequest.leaveType,
-      status: item.leaveRequest.status,
+      totalHours: item.totalHours.toString(),
+      leaveType: item.leaveType,
+      status: item.status,
     })) || [];
 
   const columns: TableProps<DataType>["columns"] = [
-    {
-      title: "STT",
-      dataIndex: "key",
-      rowScope: "row",
-      width: "60px",
-    },
-    {
-      title: "MSNV",
-      dataIndex: "MSNV",
-      width: "80px",
-    },
+    { title: "STT", dataIndex: "key", rowScope: "row", width: "60px" },
+    { title: "MSNV", dataIndex: "MSNV", width: "80px" },
     {
       title: "Tên NV",
       dataIndex: "name",
@@ -99,24 +102,9 @@ const ModalNeedApproved = ({
       width: "170px",
       render: (text) => <a>{text}</a>,
     },
-    {
-      title: "Phòng ban",
-      dataIndex: "department",
-      key: "department",
-      width: "80px",
-    },
-    {
-      title: "Ngày nghỉ",
-      dataIndex: "startDate",
-      key: "startDate",
-      width: "170px",
-    },
-    {
-      title: "Loại phép",
-      dataIndex: "leaveType",
-      key: "leaveType",
-      width: "80px",
-    },
+    { title: "Phòng ban", dataIndex: "department", key: "department", width: "80px" },
+    { title: "Ngày nghỉ", dataIndex: "startDate", key: "startDate", width: "170px" },
+    { title: "Loại phép", dataIndex: "leaveType", key: "leaveType", width: "80px" },
     {
       title: "",
       key: "action",
@@ -130,24 +118,25 @@ const ModalNeedApproved = ({
   ];
 
   const handleOpenRequest = (msnv: string) => {
-    const requests = allRequestsApproved.find(
-      (emp) => emp.leaveRequest.employee.employeeCode === msnv
-    );
+    const requests = allRequestsApproved.find((emp) => emp.employeeCode === msnv);
     setRequestApprove(requests);
     setApproveRequest(true);
   };
 
-  const handlePutApprovedRequest = (
-    id: number | string,
-    stautsRequest: string
-  ) => {
+  const handlePutApprovedRequest = async (decision: "approved" | "rejected") => {
+    if (!requestApprove) return;
+
     setLoading(true);
     try {
-      putApprovedRequest(id, stautsRequest);
+      await putApprovedRequest({
+        stepId: requestApprove.stepId,
+        approverId: Number(id) ?? 0,
+        decision: decision,
+      });
       setApproveRequest(false);
-      setLoading(false);
     } catch (err) {
-      console.error("Lỗi:", err);
+      console.error("Lỗi khi phê duyệt:", err);
+    } finally {
       setLoading(false);
     }
   };
@@ -157,16 +146,13 @@ const ModalNeedApproved = ({
       <Drawer
         title={<p className="text-2xl">Phê duyệt</p>}
         placement="right"
-        // size={"large"}
         onClose={onClose}
         width={1000}
         open={open}
       >
         <ModalLoading isOpen={loading} />
         <ModalApproveRequest
-          onClose={() => {
-            setApproveRequest(false);
-          }}
+          onClose={() => setApproveRequest(false)}
           open={approvedRequest}
           requestApprove={requestApprove}
           putApprovedRequest={handlePutApprovedRequest}
@@ -174,7 +160,7 @@ const ModalNeedApproved = ({
         <Table<DataType>
           className={styles.customTable}
           columns={columns}
-          dataSource={formatted ?? []}
+          dataSource={formatted}
           pagination={{ pageSize: 12 }}
           scroll={{ y: "calc(100vh - 225px)" }}
         />

@@ -56,6 +56,16 @@ const useStyle = createStyles((utils) => {
   };
 });
 
+export interface CreateLeavePayload {
+  employeeId: number;
+  leaveType: string;
+  startDateTime: string;
+  endDateTime: string;
+  reason: string;
+  totalHours: string;
+  approverIds: number[];
+}
+
 export default function RequestPage() {
   const [myRequestsLeave, setMyRequetsLeave] = useState<ListRequestLeave>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -128,12 +138,7 @@ export default function RequestPage() {
 
   // Tạo đơn mới
   const CreateRequestLeave = async (
-    employeeId: string,
-    leaveType: string,
-    startDateTime: string,
-    endDateTime: string,
-    reason: string,
-    totalHours: string
+   payload: CreateLeavePayload
   ) => {
     try {
       setLoading(true);
@@ -141,12 +146,7 @@ export default function RequestPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          employeeId,
-          leaveType,
-          startDateTime,
-          endDateTime,
-          reason,
-          totalHours,
+       payload
         }),
       });
 

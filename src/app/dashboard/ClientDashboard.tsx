@@ -252,7 +252,6 @@ export default function ClientDashboard({
     },
   ];
 
-  console.log(isMobile);
 
 
 

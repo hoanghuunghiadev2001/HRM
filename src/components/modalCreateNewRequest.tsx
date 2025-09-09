@@ -1,190 +1,192 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
-import { DatePicker, Form, Modal, Select } from "antd";
-import dayjs from "dayjs";
-import TextArea from "antd/es/input/TextArea";
+import { DatePicker, Form, Modal, Select, Input, Spin } from "antd";
+import dayjs, { Dayjs } from "dayjs";
 import { NumericInput } from "./function";
 import { useAppSelector } from "@/store/hook";
+import { CreateLeavePayload } from "@/app/dashboard/request/page";
+
+const { RangePicker } = DatePicker;
+const { TextArea } = Input;
+
+interface EmployeeOption {
+  label: string;
+  value: string; // employeeId
+}
 
 interface ModalCreateNewRequestProps {
   open: boolean;
   onClose: () => void;
-  createRequestLeave: (
-    employeeId: string,
-    leaveType: string,
-    startDateTime: string,
-    endDateTime: string,
-    reason: string,
-    totalHours: string
-  ) => void;
+  createRequestLeave: (data: CreateLeavePayload) => void;
 }
-const ModalCreateNewRequest = ({
-  onClose,
+
+const leaveOptions = [
+  { value: "PN", label: "PN - Phép năm" },
+  { value: "NB", label: "NB - Nghỉ bù" },
+  { value: "PC", label: "PC - Phép cưới" },
+  { value: "Cgt", label: "CGT - Công tác" },
+  { value: "PB", label: "PB - Phép bệnh" },
+  { value: "TS", label: "TS - Thai sản" },
+  { value: "PR", label: "PR - Phép riêng" },
+];
+
+const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
   open,
+  onClose,
   createRequestLeave,
-}: ModalCreateNewRequestProps) => {
+}) => {
+  const { name, id, employeeCode, department, position } = useAppSelector(
+    (state) => state.user
+  );
 
-  const { RangePicker } = DatePicker;
+  const [leaveType, setLeaveType] = useState<string>("PN");
+  const [totalHours, setTotalHours] = useState<string>("");
+  const [reason, setReason] = useState<string>("");
+  const [timeRange, setTimeRange] = useState<[Dayjs, Dayjs] | null>(null);
+  const [selectedApprovers, setSelectedApprovers] = useState<number[]>([]);
+  const [errorMsg, setErrorMsg] = useState<string>("");
+  const [approversList, setApproversList] = useState<EmployeeOption[]>([]);
+  const [loadingApprovers, setLoadingApprovers] = useState<boolean>(false);
 
-  // state push api
-  const [totalHours, setTotalHours] = useState("");
-  const [typeLeave, setTypeLeave] = useState("PN");
-  const [reason, setReason] = useState("");
-  const [messErr, setMessErr] = useState("");
-  const [timeStartObj, setTimeStartObj] = useState<dayjs.Dayjs | null>(null);
-  const [timeEndObj, setTimeEndObj] = useState<dayjs.Dayjs | null>(null);
-
-  const { name, id,  employeeCode, department,position } = useAppSelector((state) => state.user);
-
-  // const onChange = (value: any, dateString: any) => {
-  //   setTimeStart(dateString[0]);
-  //   setTimeEnd(dateString[1]);
-  // };
-
-  const disabledDate = (currentDate: dayjs.Dayjs) => {
-    // Không cho chọn ngày trước hôm nay (chỉ chọn hôm nay trở đi)
-    return currentDate && currentDate.isBefore(dayjs().startOf("day"));
-  };
-
-  const handleCreateNewRequest = () => {
-    if (
-      !id ||
-      !typeLeave ||
-      !timeStartObj ||
-      !timeEndObj ||
-      !totalHours ||
-      !reason
-    ) {
-      setMessErr("Vui lòng điền đầy đủ thông tin");
-      return;
+  // Load danh sách người duyệt từ backend
+  const fetchApprovers = async () => {
+    try {
+      setLoadingApprovers(true);
+      const res = await fetch("/api/employees/employeeProposal");
+      const data = await res.json();
+      if (res.ok) {
+        const options = data.map((emp: any) => ({
+          label: `${emp.name} (${emp.position ?? "Chưa có chức vụ"})`,
+          value: emp.id,
+        }));
+        setApproversList(options);
+      } else {
+        console.error("Error fetching approvers:", data.error);
+      }
+    } catch (error) {
+      console.error("Error fetching approvers:", error);
+    } finally {
+      setLoadingApprovers(false);
     }
-    createRequestLeave(
-      id,
-      typeLeave,
-      timeStartObj!.toISOString(), // dấu "!" nói với TS là: tôi chắc chắn biến này không null
-      timeEndObj!.toISOString(),
-      reason,
-      totalHours
-    );
   };
 
   useEffect(() => {
-    setTotalHours("");
-    setTypeLeave("PN");
-    setMessErr("");
-    setReason("");
-    setTimeStartObj(null);
-    setTimeEndObj(null);
+    if (open) {
+      setLeaveType("PN");
+      setTotalHours("");
+      setReason("");
+      setTimeRange(null);
+      setSelectedApprovers([]);
+      setErrorMsg("");
+      fetchApprovers();
+    }
   }, [open]);
 
-  return (
-    <>
-      <Modal
-        style={{ top: 20 }}
-        title={
-          <p className="text-2xl font-bold text-center">Tạo phiếu yêu cầu</p>
-        }
-        // loading={loading}
-        open={open}
-        onCancel={onClose}
-        cancelText={"Hủy"}
-        okText="Tạo mới"
-        onOk={handleCreateNewRequest}
-      >
-        {/* <ModalLoading isOpen={loading} /> */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 mt-2 gap-4">
-          <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
-            <p className="shrink-0">Họ và tên:</p>
-            <p className="inline font-medium text-[#3a3a3a]">
-              {name}
-            </p>
-          </div>
-          <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
-            <p className="shrink-0">MSNV:</p>
-            <p className="inline font-medium text-[#3a3a3a]">
-              {employeeCode}
-            </p>
-          </div>
-          <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
-            <p className="shrink-0">Bộ phận:</p>
-            <p className="inline font-medium text-[#3a3a3a]">
-              {department}
-            </p>
-          </div>
-          <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
-            <p className="shrink-0">Chức vụ:</p>
-            <p className="inline font-medium text-[#3a3a3a]">
-              {position}
-            </p>
-          </div>
-        </div>
+  const disabledDate = (current: Dayjs) => current && current.isBefore(dayjs().startOf("day"));
 
-        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Form.Item
-            label={<p className="font-bold text-[#242424]">Loại Phép</p>}
-            rules={[{ required: true, message: "Vui lòng chọn loại phép" }]}
-          >
-            <Select
-              onChange={(e) => setTypeLeave(e)}
-              options={[
-                { value: "PN", label: "PN-Phép năm" },
-                { value: "NB", label: "NB-Nghỉ bù" },
-                { value: "PC", label: "PC-Phép cưới" },
-                { value: "Cgt", label: "CGT-Công tác" },
-                { value: "PB", label: "PB-Phép bệnh" },
-                { value: "TS", label: "TS-Thai sản" },
-                { value: "PR", label: "PR-Phép riêng" },
-              ]}
-            />
-          </Form.Item>
-          <div className="flex gap-2 items-center">
-            <p className="font-bold text-[#242424]">Tổng giờ:</p>
-            <NumericInput
-              style={{ width: 60 }}
-              value={totalHours}
-              onChange={setTotalHours}
-            />
-          </div>
+  const handleOk = () => {
+    if (!id || !leaveType || !totalHours || !reason || !timeRange || selectedApprovers.length === 0) {
+      setErrorMsg("Vui lòng điền đầy đủ thông tin và chọn người duyệt.");
+      return;
+    }
+
+    createRequestLeave({
+      employeeId: Number(id),
+      leaveType,
+      startDateTime: timeRange[0].toISOString(),
+      endDateTime: timeRange[1].toISOString(),
+      reason,
+      totalHours,
+      approverIds: selectedApprovers,
+    });
+  };
+
+  return (
+    <Modal
+      title={<p className="text-2xl font-bold text-center">Tạo phiếu yêu cầu</p>}
+      open={open}
+      onCancel={onClose}
+      onOk={handleOk}
+      okText="Tạo mới"
+      cancelText="Hủy"
+      style={{ top: 20 }}
+    >
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <div className="font-bold text-[#242424] flex gap-2 items-center">
+          <span>Họ và tên:</span>
+          <span className="font-medium text-[#3a3a3a]">{name}</span>
         </div>
-        <div className="flex gap-2 items-center mt-3">
-          <p className="font-bold text-[#242424] shrink-0">Thời gian</p>
-          <RangePicker
-            disabledDate={disabledDate}
-            placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
-            showTime={{
-              hideDisabledOptions: true,
-              defaultValue: [
-                dayjs("08:00:00", "HH:mm:ss"),
-                dayjs("17:00:00", "HH:mm:ss"),
-              ],
-            }}
-            format="DD/MM/YYYY HH:mm:ss"
-            onChange={(dates) => {
-              if (dates && dates[0] && dates[1]) {
-                setTimeStartObj(dates[0]);
-                setTimeEndObj(dates[1]);
-              } else {
-                setTimeStartObj(null);
-                setTimeEndObj(null);
-              }
-            }}
+        <div className="font-bold text-[#242424] flex gap-2 items-center">
+          <span>MSNV:</span>
+          <span className="font-medium text-[#3a3a3a]">{employeeCode}</span>
+        </div>
+        <div className="font-bold text-[#242424] flex gap-2 items-center">
+          <span>Bộ phận:</span>
+          <span className="font-medium text-[#3a3a3a]">{department}</span>
+        </div>
+        <div className="font-bold text-[#242424] flex gap-2 items-center">
+          <span>Chức vụ:</span>
+          <span className="font-medium text-[#3a3a3a]">{position}</span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <Form.Item label="Loại phép" required>
+          <Select
+            value={leaveType}
+            onChange={setLeaveType}
+            options={leaveOptions}
           />
+        </Form.Item>
+        <div className="flex gap-2 items-center">
+          <span className="font-bold text-[#242424]">Tổng giờ:</span>
+          <NumericInput style={{ width: 80 }} value={totalHours} onChange={setTotalHours} />
         </div>
-        <div>
-          <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
-            Lý do:
-          </p>
-          <TextArea
-            rows={4}
-            placeholder="Nhập lý do"
-            onChange={(e) => {
-              setReason(e.target.value);
-            }}
-            value={reason}
+      </div>
+
+      <div className="mb-4">
+        <span className="font-bold text-[#242424]">Thời gian:</span>
+        <RangePicker
+          value={timeRange || undefined}
+          onChange={(dates) => {
+            if (dates && dates[0] && dates[1]) setTimeRange([dates[0], dates[1]]);
+            else setTimeRange(null);
+          }}
+          disabledDate={disabledDate}
+          showTime={{ format: "HH:mm:ss" }}
+          format="DD/MM/YYYY HH:mm:ss"
+          style={{ width: "100%" }}
+        />
+      </div>
+
+      <div className="mb-4">
+        <span className="font-bold text-[#242424]">Người duyệt:</span>
+        {loadingApprovers ? (
+          <Spin />
+        ) : (
+          <Select
+            mode="multiple"
+            value={selectedApprovers}
+            onChange={setSelectedApprovers}
+            options={approversList}
+            placeholder="Chọn người duyệt theo thứ tự"
+            style={{ width: "100%" }}
           />
-        </div>
-        <p className="text-center text-sm italic text-red-600">{messErr}</p>
-      </Modal>
-    </>
+        )}
+      </div>
+
+      <div className="mb-2">
+        <span className="font-bold text-[#242424]">Lý do:</span>
+        <TextArea
+          rows={4}
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          placeholder="Nhập lý do"
+        />
+      </div>
+
+      {errorMsg && <p className="text-center text-sm text-red-600 italic">{errorMsg}</p>}
+    </Modal>
   );
 };
 
