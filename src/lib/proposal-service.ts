@@ -99,9 +99,9 @@ export class ProposalService {
       const isSigner = proposal.signers.some(s => s.signerId === userId)
       const isApprover = proposal.approvers.some(a => a.approverId === userId)
 
-      if (!userId || (!isSigner && !isApprover)) {
-        return { success: false, error: "Bạn không có quyền xem đề xuất này" }
-      }
+      // if (!userId || (!isSigner && !isApprover)) {
+      //   return { success: false, error: "Bạn không có quyền xem đề xuất này" }
+      // }
 
       return { success: true, data: proposal }
     } catch (error) {

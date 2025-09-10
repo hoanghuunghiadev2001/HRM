@@ -39,8 +39,8 @@ export async function GET(
       return NextResponse.json({ success: false, error: "Không tìm thấy đề xuất" }, { status: 404 });
 
     const isSigner = proposal.signers.some(s => s.signerId === decoded.id);
-    if (!decoded.id || !isSigner)
-      return NextResponse.json({ success: false, error: "Bạn không có quyền xem đề xuất này" }, { status: 403 });
+    // if (!decoded.id || !isSigner)
+    //   return NextResponse.json({ success: false, error: "Bạn không có quyền xem đề xuất này" }, { status: 403 });
 
     if (!proposal.file) return new NextResponse("File not found", { status: 404 });
 
