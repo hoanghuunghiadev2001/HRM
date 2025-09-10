@@ -25,6 +25,7 @@ import timezone from "dayjs/plugin/timezone";
 import { TreeSelect } from "antd/lib";
 import { Department } from "@/lib/interface";
 import { useAppSelector } from "@/store/hook";
+import ExportLeaveRequests from "@/components/exportLeave";
 
 // Extend plugin
 dayjs.extend(utc);
@@ -529,6 +530,7 @@ const putApprovedRequest = async (payload: ApproveRequestPayload) => {
                   onPopupScroll={onPopupScroll}
                 />
               </Form.Item>
+              <ExportLeaveRequests/>
             </div>
           )}
 
