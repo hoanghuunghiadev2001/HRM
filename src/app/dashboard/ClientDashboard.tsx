@@ -107,7 +107,7 @@ export default function ClientDashboard({
     { key: "/dashboard", icon: <UserRoundPen />, label: "Hồ sơ" },
     { key: "/dashboard/request", icon: <FileText />, label: "Phiếu yêu cầu" },
     {
-          key: "/dashboard/proposal",
+          key: "/dashboard/proposal1",
           icon: <FileStack />,
           label: "Đề xuất",
           children: [
@@ -381,7 +381,7 @@ export default function ClientDashboard({
                       }}
                     />
 
-                    <p className={`text-base font-normal italic text-[#070d10]  ${collapsed && !isMobile ? 'hidden' : ''} `}>
+                    <p className={`text-xs font-normal italic text-[#070d10]  ${collapsed && !isMobile ? 'hidden' : ''} `}>
                       {name}
                     </p>
                   </div>

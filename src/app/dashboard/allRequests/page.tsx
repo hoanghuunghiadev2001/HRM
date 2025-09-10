@@ -178,9 +178,8 @@ export default function AllRequestPage() {
   const [requestsNeedApprove, setRequestsNeedApprove] = useState<
     PendingApprovalItem[]
   >([]);
-const { role , id} = useAppSelector((state) => state.user);
+const { role , id, department} = useAppSelector((state) => state.user);
 
-  const localUser = getUserFromLocalStorage();
   const [departments, setDepartments] = useState<Department[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -240,7 +239,7 @@ const { role , id} = useAppSelector((state) => state.user);
         department:
           role === "ADMIN"
             ? filterDepartment
-            : localUser.workInfo.department,
+            : String(department) ? String(department) :'' ,
         employeeCode: filterMSNV,
         name: filterName,
 
@@ -502,7 +501,7 @@ const putApprovedRequest = async (payload: ApproveRequestPayload) => {
               />
             </Form.Item>
           </div>
-          {localUser?.role === "ADMIN" && (
+          {role === "ADMIN" && (
             <div className="!flex gap-2 items-center ">
               <Form.Item
                 layout="horizontal"

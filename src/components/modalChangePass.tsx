@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // import { LockOutlined } from "@ant-design/icons";
 import { interfaceChangePassword } from "@/lib/interface";
 import { Button, Form, Input, message, Modal } from "antd";
 import { useEffect, useState } from "react";
+import { useLayoutEffect } from "react";
+
 
 interface ModalChangePassProps {
   open: boolean;
@@ -49,11 +52,13 @@ const ModalChangePass = ({
   };
 
   // To disable submit button at the beginning.
-  useEffect(() => {
+
+useLayoutEffect(() => {
+  if (open) {
     setClientReady(true);
     form.resetFields();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }
+}, [open]);
 
   // const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
   //   console.log('Failed:', errorInfo);

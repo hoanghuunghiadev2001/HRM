@@ -104,3 +104,58 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+
+export async function PUT(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { id, employeeId, leaveType } = body;
+
+    if (!id || !employeeId) {
+      return NextResponse.json(
+        { message: "Thiếu ID đơn nghỉ phép hoặc ID nhân viên" },
+        { status: 400 }
+      );
+    }
+
+    // Lấy đơn xin phép
+    const leaveRequest = await prisma.leaveRequest.findUnique({
+      where: { id },
+    select: { id: true, employeeId: true, status: true },
+    });
+
+    if (!leaveRequest) {
+      return NextResponse.json(
+        { message: "Không tìm thấy đơn nghỉ phép" },
+        { status: 404 }
+      );
+    }
+
+    // Chỉ nhân viên tạo mới được chỉnh
+    if (leaveRequest.employeeId !== employeeId) {
+      return NextResponse.json(
+        { message: "Bạn không có quyền sửa đơn này" },
+        { status: 403 }
+      );
+    }
+
+    // Nếu đơn đã được xử lý thì không cho sửa
+    
+
+    // Cập nhật chỉ trường leaveType
+    const updatedLeave = await prisma.leaveRequest.update({
+      where: { id },
+      data: {
+        leaveType,
+      },
+    });
+
+    return NextResponse.json({
+      message: "Cập nhật loại phép thành công",
+      data: updatedLeave,
+    });
+  } catch (error) {
+    console.error("Lỗi khi cập nhật loại phép:", error);
+    return NextResponse.json({ message: "Cập nhật thất bại" }, { status: 500 });
+  }
+}
+

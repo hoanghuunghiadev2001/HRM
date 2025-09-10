@@ -300,7 +300,7 @@ type LeaveFilters = {
   page: number;
   pageSize: number;
   role: string;
-  department: string;
+  department?: string;
   employeeCode: string;
   name: string;
   status: string;

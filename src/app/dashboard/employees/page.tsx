@@ -20,7 +20,6 @@ import { TableProps } from "antd";
 import {
   EmployeesSumary,
   fetchEmployeeSummary,
-  getUserFromLocalStorage,
 } from "@/components/api";
 import ModalLoading from "@/components/modalLoading";
 import { ListCollapse, PlusIcon } from "lucide-react";
@@ -76,11 +75,12 @@ export default function EmployeesPage() {
   const [pageTable, setPageTable] = useState(1);
   const [totalTable, setTotalTable] = useState();
   const [infoEmployee, setInfoEmployee] = useState<InfoEmployee>();
-  const localUser = getUserFromLocalStorage();
+
+    const { role, department } = useAppSelector((state) => state.user);
+  
   const [departments, setDepartments] = useState<Department[]>([]);
   const [modalEditEmployee, setModalEditEmployee] = useState<boolean>(false);
   const [workStatus, setWorkStatus] = useState<string>();
-  const { role } = useAppSelector((state) => state.user);
 
   const [modal, contextHolder] = Modal.useModal();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -132,7 +132,7 @@ export default function EmployeesPage() {
         department:
           role === "ADMIN"
             ? filterDepartment
-            : localUser.workInfo.department,
+            : department?? '',
         name: filterName,
         employeeCode: filterMSNV,
         page: page,
@@ -663,13 +663,13 @@ export default function EmployeesPage() {
       </div>
       <div className="w-full  mt-4 ">
         <div className="flex justify-end items-start mb-3 gap-4  w-full flex-wrap">
-          {localUser?.role === "ADMIN" && (
+          {role === "ADMIN" && (
             <Button onClick={handleExportExcel} icon={<DownloadOutlined />}>
               <p className="hidden sm:block">Download</p>
             </Button>
           )}
 
-          {localUser?.role === "ADMIN" && (
+          {role === "ADMIN" && (
             <label htmlFor="file-upload" className="relative inline-block">
               <Button icon={<UploadOutlined />}>
                 <p className="hidden sm:block">Upload</p>
@@ -741,7 +741,7 @@ export default function EmployeesPage() {
               />
             </Form.Item>
           </div>
-          {localUser?.role === "ADMIN" && (
+          {role === "ADMIN" && (
             <div className="!flex gap-2 items-center ">
               <Form.Item
                 className=""

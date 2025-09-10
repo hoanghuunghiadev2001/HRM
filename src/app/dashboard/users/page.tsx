@@ -89,12 +89,14 @@ export default function EmployeeList() {
   }));
 
   const onPageChange = (page: number, pageSizeEnter?: number) => {
+    console.log(page, pageSizeEnter);
+    
     if (pageSizeEnter) {
       setPageSize(pageSizeEnter);
-      fetchEmployees(page, pageSizeEnter);
+      fetchEmployees(pageSizeEnter, page );
     } else {
       setPageTable(page);
-      fetchEmployees(page, pageSize);
+      fetchEmployees(pageSize,page );
     }
   };
 
