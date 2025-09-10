@@ -130,7 +130,7 @@ export default function EmployeesPage() {
         workStatus: workStatus ?? "",
         role: role,
         department:
-          role === "ADMIN"
+          role === "ADMIN" || role === "MANAGER"
             ? filterDepartment
             : department?? '',
         name: filterName,
