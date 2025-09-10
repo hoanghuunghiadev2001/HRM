@@ -129,7 +129,7 @@ model ContactInfo {
   phoneNumber   String?  @unique
   relativePhone String?
   companyPhone  String?
-  email         String?  @unique
+  email         String?  
   employeeId    Int      @unique
   employee      Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 }

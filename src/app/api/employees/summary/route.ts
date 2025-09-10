@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
     // Xử lý lọc phòng ban
     let departmentId: number | undefined;
     let positionId: number | undefined;
-    if (department) {
+    if (role !== "ADMIN" && department) {
       const parts = department.split("-");
       departmentId = parts[0] ? parseInt(parts[0], 10) : undefined;
       positionId = parts[1] ? parseInt(parts[1], 10) : undefined;
@@ -40,39 +40,39 @@ export async function GET(req: NextRequest) {
       AND: [
         name
           ? {
-              name: {
-                contains: name,
-              },
-            }
+            name: {
+              contains: name,
+            },
+          }
           : {},
         employeeCode
           ? {
-              employeeCode: {
-                contains: employeeCode,
-              },
-            }
+            employeeCode: {
+              contains: employeeCode,
+            },
+          }
           : {},
         departmentId || positionId
           ? {
-              workInfo: {
-                ...(departmentId && { departmentId }),
-                ...(positionId && { positionId }),
-              },
-            }
+            workInfo: {
+              ...(departmentId && { departmentId }),
+              ...(positionId && { positionId }),
+            },
+          }
           : {},
         workStatus
           ? {
-              otherInfo: {
-                workStatus: workStatus as any,
-              },
-            }
+            otherInfo: {
+              workStatus: workStatus as any,
+            },
+          }
           : {
-              otherInfo: {
-                workStatus: {
-                  in: ["OFFICIAL", "PROBATION"],
-                },
+            otherInfo: {
+              workStatus: {
+                in: ["OFFICIAL", "PROBATION"],
               },
             },
+          },
       ],
     };
 

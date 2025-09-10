@@ -22728,15 +22728,15 @@ export namespace Prisma {
   export type ContactInfoWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     phoneNumber?: string
-    email?: string
     employeeId?: number
     AND?: ContactInfoWhereInput | ContactInfoWhereInput[]
     OR?: ContactInfoWhereInput[]
     NOT?: ContactInfoWhereInput | ContactInfoWhereInput[]
     relativePhone?: StringNullableFilter<"ContactInfo"> | string | null
     companyPhone?: StringNullableFilter<"ContactInfo"> | string | null
+    email?: StringNullableFilter<"ContactInfo"> | string | null
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
-  }, "id" | "phoneNumber" | "email" | "employeeId">
+  }, "id" | "phoneNumber" | "employeeId">
 
   export type ContactInfoOrderByWithAggregationInput = {
     id?: SortOrder

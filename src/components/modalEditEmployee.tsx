@@ -16,10 +16,10 @@ import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { Department, InfoEmployee } from "@/lib/interface";
 import Image from "next/image";
-import { getUserFromLocalStorage } from "./api";
 
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { useAppSelector } from "@/store/hook";
 
 // Extend plugin
 dayjs.extend(utc);
@@ -55,7 +55,7 @@ const ModalEditEmployee = ({
   const [positions, setPositions] = useState<Position[]>([]);
   type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-  const localUser = getUserFromLocalStorage();
+  const { role } = useAppSelector((state) => state.user);
 
   const maxDate = dayjs();
 
@@ -102,9 +102,9 @@ const ModalEditEmployee = ({
         education: formData.education,
         drivingLicense: formData.drivingLicense,
         toyotaCertificate: formData.toyotaCertificate,
-        taxCode: formData.taxCode,
-        insuranceNumber: formData.insuranceNumber,
-        insuranceSalary: parseFloat(formData.insuranceSalary),
+        taxCode: formData.taxCode ?? employeeInfo?.employeeCode + "tax",
+        insuranceNumber: formData.insuranceNumber ?? employeeInfo?.employeeCode + "insuranceNumber",
+        insuranceSalary: parseFloat(formData.insuranceSalary) ,
       },
 
       contactInfo: {
@@ -257,15 +257,15 @@ const ModalEditEmployee = ({
       education: data.personalInfo?.education ?? "",
       drivingLicense: data.personalInfo?.drivingLicense ?? "",
       toyotaCertificate: data.personalInfo?.toyotaCertificate ?? "",
-      taxCode: data.personalInfo?.taxCode ?? "",
-      insuranceNumber: data.personalInfo?.insuranceNumber ?? "",
+      taxCode: data.personalInfo?.taxCode ?? employeeInfo?.employeeCode + "taxCode",
+      insuranceNumber: data.personalInfo?.insuranceNumber ?? employeeInfo?.employeeCode + "insuranceNumber",
       insuranceSalary: data.personalInfo?.insuranceSalary || null,
 
       // contactInfo
       phoneNumber: data.contactInfo?.phoneNumber ?? "",
       relativePhone: data.contactInfo?.relativePhone ?? "",
       companyPhone: data.contactInfo?.companyPhone ?? "",
-      email: data.contactInfo?.email ?? "",
+      email: data.contactInfo?.email ?? "it@toyota.binhduong.vn",
 
       // otherInfo
       workStatus: data.otherInfo?.workStatus ?? "",
@@ -435,7 +435,7 @@ const ModalEditEmployee = ({
                   rules={[{ required: true }]}
                 >
                   <Select placeholder="Vài trò" allowClear>
-                    {localUser?.role === "ADMIN" ? (
+                    {role === "ADMIN" ? (
                       <Option value="ADMIN">ADMIN</Option>
                     ) : (
                       ""
@@ -549,12 +549,12 @@ const ModalEditEmployee = ({
                   name="department"
                   label="Bộ phận"
                   rules={[
-                    { required: localUser?.role === "MANAGER" ? false : true },
+                    { required: role === "MANAGER" ? false : true },
                   ]}
                 >
                   <Select
                     placeholder="Bộ phận"
-                    disabled={localUser?.role === "MANAGER"}
+                    disabled={role === "MANAGER"}
                     allowClear
                     onChange={(value) => {
                       setSelectedDepartmentId(value);
@@ -573,7 +573,7 @@ const ModalEditEmployee = ({
                 >
                   <Select
                     placeholder="Chức vụ"
-                    disabled={localUser?.role === "MANAGER"}
+                    disabled={role === "MANAGER"}
                     allowClear
                     options={positions.map((d) => ({
                       value: d.id,
