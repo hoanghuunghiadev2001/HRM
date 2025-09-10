@@ -342,7 +342,6 @@ export default function EmployeeList() {
     setLoading(true);
     const res = await updateEmployee(employeeCode, infoEmployee);
     if (res.status === 1) {
-    dispatch(setUser({ name:infoEmployee.name, avatar: infoEmployee.avatar, employeeCode: infoEmployee.employeeCode, id: infoEmployee.id })) // nên là URL
 
       fetchEmployees(pageSize, pageTable);
       setModalEditEmployee(false);
