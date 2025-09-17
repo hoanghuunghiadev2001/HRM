@@ -3,6 +3,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { v2 as cloudinary } from "cloudinary";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+const TZ = "Asia/Ho_Chi_Minh";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
@@ -18,17 +25,23 @@ function getEmployeeCodeFromUrl(urlString: string) {
 
 function formatDate(date: Date | null | undefined): string | null {
   if (!date) return null;
-  const d = new Date(date);
-  const day = String(d.getDate()).padStart(2, "0");
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const year = d.getFullYear();
-  return `${day}/${month}/${year}`;
+  return dayjs(date).tz(TZ).format("DD/MM/YYYY");
+}
+
+function parseDateToTZ(date: string | null | undefined): Date | undefined {
+  if (!date) return undefined;
+  return dayjs.tz(date, TZ).toDate();
+}
+
+function isBase64Image(str: string): boolean {
+  return /^data:image\/\w+;base64,/.test(str);
 }
 
 export async function GET(req: NextRequest) {
   const employeeCode = getEmployeeCodeFromUrl(req.url);
   const token = req.cookies.get("token")?.value;
   if (!token) return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
+
   const user = verifyToken(token);
   if (!user) return NextResponse.json({ message: "Token không hợp lệ" }, { status: 401 });
   if (user.role !== "ADMIN" && user.role !== "MANAGER") {
@@ -52,24 +65,27 @@ export async function GET(req: NextRequest) {
     const formattedEmployee = {
       ...employee,
       birthDate: formatDate(employee.birthDate),
-      workInfo: employee.workInfo ? {
-        ...employee.workInfo,
-        joinedTBD: formatDate(employee.workInfo.joinedTBD),
-        joinedTeSCC: formatDate(employee.workInfo.joinedTeSCC),
-        seniorityStart: formatDate(employee.workInfo.seniorityStart),
-        contractDate: formatDate(employee.workInfo.contractDate),
-        contractEndDate: formatDate(employee.workInfo.contractEndDate),
-      } : null,
-      personalInfo: employee.personalInfo ? {
-        ...employee.personalInfo,
-        issueDate: formatDate(employee.personalInfo.issueDate),
-      } : null,
+      workInfo: employee.workInfo
+        ? {
+            ...employee.workInfo,
+            joinedTBD: formatDate(employee.workInfo.joinedTBD),
+            joinedTeSCC: formatDate(employee.workInfo.joinedTeSCC),
+            seniorityStart: formatDate(employee.workInfo.seniorityStart),
+            contractDate: formatDate(employee.workInfo.contractDate),
+            contractEndDate: formatDate(employee.workInfo.contractEndDate),
+          }
+        : null,
+      personalInfo: employee.personalInfo
+        ? { ...employee.personalInfo, issueDate: formatDate(employee.personalInfo.issueDate) }
+        : null,
       contactInfo: employee.contactInfo ?? null,
-      otherInfo: employee.otherInfo ? {
-        ...employee.otherInfo,
-        resignedDate: formatDate(employee.otherInfo.resignedDate),
-        updatedAt: formatDate(employee.otherInfo.updatedAt),
-      } : null,
+      otherInfo: employee.otherInfo
+        ? {
+            ...employee.otherInfo,
+            resignedDate: formatDate(employee.otherInfo.resignedDate),
+            updatedAt: formatDate(employee.otherInfo.updatedAt),
+          }
+        : null,
       LeaveRequest: employee.LeaveRequest?.map((leave: any) => ({
         ...leave,
         startDate: formatDate(leave.startDate),
@@ -86,14 +102,11 @@ export async function GET(req: NextRequest) {
   }
 }
 
-function isBase64Image(str: string): boolean {
-  return /^data:image\/\w+;base64,/.test(str);
-}
-
 export async function PATCH(req: NextRequest) {
   const employeeCode = getEmployeeCodeFromUrl(req.url);
   const token = req.cookies.get("token")?.value;
   if (!token) return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
+
   const user = verifyToken(token);
   if (!user) return NextResponse.json({ message: "Token không hợp lệ" }, { status: 401 });
 
@@ -106,6 +119,7 @@ export async function PATCH(req: NextRequest) {
 
     const body = await req.json();
     let avatar = body.avatar;
+
     if (typeof avatar === "string" && isBase64Image(avatar)) {
       const res = await cloudinary.uploader.upload(avatar, {
         folder: "employee_avatars",
@@ -116,27 +130,12 @@ export async function PATCH(req: NextRequest) {
       avatar = undefined;
     }
 
-    if (body.workInfo?.position) {
-      const position = await prisma.position.findUnique({ where: { id: body.workInfo.position } });
-      if (position?.name) {
-        let newLevel = 1;
-        const name = position.name.toLowerCase();
-        if (name.includes("tổ trưởng")) newLevel = 2;
-        else if (name.includes("trưởng phòng")) newLevel = 3;
-        else if (name.includes("phó tổng giám đốc") || name.includes("tổng giám đốc")) newLevel = 5;
-        else if (name.includes("giám đốc")) newLevel = 4;
-        if (newLevel !== position.level) {
-          await prisma.position.update({ where: { id: body.workInfo.position }, data: { level: newLevel } });
-        }
-      }
-    }
-
     await prisma.employee.update({
       where: { id: employee.id },
       data: {
         avatar,
         name: body.name,
-        birthDate: body.birthDate ? new Date(body.birthDate) : undefined,
+        birthDate: parseDateToTZ(body.birthDate),
         role: body.role,
         gender: body.gender,
         employeeCode: body.employeeCode,
@@ -157,21 +156,21 @@ export async function PATCH(req: NextRequest) {
         departmentId: body.workInfo.department,
         positionId: body.workInfo.position,
         specialization: body.workInfo.specialization,
-        joinedTBD: body.workInfo.joinedTBD ? new Date(body.workInfo.joinedTBD) : undefined,
-        joinedTeSCC: body.workInfo.joinedTeSCC ? new Date(body.workInfo.joinedTeSCC) : undefined,
-        seniorityStart: body.workInfo.seniorityStart ? new Date(body.workInfo.seniorityStart) : undefined,
+        joinedTBD: parseDateToTZ(body.workInfo.joinedTBD),
+        joinedTeSCC: parseDateToTZ(body.workInfo.joinedTeSCC),
+        seniorityStart: parseDateToTZ(body.workInfo.seniorityStart),
         seniority: body.workInfo.seniority,
         contractNumber: body.workInfo.contractNumber,
-        contractDate: body.workInfo.contractDate ? new Date(body.workInfo.contractDate) : undefined,
+        contractDate: parseDateToTZ(body.workInfo.contractDate),
         contractType: body.workInfo.contractType,
-        contractEndDate: body.workInfo.contractEndDate ? new Date(body.workInfo.contractEndDate) : undefined,
+        contractEndDate: parseDateToTZ(body.workInfo.contractEndDate),
       });
     }
 
     if (body.personalInfo) {
       await upsert(prisma.personalInfo, {
         identityNumber: body.personalInfo.identityNumber,
-        issueDate: body.personalInfo.issueDate ? new Date(body.personalInfo.issueDate) : undefined,
+        issueDate: parseDateToTZ(body.personalInfo.issueDate),
         issuePlace: body.personalInfo.issuePlace,
         hometown: body.personalInfo.hometown,
         idAddress: body.personalInfo.idAddress,
@@ -196,7 +195,7 @@ export async function PATCH(req: NextRequest) {
     if (body.otherInfo) {
       await upsert(prisma.otherInfo, {
         workStatus: body.otherInfo.workStatus,
-        resignedDate: body.otherInfo.resignedDate ? new Date(body.otherInfo.resignedDate) : undefined,
+        resignedDate: parseDateToTZ(body.otherInfo.resignedDate),
         documentsChecked: body.otherInfo.documentsChecked,
         updatedAt: new Date(),
         VCB: body.otherInfo.VCB,
