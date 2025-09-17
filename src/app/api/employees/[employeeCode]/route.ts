@@ -9,6 +9,7 @@ import timezone from "dayjs/plugin/timezone";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
+
 const TZ = "Asia/Ho_Chi_Minh";
 
 cloudinary.config({
@@ -23,16 +24,21 @@ function getEmployeeCodeFromUrl(urlString: string) {
   return segments[segments.length - 1];
 }
 
+// Trả về string DD/MM/YYYY theo timezone
 function formatDate(date: Date | null | undefined): string | null {
   if (!date) return null;
   return dayjs(date).tz(TZ).format("DD/MM/YYYY");
 }
 
-function parseDateToTZ(date: string | null | undefined): Date | undefined {
-  if (!date) return undefined;
-  return dayjs.tz(date, TZ).toDate();
+// Chuyển string DD/MM/YYYY sang Date để lưu DB
+
+function parseDateToDB(date: string | null | undefined): Date | null {
+  if (!date) return null;
+  const parsed = dayjs(date, "DD/MM/YYYY", true); // strict parse
+  return parsed.isValid() ? parsed.tz(TZ).toDate() : null;
 }
 
+// Kiểm tra avatar base64
 function isBase64Image(str: string): boolean {
   return /^data:image\/\w+;base64,/.test(str);
 }
@@ -130,18 +136,20 @@ export async function PATCH(req: NextRequest) {
       avatar = undefined;
     }
 
+    // Cập nhật Employee chính
     await prisma.employee.update({
       where: { id: employee.id },
       data: {
         avatar,
         name: body.name,
-        birthDate: parseDateToTZ(body.birthDate),
+        birthDate: parseDateToDB(body.birthDate),
         role: body.role,
         gender: body.gender,
         employeeCode: body.employeeCode,
       },
     });
 
+    // Hàm upsert cho các bảng liên quan
     const upsert = async (model: any, data: any) => {
       const exists = await model.findUnique({ where: { employeeId: employee.id } });
       if (exists) {
@@ -156,21 +164,21 @@ export async function PATCH(req: NextRequest) {
         departmentId: body.workInfo.department,
         positionId: body.workInfo.position,
         specialization: body.workInfo.specialization,
-        joinedTBD: parseDateToTZ(body.workInfo.joinedTBD),
-        joinedTeSCC: parseDateToTZ(body.workInfo.joinedTeSCC),
-        seniorityStart: parseDateToTZ(body.workInfo.seniorityStart),
+        joinedTBD: parseDateToDB(body.workInfo.joinedTBD),
+        joinedTeSCC: parseDateToDB(body.workInfo.joinedTeSCC),
+        seniorityStart: parseDateToDB(body.workInfo.seniorityStart),
         seniority: body.workInfo.seniority,
         contractNumber: body.workInfo.contractNumber,
-        contractDate: parseDateToTZ(body.workInfo.contractDate),
+        contractDate: parseDateToDB(body.workInfo.contractDate),
         contractType: body.workInfo.contractType,
-        contractEndDate: parseDateToTZ(body.workInfo.contractEndDate),
+        contractEndDate: parseDateToDB(body.workInfo.contractEndDate),
       });
     }
 
     if (body.personalInfo) {
       await upsert(prisma.personalInfo, {
         identityNumber: body.personalInfo.identityNumber,
-        issueDate: parseDateToTZ(body.personalInfo.issueDate),
+        issueDate: parseDateToDB(body.personalInfo.issueDate),
         issuePlace: body.personalInfo.issuePlace,
         hometown: body.personalInfo.hometown,
         idAddress: body.personalInfo.idAddress,
@@ -195,7 +203,7 @@ export async function PATCH(req: NextRequest) {
     if (body.otherInfo) {
       await upsert(prisma.otherInfo, {
         workStatus: body.otherInfo.workStatus,
-        resignedDate: parseDateToTZ(body.otherInfo.resignedDate),
+        resignedDate: parseDateToDB(body.otherInfo.resignedDate),
         documentsChecked: body.otherInfo.documentsChecked,
         updatedAt: new Date(),
         VCB: body.otherInfo.VCB,
