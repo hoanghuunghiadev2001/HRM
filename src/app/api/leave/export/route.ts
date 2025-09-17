@@ -3,12 +3,20 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import ExcelJS from "exceljs";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import { LeaveStatus } from "../../../../../generated/prisma";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+const TZ = "Asia/Ho_Chi_Minh";
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const month = searchParams.get("month"); // format: YYYY-MM
+
     if (!month) {
       return NextResponse.json(
         { message: "Thiếu tham số month (YYYY-MM)" },
@@ -42,7 +50,7 @@ export async function GET(req: NextRequest) {
           include: {
             approvers: {
               include: {
-                approver: { select: { name: true } },
+                approver: { select: { name: true, employeeCode: true } },
               },
             },
           },
@@ -63,7 +71,7 @@ export async function GET(req: NextRequest) {
     const workbook = new ExcelJS.Workbook();
 
     for (const [deptName, requests] of Object.entries(grouped)) {
-      const sheet = workbook.addWorksheet(deptName); // mỗi phòng ban = 1 sheet
+      const sheet = workbook.addWorksheet(deptName);
 
       sheet.columns = [
         { header: "STT", key: "stt", width: 6 },
@@ -75,7 +83,7 @@ export async function GET(req: NextRequest) {
         { header: "Đến ngày", key: "endDate", width: 20 },
         { header: "Số giờ", key: "totalHours", width: 10 },
         { header: "Lý do", key: "reason", width: 30 },
-        { header: "Người phê duyệt", key: "approvedBy", width: 40 },
+        { header: "Người phê duyệt", key: "approvedBy", width: 50 },
       ];
 
       requests.forEach((req, index) => {
@@ -84,9 +92,9 @@ export async function GET(req: NextRequest) {
           .flatMap((step) =>
             step.approvers.map(
               (a) =>
-                `${a.approver.name}${
+                `${a.approver.name} (${a.approver.employeeCode})${
                   a.approvedAt
-                    ? " - " + dayjs(a.approvedAt).format("DD/MM/YYYY HH:mm")
+                    ? " - " + dayjs(a.approvedAt).tz(TZ).format("DD/MM/YYYY HH:mm")
                     : ""
                 }`
             )
@@ -99,8 +107,8 @@ export async function GET(req: NextRequest) {
           name: req.employee.name,
           position: req.employee.workInfo?.position?.name || "",
           leaveType: req.leaveType,
-          startDate: dayjs(req.startDate).format("DD/MM/YYYY HH:mm"),
-          endDate: dayjs(req.endDate).format("DD/MM/YYYY HH:mm"),
+          startDate: dayjs(req.startDate).tz(TZ).format("DD/MM/YYYY HH:mm"),
+          endDate: dayjs(req.endDate).tz(TZ).format("DD/MM/YYYY HH:mm"),
           totalHours: req.totalHours ?? "",
           reason: req.reason ?? "",
           approvedBy: approvers || req.approvedBy || "",
