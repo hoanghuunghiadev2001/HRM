@@ -133,30 +133,32 @@ export default function ClientDashboard({
           icon: <FileStack />,
           label: "DS yêu cầu",
         },
-        {
-          key: "/dashboard/employees",
-          icon: <UsersRound />,
-          label: "Nhân sự",
-        },
+        
         {
           key: "/dashboard/attendance",
           icon: <Fingerprint />,
           label: "Chấm công",
         },
 
-        {
-          key: "/dashboard/report",
-          icon: <ClipboardPlus />,
-          label: "Báo cáo",
-        },
+      
       ]
       : []),
     ...(isAdmin === "ADMIN"
       ? [
         {
+          key: "/dashboard/employees",
+          icon: <UsersRound />,
+          label: "Nhân sự",
+        },
+        {
           key: "/dashboard/department",
           icon: <Network />,
           label: "Phòng ban",
+        },
+          {
+          key: "/dashboard/report",
+          icon: <ClipboardPlus />,
+          label: "Báo cáo",
         },
         {
           key: "/dashboard/users",
