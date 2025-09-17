@@ -17,12 +17,13 @@ export async function GET(req: NextRequest) {
     }
 
     const startDate = dayjs(month + "-01").startOf("month").toDate();
+    const endDate = dayjs(month + "-01").endOf("month").toDate();
 
     // Lấy tất cả đơn đã duyệt trong tháng
     const leaveRequests = await prisma.leaveRequest.findMany({
       where: {
         status: LeaveStatus.approved,
-        startDate: { gte: startDate },
+        startDate: { gte: startDate, lte: endDate },
       },
       include: {
         employee: {
@@ -33,6 +34,15 @@ export async function GET(req: NextRequest) {
               select: {
                 department: { select: { name: true } },
                 position: { select: { name: true } },
+              },
+            },
+          },
+        },
+        approvalSteps: {
+          include: {
+            approvers: {
+              include: {
+                approver: { select: { name: true } },
               },
             },
           },
@@ -61,23 +71,39 @@ export async function GET(req: NextRequest) {
         { header: "Tên nhân viên", key: "name", width: 25 },
         { header: "Chức vụ", key: "position", width: 20 },
         { header: "Loại phép", key: "leaveType", width: 15 },
-        { header: "Từ ngày", key: "startDate", width: 15 },
-        { header: "Đến ngày", key: "endDate", width: 15 },
+        { header: "Từ ngày", key: "startDate", width: 20 },
+        { header: "Đến ngày", key: "endDate", width: 20 },
         { header: "Số giờ", key: "totalHours", width: 10 },
         { header: "Lý do", key: "reason", width: 30 },
+        { header: "Người phê duyệt", key: "approvedBy", width: 40 },
       ];
 
       requests.forEach((req, index) => {
+        // Ghép danh sách người phê duyệt
+        const approvers = req.approvalSteps
+          .flatMap((step) =>
+            step.approvers.map(
+              (a) =>
+                `${a.approver.name}${
+                  a.approvedAt
+                    ? " - " + dayjs(a.approvedAt).format("DD/MM/YYYY HH:mm")
+                    : ""
+                }`
+            )
+          )
+          .join("; ");
+
         sheet.addRow({
           stt: index + 1,
           employeeCode: req.employee.employeeCode,
           name: req.employee.name,
           position: req.employee.workInfo?.position?.name || "",
           leaveType: req.leaveType,
-          startDate: dayjs(req.startDate).format("DD/MM/YYYY"),
-          endDate: dayjs(req.endDate).format("DD/MM/YYYY"),
+          startDate: dayjs(req.startDate).format("DD/MM/YYYY HH:mm"),
+          endDate: dayjs(req.endDate).format("DD/MM/YYYY HH:mm"),
           totalHours: req.totalHours ?? "",
           reason: req.reason ?? "",
+          approvedBy: approvers || req.approvedBy || "",
         });
       });
 

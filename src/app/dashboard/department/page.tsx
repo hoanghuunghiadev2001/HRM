@@ -220,7 +220,7 @@ export default function DepartmentPositionCRUD() {
   const onDeletePosition = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/positions/${editItemId}`, {
+      const res = await fetch(`/api/positions?posId=${editItemId}`, {
         method: "DELETE",
       });
       if (!res.ok) {
@@ -229,6 +229,7 @@ export default function DepartmentPositionCRUD() {
       }
       message.success("Xóa chức vụ thành công");
       fetchDepartmentsAndPositions();
+      setModalConfirm(false);
       setLoading(false);
     } catch (error: any) {
       message.error(error.message || "Lỗi xảy ra");

@@ -110,6 +110,7 @@ interface DataType {
   totalHours: string;
   leaveType: string;
   status: string;
+  approvers: string
 }
 
 const useStyle = createStyles((utils) => {
@@ -296,7 +297,9 @@ const { role , id, department} = useAppSelector((state) => state.user);
       totalHours: item.totalHours.toString(),
       leaveType: item.leaveType,
       status: item.status,
-      approvedBy: item.approvedBy,
+      approvedBy: item.approvers,
+      approvers: item.approvers ?? '',
+      
     })) || [];
 
   const columns: TableProps<DataType>["columns"] = [

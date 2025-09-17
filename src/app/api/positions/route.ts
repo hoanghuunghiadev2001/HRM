@@ -45,7 +45,7 @@ export async function PATCH(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const posIdStr = req?.nextUrl?.searchParams.get("posId");
+  const posIdStr = req.nextUrl.searchParams.get("posId");
   const positionId = Number(posIdStr);
 
   if (isNaN(positionId)) {
@@ -60,3 +60,4 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "Delete failed" }, { status: 500 });
   }
 }
+

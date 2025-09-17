@@ -1,3 +1,4 @@
+// app/api/leaveRequests/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { LeaveStatus, Prisma } from "../../../../../generated/prisma";
@@ -46,16 +47,14 @@ export async function GET(req: NextRequest) {
     }
 
     if ((role === "MANAGER" || role === "ADMIN") && department) {
-      if (department) {
-        const parts = department.split("-");
-        const departmentId = parts[0] ? parseInt(parts[0], 10) : undefined;
-        const positionId = parts[1] ? parseInt(parts[1], 10) : undefined;
+      const parts = department.split("-");
+      const departmentId = parts[0] ? parseInt(parts[0], 10) : undefined;
+      const positionId = parts[1] ? parseInt(parts[1], 10) : undefined;
 
-        employeeFilter.workInfo = {
-          ...(departmentId && { departmentId }),
-          ...(positionId && { positionId }),
-        };
-      }
+      employeeFilter.workInfo = {
+        ...(departmentId && { departmentId }),
+        ...(positionId && { positionId }),
+      };
     }
 
     const baseWhere: Prisma.LeaveRequestWhereInput = {
@@ -63,7 +62,7 @@ export async function GET(req: NextRequest) {
       employee: employeeFilter,
     };
 
-    const [processedRequests, total] = await Promise.all([
+    const [requests, total] = await Promise.all([
       prisma.leaveRequest.findMany({
         where: baseWhere,
         orderBy: {
@@ -85,10 +84,39 @@ export async function GET(req: NextRequest) {
               },
             },
           },
+          approvalSteps: {
+            include: {
+              approvers: {
+                include: {
+                  approver: {
+                    select: { id: true, name: true, employeeCode: true },
+                  },
+                },
+              },
+            },
+          },
         },
       }),
       prisma.leaveRequest.count({ where: baseWhere }),
     ]);
+
+    // Map dữ liệu: gộp người phê duyệt thành string
+    const processedRequests = requests.map((req) => {
+      const approversString = req.approvalSteps
+        .flatMap((step) =>
+          step.approvers.map(
+            (a) =>
+              `${a.approver?.name || ""} (${a.approver?.employeeCode || ""})`
+          )
+        )
+        .filter((s) => s.trim() !== "")
+        .join("; ");
+
+      return {
+        ...req,
+        approvers: approversString, // thêm người phê duyệt dạng string
+      };
+    });
 
     return NextResponse.json({
       data: processedRequests,
@@ -117,10 +145,9 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    // Lấy đơn xin phép
     const leaveRequest = await prisma.leaveRequest.findUnique({
       where: { id },
-    select: { id: true, employeeId: true, status: true },
+      select: { id: true, employeeId: true, status: true },
     });
 
     if (!leaveRequest) {
@@ -130,7 +157,6 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    // Chỉ nhân viên tạo mới được chỉnh
     if (leaveRequest.employeeId !== employeeId) {
       return NextResponse.json(
         { message: "Bạn không có quyền sửa đơn này" },
@@ -138,10 +164,13 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    // Nếu đơn đã được xử lý thì không cho sửa
-    
+    if (leaveRequest.status !== LeaveStatus.pending) {
+      return NextResponse.json(
+        { message: "Đơn đã được xử lý, không thể sửa" },
+        { status: 400 }
+      );
+    }
 
-    // Cập nhật chỉ trường leaveType
     const updatedLeave = await prisma.leaveRequest.update({
       where: { id },
       data: {
@@ -158,4 +187,3 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ message: "Cập nhật thất bại" }, { status: 500 });
   }
 }
-
