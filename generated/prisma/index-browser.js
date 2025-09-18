@@ -250,13 +250,20 @@ exports.Prisma.LeaveApprovalStepApproverScalarFieldEnum = {
   approvedAt: 'approvedAt'
 };
 
+exports.Prisma.AttendanceImportLogScalarFieldEnum = {
+  id: 'id',
+  filename: 'filename',
+  importedAt: 'importedAt'
+};
+
 exports.Prisma.AttendanceScalarFieldEnum = {
   id: 'id',
   employeeId: 'employeeId',
   date: 'date',
   checkInTime: 'checkInTime',
   checkOutTime: 'checkOutTime',
-  workingHours: 'workingHours'
+  workingHours: 'workingHours',
+  importId: 'importId'
 };
 
 exports.Prisma.KPIScalarFieldEnum = {
@@ -391,6 +398,10 @@ exports.Prisma.LeaveRequestOrderByRelevanceFieldEnum = {
   approvedBy: 'approvedBy'
 };
 
+exports.Prisma.AttendanceImportLogOrderByRelevanceFieldEnum = {
+  filename: 'filename'
+};
+
 exports.Prisma.KPIOrderByRelevanceFieldEnum = {
   name: 'name',
   period: 'period'
@@ -458,6 +469,7 @@ exports.Prisma.ModelName = {
   LeaveRequest: 'LeaveRequest',
   LeaveApprovalStep: 'LeaveApprovalStep',
   LeaveApprovalStepApprover: 'LeaveApprovalStepApprover',
+  AttendanceImportLog: 'AttendanceImportLog',
   Attendance: 'Attendance',
   KPI: 'KPI',
   KPIEmployee: 'KPIEmployee',

@@ -3,31 +3,34 @@ import "server-only";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "../../../../generated/prisma";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
-function parseDate(dateStr?: string): Date | undefined {
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+/**
+ * Chuyển dd/MM/yyyy sang Date VN timezone (Asia/Ho_Chi_Minh)
+ * endOfDay = true → 23:59:59, false → 00:00:00
+ */
+function parseDateVN(dateStr?: string, endOfDay = false): Date | undefined {
   if (!dateStr) return undefined;
-  // parse định dạng dd/MM/yyyy hoặc ISO
   const parts = dateStr.split("/");
   if (parts.length === 3) {
     const [day, month, year] = parts.map(Number);
-    return new Date(year, month - 1, day);
+    const d = dayjs.tz(`${year}-${month}-${day} ${endOfDay ? "23:59:59" : "00:00:00"}`, "YYYY-M-D HH:mm:ss", "Asia/Ho_Chi_Minh");
+    return d.utc().toDate(); // convert sang UTC để filter DB
   }
-  const d = new Date(dateStr);
-  return isNaN(d.getTime()) ? undefined : d;
+  const d = dayjs.tz(dateStr, "Asia/Ho_Chi_Minh");
+  if (!d.isValid()) return undefined;
+  return endOfDay ? d.endOf("day").utc().toDate() : d.startOf("day").utc().toDate();
 }
 
-function toUTCDate(date: Date) {
-  return new Date(
-    Date.UTC(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      date.getHours(),
-      date.getMinutes(),
-      date.getSeconds(),
-      date.getMilliseconds()
-    )
-  );
+// Tính số giờ từ 2 Date
+function calcHours(checkIn: Date | null, checkOut: Date | null): number {
+  if (!checkIn || !checkOut) return 0;
+  return +((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60)).toFixed(2);
 }
 
 export async function GET(req: NextRequest) {
@@ -37,24 +40,12 @@ export async function GET(req: NextRequest) {
     const msnv = searchParams.get("msnv") ?? undefined;
     const name = searchParams.get("name") ?? undefined;
     const department = searchParams.get("department") ?? undefined;
-    let fromDate = parseDate(searchParams.get("fromDate") ?? undefined);
-    let toDate = parseDate(searchParams.get("toDate") ?? undefined);
+    const fromDate = parseDateVN(searchParams.get("fromDate") ?? undefined);
+    const toDate = parseDateVN(searchParams.get("toDate") ?? undefined, true);
     const page = parseInt(searchParams.get("page") ?? "1", 10);
     const pageSize = parseInt(searchParams.get("pageSize") ?? "20", 10);
 
-    // Chuẩn hóa fromDate thành 00:00:00 UTC
-    if (fromDate) {
-      fromDate.setHours(0, 0, 0, 0);
-      fromDate = toUTCDate(fromDate);
-    }
-
-    // Chuẩn hóa toDate thành 23:59:59.999 UTC
-    if (toDate) {
-      toDate.setHours(23, 59, 59, 999);
-      toDate = toUTCDate(toDate);
-    }
-
-    // Điều kiện lọc nhân viên
+    // Filter employee
     const employeeWhere: Prisma.EmployeeWhereInput = {};
     if (msnv) employeeWhere.employeeCode = { contains: msnv };
     if (name) employeeWhere.name = { contains: name };
@@ -62,42 +53,26 @@ export async function GET(req: NextRequest) {
       const parts = department.split("-");
       const departmentId = parts[0] ? parseInt(parts[0], 10) : undefined;
       const positionId = parts[1] ? parseInt(parts[1], 10) : undefined;
-
       employeeWhere.workInfo = {
         ...(departmentId && { departmentId }),
         ...(positionId && { positionId }),
       };
     }
 
-    // Điều kiện lọc attendance
-    const attendanceWhere: Prisma.AttendanceWhereInput = {};
-    if (fromDate) attendanceWhere.date = { gte: fromDate };
-    if (fromDate && toDate) {
-      attendanceWhere.date = {
-        gte: fromDate,
-        lte: toDate,
-      };
-    } else if (fromDate) {
-      attendanceWhere.date = { gte: fromDate };
-    } else if (toDate) {
-      attendanceWhere.date = { lte: toDate };
-    }
+    // Filter attendance theo Date UTC
+    const attendanceWhere: Prisma.AttendanceWhereInput = {
+      employee: { is: { ...employeeWhere } },
+      ...(fromDate && toDate
+        ? { date: { gte: fromDate, lte: toDate } }
+        : fromDate
+        ? { date: { gte: fromDate } }
+        : toDate
+        ? { date: { lte: toDate } }
+        : {}),
+    };
 
-    // Lấy tất cả attendance thỏa điều kiện với employee info
-    // Không phân trang để tính tổng số bản ghi sau khi group theo employeeId + date
     const attendances = await prisma.attendance.findMany({
-      where: {
-        AND: [
-          attendanceWhere,
-          {
-            employee: {
-              is: {
-                ...employeeWhere,
-              },
-            },
-          },
-        ],
-      },
+      where: attendanceWhere,
       select: {
         employeeId: true,
         date: true,
@@ -110,25 +85,16 @@ export async function GET(req: NextRequest) {
             avatar: true,
             workInfo: {
               select: {
-                department: {
-                  select: {
-                    name: true,
-                  },
-                },
-                position: {
-                  select: {
-                    name: true,
-                  },
-                },
+                department: { select: { name: true } },
+                position: { select: { name: true } },
               },
             },
           },
         },
       },
-      orderBy: {
-        date: "asc",
-      },
+      orderBy: { date: "asc" },
     });
+
     // Group theo employeeId + date
     const grouped = new Map<
       string,
@@ -147,7 +113,9 @@ export async function GET(req: NextRequest) {
     >();
 
     attendances.forEach((att: any) => {
-      const key = `${att.employeeId}-${att.date.toISOString().slice(0, 10)}`;
+      // Convert date sang VN timezone
+      const dateVN = dayjs(att.date).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD");
+      const key = `${att.employeeId}-${dateVN}`;
 
       if (!grouped.has(key)) {
         grouped.set(key, {
@@ -155,9 +123,9 @@ export async function GET(req: NextRequest) {
           employeeCode: att.employee.employeeCode,
           avatar: att.employee.avatar,
           employeeName: att.employee.name,
-          department: att.employee.workInfo?.department,
-          position: att.employee.workInfo?.position,
-          date: att.date.toISOString().slice(0, 10),
+          department: att.employee.workInfo?.department?.name,
+          position: att.employee.workInfo?.position?.name,
+          date: dateVN,
           firstCheckIn: att.checkInTime ?? null,
           lastCheckOut: att.checkOutTime ?? null,
           totalMs: 0,
@@ -166,44 +134,32 @@ export async function GET(req: NextRequest) {
 
       const group = grouped.get(key)!;
 
-      // Cập nhật giờ vào sớm nhất
-      if (
-        att.checkInTime &&
-        (!group.firstCheckIn || att.checkInTime < group.firstCheckIn)
-      ) {
+      if (att.checkInTime && (!group.firstCheckIn || att.checkInTime < group.firstCheckIn)) {
         group.firstCheckIn = att.checkInTime;
       }
-      // Cập nhật giờ ra muộn nhất
-      if (
-        att.checkOutTime &&
-        (!group.lastCheckOut || att.checkOutTime > group.lastCheckOut)
-      ) {
+
+      if (att.checkOutTime && (!group.lastCheckOut || att.checkOutTime > group.lastCheckOut)) {
         group.lastCheckOut = att.checkOutTime;
       }
 
-      // Cộng tổng giờ làm (chỉ tính khi có checkIn và checkOut)
       if (att.checkInTime && att.checkOutTime) {
         group.totalMs += att.checkOutTime.getTime() - att.checkInTime.getTime();
       }
     });
 
-    // Chuyển thành mảng và tính tổng giờ theo đơn vị giờ, 2 chữ số thập phân
-    const summary = Array.from(grouped.values()).map((g) => {
-      return {
-        employeeId: g.employeeId,
-        employeeCode: g.employeeCode,
-        avatar: g.avatar,
-        employeeName: g.employeeName,
-        department: g.department,
-        position: g.position,
-        date: g.date,
-        firstCheckIn: g.firstCheckIn?.toISOString() ?? null,
-        lastCheckOut: g.lastCheckOut?.toISOString() ?? null,
-        totalHours: +(g.totalMs / (1000 * 60 * 60)).toFixed(2),
-      };
-    });
+    const summary = Array.from(grouped.values()).map((g) => ({
+      employeeId: g.employeeId,
+      employeeCode: g.employeeCode,
+      avatar: g.avatar,
+      employeeName: g.employeeName,
+      department: g.department,
+      position: g.position,
+      date: g.date,
+      firstCheckIn: g.firstCheckIn?.toISOString() ?? null,
+      lastCheckOut: g.lastCheckOut?.toISOString() ?? null,
+      totalHours: calcHours(g.firstCheckIn, g.lastCheckOut),
+    }));
 
-    // Phân trang thủ công
     const total = summary.length;
     const start = (page - 1) * pageSize;
     const pagedSummary = summary.slice(start, start + pageSize);

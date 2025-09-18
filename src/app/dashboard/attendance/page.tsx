@@ -12,26 +12,39 @@ import {
   Pagination,
   Table,
   TreeSelect,
+  Tabs,
+  Upload,
+  message,
+  Popconfirm,
 } from "antd";
 import type { TableProps } from "antd";
-import { getUserFromLocalStorage } from "@/components/api";
 import ModalLoading from "@/components/modalLoading";
-import { formatDateTime } from "@/components/function";
 import { createStyles } from "antd-style";
 import dayjs from "dayjs";
 import { fetchAttendances } from "@/lib/api";
 import { AttendanceResponse, Department } from "@/lib/interface";
 import Image from "next/image";
-import { DownloadOutlined } from "@ant-design/icons";
+import {
+  DownloadOutlined,
+  UploadOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 import { TreeSelectProps } from "antd/lib";
 import { useAppSelector } from "@/store/hook";
+import { formatDateTime } from "@/utils/formatDateTime";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface DataType {
   key: string;
   employeeId: number;
   employeeCode: string;
   avatar: string;
-  employeeName: string;
+  employeeName?: string;
   department: string;
   position: string;
   date: string;
@@ -40,9 +53,17 @@ interface DataType {
   totalHours?: number;
 }
 
+interface ImportHistory {
+  id: number;
+  fileName: string;
+  importedBy: string;
+  importedAt: string;
+  recordCount: number;
+}
+
 const useStyle = createStyles((utils) => {
   const { css, token } = utils;
-  const antCls = (token as any).antCls || ".ant"; // fallback nếu token.antCls không tồn tại
+  const antCls = (token as any).antCls || ".ant";
 
   return {
     customTable: css`
@@ -71,12 +92,11 @@ function getTodayVNDateString() {
 }
 
 export default function AttendancePage() {
-  const { role } = useAppSelector((state) => state.user);
+  const { role, department } = useAppSelector((state) => state.user);
   const [loading, setLoading] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState(10);
   const [pageTable, setPageTable] = useState(1);
   const [totalTable, setTotalTable] = useState(0);
-  const localUser = getUserFromLocalStorage();
   const [filterName, setFilterName] = useState("");
   const [filterMSNV, setFilterMSNV] = useState("");
   const [filterDepartment, setFilterDepartment] = useState<string>();
@@ -87,11 +107,13 @@ export default function AttendancePage() {
   const [listAttendance, setListAttendance] = useState<AttendanceResponse>();
 
   const [departments, setDepartments] = useState<Department[]>([]);
+
+  // ===== Thêm state lịch sử import =====
+  const [importHistory, setImportHistory] = useState<ImportHistory[]>([]);
+
   const onChangeSelectDepartment = (newValue: string) => {
     setFilterDepartment(newValue);
   };
-
-  
 
   const treeData = departments.map((dept) => ({
     value: dept.id.toString(),
@@ -139,7 +161,7 @@ export default function AttendancePage() {
             className="h-8 w-8 rounded-[50%] object-cover"
             width={32}
             height={32}
-            quality={70} // giảm chất lượng xuống chút để nhẹ hơn
+            quality={70}
             priority={false}
           />
           <a>{record.employeeName}</a>
@@ -187,9 +209,7 @@ export default function AttendancePage() {
       msnv: filterMSNV,
       name: filterName,
       department:
-        role
-          ? filterDepartment
-          : localUser.workInfo.department,
+        role === "ADMIN" ? filterDepartment : department ?? '',
       fromDate: timeStart,
       toDate: timeEnd,
       page: pageTable,
@@ -204,30 +224,6 @@ export default function AttendancePage() {
     }
   };
 
-  // //xem chi tiết đơn xin nghỉ
-  // const DetailRequetsLeave = (id: number) => {
-  //   const item = allRequestsApproved?.data?.find((item) => item.id === id);
-  //   setInfoRequestLeave(item);
-  //   setModalDetailLeave(true);
-  // };
-
-  // // chức năng phê duyệt đơn xin nghỉ
-  // const putApprovedRequest = async (
-  //   id: number | string,
-  //   statusRequest: string
-  // ) => {
-  //   setLoading(true);
-  //   try {
-  //     await approveLeaveRequest(id, statusRequest, localUser.name);
-  //     await getApiAllRequestsApproved(pageTable, pageSize);
-  //     await getApiAllRequestsNeed();
-  //     setLoading(false);
-  //   } catch (err) {
-  //     console.error("Lỗi:", err);
-  //     setLoading(false);
-  //   }
-  // };
-
   const onPageChange = (page: number, pageSizeEnter?: number) => {
     if (pageSizeEnter) {
       setPageSize(pageSizeEnter);
@@ -237,32 +233,62 @@ export default function AttendancePage() {
       handleFetchAttendances(page, pageSize);
     }
   };
+
   const listDepartment = async () => {
     const res = await fetch("/api/departments");
     if (!res.ok) throw new Error("Lấy dữ liệu thất bại");
-    const departmentsData = await res.json(); //
+    const departmentsData = await res.json();
     setDepartments(departmentsData);
   };
+
+  // ===== Thêm fetch lịch sử import =====
+  const fetchImportHistory = async () => {
+    const res = await fetch("/api/attendance/import");
+    if (res.ok) {
+      setImportHistory(await res.json());
+    }
+    setLoading(false);
+  };
+
+  const deleteImportHistory = async (id: number) => {
+    setLoading(true);
+    const res = await fetch(`/api/attendance/import/${id}`, {
+      method: "DELETE",
+    });
+    if (res.ok) {
+      setLoading(false);
+      message.success("Xóa lịch sử thành công");
+      fetchImportHistory();
+    } else {
+      setLoading(false);
+      message.error("Xóa thất bại");
+    }
+    setLoading(false);
+  };
+
+  // ===== Upload Excel =====
+  const uploadProps = {
+    name: "file",
+    multiple: false,
+    accept: ".xlsx,.xls",
+    action: "/api/attendance/upload",
+    showUploadList: false,
+    onChange(info: any) {
+      if (info.file.status === "done") {
+        message.success(`${info.file.name} tải lên thành công`);
+        fetchImportHistory();
+      } else if (info.file.status === "error") {
+        message.error(`${info.file.name} tải lên thất bại`);
+      }
+    },
+  };
+
   useEffect(() => {
     listDepartment();
     handleFetchAttendances(pageTable, pageSize);
+    fetchImportHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  //style table scroll
-
-  // const { data, isLoading, error } = useAttendances(
-  //   {
-  //     msnv: filterMSNV,
-  //     name: filterName,
-  //     deparment: role ? "" : localUser.deparment,
-  //     fromDate: timeStart,
-  //     toDate: timeEnd,
-  //     page: pageTable,
-  //     pageSize,
-  //   },
-  //   enabledSearch || initialLoad
-  // );
 
   const formatted: DataType[] =
     listAttendance?.data.map((item, index) => ({
@@ -271,28 +297,36 @@ export default function AttendancePage() {
       employeeCode: item.employeeCode,
       avatar: item.avatar,
       employeeName: item.employeeName,
-      department: item.department.name,
-      position: item.position.name,
+      department: item.department?.name ?? '',
+      position: item.position?.name,
       date: formatDateTime(item.date),
       firstCheckIn: formatDateTime(item.firstCheckIn),
       lastCheckOut: item.lastCheckOut
         ? formatDateTime(item.lastCheckOut ?? "")
         : "",
-
       totalHours: item.totalHours,
     })) || [];
-
+  const formatToVNDate = (date: Date) => {
+    return dayjs(date).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY");
+  };
   const changeDate = (value: any, dateString: any) => {
-    setTimeStart(dateString[0]);
-    setTimeEnd(dateString[1]);
+    if (!dateString || dateString.length !== 2) return;
+
+    // Chuyển từ VN timezone sang UTC
+    const startUTC = dayjs.tz(dateString[0], "Asia/Ho_Chi_Minh").utc().toDate();
+    const endUTC = dayjs.tz(dateString[1], "Asia/Ho_Chi_Minh").utc().toDate();
+    console.log(formatToVNDate(startUTC));
+
+    setTimeStart(formatToVNDate(startUTC));
+    setTimeEnd(formatToVNDate(endUTC));
   };
 
   const handleExportExcel = async () => {
     const res = await fetch("/api/attendance/export", {
       method: "POST",
       body: JSON.stringify({
-        week: todayVN, // Ngày bất kỳ trong tuần muốn xuất
-        department: role ? "" : localUser.department, // Hoặc bỏ trống nếu xuất toàn bộ
+        week: todayVN,
+        department: role ? "" : department ?? '',
       }),
       headers: { "Content-Type": "application/json" },
     });
@@ -305,146 +339,210 @@ export default function AttendancePage() {
     URL.revokeObjectURL(url);
   };
 
+  // ===== Table lịch sử import =====
+  const historyColumns: TableProps<ImportHistory>["columns"] = [
+    { title: "ID", dataIndex: "id", width: "60px" },
+    { title: "Tên file", dataIndex: "fileName", width: "200px" },
+    { title: "Người import", dataIndex: "importedBy", width: "150px" },
+    { title: "Ngày import", dataIndex: "importedAt", width: "180px" },
+    { title: "Số bản ghi", dataIndex: "recordCount", width: "100px" },
+    {
+      title: "Hành động",
+      key: "action",
+      render: (_, record) => (
+        <Popconfirm
+          title="Bạn có chắc muốn xóa?"
+          onConfirm={() => deleteImportHistory(record.id)}
+          okText="Xóa"
+          cancelText="Hủy"
+        >
+          <Button danger icon={<DeleteOutlined />} />
+        </Popconfirm>
+      ),
+    },
+  ];
+
   return (
     <div>
       <ModalLoading isOpen={loading} />
 
-      <div className="w-full flex justify-between">
-        <p className="font-bold  text-2xl text-[#4a4a6a]">
-          Danh sách chấm công:
-        </p>
-        <Button
-          onClick={handleExportExcel}
-          type="primary"
-          icon={<DownloadOutlined />}
-        >
-          <p className="hidden sm:block">Xuất file tuần này</p>
-        </Button>
-      </div>
-      <div className="w-full">
-        <p className="font-bold  text-xl text-[#4a4a6a]">Tìm kiếm:</p>
-        <div className="grid grid-cols-2 md:flex md:items-center gap-4 mb-4 w-full mt-2 pl-0 md:px-4 flex-wrap">
-          <div className="flex gap-2 items-center">
-            <Form.Item
-              layout="horizontal"
-              label={
-                <p className="font-bold text-[#242424] hidden md:block">MSNV</p>
-              }
-            >
-              <Input
-                className=" w-full md:!w-[80px]"
-                placeholder="MSNV"
-                onChange={(e) => setFilterMSNV(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleFetchAttendances(pageTable, pageSize);
-                  }
-                }}
-              />
-            </Form.Item>
-          </div>
-          <div className="flex gap-2 items-center ">
-            {/* <p className="text-sm text-[#4a4a6a] shrink-0">Tên NV:</p> */}
-            <Form.Item
-              layout="horizontal"
-              label={
-                <p className="font-bold text-[#242424] hidden md:block">
-                  Tên NV
-                </p>
-              }
-            >
-              <Input
-                className="w-full md:!w-[100px]"
-                placeholder="Tên NV"
-                onChange={(e) => setFilterName(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleFetchAttendances(pageTable, pageSize);
-                  }
-                }}
-              />
-            </Form.Item>
-          </div>
-          <div className="!flex gap-2 items-center col-span-2">
-            <Form.Item
-              layout="horizontal"
-              name="range-picker"
-              className="w-full"
-              label={
-                <p className="font-bold text-[#242424] hidden md:block">
-                  Theo ngày
-                </p>
-              }
-            >
-              <RangePicker
-                format={"DD/MM/YYYY"}
-                className="w-full"
-                lang="vn"
-                onChange={changeDate}
-                disabledDate={(current) => {
-                  return current && current > maxDate;
-                }}
-              />
-            </Form.Item>
-          </div>
-          {localUser?.role === "ADMIN" ? (
-            <div className="!flex gap-2 items-center ">
-              <Form.Item
-                layout="horizontal"
-                label={
-                  <p className="font-bold text-[#242424] hidden md:block">
-                    Bộ phận
+      <Tabs
+        defaultActiveKey="1"
+        items={[
+          {
+            key: "1",
+            label: "Danh sách chấm công",
+            children: (
+              <div>
+                <div className="w-full flex justify-between">
+                  <p className="font-bold  text-2xl text-[#4a4a6a]">
+                    Danh sách chấm công:
                   </p>
-                }
-              >
-                <TreeSelect
-                  showSearch
-                  style={{ minWidth: "150px", maxWidth: "200px" }}
-                  value={filterDepartment}
-                  styles={{
-                    popup: { root: { maxHeight: 400, overflow: "auto" } },
-                  }}
-                  placeholder="Phòng ban"
-                  allowClear
-                  listItemScrollOffset={200}
-                  onChange={onChangeSelectDepartment}
-                  showCheckedStrategy="SHOW_ALL"
-                  treeData={treeData}
-                  onPopupScroll={onPopupScroll}
-                />
-              </Form.Item>
-            </div>
-          ) : (
-            ""
-          )}
-          <button
-            className="flex ml-4 md:ml-0 shrink-0 gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
-            onClick={() => {
-              handleFetchAttendances(pageTable, pageSize);
-            }}
-          >
-            Tìm kiếm
-          </button>
-        </div>
-        <Table<DataType>
-          className={styles.customTable}
-          columns={columns}
-          dataSource={formatted ?? []}
-          scroll={{ y: "calc(100vh - 335px)", x: "100%" }}
-          pagination={false}
-          size="small"
-        />
-        <Pagination
-          align="center"
-          // current={pageTable}
-          pageSize={pageSize}
-          total={totalTable}
-          onChange={onPageChange}
-          showSizeChanger
-          onShowSizeChange={onPageChange}
-          className="!mt-3"
-        />
-      </div>
+                  <div className="flex gap-2">
+                    <Upload {...uploadProps}>
+                      <Button icon={<UploadOutlined />}>Upload Excel</Button>
+                    </Upload>
+                    <Button
+                      onClick={handleExportExcel}
+                      type="primary"
+                      icon={<DownloadOutlined />}
+                    >
+                      <p className="hidden sm:block">Xuất file tuần này</p>
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Bộ lọc + bảng danh sách giữ nguyên code cũ */}
+                <div className="w-full">
+                  <p className="font-bold  text-xl text-[#4a4a6a]">Tìm kiếm:</p>
+                  <div className="grid grid-cols-2 md:flex md:items-center gap-4 mb-4 w-full mt-2 pl-0 md:px-4 flex-wrap">
+                    {/* MSNV */}
+                    <div className="flex gap-2 items-center">
+                      <Form.Item
+                        layout="horizontal"
+                        label={
+                          <p className="font-bold text-[#242424] hidden md:block">
+                            MSNV
+                          </p>
+                        }
+                      >
+                        <Input
+                          className=" w-full md:!w-[80px]"
+                          placeholder="MSNV"
+                          onChange={(e) => setFilterMSNV(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              handleFetchAttendances(pageTable, pageSize);
+                            }
+                          }}
+                        />
+                      </Form.Item>
+                    </div>
+                    {/* Tên NV */}
+                    <div className="flex gap-2 items-center ">
+                      <Form.Item
+                        layout="horizontal"
+                        label={
+                          <p className="font-bold text-[#242424] hidden md:block">
+                            Tên NV
+                          </p>
+                        }
+                      >
+                        <Input
+                          className="w-full md:!w-[100px]"
+                          placeholder="Tên NV"
+                          onChange={(e) => setFilterName(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              handleFetchAttendances(pageTable, pageSize);
+                            }
+                          }}
+                        />
+                      </Form.Item>
+                    </div>
+                    {/* Ngày */}
+                    <div className="!flex gap-2 items-center col-span-2">
+                      <Form.Item
+                        layout="horizontal"
+                        name="range-picker"
+                        className="w-full"
+                        label={
+                          <p className="font-bold text-[#242424] hidden md:block">
+                            Theo ngày
+                          </p>
+                        }
+                      >
+                        <RangePicker
+                          format={"DD/MM/YYYY"}
+                          className="w-full"
+                          lang="vn"
+                          onChange={changeDate}
+                          disabledDate={(current) => {
+                            return current && current > maxDate;
+                          }}
+                        />
+                      </Form.Item>
+                    </div>
+                    {/* Bộ phận */}
+                    {role === "ADMIN" ? (
+                      <div className="!flex gap-2 items-center ">
+                        <Form.Item
+                          layout="horizontal"
+                          label={
+                            <p className="font-bold text-[#242424] hidden md:block">
+                              Bộ phận
+                            </p>
+                          }
+                        >
+                          <TreeSelect
+                            showSearch
+                            style={{ minWidth: "150px", maxWidth: "200px" }}
+                            value={filterDepartment}
+                            styles={{
+                              popup: {
+                                root: { maxHeight: 400, overflow: "auto" },
+                              },
+                            }}
+                            placeholder="Phòng ban"
+                            allowClear
+                            listItemScrollOffset={200}
+                            onChange={onChangeSelectDepartment}
+                            showCheckedStrategy="SHOW_ALL"
+                            treeData={treeData}
+                            onPopupScroll={onPopupScroll}
+                          />
+                        </Form.Item>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                    <button
+                      className="flex ml-4 md:ml-0 shrink-0 gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
+                      onClick={() => {
+                        handleFetchAttendances(pageTable, pageSize);
+                      }}
+                    >
+                      Tìm kiếm
+                    </button>
+                  </div>
+
+                  {/* Bảng danh sách chấm công */}
+                  <Table<DataType>
+                    className={styles.customTable}
+                    columns={columns}
+                    dataSource={formatted ?? []}
+                    scroll={{ y: "calc(100vh - 335px)", x: "100%" }}
+                    pagination={false}
+                    size="small"
+                  />
+                  <Pagination
+                    align="center"
+                    pageSize={pageSize}
+                    total={totalTable}
+                    onChange={onPageChange}
+                    showSizeChanger
+                    onShowSizeChange={onPageChange}
+                    className="!mt-3"
+                  />
+                </div>
+              </div>
+            ),
+          },
+          {
+            key: "2",
+            label: "Lịch sử import",
+            children: (
+              <Table<ImportHistory>
+                rowKey="id"
+                columns={historyColumns}
+                dataSource={importHistory}
+                pagination={false}
+                size="small"
+              />
+            ),
+          },
+        ]}
+      />
     </div>
   );
 }

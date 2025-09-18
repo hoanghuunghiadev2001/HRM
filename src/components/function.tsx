@@ -57,15 +57,20 @@ export const StatusLeave = ({ status }: StatusLeaveProps) => {
   );
 };
 
-export function formatDateTime(dateString: string) {
-  // dateStr = "2025-05-21T17:00:00.000Z"
-  // Lấy phần giờ phút
-  const time = dateString.slice(11, 16); // "17:00"
-  // Lấy phần ngày tháng năm
-  const datePart = dateString.slice(0, 10); // "2025-05-21"
-  // Đổi định dạng ngày tháng năm từ yyyy-mm-dd sang dd-mm-yyyy
-  const [year, month, day] = datePart.split("-");
-  return `${time} ${day}-${month}-${year}`;
+export function formatDateTime(dateString?: string | null) {
+  if (!dateString) return "-"; // chống null
+  try {
+    // Trường hợp dateString dạng ISO: "2025-05-21T17:00:00.000Z"
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) return "-"; // chống invalid
+
+    const time = d.toISOString().slice(11, 16); // "17:00"
+    const [year, month, day] = d.toISOString().slice(0, 10).split("-"); // "2025-05-21"
+
+    return `${time} ${day}-${month}-${year}`;
+  } catch {
+    return "-";
+  }
 }
 
 interface NumericInputProps {

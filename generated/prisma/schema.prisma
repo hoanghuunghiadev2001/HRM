@@ -129,7 +129,7 @@ model ContactInfo {
   phoneNumber   String?  @unique
   relativePhone String?
   companyPhone  String?
-  email         String?  @unique
+  email         String?
   employeeId    Int      @unique
   employee      Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 }
@@ -193,6 +193,13 @@ model LeaveApprovalStepApprover {
   @@index([approverId], map: "LeaveApprovalStepApprover_approverId_fkey")
 }
 
+model AttendanceImportLog {
+  id          Int          @id @default(autoincrement())
+  filename    String
+  importedAt  DateTime     @default(now())
+  attendances Attendance[]
+}
+
 model Attendance {
   id           Int       @id @default(autoincrement())
   employeeId   Int
@@ -201,6 +208,9 @@ model Attendance {
   checkOutTime DateTime?
   workingHours Float?
   employee     Employee  @relation(fields: [employeeId], references: [id])
+
+  importId  Int? // liên kết tới log import
+  importLog AttendanceImportLog? @relation(fields: [importId], references: [id])
 
   @@unique([employeeId, date])
   @@index([date])

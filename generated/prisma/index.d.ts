@@ -69,6 +69,11 @@ export type LeaveApprovalStep = $Result.DefaultSelection<Prisma.$LeaveApprovalSt
  */
 export type LeaveApprovalStepApprover = $Result.DefaultSelection<Prisma.$LeaveApprovalStepApproverPayload>
 /**
+ * Model AttendanceImportLog
+ * 
+ */
+export type AttendanceImportLog = $Result.DefaultSelection<Prisma.$AttendanceImportLogPayload>
+/**
  * Model Attendance
  * 
  */
@@ -426,6 +431,16 @@ export class PrismaClient<
     * ```
     */
   get leaveApprovalStepApprover(): Prisma.LeaveApprovalStepApproverDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.attendanceImportLog`: Exposes CRUD operations for the **AttendanceImportLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AttendanceImportLogs
+    * const attendanceImportLogs = await prisma.attendanceImportLog.findMany()
+    * ```
+    */
+  get attendanceImportLog(): Prisma.AttendanceImportLogDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.attendance`: Exposes CRUD operations for the **Attendance** model.
@@ -947,6 +962,7 @@ export namespace Prisma {
     LeaveRequest: 'LeaveRequest',
     LeaveApprovalStep: 'LeaveApprovalStep',
     LeaveApprovalStepApprover: 'LeaveApprovalStepApprover',
+    AttendanceImportLog: 'AttendanceImportLog',
     Attendance: 'Attendance',
     KPI: 'KPI',
     KPIEmployee: 'KPIEmployee',
@@ -972,7 +988,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "file" | "employee" | "department" | "position" | "workInfo" | "personalInfo" | "contactInfo" | "otherInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover"
+      modelProps: "file" | "employee" | "department" | "position" | "workInfo" | "personalInfo" | "contactInfo" | "otherInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1702,6 +1718,72 @@ export namespace Prisma {
           }
         }
       }
+      AttendanceImportLog: {
+        payload: Prisma.$AttendanceImportLogPayload<ExtArgs>
+        fields: Prisma.AttendanceImportLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AttendanceImportLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendanceImportLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AttendanceImportLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendanceImportLogPayload>
+          }
+          findFirst: {
+            args: Prisma.AttendanceImportLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendanceImportLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AttendanceImportLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendanceImportLogPayload>
+          }
+          findMany: {
+            args: Prisma.AttendanceImportLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendanceImportLogPayload>[]
+          }
+          create: {
+            args: Prisma.AttendanceImportLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendanceImportLogPayload>
+          }
+          createMany: {
+            args: Prisma.AttendanceImportLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.AttendanceImportLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendanceImportLogPayload>
+          }
+          update: {
+            args: Prisma.AttendanceImportLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendanceImportLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.AttendanceImportLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AttendanceImportLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.AttendanceImportLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttendanceImportLogPayload>
+          }
+          aggregate: {
+            args: Prisma.AttendanceImportLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAttendanceImportLog>
+          }
+          groupBy: {
+            args: Prisma.AttendanceImportLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AttendanceImportLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AttendanceImportLogCountArgs<ExtArgs>
+            result: $Utils.Optional<AttendanceImportLogCountAggregateOutputType> | number
+          }
+        }
+      }
       Attendance: {
         payload: Prisma.$AttendancePayload<ExtArgs>
         fields: Prisma.AttendanceFieldRefs
@@ -2259,6 +2341,7 @@ export namespace Prisma {
     leaveRequest?: LeaveRequestOmit
     leaveApprovalStep?: LeaveApprovalStepOmit
     leaveApprovalStepApprover?: LeaveApprovalStepApproverOmit
+    attendanceImportLog?: AttendanceImportLogOmit
     attendance?: AttendanceOmit
     kPI?: KPIOmit
     kPIEmployee?: KPIEmployeeOmit
@@ -2619,6 +2702,37 @@ export namespace Prisma {
    */
   export type LeaveApprovalStepCountOutputTypeCountApproversArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LeaveApprovalStepApproverWhereInput
+  }
+
+
+  /**
+   * Count Type AttendanceImportLogCountOutputType
+   */
+
+  export type AttendanceImportLogCountOutputType = {
+    attendances: number
+  }
+
+  export type AttendanceImportLogCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    attendances?: boolean | AttendanceImportLogCountOutputTypeCountAttendancesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AttendanceImportLogCountOutputType without action
+   */
+  export type AttendanceImportLogCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AttendanceImportLogCountOutputType
+     */
+    select?: AttendanceImportLogCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AttendanceImportLogCountOutputType without action
+   */
+  export type AttendanceImportLogCountOutputTypeCountAttendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AttendanceWhereInput
   }
 
 
@@ -14537,6 +14651,973 @@ export namespace Prisma {
 
 
   /**
+   * Model AttendanceImportLog
+   */
+
+  export type AggregateAttendanceImportLog = {
+    _count: AttendanceImportLogCountAggregateOutputType | null
+    _avg: AttendanceImportLogAvgAggregateOutputType | null
+    _sum: AttendanceImportLogSumAggregateOutputType | null
+    _min: AttendanceImportLogMinAggregateOutputType | null
+    _max: AttendanceImportLogMaxAggregateOutputType | null
+  }
+
+  export type AttendanceImportLogAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type AttendanceImportLogSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type AttendanceImportLogMinAggregateOutputType = {
+    id: number | null
+    filename: string | null
+    importedAt: Date | null
+  }
+
+  export type AttendanceImportLogMaxAggregateOutputType = {
+    id: number | null
+    filename: string | null
+    importedAt: Date | null
+  }
+
+  export type AttendanceImportLogCountAggregateOutputType = {
+    id: number
+    filename: number
+    importedAt: number
+    _all: number
+  }
+
+
+  export type AttendanceImportLogAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type AttendanceImportLogSumAggregateInputType = {
+    id?: true
+  }
+
+  export type AttendanceImportLogMinAggregateInputType = {
+    id?: true
+    filename?: true
+    importedAt?: true
+  }
+
+  export type AttendanceImportLogMaxAggregateInputType = {
+    id?: true
+    filename?: true
+    importedAt?: true
+  }
+
+  export type AttendanceImportLogCountAggregateInputType = {
+    id?: true
+    filename?: true
+    importedAt?: true
+    _all?: true
+  }
+
+  export type AttendanceImportLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AttendanceImportLog to aggregate.
+     */
+    where?: AttendanceImportLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AttendanceImportLogs to fetch.
+     */
+    orderBy?: AttendanceImportLogOrderByWithRelationInput | AttendanceImportLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AttendanceImportLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AttendanceImportLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AttendanceImportLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AttendanceImportLogs
+    **/
+    _count?: true | AttendanceImportLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AttendanceImportLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AttendanceImportLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AttendanceImportLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AttendanceImportLogMaxAggregateInputType
+  }
+
+  export type GetAttendanceImportLogAggregateType<T extends AttendanceImportLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateAttendanceImportLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAttendanceImportLog[P]>
+      : GetScalarType<T[P], AggregateAttendanceImportLog[P]>
+  }
+
+
+
+
+  export type AttendanceImportLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AttendanceImportLogWhereInput
+    orderBy?: AttendanceImportLogOrderByWithAggregationInput | AttendanceImportLogOrderByWithAggregationInput[]
+    by: AttendanceImportLogScalarFieldEnum[] | AttendanceImportLogScalarFieldEnum
+    having?: AttendanceImportLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AttendanceImportLogCountAggregateInputType | true
+    _avg?: AttendanceImportLogAvgAggregateInputType
+    _sum?: AttendanceImportLogSumAggregateInputType
+    _min?: AttendanceImportLogMinAggregateInputType
+    _max?: AttendanceImportLogMaxAggregateInputType
+  }
+
+  export type AttendanceImportLogGroupByOutputType = {
+    id: number
+    filename: string
+    importedAt: Date
+    _count: AttendanceImportLogCountAggregateOutputType | null
+    _avg: AttendanceImportLogAvgAggregateOutputType | null
+    _sum: AttendanceImportLogSumAggregateOutputType | null
+    _min: AttendanceImportLogMinAggregateOutputType | null
+    _max: AttendanceImportLogMaxAggregateOutputType | null
+  }
+
+  type GetAttendanceImportLogGroupByPayload<T extends AttendanceImportLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AttendanceImportLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AttendanceImportLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AttendanceImportLogGroupByOutputType[P]>
+            : GetScalarType<T[P], AttendanceImportLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AttendanceImportLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    filename?: boolean
+    importedAt?: boolean
+    attendances?: boolean | AttendanceImportLog$attendancesArgs<ExtArgs>
+    _count?: boolean | AttendanceImportLogCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["attendanceImportLog"]>
+
+
+
+  export type AttendanceImportLogSelectScalar = {
+    id?: boolean
+    filename?: boolean
+    importedAt?: boolean
+  }
+
+  export type AttendanceImportLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filename" | "importedAt", ExtArgs["result"]["attendanceImportLog"]>
+  export type AttendanceImportLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    attendances?: boolean | AttendanceImportLog$attendancesArgs<ExtArgs>
+    _count?: boolean | AttendanceImportLogCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $AttendanceImportLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AttendanceImportLog"
+    objects: {
+      attendances: Prisma.$AttendancePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      filename: string
+      importedAt: Date
+    }, ExtArgs["result"]["attendanceImportLog"]>
+    composites: {}
+  }
+
+  type AttendanceImportLogGetPayload<S extends boolean | null | undefined | AttendanceImportLogDefaultArgs> = $Result.GetResult<Prisma.$AttendanceImportLogPayload, S>
+
+  type AttendanceImportLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AttendanceImportLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AttendanceImportLogCountAggregateInputType | true
+    }
+
+  export interface AttendanceImportLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AttendanceImportLog'], meta: { name: 'AttendanceImportLog' } }
+    /**
+     * Find zero or one AttendanceImportLog that matches the filter.
+     * @param {AttendanceImportLogFindUniqueArgs} args - Arguments to find a AttendanceImportLog
+     * @example
+     * // Get one AttendanceImportLog
+     * const attendanceImportLog = await prisma.attendanceImportLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AttendanceImportLogFindUniqueArgs>(args: SelectSubset<T, AttendanceImportLogFindUniqueArgs<ExtArgs>>): Prisma__AttendanceImportLogClient<$Result.GetResult<Prisma.$AttendanceImportLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AttendanceImportLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AttendanceImportLogFindUniqueOrThrowArgs} args - Arguments to find a AttendanceImportLog
+     * @example
+     * // Get one AttendanceImportLog
+     * const attendanceImportLog = await prisma.attendanceImportLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AttendanceImportLogFindUniqueOrThrowArgs>(args: SelectSubset<T, AttendanceImportLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AttendanceImportLogClient<$Result.GetResult<Prisma.$AttendanceImportLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AttendanceImportLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttendanceImportLogFindFirstArgs} args - Arguments to find a AttendanceImportLog
+     * @example
+     * // Get one AttendanceImportLog
+     * const attendanceImportLog = await prisma.attendanceImportLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AttendanceImportLogFindFirstArgs>(args?: SelectSubset<T, AttendanceImportLogFindFirstArgs<ExtArgs>>): Prisma__AttendanceImportLogClient<$Result.GetResult<Prisma.$AttendanceImportLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AttendanceImportLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttendanceImportLogFindFirstOrThrowArgs} args - Arguments to find a AttendanceImportLog
+     * @example
+     * // Get one AttendanceImportLog
+     * const attendanceImportLog = await prisma.attendanceImportLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AttendanceImportLogFindFirstOrThrowArgs>(args?: SelectSubset<T, AttendanceImportLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__AttendanceImportLogClient<$Result.GetResult<Prisma.$AttendanceImportLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AttendanceImportLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttendanceImportLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AttendanceImportLogs
+     * const attendanceImportLogs = await prisma.attendanceImportLog.findMany()
+     * 
+     * // Get first 10 AttendanceImportLogs
+     * const attendanceImportLogs = await prisma.attendanceImportLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const attendanceImportLogWithIdOnly = await prisma.attendanceImportLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AttendanceImportLogFindManyArgs>(args?: SelectSubset<T, AttendanceImportLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendanceImportLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AttendanceImportLog.
+     * @param {AttendanceImportLogCreateArgs} args - Arguments to create a AttendanceImportLog.
+     * @example
+     * // Create one AttendanceImportLog
+     * const AttendanceImportLog = await prisma.attendanceImportLog.create({
+     *   data: {
+     *     // ... data to create a AttendanceImportLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends AttendanceImportLogCreateArgs>(args: SelectSubset<T, AttendanceImportLogCreateArgs<ExtArgs>>): Prisma__AttendanceImportLogClient<$Result.GetResult<Prisma.$AttendanceImportLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AttendanceImportLogs.
+     * @param {AttendanceImportLogCreateManyArgs} args - Arguments to create many AttendanceImportLogs.
+     * @example
+     * // Create many AttendanceImportLogs
+     * const attendanceImportLog = await prisma.attendanceImportLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AttendanceImportLogCreateManyArgs>(args?: SelectSubset<T, AttendanceImportLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a AttendanceImportLog.
+     * @param {AttendanceImportLogDeleteArgs} args - Arguments to delete one AttendanceImportLog.
+     * @example
+     * // Delete one AttendanceImportLog
+     * const AttendanceImportLog = await prisma.attendanceImportLog.delete({
+     *   where: {
+     *     // ... filter to delete one AttendanceImportLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AttendanceImportLogDeleteArgs>(args: SelectSubset<T, AttendanceImportLogDeleteArgs<ExtArgs>>): Prisma__AttendanceImportLogClient<$Result.GetResult<Prisma.$AttendanceImportLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AttendanceImportLog.
+     * @param {AttendanceImportLogUpdateArgs} args - Arguments to update one AttendanceImportLog.
+     * @example
+     * // Update one AttendanceImportLog
+     * const attendanceImportLog = await prisma.attendanceImportLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AttendanceImportLogUpdateArgs>(args: SelectSubset<T, AttendanceImportLogUpdateArgs<ExtArgs>>): Prisma__AttendanceImportLogClient<$Result.GetResult<Prisma.$AttendanceImportLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AttendanceImportLogs.
+     * @param {AttendanceImportLogDeleteManyArgs} args - Arguments to filter AttendanceImportLogs to delete.
+     * @example
+     * // Delete a few AttendanceImportLogs
+     * const { count } = await prisma.attendanceImportLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AttendanceImportLogDeleteManyArgs>(args?: SelectSubset<T, AttendanceImportLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AttendanceImportLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttendanceImportLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AttendanceImportLogs
+     * const attendanceImportLog = await prisma.attendanceImportLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AttendanceImportLogUpdateManyArgs>(args: SelectSubset<T, AttendanceImportLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one AttendanceImportLog.
+     * @param {AttendanceImportLogUpsertArgs} args - Arguments to update or create a AttendanceImportLog.
+     * @example
+     * // Update or create a AttendanceImportLog
+     * const attendanceImportLog = await prisma.attendanceImportLog.upsert({
+     *   create: {
+     *     // ... data to create a AttendanceImportLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AttendanceImportLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AttendanceImportLogUpsertArgs>(args: SelectSubset<T, AttendanceImportLogUpsertArgs<ExtArgs>>): Prisma__AttendanceImportLogClient<$Result.GetResult<Prisma.$AttendanceImportLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AttendanceImportLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttendanceImportLogCountArgs} args - Arguments to filter AttendanceImportLogs to count.
+     * @example
+     * // Count the number of AttendanceImportLogs
+     * const count = await prisma.attendanceImportLog.count({
+     *   where: {
+     *     // ... the filter for the AttendanceImportLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends AttendanceImportLogCountArgs>(
+      args?: Subset<T, AttendanceImportLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AttendanceImportLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AttendanceImportLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttendanceImportLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AttendanceImportLogAggregateArgs>(args: Subset<T, AttendanceImportLogAggregateArgs>): Prisma.PrismaPromise<GetAttendanceImportLogAggregateType<T>>
+
+    /**
+     * Group by AttendanceImportLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttendanceImportLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AttendanceImportLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AttendanceImportLogGroupByArgs['orderBy'] }
+        : { orderBy?: AttendanceImportLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AttendanceImportLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAttendanceImportLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AttendanceImportLog model
+   */
+  readonly fields: AttendanceImportLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AttendanceImportLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AttendanceImportLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    attendances<T extends AttendanceImportLog$attendancesArgs<ExtArgs> = {}>(args?: Subset<T, AttendanceImportLog$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AttendanceImportLog model
+   */
+  interface AttendanceImportLogFieldRefs {
+    readonly id: FieldRef<"AttendanceImportLog", 'Int'>
+    readonly filename: FieldRef<"AttendanceImportLog", 'String'>
+    readonly importedAt: FieldRef<"AttendanceImportLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AttendanceImportLog findUnique
+   */
+  export type AttendanceImportLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AttendanceImportLog
+     */
+    select?: AttendanceImportLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AttendanceImportLog
+     */
+    omit?: AttendanceImportLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceImportLogInclude<ExtArgs> | null
+    /**
+     * Filter, which AttendanceImportLog to fetch.
+     */
+    where: AttendanceImportLogWhereUniqueInput
+  }
+
+  /**
+   * AttendanceImportLog findUniqueOrThrow
+   */
+  export type AttendanceImportLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AttendanceImportLog
+     */
+    select?: AttendanceImportLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AttendanceImportLog
+     */
+    omit?: AttendanceImportLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceImportLogInclude<ExtArgs> | null
+    /**
+     * Filter, which AttendanceImportLog to fetch.
+     */
+    where: AttendanceImportLogWhereUniqueInput
+  }
+
+  /**
+   * AttendanceImportLog findFirst
+   */
+  export type AttendanceImportLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AttendanceImportLog
+     */
+    select?: AttendanceImportLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AttendanceImportLog
+     */
+    omit?: AttendanceImportLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceImportLogInclude<ExtArgs> | null
+    /**
+     * Filter, which AttendanceImportLog to fetch.
+     */
+    where?: AttendanceImportLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AttendanceImportLogs to fetch.
+     */
+    orderBy?: AttendanceImportLogOrderByWithRelationInput | AttendanceImportLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AttendanceImportLogs.
+     */
+    cursor?: AttendanceImportLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AttendanceImportLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AttendanceImportLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AttendanceImportLogs.
+     */
+    distinct?: AttendanceImportLogScalarFieldEnum | AttendanceImportLogScalarFieldEnum[]
+  }
+
+  /**
+   * AttendanceImportLog findFirstOrThrow
+   */
+  export type AttendanceImportLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AttendanceImportLog
+     */
+    select?: AttendanceImportLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AttendanceImportLog
+     */
+    omit?: AttendanceImportLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceImportLogInclude<ExtArgs> | null
+    /**
+     * Filter, which AttendanceImportLog to fetch.
+     */
+    where?: AttendanceImportLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AttendanceImportLogs to fetch.
+     */
+    orderBy?: AttendanceImportLogOrderByWithRelationInput | AttendanceImportLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AttendanceImportLogs.
+     */
+    cursor?: AttendanceImportLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AttendanceImportLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AttendanceImportLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AttendanceImportLogs.
+     */
+    distinct?: AttendanceImportLogScalarFieldEnum | AttendanceImportLogScalarFieldEnum[]
+  }
+
+  /**
+   * AttendanceImportLog findMany
+   */
+  export type AttendanceImportLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AttendanceImportLog
+     */
+    select?: AttendanceImportLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AttendanceImportLog
+     */
+    omit?: AttendanceImportLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceImportLogInclude<ExtArgs> | null
+    /**
+     * Filter, which AttendanceImportLogs to fetch.
+     */
+    where?: AttendanceImportLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AttendanceImportLogs to fetch.
+     */
+    orderBy?: AttendanceImportLogOrderByWithRelationInput | AttendanceImportLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AttendanceImportLogs.
+     */
+    cursor?: AttendanceImportLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AttendanceImportLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AttendanceImportLogs.
+     */
+    skip?: number
+    distinct?: AttendanceImportLogScalarFieldEnum | AttendanceImportLogScalarFieldEnum[]
+  }
+
+  /**
+   * AttendanceImportLog create
+   */
+  export type AttendanceImportLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AttendanceImportLog
+     */
+    select?: AttendanceImportLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AttendanceImportLog
+     */
+    omit?: AttendanceImportLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceImportLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AttendanceImportLog.
+     */
+    data: XOR<AttendanceImportLogCreateInput, AttendanceImportLogUncheckedCreateInput>
+  }
+
+  /**
+   * AttendanceImportLog createMany
+   */
+  export type AttendanceImportLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AttendanceImportLogs.
+     */
+    data: AttendanceImportLogCreateManyInput | AttendanceImportLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AttendanceImportLog update
+   */
+  export type AttendanceImportLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AttendanceImportLog
+     */
+    select?: AttendanceImportLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AttendanceImportLog
+     */
+    omit?: AttendanceImportLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceImportLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AttendanceImportLog.
+     */
+    data: XOR<AttendanceImportLogUpdateInput, AttendanceImportLogUncheckedUpdateInput>
+    /**
+     * Choose, which AttendanceImportLog to update.
+     */
+    where: AttendanceImportLogWhereUniqueInput
+  }
+
+  /**
+   * AttendanceImportLog updateMany
+   */
+  export type AttendanceImportLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AttendanceImportLogs.
+     */
+    data: XOR<AttendanceImportLogUpdateManyMutationInput, AttendanceImportLogUncheckedUpdateManyInput>
+    /**
+     * Filter which AttendanceImportLogs to update
+     */
+    where?: AttendanceImportLogWhereInput
+    /**
+     * Limit how many AttendanceImportLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AttendanceImportLog upsert
+   */
+  export type AttendanceImportLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AttendanceImportLog
+     */
+    select?: AttendanceImportLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AttendanceImportLog
+     */
+    omit?: AttendanceImportLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceImportLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AttendanceImportLog to update in case it exists.
+     */
+    where: AttendanceImportLogWhereUniqueInput
+    /**
+     * In case the AttendanceImportLog found by the `where` argument doesn't exist, create a new AttendanceImportLog with this data.
+     */
+    create: XOR<AttendanceImportLogCreateInput, AttendanceImportLogUncheckedCreateInput>
+    /**
+     * In case the AttendanceImportLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AttendanceImportLogUpdateInput, AttendanceImportLogUncheckedUpdateInput>
+  }
+
+  /**
+   * AttendanceImportLog delete
+   */
+  export type AttendanceImportLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AttendanceImportLog
+     */
+    select?: AttendanceImportLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AttendanceImportLog
+     */
+    omit?: AttendanceImportLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceImportLogInclude<ExtArgs> | null
+    /**
+     * Filter which AttendanceImportLog to delete.
+     */
+    where: AttendanceImportLogWhereUniqueInput
+  }
+
+  /**
+   * AttendanceImportLog deleteMany
+   */
+  export type AttendanceImportLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AttendanceImportLogs to delete
+     */
+    where?: AttendanceImportLogWhereInput
+    /**
+     * Limit how many AttendanceImportLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AttendanceImportLog.attendances
+   */
+  export type AttendanceImportLog$attendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attendance
+     */
+    select?: AttendanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attendance
+     */
+    omit?: AttendanceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceInclude<ExtArgs> | null
+    where?: AttendanceWhereInput
+    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
+    cursor?: AttendanceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
+  }
+
+  /**
+   * AttendanceImportLog without action
+   */
+  export type AttendanceImportLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AttendanceImportLog
+     */
+    select?: AttendanceImportLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AttendanceImportLog
+     */
+    omit?: AttendanceImportLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceImportLogInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Attendance
    */
 
@@ -14552,12 +15633,14 @@ export namespace Prisma {
     id: number | null
     employeeId: number | null
     workingHours: number | null
+    importId: number | null
   }
 
   export type AttendanceSumAggregateOutputType = {
     id: number | null
     employeeId: number | null
     workingHours: number | null
+    importId: number | null
   }
 
   export type AttendanceMinAggregateOutputType = {
@@ -14567,6 +15650,7 @@ export namespace Prisma {
     checkInTime: Date | null
     checkOutTime: Date | null
     workingHours: number | null
+    importId: number | null
   }
 
   export type AttendanceMaxAggregateOutputType = {
@@ -14576,6 +15660,7 @@ export namespace Prisma {
     checkInTime: Date | null
     checkOutTime: Date | null
     workingHours: number | null
+    importId: number | null
   }
 
   export type AttendanceCountAggregateOutputType = {
@@ -14585,6 +15670,7 @@ export namespace Prisma {
     checkInTime: number
     checkOutTime: number
     workingHours: number
+    importId: number
     _all: number
   }
 
@@ -14593,12 +15679,14 @@ export namespace Prisma {
     id?: true
     employeeId?: true
     workingHours?: true
+    importId?: true
   }
 
   export type AttendanceSumAggregateInputType = {
     id?: true
     employeeId?: true
     workingHours?: true
+    importId?: true
   }
 
   export type AttendanceMinAggregateInputType = {
@@ -14608,6 +15696,7 @@ export namespace Prisma {
     checkInTime?: true
     checkOutTime?: true
     workingHours?: true
+    importId?: true
   }
 
   export type AttendanceMaxAggregateInputType = {
@@ -14617,6 +15706,7 @@ export namespace Prisma {
     checkInTime?: true
     checkOutTime?: true
     workingHours?: true
+    importId?: true
   }
 
   export type AttendanceCountAggregateInputType = {
@@ -14626,6 +15716,7 @@ export namespace Prisma {
     checkInTime?: true
     checkOutTime?: true
     workingHours?: true
+    importId?: true
     _all?: true
   }
 
@@ -14722,6 +15813,7 @@ export namespace Prisma {
     checkInTime: Date | null
     checkOutTime: Date | null
     workingHours: number | null
+    importId: number | null
     _count: AttendanceCountAggregateOutputType | null
     _avg: AttendanceAvgAggregateOutputType | null
     _sum: AttendanceSumAggregateOutputType | null
@@ -14750,7 +15842,9 @@ export namespace Prisma {
     checkInTime?: boolean
     checkOutTime?: boolean
     workingHours?: boolean
+    importId?: boolean
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    importLog?: boolean | Attendance$importLogArgs<ExtArgs>
   }, ExtArgs["result"]["attendance"]>
 
 
@@ -14762,17 +15856,20 @@ export namespace Prisma {
     checkInTime?: boolean
     checkOutTime?: boolean
     workingHours?: boolean
+    importId?: boolean
   }
 
-  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "date" | "checkInTime" | "checkOutTime" | "workingHours", ExtArgs["result"]["attendance"]>
+  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "date" | "checkInTime" | "checkOutTime" | "workingHours" | "importId", ExtArgs["result"]["attendance"]>
   export type AttendanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    importLog?: boolean | Attendance$importLogArgs<ExtArgs>
   }
 
   export type $AttendancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Attendance"
     objects: {
       employee: Prisma.$EmployeePayload<ExtArgs>
+      importLog: Prisma.$AttendanceImportLogPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -14781,6 +15878,7 @@ export namespace Prisma {
       checkInTime: Date | null
       checkOutTime: Date | null
       workingHours: number | null
+      importId: number | null
     }, ExtArgs["result"]["attendance"]>
     composites: {}
   }
@@ -15122,6 +16220,7 @@ export namespace Prisma {
   export interface Prisma__AttendanceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    importLog<T extends Attendance$importLogArgs<ExtArgs> = {}>(args?: Subset<T, Attendance$importLogArgs<ExtArgs>>): Prisma__AttendanceImportLogClient<$Result.GetResult<Prisma.$AttendanceImportLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15157,6 +16256,7 @@ export namespace Prisma {
     readonly checkInTime: FieldRef<"Attendance", 'DateTime'>
     readonly checkOutTime: FieldRef<"Attendance", 'DateTime'>
     readonly workingHours: FieldRef<"Attendance", 'Float'>
+    readonly importId: FieldRef<"Attendance", 'Int'>
   }
     
 
@@ -15497,6 +16597,25 @@ export namespace Prisma {
      * Limit how many Attendances to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Attendance.importLog
+   */
+  export type Attendance$importLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AttendanceImportLog
+     */
+    select?: AttendanceImportLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AttendanceImportLog
+     */
+    omit?: AttendanceImportLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttendanceImportLogInclude<ExtArgs> | null
+    where?: AttendanceImportLogWhereInput
   }
 
   /**
@@ -21829,13 +22948,23 @@ export namespace Prisma {
   export type LeaveApprovalStepApproverScalarFieldEnum = (typeof LeaveApprovalStepApproverScalarFieldEnum)[keyof typeof LeaveApprovalStepApproverScalarFieldEnum]
 
 
+  export const AttendanceImportLogScalarFieldEnum: {
+    id: 'id',
+    filename: 'filename',
+    importedAt: 'importedAt'
+  };
+
+  export type AttendanceImportLogScalarFieldEnum = (typeof AttendanceImportLogScalarFieldEnum)[keyof typeof AttendanceImportLogScalarFieldEnum]
+
+
   export const AttendanceScalarFieldEnum: {
     id: 'id',
     employeeId: 'employeeId',
     date: 'date',
     checkInTime: 'checkInTime',
     checkOutTime: 'checkOutTime',
-    workingHours: 'workingHours'
+    workingHours: 'workingHours',
+    importId: 'importId'
   };
 
   export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
@@ -22022,6 +23151,13 @@ export namespace Prisma {
   };
 
   export type LeaveRequestOrderByRelevanceFieldEnum = (typeof LeaveRequestOrderByRelevanceFieldEnum)[keyof typeof LeaveRequestOrderByRelevanceFieldEnum]
+
+
+  export const AttendanceImportLogOrderByRelevanceFieldEnum: {
+    filename: 'filename'
+  };
+
+  export type AttendanceImportLogOrderByRelevanceFieldEnum = (typeof AttendanceImportLogOrderByRelevanceFieldEnum)[keyof typeof AttendanceImportLogOrderByRelevanceFieldEnum]
 
 
   export const KPIOrderByRelevanceFieldEnum: {
@@ -23060,6 +24196,54 @@ export namespace Prisma {
     approvedAt?: DateTimeNullableWithAggregatesFilter<"LeaveApprovalStepApprover"> | Date | string | null
   }
 
+  export type AttendanceImportLogWhereInput = {
+    AND?: AttendanceImportLogWhereInput | AttendanceImportLogWhereInput[]
+    OR?: AttendanceImportLogWhereInput[]
+    NOT?: AttendanceImportLogWhereInput | AttendanceImportLogWhereInput[]
+    id?: IntFilter<"AttendanceImportLog"> | number
+    filename?: StringFilter<"AttendanceImportLog"> | string
+    importedAt?: DateTimeFilter<"AttendanceImportLog"> | Date | string
+    attendances?: AttendanceListRelationFilter
+  }
+
+  export type AttendanceImportLogOrderByWithRelationInput = {
+    id?: SortOrder
+    filename?: SortOrder
+    importedAt?: SortOrder
+    attendances?: AttendanceOrderByRelationAggregateInput
+    _relevance?: AttendanceImportLogOrderByRelevanceInput
+  }
+
+  export type AttendanceImportLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: AttendanceImportLogWhereInput | AttendanceImportLogWhereInput[]
+    OR?: AttendanceImportLogWhereInput[]
+    NOT?: AttendanceImportLogWhereInput | AttendanceImportLogWhereInput[]
+    filename?: StringFilter<"AttendanceImportLog"> | string
+    importedAt?: DateTimeFilter<"AttendanceImportLog"> | Date | string
+    attendances?: AttendanceListRelationFilter
+  }, "id">
+
+  export type AttendanceImportLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    filename?: SortOrder
+    importedAt?: SortOrder
+    _count?: AttendanceImportLogCountOrderByAggregateInput
+    _avg?: AttendanceImportLogAvgOrderByAggregateInput
+    _max?: AttendanceImportLogMaxOrderByAggregateInput
+    _min?: AttendanceImportLogMinOrderByAggregateInput
+    _sum?: AttendanceImportLogSumOrderByAggregateInput
+  }
+
+  export type AttendanceImportLogScalarWhereWithAggregatesInput = {
+    AND?: AttendanceImportLogScalarWhereWithAggregatesInput | AttendanceImportLogScalarWhereWithAggregatesInput[]
+    OR?: AttendanceImportLogScalarWhereWithAggregatesInput[]
+    NOT?: AttendanceImportLogScalarWhereWithAggregatesInput | AttendanceImportLogScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"AttendanceImportLog"> | number
+    filename?: StringWithAggregatesFilter<"AttendanceImportLog"> | string
+    importedAt?: DateTimeWithAggregatesFilter<"AttendanceImportLog"> | Date | string
+  }
+
   export type AttendanceWhereInput = {
     AND?: AttendanceWhereInput | AttendanceWhereInput[]
     OR?: AttendanceWhereInput[]
@@ -23070,7 +24254,9 @@ export namespace Prisma {
     checkInTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     checkOutTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     workingHours?: FloatNullableFilter<"Attendance"> | number | null
+    importId?: IntNullableFilter<"Attendance"> | number | null
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    importLog?: XOR<AttendanceImportLogNullableScalarRelationFilter, AttendanceImportLogWhereInput> | null
   }
 
   export type AttendanceOrderByWithRelationInput = {
@@ -23080,7 +24266,9 @@ export namespace Prisma {
     checkInTime?: SortOrderInput | SortOrder
     checkOutTime?: SortOrderInput | SortOrder
     workingHours?: SortOrderInput | SortOrder
+    importId?: SortOrderInput | SortOrder
     employee?: EmployeeOrderByWithRelationInput
+    importLog?: AttendanceImportLogOrderByWithRelationInput
   }
 
   export type AttendanceWhereUniqueInput = Prisma.AtLeast<{
@@ -23094,7 +24282,9 @@ export namespace Prisma {
     checkInTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     checkOutTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     workingHours?: FloatNullableFilter<"Attendance"> | number | null
+    importId?: IntNullableFilter<"Attendance"> | number | null
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    importLog?: XOR<AttendanceImportLogNullableScalarRelationFilter, AttendanceImportLogWhereInput> | null
   }, "id" | "employeeId_date">
 
   export type AttendanceOrderByWithAggregationInput = {
@@ -23104,6 +24294,7 @@ export namespace Prisma {
     checkInTime?: SortOrderInput | SortOrder
     checkOutTime?: SortOrderInput | SortOrder
     workingHours?: SortOrderInput | SortOrder
+    importId?: SortOrderInput | SortOrder
     _count?: AttendanceCountOrderByAggregateInput
     _avg?: AttendanceAvgOrderByAggregateInput
     _max?: AttendanceMaxOrderByAggregateInput
@@ -23121,6 +24312,7 @@ export namespace Prisma {
     checkInTime?: DateTimeNullableWithAggregatesFilter<"Attendance"> | Date | string | null
     checkOutTime?: DateTimeNullableWithAggregatesFilter<"Attendance"> | Date | string | null
     workingHours?: FloatNullableWithAggregatesFilter<"Attendance"> | number | null
+    importId?: IntNullableWithAggregatesFilter<"Attendance"> | number | null
   }
 
   export type KPIWhereInput = {
@@ -24508,12 +25700,56 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type AttendanceImportLogCreateInput = {
+    filename: string
+    importedAt?: Date | string
+    attendances?: AttendanceCreateNestedManyWithoutImportLogInput
+  }
+
+  export type AttendanceImportLogUncheckedCreateInput = {
+    id?: number
+    filename: string
+    importedAt?: Date | string
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutImportLogInput
+  }
+
+  export type AttendanceImportLogUpdateInput = {
+    filename?: StringFieldUpdateOperationsInput | string
+    importedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attendances?: AttendanceUpdateManyWithoutImportLogNestedInput
+  }
+
+  export type AttendanceImportLogUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    filename?: StringFieldUpdateOperationsInput | string
+    importedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attendances?: AttendanceUncheckedUpdateManyWithoutImportLogNestedInput
+  }
+
+  export type AttendanceImportLogCreateManyInput = {
+    id?: number
+    filename: string
+    importedAt?: Date | string
+  }
+
+  export type AttendanceImportLogUpdateManyMutationInput = {
+    filename?: StringFieldUpdateOperationsInput | string
+    importedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AttendanceImportLogUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    filename?: StringFieldUpdateOperationsInput | string
+    importedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AttendanceCreateInput = {
     date: Date | string
     checkInTime?: Date | string | null
     checkOutTime?: Date | string | null
     workingHours?: number | null
     employee: EmployeeCreateNestedOneWithoutAttendanceInput
+    importLog?: AttendanceImportLogCreateNestedOneWithoutAttendancesInput
   }
 
   export type AttendanceUncheckedCreateInput = {
@@ -24523,6 +25759,7 @@ export namespace Prisma {
     checkInTime?: Date | string | null
     checkOutTime?: Date | string | null
     workingHours?: number | null
+    importId?: number | null
   }
 
   export type AttendanceUpdateInput = {
@@ -24531,6 +25768,7 @@ export namespace Prisma {
     checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
     employee?: EmployeeUpdateOneRequiredWithoutAttendanceNestedInput
+    importLog?: AttendanceImportLogUpdateOneWithoutAttendancesNestedInput
   }
 
   export type AttendanceUncheckedUpdateInput = {
@@ -24540,6 +25778,7 @@ export namespace Prisma {
     checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    importId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type AttendanceCreateManyInput = {
@@ -24549,6 +25788,7 @@ export namespace Prisma {
     checkInTime?: Date | string | null
     checkOutTime?: Date | string | null
     workingHours?: number | null
+    importId?: number | null
   }
 
   export type AttendanceUpdateManyMutationInput = {
@@ -24565,6 +25805,7 @@ export namespace Prisma {
     checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    importId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type KPICreateInput = {
@@ -26044,6 +27285,43 @@ export namespace Prisma {
     approverId?: SortOrder
   }
 
+  export type AttendanceImportLogOrderByRelevanceInput = {
+    fields: AttendanceImportLogOrderByRelevanceFieldEnum | AttendanceImportLogOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type AttendanceImportLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    filename?: SortOrder
+    importedAt?: SortOrder
+  }
+
+  export type AttendanceImportLogAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type AttendanceImportLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    filename?: SortOrder
+    importedAt?: SortOrder
+  }
+
+  export type AttendanceImportLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    filename?: SortOrder
+    importedAt?: SortOrder
+  }
+
+  export type AttendanceImportLogSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type AttendanceImportLogNullableScalarRelationFilter = {
+    is?: AttendanceImportLogWhereInput | null
+    isNot?: AttendanceImportLogWhereInput | null
+  }
+
   export type AttendanceEmployeeIdDateCompoundUniqueInput = {
     employeeId: number
     date: Date | string
@@ -26056,12 +27334,14 @@ export namespace Prisma {
     checkInTime?: SortOrder
     checkOutTime?: SortOrder
     workingHours?: SortOrder
+    importId?: SortOrder
   }
 
   export type AttendanceAvgOrderByAggregateInput = {
     id?: SortOrder
     employeeId?: SortOrder
     workingHours?: SortOrder
+    importId?: SortOrder
   }
 
   export type AttendanceMaxOrderByAggregateInput = {
@@ -26071,6 +27351,7 @@ export namespace Prisma {
     checkInTime?: SortOrder
     checkOutTime?: SortOrder
     workingHours?: SortOrder
+    importId?: SortOrder
   }
 
   export type AttendanceMinOrderByAggregateInput = {
@@ -26080,12 +27361,14 @@ export namespace Prisma {
     checkInTime?: SortOrder
     checkOutTime?: SortOrder
     workingHours?: SortOrder
+    importId?: SortOrder
   }
 
   export type AttendanceSumOrderByAggregateInput = {
     id?: SortOrder
     employeeId?: SortOrder
     workingHours?: SortOrder
+    importId?: SortOrder
   }
 
   export type KPIOrderByRelevanceInput = {
@@ -27557,10 +28840,58 @@ export namespace Prisma {
     update?: XOR<XOR<LeaveApprovalStepUpdateToOneWithWhereWithoutApproversInput, LeaveApprovalStepUpdateWithoutApproversInput>, LeaveApprovalStepUncheckedUpdateWithoutApproversInput>
   }
 
+  export type AttendanceCreateNestedManyWithoutImportLogInput = {
+    create?: XOR<AttendanceCreateWithoutImportLogInput, AttendanceUncheckedCreateWithoutImportLogInput> | AttendanceCreateWithoutImportLogInput[] | AttendanceUncheckedCreateWithoutImportLogInput[]
+    connectOrCreate?: AttendanceCreateOrConnectWithoutImportLogInput | AttendanceCreateOrConnectWithoutImportLogInput[]
+    createMany?: AttendanceCreateManyImportLogInputEnvelope
+    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+  }
+
+  export type AttendanceUncheckedCreateNestedManyWithoutImportLogInput = {
+    create?: XOR<AttendanceCreateWithoutImportLogInput, AttendanceUncheckedCreateWithoutImportLogInput> | AttendanceCreateWithoutImportLogInput[] | AttendanceUncheckedCreateWithoutImportLogInput[]
+    connectOrCreate?: AttendanceCreateOrConnectWithoutImportLogInput | AttendanceCreateOrConnectWithoutImportLogInput[]
+    createMany?: AttendanceCreateManyImportLogInputEnvelope
+    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+  }
+
+  export type AttendanceUpdateManyWithoutImportLogNestedInput = {
+    create?: XOR<AttendanceCreateWithoutImportLogInput, AttendanceUncheckedCreateWithoutImportLogInput> | AttendanceCreateWithoutImportLogInput[] | AttendanceUncheckedCreateWithoutImportLogInput[]
+    connectOrCreate?: AttendanceCreateOrConnectWithoutImportLogInput | AttendanceCreateOrConnectWithoutImportLogInput[]
+    upsert?: AttendanceUpsertWithWhereUniqueWithoutImportLogInput | AttendanceUpsertWithWhereUniqueWithoutImportLogInput[]
+    createMany?: AttendanceCreateManyImportLogInputEnvelope
+    set?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    disconnect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    delete?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    update?: AttendanceUpdateWithWhereUniqueWithoutImportLogInput | AttendanceUpdateWithWhereUniqueWithoutImportLogInput[]
+    updateMany?: AttendanceUpdateManyWithWhereWithoutImportLogInput | AttendanceUpdateManyWithWhereWithoutImportLogInput[]
+    deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+  }
+
+  export type AttendanceUncheckedUpdateManyWithoutImportLogNestedInput = {
+    create?: XOR<AttendanceCreateWithoutImportLogInput, AttendanceUncheckedCreateWithoutImportLogInput> | AttendanceCreateWithoutImportLogInput[] | AttendanceUncheckedCreateWithoutImportLogInput[]
+    connectOrCreate?: AttendanceCreateOrConnectWithoutImportLogInput | AttendanceCreateOrConnectWithoutImportLogInput[]
+    upsert?: AttendanceUpsertWithWhereUniqueWithoutImportLogInput | AttendanceUpsertWithWhereUniqueWithoutImportLogInput[]
+    createMany?: AttendanceCreateManyImportLogInputEnvelope
+    set?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    disconnect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    delete?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+    update?: AttendanceUpdateWithWhereUniqueWithoutImportLogInput | AttendanceUpdateWithWhereUniqueWithoutImportLogInput[]
+    updateMany?: AttendanceUpdateManyWithWhereWithoutImportLogInput | AttendanceUpdateManyWithWhereWithoutImportLogInput[]
+    deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+  }
+
   export type EmployeeCreateNestedOneWithoutAttendanceInput = {
     create?: XOR<EmployeeCreateWithoutAttendanceInput, EmployeeUncheckedCreateWithoutAttendanceInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutAttendanceInput
     connect?: EmployeeWhereUniqueInput
+  }
+
+  export type AttendanceImportLogCreateNestedOneWithoutAttendancesInput = {
+    create?: XOR<AttendanceImportLogCreateWithoutAttendancesInput, AttendanceImportLogUncheckedCreateWithoutAttendancesInput>
+    connectOrCreate?: AttendanceImportLogCreateOrConnectWithoutAttendancesInput
+    connect?: AttendanceImportLogWhereUniqueInput
   }
 
   export type EmployeeUpdateOneRequiredWithoutAttendanceNestedInput = {
@@ -27569,6 +28900,16 @@ export namespace Prisma {
     upsert?: EmployeeUpsertWithoutAttendanceInput
     connect?: EmployeeWhereUniqueInput
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutAttendanceInput, EmployeeUpdateWithoutAttendanceInput>, EmployeeUncheckedUpdateWithoutAttendanceInput>
+  }
+
+  export type AttendanceImportLogUpdateOneWithoutAttendancesNestedInput = {
+    create?: XOR<AttendanceImportLogCreateWithoutAttendancesInput, AttendanceImportLogUncheckedCreateWithoutAttendancesInput>
+    connectOrCreate?: AttendanceImportLogCreateOrConnectWithoutAttendancesInput
+    upsert?: AttendanceImportLogUpsertWithoutAttendancesInput
+    disconnect?: AttendanceImportLogWhereInput | boolean
+    delete?: AttendanceImportLogWhereInput | boolean
+    connect?: AttendanceImportLogWhereUniqueInput
+    update?: XOR<XOR<AttendanceImportLogUpdateToOneWithWhereWithoutAttendancesInput, AttendanceImportLogUpdateWithoutAttendancesInput>, AttendanceImportLogUncheckedUpdateWithoutAttendancesInput>
   }
 
   export type KPIEmployeeCreateNestedManyWithoutKpiInput = {
@@ -28323,6 +29664,7 @@ export namespace Prisma {
     checkInTime?: Date | string | null
     checkOutTime?: Date | string | null
     workingHours?: number | null
+    importLog?: AttendanceImportLogCreateNestedOneWithoutAttendancesInput
   }
 
   export type AttendanceUncheckedCreateWithoutEmployeeInput = {
@@ -28331,6 +29673,7 @@ export namespace Prisma {
     checkInTime?: Date | string | null
     checkOutTime?: Date | string | null
     workingHours?: number | null
+    importId?: number | null
   }
 
   export type AttendanceCreateOrConnectWithoutEmployeeInput = {
@@ -28879,6 +30222,7 @@ export namespace Prisma {
     checkInTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     checkOutTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     workingHours?: FloatNullableFilter<"Attendance"> | number | null
+    importId?: IntNullableFilter<"Attendance"> | number | null
   }
 
   export type ContactInfoUpsertWithoutEmployeeInput = {
@@ -30981,6 +32325,49 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type AttendanceCreateWithoutImportLogInput = {
+    date: Date | string
+    checkInTime?: Date | string | null
+    checkOutTime?: Date | string | null
+    workingHours?: number | null
+    employee: EmployeeCreateNestedOneWithoutAttendanceInput
+  }
+
+  export type AttendanceUncheckedCreateWithoutImportLogInput = {
+    id?: number
+    employeeId: number
+    date: Date | string
+    checkInTime?: Date | string | null
+    checkOutTime?: Date | string | null
+    workingHours?: number | null
+  }
+
+  export type AttendanceCreateOrConnectWithoutImportLogInput = {
+    where: AttendanceWhereUniqueInput
+    create: XOR<AttendanceCreateWithoutImportLogInput, AttendanceUncheckedCreateWithoutImportLogInput>
+  }
+
+  export type AttendanceCreateManyImportLogInputEnvelope = {
+    data: AttendanceCreateManyImportLogInput | AttendanceCreateManyImportLogInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AttendanceUpsertWithWhereUniqueWithoutImportLogInput = {
+    where: AttendanceWhereUniqueInput
+    update: XOR<AttendanceUpdateWithoutImportLogInput, AttendanceUncheckedUpdateWithoutImportLogInput>
+    create: XOR<AttendanceCreateWithoutImportLogInput, AttendanceUncheckedCreateWithoutImportLogInput>
+  }
+
+  export type AttendanceUpdateWithWhereUniqueWithoutImportLogInput = {
+    where: AttendanceWhereUniqueInput
+    data: XOR<AttendanceUpdateWithoutImportLogInput, AttendanceUncheckedUpdateWithoutImportLogInput>
+  }
+
+  export type AttendanceUpdateManyWithWhereWithoutImportLogInput = {
+    where: AttendanceScalarWhereInput
+    data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyWithoutImportLogInput>
+  }
+
   export type EmployeeCreateWithoutAttendanceInput = {
     employeeCode: string
     name: string
@@ -31041,6 +32428,22 @@ export namespace Prisma {
   export type EmployeeCreateOrConnectWithoutAttendanceInput = {
     where: EmployeeWhereUniqueInput
     create: XOR<EmployeeCreateWithoutAttendanceInput, EmployeeUncheckedCreateWithoutAttendanceInput>
+  }
+
+  export type AttendanceImportLogCreateWithoutAttendancesInput = {
+    filename: string
+    importedAt?: Date | string
+  }
+
+  export type AttendanceImportLogUncheckedCreateWithoutAttendancesInput = {
+    id?: number
+    filename: string
+    importedAt?: Date | string
+  }
+
+  export type AttendanceImportLogCreateOrConnectWithoutAttendancesInput = {
+    where: AttendanceImportLogWhereUniqueInput
+    create: XOR<AttendanceImportLogCreateWithoutAttendancesInput, AttendanceImportLogUncheckedCreateWithoutAttendancesInput>
   }
 
   export type EmployeeUpsertWithoutAttendanceInput = {
@@ -31109,6 +32512,28 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+  }
+
+  export type AttendanceImportLogUpsertWithoutAttendancesInput = {
+    update: XOR<AttendanceImportLogUpdateWithoutAttendancesInput, AttendanceImportLogUncheckedUpdateWithoutAttendancesInput>
+    create: XOR<AttendanceImportLogCreateWithoutAttendancesInput, AttendanceImportLogUncheckedCreateWithoutAttendancesInput>
+    where?: AttendanceImportLogWhereInput
+  }
+
+  export type AttendanceImportLogUpdateToOneWithWhereWithoutAttendancesInput = {
+    where?: AttendanceImportLogWhereInput
+    data: XOR<AttendanceImportLogUpdateWithoutAttendancesInput, AttendanceImportLogUncheckedUpdateWithoutAttendancesInput>
+  }
+
+  export type AttendanceImportLogUpdateWithoutAttendancesInput = {
+    filename?: StringFieldUpdateOperationsInput | string
+    importedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AttendanceImportLogUncheckedUpdateWithoutAttendancesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    filename?: StringFieldUpdateOperationsInput | string
+    importedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type KPIEmployeeCreateWithoutKpiInput = {
@@ -32297,6 +33722,7 @@ export namespace Prisma {
     checkInTime?: Date | string | null
     checkOutTime?: Date | string | null
     workingHours?: number | null
+    importId?: number | null
   }
 
   export type EmployeeCreateManyManagerInput = {
@@ -32386,6 +33812,7 @@ export namespace Prisma {
     checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    importLog?: AttendanceImportLogUpdateOneWithoutAttendancesNestedInput
   }
 
   export type AttendanceUncheckedUpdateWithoutEmployeeInput = {
@@ -32394,6 +33821,7 @@ export namespace Prisma {
     checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    importId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type AttendanceUncheckedUpdateManyWithoutEmployeeInput = {
@@ -32402,6 +33830,7 @@ export namespace Prisma {
     checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    importId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type EmployeeUpdateWithoutManagerInput = {
@@ -32893,6 +34322,41 @@ export namespace Prisma {
     approverId?: IntFieldUpdateOperationsInput | number
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AttendanceCreateManyImportLogInput = {
+    id?: number
+    employeeId: number
+    date: Date | string
+    checkInTime?: Date | string | null
+    checkOutTime?: Date | string | null
+    workingHours?: number | null
+  }
+
+  export type AttendanceUpdateWithoutImportLogInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    employee?: EmployeeUpdateOneRequiredWithoutAttendanceNestedInput
+  }
+
+  export type AttendanceUncheckedUpdateWithoutImportLogInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
+  }
+
+  export type AttendanceUncheckedUpdateManyWithoutImportLogInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type KPIEmployeeCreateManyKpiInput = {

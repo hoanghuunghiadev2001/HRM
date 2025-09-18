@@ -1,11 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { Prisma } from "../../../../../generated/prisma";
+import { Prisma, Attendance } from "../../../../../generated/prisma";
 
-// Định nghĩa kiểu dữ liệu cho record có include employee
-type AttendanceWithEmployee = Awaited<
-  ReturnType<typeof prisma.attendance.findFirst>
-> & {
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(isSameOrBefore);
+
+type AttendanceWithEmployeeFlat = Attendance & {
   employee: {
     id: number;
     name: string;
@@ -32,20 +39,13 @@ export async function GET(request: Request) {
         lte: new Date(endDate),
       };
     } else if (startDate) {
-      where.date = {
-        gte: new Date(startDate),
-      };
+      where.date = { gte: new Date(startDate) };
     } else if (endDate) {
-      where.date = {
-        lte: new Date(endDate),
-      };
+      where.date = { lte: new Date(endDate) };
     }
 
-    if (employeeId) {
-      where.employeeId = Number.parseInt(employeeId);
-    }
+    if (employeeId) where.employeeId = Number.parseInt(employeeId);
 
-    // Query attendance cùng employee + workInfo và include cả department relation
     const attendanceDataRaw = await prisma.attendance.findMany({
       where,
       include: {
@@ -56,11 +56,8 @@ export async function GET(request: Request) {
             employeeCode: true,
             workInfo: {
               select: {
-                // Chỉ lấy trường department.name thôi
                 department: {
-                  select: {
-                    name: true,
-                  },
+                  select: { name: true },
                 },
               },
             },
@@ -69,27 +66,25 @@ export async function GET(request: Request) {
       },
     });
 
-    // Map lại dữ liệu để phù hợp với kiểu AttendanceWithEmployee
-    let attendanceData: AttendanceWithEmployee[] = attendanceDataRaw.map(
-      (record) => {
-        return {
-          ...record,
-          employee: {
-            ...record.employee,
-            workInfo: record.employee.workInfo
-              ? {
-                  department: record.employee.workInfo.department?.name ?? null,
-                }
-              : null,
-          },
-        };
-      }
+    // Flatten department
+    let attendanceData: AttendanceWithEmployeeFlat[] = attendanceDataRaw.map(
+      (record) => ({
+        ...record,
+        employee: {
+          ...record.employee,
+          workInfo: record.employee.workInfo
+            ? {
+                department: record.employee.workInfo.department?.name ?? null,
+              }
+            : null,
+        },
+      })
     );
 
-    // Nếu lọc theo department thì filter tiếp
+    // Filter theo department nếu có
     if (department) {
       attendanceData = attendanceData.filter(
-        (record) => record.employee.workInfo?.department === department
+        (r) => r.employee.workInfo?.department === department
       );
     }
 
@@ -108,11 +103,13 @@ export async function GET(request: Request) {
   }
 }
 
+/* ----------------- Hàm tính thống kê ----------------- */
 type DailyStat = {
-  date: string;
+  date: string; // YYYY-MM-DD
   onTime: number;
   late: number;
   absent: number;
+  earlyLeave: number;
   total: number;
 };
 
@@ -122,58 +119,67 @@ type AttendanceStats = {
     onTime: number;
     late: number;
     absent: number;
+    earlyLeave: number;
     total: number;
   };
 };
 
 function calculateAttendanceStats(
-  data: AttendanceWithEmployee[]
+  data: AttendanceWithEmployeeFlat[]
 ): AttendanceStats {
-  const groupedByDate: Record<string, AttendanceWithEmployee[]> = {};
+  const groupedByDate: Record<string, AttendanceWithEmployeeFlat[]> = {};
 
   for (const record of data) {
-    // Chuyển ngày attendance.date sang giờ VN để group đúng ngày
-    const dateUtc = new Date(record.date);
-    const dateVn = new Date(dateUtc.getTime() + 7 * 60 * 60 * 1000);
-    const dateStr = dateVn.toISOString().slice(0, 10);
-
-    if (!groupedByDate[dateStr]) {
-      groupedByDate[dateStr] = [];
-    }
+    const dateStr = dayjs(record.date)
+      .tz("Asia/Ho_Chi_Minh", true)
+      .format("YYYY-MM-DD");
+    if (!groupedByDate[dateStr]) groupedByDate[dateStr] = [];
     groupedByDate[dateStr].push(record);
   }
 
   const dailyStats: DailyStat[] = Object.entries(groupedByDate).map(
     ([dateStr, records]) => {
-      // Tạo mốc 8:00 sáng giờ VN theo ngày đó
-      const baseTime = new Date(`${dateStr}T08:00:00+07:00`);
-      const baseTime2 = new Date(`${dateStr}T12:00:00+07:00`);
-      const baseTime3 = new Date(`${dateStr}T13:00:00+07:00`);
+      const shiftStart = dayjs.tz(`${dateStr} 08:00`, "YYYY-MM-DD HH:mm", "Asia/Ho_Chi_Minh");
+      const shiftEnd = dayjs.tz(`${dateStr} 17:00`, "YYYY-MM-DD HH:mm", "Asia/Ho_Chi_Minh");
 
-      // baseTime.getTime() ra UTC timestamp tương ứng với 8:00 giờ VN ngày đó
-
-      let onTime = 0,
-        late = 0,
-        absent = 0;
+      let onTime = 0;
+      let late = 0;
+      let absent = 0;
+      let earlyLeave = 0;
 
       for (const r of records) {
-        if (!r.checkInTime) {
+        const checkInLocal = r.checkInTime
+          ? dayjs.tz(r.checkInTime.toISOString(), "Asia/Ho_Chi_Minh")
+          : null;
+        const checkOutLocal = r.checkOutTime
+          ? dayjs.tz(r.checkOutTime.toISOString(), "Asia/Ho_Chi_Minh")
+          : null;
+
+        if (!checkInLocal) {
           absent++;
           continue;
         }
-        // checkInTime là UTC, lấy timestamp UTC
-        const checkInUtc =
-          new Date(r.checkInTime).getTime() - 7 * 60 * 60 * 1000;
 
-        // So sánh checkIn UTC với mốc 8:00 giờ VN đã convert sang UTC timestamp
-        if (
-          checkInUtc <= baseTime.getTime() ||
-          (checkInUtc > baseTime2.getTime() &&
-            checkInUtc <= baseTime3.getTime())
-        ) {
-          onTime++;
-        } else {
+        // Chỉ lấy giờ + phút của check-in/check-out để so sánh với ca
+        const checkInTimeOnly = checkInLocal.set('year', shiftStart.year())
+          .set('month', shiftStart.month())
+          .set('date', shiftStart.date());
+        const checkOutTimeOnly = checkOutLocal
+          ? checkOutLocal.set('year', shiftStart.year())
+              .set('month', shiftStart.month())
+              .set('date', shiftStart.date())
+          : null;
+
+        // Tính late/onTime
+        if (checkInTimeOnly.isAfter(shiftStart)) {
           late++;
+        } else {
+          onTime++;
+        }
+
+        // Tính early leave
+        if (checkOutTimeOnly && checkOutTimeOnly.isBefore(shiftEnd)) {
+          earlyLeave++;
         }
       }
 
@@ -182,32 +188,30 @@ function calculateAttendanceStats(
         onTime,
         late,
         absent,
+        earlyLeave,
         total: records.length,
       };
     }
   );
 
-  dailyStats.sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-  );
+  dailyStats.sort((a, b) => dayjs(a.date).valueOf() - dayjs(b.date).valueOf());
 
   const summary = dailyStats.reduce(
     (acc, day) => {
       acc.onTime += day.onTime;
       acc.late += day.late;
       acc.absent += day.absent;
+      acc.earlyLeave += day.earlyLeave;
       acc.total += day.total;
       return acc;
     },
-    { onTime: 0, late: 0, absent: 0, total: 0 }
+    { onTime: 0, late: 0, absent: 0, earlyLeave: 0, total: 0 }
   );
 
-  return {
-    dailyStats,
-    summary,
-  };
+  return { dailyStats, summary };
 }
 
+/* ----------------- POST handler ----------------- */
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -224,10 +228,7 @@ export async function POST(request: Request) {
     const parsedDate = new Date(date);
 
     const existingRecord = await prisma.attendance.findFirst({
-      where: {
-        employeeId: parsedEmployeeId,
-        date: parsedDate,
-      },
+      where: { employeeId: parsedEmployeeId, date: parsedDate },
     });
 
     let attendance;
@@ -236,12 +237,8 @@ export async function POST(request: Request) {
       attendance = await prisma.attendance.update({
         where: { id: existingRecord.id },
         data: {
-          checkInTime: checkInTime
-            ? new Date(checkInTime)
-            : existingRecord.checkInTime,
-          checkOutTime: checkOutTime
-            ? new Date(checkOutTime)
-            : existingRecord.checkOutTime,
+          checkInTime: checkInTime ? new Date(checkInTime) : existingRecord.checkInTime,
+          checkOutTime: checkOutTime ? new Date(checkOutTime) : existingRecord.checkOutTime,
         },
       });
     } else {
