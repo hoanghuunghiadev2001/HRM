@@ -1,6 +1,6 @@
 import { axiosClient } from "./axiosClient";
 import {
-  AttendanceResponse,
+  AttendanceResponse2,
   employeeAddAttendance,
   InfoEmployee,
   interfaceChangePassword,
@@ -42,7 +42,7 @@ export async function updateEmployee(employeeCode: string, data: InfoEmployee) {
 
 export const fetchAttendances = async (params: UseAttendanceParams) => {
   try {
-    const res = await axiosClient.get<AttendanceResponse>("/attendance", {
+    const res = await axiosClient.get<AttendanceResponse2>("/attendance", {
       params,
     });
     return { status: 1, data: res.data };

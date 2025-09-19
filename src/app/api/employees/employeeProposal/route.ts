@@ -4,34 +4,43 @@ import { prisma } from "@/lib/prisma";
 export async function GET() {
   try {
     const employees = await prisma.employee.findMany({
+      where: {
+        isActive: true,
+        workInfo: {
+          position: {
+            level: {
+              gte: 2, // từ Tổ trưởng trở lên
+            },
+          },
+        },
+      },
       select: {
-        id: true, // ID của nhân viên
+        id: true,
         name: true,
         avatar: true,
         workInfo: {
           select: {
             position: {
               select: {
-                name: true, // Tên chức vụ
+                name: true,
+                level: true,
               },
             },
           },
         },
         contactInfo: {
-          select: {
-            email: true, // Email
-          },
+          select: { email: true },
         },
       },
     });
 
-    // Flatten dữ liệu để dễ xử lý ở FE
     const formatted = employees.map(emp => ({
-        id: emp.id,
+      id: emp.id,
       name: emp.name,
       avatar: emp.avatar,
       email: emp.contactInfo?.email ?? null,
       position: emp.workInfo?.position?.name ?? null,
+      level: emp.workInfo?.position?.level ?? null,
     }));
 
     return NextResponse.json(formatted);

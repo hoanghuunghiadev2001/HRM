@@ -297,15 +297,18 @@ export interface Employee {
   workInfo: WorkInfo;
 }
 
-type LeaveFilters = {
-  page: number;
-  pageSize: number;
-  role: string;
+export interface LeaveFilters {
+  page?: number;
+  pageSize?: number;
+  role?: string;
   department?: string;
-  employeeCode: string;
-  name: string;
-  status: string;
-};
+  employeeCode?: string;
+  name?: string;
+  status?: string;
+  startDate?: string; // thêm ngày bắt đầu
+  endDate?: string;   // thêm ngày kết thúc
+}
+
 
 type LeavePendingFilters = {
   role: string;
@@ -333,6 +336,8 @@ export async function fetchLeaveRequests(
     employeeCode: "",
     name: "",
     status: "",
+    startDate: "",
+    endDate: "",
   }
 ) {
   const queryParams = new URLSearchParams();
@@ -347,12 +352,17 @@ export async function fetchLeaveRequests(
   if (filters.department) queryParams.append("department", filters.department);
   if (filters.status) queryParams.append("status", filters.status);
 
+  // Thêm ngày bắt đầu & kết thúc
+  if (filters.startDate) queryParams.append("startDate", filters.startDate);
+  if (filters.endDate) queryParams.append("endDate", filters.endDate);
+
   const res = await fetch(`/api/leave/all-requests?${queryParams.toString()}`);
   if (!res.ok) {
     throw new Error("Lỗi khi gọi API lấy danh sách nghỉ phép");
   }
   return await res.json();
 }
+
 
 export async function getApiAllRequestsNeedApprove(
   filters: LeavePendingFilters

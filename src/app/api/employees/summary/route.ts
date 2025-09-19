@@ -79,7 +79,7 @@ export async function GET(req: NextRequest) {
     const findManyOptions: any = {
       where: whereFilter,
       orderBy: {
-        name: "asc",
+        employeeCode: "asc",
       },
       select: {
         id: true,

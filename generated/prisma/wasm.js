@@ -447,7 +447,8 @@ exports.LeaveTypeEnum = exports.$Enums.LeaveTypeEnum = {
 exports.LeaveStatus = exports.$Enums.LeaveStatus = {
   pending: 'pending',
   approved: 'approved',
-  rejected: 'rejected'
+  rejected: 'rejected',
+  revoked: 'revoked'
 };
 
 exports.ProposalStatus = exports.$Enums.ProposalStatus = {

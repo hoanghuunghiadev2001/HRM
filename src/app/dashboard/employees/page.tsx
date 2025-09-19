@@ -35,7 +35,7 @@ import {
   InfoCircleOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import {  useAppSelector } from "@/store/hook";
+import { useAppSelector } from "@/store/hook";
 
 interface DataType {
   key: string;
@@ -76,8 +76,8 @@ export default function EmployeesPage() {
   const [totalTable, setTotalTable] = useState();
   const [infoEmployee, setInfoEmployee] = useState<InfoEmployee>();
 
-    const { role, department } = useAppSelector((state) => state.user);
-  
+  const { role, department } = useAppSelector((state) => state.user);
+
   const [departments, setDepartments] = useState<Department[]>([]);
   const [modalEditEmployee, setModalEditEmployee] = useState<boolean>(false);
   const [workStatus, setWorkStatus] = useState<string>();
@@ -132,7 +132,7 @@ export default function EmployeesPage() {
         department:
           role === "ADMIN" || role === "MANAGER"
             ? filterDepartment
-            : department?? '',
+            : department ?? '',
         name: filterName,
         employeeCode: filterMSNV,
         page: page,
@@ -494,6 +494,33 @@ export default function EmployeesPage() {
     }
   };
 
+const handleFileEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  setLoading(true);
+  const formData = new FormData();
+  formData.append("file", file); // ✅ key "file" trùng với backend
+
+  fetch("/api/employees/uploadEmail", {
+    method: "POST",
+    body: formData, // browser tự set multipart/form-data
+  })
+    .then(res => res.json())
+    .then(result => {
+      if (result.success) addEmployeeSuccess();
+      else addEmployeeErr();
+    })
+    .catch(err => {
+      console.error(err);
+      addEmployeeErr();
+    })
+    .finally(() => setLoading(false));
+};
+
+
+
+
   // hàm processExcell
   const processExcelData = (rawData: any[][]) => {
     // Find the row with headers - look for key identifiable columns
@@ -670,18 +697,35 @@ export default function EmployeesPage() {
           )}
 
           {role === "ADMIN" && (
-            <label htmlFor="file-upload" className="relative inline-block">
-              <Button icon={<UploadOutlined />}>
-                <p className="hidden sm:block">Upload</p>
-              </Button>
-              <input
-                type="file"
-                id="file-upload"
-                className="opacity-0 absolute z-10 w-full h-full top-0 right-0"
-                accept=".xlsx, .xls, .csv"
-                onChange={handleFileChange}
-              />
-            </label>
+            <>
+              {/* Upload danh sách nhân viên */}
+              <label htmlFor="file-upload" className="relative inline-block">
+                <Button icon={<UploadOutlined />}>
+                  <p className="hidden sm:block">Upload</p>
+                </Button>
+                <input
+                  type="file"
+                  id="file-upload"
+                  className="opacity-0 absolute z-10 w-full h-full top-0 right-0"
+                  accept=".xlsx, .xls, .csv"
+                  onChange={handleFileChange}
+                />
+              </label>
+
+              {/* Upload email nhân viên */}
+              <label htmlFor="file-upload-email" className="relative inline-block">
+                <Button icon={<UploadOutlined />} className="!bg-green-600 !text-white">
+                  <p className="hidden sm:block">Upload Email</p>
+                </Button>
+                <input
+                  type="file"
+                  id="file-upload-email"
+                  className="opacity-0 absolute z-10 w-full h-full top-0 right-0"
+                  accept=".xlsx, .xls, .csv"
+                  onChange={handleFileEmailChange}
+                />
+              </label>
+            </>
           )}
 
           <Button

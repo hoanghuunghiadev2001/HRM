@@ -156,7 +156,8 @@ export type LeaveTypeEnum = (typeof LeaveTypeEnum)[keyof typeof LeaveTypeEnum]
 export const LeaveStatus: {
   pending: 'pending',
   approved: 'approved',
-  rejected: 'rejected'
+  rejected: 'rejected',
+  revoked: 'revoked'
 };
 
 export type LeaveStatus = (typeof LeaveStatus)[keyof typeof LeaveStatus]

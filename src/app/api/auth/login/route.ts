@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
       path: "/",
     });
 
-    return NextResponse.json({ success: true, name: employee.name, avt: employee.avatar, role: employee.role, id: employee.id, employeeCode: employee.employeeCode, department: employee.workInfo?.department?.name, position:  employee.workInfo?.position?.name,});
+    return NextResponse.json({ success: true, name: employee.name, avt: employee.avatar, role: employee.role, id: employee.id, employeeCode: employee.employeeCode, department: employee.workInfo?.department?.name, position:  employee.workInfo?.position?.name, departmentID: employee.workInfo?.departmentId});
   } catch (err) {
     console.error("Login error:", err);
     return NextResponse.json(

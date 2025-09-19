@@ -26,6 +26,8 @@ import { TreeSelect } from "antd/lib";
 import { Department } from "@/lib/interface";
 import { useAppSelector } from "@/store/hook";
 import ExportLeaveRequests from "@/components/exportLeave";
+import { DatePicker } from "antd";
+const { RangePicker } = DatePicker;
 
 // Extend plugin
 dayjs.extend(utc);
@@ -180,7 +182,7 @@ export default function AllRequestPage() {
   const [requestsNeedApprove, setRequestsNeedApprove] = useState<
     PendingApprovalItem[]
   >([]);
-const { role , id, department} = useAppSelector((state) => state.user);
+  const { role, id, department, departmentID } = useAppSelector((state) => state.user);
 
   const [departments, setDepartments] = useState<Department[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
@@ -189,25 +191,27 @@ const { role , id, department} = useAppSelector((state) => state.user);
   const [filterMSNV, setFilterMSNV] = useState("");
   const [filterDepartment, setDepartment] = useState<string>();
 
+  const [filterDate, setFilterDate] = useState<string>("");
+
   const onChangeSelectDepartment = (newValue: string) => {
     setDepartment(newValue);
     console.log(newValue);
   };
 
-   const getPendingApprovals = async (userId: number): Promise<PendingApprovalItem[]> => {
-  try {
-    const res = await fetch(`/api/leave/all-requests-need-approve?userId=${userId}`);
-    if (!res.ok) {
-      throw new Error("Lấy danh sách cần phê duyệt thất bại");
-    }
-    const data: PendingApprovalItem[] = await res.json();
+  const getPendingApprovals = async (userId: number): Promise<PendingApprovalItem[]> => {
+    try {
+      const res = await fetch(`/api/leave/all-requests-need-approve?userId=${userId}`);
+      if (!res.ok) {
+        throw new Error("Lấy danh sách cần phê duyệt thất bại");
+      }
+      const data: PendingApprovalItem[] = await res.json();
       setRequestsNeedApprove(data);
-    return data;
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-};
+      return data;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
 
   const treeData = departments.map((dept) => ({
     value: dept.id.toString(),
@@ -228,24 +232,18 @@ const { role , id, department} = useAppSelector((state) => state.user);
     setLoading(true);
     try {
       const res = await fetchLeaveRequests({
-        // page: page,
-        // pageSize: pageSize,
-        // name: filterName,
-        // employeeCode: filterMSNV,
-        // department: "IT",
-        // status: "",
-
         page: page,
         pageSize: pageSize,
         role: role,
         department:
           role === "ADMIN"
             ? filterDepartment
-            : String(department) ? String(department) :'' ,
+            : String(departmentID) ?? '',
         employeeCode: filterMSNV,
         name: filterName,
-
         status: "",
+        startDate: filterDate ,
+        endDate: filterDate ,
       });
       setAllRequestsApproved(res);
       setTotalTable(res.total);
@@ -256,8 +254,9 @@ const { role , id, department} = useAppSelector((state) => state.user);
     }
   };
 
+
   // const getApiAllRequestsNeed = async () => {
-    
+
   //   setLoading(true);
   //   try {
   //     const res = await getApiAllRequestsNeedApprove({
@@ -299,7 +298,7 @@ const { role , id, department} = useAppSelector((state) => state.user);
       status: item.status,
       approvedBy: item.approvers,
       approvers: item.approvers ?? '',
-      
+
     })) || [];
 
   const columns: TableProps<DataType>["columns"] = [
@@ -369,29 +368,29 @@ const { role , id, department} = useAppSelector((state) => state.user);
   };
 
   // chức năng phê duyệt đơn xin nghỉ
-const putApprovedRequest = async (payload: ApproveRequestPayload) => {
-  try {
-    const res = await fetch("/api/leave/create-requests", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+  const putApprovedRequest = async (payload: ApproveRequestPayload) => {
+    try {
+      const res = await fetch("/api/leave/create-requests", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData?.error || "Phê duyệt thất bại");
-    }else{
-      getPendingApprovals(Number(id)??0)
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData?.error || "Phê duyệt thất bại");
+      } else {
+        getPendingApprovals(Number(id) ?? 0)
+      }
+
+      return await res.json();
+    } catch (error) {
+      console.error("Lỗi khi phê duyệt đơn:", error);
+      throw error;
     }
-
-    return await res.json();
-  } catch (error) {
-    console.error("Lỗi khi phê duyệt đơn:", error);
-    throw error;
-  }
-};
+  };
 
   const onPageChange = (page: number, pageSizeEnter?: number) => {
     if (pageSizeEnter) {
@@ -412,7 +411,7 @@ const putApprovedRequest = async (payload: ApproveRequestPayload) => {
   };
 
   useEffect(() => {
-    getPendingApprovals(Number(id)??0)
+    getPendingApprovals(Number(id) ?? 0)
     getApiAllRequestsApproved(pageTable, pageSize);
     listDepartment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -424,7 +423,7 @@ const putApprovedRequest = async (payload: ApproveRequestPayload) => {
     <div>
       <ModalNeedApproved
         onClose={() => {
-        getPendingApprovals(Number(id)??0)
+          getPendingApprovals(Number(id) ?? 0)
           setModalNeedApproved(false);
           getApiAllRequestsApproved(pageTable, pageSize);
         }}
@@ -451,14 +450,13 @@ const putApprovedRequest = async (payload: ApproveRequestPayload) => {
             className="flex mt-4 relative  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
             onClick={() => {
               setModalNeedApproved(true);
-              
+
             }}
           >
             Phê duyệt
             <div
-              className={`h-8 right-[-15px] top-[-20px] flex justify-center items-center w-8 rounded-[50%] bg-red-600 text-white font-semibold absolute ${
-                requestsNeedApprove.length < 1 ? "hidden" : ""
-              }`}
+              className={`h-8 right-[-15px] top-[-20px] flex justify-center items-center w-8 rounded-[50%] bg-red-600 text-white font-semibold absolute ${requestsNeedApprove.length < 1 ? "hidden" : ""
+                }`}
             >
               {requestsNeedApprove.length > 99
                 ? "99+"
@@ -505,6 +503,21 @@ const putApprovedRequest = async (payload: ApproveRequestPayload) => {
               />
             </Form.Item>
           </div>
+          <div className="flex gap-2 items-center shrink-0">
+            <Form.Item
+              layout="horizontal"
+              label={<p className="font-bold text-[#242424]">Ngày nghỉ</p>}
+            >
+              <DatePicker
+                placeholder="Chọn ngày"
+                onChange={(date) => {
+                  if (date) setFilterDate(dayjs(date).format("YYYY-MM-DD"));
+                  else setFilterDate("");
+                }}
+              />
+            </Form.Item>
+          </div>
+
           {role === "ADMIN" && (
             <div className="!flex gap-2 items-center ">
               <Form.Item
@@ -533,7 +546,7 @@ const putApprovedRequest = async (payload: ApproveRequestPayload) => {
                   onPopupScroll={onPopupScroll}
                 />
               </Form.Item>
-              <ExportLeaveRequests/>
+              <ExportLeaveRequests />
             </div>
           )}
 

@@ -38,7 +38,8 @@ export async function GET(
     if (!proposal)
       return NextResponse.json({ success: false, error: "Không tìm thấy đề xuất" }, { status: 404 });
 
-    const isSigner = proposal.signers.some(s => s.signerId === decoded.id);
+    // Nếu muốn check quyền thì bật lại đoạn này
+    // const isSigner = proposal.signers.some(s => s.signerId === decoded.id);
     // if (!decoded.id || !isSigner)
     //   return NextResponse.json({ success: false, error: "Bạn không có quyền xem đề xuất này" }, { status: 403 });
 
@@ -64,51 +65,78 @@ export async function GET(
     const nameSize = 14;
     const lineHeight = 22;
 
-    // Tiêu đề
-    page.drawText("Danh sách ký và phê duyệt", {
+    // ===== Thông tin đề xuất =====
+    page.drawText(`Tên đề xuất: ${proposal.title || "Không có tên"}`, {
+      x: margin,
+      y,
+      size: nameSize,
+      font,
+      color: rgb(0, 0, 0),
+    });
+    y -= lineHeight;
+
+    page.drawText(
+      `Người tạo: ${proposal.proposer?.name || ""} (${proposal.proposer?.employeeCode || ""})`,
+      {
+        x: margin,
+        y,
+        size: nameSize,
+        font,
+        color: rgb(0, 0, 0),
+      }
+    );
+    y -= 40;
+
+    // ===== Danh sách ký =====
+    page.drawText("Danh sách người ký", {
       x: margin,
       y,
       size: titleSize,
       font,
       color: rgb(0, 0, 0),
     });
-    y -= 40;
-
-    // 2 cột
-    const leftX = margin;
-    const rightX = width / 2 + 20;
-    page.drawText("Đã ký", { x: leftX, y, size: titleSize, font, color: rgb(0, 0, 0) });
-    page.drawText("Đã phê duyệt", { x: rightX, y, size: titleSize, font, color: rgb(0, 0, 0) });
     y -= 30;
 
-    const signers = proposal.signers.filter(s => s.status === "approved");
-    const approvers = proposal.approvers.filter(a => a.status === "approved");
-    const maxRows = Math.max(signers.length, approvers.length);
-
-    for (let i = 0; i < maxRows; i++) {
+    const signers = proposal.signers.filter((s) => s.status === "approved");
+    for (const signer of signers) {
       if (y < margin) {
-        // Nếu quá dài, thêm trang A4 mới
+        // Nếu hết trang thì thêm trang mới
+        page = pdfDoc.addPage([595, 842]);
         y = height - margin;
-        const newPage = pdfDoc.addPage([595, 842]);
-        page = newPage;
       }
 
-      const signer = signers[i];
-      if (signer) {
-        page.drawText(
-          `${signer.signer.name} (${signer.signer.employeeCode || ''}) • ${signer.signedAt?.toLocaleDateString()}`,
-          { x: leftX, y, size: nameSize, font, color: rgb(0, 0, 0) }
-        );
+      page.drawText(
+        `- ${signer.signer.name} (${signer.signer.employeeCode || ""}) • ${signer.signedAt?.toLocaleDateString() || ""
+        }`,
+        { x: margin + 20, y, size: nameSize, font, color: rgb(0, 0, 0) }
+      );
+      y -= lineHeight;
+    }
+
+    y -= 30;
+
+    // ===== Danh sách phê duyệt =====
+    page.drawText("Danh sách người phê duyệt", {
+      x: margin,
+      y,
+      size: titleSize,
+      font,
+      color: rgb(0, 0, 0),
+    });
+    y -= 30;
+
+    const approvers = proposal.approvers.filter((a) => a.status === "approved");
+    for (const approver of approvers) {
+      if (y < margin) {
+        page = pdfDoc.addPage([595, 842]);
+        y = height - margin;
       }
 
-      const approver = approvers[i];
-      if (approver) {
-        page.drawText(
-          `${approver.approver.name} (${approver.approver.employeeCode || ''}) • ${approver.approvedAt?.toLocaleDateString()}`,
-          { x: rightX, y, size: nameSize, font, color: rgb(0, 0, 0) }
-        );
-      }
-
+      page.drawText(
+        `- ${approver.approver.name} (${approver.approver.employeeCode || ""}) • ${approver.approvedAt?.toLocaleDateString() || ""
+        }`,
+        { x: margin + 20, y, size: nameSize, font, color: rgb(0, 0, 0) }
+      );
       y -= lineHeight;
     }
 

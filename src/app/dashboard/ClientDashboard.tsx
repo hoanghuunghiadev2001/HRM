@@ -125,6 +125,11 @@ export default function ClientDashboard({
              
           ],
         },
+          {
+          key: "/dashboard/attendance",
+          icon: <Fingerprint />,
+          label: "Chấm công",
+        },
 
     ...(isAdmin === "ADMIN" || isAdmin === "MANAGER"
       ? [
@@ -134,11 +139,7 @@ export default function ClientDashboard({
           label: "DS yêu cầu",
         },
         
-        {
-          key: "/dashboard/attendance",
-          icon: <Fingerprint />,
-          label: "Chấm công",
-        },
+      
 
       
       ]

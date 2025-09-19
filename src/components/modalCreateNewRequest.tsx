@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { DatePicker, Form, Modal, Select, Input, Spin } from "antd";
-import dayjs, { Dayjs } from "dayjs";
+import  { Dayjs } from "dayjs";
 import { NumericInput } from "./function";
 import { useAppSelector } from "@/store/hook";
 import { CreateLeavePayload } from "@/app/dashboard/request/page";
@@ -82,7 +82,7 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
     }
   }, [open]);
 
-  const disabledDate = (current: Dayjs) => current && current.isBefore(dayjs().startOf("day"));
+  // const disabledDate = (current: Dayjs) => current && current.isBefore(dayjs().startOf("day"));
 
   const handleOk = () => {
     if (!id || !leaveType || !totalHours || !reason || !timeRange || selectedApprovers.length === 0) {
@@ -152,7 +152,6 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
             if (dates && dates[0] && dates[1]) setTimeRange([dates[0], dates[1]]);
             else setTimeRange(null);
           }}
-          disabledDate={disabledDate}
           showTime={{ format: "HH:mm:ss" }}
           format="DD/MM/YYYY HH:mm:ss"
           style={{ width: "100%" }}
@@ -164,14 +163,16 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
         {loadingApprovers ? (
           <Spin />
         ) : (
-          <Select
-            mode="multiple"
-            value={selectedApprovers}
-            onChange={setSelectedApprovers}
-            options={approversList}
-            placeholder="Chọn người duyệt theo thứ tự"
-            style={{ width: "100%" }}
-          />
+        <Select
+  mode="multiple"
+  showSearch
+  optionFilterProp="label" // search dựa vào label
+  value={selectedApprovers}
+  onChange={setSelectedApprovers}
+  options={approversList}
+  placeholder="Chọn người duyệt theo thứ tự"
+  style={{ width: "100%" }}
+/>
         )}
       </div>
 

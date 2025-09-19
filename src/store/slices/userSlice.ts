@@ -6,8 +6,9 @@ interface UserState {
   name: string | null;
   avatar: string | null;
   role: string; // Thêm role nếu cần
-  department?: string| null;
-  position?: string| null
+  department?: string | null;
+  position?: string | null
+  departmentID?: string | null
 }
 
 const initialState: UserState = {
@@ -18,19 +19,21 @@ const initialState: UserState = {
   id: null, // Mặc định là null, có thể thay đổi nếu cần
   department: null,
   position: null,
+  departmentID: null
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<{ name: string; avatar: string; id: string, employeeCode: string, department?: string, position?: string }>) => {
+    setUser: (state, action: PayloadAction<{ name: string; avatar: string; id: string, employeeCode: string, department?: string, position?: string, departmentID: string }>) => {
       state.name = action.payload.name;
       state.avatar = action.payload.avatar;
       state.id = action.payload.id || null; // Cập nhật id nếu có
       state.employeeCode = action.payload.employeeCode || null; // Cập nhật employeeCode nếu  
-      state.department= action.payload.department || null;
-      state.position= action.payload.position || null;
+      state.department = action.payload.department || null;
+      state.position = action.payload.position || null;
+      state.departmentID = action.payload.departmentID || null;
 
     },
     setUserAvatar: (state, action) => {
@@ -43,11 +46,11 @@ const userSlice = createSlice({
     clearUser: (state) => {
       state.name = null;
       state.avatar = null;
-      state.employeeCode=null;
-      
+      state.employeeCode = null;
+
     },
   },
 });
 
-export const { setUser, clearUser, setUserAvatar,setUserRole } = userSlice.actions;
+export const { setUser, clearUser, setUserAvatar, setUserRole } = userSlice.actions;
 export default userSlice.reducer;

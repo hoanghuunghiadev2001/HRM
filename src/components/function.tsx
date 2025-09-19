@@ -40,19 +40,18 @@ interface StatusLeaveProps {
 export const StatusLeave = ({ status }: StatusLeaveProps) => {
   return (
     <div
-      className={`px-4 py-1 rounded-xl w-fit font-medium text-nowrap ${
-        status === "pending"
+      className={`px-4 py-1 rounded-xl w-fit font-medium text-nowrap ${status === "pending"
           ? "bg-[#a5cbe4] text-[#1181c8]"
           : status === "approved"
-          ? "text-[#0b5705] bg-[#c9fab4]"
-          : "bg-[#ffc0c2] text-[#eb2128]"
-      }`}
+            ? "text-[#0b5705] bg-[#c9fab4]"
+            : status === "revoked" ? "bg-blue-600 text-white " : "bg-[#ffc0c2] text-[#eb2128]"
+        }`}
     >
       {status === "pending"
         ? "Đang chờ"
         : status === "approved"
-        ? "Chấp nhận"
-        : "Từ chối"}
+          ? "Chấp nhận"
+          : status === "revoked" ? "Đã rút đơn" : "Từ chối"}
     </div>
   );
 };

@@ -41,7 +41,7 @@ export default function LoginClient() {
 
     if (res.ok) {
       localStorage.setItem("token", data.token);
-  dispatch(setUser({ name: data.name, avatar: data.avt, id: data.id, employeeCode: data.employeeCode, department: data.department, position:data.position }));
+  dispatch(setUser({ name: data.name, avatar: data.avt, id: data.id, employeeCode: data.employeeCode, department: data.department, position:data.position , departmentID: data.departmentID}));
   dispatch(setUserRole(data.role)) // nên là URL
       router.push("/dashboard"); // thay vì redirect từ server
     } else {

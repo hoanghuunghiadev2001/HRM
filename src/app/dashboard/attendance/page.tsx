@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
@@ -22,7 +23,7 @@ import ModalLoading from "@/components/modalLoading";
 import { createStyles } from "antd-style";
 import dayjs from "dayjs";
 import { fetchAttendances } from "@/lib/api";
-import { AttendanceResponse, Department } from "@/lib/interface";
+import { AttendanceResponse2, Department } from "@/lib/interface";
 import Image from "next/image";
 import {
   DownloadOutlined,
@@ -92,7 +93,7 @@ function getTodayVNDateString() {
 }
 
 export default function AttendancePage() {
-  const { role, department } = useAppSelector((state) => state.user);
+  const { role, department, departmentID, name } = useAppSelector((state) => state.user);
   const [loading, setLoading] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState(10);
   const [pageTable, setPageTable] = useState(1);
@@ -104,7 +105,7 @@ export default function AttendancePage() {
 
   const [timeStart, setTimeStart] = useState("");
   const [timeEnd, setTimeEnd] = useState("");
-  const [listAttendance, setListAttendance] = useState<AttendanceResponse>();
+  const [listAttendance, setListAttendance] = useState<AttendanceResponse2>();
 
   const [departments, setDepartments] = useState<Department[]>([]);
 
@@ -207,9 +208,9 @@ export default function AttendancePage() {
     setLoading(true);
     const res = await fetchAttendances({
       msnv: filterMSNV,
-      name: filterName,
+      name: role === "USER" ? name ?? '' : filterName,
       department:
-        role === "ADMIN" ? filterDepartment : department ?? '',
+        role === "ADMIN" ? filterDepartment : departmentID ?? '',
       fromDate: timeStart,
       toDate: timeEnd,
       page: pageTable,
@@ -297,8 +298,8 @@ export default function AttendancePage() {
       employeeCode: item.employeeCode,
       avatar: item.avatar,
       employeeName: item.employeeName,
-      department: item.department?.name ?? '',
-      position: item.position?.name,
+      department: item.department,
+      position: item.position,
       date: formatDateTime(item.date),
       firstCheckIn: formatDateTime(item.firstCheckIn),
       lastCheckOut: item.lastCheckOut
@@ -309,17 +310,19 @@ export default function AttendancePage() {
   const formatToVNDate = (date: Date) => {
     return dayjs(date).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY");
   };
-  const changeDate = (value: any, dateString: any) => {
-    if (!dateString || dateString.length !== 2) return;
+  const changeDate = (dates: any, dateStrings: [string, string]) => {
+    if (!dates || dates.length !== 2) return;
 
     // Chuyển từ VN timezone sang UTC
-    const startUTC = dayjs.tz(dateString[0], "Asia/Ho_Chi_Minh").utc().toDate();
-    const endUTC = dayjs.tz(dateString[1], "Asia/Ho_Chi_Minh").utc().toDate();
-    console.log(formatToVNDate(startUTC));
+    const startUTC = dates[0].tz("Asia/Ho_Chi_Minh").utc().format("YYYY-MM-DD");
+    const endUTC = dates[1].tz("Asia/Ho_Chi_Minh").utc().format("YYYY-MM-DD");
 
-    setTimeStart(formatToVNDate(startUTC));
-    setTimeEnd(formatToVNDate(endUTC));
+    setTimeStart(startUTC);
+    setTimeEnd(endUTC);
+
+    console.log("Start:", startUTC, "End:", endUTC);
   };
+
 
   const handleExportExcel = async () => {
     const res = await fetch("/api/attendance/export", {
@@ -378,18 +381,21 @@ export default function AttendancePage() {
                   <p className="font-bold  text-2xl text-[#4a4a6a]">
                     Danh sách chấm công:
                   </p>
-                  <div className="flex gap-2">
-                    <Upload {...uploadProps}>
-                      <Button icon={<UploadOutlined />}>Upload Excel</Button>
-                    </Upload>
-                    <Button
-                      onClick={handleExportExcel}
-                      type="primary"
-                      icon={<DownloadOutlined />}
-                    >
-                      <p className="hidden sm:block">Xuất file tuần này</p>
-                    </Button>
-                  </div>
+                  {role === "ADMIN" ? (
+                    <div className="flex gap-2">
+                      <Upload {...uploadProps}>
+                        <Button icon={<UploadOutlined />}>Upload Excel</Button>
+                      </Upload>
+                      <Button
+                        onClick={handleExportExcel}
+                        type="primary"
+                        icon={<DownloadOutlined />}
+                      >
+                        <p className="hidden sm:block">Xuất file tuần này</p>
+                      </Button>
+                    </div>
+                  ) : ''}
+
                 </div>
 
                 {/* Bộ lọc + bảng danh sách giữ nguyên code cũ */}
@@ -397,7 +403,7 @@ export default function AttendancePage() {
                   <p className="font-bold  text-xl text-[#4a4a6a]">Tìm kiếm:</p>
                   <div className="grid grid-cols-2 md:flex md:items-center gap-4 mb-4 w-full mt-2 pl-0 md:px-4 flex-wrap">
                     {/* MSNV */}
-                    <div className="flex gap-2 items-center">
+                    <div className={`${role === "USER" ? 'hidden' : ''} flex gap-2 items-center`}>
                       <Form.Item
                         layout="horizontal"
                         label={
@@ -419,7 +425,7 @@ export default function AttendancePage() {
                       </Form.Item>
                     </div>
                     {/* Tên NV */}
-                    <div className="flex gap-2 items-center ">
+                    <div className={`${role === "USER" ? 'hidden' : ''} flex gap-2 items-center`}>
                       <Form.Item
                         layout="horizontal"
                         label={
@@ -453,13 +459,8 @@ export default function AttendancePage() {
                         }
                       >
                         <RangePicker
-                          format={"DD/MM/YYYY"}
-                          className="w-full"
-                          lang="vn"
+                          format="DD/MM/YYYY"
                           onChange={changeDate}
-                          disabledDate={(current) => {
-                            return current && current > maxDate;
-                          }}
                         />
                       </Form.Item>
                     </div>

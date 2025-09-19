@@ -16,6 +16,7 @@ interface Position {
   id: number;
   name: string;
   departmentId: number;
+  level: number;
 }
 
 export default function DepartmentPositionCRUD() {
@@ -99,7 +100,7 @@ export default function DepartmentPositionCRUD() {
     setModalMode("edit");
     setCurrentDeptIdForPos(pos.departmentId);
     setEditItemId(pos.id);
-    form.setFieldsValue({ name: pos.name });
+    form.setFieldsValue({ name: pos.name, level: pos.level }); // set cả level
     setModalOpen(true);
   };
 
@@ -175,6 +176,7 @@ export default function DepartmentPositionCRUD() {
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 name: newName,
+                level: values.level,   // gửi level
               }),
             }
           );
@@ -189,7 +191,10 @@ export default function DepartmentPositionCRUD() {
           const res = await fetch(`/api/positions/?posId=${editItemId}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name: newName }),
+            body: JSON.stringify({
+              name: newName,
+              level: values.level,   // gửi level
+            }),
           });
           if (!res.ok) {
             setLoading(false);
@@ -302,6 +307,13 @@ export default function DepartmentPositionCRUD() {
     },
     { title: "Tên chức vụ", dataIndex: "name", key: "name" },
     {
+      title: "Level",
+      dataIndex: "level",
+      key: "level",
+      width: 100,
+      render: (level: number) => level ?? "-", // Hiển thị level, nếu null thì "-"
+    },
+    {
       title: "Thao tác",
       key: "actions",
       width: 100,
@@ -389,8 +401,8 @@ export default function DepartmentPositionCRUD() {
               ? "Thêm Phòng ban"
               : "Thêm Chức vụ"
             : modalType === "department"
-            ? "Sửa Phòng ban"
-            : "Sửa Chức vụ"
+              ? "Sửa Phòng ban"
+              : "Sửa Chức vụ"
         }
         open={modalOpen}
         onOk={onModalOk}
@@ -412,17 +424,29 @@ export default function DepartmentPositionCRUD() {
               autoFocus
             />
           </Form.Item>
+
           {modalType === "department" && (
             <Form.Item
               label={"Mã phòng ban"}
               name="abbreviation"
               className="!mt-3"
-              rules={[{ required: true, message: "Vui lòng nhập tên" }]}
+              rules={[{ required: true, message: "Vui lòng nhập mã phòng ban" }]}
             >
               <Input placeholder={"Nhập mã phòng ban"} />
             </Form.Item>
           )}
+
+          {modalType === "position" && (
+            <Form.Item
+              label="Level"
+              name="level"
+              rules={[{ required: true, message: "Vui lòng nhập level" }]}
+            >
+              <Input type="number" placeholder="Nhập level" />
+            </Form.Item>
+          )}
         </Form>
+
       </Modal>
       <Modal
         title={modalType === "department" ? "Xóa Phòng ban" : "Xóa chức vụ"}

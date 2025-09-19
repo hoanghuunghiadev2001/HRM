@@ -194,7 +194,7 @@ export default function RequestPage() {
       />
       <ModalDetailLeave
         infoRequetLeave={infoRequetLeave}
-        onClose={() => setModalDetailLeave(false)}
+        onClose={() => {setModalDetailLeave(false); getRequestsLeave()}}
         open={modalDetailLeave}
         title="Chi Tiết Đơn Xin Phép"
       />
@@ -204,7 +204,7 @@ export default function RequestPage() {
       <div className="flex flex-col  sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
         <p className="font-bold text-xl text-[#4a4a6a]">Phiếu yêu cầu</p>
         <button
-          className="flex gap-2 items-center  h-10 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] text-white text-sm font-semibold w-fit"
+          className="flex gap-2 items-center   h-10 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] text-white text-sm font-semibold w-fit"
           onClick={() => setCreateRequest(true)}
         >
           <Plus size={16} />

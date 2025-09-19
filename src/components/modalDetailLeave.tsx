@@ -13,7 +13,6 @@ import { RequestLeave } from "./api";
 import { StatusLeave } from "./function";
 import { useAppSelector } from "@/store/hook";
 
-
 // Extend plugin
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -56,6 +55,7 @@ const ModalDetailLeave = ({
   const [loading, setLoading] = useState(false);
   const { id, employeeCode } = useAppSelector((state) => state.user);
 
+  // API cập nhật loại phép
   async function updateLeaveTypeAPI(payload: UpdateLeaveRequestPayload) {
     try {
       setLoading(true);
@@ -84,6 +84,36 @@ const ModalDetailLeave = ({
       leaveType,
     });
   };
+
+  // API rút đơn
+  async function handleRevoke() {
+    if (!infoRequetLeave) return;
+    try {
+      setLoading(true);
+      const response = await fetch("/api/leave/my-requests/", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ leaveRequestId: infoRequetLeave.id }),
+      });
+      const result: ApiResponse<any> = await response.json();
+      if (!response.ok) throw new Error(result.message || "Rút đơn thất bại");
+      message.success(result.message);
+      onClose(); // đóng drawer sau khi rút
+    } catch (error: any) {
+      message.error(error.message || "Rút đơn thất bại");
+      console.error("Lỗi khi rút đơn:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Kiểm tra điều kiện hiển thị nút rút đơn
+  const now = dayjs().tz("Asia/Ho_Chi_Minh");
+  const start = infoRequetLeave ? dayjs.utc(infoRequetLeave.startDate).tz("Asia/Ho_Chi_Minh") : null;
+  const canRevoke =
+    infoRequetLeave?.status === "approved" &&
+    start &&
+    start.isAfter(now);
 
   return (
     <Drawer
@@ -129,7 +159,6 @@ const ModalDetailLeave = ({
         {/* Chi tiết đơn nghỉ */}
         <p className="text-xl font-bold mt-4">Chi tiết:</p>
         <div className="pl-4 mt-1">
-
           {employeeCode === "AD001" || employeeCode === "00898"  ? (
             <Form.Item label="Loại phép">
               <Select value={leaveType} onChange={setLeaveType} options={leaveOptions} />
@@ -173,9 +202,9 @@ const ModalDetailLeave = ({
           )}
         </div>
 
-
-        {employeeCode === "AD001" || employeeCode === "00898" ? (
-          <div className="mt-4 flex justify-end">
+        {/* Nút cập nhật và rút đơn */}
+        {(employeeCode === "AD001" || employeeCode === "00898") && (
+          <div className="mt-4 flex justify-end gap-2">
             <button
               onClick={handleUpdate}
               disabled={loading}
@@ -183,9 +212,17 @@ const ModalDetailLeave = ({
             >
               {loading ? "Đang cập nhật..." : "Cập nhật"}
             </button>
+            {canRevoke && (
+              <button
+                onClick={handleRevoke}
+                disabled={loading}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                {loading ? "Đang rút đơn..." : "Rút đơn"}
+              </button>
+            )}
           </div>
-        ):''}
-
+        )}
       </div>
     </Drawer>
   );

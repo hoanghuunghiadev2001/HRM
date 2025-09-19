@@ -10,6 +10,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+
 function generateRejectionEmail(
   employeeName: string,
   approvers: { name: string; approvedAt: Date }[],
@@ -18,13 +19,13 @@ function generateRejectionEmail(
   const approvedListHtml = approvers.length
     ? `<ul style="padding-left: 20px; color: #444;">
         ${approvers
-          .map(
-            (a) =>
-              `<li><strong>${a.name}</strong> – ${dayjs(a.approvedAt)
-                .tz("Asia/Ho_Chi_Minh")
-                .format("DD/MM/YYYY HH:mm")}</li>`
-          )
-          .join("")}
+      .map(
+        (a) =>
+          `<li><strong>${a.name}</strong> – ${dayjs(a.approvedAt)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY HH:mm")}</li>`
+      )
+      .join("")}
        </ul>`
     : `<p style="font-style: italic; color: #888;">Không có người nào duyệt trước đó</p>`;
 
@@ -49,7 +50,6 @@ function generateRejectionEmail(
 
 async function approveStep(stepApproverId: number) {
   return await prisma.$transaction(async (tx) => {
-    // Lấy thông tin stepApprover và step liên quan
     const stepApprover = await tx.leaveApprovalStepApprover.findUnique({
       where: { id: stepApproverId },
       include: { leaveApprovalStep: { include: { approvers: true } } },
@@ -57,17 +57,14 @@ async function approveStep(stepApproverId: number) {
 
     if (!stepApprover) throw new Error("Step Approver not found");
 
-    // Kiểm tra xem có ai trong cùng bước đã duyệt chưa
     const someoneApproved = stepApprover.leaveApprovalStep.approvers.some(
       (a) => a.status === "approved"
     );
 
     if (someoneApproved) {
-      // Đã có người duyệt rồi, không cho duyệt nữa
       throw new Error("Bước duyệt này đã có người duyệt rồi");
     }
 
-    // Nếu chưa ai duyệt, cho phép cập nhật trạng thái người duyệt hiện tại
     const updated = await tx.leaveApprovalStepApprover.update({
       where: { id: stepApproverId, status: "pending" },
       data: {
@@ -93,9 +90,8 @@ export async function PUT(req: NextRequest) {
       role: string;
     };
 
-
     const body = await req.json();
-    const { leaveRequestId, status, approvedByName } = body;
+    const { leaveRequestId, status, approvedByName, notifyAllCompany, notifyDepartmentId } = body;
 
     if (
       typeof leaveRequestId !== "number" ||
@@ -143,10 +139,18 @@ export async function PUT(req: NextRequest) {
       where: { id: leaveRequestId },
       include: {
         employee: {
-          include: { contactInfo: true, workInfo: true },
+          include: {
+            contactInfo: true,
+            workInfo: {
+              include: {
+                position: true, // thêm dòng này để lấy position
+                department: true // nếu muốn luôn department
+              },
+            },
+          },
         },
       },
-    });
+    })
 
     if (!leaveRequest) {
       return NextResponse.json(
@@ -155,7 +159,6 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    // ✅ Nếu từ chối
     if (!approve) {
       await prisma.leaveApprovalStepApprover.update({
         where: { id: stepApprover.id },
@@ -208,7 +211,6 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ message: "Đơn đã bị từ chối" });
     }
 
-    // ✅ Cập nhật người duyệt thành approved
     await prisma.leaveApprovalStepApprover.update({
       where: { id: stepApprover.id },
       data: {
@@ -217,7 +219,6 @@ export async function PUT(req: NextRequest) {
       },
     });
 
-    // ✅ Nếu là người duyệt cuối trong bước → duyệt luôn bước đó
     const currentStep = await prisma.leaveApprovalStep.update({
       where: { id: stepApprover.leaveApprovalStepId },
       data: {
@@ -226,7 +227,6 @@ export async function PUT(req: NextRequest) {
       },
     });
 
-    // ✅ Tìm bước tiếp theo
     const nextStep = await prisma.leaveApprovalStep.findFirst({
       where: {
         leaveRequestId,
@@ -256,7 +256,6 @@ export async function PUT(req: NextRequest) {
       },
     });
 
-    // ✅ Nếu có bước tiếp theo → gửi mail người duyệt
     if (nextStep) {
       const requesterDepartmentId =
         leaveRequest.employee.workInfo?.departmentId;
@@ -313,7 +312,6 @@ export async function PUT(req: NextRequest) {
         }
       }
     } else {
-      // ✅ Không còn bước tiếp theo → duyệt đơn luôn
       await prisma.leaveRequest.update({
         where: { id: leaveRequestId },
         data: {
@@ -353,6 +351,95 @@ export async function PUT(req: NextRequest) {
       </div>
     `,
         });
+      }
+      const startVN = dayjs(leaveRequest.startDate)
+        .tz("Asia/Ho_Chi_Minh")
+        .format("DD/MM/YYYY HH:mm");
+      const endVN = dayjs(leaveRequest.endDate)
+        .tz("Asia/Ho_Chi_Minh")
+        .format("DD/MM/YYYY HH:mm");
+
+      // 📢 Gửi mail toàn công ty hoặc bộ phận nếu được yêu cầu
+      if (notifyAllCompany) {
+        const allEmployees = await prisma.employee.findMany({
+          include: { contactInfo: true },
+        });
+
+        const emails = allEmployees
+          .map((e) => e.contactInfo?.email)
+          .filter((email): email is string => !!email);
+
+        if (emails.length > 0) {
+          await sendEmail({
+            to: emails,
+            subject: `📢 Thông báo: Đơn về việc nghỉ phép của ${leaveRequest.employee.workInfo?.position?.name +':' + leaveRequest.employee.name}`,
+            html: `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border-radius: 8px; background-color: #f5f5f5; border: 1px solid #ddd;">
+      <h2 style="color: #2e7d32; margin-bottom: 16px;">📢 Thông báo đơn nghỉ phép</h2>
+      <p>Xin chào,</p>
+      <p>Nhân viên <strong>${leaveRequest.employee.name}</strong> đã được duyệt đơn nghỉ phép với thông tin:</p>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 12px;">
+        <tbody>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ccc; background-color: #fff; font-weight: 600; width: 150px;">Mã nhân viên</td>
+            <td style="padding: 8px; border: 1px solid #ccc; background-color: #fff;">${leaveRequest.employee.employeeCode}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ccc; background-color: #fff; font-weight: 600;">Thời gian nghỉ</td>
+            <td style="padding: 8px; border: 1px solid #ccc; background-color: #fff;">${startVN} đến ${endVN}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 16px;">Vui lòng cập nhật thông tin công việc hoặc phối hợp với nhân viên khi cần.</p>
+      <hr style="margin: 24px 0; border: none; border-top: 1px solid #eee;" />
+      <p style="font-size: 12px; color: #888;">📧 Email được gửi tự động từ hệ thống quản lý nghỉ phép. Vui lòng không trả lời trực tiếp email này.</p>
+    </div>
+    `,
+          });
+        }
+      }
+
+
+      if (notifyDepartmentId) {
+        const deptEmployees = await prisma.employee.findMany({
+          where: {
+            workInfo: { departmentId: notifyDepartmentId },
+          },
+          include: { contactInfo: true },
+        });
+
+        const emails = deptEmployees
+          .map((e) => e.contactInfo?.email)
+          .filter((email): email is string => !!email);
+
+         if (emails.length > 0) {
+          await sendEmail({
+            to: emails,
+            subject: `📢 Thông báo: Đơn về việc nghỉ phép của ${leaveRequest.employee.workInfo?.position?.name +':' + leaveRequest.employee.name}`,
+            html: `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border-radius: 8px; background-color: #f5f5f5; border: 1px solid #ddd;">
+      <h2 style="color: #2e7d32; margin-bottom: 16px;">📢 Thông báo đơn nghỉ phép</h2>
+      <p>Xin chào,</p>
+      <p>Nhân viên <strong>${leaveRequest.employee.name}</strong> đã được duyệt đơn nghỉ phép với thông tin:</p>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 12px;">
+        <tbody>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ccc; background-color: #fff; font-weight: 600; width: 150px;">Mã nhân viên</td>
+            <td style="padding: 8px; border: 1px solid #ccc; background-color: #fff;">${leaveRequest.employee.employeeCode}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ccc; background-color: #fff; font-weight: 600;">Thời gian nghỉ</td>
+            <td style="padding: 8px; border: 1px solid #ccc; background-color: #fff;">${startVN} đến ${endVN}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 16px;">Vui lòng cập nhật thông tin công việc hoặc phối hợp với nhân viên khi cần.</p>
+      <hr style="margin: 24px 0; border: none; border-top: 1px solid #eee;" />
+      <p style="font-size: 12px; color: #888;">📧 Email được gửi tự động từ hệ thống quản lý nghỉ phép. Vui lòng không trả lời trực tiếp email này.</p>
+    </div>
+    `,
+          });
+        }
       }
     }
 

@@ -49,6 +49,7 @@ export async function PATCH(req: NextRequest) {
 
     const employee = await prisma.employee.findUnique({
       where: { id },
+      
       include: {
         contactInfo: true,
       },

@@ -129,7 +129,7 @@ model ContactInfo {
   phoneNumber   String?  @unique
   relativePhone String?
   companyPhone  String?
-  email         String?  
+  email         String?
   employeeId    Int      @unique
   employee      Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 }
@@ -194,9 +194,9 @@ model LeaveApprovalStepApprover {
 }
 
 model AttendanceImportLog {
-  id         Int          @id @default(autoincrement())
-  filename   String
-  importedAt DateTime     @default(now())
+  id          Int          @id @default(autoincrement())
+  filename    String
+  importedAt  DateTime     @default(now())
   attendances Attendance[]
 }
 
@@ -209,8 +209,8 @@ model Attendance {
   workingHours Float?
   employee     Employee  @relation(fields: [employeeId], references: [id])
 
-    importId      Int?      // liên kết tới log import
-  importLog     AttendanceImportLog? @relation(fields: [importId], references: [id])
+  importId  Int? // liên kết tới log import
+  importLog AttendanceImportLog? @relation(fields: [importId], references: [id])
 
   @@unique([employeeId, date])
   @@index([date])
@@ -287,7 +287,7 @@ model ProposalSigner {
   signedAt   DateTime?
   proposal   Proposal    @relation(fields: [proposalId], references: [id], onDelete: Cascade)
   signer     Employee    @relation(fields: [signerId], references: [id])
-  level       Int       // Thêm cột level để quản lý thứ tự ký
+  level      Int // Thêm cột level để quản lý thứ tự ký
 
   @@unique([proposalId, signerId])
   @@index([signerId], map: "ProposalSigner_signerId_fkey")
@@ -301,7 +301,8 @@ model ProposalApprover {
   approvedAt DateTime?
   approver   Employee    @relation(fields: [approverId], references: [id])
   proposal   Proposal    @relation(fields: [proposalId], references: [id], onDelete: Cascade)
-  level       Int       // Thêm cột level để quản lý thứ tự ký
+  level      Int // Thêm cột level để quản lý thứ tự ký
+
   @@unique([proposalId, approverId])
   @@index([approverId], map: "ProposalApprover_approverId_fkey")
 }
@@ -338,6 +339,7 @@ enum LeaveStatus {
   pending
   approved
   rejected
+  revoked
 }
 
 enum ProposalStatus {

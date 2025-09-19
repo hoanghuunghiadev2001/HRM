@@ -117,6 +117,26 @@ export interface AttendanceResponse {
   data: Attendance[];
 }
 
+export interface Attendance2 {
+  employeeId: number;
+  employeeCode: string;
+  avatar: string;
+  employeeName: string;
+  department: string;
+  position: string;
+  date: string;
+  firstCheckIn: string;
+  lastCheckOut: string;
+  totalHours: number;
+}
+
+export interface AttendanceResponse2 {
+  total: number;
+  page: number;
+  pageSize: number;
+  data: Attendance2[];
+}
+
 export interface UseAttendanceParams {
   msnv?: string;
   name?: string;

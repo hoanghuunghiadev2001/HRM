@@ -35,7 +35,6 @@ export async function GET(req: NextRequest) {
     if (employeeCode) {
       whereFilter.employeeCode = {
         contains: employeeCode,
-        mode: "insensitive",
       };
     }
 
@@ -67,7 +66,7 @@ export async function GET(req: NextRequest) {
       skip: (page - 1) * pageSize,
       take: pageSize,
       orderBy: {
-        name: "asc",
+        employeeCode: "asc",
       },
       select: {
         id: true,
