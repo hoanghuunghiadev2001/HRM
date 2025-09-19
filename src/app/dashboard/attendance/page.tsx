@@ -529,19 +529,23 @@ export default function AttendancePage() {
               </div>
             ),
           },
-          {
-            key: "2",
-            label: "Lịch sử import",
-            children: (
-              <Table<ImportHistory>
-                rowKey="id"
-                columns={historyColumns}
-                dataSource={importHistory}
-                pagination={false}
-                size="small"
-              />
-            ),
-          },
+          ...(role === "ADMIN"
+            ? [
+              {
+                key: "2",
+                label: "Lịch sử import",
+                children: (
+                  <Table<ImportHistory>
+                    rowKey="id"
+                    columns={historyColumns}
+                    dataSource={importHistory}
+                    pagination={false}
+                    size="small"
+                  />
+                ),
+              },
+            ]
+            : []),
         ]}
       />
     </div>
