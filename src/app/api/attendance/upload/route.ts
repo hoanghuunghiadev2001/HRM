@@ -9,22 +9,19 @@ import timezone from "dayjs/plugin/timezone";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-/** Convert a cell value to "HH:MM" (string) or null.
- * - handles strings like "7:5", "07:05", "07:05:00"
- * - handles Excel time numbers (fraction of day) or datetime serials
- */
+/** Convert a cell value to "HH:MM" (string) or null */
 function cellToHHmm(val: any): string | null {
   if (val === undefined || val === null || String(val).trim() === "") return null;
-  if (val instanceof Date && !isNaN(val.getTime())) {
-    return dayjs(val).format("HH:mm");
-  }
+  if (val instanceof Date && !isNaN(val.getTime())) return dayjs(val).format("HH:mm");
+
   const s = String(val).trim();
-  const m1 = s.match(/(\d{1,2}):(\d{1,2})(?::\d{1,2})?/);
-  if (m1) {
-    const hh = String(Number(m1[1])).padStart(2, "0");
-    const mm = String(Number(m1[2])).padStart(2, "0");
+  const m = s.match(/(\d{1,2}):(\d{1,2})(?::\d{1,2})?/);
+  if (m) {
+    const hh = String(Number(m[1])).padStart(2, "0");
+    const mm = String(Number(m[2])).padStart(2, "0");
     return `${hh}:${mm}`;
   }
+
   const num = Number(s);
   if (!isNaN(num)) {
     if (num >= 0 && num < 1) {
@@ -43,22 +40,18 @@ function cellToHHmm(val: any): string | null {
   return null;
 }
 
-/** normalize time (HH:mm) string into Date (UTC) for workDate (in VN tz) */
+/** Convert "HH:mm" thành Date UTC (giữ đúng ngày VN) */
 function parseTimeToUTC(workDate: Date, hhmm: string | null): Date | null {
-  if (!hhmm) return null;
-  if (!/^\d{2}:\d{2}$/.test(hhmm)) return null;
+  if (!hhmm || !/^\d{2}:\d{2}$/.test(hhmm)) return null;
   const [hh, mm] = hhmm.split(":").map(Number);
-  return dayjs(workDate)
-    .hour(hh)
-    .minute(mm)
-    .second(0)
-    .millisecond(0)
-    .tz("Asia/Ho_Chi_Minh", true)
-    .utc()
-    .toDate();
+  return dayjs.tz(
+    `${dayjs(workDate).format("YYYY-MM-DD")} ${hh}:${mm}`,
+    "YYYY-MM-DD HH:mm",
+    "Asia/Ho_Chi_Minh"
+  ).toDate();
 }
 
-/** calc hours given HH:mm strings (local VN times) */
+/** Tính giờ làm việc từ HH:mm strings */
 function calcHours(checkInHHmm: string | null, checkOutHHmm: string | null): number {
   if (!checkInHHmm || !checkOutHHmm) return 0;
   const [h1, m1] = checkInHHmm.split(":").map(Number);
@@ -70,56 +63,47 @@ export async function POST(req: Request) {
   try {
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
-    if (!file) {
-      return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
-    }
+    if (!file) return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const workbook = XLSX.read(buffer, { type: "buffer" });
 
     const sheetName = "ThongKe";
     const sheet = workbook.Sheets[sheetName];
-    if (!sheet) {
-      return NextResponse.json({ error: `Sheet '${sheetName}' not found` }, { status: 400 });
-    }
+    if (!sheet) return NextResponse.json({ error: `Sheet '${sheetName}' not found` }, { status: 400 });
 
     const rows: any[][] = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: true });
 
-    const dateRow = rows[2]?.[0] || "";
+    // Lấy ngày từ dòng A4
+    const dateRow = rows[3]?.[0] || "";
     const match = String(dateRow).match(/(\d{2}\/\d{2}\/\d{4})/);
-    const workDate = match
-      ? new Date(match[1].split("/").reverse().join("-"))
-      : new Date();
-    workDate.setHours(0, 0, 0, 0);
+    if (!match) return NextResponse.json({ error: "Không đọc được ngày từ file Excel" }, { status: 400 });
 
-    const startIndex = rows.findIndex((r) => r && (r[0] === 1 || r[0] === "1" || r[0] === "STT"));
+    const [dd, mm, yyyy] = match[1].split("/");
+    const workDate = dayjs(`${yyyy}-${mm}-${dd}`).startOf("day").toDate();
+    workDate.setUTCHours(0, 0, 0, 0);
+
+    // Tìm dòng bắt đầu dữ liệu nhân viên
+    let startIndex = rows.findIndex(r => r && (r[0] === 1 || r[0] === "1" || r[0] === "STT"));
     if (startIndex === -1) {
-      const alt = rows.findIndex((r) => r && r[1] && String(r[1]).trim().length > 0 && String(r[2] ?? "").trim() !== "");
-      if (alt === -1) {
-        return NextResponse.json({ error: "Không tìm thấy dữ liệu nhân viên trong file" }, { status: 400 });
-      }
+      startIndex = rows.findIndex(r => r && r[1] && String(r[1]).trim() && String(r[2] ?? "").trim());
+      if (startIndex === -1) return NextResponse.json({ error: "Không tìm thấy dữ liệu nhân viên trong file" }, { status: 400 });
     }
 
-    const importLog = await prisma.attendanceImportLog.create({
-      data: { filename: file.name || "upload.xlsx" },
-    });
+    const importLog = await prisma.attendanceImportLog.create({ data: { filename: file.name || "upload.xlsx" } });
 
     let imported = 0;
     let skipped = 0;
 
     for (let i = startIndex; i < rows.length; i++) {
       const row = rows[i] || [];
-      const colB = row[1];
-      if (!colB || String(colB).trim() === "") continue;
+      const employeeCode = row[1] ? String(row[1]).trim() : null;
+      if (!employeeCode) continue;
 
-      const employeeCode = String(colB).trim();
       const employeeName = String(row[2] ?? "").trim();
+      const checkInHHmm = cellToHHmm(row[4]);
 
-      // Check-in time
-      const checkInCell = row[4];
-      const checkInHHmm = cellToHHmm(checkInCell);
-
-      // Check-out time (look ahead)
+      // Tìm check-out (look ahead 3 dòng)
       let checkOutHHmm: string | null = null;
       let consumedIndex = i;
       for (let j = i + 1; j <= Math.min(i + 3, rows.length - 1); j++) {
@@ -146,10 +130,9 @@ export async function POST(req: Request) {
         continue;
       }
 
-      // find employee in DB, include OtherInfo để check trạng thái
-      const employee = await prisma.employee.findUnique({ 
+      const employee = await prisma.employee.findUnique({
         where: { employeeCode },
-        include: { otherInfo: true }
+        include: { otherInfo: true },
       });
       if (!employee) {
         console.warn(`⚠️ Không tìm thấy nhân viên ${employeeCode} - ${employeeName}`);
@@ -158,7 +141,6 @@ export async function POST(req: Request) {
         continue;
       }
 
-      // Skip nếu nhân viên đã nghỉ việc
       if (employee.otherInfo?.workStatus === "RESIGNED") {
         console.info(`ℹ️ Nhân viên ${employeeCode} đã nghỉ việc, bỏ qua`);
         skipped++;
@@ -166,46 +148,41 @@ export async function POST(req: Request) {
         continue;
       }
 
-      // tìm attendance hiện có
-      const existing = await prisma.attendance.findUnique({
-        where: { employeeId_date: { employeeId: employee.id, date: workDate } },
-      });
-
       const checkInDateUTC = parseTimeToUTC(workDate, checkInHHmm);
       const checkOutDateUTC = parseTimeToUTC(workDate, checkOutHHmm);
 
-      if (!existing) {
+      const finalInHH = checkInHHmm;
+      const finalOutHH = checkOutHHmm;
+
+      // Tìm attendance hiện tại theo khoảng ngày
+      const existing = await prisma.attendance.findFirst({
+        where: {
+          employeeId: employee.id,
+          date: {
+            gte: dayjs(workDate).startOf("day").toDate(),
+            lte: dayjs(workDate).endOf("day").toDate(),
+          },
+        },
+      });
+
+      if (existing) {
+        await prisma.attendance.update({
+          where: { id: existing.id },
+          data: {
+            checkInTime: checkInDateUTC,
+            checkOutTime: checkOutDateUTC,
+            workingHours: calcHours(finalInHH, finalOutHH),
+            importId: importLog.id,
+          },
+        });
+      } else {
         await prisma.attendance.create({
           data: {
             employeeId: employee.id,
             date: workDate,
             checkInTime: checkInDateUTC,
             checkOutTime: checkOutDateUTC,
-            workingHours: calcHours(checkInHHmm, checkOutHHmm),
-            importId: importLog.id,
-          },
-        });
-      } else {
-        const existingCheckInHHmm = existing.checkInTime
-          ? dayjs(existing.checkInTime).tz("Asia/Ho_Chi_Minh").format("HH:mm")
-          : null;
-        const existingCheckOutHHmm = existing.checkOutTime
-          ? dayjs(existing.checkOutTime).tz("Asia/Ho_Chi_Minh").format("HH:mm")
-          : null;
-
-        const newCheckInDate = existing.checkInTime ?? checkInDateUTC;
-        const newCheckOutDate = existing.checkOutTime ?? checkOutDateUTC;
-
-        const finalInHH = existingCheckInHHmm ?? checkInHHmm;
-        const finalOutHH = existingCheckOutHHmm ?? checkOutHHmm;
-        const newWorkingHours = calcHours(finalInHH, finalOutHH);
-
-        await prisma.attendance.update({
-          where: { id: existing.id },
-          data: {
-            checkInTime: newCheckInDate,
-            checkOutTime: newCheckOutDate,
-            workingHours: newWorkingHours,
+            workingHours: calcHours(finalInHH, finalOutHH),
             importId: importLog.id,
           },
         });
