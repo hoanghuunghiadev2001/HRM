@@ -356,7 +356,11 @@ export async function fetchLeaveRequests(
   if (filters.startDate) queryParams.append("startDate", filters.startDate);
   if (filters.endDate) queryParams.append("endDate", filters.endDate);
 
-  const res = await fetch(`/api/leave/all-requests?${queryParams.toString()}`);
+  const res = await fetch(`/api/leave/all-requests?${queryParams.toString()}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`, // frontend chỉ gửi token
+    },
+  });
   if (!res.ok) {
     throw new Error("Lỗi khi gọi API lấy danh sách nghỉ phép");
   }

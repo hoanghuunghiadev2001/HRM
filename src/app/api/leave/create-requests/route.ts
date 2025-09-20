@@ -189,6 +189,7 @@ export async function POST(req: Request) {
         totalHours: Number(totalHours),
         reason: reason || "",
         action: "new",
+        detailUrl: process.env.detailUrlRequest + "/allRequests"
       });
     }
 
@@ -250,6 +251,7 @@ export async function PUT(req: Request) {
           totalHours: leaveRequest.totalHours ?? 0,
           reason: leaveRequest.reason || "",
           action: "rejected",
+          detailUrl: process.env.detailUrlRequest + "/request"
         });
       }
 
@@ -284,6 +286,7 @@ export async function PUT(req: Request) {
           totalHours: leaveRequest.totalHours ?? 0,
           reason: leaveRequest.reason || "",
           action: "new",
+          detailUrl: process.env.detailUrlRequest + "/allRequests"
         });
       }
     } else {
@@ -309,6 +312,7 @@ export async function PUT(req: Request) {
           totalHours: leaveRequest.totalHours ?? 0,
           reason: leaveRequest.reason || "",
           action: "approved",
+          detailUrl: process.env.detailUrlRequest + "/request"
         });
       }
     }

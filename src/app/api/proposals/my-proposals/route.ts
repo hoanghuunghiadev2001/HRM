@@ -8,32 +8,31 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 export async function GET(request: NextRequest) {
   try {
     const token = request.cookies.get("token")?.value;
-    if (!token) {
-      return NextResponse.json({ error: "Thiếu token xác thực" }, { status: 401 });
-    }
+    if (!token) return NextResponse.json({ error: "Thiếu token xác thực" }, { status: 401 });
 
-    let employeeId: number;
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
-      employeeId = decoded.id;
-    } catch {
-      return NextResponse.json({ error: "Token không hợp lệ hoặc đã hết hạn" }, { status: 401 });
-    }
+    const decoded = jwt.verify(token, JWT_SECRET) as { id: number; role: string };
+    const employeeId = decoded.id;
+    const role = decoded.role;
 
     const { searchParams } = request.nextUrl;
     const page = parseInt(searchParams.get("page") || "1", 10);
     const pageSize = parseInt(searchParams.get("pageSize") || "10", 10);
     const skip = (page - 1) * pageSize;
 
-    // 1. Proposal đã tạo / tham gia
+    // ADMIN xem tất cả, USER & MANAGER chỉ xem liên quan
+    const createdWhere =
+      role === "ADMIN"
+        ? {}
+        : {
+            OR: [
+              { createdById: employeeId },
+              { signers: { some: { signerId: employeeId } } },
+              { approvers: { some: { approverId: employeeId } } },
+            ],
+          };
+
     const created = await prisma.proposal.findMany({
-      where: {
-        OR: [
-          { createdById: employeeId },
-          { signers: { some: { signerId: employeeId } } },
-          { approvers: { some: { approverId: employeeId } } },
-        ],
-      },
+      where: createdWhere,
       include: defaultInclude(),
       skip,
       take: pageSize,
@@ -41,43 +40,49 @@ export async function GET(request: NextRequest) {
     });
 
     const createdTotal = await prisma.proposal.count({
-      where: {
-        OR: [
-          { createdById: employeeId },
-          { signers: { some: { signerId: employeeId } } },
-          { approvers: { some: { approverId: employeeId } } },
-        ],
-      },
+      where: createdWhere,
     });
 
-    // 2. Proposal cần ký – chỉ tới **người ký hiện tại theo thứ tự**
+    // Proposal cần ký
     const need_to_sign_all = await prisma.proposal.findMany({
-      where: { signers: { some: { status: "pending" } } },
+      where:
+        role === "ADMIN"
+          ? { signers: { some: { status: "pending" } } }
+          : { signers: { some: { status: "pending", signerId: employeeId } } },
       include: { ...defaultInclude(), signers: true },
     });
 
-    const need_to_sign_filtered = need_to_sign_all.filter((p) => {
-      const pendingSigners = p.signers.filter((s) => s.status === "pending");
-      const minLevel = Math.min(...pendingSigners.map((s) => s.level));
-      const currentSigner = pendingSigners.find((s) => s.level === minLevel);
-      return currentSigner?.signerId === employeeId;
-    });
+    const need_to_sign_filtered =
+      role === "ADMIN"
+        ? need_to_sign_all
+        : need_to_sign_all.filter((p) => {
+            const pendingSigners = p.signers.filter((s) => s.status === "pending");
+            const minLevel = Math.min(...pendingSigners.map((s) => s.level));
+            const currentSigner = pendingSigners.find((s) => s.level === minLevel);
+            return currentSigner?.signerId === employeeId;
+          });
 
     const needToSignTotal = need_to_sign_filtered.length;
     const need_to_sign = need_to_sign_filtered.slice(skip, skip + pageSize);
 
-    // 3. Proposal cần phê duyệt – chỉ tới **approver hiện tại theo thứ tự**
+    // Proposal cần phê duyệt
     const need_to_approve_all = await prisma.proposal.findMany({
-      where: { status: "waiting_approval", approvers: { some: { status: "pending" } } },
+      where:
+        role === "ADMIN"
+          ? { status: "waiting_approval" }
+          : { status: "waiting_approval", approvers: { some: { status: "pending", approverId: employeeId } } },
       include: { ...defaultInclude(), approvers: true },
     });
 
-    const need_to_approve_filtered = need_to_approve_all.filter((p) => {
-      const pendingApprovers = p.approvers.filter((a) => a.status === "pending");
-      const minLevel = Math.min(...pendingApprovers.map((a) => a.level));
-      const currentApprover = pendingApprovers.find((a) => a.level === minLevel);
-      return currentApprover?.approverId === employeeId;
-    });
+    const need_to_approve_filtered =
+      role === "ADMIN"
+        ? need_to_approve_all
+        : need_to_approve_all.filter((p) => {
+            const pendingApprovers = p.approvers.filter((a) => a.status === "pending");
+            const minLevel = Math.min(...pendingApprovers.map((a) => a.level));
+            const currentApprover = pendingApprovers.find((a) => a.level === minLevel);
+            return currentApprover?.approverId === employeeId;
+          });
 
     const needToApproveTotal = need_to_approve_filtered.length;
     const need_to_approve = need_to_approve_filtered.slice(skip, skip + pageSize);
@@ -94,6 +99,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ message: "Lỗi máy chủ nội bộ" }, { status: 500 });
   }
 }
+
+
 
 // Include mặc định
 function defaultInclude() {
