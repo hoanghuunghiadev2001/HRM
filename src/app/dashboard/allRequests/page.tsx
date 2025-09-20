@@ -433,7 +433,7 @@ export default function AllRequestPage() {
       />
       <ModalDetailLeave
         infoRequetLeave={infoRequetLeave}
-        onClose={() => setModalDetailLeave(false)}
+        onClose={() => {setModalDetailLeave(false);  getApiAllRequestsApproved(pageTable, pageSize);}}
         open={modalDetailLeave}
         title="Chi Tiết Đơn Xin Phép"
       />

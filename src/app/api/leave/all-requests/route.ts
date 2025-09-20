@@ -1,8 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // app/api/leaveRequests/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { LeaveStatus, Prisma } from "../../../../../generated/prisma";
 import { startOfDay, endOfDay } from "date-fns";
+import jwt from "jsonwebtoken";
+
+interface JWTPayload {
+  id: number;
+  role: string;
+  employeeCode: string;
+}
 
 export async function GET(req: NextRequest) {
   try {
@@ -165,5 +173,50 @@ export async function PUT(req: NextRequest) {
   } catch (error) {
     console.error("Lỗi khi cập nhật loại phép:", error);
     return NextResponse.json({ message: "Cập nhật thất bại" }, { status: 500 });
+  }
+}
+
+// app/api/leaveRequests/route.ts
+export async function DELETE(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json(
+        { message: "Thiếu ID đơn nghỉ phép" },
+        { status: 400 }
+      );
+    }
+
+     const token = req.cookies.get("token")?.value; // lấy token từ cookie
+  if (!token) return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
+
+  // giải mã token và kiểm tra role
+  const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
+  if (decoded.role !== "ADMIN") {
+    return NextResponse.json({ message: "Bạn không có quyền" }, { status: 403 });
+  }
+
+    // --- Xóa đơn ---
+    const leaveRequest = await prisma.leaveRequest.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!leaveRequest) {
+      return NextResponse.json(
+        { message: "Không tìm thấy đơn nghỉ phép" },
+        { status: 404 }
+      );
+    }
+
+    await prisma.leaveRequest.delete({
+      where: { id: Number(id) },
+    });
+
+    return NextResponse.json({ message: "Xóa đơn nghỉ thành công" });
+  } catch (error) {
+    console.error("❌ Lỗi khi xóa đơn nghỉ:", error);
+    return NextResponse.json({ message: "Xóa đơn thất bại" }, { status: 500 });
   }
 }
