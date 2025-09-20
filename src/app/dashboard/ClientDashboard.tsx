@@ -322,6 +322,7 @@ export default function ClientDashboard({
           <div className="py-5 pl-4">
             <div
               className={`
+                ${isMobile ? 'flex-col-reverse':''}
               ${!isMobile && collapsed ? "sm:!w-[70px]" : "sm:w-[250px]"}
               ${isMobile && !collapsed ? "hidden " : " "}
               ${collapsed && isMobile ? "!w-full fixed !h-[calc(100vh-56px)] top-14 !rounded-none right-0 z-10" : ""}
