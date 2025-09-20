@@ -3,13 +3,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "../../../../../generated/prisma";
 
-
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
 
     const role = searchParams.get("role") || "USER";
-    const department = searchParams.get("department") || "";
+    const department = searchParams.get("department") || ""; // "departmentId-positionId"
     const name = searchParams.get("name") || "";
     const employeeCode = searchParams.get("employeeCode") || "";
     const workStatus = searchParams.get("workStatus") || ""; // OFFICIAL | PROBATION | RESIGNED
@@ -26,61 +25,52 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Xử lý lọc phòng ban
+    // Xử lý departmentId và positionId
     let departmentId: number | undefined;
     let positionId: number | undefined;
-    if (role !== "ADMIN" && department) {
+    if (department) {
       const parts = department.split("-");
       departmentId = parts[0] ? parseInt(parts[0], 10) : undefined;
       positionId = parts[1] ? parseInt(parts[1], 10) : undefined;
     }
 
-    // Bộ lọc chung
+    // Tạo mảng AND filter chắc chắn type-safe
+    const andFilters: Prisma.EmployeeWhereInput[] = [];
+
+    if (name) {
+      andFilters.push({ name: { contains: name } });
+    }
+
+    if (employeeCode) {
+      andFilters.push({ employeeCode: { contains: employeeCode } });
+    }
+
+    if (departmentId || positionId) {
+      andFilters.push({
+        workInfo: {
+          ...(departmentId && { departmentId }),
+          ...(positionId && { positionId }),
+        },
+      });
+    }
+
+    if (workStatus) {
+      andFilters.push({ otherInfo: { workStatus: workStatus as any } });
+    } else {
+      andFilters.push({
+        otherInfo: {
+          workStatus: { in: ["OFFICIAL", "PROBATION"] },
+        },
+      });
+    }
+
     const whereFilter: Prisma.EmployeeWhereInput = {
-      AND: [
-        name
-          ? {
-            name: {
-              contains: name,
-            },
-          }
-          : {},
-        employeeCode
-          ? {
-            employeeCode: {
-              contains: employeeCode,
-            },
-          }
-          : {},
-        departmentId || positionId
-          ? {
-            workInfo: {
-              ...(departmentId && { departmentId }),
-              ...(positionId && { positionId }),
-            },
-          }
-          : {},
-        workStatus
-          ? {
-            otherInfo: {
-              workStatus: workStatus as any,
-            },
-          }
-          : {
-            otherInfo: {
-              workStatus: {
-                in: ["OFFICIAL", "PROBATION"],
-              },
-            },
-          },
-      ],
+      AND: andFilters,
     };
 
     const findManyOptions: any = {
       where: whereFilter,
-      orderBy: {
-        employeeCode: "asc",
-      },
+      orderBy: { employeeCode: "asc" },
       select: {
         id: true,
         employeeCode: true,

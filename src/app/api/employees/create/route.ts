@@ -171,7 +171,7 @@ export async function POST(req: NextRequest) {
     // Xử lý personalInfo
     const personalInfoData = personalInfo
       ? {
-          identityNumber: personalInfo.identityNumber,
+          identityNumber: personalInfo.identityNumber ?? null,
           issueDate: parseDateRequired(personalInfo.issueDate, "issueDate"),
           issuePlace: personalInfo.issuePlace,
           hometown: personalInfo.hometown,
@@ -179,17 +179,17 @@ export async function POST(req: NextRequest) {
           education: personalInfo.education ?? null,
           drivingLicense: personalInfo.drivingLicense ?? null,
           toyotaCertificate: personalInfo.toyotaCertificate ?? null,
-          taxCode: personalInfo.taxCode ?? "Tax"+employeeCode,
-          insuranceNumber: personalInfo.insuranceNumber ?? "insurance"+employeeCode,
-          insuranceSalary: personalInfo.insuranceSalary ?? "insurance"+employeeCode,
+          taxCode: personalInfo.taxCode ?? null,
+          insuranceNumber: personalInfo.insuranceNumber ?? null,
+          insuranceSalary: personalInfo.insuranceSalary ?? null,
         }
       : undefined;
 
     // Xử lý contactInfo
     const contactInfoData = contactInfo
       ? {
-          phoneNumber: contactInfo.phoneNumber,
-          relativePhone: contactInfo.relativePhone,
+          phoneNumber: contactInfo.phoneNumber?? null,
+          relativePhone: contactInfo.relativePhone ?? null,
           companyPhone: contactInfo.companyPhone ?? null,
           email: contactInfo.email ?? null,
         }
