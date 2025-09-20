@@ -100,7 +100,7 @@ export class EmailService {
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${process.env.NEXT_PUBLIC_APP_URL}/proposals/${proposal.id}" 
+              <a href="${process.env.detailUrlRequest}/proposals/${proposal.id}" 
                 style="background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                 Phê duyệt đề xuất
               </a>
@@ -170,7 +170,7 @@ export class EmailService {
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard/proposal/${proposal.id}" 
+              <a href="${process.env.detailUrlRequest}/dashboard/proposal/${proposal.id}" 
                 style="background: ${config.color}; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                 Xem chi tiết
               </a>
@@ -285,7 +285,7 @@ export class EmailService {
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard/proposal/${proposal.id}" 
+              <a href="${process.env.detailUrlRequest}/dashboard/proposal/${proposal.id}" 
                 style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                 Xem chi tiết đề xuất
               </a>
@@ -347,7 +347,7 @@ export class EmailService {
             ${fileLink}
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard/proposal/${proposal.id}" 
+              <a href="${process.env.detailUrlRequest}/dashboard/proposal/${proposal.id}" 
                 style="background-color: #dc3545; color: white; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 16px;">
                 🔍 Xem chi tiết đề xuất
               </a>
