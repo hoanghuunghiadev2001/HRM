@@ -38,7 +38,7 @@ export class EmailService {
             <p style="font-size: 16px; color: #333; margin-top: 20px;">Vui lòng truy cập hệ thống để xem chi tiết và đưa ra quyết định.</p>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${process.env.NEXT_PUBLIC_APP_URL}/proposals/${proposal.id}" 
+              <a href="${process.env.detailUrlRequest}/proposals/${proposal.id}" 
                 style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                 Xem đề xuất
               </a>
@@ -233,7 +233,7 @@ export class EmailService {
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${process.env.NEXT_PUBLIC_APP_URL}/proposals/${proposal.id}" 
+              <a href="${process.env.detailUrlRequest}/proposals/${proposal.id}" 
                 style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                 Theo dõi đề xuất
               </a>
