@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // next.config.ts
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import withPWA from "next-pwa";
@@ -22,9 +23,35 @@ const nextConfig = {
   images: {
     domains: ["res.cloudinary.com"],
   },
+  webpack(config: { module: { rules: any[]; }; }) {
+    // Ant Design Less variables
+    const lessRule = config.module.rules.find(
+      (rule: any) => rule.test && rule.test.toString().includes("less")
+    );
+    if (lessRule) {
+      lessRule.use.push({
+        loader: "less-loader",
+        options: {
+          lessOptions: {
+            javascriptEnabled: true,
+            modifyVars: {
+              "@body-background": "#ffffff",
+              "@component-background": "#ffffff",
+              "@layout-body-background": "#ffffff",
+              "@layout-header-background": "#ffffff",
+              "@text-color": "#000000",
+              "@heading-color": "#000000",
+              "@border-color-base": "#d9d9d9",
+            },
+          },
+        },
+      });
+    }
+    return config;
+  },
 };
 
-// KHÔNG ép kiểu gì hết, chỉ return plain object
+// Kết hợp PWA + Bundle Analyzer
 export default withAnalyzer(
   withPWA({
     dest: "public",

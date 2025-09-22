@@ -48,7 +48,7 @@ export const StatusLeave = ({ status }: StatusLeaveProps) => {
         }`}
     >
       {status === "pending"
-        ? "Đang chờ"
+        ? "Chờ duyệt"
         : status === "approved"
           ? "Chấp nhận"
           : status === "revoked" ? "Đã rút đơn" : "Từ chối"}

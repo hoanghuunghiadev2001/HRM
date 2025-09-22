@@ -211,3 +211,38 @@ div::-webkit-scrollbar-thumb {
     font-size: 13px;
   }
 }
+
+/* global.css */
+
+/* Cố định nền trắng, chữ đen */
+html, body {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  transition: none !important; /* tránh animation khi dark/light */
+}
+
+/* Các thẻ cơ bản */
+a {
+  color: #000000;
+}
+button {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Ngăn trình duyệt dark mode */
+@media (prefers-color-scheme: dark) {
+  html, body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  a, button {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+  }
+}
+
+.text-white{
+  color: white !important;
+}

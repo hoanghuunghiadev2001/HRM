@@ -536,7 +536,7 @@ const Profile = () => {
         </div>
       </div>
       <button
-        className="flex mt-4 gap-2 items-center h-10 px-4 rounded-2xl bg-gradient-to-r from-[#aa0404] to-[#350000] cursor-pointer text-white font-semibold"
+        className="flex mt-4 gap-2 items-center h-10 px-4 rounded-2xl bg-gradient-to-r from-[#aa0404] to-[#350000] cursor-pointer !text-white font-semibold"
         onClick={handleUpdateProfile}
       >
         <Send />
