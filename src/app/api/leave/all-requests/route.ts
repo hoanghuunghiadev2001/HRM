@@ -37,20 +37,32 @@ export async function GET(req: NextRequest) {
     const pageSize = parseInt(url.searchParams.get("pageSize") || "10", 10);
     const name = url.searchParams.get("name");
     const employeeCode = url.searchParams.get("employeeCode");
+    const departmentIdParam = url.searchParams.get("department");
+
     const status = url.searchParams.get("status") as LeaveStatus | undefined;
     const startDate = url.searchParams.get("startDate");
 
     // Build filter nhân viên
     const employeeFilter: Prisma.EmployeeWhereInput = {};
+
     if (decoded.role === "ADMIN") {
       if (name) employeeFilter.name = { contains: name };
-      if (employeeCode)
-        employeeFilter.employeeCode = { contains: employeeCode };
+      if (employeeCode) employeeFilter.employeeCode = { contains: employeeCode };
+
+      if (departmentIdParam) {
+        const departmentIdNum = parseInt(departmentIdParam, 10);
+        if (!isNaN(departmentIdNum)) {
+          employeeFilter.workInfo = {
+            is: { departmentId: departmentIdNum },
+          };
+        }
+      }
     } else if (decoded.role === "MANAGER") {
-      employeeFilter.workInfo = { departmentId: decoded.departmentId };
+      employeeFilter.workInfo = {
+        is: { departmentId: decoded.departmentId }, // cái này đã là number
+      };
       if (name) employeeFilter.name = { contains: name };
-      if (employeeCode)
-        employeeFilter.employeeCode = { contains: employeeCode };
+      if (employeeCode) employeeFilter.employeeCode = { contains: employeeCode };
     }
 
     // Build filter leave request
@@ -60,11 +72,11 @@ export async function GET(req: NextRequest) {
       status: status ? status : undefined,
       ...(filterDate
         ? {
-            AND: [
-          { startDate: { lte: endOfDay(filterDate) } }, // nhỏ hơn hoặc bằng cuối ngày
-          { endDate: { gte: startOfDay(filterDate) } }, // lớn hơn hoặc bằng đầu ngày
-        ],
-          }
+          AND: [
+            { startDate: { lte: endOfDay(filterDate) } }, // nhỏ hơn hoặc bằng cuối ngày
+            { endDate: { gte: startOfDay(filterDate) } }, // lớn hơn hoặc bằng đầu ngày
+          ],
+        }
         : {}),
     };
 
