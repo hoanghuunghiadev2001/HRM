@@ -314,7 +314,7 @@ export default function ClientDashboard({
         )} */}
 
         {/* Layout chính */}
-        <div className={`w-full  flex relative ${isMobile && !collapsed ? 'h-[100vh] overflow-hidden':'h-[100vh]'}`}>
+        <div className={`w-full  flex relative ${isMobile? 'h-[calc(100vh-60px)]':'h-[100vh]'} ${isMobile && !collapsed ? 'overflow-hidden':''}`}>
 
 
           {/* Sidebar menu */}

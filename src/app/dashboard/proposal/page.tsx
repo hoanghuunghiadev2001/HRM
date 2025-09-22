@@ -191,19 +191,20 @@ export default function ProposalCreator() {
 
   const userSelectOptions = Array.isArray(employees)
     ? employees.map((user) => ({
-        label: (
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Avatar size="small" src={user.avatar} icon={<UserOutlined />} />
-            <div>
-              <div>{user.name}</div>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                {user.position} • {user.email}
-              </Text>
-            </div>
+      label: (
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Avatar size="small" src={user.avatar} icon={<UserOutlined />} />
+          <div>
+            <div>{user.name}</div>
+            <Text type="secondary" style={{ fontSize: 12 }}>
+              {user.position} • {user.email}
+            </Text>
           </div>
-        ),
-        value: user.id,
-      }))
+        </div>
+      ),
+      value: user.id,
+      searchText: `${user.name} ${user.position} ${user.email}`,
+    }))
     : []
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -297,7 +298,9 @@ export default function ProposalCreator() {
                   onChange={setSigners}
                   options={userSelectOptions}
                   style={{ width: "100%", marginTop: 8 }}
-                  optionLabelProp="label"
+
+                  optionLabelProp="customLabel" // Hiển thị custom
+                  optionFilterProp="searchText"
                   tagRender={customTagRender}
                   disabled={submitting}
                 />
@@ -315,7 +318,8 @@ export default function ProposalCreator() {
                   onChange={setApprovers}
                   options={userSelectOptions}
                   style={{ width: "100%", marginTop: 8 }}
-                  optionLabelProp="label"
+                  optionLabelProp="customLabel" // Hiển thị custom
+                  optionFilterProp="searchText"
                   tagRender={customTagRender}
                   disabled={submitting}
                 />
