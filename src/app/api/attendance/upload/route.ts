@@ -9,7 +9,6 @@ import timezone from "dayjs/plugin/timezone";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-/** Convert a cell value to "HH:MM" (string) or null */
 function cellToHHmm(val: any): string | null {
   if (val === undefined || val === null || String(val).trim() === "") return null;
   if (val instanceof Date && !isNaN(val.getTime())) return dayjs(val).format("HH:mm");
@@ -40,7 +39,6 @@ function cellToHHmm(val: any): string | null {
   return null;
 }
 
-/** Convert "HH:mm" thành Date UTC (giữ đúng ngày VN) */
 function parseTimeToUTC(workDate: Date, hhmm: string | null): Date | null {
   if (!hhmm || !/^\d{2}:\d{2}$/.test(hhmm)) return null;
   const [hh, mm] = hhmm.split(":").map(Number);
@@ -51,7 +49,6 @@ function parseTimeToUTC(workDate: Date, hhmm: string | null): Date | null {
   ).toDate();
 }
 
-/** Tính giờ làm việc từ HH:mm strings */
 function calcHours(checkInHHmm: string | null, checkOutHHmm: string | null): number {
   if (!checkInHHmm || !checkOutHHmm) return 0;
   const [h1, m1] = checkInHHmm.split(":").map(Number);
@@ -63,6 +60,8 @@ export async function POST(req: Request) {
   try {
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
+    const importedById = formData.get("importedById") as string | null; // id nhân viên gửi file
+
     if (!file) return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
 
     const buffer = Buffer.from(await file.arrayBuffer());
@@ -74,7 +73,6 @@ export async function POST(req: Request) {
 
     const rows: any[][] = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: true });
 
-    // Lấy ngày từ dòng A4
     const dateRow = rows[3]?.[0] || "";
     const match = String(dateRow).match(/(\d{2}\/\d{2}\/\d{4})/);
     if (!match) return NextResponse.json({ error: "Không đọc được ngày từ file Excel" }, { status: 400 });
@@ -83,14 +81,20 @@ export async function POST(req: Request) {
     const workDate = dayjs(`${yyyy}-${mm}-${dd}`).startOf("day").toDate();
     workDate.setUTCHours(0, 0, 0, 0);
 
-    // Tìm dòng bắt đầu dữ liệu nhân viên
     let startIndex = rows.findIndex(r => r && (r[0] === 1 || r[0] === "1" || r[0] === "STT"));
     if (startIndex === -1) {
       startIndex = rows.findIndex(r => r && r[1] && String(r[1]).trim() && String(r[2] ?? "").trim());
       if (startIndex === -1) return NextResponse.json({ error: "Không tìm thấy dữ liệu nhân viên trong file" }, { status: 400 });
     }
 
-    const importLog = await prisma.attendanceImportLog.create({ data: { filename: file.name || "upload.xlsx" } });
+    // Tạo log import
+    const importLog = await prisma.attendanceImportLog.create({
+      data: {
+        filename: file.name || "upload.xlsx",
+        importedById: Number(importedById) ?? null,
+        importedAt: dayjs().tz("Asia/Ho_Chi_Minh").toDate(), // giờ Việt Nam
+      },
+    });
 
     let imported = 0;
     let skipped = 0;
@@ -100,10 +104,8 @@ export async function POST(req: Request) {
       const employeeCode = row[1] ? String(row[1]).trim() : null;
       if (!employeeCode) continue;
 
-      const employeeName = String(row[2] ?? "").trim();
       const checkInHHmm = cellToHHmm(row[4]);
 
-      // Tìm check-out (look ahead 3 dòng)
       let checkOutHHmm: string | null = null;
       let consumedIndex = i;
       for (let j = i + 1; j <= Math.min(i + 3, rows.length - 1); j++) {
@@ -135,14 +137,12 @@ export async function POST(req: Request) {
         include: { otherInfo: true },
       });
       if (!employee) {
-        console.warn(`⚠️ Không tìm thấy nhân viên ${employeeCode} - ${employeeName}`);
         skipped++;
         i = Math.max(i, consumedIndex);
         continue;
       }
 
       if (employee.otherInfo?.workStatus === "RESIGNED") {
-        console.info(`ℹ️ Nhân viên ${employeeCode} đã nghỉ việc, bỏ qua`);
         skipped++;
         i = Math.max(i, consumedIndex);
         continue;
@@ -151,10 +151,6 @@ export async function POST(req: Request) {
       const checkInDateUTC = parseTimeToUTC(workDate, checkInHHmm);
       const checkOutDateUTC = parseTimeToUTC(workDate, checkOutHHmm);
 
-      const finalInHH = checkInHHmm;
-      const finalOutHH = checkOutHHmm;
-
-      // Tìm attendance hiện tại theo khoảng ngày
       const existing = await prisma.attendance.findFirst({
         where: {
           employeeId: employee.id,
@@ -171,7 +167,7 @@ export async function POST(req: Request) {
           data: {
             checkInTime: checkInDateUTC,
             checkOutTime: checkOutDateUTC,
-            workingHours: calcHours(finalInHH, finalOutHH),
+            workingHours: calcHours(checkInHHmm, checkOutHHmm),
             importId: importLog.id,
           },
         });
@@ -182,7 +178,7 @@ export async function POST(req: Request) {
             date: workDate,
             checkInTime: checkInDateUTC,
             checkOutTime: checkOutDateUTC,
-            workingHours: calcHours(finalInHH, finalOutHH),
+            workingHours: calcHours(checkInHHmm, checkOutHHmm),
             importId: importLog.id,
           },
         });

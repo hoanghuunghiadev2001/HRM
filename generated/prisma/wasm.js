@@ -253,7 +253,8 @@ exports.Prisma.LeaveApprovalStepApproverScalarFieldEnum = {
 exports.Prisma.AttendanceImportLogScalarFieldEnum = {
   id: 'id',
   filename: 'filename',
-  importedAt: 'importedAt'
+  importedAt: 'importedAt',
+  importedById: 'importedById'
 };
 
 exports.Prisma.AttendanceScalarFieldEnum = {

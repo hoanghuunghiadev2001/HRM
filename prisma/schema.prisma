@@ -51,6 +51,7 @@ model Employee {
   proposalApprovals    ProposalApprover[]
   proposalSignatures   ProposalSigner[]
   workInfo             WorkInfo?
+  AttendanceImportLog  AttendanceImportLog[]       @relation("EmployeeImportLogs")
 
   @@index([employeeCode])
   @@index([managerId])
@@ -194,9 +195,13 @@ model LeaveApprovalStepApprover {
 }
 
 model AttendanceImportLog {
-  id          Int          @id @default(autoincrement())
-  filename    String
-  importedAt  DateTime     @default(now())
+  id         Int      @id @default(autoincrement())
+  filename   String
+  importedAt DateTime @default(now())
+
+  importedById Int?
+  importedBy   Employee? @relation("EmployeeImportLogs", fields: [importedById], references: [id])
+
   attendances Attendance[]
 }
 

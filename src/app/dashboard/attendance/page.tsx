@@ -93,7 +93,7 @@ function getTodayVNDateString() {
 }
 
 export default function AttendancePage() {
-  const { role, department, departmentID, name } = useAppSelector((state) => state.user);
+  const { role, department, departmentID, name, id } = useAppSelector((state) => state.user);
   const [loading, setLoading] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState(10);
   const [pageTable, setPageTable] = useState(1);
@@ -266,14 +266,15 @@ export default function AttendancePage() {
     }
     setLoading(false);
   };
-
-  // ===== Upload Excel =====
   const uploadProps = {
     name: "file",
     multiple: false,
     accept: ".xlsx,.xls",
     action: "/api/attendance/upload",
     showUploadList: false,
+    data: {
+      importedById: id, // truyền id nhân viên đang login
+    },
     onChange(info: any) {
       if (info.file.status === "done") {
         message.success(`${info.file.name} tải lên thành công`);
@@ -283,6 +284,7 @@ export default function AttendancePage() {
       }
     },
   };
+
 
   useEffect(() => {
     listDepartment();
@@ -310,18 +312,18 @@ export default function AttendancePage() {
   const formatToVNDate = (date: Date) => {
     return dayjs(date).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY");
   };
-const changeDate = (dates: any, dateStrings: [string, string]) => {
-  if (!dates || dates.length !== 2) return;
+  const changeDate = (dates: any, dateStrings: [string, string]) => {
+    if (!dates || dates.length !== 2) return;
 
-  // luôn ép sang VN timezone
-  const startDate = dayjs(dates[0]).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD");
-  const endDate = dayjs(dates[1]).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD");
+    // luôn ép sang VN timezone
+    const startDate = dayjs(dates[0]).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD");
+    const endDate = dayjs(dates[1]).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD");
 
-  setTimeStart(startDate);
-  setTimeEnd(endDate);
+    setTimeStart(startDate);
+    setTimeEnd(endDate);
 
-  console.log("Start:", startDate, "End:", endDate);
-};
+    console.log("Start:", startDate, "End:", endDate);
+  };
 
 
   const handleExportExcel = async () => {
