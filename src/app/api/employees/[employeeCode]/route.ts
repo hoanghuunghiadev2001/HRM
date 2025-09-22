@@ -193,9 +193,9 @@ export async function PATCH(req: NextRequest) {
 
     if (body.contactInfo) {
       await upsert(prisma.contactInfo, {
-        phoneNumber: body.contactInfo.phoneNumber,
-        relativePhone: body.contactInfo.relativePhone,
-        companyPhone: body.contactInfo.companyPhone,
+        phoneNumber: body.contactInfo.phoneNumber || body.contactInfo.phoneNumber != "" ?body.contactInfo.phoneNumber:  null,
+        relativePhone: body.contactInfo.relativePhone  || body.contactInfo.relativePhone != "" ?body.contactInfo.relativePhone: null,
+        companyPhone: body.contactInfo.companyPhone  || body.contactInfo.companyPhone != "" ?body.contactInfo.companyPhone: null,
         email: body.contactInfo.email,
       });
     }
