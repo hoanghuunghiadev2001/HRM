@@ -54,13 +54,20 @@ interface DataType {
   totalHours?: number;
 }
 
-interface ImportHistory {
+
+export interface ImportHistory {
   id: number;
-  fileName: string;
-  importedBy: string;
+  filename: string;
   importedAt: string;
-  recordCount: number;
+  recordCount: number;  // sửa lại đúng tên recordCount (không phải totalRecords)
+  importedBy: ImportedBy | null;
 }
+
+export interface ImportedBy {
+  code: string;
+  name: string;
+}
+
 
 const useStyle = createStyles((utils) => {
   const { css, token } = utils;
@@ -345,27 +352,38 @@ export default function AttendancePage() {
   };
 
   // ===== Table lịch sử import =====
-  const historyColumns: TableProps<ImportHistory>["columns"] = [
-    { title: "ID", dataIndex: "id", width: "60px" },
-    { title: "Tên file", dataIndex: "fileName", width: "200px" },
-    { title: "Người import", dataIndex: "importedBy", width: "150px" },
-    { title: "Ngày import", dataIndex: "importedAt", width: "180px" },
-    { title: "Số bản ghi", dataIndex: "recordCount", width: "100px" },
-    {
-      title: "Hành động",
-      key: "action",
-      render: (_, record) => (
-        <Popconfirm
-          title="Bạn có chắc muốn xóa?"
-          onConfirm={() => deleteImportHistory(record.id)}
-          okText="Xóa"
-          cancelText="Hủy"
-        >
-          <Button danger icon={<DeleteOutlined />} />
-        </Popconfirm>
-      ),
-    },
-  ];
+const historyColumns: TableProps<ImportHistory>["columns"] = [
+  { title: "ID", dataIndex: "id", width: "60px" },
+  { title: "Tên file", dataIndex: "filename", width: "200px" },
+  {
+    title: "Người import",
+    dataIndex: "importedBy",
+    width: "200px",
+    render: (importedBy) =>
+      importedBy ? `${importedBy.name} (${importedBy.code})` : "N/A",
+  },
+  {
+    title: "Ngày import",
+    dataIndex: "importedAt",
+    width: "180px",
+    render: (value) => dayjs(value).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm"),
+  },
+  { title: "Số bản ghi", dataIndex: "recordCount", width: "100px" },
+  {
+    title: "Hành động",
+    key: "action",
+    render: (_, record) => (
+      <Popconfirm
+        title="Bạn có chắc muốn xóa?"
+        onConfirm={() => deleteImportHistory(record.id)}
+        okText="Xóa"
+        cancelText="Hủy"
+      >
+        <Button danger icon={<DeleteOutlined />} />
+      </Popconfirm>
+    ),
+  },
+];
 
   return (
     <div>

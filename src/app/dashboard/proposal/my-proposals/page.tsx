@@ -12,25 +12,25 @@ import {
   Typography,
   Tabs,
   message,
+  Input,
 } from "antd"
 import {
   FileTextOutlined,
   EyeOutlined,
-  CheckOutlined,
+  CheckCircleOutlined,
   CloseOutlined,
   ClockCircleOutlined,
-  CheckCircleOutlined,
 } from "@ant-design/icons"
 import type { ColumnsType } from "antd/es/table"
 import { useRouter } from "next/navigation"
 import axios from "axios"
 
-import ModalApproveProposal from "@/components/ModalApproveProposal"
 import ModalLoading from "@/components/modalLoading"
 import { useAppSelector } from "@/store/hook"
 
 const { Title, Text } = Typography
 const { TabPane } = Tabs
+const { Search } = Input
 
 interface Proposal {
   id: number
@@ -83,6 +83,7 @@ export default function MyProposalsPage() {
   const [actionLoading, setActionLoading] = useState<number | null>(null)
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
+  const [searchText, setSearchText] = useState("")
   const { id } = useAppSelector((state) => state.user)
 
   const getStatusColor = (status: string) => {
@@ -107,7 +108,9 @@ export default function MyProposalsPage() {
     setLoading(true)
     try {
       const response = await fetch(
-        `/api/proposals/my-proposals?page=${page}&pageSize=${pageSize}`
+        `/api/proposals/my-proposals?page=${page}&pageSize=${pageSize}&search=${encodeURIComponent(
+          searchText
+        )}`
       )
       const data = await response.json()
 
@@ -126,9 +129,14 @@ export default function MyProposalsPage() {
     }
   }
 
+  // Debounce search
   useEffect(() => {
-    fetchProposals()
-  }, [page, pageSize])
+    const delay = setTimeout(() => {
+      setPage(1) // reset page khi search
+      fetchProposals()
+    }, 500)
+    return () => clearTimeout(delay)
+  }, [searchText, page, pageSize])
 
   const showConfirm = async (
     proposalId: number,
@@ -288,15 +296,22 @@ export default function MyProposalsPage() {
     })
 
   return (
-    <div
-      style={{ padding: 0, maxWidth: 1400, margin: "0 auto" }}
-      className="proposal-page"
-    >
+    <div style={{ padding: 0, maxWidth: 1400, margin: "0 auto" }} className="proposal-page">
       <ModalLoading isOpen={loading} />
 
-      <Title level={2} style={{ marginBottom: 24 }}>
+      <Title level={2} style={{ marginBottom: 16 }}>
         <FileTextOutlined /> Quản lý đề xuất
       </Title>
+
+      <Search
+        placeholder="Tìm theo tên đề xuất..."
+        allowClear
+        enterButton
+        size="middle"
+        style={{ marginBottom: 24, width: 300 }}
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+      />
 
       <Tabs
         defaultActiveKey="created"
@@ -308,11 +323,7 @@ export default function MyProposalsPage() {
         }}
       >
         <TabPane
-          tab={
-            <span>
-              <FileTextOutlined /> Đề xuất ({createdProposals?.data.length})
-            </span>
-          }
+          tab={<span><FileTextOutlined /> Đề xuất ({createdProposals?.data.length})</span>}
           key="created"
         >
           <Card className="proposal-table">
@@ -338,11 +349,7 @@ export default function MyProposalsPage() {
         </TabPane>
 
         <TabPane
-          tab={
-            <span>
-              <ClockCircleOutlined /> Cần ký ({pendingSignatures?.data.length})
-            </span>
-          }
+          tab={<span><ClockCircleOutlined /> Cần ký ({pendingSignatures?.data.length})</span>}
           key="pending_signature"
         >
           <Card className="proposal-table">
@@ -368,12 +375,7 @@ export default function MyProposalsPage() {
         </TabPane>
 
         <TabPane
-          tab={
-            <span>
-              <CheckCircleOutlined /> Cần phê duyệt (
-              {pendingApprovals?.data.length})
-            </span>
-          }
+          tab={<span><CheckCircleOutlined /> Cần phê duyệt ({pendingApprovals?.data.length})</span>}
           key="pending_approval"
         >
           <Card className="proposal-table">
