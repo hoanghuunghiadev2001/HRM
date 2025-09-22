@@ -308,7 +308,6 @@ const ModalEditEmployee = ({
   }, [selectedDepartmentId]);
 
   const fetchData = async () => {
-    console.log(selectedDepartmentId);
 
     try {
       const [positionsData] = await Promise.all([

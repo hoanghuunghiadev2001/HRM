@@ -225,7 +225,7 @@ export default function ProposalCreator() {
   }, [])
 
   return (
-    <div style={{ padding: 24, maxWidth: 1400, margin: "0 auto" }}>
+    <div style={{ padding: 0, maxWidth: 1400, margin: "0 auto" }}>
       <ModalLoading isOpen={loading || submitting} />
       <Title level={2}>
         <EditOutlined /> Tạo Đề Xuất Mới

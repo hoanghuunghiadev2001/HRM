@@ -370,7 +370,7 @@ export default function EmployeeList() {
           {isActiveFilter ? "đã kích hoạt" : " chưa kích hoạt"}
         </Title>
         <Button
-          style={{ marginBottom: 16 }}
+          style={{ marginBottom: 16 , marginLeft: 16}}
           onClick={() => setIsActiveFilter((prev) => !prev)}
         >
           Hiển thị nhân viên{" "}
@@ -426,7 +426,7 @@ export default function EmployeeList() {
         <div className="!flex gap-2 items-center ">
           <Form.Item
             layout="horizontal"
-            className=""
+            className="w-full"
             label={
               <p className="font-bold text-[#242424] hidden sm:block">
                 Bộ phận
@@ -435,7 +435,7 @@ export default function EmployeeList() {
           >
             <TreeSelect
               showSearch
-              style={{ minWidth: "150px", maxWidth: "200px" }}
+              style={{ width: '100%' }}
               value={filterDepartment}
               styles={{
                 popup: { root: { maxHeight: 400, overflow: "auto" } },
@@ -451,7 +451,7 @@ export default function EmployeeList() {
           </Form.Item>
         </div>
 
-        <div className="flex items-center w-fit">
+        <div className="flex items-center w-fit pl-4">
           <Button
             className="w-full sm:w-fit flex  gap-2 items-center h-8 px-4 rounded-lg justify-center !bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer !text-white font-semibold"
             onClick={() => fetchEmployees(pageSize, pageTable)}

@@ -289,7 +289,7 @@ export default function MyProposalsPage() {
 
   return (
     <div
-      style={{ padding: 16, maxWidth: 1400, margin: "0 auto" }}
+      style={{ padding: 0, maxWidth: 1400, margin: "0 auto" }}
       className="proposal-page"
     >
       <ModalLoading isOpen={loading} />

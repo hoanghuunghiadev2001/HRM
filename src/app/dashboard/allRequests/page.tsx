@@ -242,8 +242,8 @@ export default function AllRequestPage() {
         employeeCode: filterMSNV,
         name: filterName,
         status: "",
-        startDate: filterDate ,
-        endDate: filterDate ,
+        startDate: filterDate,
+        endDate: filterDate,
       });
       setAllRequestsApproved(res);
       setTotalTable(res.total);
@@ -433,7 +433,7 @@ export default function AllRequestPage() {
       />
       <ModalDetailLeave
         infoRequetLeave={infoRequetLeave}
-        onClose={() => {setModalDetailLeave(false);  getApiAllRequestsApproved(pageTable, pageSize);}}
+        onClose={() => { setModalDetailLeave(false); getApiAllRequestsApproved(pageTable, pageSize); }}
         open={modalDetailLeave}
         title="Chi Tiết Đơn Xin Phép"
       />
@@ -519,35 +519,39 @@ export default function AllRequestPage() {
           </div>
 
           {role === "ADMIN" && (
-            <div className="!flex gap-2 items-center ">
-              <Form.Item
-                layout="horizontal"
-                className=""
-                label={
-                  <p className="font-bold text-[#242424] hidden sm:block">
-                    Bộ phận
-                  </p>
-                }
-              >
-                <TreeSelect
-                  showSearch
-                  style={{ minWidth: "150px", maxWidth: "200px" }}
-                  value={filterDepartment}
-                  styles={{
-                    popup: { root: { maxHeight: 400, overflow: "auto" } },
-                  }}
-                  placeholder="Phòng ban"
-                  allowClear
-                  listItemScrollOffset={200}
-                  treeDefaultExpandAll={false}
-                  onChange={onChangeSelectDepartment}
-                  showCheckedStrategy="SHOW_ALL"
-                  treeData={treeData}
-                  onPopupScroll={onPopupScroll}
-                />
-              </Form.Item>
+            <>
+              <div className="!flex gap-2 items-center ">
+                <Form.Item
+                  layout="horizontal"
+                  className=""
+                  label={
+                    <p className="font-bold text-[#242424] hidden sm:block">
+                      Bộ phận
+                    </p>
+                  }
+                >
+                  <TreeSelect
+                    showSearch
+                    style={{ minWidth: "150px", maxWidth: "200px" }}
+                    value={filterDepartment}
+                    styles={{
+                      popup: { root: { maxHeight: 400, overflow: "auto" } },
+                    }}
+                    placeholder="Phòng ban"
+                    allowClear
+                    listItemScrollOffset={200}
+                    treeDefaultExpandAll={false}
+                    onChange={onChangeSelectDepartment}
+                    showCheckedStrategy="SHOW_ALL"
+                    treeData={treeData}
+                    onPopupScroll={onPopupScroll}
+                  />
+                </Form.Item>
+
+              </div>
               <ExportLeaveRequests />
-            </div>
+            </>
+
           )}
 
           <button

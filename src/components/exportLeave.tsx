@@ -35,5 +35,5 @@ export default function ExportLeaveRequests() {
     }
   };
 
-  return <Button onClick={handleExport}>Xuất Excel đơn nghỉ tháng này</Button>;
+  return <Button onClick={handleExport}>Xuất đơn tháng</Button>;
 }

@@ -103,7 +103,6 @@ export default function ClientDashboard({
   };
   useEffect(()=>{
     console.log(isAdmin);
-    
   })
   // Khai báo menu
   const Menus: MenuItem[] = [
@@ -273,7 +272,7 @@ export default function ClientDashboard({
 
       <title>TOYOTA</title>
 
-      <div className="w-full h-[100vh] overflow-hidden ">
+      <div className="w-full h-full overflow-hidden ">
         {/* Header */}
         <div className={`${isMobile ? '' : 'hidden'} h-14 w-full bg-[#ffffff] flex items-center justify-between px-4 border-b border-[#cecece] z-50`}>
           <Button
@@ -314,7 +313,7 @@ export default function ClientDashboard({
         )} */}
 
         {/* Layout chính */}
-        <div className="w-full h-[100vh] flex relative">
+        <div className={`w-full  flex relative ${isMobile && collapsed ? 'overflow-hidden':'h-full'}`}>
 
 
           {/* Sidebar menu */}
@@ -323,10 +322,10 @@ export default function ClientDashboard({
             <div
               className={`
                 ${isMobile ? 'flex-col-reverse':''}
-              ${!isMobile && collapsed ? "sm:!w-[70px]" : "sm:w-[250px]"}
+              ${!isMobile && collapsed ? "sm:!w-[70px] justify-between" : "sm:w-[250px] justify-end"}
               ${isMobile && !collapsed ? "hidden " : " "}
               ${collapsed && isMobile ? "!w-full fixed !h-[calc(100vh-56px)] top-14 !rounded-none right-0 z-10" : ""}
-               shrink-0  h-full flex flex-col justify-between
+               shrink-0  h-full flex flex-col 
               transition-all duration-300 ease-in-out shadow-2xl rounded-4xl py-6 px-4 border bg-[#e8f4fd] border-[#cecece]
             `}
             >
@@ -342,7 +341,7 @@ export default function ClientDashboard({
                     <LeftCircleFilled className="text-2xl !text-[#ff511a]" />
                   )}
                 </Button>
-                <div className="flex flex-col items-center justify-center w-full  py-2">
+                <div className={`${isMobile? 'hidden':''} flex flex-col items-center justify-center w-full  py-2`}>
                   <Image
                     loading="lazy"
                     src="/storage/logo-toyota.webp"
