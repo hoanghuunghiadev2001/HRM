@@ -310,18 +310,18 @@ export default function AttendancePage() {
   const formatToVNDate = (date: Date) => {
     return dayjs(date).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY");
   };
-  const changeDate = (dates: any, dateStrings: [string, string]) => {
-    if (!dates || dates.length !== 2) return;
+const changeDate = (dates: any, dateStrings: [string, string]) => {
+  if (!dates || dates.length !== 2) return;
 
-    // Chuyển từ VN timezone sang UTC
-    const startUTC = dates[0].tz("Asia/Ho_Chi_Minh").utc().format("YYYY-MM-DD");
-    const endUTC = dates[1].tz("Asia/Ho_Chi_Minh").utc().format("YYYY-MM-DD");
+  // luôn ép sang VN timezone
+  const startDate = dayjs(dates[0]).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD");
+  const endDate = dayjs(dates[1]).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD");
 
-    setTimeStart(startUTC);
-    setTimeEnd(endUTC);
+  setTimeStart(startDate);
+  setTimeEnd(endDate);
 
-    console.log("Start:", startUTC, "End:", endUTC);
-  };
+  console.log("Start:", startDate, "End:", endDate);
+};
 
 
   const handleExportExcel = async () => {
