@@ -103,6 +103,7 @@ export default function ClientDashboard({
   };
   useEffect(()=>{
     console.log(isAdmin);
+    
   })
   // Khai báo menu
   const Menus: MenuItem[] = [
@@ -313,7 +314,7 @@ export default function ClientDashboard({
         )} */}
 
         {/* Layout chính */}
-        <div className={`w-full  flex relative ${isMobile && collapsed ? 'overflow-hidden':'h-full'}`}>
+        <div className={`w-full  flex relative ${isMobile && !collapsed ? 'h-[100vh] overflow-hidden':'h-[100vh]'}`}>
 
 
           {/* Sidebar menu */}
