@@ -406,10 +406,7 @@ export default function ProposalCreator() {
       <Divider />
       <div style={{ textAlign: "center" }}>
         <Space size="middle">
-          <Button size="large" disabled={submitting}>
-            Hủy
-          </Button>
-          <Button type="primary" size="large" onClick={handleSubmit} loading={submitting} disabled={submitting}>
+          <Button className="flex mt-4 gap-2 items-center h-10 px-4 rounded-2xl !bg-gradient-to-r !from-[#aa0404] !to-[#350000] cursor-pointer !text-white font-semibold" type="primary" size="large" onClick={handleSubmit} loading={submitting} disabled={submitting}>
             {submitting ? "Đang tạo đề xuất..." : "Tạo Đề Xuất"}
           </Button>
         </Space>

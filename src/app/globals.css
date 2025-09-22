@@ -225,10 +225,10 @@ html, body {
 a {
   color: #000000;
 }
-button {
+/* button {
   background-color: #ffffff;
   color: #000000;
-}
+} */
 
 /* Ngăn trình duyệt dark mode */
 @media (prefers-color-scheme: dark) {
@@ -237,7 +237,7 @@ button {
     color: #000000 !important;
   }
 
-  a, button {
+  a {
     color: #000000 !important;
     background-color: #ffffff !important;
   }
