@@ -222,9 +222,7 @@ html, body {
 }
 
 /* Các thẻ cơ bản */
-a {
-  color: #000000;
-}
+
 /* button {
   background-color: #ffffff;
   color: #000000;
@@ -237,10 +235,7 @@ a {
     color: #000000 !important;
   }
 
-  a {
-    color: #000000 !important;
-    background-color: #ffffff !important;
-  }
+
 }
 
 .text-white{
