@@ -20,17 +20,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-   const employee = await prisma.employee.findUnique({
-  where: { employeeCode },
-  include: {
-    workInfo: {
+    const employee = await prisma.employee.findUnique({
+      where: { employeeCode },
       include: {
-        department: true,
-        position: true,
+        workInfo: {
+          include: {
+            department: true,
+            position: true,
+          },
+        },
       },
-    },
-  },
-});
+    });
 
     if (
       !employee ||
@@ -57,6 +57,7 @@ export async function POST(req: NextRequest) {
       id: employee.id,
       employeeCode: employee.employeeCode,
       role: employee.role,
+      departmentId: employee.workInfo?.departmentId || null, // 🔑 thêm dòng này
     };
 
     const expiresIn = remember ? "7d" : "1d";
@@ -76,7 +77,7 @@ export async function POST(req: NextRequest) {
       path: "/",
     });
 
-    return NextResponse.json({ success: true, name: employee.name, avt: employee.avatar, role: employee.role, id: employee.id, employeeCode: employee.employeeCode, department: employee.workInfo?.department?.name, position:  employee.workInfo?.position?.name, departmentID: employee.workInfo?.departmentId});
+    return NextResponse.json({ success: true, name: employee.name, avt: employee.avatar, role: employee.role, id: employee.id, employeeCode: employee.employeeCode, department: employee.workInfo?.department?.name, position: employee.workInfo?.position?.name, departmentID: employee.workInfo?.departmentId });
   } catch (err) {
     console.error("Login error:", err);
     return NextResponse.json(
