@@ -113,6 +113,7 @@ export default function AttendancePage() {
   const [timeStart, setTimeStart] = useState("");
   const [timeEnd, setTimeEnd] = useState("");
   const [listAttendance, setListAttendance] = useState<AttendanceResponse2>();
+  const [uploading, setUploading] = useState(false);
 
   const [departments, setDepartments] = useState<Department[]>([]);
 
@@ -279,33 +280,22 @@ const uploadProps = {
   accept: ".xlsx,.xls",
   action: "/api/attendance/upload",
   showUploadList: false,
-  data: {
-    importedById: id, // truyền id nhân viên đang login
-  },
+  data: { importedById: id },
   onChange(info: any) {
     if (info.file.status === "uploading") {
-      setLoading(true);
-      message.loading({
-        content: `Đang tải lên: ${info.file.name}`,
-        key: "uploading",
-      });
+      setUploading(true);
     } else if (info.file.status === "done") {
-      setLoading(false);
-      message.success({
-        content: `${info.file.name} tải lên thành công`,
-        key: "uploading",
-      });
+      setUploading(false);
+      message.success(`${info.file.name} tải lên thành công`);
       fetchImportHistory();
-      handleFetchAttendances(pageTable, pageSize); // refresh bảng chấm công luôn
+      handleFetchAttendances(pageTable, pageSize);
     } else if (info.file.status === "error") {
-      setLoading(false);
-      message.error({
-        content: `${info.file.name} tải lên thất bại`,
-        key: "uploading",
-      });
+      setUploading(false);
+      message.error(`${info.file.name} tải lên thất bại`);
     }
   },
 };
+
 
 
 
@@ -419,9 +409,15 @@ const historyColumns: TableProps<ImportHistory>["columns"] = [
                   </p>
                   {role === "ADMIN" ? (
                     <div className="flex gap-2">
-                      <Upload {...uploadProps}>
-                        <Button icon={<UploadOutlined />}>Upload Excel</Button>
-                      </Upload>
+                   <Upload {...uploadProps}>
+  <Button 
+    icon={<UploadOutlined />} 
+    loading={uploading} 
+    disabled={uploading}
+  >
+    Upload Excel
+  </Button>
+</Upload>
                       <Button
                         onClick={handleExportExcel}
                         type="primary"
