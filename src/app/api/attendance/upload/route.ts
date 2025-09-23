@@ -78,8 +78,9 @@ export async function POST(req: Request) {
     if (!match) return NextResponse.json({ error: "Không đọc được ngày từ file Excel" }, { status: 400 });
 
     const [dd, mm, yyyy] = match[1].split("/");
-    const workDate = dayjs(`${yyyy}-${mm}-${dd}`).startOf("day").toDate();
-    workDate.setUTCHours(0, 0, 0, 0);
+const workDate = dayjs.tz(`${yyyy}-${mm}-${dd}`, "YYYY-MM-DD", "Asia/Ho_Chi_Minh")
+  .startOf("day")
+  .toDate();
 
     let startIndex = rows.findIndex(r => r && (r[0] === 1 || r[0] === "1" || r[0] === "STT"));
     if (startIndex === -1) {

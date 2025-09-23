@@ -164,6 +164,8 @@ export interface RequestLeave {
   approvedBy: string;
 }
 
+
+
 export interface Employee {
   name: string;
   employeeCode: string;
@@ -289,6 +291,7 @@ export interface RequestsLeave {
   createdAt: string;
   employee: Employee;
   approvers?: string
+  approversSummary?: string
 }
 
 export interface Employee {

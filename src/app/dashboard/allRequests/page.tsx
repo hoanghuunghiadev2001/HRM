@@ -296,8 +296,8 @@ export default function AllRequestPage() {
       totalHours: item.totalHours.toString(),
       leaveType: item.leaveType,
       status: item.status,
-      approvedBy: item.approvers,
-      approvers: item.approvers ?? '',
+      approvedBy: item.approversSummary,
+      approvers: item.approversSummary ?? '',
 
     })) || [];
 

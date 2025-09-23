@@ -15,16 +15,13 @@ interface JWTPayload {
 
 export async function GET(req: NextRequest) {
   try {
-    // Lấy token từ cookie
     const token = req.cookies.get("token")?.value;
     if (!token) {
       return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
     }
 
-    // Giải mã token
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
 
-    // Chặn USER
     if (!decoded.role || decoded.role === "USER") {
       return NextResponse.json(
         { message: "Không có quyền xem danh sách" },
@@ -38,7 +35,6 @@ export async function GET(req: NextRequest) {
     const name = url.searchParams.get("name");
     const employeeCode = url.searchParams.get("employeeCode");
     const departmentIdParam = url.searchParams.get("department");
-
     const status = url.searchParams.get("status") as LeaveStatus | undefined;
     const startDate = url.searchParams.get("startDate");
 
@@ -48,19 +44,14 @@ export async function GET(req: NextRequest) {
     if (decoded.role === "ADMIN") {
       if (name) employeeFilter.name = { contains: name };
       if (employeeCode) employeeFilter.employeeCode = { contains: employeeCode };
-
       if (departmentIdParam) {
         const departmentIdNum = parseInt(departmentIdParam, 10);
         if (!isNaN(departmentIdNum)) {
-          employeeFilter.workInfo = {
-            is: { departmentId: departmentIdNum },
-          };
+          employeeFilter.workInfo = { is: { departmentId: departmentIdNum } };
         }
       }
     } else if (decoded.role === "MANAGER") {
-      employeeFilter.workInfo = {
-        is: { departmentId: decoded.departmentId }, // cái này đã là number
-      };
+      employeeFilter.workInfo = { is: { departmentId: decoded.departmentId } };
       if (name) employeeFilter.name = { contains: name };
       if (employeeCode) employeeFilter.employeeCode = { contains: employeeCode };
     }
@@ -73,14 +64,14 @@ export async function GET(req: NextRequest) {
       ...(filterDate
         ? {
           AND: [
-            { startDate: { lte: endOfDay(filterDate) } }, // nhỏ hơn hoặc bằng cuối ngày
-            { endDate: { gte: startOfDay(filterDate) } }, // lớn hơn hoặc bằng đầu ngày
+            { startDate: { lte: endOfDay(filterDate) } },
+            { endDate: { gte: startOfDay(filterDate) } },
           ],
         }
         : {}),
     };
 
-    // Lấy dữ liệu đầy đủ
+    // Lấy dữ liệu
     const [data, total] = await Promise.all([
       prisma.leaveRequest.findMany({
         where: leaveFilter,
@@ -96,7 +87,10 @@ export async function GET(req: NextRequest) {
           approvalSteps: {
             include: {
               approvers: {
-                include: {
+                select: {
+                  id: true,
+                  status: true,
+                  approvedAt: true,
                   approver: {
                     select: { id: true, name: true, employeeCode: true },
                   },
@@ -108,29 +102,47 @@ export async function GET(req: NextRequest) {
       }),
       prisma.leaveRequest.count({ where: leaveFilter }),
     ]);
+    const statusMap: Record<string, string> = {
+      approved: "Đã duyệt",
+      rejected: "Từ chối",
+      pending: "Đang chờ",
+    };
+    // Map dữ liệu
+    const processedData = data.map((req) => {
+      const approvalHistory = req.approvalSteps.flatMap((step) =>
+        step.approvers.map((a) => ({
+          approverId: a.approver?.id,
+          name: a.approver?.name,
+          employeeCode: a.approver?.employeeCode,
+          level: step.level,
+          status: a.status,
+          approvedAt: a.approvedAt,
+        }))
+      );
 
-    // Map người phê duyệt thành string
-    const processedData = data.map((req) => ({
-      ...req,
-      approvers: req.approvalSteps
-        .flatMap((step) =>
-          step.approvers.map(
-            (a) => `${a.approver?.name || ""} (${a.approver?.employeeCode || ""})`
+      return {
+        ...req,
+        approvalHistory,
+        approversSummary: approvalHistory
+          .map(
+            (a) =>
+              `${a.name || ""} (${a.employeeCode || ""}) - ${statusMap[a.status] || a.status
+              }${a.approvedAt
+                ? ` lúc ${new Date(a.approvedAt).toLocaleString("vi-VN")}`
+                : ""
+              }`
           )
-        )
-        .filter(Boolean)
-        .join("; "),
-    }));
+          .join("; "),
+      };
+    });
 
     return NextResponse.json({ data: processedData, total, page, pageSize });
   } catch (err) {
     console.error("❌ Lỗi API leave:", err);
-    return NextResponse.json(
-      { message: "Lấy danh sách thất bại" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Lấy danh sách thất bại" }, { status: 500 });
   }
 }
+
 
 export async function PUT(req: NextRequest) {
   try {
@@ -165,7 +177,6 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    // Chuẩn bị dữ liệu update
     const dataToUpdate: Prisma.LeaveRequestUpdateInput = {};
     if (leaveType) dataToUpdate.leaveType = leaveType;
     if (startDate) dataToUpdate.startDate = new Date(startDate);

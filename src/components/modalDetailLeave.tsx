@@ -7,9 +7,9 @@ import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Key, useEffect, useState } from "react";
 import InfoPersonal from "./infoPersonal";
-import { RequestLeave } from "./api";
+// import { RequestLeave } from "./api";
 import { StatusLeave } from "./function";
 import { useAppSelector } from "@/store/hook";
 
@@ -33,8 +33,15 @@ interface ModalDetailLeaveProps {
   open: boolean;
   onClose: () => void;
   title: string;
-  infoRequetLeave?: RequestLeave;
+  infoRequetLeave?: any;
 }
+
+// Bản đồ trạng thái sang tiếng Việt
+const statusMap: Record<string, string> = {
+  approved: "Đã duyệt",
+  rejected: "Từ chối",
+  pending: "Đang chờ",
+};
 
 const leaveOptions = [
   { value: "PN", label: "PN - Phép năm" },
@@ -45,8 +52,6 @@ const leaveOptions = [
   { value: "TS", label: "TS - Thai sản" },
   { value: "PR", label: "PR - Phép riêng" },
 ];
-
-{/* ... các import giữ nguyên ... */}
 
 const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetailLeaveProps) => {
   const { employeeCode } = useAppSelector((state) => state.user);
@@ -60,12 +65,12 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
   const [loading, setLoading] = useState(false);
   
   useEffect(() => {
-  if (infoRequetLeave) {
-    setLeaveType(infoRequetLeave.leaveType || "PN");
-    setStartDate(dayjs.utc(infoRequetLeave.startDate).tz("Asia/Ho_Chi_Minh"));
-    setEndDate(dayjs.utc(infoRequetLeave.endDate).tz("Asia/Ho_Chi_Minh"));
-  }
-}, [infoRequetLeave]);
+    if (infoRequetLeave) {
+      setLeaveType(infoRequetLeave.leaveType || "PN");
+      setStartDate(dayjs.utc(infoRequetLeave.startDate).tz("Asia/Ho_Chi_Minh"));
+      setEndDate(dayjs.utc(infoRequetLeave.endDate).tz("Asia/Ho_Chi_Minh"));
+    }
+  }, [infoRequetLeave]);
 
   // API cập nhật đơn (ADMIN)
   async function updateLeaveRequest(payload: UpdateLeaveRequestPayload) {
@@ -90,13 +95,10 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
 
   const handleUpdate = () => {
     if (!infoRequetLeave) return;
-
-    // Kiểm tra logic ngày: start ≤ end
     if (startDate && endDate && startDate.isAfter(endDate)) {
       message.error("Ngày bắt đầu không được lớn hơn ngày kết thúc");
       return;
     }
-
     updateLeaveRequest({
       id: infoRequetLeave.id,
       leaveType,
@@ -106,49 +108,47 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
   };
 
   // --- API rút đơn ---
-async function handleRevoke() {
-  if (!infoRequetLeave) return;
-  try {
-    setLoading(true);
-    const response = await fetch("/api/leave/my-requests/", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ leaveRequestId: infoRequetLeave.id }),
-    });
-    const result: ApiResponse<any> = await response.json();
-    if (!response.ok) throw new Error(result.message || "Rút đơn thất bại");
-    message.success(result.message);
-    onClose();
-  } catch (error: any) {
-    message.error(error.message || "Rút đơn thất bại");
-    console.error("Lỗi khi rút đơn:", error.message);
-  } finally {
-    setLoading(false);
+  async function handleRevoke() {
+    if (!infoRequetLeave) return;
+    try {
+      setLoading(true);
+      const response = await fetch("/api/leave/my-requests/", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ leaveRequestId: infoRequetLeave.id }),
+      });
+      const result: ApiResponse<any> = await response.json();
+      if (!response.ok) throw new Error(result.message || "Rút đơn thất bại");
+      message.success(result.message);
+      onClose();
+    } catch (error: any) {
+      message.error(error.message || "Rút đơn thất bại");
+      console.error("Lỗi khi rút đơn:", error.message);
+    } finally {
+      setLoading(false);
+    }
   }
-}
 
-// --- API xóa đơn ---
-async function handleDelete() {
-  if (!infoRequetLeave) return;
-  try {
-    setLoading(true);
-    const response = await fetch(`/api/leave/all-requests?id=${infoRequetLeave.id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    });
-    const result: ApiResponse<any> = await response.json();
-    if (!response.ok) throw new Error(result.message || "Xóa đơn thất bại");
-    message.success(result.message);
-    onClose();
-  } catch (error: any) {
-    message.error(error.message || "Xóa đơn thất bại");
-    console.error("Lỗi khi xóa đơn:", error.message);
-  } finally {
-    setLoading(false);
+  // --- API xóa đơn ---
+  async function handleDelete() {
+    if (!infoRequetLeave) return;
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/leave/all-requests?id=${infoRequetLeave.id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+      const result: ApiResponse<any> = await response.json();
+      if (!response.ok) throw new Error(result.message || "Xóa đơn thất bại");
+      message.success(result.message);
+      onClose();
+    } catch (error: any) {
+      message.error(error.message || "Xóa đơn thất bại");
+      console.error("Lỗi khi xóa đơn:", error.message);
+    } finally {
+      setLoading(false);
+    }
   }
-}
-
-  {/* ... giữ nguyên handleRevoke, handleDelete ... */}
 
   // Kiểm tra điều kiện hiển thị nút rút đơn
   const now = dayjs().tz("Asia/Ho_Chi_Minh");
@@ -195,13 +195,11 @@ async function handleDelete() {
         {/* Chi tiết đơn nghỉ */}
         <p className="text-xl font-bold mt-4">Chi tiết:</p>
         <div className="pl-4 mt-1">
-          {(employeeCode === "AD001" || employeeCode === "00898") ? (
+          {(employeeCode === "01375" || employeeCode === "00898") ? (
             <>
-              {/* Loại phép */}
               <Form.Item label="Loại phép">
                 <Select value={leaveType} onChange={setLeaveType} options={leaveOptions} />
               </Form.Item>
-              {/* Chỉnh thời gian */}
               <Form.Item label="Bắt đầu">
                 <DatePicker
                   showTime
@@ -249,10 +247,33 @@ async function handleDelete() {
           {infoRequetLeave?.approvedBy && (
             <InfoPersonal titleValue="Người phê duyệt" value={infoRequetLeave?.approvedBy} />
           )}
+
+          {/* --- Lịch sử phê duyệt --- */}
+          {infoRequetLeave?.approvalHistory?.length > 0 && (
+            <div className="mt-4">
+              <p className="font-bold text-xl">Lịch sử phê duyệt:</p>
+              <ul className="pl-4 mt-2 space-y-1">
+                {infoRequetLeave.approvalHistory.map((step: { approverId: Key | null | undefined; name: any; employeeCode: any; level: any; status: string; }) => (
+                  <li key={step.approverId} className="flex justify-between items-center">
+                    <span>{`${step.name} (${step.employeeCode}) - Cấp ${step.level}`}</span>
+                    <span
+                      className={`font-semibold ${
+                        step.status === "approved" ? "text-green-600" :
+                        step.status === "rejected" ? "text-red-600" :
+                        "text-orange-500"
+                      }`}
+                    >
+                      {statusMap[step.status]}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         {/* Nút cập nhật và rút/xóa đơn */}
-        {(employeeCode === "AD001" || employeeCode === "00898") && (
+        {(employeeCode === "01375" || employeeCode === "00898") && (
           <div className="mt-4 flex justify-end gap-2">
             <button
               onClick={handleUpdate}
@@ -285,4 +306,3 @@ async function handleDelete() {
 };
 
 export default ModalDetailLeave;
-

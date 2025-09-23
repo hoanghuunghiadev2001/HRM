@@ -65,8 +65,12 @@ async function approveStep(stepApproverId: number) {
       throw new Error("Bước duyệt này đã có người duyệt rồi");
     }
 
+    if (stepApprover.status !== "pending") {
+      throw new Error("Bạn đã duyệt bước này rồi");
+    }
+
     const updated = await tx.leaveApprovalStepApprover.update({
-      where: { id: stepApproverId, status: "pending" },
+      where: { id: stepApproverId },
       data: {
         status: "approved",
         approvedAt: new Date(),
@@ -372,7 +376,7 @@ export async function PUT(req: NextRequest) {
         if (emails.length > 0) {
           await sendEmail({
             to: emails,
-            subject: `📢 Thông báo: Đơn về việc nghỉ phép của ${leaveRequest.employee.workInfo?.position?.name +':' + leaveRequest.employee.name}`,
+            subject: `📢 Thông báo: Đơn về việc nghỉ phép của ${leaveRequest.employee.workInfo?.position?.name + ':' + leaveRequest.employee.name}`,
             html: `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border-radius: 8px; background-color: #f5f5f5; border: 1px solid #ddd;">
       <h2 style="color: #2e7d32; margin-bottom: 16px;">📢 Thông báo đơn nghỉ phép</h2>
@@ -412,10 +416,10 @@ export async function PUT(req: NextRequest) {
           .map((e) => e.contactInfo?.email)
           .filter((email): email is string => !!email);
 
-         if (emails.length > 0) {
+        if (emails.length > 0) {
           await sendEmail({
             to: emails,
-            subject: `📢 Thông báo: Đơn về việc nghỉ phép của ${leaveRequest.employee.workInfo?.position?.name +':' + leaveRequest.employee.name}`,
+            subject: `📢 Thông báo: Đơn về việc nghỉ phép của ${leaveRequest.employee.workInfo?.position?.name + ':' + leaveRequest.employee.name}`,
             html: `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border-radius: 8px; background-color: #f5f5f5; border: 1px solid #ddd;">
       <h2 style="color: #2e7d32; margin-bottom: 16px;">📢 Thông báo đơn nghỉ phép</h2>
