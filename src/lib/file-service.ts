@@ -119,24 +119,20 @@ export class FileService {
   }
 
   static validateFile(file: File): { valid: boolean; error?: string } {
-    // Kiểm tra kích thước file (max 10MB)
-    const maxSize = 10 * 1024 * 1024 // 10MB
-    if (file.size > maxSize) {
-      return {
-        valid: false,
-        error: "File không được vượt quá 10MB",
-      }
-    }
-    // Kiểm tra loại file
-    const allowedTypes = ["application/pdf"] // Chỉ chấp nhận PDF cho mục đích ký số
-    if (!allowedTypes.includes(file.type)) {
-      return {
-        valid: false,
-        error: "Chỉ chấp nhận file PDF", // Cập nhật thông báo lỗi
-      }
-    }
-    return { valid: true }
+  // Kiểm tra kích thước file (max 10MB)
+  const maxSize = 10 * 1024 * 1024 // 10MB
+  if (file.size > maxSize) {
+    return { valid: false, error: "File không được vượt quá 10MB" }
   }
+
+  // Chấp nhận PDF và tất cả ảnh
+  const allowedTypes = ["application/pdf", "image/jpeg", "image/png", "image/jpg", "image/gif"]
+  if (!allowedTypes.includes(file.type)) {
+    return { valid: false, error: "Chỉ chấp nhận file PDF hoặc ảnh" }
+  }
+
+  return { valid: true }
+}
 
   static formatFileSize(bytes: number): string {
     if (bytes === 0) return "0 Bytes"

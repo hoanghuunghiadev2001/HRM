@@ -328,10 +328,15 @@ export default function ProposalDetailPage() {
       >
         <div style={{ height: "80vh", overflowY: "auto", display: "flex", justifyContent: "center", alignItems: "center" }}>
           {currentPreviewUrl ? (
-
-            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.10.111/build/pdf.worker.min.js">
-              <Viewer fileUrl={currentPreviewUrl} plugins={[defaultLayoutPluginInstance]} />
-            </Worker>
+            proposal.file?.mimeType === "application/pdf" ? (
+              <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.10.111/build/pdf.worker.min.js">
+                <Viewer fileUrl={currentPreviewUrl} plugins={[defaultLayoutPluginInstance]} />
+              </Worker>
+            ) : proposal.file?.mimeType.startsWith("image/") ? (
+              <img src={currentPreviewUrl} alt={proposal.file?.filename} style={{ maxWidth: "100%", maxHeight: "80vh" }} />
+            ) : (
+              <div>Không thể xem trước file này</div>
+            )
           ) : (
             <Spin tip="Đang tải nội dung xem trước..." />
           )}

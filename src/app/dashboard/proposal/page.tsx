@@ -64,19 +64,19 @@ export default function ProposalCreator() {
 
   // Xử lý trước khi upload
   const beforeUpload = (file: RcFile) => {
-    // Kiểm tra file PDF
-    if (file.type !== "application/pdf") {
-      message.error("Chỉ chấp nhận file PDF!")
-      return false
+    const isValidType = file.type === "application/pdf" || file.type.startsWith("image/")
+    if (!isValidType) {
+      message.error("Chỉ chấp nhận file PDF hoặc ảnh!")
+      return Upload.LIST_IGNORE
     }
-    // Kiểm tra kích thước file (10MB)
+
     if (file.size > 10 * 1024 * 1024) {
       message.error("File không được vượt quá 10MB!")
-      return false
+      return Upload.LIST_IGNORE
     }
-    // Xử lý file ngay tại đây
+
     handleFileSelect(file)
-    return false // Ngăn upload tự động
+    return false // ngăn upload tự động
   }
 
   // Xử lý khi chọn file
@@ -262,7 +262,7 @@ export default function ProposalCreator() {
                   fileList={fileList}
                   beforeUpload={beforeUpload}
                   onRemove={handleRemove}
-                  accept=".pdf"
+                  accept=".pdf,image/*" // <- sửa ở đây, chấp nhận PDF và tất cả ảnh
                   maxCount={1}
                   style={{ marginTop: 8 }}
                   disabled={submitting}
@@ -274,7 +274,7 @@ export default function ProposalCreator() {
                 >
                   {fileList.length === 0 && (
                     <Button icon={<UploadOutlined />} size="large" disabled={submitting}>
-                      <FilePdfOutlined /> Chọn file PDF
+                      <FilePdfOutlined /> Chọn file (PDF hoặc ảnh)
                     </Button>
                   )}
                 </Upload>
