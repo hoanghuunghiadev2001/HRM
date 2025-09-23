@@ -39,19 +39,17 @@ function cellToHHmm(val: any): string | null {
   return null;
 }
 
-// Giữ workDate ở dạng dayjs để tránh lệch ngày
-function parseTimeToUTC(workDate: dayjs.Dayjs, hhmm: string | null): Date | null {
+function parseTimeToUTC(workDate: Date, hhmm: string | null): Date | null {
   if (!hhmm || !/^\d{2}:\d{2}$/.test(hhmm)) return null;
   const [hh, mm] = hhmm.split(":").map(Number);
 
-  return dayjs.tz(
-    `${workDate.format("YYYY-MM-DD")} ${hh}:${mm}`,
-    "YYYY-MM-DD HH:mm",
-    "Asia/Ho_Chi_Minh"
-  )
-    .utc(true) // ép chuẩn sang UTC
-    .toDate();
+  // Tạo dayjs ở VN
+  const dt = dayjs(workDate).tz("Asia/Ho_Chi_Minh").hour(hh).minute(mm).second(0).millisecond(0);
+  
+  // Lấy UTC Date
+  return dt.utc().toDate();
 }
+
 
 function calcHours(checkInHHmm: string | null, checkOutHHmm: string | null): number {
   if (!checkInHHmm || !checkOutHHmm) return 0;
@@ -77,13 +75,13 @@ export async function POST(req: Request) {
 
     const rows: any[][] = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: true });
 
-    // Lấy ngày từ file
     const dateRow = rows[3]?.[0] || "";
     const match = String(dateRow).match(/(\d{2}\/\d{2}\/\d{4})/);
     if (!match) return NextResponse.json({ error: "Không đọc được ngày từ file Excel" }, { status: 400 });
 
     const [dd, mm, yyyy] = match[1].split("/");
-    const workDate = dayjs.tz(`${yyyy}-${mm}-${dd}`, "YYYY-MM-DD", "Asia/Ho_Chi_Minh").startOf("day");
+    const workDate = dayjs(`${yyyy}-${mm}-${dd}`).startOf("day").toDate();
+    workDate.setUTCHours(0, 0, 0, 0);
 
     let startIndex = rows.findIndex(r => r && (r[0] === 1 || r[0] === "1" || r[0] === "STT"));
     if (startIndex === -1) {
@@ -159,8 +157,8 @@ export async function POST(req: Request) {
         where: {
           employeeId: employee.id,
           date: {
-            gte: workDate.startOf("day").toDate(),
-            lte: workDate.endOf("day").toDate(),
+            gte: dayjs(workDate).startOf("day").toDate(),
+            lte: dayjs(workDate).endOf("day").toDate(),
           },
         },
       });
@@ -179,7 +177,7 @@ export async function POST(req: Request) {
         await prisma.attendance.create({
           data: {
             employeeId: employee.id,
-            date: workDate.toDate(), // ngày chuẩn VN
+            date: workDate,
             checkInTime: checkInDateUTC,
             checkOutTime: checkOutDateUTC,
             workingHours: calcHours(checkInHHmm, checkOutHHmm),
@@ -196,7 +194,7 @@ export async function POST(req: Request) {
       message: "Import attendance success",
       imported,
       skipped,
-      date: workDate.toDate(),
+      date: workDate,
       importId: importLog.id,
     });
   } catch (err) {
