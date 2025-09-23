@@ -13,6 +13,7 @@ dayjs.extend(timezone);
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 // GET: Lấy danh sách đơn nghỉ phép của chính user
+// GET: Lấy danh sách đơn nghỉ phép của chính user
 export async function GET(request: NextRequest) {
   try {
     const cookieHeader = request.headers.get("cookie") || "";
@@ -47,7 +48,13 @@ export async function GET(request: NextRequest) {
           include: {
             approvers: {
               include: {
-                approver: { select: { id: true, name: true, contactInfo: true } },
+                approver: {
+                  select: {
+                    id: true,
+                    name: true,
+                    employeeCode: true,
+                  },
+                },
               },
             },
           },
@@ -56,12 +63,54 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json(leaveRequests, { status: 200 });
+    // 🔹 Build thêm approvalHistory và approversSummary
+    const enriched = leaveRequests.map((leave) => {
+      const approvalHistory = leave.approvalSteps
+        .flatMap((step) =>
+          step.approvers.map((a) => ({
+            stepId: step.id,
+            level: step.level,
+            status: step.status,
+            approvedAt: step.approvedAt,
+
+            approverId: a.approver?.id,
+            name: a.approver?.name,
+            employeeCode: a.approver?.employeeCode,
+            approverStatus: a.status,
+            approverApprovedAt: a.approvedAt,
+          }))
+        )
+        .sort((a, b) => a.level - b.level);
+
+      const approversSummary = approvalHistory
+        .map(
+          (h) =>
+            `${h.name} (${h.employeeCode}) - ${
+              h.approverStatus === "approved"
+                ? "Đã duyệt"
+                : h.approverStatus === "rejected"
+                ? "Từ chối"
+                : h.approverStatus === "revoked"
+                ? "Thu hồi"
+                : "Đang chờ"
+            }`
+        )
+        .join("; ");
+
+      return {
+        ...leave,
+        approvalHistory,
+        approversSummary,
+      };
+    });
+
+    return NextResponse.json(enriched, { status: 200 });
   } catch (error) {
     console.error("Lỗi token hoặc truy vấn:", error);
     return NextResponse.json({ message: "Token không hợp lệ" }, { status: 401 });
   }
 }
+
 
 // PUT: Thu hồi đơn nghỉ phép
 export async function PUT(req: NextRequest) {

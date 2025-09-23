@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import React from "react";
 import { message, Table } from "antd";
 import type { TableProps } from "antd";
-import { ListRequestLeave, RequestLeave } from "@/components/api";
+import { ListRequestLeave } from "@/components/api";
 import ModalLoading from "@/components/modalLoading";
 import { StatusLeave } from "@/components/function";
 import ModalDetailLeave from "@/components/modalDetailLeave";
@@ -70,7 +70,7 @@ export default function RequestPage() {
   const [myRequestsLeave, setMyRequetsLeave] = useState<ListRequestLeave>();
   const [loading, setLoading] = useState<boolean>(false);
   const [modalDetailLeave, setModalDetailLeave] = useState<boolean>(false);
-  const [infoRequetLeave, setInfoRequestLeave] = useState<RequestLeave>();
+  const [infoRequetLeave, setInfoRequestLeave] = useState<any>();
   const [createRequest, setCreateRequest] = useState<boolean>(false);
   const isMobile = useSelector((state: RootState) => state.responsive.isMobile);
   const { styles } = useStyle();

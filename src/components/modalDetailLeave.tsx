@@ -249,27 +249,57 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
           )}
 
           {/* --- Lịch sử phê duyệt --- */}
-          {infoRequetLeave?.approvalHistory?.length > 0 && (
-            <div className="mt-4">
-              <p className="font-bold text-xl">Lịch sử phê duyệt:</p>
-              <ul className="pl-4 mt-2 space-y-1">
-                {infoRequetLeave.approvalHistory.map((step: { approverId: Key | null | undefined; name: any; employeeCode: any; level: any; status: string; }) => (
-                  <li key={step.approverId} className="flex justify-between items-center">
-                    <span>{`${step.name} (${step.employeeCode}) - Cấp ${step.level}`}</span>
-                    <span
-                      className={`font-semibold ${
-                        step.status === "approved" ? "text-green-600" :
-                        step.status === "rejected" ? "text-red-600" :
-                        "text-orange-500"
-                      }`}
-                    >
-                      {statusMap[step.status]}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+       {infoRequetLeave?.approvalHistory?.length > 0 && (
+  <div className="mt-4">
+    <p className="font-bold text-xl">Lịch sử phê duyệt:</p>
+    <ul className="pl-4 mt-2 space-y-2">
+      {infoRequetLeave.approvalHistory.map(
+        (step: {
+          approverId: Key | null | undefined;
+          name: any;
+          employeeCode: any;
+          level: any;
+          status: string;
+          approvedAt?: string | null;
+        }) => {
+          const time =
+            step.approvedAt &&
+            dayjs
+              .utc(step.approvedAt)
+              .tz("Asia/Ho_Chi_Minh")
+              .format("DD/MM/YYYY HH:mm");
+          return (
+            <li
+              key={step.approverId}
+              className="flex justify-between items-center"
+            >
+              <div className="flex flex-col">
+                <span>{`${step.name} (${step.employeeCode}) - Cấp ${step.level}`}</span>
+                {time && (
+                  <span className="text-sm text-gray-500">
+                    {`Thời gian: ${time}`}
+                  </span>
+                )}
+              </div>
+              <span
+                className={`font-semibold ${
+                  step.status === "approved"
+                    ? "text-green-600"
+                    : step.status === "rejected"
+                    ? "text-red-600"
+                    : "text-orange-500"
+                }`}
+              >
+                {statusMap[step.status]}
+              </span>
+            </li>
+          );
+        }
+      )}
+    </ul>
+  </div>
+)}
+
         </div>
 
         {/* Nút cập nhật và rút/xóa đơn */}
