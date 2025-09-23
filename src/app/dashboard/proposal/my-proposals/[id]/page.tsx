@@ -403,7 +403,7 @@ export default function ProposalDetailPage() {
       </Card>
 
       {/* Action buttons */}
-      <Card style={{ textAlign: "center" }}>
+      {/* <Card style={{ textAlign: "center" }}>
         {proposal.signers.some((s) => s.signer.id === currentUserId && s.status === "pending") && (
           <Space>
             <Button type="primary" loading={actionLoading} onClick={() => showConfirm("sign", "approved")}>Ký đồng ý</Button>
@@ -416,7 +416,7 @@ export default function ProposalDetailPage() {
             <Button danger loading={actionLoading} onClick={() => showConfirm("approve", "rejected")}>Từ chối</Button>
           </Space>
         )}
-      </Card>
+      </Card> */}
     </div>
   )
 }

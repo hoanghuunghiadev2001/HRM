@@ -130,6 +130,7 @@ export async function PUT(req: NextRequest) {
 
     const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
     const userId = decoded.id;
+console.log(userId);
 
     const body = await req.json();
     const { leaveRequestId } = body;
@@ -156,9 +157,9 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ message: "Không tìm thấy đơn nghỉ phép" }, { status: 404 });
     }
 
-    if (leave.employeeId !== userId) {
-      return NextResponse.json({ message: "Bạn không có quyền thu hồi đơn này" }, { status: 403 });
-    }
+    // if (leave.employeeId !== userId) {
+    //   return NextResponse.json({ message: "Bạn không có quyền thu hồi đơn này" }, { status: 403 });
+    // }
 
     if (leave.status !== "approved") {
       return NextResponse.json({ message: "Chỉ đơn đã duyệt mới có thể thu hồi" }, { status: 400 });
