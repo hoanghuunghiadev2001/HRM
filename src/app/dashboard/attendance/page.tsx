@@ -274,27 +274,27 @@ export default function AttendancePage() {
     }
     setLoading(false);
   };
-const uploadProps = {
-  name: "file",
-  multiple: false,
-  accept: ".xlsx,.xls",
-  action: "/api/attendance/upload",
-  showUploadList: false,
-  data: { importedById: id },
-  onChange(info: any) {
-    if (info.file.status === "uploading") {
-      setUploading(true);
-    } else if (info.file.status === "done") {
-      setUploading(false);
-      message.success(`${info.file.name} tải lên thành công`);
-      fetchImportHistory();
-      handleFetchAttendances(pageTable, pageSize);
-    } else if (info.file.status === "error") {
-      setUploading(false);
-      message.error(`${info.file.name} tải lên thất bại`);
-    }
-  },
-};
+  const uploadProps = {
+    name: "file",
+    multiple: false,
+    accept: ".xlsx,.xls",
+    action: "/api/attendance/upload",
+    showUploadList: false,
+    data: { importedById: id },
+    onChange(info: any) {
+      if (info.file.status === "uploading") {
+        setUploading(true);
+      } else if (info.file.status === "done") {
+        setUploading(false);
+        message.success(`${info.file.name} tải lên thành công`);
+        fetchImportHistory();
+        handleFetchAttendances(pageTable, pageSize);
+      } else if (info.file.status === "error") {
+        setUploading(false);
+        message.error(`${info.file.name} tải lên thất bại`);
+      }
+    },
+  };
 
 
 
@@ -358,38 +358,38 @@ const uploadProps = {
   };
 
   // ===== Table lịch sử import =====
-const historyColumns: TableProps<ImportHistory>["columns"] = [
-  { title: "ID", dataIndex: "id", width: "60px" },
-  { title: "Tên file", dataIndex: "filename", width: "200px" },
-  {
-    title: "Người import",
-    dataIndex: "importedBy",
-    width: "200px",
-    render: (importedBy) =>
-      importedBy ? `${importedBy.name} (${importedBy.code})` : "N/A",
-  },
-  {
-    title: "Ngày import",
-    dataIndex: "importedAt",
-    width: "180px",
-    render: (value) => dayjs(value).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm"),
-  },
-  { title: "Số bản ghi", dataIndex: "recordCount", width: "100px" },
-  {
-    title: "Hành động",
-    key: "action",
-    render: (_, record) => (
-      <Popconfirm
-        title="Bạn có chắc muốn xóa?"
-        onConfirm={() => deleteImportHistory(record.id)}
-        okText="Xóa"
-        cancelText="Hủy"
-      >
-        <Button danger icon={<DeleteOutlined />} />
-      </Popconfirm>
-    ),
-  },
-];
+  const historyColumns: TableProps<ImportHistory>["columns"] = [
+    { title: "ID", dataIndex: "id", width: "60px" },
+    { title: "Tên file", dataIndex: "filename", width: "200px" },
+    {
+      title: "Người import",
+      dataIndex: "importedBy",
+      width: "200px",
+      render: (importedBy) =>
+        importedBy ? `${importedBy.name} (${importedBy.code})` : "N/A",
+    },
+    {
+      title: "Ngày import",
+      dataIndex: "importedAt",
+      width: "180px",
+      render: (value) => dayjs(value).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm"),
+    },
+    { title: "Số bản ghi", dataIndex: "recordCount", width: "100px" },
+    {
+      title: "Hành động",
+      key: "action",
+      render: (_, record) => (
+        <Popconfirm
+          title="Bạn có chắc muốn xóa?"
+          onConfirm={() => deleteImportHistory(record.id)}
+          okText="Xóa"
+          cancelText="Hủy"
+        >
+          <Button danger icon={<DeleteOutlined />} />
+        </Popconfirm>
+      ),
+    },
+  ];
 
   return (
     <div>
@@ -409,15 +409,15 @@ const historyColumns: TableProps<ImportHistory>["columns"] = [
                   </p>
                   {role === "ADMIN" ? (
                     <div className="flex gap-2">
-                   <Upload {...uploadProps}>
-  <Button 
-    icon={<UploadOutlined />} 
-    loading={uploading} 
-    disabled={uploading}
-  >
-    Upload Excel
-  </Button>
-</Upload>
+                      <Upload {...uploadProps}>
+                        <Button
+                          icon={<UploadOutlined />}
+                          loading={uploading}
+                          disabled={uploading}
+                        >
+                          Upload Excel
+                        </Button>
+                      </Upload>
                       <Button
                         onClick={handleExportExcel}
                         type="primary"
