@@ -217,6 +217,7 @@ model Attendance {
   importId  Int? // liên kết tới log import
   importLog AttendanceImportLog? @relation(fields: [importId], references: [id])
 
+  @@unique([employeeId, date])
   @@index([date])
 }
 
