@@ -273,24 +273,40 @@ export default function AttendancePage() {
     }
     setLoading(false);
   };
-  const uploadProps = {
-    name: "file",
-    multiple: false,
-    accept: ".xlsx,.xls",
-    action: "/api/attendance/upload",
-    showUploadList: false,
-    data: {
-      importedById: id, // truyền id nhân viên đang login
-    },
-    onChange(info: any) {
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} tải lên thành công`);
-        fetchImportHistory();
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} tải lên thất bại`);
-      }
-    },
-  };
+const uploadProps = {
+  name: "file",
+  multiple: false,
+  accept: ".xlsx,.xls",
+  action: "/api/attendance/upload",
+  showUploadList: false,
+  data: {
+    importedById: id, // truyền id nhân viên đang login
+  },
+  onChange(info: any) {
+    if (info.file.status === "uploading") {
+      setLoading(true);
+      message.loading({
+        content: `Đang tải lên: ${info.file.name}`,
+        key: "uploading",
+      });
+    } else if (info.file.status === "done") {
+      setLoading(false);
+      message.success({
+        content: `${info.file.name} tải lên thành công`,
+        key: "uploading",
+      });
+      fetchImportHistory();
+      handleFetchAttendances(pageTable, pageSize); // refresh bảng chấm công luôn
+    } else if (info.file.status === "error") {
+      setLoading(false);
+      message.error({
+        content: `${info.file.name} tải lên thất bại`,
+        key: "uploading",
+      });
+    }
+  },
+};
+
 
 
   useEffect(() => {
