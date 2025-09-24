@@ -89,25 +89,45 @@ export class ProposalService {
   /**
    * Lấy đề xuất
    */
-  static async getProposal(proposalId: number, userId?: number) {
+  static async getProposal(proposalId: number, userId?: string) {
+    console.log("emp: "+userId);
+    
     try {
       const proposal = await prisma.proposal.findUnique({
         where: { id: proposalId },
-        include: this.getFullIncludeObject(),
-      })
-      if (!proposal) return { success: false, error: "Không tìm thấy đề xuất" }
+        include: this.getFullIncludeObject(), // signers, approvers, proposer...
+      });
 
-      const isSigner = proposal.signers.some(s => s.signerId === userId)
-      const isApprover = proposal.approvers.some(a => a.approverId === userId)
+      if (!proposal) return { success: false, error: "Không tìm thấy đề xuất" };
 
-      // if (!userId || (!isSigner && !isApprover)) {
-      //   return { success: false, error: "Bạn không có quyền xem đề xuất này" }
-      // }
+      let statusSign = false;
+      let statusApprove = false;
 
-      return { success: true, data: proposal }
+      if (userId) {
+        // Chỉ xét signer nếu user thực sự là signer
+        const signer = proposal.signers.find(s => String(s.signerId) === userId);
+        if (signer) {
+          const previousSignersApproved = proposal.signers
+            .slice(0, proposal.signers.indexOf(signer))
+            .every(s => s.status === "approved");
+          statusSign = signer.status === "pending" && previousSignersApproved;
+        }
+
+        // Chỉ xét approver nếu user thực sự là approver
+        const approver = proposal.approvers.find(a => String(a.approverId) === userId);
+        if (approver) {
+          const allSignersApproved = proposal.signers.every(s => s.status === "approved");
+          const previousApproversApproved = proposal.approvers
+            .slice(0, proposal.approvers.indexOf(approver))
+            .every(a => a.status === "approved");
+          statusApprove = allSignersApproved && approver.status === "pending" && previousApproversApproved;
+        }
+      }
+
+      return { success: true, data: { ...proposal, statusSign, statusApprove } };
     } catch (error) {
-      console.error("getProposal error:", error)
-      return { success: false, error: "Lỗi khi lấy thông tin đề xuất" }
+      console.error("getProposal error:", error);
+      return { success: false, error: "Lỗi khi lấy thông tin đề xuất" };
     }
   }
 
@@ -294,78 +314,78 @@ export class ProposalService {
   /**
    * Include đầy đủ cho Employee
    */
-static getFullEmployeeInclude(): Prisma.EmployeeInclude {
-  return {
-    contactInfo: true, // chứa email, phone, address
-    workInfo: {
-      include: {
-        position: true,
-        department: true,
+  static getFullEmployeeInclude(): Prisma.EmployeeInclude {
+    return {
+      contactInfo: true, // chứa email, phone, address
+      workInfo: {
+        include: {
+          position: true,
+          department: true,
+        },
       },
-    },
-    manager: {
-      include: {
-        contactInfo: true, // manager cũng có email
-        workInfo: { include: { position: true, department: true } },
+      manager: {
+        include: {
+          contactInfo: true, // manager cũng có email
+          workInfo: { include: { position: true, department: true } },
+        },
       },
-    },
-    subordinates: {
-      include: {
-        contactInfo: true,
-        workInfo: { include: { position: true, department: true } },
+      subordinates: {
+        include: {
+          contactInfo: true,
+          workInfo: { include: { position: true, department: true } },
+        },
       },
-    },
+    }
   }
-}
 
 
   /**
    * Include object để lấy đầy đủ quan hệ proposal
    */
   static getFullIncludeObject() {
-  return {
-    file: true,
-    proposer: {
-      include: {
-        contactInfo: true,
-        workInfo: {
-          include: { position: true, department: true },
+    return {
+      file: true,
+      proposer: {
+        include: {
+          contactInfo: true,
+          workInfo: {
+            include: { position: true, department: true },
+          },
         },
       },
-    },
-    createdBy: {
-      include: {
-        contactInfo: true,
-        workInfo: {
-          include: { position: true, department: true },
+      createdBy: {
+        include: {
+          contactInfo: true,
+          workInfo: {
+            include: { position: true, department: true },
+          },
         },
       },
-    },
-    signers: {
-      include: {
-        signer: {
-          include: {
-            contactInfo: true,
-            workInfo: {
-              include: { position: true, department: true },
+      signers: {
+        include: {
+          signer: {
+            include: {
+              contactInfo: true,
+              workInfo: {
+                include: { position: true, department: true },
+              },
             },
           },
         },
       },
-    },
-    approvers: {
-      include: {
-        approver: {
-          include: {
-            contactInfo: true,
-            workInfo: {
-              include: { position: true, department: true },
+      approvers: {
+        include: {
+          approver: {
+            include: {
+              contactInfo: true,
+              workInfo: {
+                include: { position: true, department: true },
+              },
             },
           },
         },
       },
-    },
+    }
   }
-}
 
 }

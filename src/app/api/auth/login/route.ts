@@ -60,6 +60,9 @@ export async function POST(req: NextRequest) {
       departmentId: employee.workInfo?.departmentId || null, // 🔑 thêm dòng này
     };
 
+    console.log("11111"+employee.id);
+    
+
     const expiresIn = remember ? "7d" : "1d";
     const maxAge = remember ? 7 * 24 * 60 * 60 : 24 * 60 * 60;
 

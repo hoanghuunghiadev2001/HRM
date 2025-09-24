@@ -103,7 +103,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "ID đề xuất không hợp lệ" }, { status: 400 })
     }
 
-    const result = await ProposalService.getProposal(proposalId, employeeId)
+    const result = await ProposalService.getProposal(proposalId, String(employeeId))
 
     if (result.success) {
       return NextResponse.json(result.data)

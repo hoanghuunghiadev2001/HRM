@@ -76,20 +76,35 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const id = searchParams.get("id")
-    const userId = searchParams.get("userId") || "1" // Default userId nếu không có
+
+     const token = request.cookies.get("token")?.value;
+    console.log("Token from cookie:", token);
+
+    if (!token) {
+      return NextResponse.json({ error: "Thiếu token xác thực" }, { status: 401 });
+    }
+
+    let employeeId: number;
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
+      employeeId = decoded.id;
+      console.log("Employee ID from token:", employeeId);
+    } catch (err) {
+      console.error("Token verification error:", err);
+      return NextResponse.json({ error: "Token không hợp lệ hoặc đã hết hạn" }, { status: 401 });
+    }
 
     if (!id) {
       return NextResponse.json({ error: "Thiếu ID đề xuất" }, { status: 400 })
     }
 
     const proposalId = Number.parseInt(id)
-    const userIdNum = Number.parseInt(userId)
 
     if (isNaN(proposalId)) {
       return NextResponse.json({ error: "ID đề xuất không hợp lệ" }, { status: 400 })
     }
 
-    const result = await ProposalService.getProposal(proposalId, userIdNum)
+    const result = await ProposalService.getProposal(proposalId, String(employeeId))
 
     if (result.success) {
       return NextResponse.json(result.data)

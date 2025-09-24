@@ -43,6 +43,15 @@ export async function GET(
     const fileData = Buffer.from(proposal.file.data);
     const fileType = proposal.file.mimeType;
 
+    console.log("=== Debug file data ===");
+    console.log("First 20 bytes:", proposal.file.data.slice(0, 20));
+console.log("As string:", Buffer.from(proposal.file.data.slice(0, 20)).toString());
+    console.log("Type:", typeof proposal.file.data);
+    console.log("Is Buffer:", Buffer.isBuffer(proposal.file.data));
+    console.log("Constructor:", proposal.file.data?.constructor?.name);
+    console.log("Length:", proposal.file.data?.length);
+    console.log("MimeType:", proposal.file.mimeType);
+
     // Tải font
     const fontPath = path.resolve("./fonts/NotoSans-Regular.ttf");
     const fontBytes = fs.readFileSync(fontPath);
@@ -62,24 +71,24 @@ export async function GET(
       const lineHeight = 22;
 
       // Thông tin proposal
-      page.drawText(`Tên đề xuất: ${proposal.title || "Không có tên"}`, { x: margin, y, size: 14, font, color: rgb(0,0,0) });
+      page.drawText(`Tên đề xuất: ${proposal.title || "Không có tên"}`, { x: margin, y, size: 14, font, color: rgb(0, 0, 0) });
       y -= lineHeight;
-      page.drawText(`Người tạo: ${proposal.proposer?.name || ""}`, { x: margin, y, size: 14, font, color: rgb(0,0,0) });
+      page.drawText(`Người tạo: ${proposal.proposer?.name || ""}`, { x: margin, y, size: 14, font, color: rgb(0, 0, 0) });
       y -= 40;
 
       // Danh sách ký
-      page.drawText("Danh sách người ký:", { x: margin, y, size: 18, font, color: rgb(0,0,0) });
+      page.drawText("Danh sách người ký:", { x: margin, y, size: 18, font, color: rgb(0, 0, 0) });
       y -= 30;
       proposal.signers.filter(s => s.status === "approved").forEach(s => {
-        page.drawText(`- ${s.signer.name} • ${s.signedAt?.toLocaleDateString() || ""}`, { x: margin+20, y, size: 14, font, color: rgb(0,0,0) });
+        page.drawText(`- ${s.signer.name} • ${s.signedAt?.toLocaleDateString() || ""}`, { x: margin + 20, y, size: 14, font, color: rgb(0, 0, 0) });
         y -= lineHeight;
       });
 
       y -= 20;
-      page.drawText("Danh sách người phê duyệt:", { x: margin, y, size: 18, font, color: rgb(0,0,0) });
+      page.drawText("Danh sách người phê duyệt:", { x: margin, y, size: 18, font, color: rgb(0, 0, 0) });
       y -= 30;
       proposal.approvers.filter(a => a.status === "approved").forEach(a => {
-        page.drawText(`- ${a.approver.name} • ${a.approvedAt?.toLocaleDateString() || ""}`, { x: margin+20, y, size: 14, font, color: rgb(0,0,0) });
+        page.drawText(`- ${a.approver.name} • ${a.approvedAt?.toLocaleDateString() || ""}`, { x: margin + 20, y, size: 14, font, color: rgb(0, 0, 0) });
         y -= lineHeight;
       });
 
@@ -104,23 +113,23 @@ export async function GET(
       const margin = 50;
       const lineHeight = 22;
 
-      page2.drawText(`Tên đề xuất: ${proposal.title || "Không có tên"}`, { x: margin, y, size: 14, font, color: rgb(0,0,0) });
+      page2.drawText(`Tên đề xuất: ${proposal.title || "Không có tên"}`, { x: margin, y, size: 14, font, color: rgb(0, 0, 0) });
       y -= lineHeight;
-      page2.drawText(`Người tạo: ${proposal.proposer?.name || ""}`, { x: margin, y, size: 14, font, color: rgb(0,0,0) });
+      page2.drawText(`Người tạo: ${proposal.proposer?.name || ""}`, { x: margin, y, size: 14, font, color: rgb(0, 0, 0) });
       y -= 40;
 
-      page2.drawText("Danh sách người ký:", { x: margin, y, size: 18, font, color: rgb(0,0,0) });
+      page2.drawText("Danh sách người ký:", { x: margin, y, size: 18, font, color: rgb(0, 0, 0) });
       y -= 30;
       proposal.signers.filter(s => s.status === "approved").forEach(s => {
-        page2.drawText(`- ${s.signer.name} • ${s.signedAt?.toLocaleDateString() || ""}`, { x: margin+20, y, size: 14, font, color: rgb(0,0,0) });
+        page2.drawText(`- ${s.signer.name} • ${s.signedAt?.toLocaleDateString() || ""}`, { x: margin + 20, y, size: 14, font, color: rgb(0, 0, 0) });
         y -= lineHeight;
       });
 
       y -= 20;
-      page2.drawText("Danh sách người phê duyệt:", { x: margin, y, size: 18, font, color: rgb(0,0,0) });
+      page2.drawText("Danh sách người phê duyệt:", { x: margin, y, size: 18, font, color: rgb(0, 0, 0) });
       y -= 30;
       proposal.approvers.filter(a => a.status === "approved").forEach(a => {
-        page2.drawText(`- ${a.approver.name} • ${a.approvedAt?.toLocaleDateString() || ""}`, { x: margin+20, y, size: 14, font, color: rgb(0,0,0) });
+        page2.drawText(`- ${a.approver.name} • ${a.approvedAt?.toLocaleDateString() || ""}`, { x: margin + 20, y, size: 14, font, color: rgb(0, 0, 0) });
         y -= lineHeight;
       });
 

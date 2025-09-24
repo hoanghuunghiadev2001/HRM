@@ -51,6 +51,8 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
+import { useAppSelector } from "@/store/hook";
+import axios from "axios";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -76,6 +78,9 @@ interface ProposalDetail {
   }
   signers: Array<{ signer: any; status: string; signedAt?: string }>
   approvers: Array<{ approver: any; status: string; approvedAt?: string }>
+  statusApprove: boolean,
+  statusSign: boolean,
+
 }
 
 export default function ProposalDetailPage() {
@@ -90,6 +95,12 @@ export default function ProposalDetailPage() {
   const proposalId = Number.parseInt(params.id as string)
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const currentUserId = 1
+  const { id } = useAppSelector((state) => state.user);
+  const [actionLoadingPD, setActionLoadingPD] = useState<number | null>(null)
+
+
+
+
 
   const getStatusConfig = (status: string) => {
     switch (status) {
@@ -113,6 +124,7 @@ export default function ProposalDetailPage() {
     const approvedSigners = proposal.signers.filter((s) => s.status === "approved").length
     const approvedApprovers = proposal.approvers.filter((a) => a.status === "approved").length
 
+
     if (proposal.status === "rejected") return { percent: 100, status: "exception" as const }
     if (proposal.status === "approved") return { percent: 100, status: "success" as const }
     if (proposal.status === "pending_signatures") {
@@ -130,7 +142,7 @@ export default function ProposalDetailPage() {
   const fetchProposal = async () => {
     setLoading(true)
     try {
-      const res = await fetch(`/api/proposals?id=${proposalId}`)
+      const res = await fetch(`/api/proposals?id=${proposalId}?userId=${id}`)
       const result = await res.json()
       if (res.ok) {
         setProposal(result)
@@ -175,26 +187,6 @@ export default function ProposalDetailPage() {
     }
   }
 
-  const showConfirm = (action: "sign" | "approve", status: "approved" | "rejected") => {
-    const actionText = action === "sign" ? "ký" : "phê duyệt"
-    const statusText = status === "approved" ? "đồng ý" : "từ chối"
-    Modal.confirm({
-      title: `Xác nhận ${statusText}`,
-      icon: <ExclamationCircleOutlined />,
-      content: `Bạn có chắc chắn muốn ${statusText} ${actionText} đề xuất này?`,
-      okText: "Xác nhận",
-      cancelText: "Hủy",
-      onOk() { handleAction(action, status) },
-    })
-  }
-
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return "0 Bytes"
-    const k = 1024
-    const sizes = ["Bytes", "KB", "MB", "GB"]
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return (bytes / Math.pow(k, i)).toFixed(2) + " " + sizes[i]
-  }
 
   const getTimelineItems = () => {
     if (!proposal) return []
@@ -303,7 +295,36 @@ export default function ProposalDetailPage() {
     )
   }
 
+  const confirm = async (
+    action: "sign" | "approve",
+    status: "approved" | "rejected"
+  ) => {
+    setLoading(true)
+    setActionLoadingPD(proposalId)
+    try {
+      await axios.post(`/api/proposals/${proposalId}/${action}`, {
+        proposalId,
+        status,
+      })
+
+      message.success(
+        status === "approved" ? "Đã phê duyệt!" : "Đã từ chối đề xuất!"
+      )
+      await fetchProposal()
+    } catch (error) {
+      console.error("Approval error:", error)
+      message.error("Có lỗi xảy ra khi gửi phê duyệt.")
+    } finally {
+     
+      setActionLoadingPD(null)
+      setLoading(false) // 👉 thêm dòng này để tắt loading
+    }
+  }
+
+
   useEffect(() => {
+
+
     if (proposalId) fetchProposal()
     return () => { if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl) }
   }, [proposalId])
@@ -364,7 +385,20 @@ export default function ProposalDetailPage() {
                 <a href={`/api/files/${proposalId}`} target="_blank" rel="noopener noreferrer">
                   <Button type="primary" icon={<DownloadOutlined />}>Tải xuống</Button>
                 </a>
-                <Button onClick={() => setIsModalOpenpdf(true)} type="dashed" icon={<FolderViewOutlined />} size="large" loading={previewLoading}>Xem file</Button>
+                <Space className={`${proposal.statusApprove || proposal.statusSign ? '' : 'hidden'}`}>
+                  {proposal.statusSign && (
+                    <>
+                      <Button type="primary" loading={actionLoading} onClick={() => confirm("sign", "approved")}>Đồng ý</Button>
+                      <Button danger loading={actionLoading} onClick={() => confirm("sign", "rejected")}>Từ chối</Button>
+                    </>
+                  )}
+                  {proposal.statusApprove && (
+                    <>
+                      <Button type="primary" loading={actionLoading} onClick={() => confirm("approve", "approved")}>Phê duyệt</Button>
+                      <Button danger loading={actionLoading} onClick={() => confirm("approve", "rejected")}>Từ chối</Button>
+                    </>
+                  )}
+                </Space>
               </div>
               <Text strong>Tiến độ xử lý</Text>
               <Progress percent={progress.percent} status={progress.status} strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }} />
@@ -382,6 +416,24 @@ export default function ProposalDetailPage() {
           <Descriptions.Item label="Ngày tạo">{new Date(proposal.createdAt).toLocaleString("vi-VN")}</Descriptions.Item>
           <Descriptions.Item label="Cập nhật lần cuối">{new Date(proposal.updatedAt).toLocaleString("vi-VN")}</Descriptions.Item>
         </Descriptions>
+      </Card>
+
+      <Card title={<><InfoCircleOutlined /> Thông tin chi tiết</>} style={{ marginBottom: 24 }}>
+        <div className="w-full flex justify-center max-h-[80vh] overflow-auto">
+          {currentPreviewUrl ? (
+            proposal.file?.mimeType === "application/pdf" ? (
+              <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.10.111/build/pdf.worker.min.js">
+                <Viewer fileUrl={currentPreviewUrl} plugins={[defaultLayoutPluginInstance]} />
+              </Worker>
+            ) : proposal.file?.mimeType.startsWith("image/") ? (
+              <img src={currentPreviewUrl} alt={proposal.file?.filename} style={{ maxWidth: "100%", maxHeight: "80vh" }} />
+            ) : (
+              <div>Không thể xem trước file này</div>
+            )
+          ) : (
+            <Spin tip="Đang tải nội dung xem trước..." />
+          )}
+        </div>
       </Card>
 
       <Row gutter={24}>

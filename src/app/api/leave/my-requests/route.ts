@@ -130,7 +130,8 @@ export async function PUT(req: NextRequest) {
 
     const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
     const userId = decoded.id;
-console.log(userId);
+    console.log(userId);
+    
 
     const body = await req.json();
     const { leaveRequestId } = body;
