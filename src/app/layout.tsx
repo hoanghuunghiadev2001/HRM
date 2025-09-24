@@ -14,11 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TOYOTA BÌNH DƯƠNG",
-  description: "TOYOTA BÌNH DƯƠNG",
+  title: "HRM-TBD",
+  description: "HRM-TBD",
     icons: {
-    icon: "/icon/icon.ico",
-    apple: "/icon/icon.ico"
+    icon: "/storage/icon.png",
+    apple: "/storage/icon.png"
   },
   manifest: "/manifest.json",
 };
