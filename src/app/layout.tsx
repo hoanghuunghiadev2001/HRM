@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "HRM-TBD",
   description: "HRM-TBD",
-    icons: {
+  icons: {
     icon: "/storage/icon.png",
     apple: "/storage/icon.png"
   },
@@ -30,13 +30,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="manifest" href="/manifest.json" />
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/storage/icon.png" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>{children}</Providers>
       </body>
     </html>
+
   );
 }
