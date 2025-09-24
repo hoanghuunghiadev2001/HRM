@@ -16,6 +16,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "TOYOTA BÌNH DƯƠNG",
   description: "TOYOTA BÌNH DƯƠNG",
+    icons: {
+    icon: "/storage/logo-toyota.webp",
+    apple: "/storage/logo-toyota.webp"
+  },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
