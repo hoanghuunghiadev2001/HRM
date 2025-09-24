@@ -1,11 +1,30 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Các route public không cần JWT
+  const publicPaths = [
+    "/login",
+    "/manifest.json",
+    "/favicon.ico",
+    "/icons/",
+    "/_next/"
+  ];
+  const isPublic = publicPaths.some(path => pathname.startsWith(path));
+
+  const jwt = request.cookies.get("jwt")?.value;
+
+  if (!isPublic && !jwt) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
   const response = NextResponse.next();
 
+  // Thêm headers bảo mật
   response.headers.set("X-Frame-Options", "DENY");
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("X-XSS-Protection", "1; mode=block");
@@ -23,5 +42,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/:path*"], // Bắt TẤT CẢ các route
+  matcher: ["/:path*"],
 };
