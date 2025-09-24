@@ -17,8 +17,8 @@ export const metadata: Metadata = {
   title: "TOYOTA BÌNH DƯƠNG",
   description: "TOYOTA BÌNH DƯƠNG",
     icons: {
-    icon: "/storage/logo-toyota.webp",
-    apple: "/storage/logo-toyota.webp"
+    icon: "/icon/icon.ico",
+    apple: "/icon/icon.ico"
   },
   manifest: "/manifest.json",
 };
