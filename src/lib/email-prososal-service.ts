@@ -38,7 +38,7 @@ export class EmailService {
             <p style="font-size: 16px; color: #333; margin-top: 20px;">Vui lòng truy cập hệ thống để xem chi tiết và đưa ra quyết định.</p>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${process.env.detailUrlRequest}/proposals/${proposal.id}" 
+              <a href="${process.env.detailUrlRequest}/my-proposals/${proposal.id}" 
                 style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                 Xem đề xuất
               </a>
@@ -63,9 +63,6 @@ export class EmailService {
     const fileLink = proposal.fileUrl
       ? `<p style="margin-top: 15px; font-size: 14px;"><a href="${proposal.fileUrl}" target="_blank" style="color: #28a745; text-decoration: none; font-weight: bold;"><span style="vertical-align: middle; margin-right: 5px;">📎</span> Tải file đề xuất</a></p>`
       : ""
-    console.log(
-      `[EmailService] Sending approval request to ${employee.contactInfo?.email || employee.employeeCode}@company.com for proposal ${proposal.title}. File link: ${fileLink.substring(0, 100)}...`,
-    )
     const emailData = {
       to: [employee.contactInfo?.email || `${employee.employeeCode}@company.com`],
       subject: `Yêu cầu phê duyệt đề xuất: ${proposal.title}`,
@@ -100,7 +97,7 @@ export class EmailService {
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${process.env.detailUrlRequest}/proposals/${proposal.id}" 
+              <a href="${process.env.detailUrlRequest}/my-proposals/${proposal.id}" 
                 style="background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                 Phê duyệt đề xuất
               </a>
@@ -170,7 +167,7 @@ export class EmailService {
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${process.env.detailUrlRequest}/dashboard/proposal/${proposal.id}" 
+              <a href="${process.env.detailUrlRequest}/my-proposals/${proposal.id}" 
                 style="background: ${config.color}; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                 Xem chi tiết
               </a>
@@ -233,7 +230,7 @@ export class EmailService {
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${process.env.detailUrlRequest}/proposals/${proposal.id}" 
+              <a href="${process.env.detailUrlRequest}/my-proposals/${proposal.id}" 
                 style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                 Theo dõi đề xuất
               </a>
@@ -285,7 +282,7 @@ export class EmailService {
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${process.env.detailUrlRequest}/dashboard/proposal/${proposal.id}" 
+              <a href="${process.env.detailUrlRequest}/my-proposals/${proposal.id}" 
                 style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                 Xem chi tiết đề xuất
               </a>
@@ -347,7 +344,7 @@ export class EmailService {
             ${fileLink}
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${process.env.detailUrlRequest}/dashboard/proposal/${proposal.id}" 
+              <a href="${process.env.detailUrlRequest}/my-proposals/${proposal.id}" 
                 style="background-color: #dc3545; color: white; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 16px;">
                 🔍 Xem chi tiết đề xuất
               </a>
