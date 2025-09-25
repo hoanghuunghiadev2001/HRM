@@ -35,7 +35,7 @@ model Employee {
   managerId            Int?
   createdAt            DateTime                    @default(now())
   updatedAt            DateTime                    @updatedAt
-  Attendance           Attendance[]
+  AttendanceImportLog  AttendanceImportLog[]       @relation("EmployeeImportLogs")
   contactInfo          ContactInfo?
   departmentDirectorOf Department?                 @relation("DepartmentDirector")
   departmentHeadOf     Department?                 @relation("DepartmentHead")
@@ -51,7 +51,6 @@ model Employee {
   proposalApprovals    ProposalApprover[]
   proposalSignatures   ProposalSigner[]
   workInfo             WorkInfo?
-  AttendanceImportLog  AttendanceImportLog[]       @relation("EmployeeImportLogs")
 
   @@index([employeeCode])
   @@index([managerId])
@@ -155,7 +154,7 @@ model LeaveRequest {
   startDate     DateTime
   endDate       DateTime
   totalHours    Float?
-  reason        String?
+  reason        String?             @db.LongText
   status        LeaveStatus         @default(pending)
   approvedBy    String?
   approvedAt    DateTime?
@@ -195,30 +194,28 @@ model LeaveApprovalStepApprover {
 }
 
 model AttendanceImportLog {
-  id         Int      @id @default(autoincrement())
-  filename   String
-  importedAt DateTime @default(now())
-
+  id           Int          @id @default(autoincrement())
+  filename     String
+  importedAt   DateTime     @default(now())
   importedById Int?
-  importedBy   Employee? @relation("EmployeeImportLogs", fields: [importedById], references: [id])
+  attendances  Attendance[]
+  importedBy   Employee?    @relation("EmployeeImportLogs", fields: [importedById], references: [id])
 
-  attendances Attendance[]
+  @@index([importedById], map: "AttendanceImportLog_importedById_fkey")
 }
 
 model Attendance {
-  id           Int       @id @default(autoincrement())
+  id           Int                  @id @default(autoincrement())
   employeeId   Int
-  date         DateTime  @db.Date
+  date         DateTime             @db.Date
   checkInTime  DateTime?
   checkOutTime DateTime?
   workingHours Float?
-  employee     Employee  @relation(fields: [employeeId], references: [id])
+  importId     Int?
+  importLog    AttendanceImportLog? @relation(fields: [importId], references: [id])
 
-  importId  Int? // liên kết tới log import
-  importLog AttendanceImportLog? @relation(fields: [importId], references: [id])
-
-  @@unique([employeeId, date])
   @@index([date])
+  @@index([importId], map: "Attendance_importId_fkey")
 }
 
 model KPI {
@@ -290,9 +287,9 @@ model ProposalSigner {
   signerId   Int
   status     LeaveStatus @default(pending)
   signedAt   DateTime?
+  level      Int
   proposal   Proposal    @relation(fields: [proposalId], references: [id], onDelete: Cascade)
   signer     Employee    @relation(fields: [signerId], references: [id])
-  level      Int // Thêm cột level để quản lý thứ tự ký
 
   @@unique([proposalId, signerId])
   @@index([signerId], map: "ProposalSigner_signerId_fkey")
@@ -304,9 +301,9 @@ model ProposalApprover {
   approverId Int
   status     LeaveStatus @default(pending)
   approvedAt DateTime?
+  level      Int
   approver   Employee    @relation(fields: [approverId], references: [id])
   proposal   Proposal    @relation(fields: [proposalId], references: [id], onDelete: Cascade)
-  level      Int // Thêm cột level để quản lý thứ tự ký
 
   @@unique([proposalId, approverId])
   @@index([approverId], map: "ProposalApprover_approverId_fkey")

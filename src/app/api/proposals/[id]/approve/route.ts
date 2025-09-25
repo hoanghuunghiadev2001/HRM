@@ -16,7 +16,6 @@ export async function POST(request: NextRequest,  { params }: { params: Promise<
     // 2. Lấy và kiểm tra token từ header Authorization
 
         const token = request.cookies.get("token")?.value;
-        console.log("Token from cookie:", token);
     
         if (!token) {
           return NextResponse.json({ error: "Thiếu token xác thực" }, { status: 401 });

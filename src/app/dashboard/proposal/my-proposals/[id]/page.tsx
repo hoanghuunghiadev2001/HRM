@@ -282,10 +282,35 @@ export default function ProposalDetailPage() {
             </Space>
           </Col>
           <Col flex="none">
-            <div style={{ textAlign: "right", minWidth: 200 }}>
+            <div className="gap-2">
               <a href={`/api/files/${proposalId}`} target="_blank" rel="noopener noreferrer">
                 <Button type="primary" icon={<DownloadOutlined />}>Tải xuống</Button>
               </a>
+
+              {proposal.statusSign ? (
+                <Space style={{ marginTop: 8, marginLeft: 8 }}>
+                  <Button type="primary" loading={actionLoading} onClick={() => confirmAction("sign", "approved")}>
+                    Đồng ý
+                  </Button>
+                  <Button danger loading={actionLoading} onClick={() => confirmAction("sign", "rejected")}>
+                    Từ chối
+                  </Button>
+                </Space>
+              ) : ''}
+              {proposal.statusApprove ? (
+                <Space style={{ marginTop: 8, marginLeft: 8  }}>
+                  <Button type="primary" loading={actionLoading} onClick={() => confirmAction("approve", "approved")}>
+                    Đồng ý
+                  </Button>
+                  <Button danger loading={actionLoading} onClick={() => confirmAction("approve", "rejected")}>
+                    Từ chối
+                  </Button>
+                </Space>
+              ) : ''}
+
+            </div>
+            <div style={{ textAlign: "right", minWidth: 200 }}>
+
               <Text strong>Tiến độ xử lý</Text>
               <Progress percent={progress.percent} status={progress.status} strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }} />
             </div>
@@ -317,18 +342,17 @@ export default function ProposalDetailPage() {
             ) : proposal.file?.mimeType.includes("officedocument") || proposal.file?.mimeType.includes("msword") ? (
               <div id="docx-container" style={{ width: "100%", minHeight: 600, overflow: "auto" }}></div>
             ) : (
-              <div style={{ textAlign: "center" }}>
-                <Text>Không thể xem trực tiếp file này.</Text>
-                <div style={{ marginTop: 12 }}>
-                  <a href={currentPreviewUrl} target="_blank" rel="noopener noreferrer">
-                    <Button type="primary" icon={<DownloadOutlined />}>Tải xuống file</Button>
-                  </a>
-                </div>
-              </div>
+              <Text>Không thể xem trực tiếp file này.</Text>
             )}
+          </div>
+          <div style={{ marginTop: 12 }}>
+            <Button type="primary" icon={<DownloadOutlined />} href={`/api/files/${proposalId}`} target="_blank" rel="noopener noreferrer">
+              Tải xuống
+            </Button>
           </div>
         </Card>
       )}
+
 
       {/* Người đề xuất / ký / phê duyệt */}
       <Row gutter={24}>

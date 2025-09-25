@@ -155,7 +155,7 @@ model LeaveRequest {
   startDate     DateTime
   endDate       DateTime
   totalHours    Float?
-  reason        String?
+  reason        String?             @db.LongText
   status        LeaveStatus         @default(pending)
   approvedBy    String?
   approvedAt    DateTime?

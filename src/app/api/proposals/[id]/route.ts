@@ -9,7 +9,6 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData()
 
      const token = request.cookies.get("token")?.value;
-        console.log("Token from cookie:", token);
     
         if (!token) {
           return NextResponse.json({ error: "Thiếu token xác thực" }, { status: 401 });
@@ -77,7 +76,6 @@ export async function GET(request: NextRequest) {
     const id = searchParams.get("id")
 
      const token = request.cookies.get("token")?.value;
-    console.log("Token from cookie:", token);
 
     if (!token) {
       return NextResponse.json({ error: "Thiếu token xác thực" }, { status: 401 });

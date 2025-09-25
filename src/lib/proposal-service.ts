@@ -134,163 +134,190 @@ export class ProposalService {
   /**
    * Ký đề xuất theo thứ tự signer
    */
-  static async signProposal(proposalId: number, employeeId: number, status: "approved" | "rejected") {
-    try {
-      const proposal = await prisma.proposal.findUnique({
-        where: { id: proposalId },
-        include: this.getFullIncludeObject(),
-      })
-      if (!proposal) return { success: false, error: "Đề xuất không tìm thấy" }
+static async signProposal(
+  proposalId: number,
+  employeeId: number,
+  status: "approved" | "rejected"
+) {
+  try {
+    const proposal = await prisma.proposal.findUnique({
+      where: { id: proposalId },
+      include: this.getFullIncludeObject(),
+    });
+    if (!proposal) return { success: false, error: "Đề xuất không tìm thấy" };
 
-      const signerEntry = proposal.signers.find(s => s.signerId === employeeId)
-      if (!signerEntry) return { success: false, error: "Bạn không phải signer của đề xuất" }
-      if (signerEntry.status !== "pending") return { success: false, error: "Bạn đã ký rồi" }
+    const signerEntry = proposal.signers.find(s => s.signerId === employeeId);
+    if (!signerEntry) return { success: false, error: "Bạn không phải signer của đề xuất" };
+    if (signerEntry.status !== "pending") return { success: false, error: "Bạn đã ký rồi" };
 
-      // Kiểm tra thứ tự ký
-      const minPendingLevel = Math.min(...proposal.signers.filter(s => s.status === "pending").map(s => s.level))
-      if (signerEntry.level !== minPendingLevel) return { success: false, error: "Chưa đến lượt ký của bạn" }
+    // Kiểm tra thứ tự ký
+    const minPendingLevel = Math.min(...proposal.signers.filter(s => s.status === "pending").map(s => s.level));
+    if (signerEntry.level !== minPendingLevel) return { success: false, error: "Chưa đến lượt ký của bạn" };
 
-      // Placeholder ký file
-      if (status === "approved" && proposal.fileId) {
-        const signerInfo = await prisma.employee.findUnique({ where: { id: employeeId } })
-        if (!signerInfo) return { success: false, error: "Không tìm thấy thông tin signer" }
-        const signedBuffer = await this._applyDigitalSignatureToFile(proposal.fileId, signerInfo, "signer")
-        if (!signedBuffer) return { success: false, error: "Không thể ký file" }
-        await FileService.updateFile(proposal.fileId, signedBuffer)
-      }
+    // Placeholder ký file
+    if (status === "approved" && proposal.fileId) {
+      const signerInfo = await prisma.employee.findUnique({ where: { id: employeeId } });
+      if (!signerInfo) return { success: false, error: "Không tìm thấy thông tin signer" };
 
-      // Cập nhật trạng thái signer
-      await prisma.proposalSigner.update({
-        where: { id: signerEntry.id },
-        data: { status, signedAt: new Date() },
-      })
+      const fileData = await FileService.getFileData(proposal.fileId);
+      if (!fileData) return { success: false, error: "Không thể lấy file gốc" };
 
-      const updatedProposal = await prisma.proposal.findUnique({
-        where: { id: proposalId },
-        include: this.getFullIncludeObject(),
-      })
+      const signedBuffer = await this._applyDigitalSignatureToFile(proposal.fileId, signerInfo, "signer");
+      if (!signedBuffer) return { success: false, error: "Không thể ký file" };
 
-      const fileUrl = updatedProposal?.file ? `${baseUrl}/api/files/${updatedProposal.file.id}` : undefined
-      const signerInfo = await prisma.employee.findUnique({ where: { id: employeeId }, include: this.getFullEmployeeInclude() })
-
-      if (status === "rejected") {
-        await prisma.proposal.update({ where: { id: proposalId }, data: { status: "rejected" } })
-        await EmailService.sendProposalRejectedBySigner(
-          updatedProposal?.proposer,
-          { ...updatedProposal, fileUrl },
-          signerInfo?.name || "Người ký"
-        )
-        return { success: true, message: "Bạn đã từ chối đề xuất. Đề xuất bị từ chối." }
-      }
-
-      // Nếu đồng ý, gửi mail cho signer tiếp theo hoặc approver đầu tiên
-      const nextSigner = updatedProposal?.signers
-        .filter(s => s.status === "pending")
-        .sort((a, b) => a.level - b.level)[0]
-
-      if (nextSigner) {
-        const nextSignerInfo = await prisma.employee.findUnique({
-          where: { id: nextSigner.signerId },
-          include: this.getFullEmployeeInclude(),
-        })
-        if (nextSignerInfo) {
-          await EmailService.sendSignatureRequest(nextSignerInfo, { ...updatedProposal, fileUrl })
-        }
-      } else {
-        // Hết signer, chuyển sang approver đầu tiên
-        await prisma.proposal.update({ where: { id: proposalId }, data: { status: "waiting_approval" } })
-        const firstApprover = updatedProposal?.approvers
-          .filter(a => a.status === "pending")
-          .sort((a, b) => a.level - b.level)[0]
-        if (firstApprover) {
-          const approverInfo = await prisma.employee.findUnique({
-            where: { id: firstApprover.approverId },
-            include: this.getFullEmployeeInclude(),
-          })
-          if (approverInfo) {
-            await EmailService.sendApprovalRequest(approverInfo, { ...updatedProposal, fileUrl })
-          }
-        }
-      }
-
-      return { success: true, message: "Đã ký đề xuất." }
-    } catch (error) {
-      console.error("[ProposalService] Error signProposal:", error)
-      return { success: false, error: "Không thể ký đề xuất" }
+      // Cập nhật file, giữ nguyên mimeType và tên gốc
+      await FileService.updateFile(
+        proposal.fileId,
+        signedBuffer,
+        fileData.mimeType,
+        signedBuffer.length
+      );
     }
+
+    // Cập nhật trạng thái signer
+    await prisma.proposalSigner.update({
+      where: { id: signerEntry.id },
+      data: { status, signedAt: new Date() },
+    });
+
+    const updatedProposal = await prisma.proposal.findUnique({
+      where: { id: proposalId },
+      include: this.getFullIncludeObject(),
+    });
+
+    const fileUrl = updatedProposal?.file ? `${baseUrl}/api/files/${updatedProposal.file.id}` : undefined;
+    const signerInfo = await prisma.employee.findUnique({ where: { id: employeeId }, include: this.getFullEmployeeInclude() });
+
+    if (status === "rejected") {
+      await prisma.proposal.update({ where: { id: proposalId }, data: { status: "rejected" } });
+      await EmailService.sendProposalRejectedBySigner(
+        updatedProposal?.proposer,
+        { ...updatedProposal, fileUrl },
+        signerInfo?.name || "Người ký"
+      );
+      return { success: true, message: "Bạn đã từ chối đề xuất. Đề xuất bị từ chối." };
+    }
+
+    // Gửi mail cho signer tiếp theo hoặc approver đầu tiên
+    const nextSigner = updatedProposal?.signers
+      .filter(s => s.status === "pending")
+      .sort((a, b) => a.level - b.level)[0];
+
+    if (nextSigner) {
+      const nextSignerInfo = await prisma.employee.findUnique({
+        where: { id: nextSigner.signerId },
+        include: this.getFullEmployeeInclude(),
+      });
+      if (nextSignerInfo) {
+        await EmailService.sendSignatureRequest(nextSignerInfo, { ...updatedProposal, fileUrl });
+      }
+    } else {
+      // Hết signer, chuyển sang approver đầu tiên
+      await prisma.proposal.update({ where: { id: proposalId }, data: { status: "waiting_approval" } });
+      const firstApprover = updatedProposal?.approvers
+        .filter(a => a.status === "pending")
+        .sort((a, b) => a.level - b.level)[0];
+      if (firstApprover) {
+        const approverInfo = await prisma.employee.findUnique({
+          where: { id: firstApprover.approverId },
+          include: this.getFullEmployeeInclude(),
+        });
+        if (approverInfo) {
+          await EmailService.sendApprovalRequest(approverInfo, { ...updatedProposal, fileUrl });
+        }
+      }
+    }
+
+    return { success: true, message: "Đã ký đề xuất." };
+  } catch (error) {
+    console.error("[ProposalService] Error signProposal:", error);
+    return { success: false, error: "Không thể ký đề xuất" };
   }
+}
+
 
   /**
    * Phê duyệt đề xuất theo thứ tự approver
    */
-  static async approveProposal(proposalId: number, employeeId: number, status: "approved" | "rejected") {
-    try {
-      const proposal = await prisma.proposal.findUnique({
-        where: { id: proposalId },
-        include: this.getFullIncludeObject(),
-      })
-      if (!proposal) return { success: false, error: "Đề xuất không tìm thấy" }
+static async approveProposal(
+  proposalId: number,
+  employeeId: number,
+  status: "approved" | "rejected"
+) {
+  try {
+    const proposal = await prisma.proposal.findUnique({
+      where: { id: proposalId },
+      include: this.getFullIncludeObject(),
+    });
+    if (!proposal) return { success: false, error: "Đề xuất không tìm thấy" };
 
-      const approverEntry = proposal.approvers.find(a => a.approverId === employeeId)
-      if (!approverEntry) return { success: false, error: "Bạn không phải approver" }
-      if (approverEntry.status !== "pending") return { success: false, error: "Bạn đã phê duyệt rồi" }
+    const approverEntry = proposal.approvers.find(a => a.approverId === employeeId);
+    if (!approverEntry) return { success: false, error: "Bạn không phải approver" };
+    if (approverEntry.status !== "pending") return { success: false, error: "Bạn đã phê duyệt rồi" };
 
-      const minPendingLevel = Math.min(...proposal.approvers.filter(a => a.status === "pending").map(a => a.level))
-      if (approverEntry.level !== minPendingLevel) return { success: false, error: "Chưa đến lượt phê duyệt" }
+    const minPendingLevel = Math.min(
+      ...proposal.approvers.filter(a => a.status === "pending").map(a => a.level)
+    );
+    if (approverEntry.level !== minPendingLevel) return { success: false, error: "Chưa đến lượt phê duyệt" };
 
-      // Placeholder ký file
-      if (status === "approved" && proposal.fileId) {
-        const approverInfo = await prisma.employee.findUnique({ where: { id: employeeId } })
-        if (!approverInfo) return { success: false, error: "Không tìm thấy thông tin approver" }
-        const signedBuffer = await this._applyDigitalSignatureToFile(proposal.fileId, approverInfo, "approver")
-        if (!signedBuffer) return { success: false, error: "Không thể ký file" }
-        await FileService.updateFile(proposal.fileId, signedBuffer)
-      }
+    // --- Ký file, giữ nguyên tất cả định dạng ---
+    if (status === "approved" && proposal.fileId) {
+      const approverInfo = await prisma.employee.findUnique({ where: { id: employeeId } });
+      if (!approverInfo) return { success: false, error: "Không tìm thấy thông tin approver" };
 
-      await prisma.proposalApprover.update({
-        where: { id: approverEntry.id },
-        data: { status, approvedAt: new Date() },
-      })
+      // Trả buffer gốc
+      const fileBuffer = await FileService.getFileBuffer(proposal.fileId);
+      if (!fileBuffer) return { success: false, error: "Không thể lấy file" };
 
-      const updatedProposal = await prisma.proposal.findUnique({
-        where: { id: proposalId },
-        include: this.getFullIncludeObject(),
-      })
-
-      const fileUrl = updatedProposal?.file ? `${baseUrl}/api/files/${updatedProposal.file.id}` : undefined
-      const approverInfo = await prisma.employee.findUnique({ where: { id: employeeId }, include: this.getFullEmployeeInclude() })
-
-      if (status === "rejected") {
-        await prisma.proposal.update({ where: { id: proposalId }, data: { status: "rejected" } })
-        await EmailService.sendStatusUpdate(updatedProposal?.proposer, { ...updatedProposal, fileUrl }, "rejected")
-        return { success: true, message: "Đã từ chối phê duyệt đề xuất." }
-      }
-
-      // Nếu đồng ý, gửi mail cho approver tiếp theo hoặc hoàn tất
-      const nextApprover = updatedProposal?.approvers
-        .filter(a => a.status === "pending")
-        .sort((a, b) => a.level - b.level)[0]
-
-      if (nextApprover) {
-        const nextApproverInfo = await prisma.employee.findUnique({
-          where: { id: nextApprover.approverId },
-          include: this.getFullEmployeeInclude(),
-        })
-        if (nextApproverInfo) {
-          await EmailService.sendApprovalRequest(nextApproverInfo, { ...updatedProposal, fileUrl })
-        }
-      } else {
-        // Hết approver, hoàn tất
-        await prisma.proposal.update({ where: { id: proposalId }, data: { status: "approved" } })
-        await EmailService.sendStatusUpdate(updatedProposal?.proposer, { ...updatedProposal, fileUrl }, "approved")
-      }
-
-      return { success: true, message: "Đã phê duyệt đề xuất." }
-    } catch (error) {
-      console.error("[ProposalService] Error approveProposal:", error)
-      return { success: false, error: "Không thể phê duyệt đề xuất" }
+      await FileService.updateFile(
+        proposal.fileId,
+        fileBuffer,
+        proposal.file?.mimeType,  // giữ nguyên mimeType gốc
+        fileBuffer.length
+      );
     }
+
+    // Cập nhật trạng thái approver
+    await prisma.proposalApprover.update({
+      where: { id: approverEntry.id },
+      data: { status, approvedAt: new Date() },
+    });
+
+    const updatedProposal = await prisma.proposal.findUnique({
+      where: { id: proposalId },
+      include: this.getFullIncludeObject(),
+    });
+
+    const fileUrl = updatedProposal?.file ? `${baseUrl}/api/files/${updatedProposal.file.id}` : undefined;
+
+    if (status === "rejected") {
+      await prisma.proposal.update({ where: { id: proposalId }, data: { status: "rejected" } });
+      await EmailService.sendStatusUpdate(updatedProposal?.proposer, { ...updatedProposal, fileUrl }, "rejected");
+      return { success: true, message: "Đã từ chối phê duyệt đề xuất." };
+    }
+
+    const nextApprover = updatedProposal?.approvers
+      .filter(a => a.status === "pending")
+      .sort((a, b) => a.level - b.level)[0];
+
+    if (nextApprover) {
+      const nextApproverInfo = await prisma.employee.findUnique({
+        where: { id: nextApprover.approverId },
+        include: this.getFullEmployeeInclude(),
+      });
+      if (nextApproverInfo) await EmailService.sendApprovalRequest(nextApproverInfo, { ...updatedProposal, fileUrl });
+    } else {
+      await prisma.proposal.update({ where: { id: proposalId }, data: { status: "approved" } });
+      await EmailService.sendStatusUpdate(updatedProposal?.proposer, { ...updatedProposal, fileUrl }, "approved");
+    }
+
+    return { success: true, message: "Đã phê duyệt đề xuất." };
+  } catch (error) {
+    console.error("[ProposalService] Error approveProposal:", error);
+    return { success: false, error: "Không thể phê duyệt đề xuất" };
   }
+}
+
 
   /**
    * Placeholder áp dụng chữ ký số

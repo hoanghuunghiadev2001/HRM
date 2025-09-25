@@ -1,0 +1,1 @@
+ALTER TABLE LeaveRequest MODIFY COLUMN reason LONGTEXT;

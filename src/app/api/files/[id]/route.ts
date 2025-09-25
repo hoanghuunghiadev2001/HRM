@@ -9,6 +9,12 @@ import fontkit from "@pdf-lib/fontkit";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
+// Hàm kiểm tra PDF hợp lệ
+function isValidPDF(buffer: Buffer): boolean {
+  // PDF hợp lệ bắt đầu bằng "%PDF"
+  return buffer.slice(0, 4).toString() === "%PDF";
+}
+
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -41,14 +47,9 @@ export async function GET(
       },
     });
 
-    if (!proposal)
+    if (!proposal || !proposal.file)
       return NextResponse.json(
-        { success: false, error: "Không tìm thấy đề xuất" },
-        { status: 404 }
-      );
-    if (!proposal.file)
-      return NextResponse.json(
-        { success: false, error: "File không tồn tại" },
+        { success: false, error: "Không tìm thấy file đề xuất" },
         { status: 404 }
       );
 
@@ -63,71 +64,44 @@ export async function GET(
 
     // === PDF gốc ===
     if (fileType === "application/pdf") {
-      const pdfDoc = await PDFDocument.load(fileData);
-      pdfDoc.registerFontkit(fontkit);
-      const font = await pdfDoc.embedFont(fontBytes);
+      if (!isValidPDF(fileData)) {
+        console.warn("File PDF không hợp lệ, trả nguyên file");
+        outputBytes = fileData;
+      } else {
+        const pdfDoc = await PDFDocument.load(fileData);
+        pdfDoc.registerFontkit(fontkit);
+        const font = await pdfDoc.embedFont(fontBytes);
 
-      // Thêm trang cuối với info
-      const page = pdfDoc.addPage([595, 842]);
-      let y = 800;
-      const margin = 50;
-      const lineHeight = 22;
+        // Thêm trang info
+        const page = pdfDoc.addPage([595, 842]);
+        let y = 800;
+        const margin = 50;
+        const lineHeight = 22;
 
-      page.drawText(`Tên đề xuất: ${proposal.title || "Không có tên"}`, {
-        x: margin,
-        y,
-        size: 14,
-        font,
-        color: rgb(0, 0, 0),
-      });
-      y -= lineHeight;
-      page.drawText(`Người tạo: ${proposal.proposer?.name || ""}`, {
-        x: margin,
-        y,
-        size: 14,
-        font,
-        color: rgb(0, 0, 0),
-      });
-      y -= 40;
+        page.drawText(`Tên đề xuất: ${proposal.title || "Không có tên"}`, { x: margin, y, size: 14, font });
+        y -= lineHeight;
+        page.drawText(`Người tạo: ${proposal.proposer?.name || ""}`, { x: margin, y, size: 14, font });
+        y -= 40;
 
-      page.drawText("Danh sách người ký:", {
-        x: margin,
-        y,
-        size: 18,
-        font,
-        color: rgb(0, 0, 0),
-      });
-      y -= 30;
-      proposal.signers
-        .filter((s) => s.status === "approved")
-        .forEach((s) => {
-          page.drawText(
-            `- ${s.signer.name} • ${s.signedAt?.toLocaleDateString() || ""}`,
-            { x: margin + 20, y, size: 14, font, color: rgb(0, 0, 0) }
-          );
-          y -= lineHeight;
-        });
+        page.drawText("Danh sách người ký:", { x: margin, y, size: 18, font });
+        y -= 30;
+        proposal.signers.filter(s => s.status === "approved")
+          .forEach(s => {
+            page.drawText(`- ${s.signer.name} • ${s.signedAt?.toLocaleDateString() || ""}`, { x: margin + 20, y, size: 14, font });
+            y -= lineHeight;
+          });
 
-      y -= 20;
-      page.drawText("Danh sách người phê duyệt:", {
-        x: margin,
-        y,
-        size: 18,
-        font,
-        color: rgb(0, 0, 0),
-      });
-      y -= 30;
-      proposal.approvers
-        .filter((a) => a.status === "approved")
-        .forEach((a) => {
-          page.drawText(
-            `- ${a.approver.name} • ${a.approvedAt?.toLocaleDateString() || ""}`,
-            { x: margin + 20, y, size: 14, font, color: rgb(0, 0, 0) }
-          );
-          y -= lineHeight;
-        });
+        y -= 20;
+        page.drawText("Danh sách người phê duyệt:", { x: margin, y, size: 18, font });
+        y -= 30;
+        proposal.approvers.filter(a => a.status === "approved")
+          .forEach(a => {
+            page.drawText(`- ${a.approver.name} • ${a.approvedAt?.toLocaleDateString() || ""}`, { x: margin + 20, y, size: 14, font });
+            y -= lineHeight;
+          });
 
-      outputBytes = await pdfDoc.save();
+        outputBytes = await pdfDoc.save();
+      }
     }
     // === Ảnh JPG/PNG → PDF ===
     else if (fileType === "image/png" || fileType === "image/jpeg") {
@@ -146,57 +120,25 @@ export async function GET(
       const margin = 50;
       const lineHeight = 22;
 
-      page2.drawText(`Tên đề xuất: ${proposal.title || "Không có tên"}`, {
-        x: margin,
-        y,
-        size: 14,
-        font,
-        color: rgb(0, 0, 0),
-      });
+      page2.drawText(`Tên đề xuất: ${proposal.title || "Không có tên"}`, { x: margin, y, size: 14, font });
       y -= lineHeight;
-      page2.drawText(`Người tạo: ${proposal.proposer?.name || ""}`, {
-        x: margin,
-        y,
-        size: 14,
-        font,
-        color: rgb(0, 0, 0),
-      });
+      page2.drawText(`Người tạo: ${proposal.proposer?.name || ""}`, { x: margin, y, size: 14, font });
       y -= 40;
 
-      page2.drawText("Danh sách người ký:", {
-        x: margin,
-        y,
-        size: 18,
-        font,
-        color: rgb(0, 0, 0),
-      });
+      page2.drawText("Danh sách người ký:", { x: margin, y, size: 18, font });
       y -= 30;
-      proposal.signers
-        .filter((s) => s.status === "approved")
-        .forEach((s) => {
-          page2.drawText(
-            `- ${s.signer.name} • ${s.signedAt?.toLocaleDateString() || ""}`,
-            { x: margin + 20, y, size: 14, font, color: rgb(0, 0, 0) }
-          );
+      proposal.signers.filter(s => s.status === "approved")
+        .forEach(s => {
+          page2.drawText(`- ${s.signer.name} • ${s.signedAt?.toLocaleDateString() || ""}`, { x: margin + 20, y, size: 14, font });
           y -= lineHeight;
         });
 
       y -= 20;
-      page2.drawText("Danh sách người phê duyệt:", {
-        x: margin,
-        y,
-        size: 18,
-        font,
-        color: rgb(0, 0, 0),
-      });
+      page2.drawText("Danh sách người phê duyệt:", { x: margin, y, size: 18, font });
       y -= 30;
-      proposal.approvers
-        .filter((a) => a.status === "approved")
-        .forEach((a) => {
-          page2.drawText(
-            `- ${a.approver.name} • ${a.approvedAt?.toLocaleDateString() || ""}`,
-            { x: margin + 20, y, size: 14, font, color: rgb(0, 0, 0) }
-          );
+      proposal.approvers.filter(a => a.status === "approved")
+        .forEach(a => {
+          page2.drawText(`- ${a.approver.name} • ${a.approvedAt?.toLocaleDateString() || ""}`, { x: margin + 20, y, size: 14, font });
           y -= lineHeight;
         });
 
@@ -204,43 +146,27 @@ export async function GET(
     }
     // === Word (.doc, .docx) ===
     else if (fileType.includes("officedocument") || fileType.includes("msword")) {
-      // Trả nguyên file Word, không convert
       outputBytes = fileData;
     } else {
-      return NextResponse.json(
-        { success: false, error: "Loại file không hỗ trợ" },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: "Loại file không hỗ trợ" }, { status: 400 });
     }
 
     // Chuẩn bị tên file
-    let encodedFileName = encodeURIComponent(
-      proposal.file.filename || "file.pdf"
-    );
-
-    // Nếu PDF convert từ ảnh, đổi tên
-    if (
-      fileType === "image/png" ||
-      fileType === "image/jpeg"
-    ) {
+    let encodedFileName = encodeURIComponent(proposal.file.filename || "file.pdf");
+    if (fileType === "image/png" || fileType === "image/jpeg") {
       encodedFileName = encodedFileName.replace(/\.(jpg|png)$/i, ".pdf");
     }
 
-    // Trả file
+    // Trả file về client
     return new NextResponse(Buffer.from(outputBytes), {
       status: 200,
       headers: {
-        "Content-Type": fileType.includes("officedocument") || fileType.includes("msword")
-          ? fileType
-          : "application/pdf",
+        "Content-Type": fileType.includes("officedocument") || fileType.includes("msword") ? fileType : "application/pdf",
         "Content-Disposition": `attachment; filename*=UTF-8''${encodedFileName}`,
       },
     });
   } catch (error) {
     console.error("getProposal error:", error);
-    return NextResponse.json(
-      { success: false, error: "Lỗi khi lấy thông tin đề xuất" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Lỗi khi lấy thông tin đề xuất" }, { status: 500 });
   }
 }

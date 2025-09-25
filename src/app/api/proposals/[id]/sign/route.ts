@@ -20,7 +20,6 @@ export async function POST(request: NextRequest,  { params }: { params: Promise<
     }
 
     const token = request.cookies.get("token")?.value;
-    console.log("Token from cookie:", token);
 
     if (!token) {
       return NextResponse.json({ error: "Thiếu token xác thực" }, { status: 401 });
