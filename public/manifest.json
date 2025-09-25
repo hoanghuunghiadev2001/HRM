@@ -2,7 +2,7 @@
   "name": "HRM-TBD",
   "short_name": "HRM-TBD",
   "description": "Quản lý nhân sự TBD",
-  "start_url": "/",
+  "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",

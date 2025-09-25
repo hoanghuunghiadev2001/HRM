@@ -151,10 +151,10 @@ export class FileService {
       return { valid: false, error: "File không được vượt quá 10MB" }
     }
 
-    const allowedTypes = ["application/pdf", "image/jpeg", "image/png", "image/jpg", "image/gif"]
-    if (!allowedTypes.includes(file.type)) {
-      return { valid: false, error: "Chỉ chấp nhận file PDF hoặc ảnh" }
-    }
+    // const allowedTypes = ["application/pdf", "image/jpeg", "image/png", "image/jpg", "image/gif"]
+    // if (!allowedTypes.includes(file.type)) {
+    //   return { valid: false, error: "Chỉ chấp nhận file PDF hoặc ảnh" }
+    // }
 
     return { valid: true }
   }
