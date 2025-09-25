@@ -10,24 +10,22 @@ import timezone from "dayjs/plugin/timezone";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-/**
- * Chuyển dd/MM/yyyy sang Date VN timezone (Asia/Ho_Chi_Minh)
- * endOfDay = true → 23:59:59, false → 00:00:00
- */
 function parseDateVN(dateStr?: string, endOfDay = false): Date | undefined {
   if (!dateStr) return undefined;
   const parts = dateStr.split("/");
   if (parts.length === 3) {
     const [day, month, year] = parts.map(Number);
-    const d = dayjs.tz(`${year}-${month}-${day} ${endOfDay ? "23:59:59" : "00:00:00"}`, "YYYY-M-D HH:mm:ss", "Asia/Ho_Chi_Minh");
-    return d.utc().toDate(); // convert sang UTC để filter DB
+    const d = dayjs.tz(
+      `${year}-${month}-${day} ${endOfDay ? "23:59:59" : "00:00:00"}`,
+      "YYYY-M-D HH:mm:ss",
+      "Asia/Ho_Chi_Minh"
+    );
+    return d.utc().toDate();
   }
   const d = dayjs.tz(dateStr, "Asia/Ho_Chi_Minh");
-  if (!d.isValid()) return undefined;
   return endOfDay ? d.endOf("day").utc().toDate() : d.startOf("day").utc().toDate();
 }
 
-// Tính số giờ từ 2 Date
 function calcHours(checkIn: Date | null, checkOut: Date | null): number {
   if (!checkIn || !checkOut) return 0;
   return +((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60)).toFixed(2);
@@ -45,7 +43,7 @@ export async function GET(req: NextRequest) {
     const page = parseInt(searchParams.get("page") ?? "1", 10);
     const pageSize = parseInt(searchParams.get("pageSize") ?? "20", 10);
 
-    // Filter employee
+    // 1️⃣ Lấy danh sách employeeId theo filter
     const employeeWhere: Prisma.EmployeeWhereInput = {};
     if (msnv) employeeWhere.employeeCode = { contains: msnv };
     if (name) employeeWhere.name = { contains: name };
@@ -59,9 +57,21 @@ export async function GET(req: NextRequest) {
       };
     }
 
-    // Filter attendance theo Date UTC
+    const employees = await prisma.employee.findMany({
+      where: employeeWhere,
+      select: { id: true, employeeCode: true, name: true, avatar: true, workInfo: { select: { department: { select: { name: true } }, position: { select: { name: true } } } } } 
+    });
+    const employeeMap = new Map(employees.map(e => [e.id, e]));
+
+    if (employees.length === 0) {
+      return NextResponse.json({ total: 0, page, pageSize, data: [] });
+    }
+
+    const employeeIds = employees.map(e => e.id);
+
+    // 2️⃣ Lấy Attendance theo employeeId và date
     const attendanceWhere: Prisma.AttendanceWhereInput = {
-      employee: { is: { ...employeeWhere } },
+      employeeId: { in: employeeIds },
       ...(fromDate && toDate
         ? { date: { gte: fromDate, lte: toDate } }
         : fromDate
@@ -73,29 +83,10 @@ export async function GET(req: NextRequest) {
 
     const attendances = await prisma.attendance.findMany({
       where: attendanceWhere,
-      select: {
-        employeeId: true,
-        date: true,
-        checkInTime: true,
-        checkOutTime: true,
-        employee: {
-          select: {
-            employeeCode: true,
-            name: true,
-            avatar: true,
-            workInfo: {
-              select: {
-                department: { select: { name: true } },
-                position: { select: { name: true } },
-              },
-            },
-          },
-        },
-      },
       orderBy: { date: "asc" },
     });
 
-    // Group theo employeeId + date
+    // 3️⃣ Gom nhóm theo employeeId + date
     const grouped = new Map<
       string,
       {
@@ -112,19 +103,19 @@ export async function GET(req: NextRequest) {
       }
     >();
 
-    attendances.forEach((att: any) => {
-      // Convert date sang VN timezone
+    attendances.forEach(att => {
+      const emp = employeeMap.get(att.employeeId)!;
       const dateVN = dayjs(att.date).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD");
       const key = `${att.employeeId}-${dateVN}`;
 
       if (!grouped.has(key)) {
         grouped.set(key, {
           employeeId: att.employeeId,
-          employeeCode: att.employee.employeeCode,
-          avatar: att.employee.avatar,
-          employeeName: att.employee.name,
-          department: att.employee.workInfo?.department?.name,
-          position: att.employee.workInfo?.position?.name,
+          employeeCode: emp.employeeCode,
+          avatar: emp.avatar,
+          employeeName: emp.name,
+          department: emp.workInfo?.department?.name,
+          position: emp.workInfo?.position?.name,
           date: dateVN,
           firstCheckIn: att.checkInTime ?? null,
           lastCheckOut: att.checkOutTime ?? null,
@@ -147,7 +138,7 @@ export async function GET(req: NextRequest) {
       }
     });
 
-    const summary = Array.from(grouped.values()).map((g) => ({
+    const summary = Array.from(grouped.values()).map(g => ({
       employeeId: g.employeeId,
       employeeCode: g.employeeCode,
       avatar: g.avatar,
