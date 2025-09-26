@@ -65,7 +65,6 @@ export default function ProposalCreator() {
   const [timestart, setTimestart] = useState<dayjs.Dayjs | null>(null)
   const [timeend, setTimeend] = useState<dayjs.Dayjs | null>(null)
   const [location, setLocation] = useState("")
-  const [noidung, setNoidung] = useState("")
 
   // trạng thái checkbox (mảng giá trị)
   const [carStatus, setCarStatus] = useState<string[]>([]) // e.g. ["outsideClean","insideClean"]
@@ -225,7 +224,7 @@ export default function ProposalCreator() {
       timeStart: timestart ? timestart.format("DD/MM/YYYY HH:mm") : "",
       timeEnd: timeend ? timeend.format("DD/MM/YYYY HH:mm") : "",
       location: location || "",
-      noidung: noidung || "",
+      noidung: description || "",
       proposalName: proposalName || "Đề xuất xe",
 
       // tình trạng xe (each has two placeholders: *_clean and *_dirty)
@@ -340,7 +339,6 @@ export default function ProposalCreator() {
         setTimestart(null)
         setTimeend(null)
         setLocation("")
-        setNoidung("")
         setCarStatus([])
         setCarDocs([])
         setProposalType("general")
@@ -434,17 +432,20 @@ export default function ProposalCreator() {
                   disabled={submitting}
                 />
               </div>
-              <div>
-                <Text strong>Mô tả</Text>
-                <TextArea
-                  placeholder="Nhập mô tả chi tiết về đề xuất"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  rows={4}
-                  style={{ marginTop: 8 }}
-                  disabled={submitting}
-                />
-              </div>
+              {proposalType === "general" && (
+                <div>
+                  <Text strong>Mô tả</Text>
+                  <TextArea
+                    placeholder="Nhập mô tả chi tiết về đề xuất"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={4}
+                    style={{ marginTop: 8 }}
+                    disabled={submitting}
+                  />
+                </div>
+              )}
+
 
               {/* If proposalType is general show upload; if vehicle hide upload (we generate docx) */}
               {proposalType === "general" && (
@@ -501,7 +502,7 @@ export default function ProposalCreator() {
                   disabled={submitting}
                 />
                 <Input placeholder="Địa điểm" value={location} onChange={(e) => setLocation(e.target.value)} disabled={submitting} />
-                <TextArea placeholder="Nội dung công tác" value={noidung} onChange={(e) => setNoidung(e.target.value)} rows={3} disabled={submitting} />
+                <TextArea placeholder="Nội dung công tác" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} disabled={submitting} />
               </Space>
             </Card>
           )}
