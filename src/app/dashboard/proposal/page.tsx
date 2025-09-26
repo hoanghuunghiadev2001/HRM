@@ -67,8 +67,6 @@ export default function ProposalCreator() {
   const [location, setLocation] = useState("")
 
   // trạng thái checkbox (mảng giá trị)
-  const [carStatus, setCarStatus] = useState<string[]>([]) // e.g. ["outsideClean","insideClean"]
-  const [carDocs, setCarDocs] = useState<string[]>([]) // e.g. ["carReg","carCheck"]
 
   // ---------- helper existing functions ----------
   const customTagRender = (props: CustomTagProps) => {
@@ -204,18 +202,7 @@ export default function ProposalCreator() {
   // map checkbox arrays to placeholders (☑/☐)
   const buildTemplateDataForVehicle = () => {
     // default all to unchecked
-    const mapChecked = (flag: boolean) => (flag ? "☑" : "☐")
 
-    // carStatus may include keys like 'outsideClean','insideClean','engineClean'
-    const outsideClean = carStatus.includes("outsideClean")
-    const insideClean = carStatus.includes("insideClean")
-    const engineClean = carStatus.includes("engineClean")
-
-    // carDocs: 'carReg','carCheck','carInsurance','carWarranty'
-    const hasCarReg = carDocs.includes("carReg")
-    const hasCarCheck = carDocs.includes("carCheck")
-    const hasInsurance = carDocs.includes("carInsurance")
-    const hasWarranty = carDocs.includes("carWarranty")
 
     // Build final object - keys must match placeholders in your DOCX template
     const tpl: Record<string, string> = {
@@ -226,24 +213,6 @@ export default function ProposalCreator() {
       location: location || "",
       noidung: description || "",
       proposalName: proposalName || "Đề xuất xe",
-
-      // tình trạng xe (each has two placeholders: *_clean and *_dirty)
-      outside_clean: mapChecked(outsideClean),
-      outside_dirty: mapChecked(!outsideClean),
-      inside_clean: mapChecked(insideClean),
-      inside_dirty: mapChecked(!insideClean),
-      engine_clean: mapChecked(engineClean),
-      engine_dirty: mapChecked(!engineClean),
-
-      // hồ sơ xe (each has yes/no)
-      carRegyes: mapChecked(hasCarReg),
-      carRegno: mapChecked(!hasCarReg),
-      carCheck_yes: mapChecked(hasCarCheck),
-      carCheck_no: mapChecked(!hasCarCheck),
-      insurance_yes: mapChecked(hasInsurance),
-      insurance_no: mapChecked(!hasInsurance),
-      warranty_yes: mapChecked(hasWarranty),
-      warranty_no: mapChecked(!hasWarranty),
     }
 
     return tpl
@@ -339,8 +308,6 @@ export default function ProposalCreator() {
         setTimestart(null)
         setTimeend(null)
         setLocation("")
-        setCarStatus([])
-        setCarDocs([])
         setProposalType("general")
         console.log("Proposal created:", result)
         message.info("Email đã được gửi đến những người cần ký duyệt", 3)
@@ -508,37 +475,7 @@ export default function ProposalCreator() {
           )}
 
           {/* Bàn giao tình trạng xe: show only vehicle */}
-          {proposalType === "vehicle" && (
-            <Card title={<><FileDoneOutlined /> Bàn Giao Tình Trạng Xe</>} style={{ marginBottom: 24 }}>
-              <Form layout="vertical">
-                <Form.Item label="Tình trạng xe">
-                  <Checkbox.Group
-                    options={[
-                      { label: "Bên ngoài xe sạch sẽ, không trầy", value: "outsideClean" },
-                      { label: "Bên trong xe sạch sẽ", value: "insideClean" },
-                      { label: "Khoang động cơ sạch sẽ", value: "engineClean" },
-                    ]}
-                    value={carStatus}
-                    onChange={(v) => setCarStatus(v as string[])}
-                    disabled={submitting}
-                  />
-                </Form.Item>
-                <Form.Item label="Bộ hồ sơ xe">
-                  <Checkbox.Group
-                    options={[
-                      { label: "Giấy hẹn/ Giấy đăng ký ô tô / Cà vẹt xe", value: "carReg" },
-                      { label: "Giấy hẹn / Sổ kiểm định", value: "carCheck" },
-                      { label: "Giấy chứng nhận bảo hiểm", value: "carInsurance" },
-                      { label: "Bao da sổ bảo hành", value: "carWarranty" },
-                    ]}
-                    value={carDocs}
-                    onChange={(v) => setCarDocs(v as string[])}
-                    disabled={submitting}
-                  />
-                </Form.Item>
-              </Form>
-            </Card>
-          )}
+        
 
           <Card title="Phân Quyền">
             <Space direction="vertical" size="large" style={{ width: "100%" }}>
