@@ -89,47 +89,56 @@ export class ProposalService {
   /**
    * Lấy đề xuất
    */
-  static async getProposal(proposalId: number, userId?: string) {
-    console.log("emp: "+userId);
-    
-    try {
-      const proposal = await prisma.proposal.findUnique({
-        where: { id: proposalId },
-        include: this.getFullIncludeObject(), // signers, approvers, proposer...
-      });
+ static async getProposal(proposalId: number, userId?: string) {
+  console.log("emp: " + userId);
 
-      if (!proposal) return { success: false, error: "Không tìm thấy đề xuất" };
+  try {
+    const proposal = await prisma.proposal.findUnique({
+      where: { id: proposalId },
+      include: this.getFullIncludeObject(), // signers, approvers, proposer...
+    });
 
-      let statusSign = false;
-      let statusApprove = false;
+    if (!proposal) return { success: false, error: "Không tìm thấy đề xuất" };
 
-      if (userId) {
-        // Chỉ xét signer nếu user thực sự là signer
-        const signer = proposal.signers.find(s => String(s.signerId) === userId);
-        if (signer) {
-          const previousSignersApproved = proposal.signers
-            .slice(0, proposal.signers.indexOf(signer))
-            .every(s => s.status === "approved");
-          statusSign = signer.status === "pending" && previousSignersApproved;
-        }
+    let statusSign = false;
+    let statusApprove = false;
 
-        // Chỉ xét approver nếu user thực sự là approver
-        const approver = proposal.approvers.find(a => String(a.approverId) === userId);
-        if (approver) {
-          const allSignersApproved = proposal.signers.every(s => s.status === "approved");
-          const previousApproversApproved = proposal.approvers
-            .slice(0, proposal.approvers.indexOf(approver))
-            .every(a => a.status === "approved");
-          statusApprove = allSignersApproved && approver.status === "pending" && previousApproversApproved;
-        }
+    // 🚨 Nếu có bất kỳ signer hoặc approver nào từ chối => dừng, gán false hết
+    const isRejected =
+      proposal.signers.some(s => s.status === "rejected") ||
+      proposal.approvers.some(a => a.status === "rejected");
+
+    if (!isRejected && userId) {
+      // Chỉ xét signer nếu user thực sự là signer
+      const signer = proposal.signers.find(s => String(s.signerId) === userId);
+      if (signer) {
+        const previousSignersApproved = proposal.signers
+          .slice(0, proposal.signers.indexOf(signer))
+          .every(s => s.status === "approved");
+        statusSign = signer.status === "pending" && previousSignersApproved;
       }
 
-      return { success: true, data: { ...proposal, statusSign, statusApprove } };
-    } catch (error) {
-      console.error("getProposal error:", error);
-      return { success: false, error: "Lỗi khi lấy thông tin đề xuất" };
+      // Chỉ xét approver nếu user thực sự là approver
+      const approver = proposal.approvers.find(a => String(a.approverId) === userId);
+      if (approver) {
+        const allSignersApproved = proposal.signers.every(s => s.status === "approved");
+        const previousApproversApproved = proposal.approvers
+          .slice(0, proposal.approvers.indexOf(approver))
+          .every(a => a.status === "approved");
+        statusApprove =
+          allSignersApproved &&
+          approver.status === "pending" &&
+          previousApproversApproved;
+      }
     }
+
+    return { success: true, data: { ...proposal, statusSign, statusApprove } };
+  } catch (error) {
+    console.error("getProposal error:", error);
+    return { success: false, error: "Lỗi khi lấy thông tin đề xuất" };
   }
+}
+
 
   /**
    * Ký đề xuất theo thứ tự signer
