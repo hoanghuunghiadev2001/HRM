@@ -117,7 +117,7 @@ export async function GET(request: NextRequest) {
 }
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const token = req.cookies.get("token")?.value;
@@ -135,7 +135,7 @@ export async function DELETE(
     if (!employee) return NextResponse.json({ error: "Không tìm thấy nhân viên" }, { status: 404 });
     if (employee.role !== "ADMIN") return NextResponse.json({ error: "Chỉ admin mới xóa được", status: 403 });
 
-    const proposalId = Number(params.id);
+    const proposalId = Number((await params).id);
     if (isNaN(proposalId)) return NextResponse.json({ error: "ID đề xuất không hợp lệ" }, { status: 400 });
 
     const result = await ProposalService.deleteProposal(proposalId);
