@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { DatePicker, Drawer, Form, Select, message } from "antd";
+import { DatePicker, Drawer, Form, InputNumber, Select, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -22,6 +22,7 @@ interface UpdateLeaveRequestPayload {
   leaveType?: string;   // loại phép mới (tùy chọn)
   startDate?: string;   // ngày bắt đầu mới (ISO)
   endDate?: string;     // ngày kết thúc mới (ISO)
+  totalHours?: number
 }
 
 interface ApiResponse<T> {
@@ -63,12 +64,14 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
     infoRequetLeave ? dayjs.utc(infoRequetLeave.endDate).tz("Asia/Ho_Chi_Minh") : null
   );
   const [loading, setLoading] = useState(false);
+  const [totalHours, setTotalHours] = useState<number>(infoRequetLeave?.totalHours || 0);
 
   useEffect(() => {
     if (infoRequetLeave) {
       setLeaveType(infoRequetLeave.leaveType || "PN");
       setStartDate(dayjs.utc(infoRequetLeave.startDate).tz("Asia/Ho_Chi_Minh"));
       setEndDate(dayjs.utc(infoRequetLeave.endDate).tz("Asia/Ho_Chi_Minh"));
+      setTotalHours(infoRequetLeave.totalHours || 0);
     }
   }, [infoRequetLeave]);
 
@@ -104,6 +107,7 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
       leaveType,
       startDate: startDate?.toISOString(),
       endDate: endDate?.toISOString(),
+      totalHours: totalHours
     });
   };
 
@@ -216,6 +220,14 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
                   format="DD/MM/YYYY HH:mm"
                 />
               </Form.Item>
+              <Form.Item label="Tổng thời gian (Giờ)">
+                <InputNumber
+                  min={0}
+                  value={totalHours}
+                  onChange={(val) => setTotalHours(val || 0)}
+                  disabled={loading}
+                />
+              </Form.Item>
             </>
           ) : (
             <>
@@ -228,9 +240,10 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
                 titleValue="Kết thúc"
                 value={dayjs.utc(infoRequetLeave?.endDate).tz("Asia/Ho_Chi_Minh").format("HH:mm giờ, ngày DD/MM/YYYY")}
               />
+              <InfoPersonal titleValue="Tổng thời gian" value={`${infoRequetLeave?.totalHours} Giờ`} />
             </>
           )}
-          <InfoPersonal titleValue="Tổng thời gian" value={`${infoRequetLeave?.totalHours} Giờ`} />
+
           <div>
             <p className="font-bold text-[#242424] flex gap-2 items-center">Lý do:</p>
             <TextArea disabled rows={4} value={infoRequetLeave?.reason} />
@@ -283,10 +296,10 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
                         </div>
                         <span
                           className={`font-semibold ${step.status === "approved"
-                              ? "text-green-600"
-                              : step.status === "rejected"
-                                ? "text-red-600"
-                                : "text-orange-500"
+                            ? "text-green-600"
+                            : step.status === "rejected"
+                              ? "text-red-600"
+                              : "text-orange-500"
                             }`}
                         >
                           {statusMap[step.status]}

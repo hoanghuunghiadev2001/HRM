@@ -157,7 +157,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { id, leaveType, startDate, endDate } = body;
+    const { id, leaveType, startDate, endDate, totalHours } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -181,6 +181,7 @@ export async function PUT(req: NextRequest) {
     if (leaveType) dataToUpdate.leaveType = leaveType;
     if (startDate) dataToUpdate.startDate = new Date(startDate);
     if (endDate) dataToUpdate.endDate = new Date(endDate);
+    if (typeof totalHours === "number") dataToUpdate.totalHours = totalHours; // <-- thêm dòng này
 
     if (dataToUpdate.startDate && dataToUpdate.endDate) {
       if (dataToUpdate.startDate > dataToUpdate.endDate) {
