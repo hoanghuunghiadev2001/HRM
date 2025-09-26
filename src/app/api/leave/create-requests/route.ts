@@ -214,7 +214,7 @@ export async function PUT(req: Request) {
     // Cập nhật trạng thái người duyệt
     await prisma.leaveApprovalStepApprover.updateMany({
       where: { leaveApprovalStepId: stepId, approverId },
-      data: { status: decision as LeaveStatus },
+      data: { status: decision as LeaveStatus, approvedAt: new Date() },
     });
 
     const step = await prisma.leaveApprovalStep.findUnique({
@@ -228,8 +228,14 @@ export async function PUT(req: Request) {
 
     if (decision === LeaveStatus.rejected) {
       // Từ chối → cập nhật toàn bộ
-      await prisma.leaveApprovalStep.update({ where: { id: step.id }, data: { status: LeaveStatus.rejected } });
-      await prisma.leaveRequest.update({ where: { id: leaveRequest.id }, data: { status: LeaveStatus.rejected } });
+      await prisma.leaveApprovalStep.update({
+        where: { id: step.id },
+        data: { status: LeaveStatus.rejected, approvedAt: new Date() },
+      });
+      await prisma.leaveRequest.update({
+        where: { id: leaveRequest.id },
+        data: { status: LeaveStatus.rejected, approvedAt: new Date() },
+      });
 
       // Gửi mail thông báo từ chối
       const employee = await prisma.employee.findUnique({
@@ -259,7 +265,10 @@ export async function PUT(req: Request) {
     }
 
     // Nếu approved → cập nhật step
-    await prisma.leaveApprovalStep.update({ where: { id: step.id }, data: { status: LeaveStatus.approved } });
+    await prisma.leaveApprovalStep.update({
+      where: { id: step.id },
+      data: { status: LeaveStatus.approved, approvedAt: new Date() },
+    });
 
     // Tìm step tiếp theo
     const nextStep = await prisma.leaveApprovalStep.findFirst({
@@ -268,7 +277,10 @@ export async function PUT(req: Request) {
     });
 
     if (nextStep) {
-      await prisma.leaveApprovalStep.update({ where: { id: nextStep.id }, data: { status: LeaveStatus.pending } });
+      await prisma.leaveApprovalStep.update({
+        where: { id: nextStep.id },
+        data: { status: LeaveStatus.pending },
+      });
 
       // Gửi mail cho approver tiếp theo
       const nextApprover = nextStep.approvers[0]?.approver;
@@ -291,7 +303,10 @@ export async function PUT(req: Request) {
       }
     } else {
       // Nếu không còn step → request được duyệt hoàn toàn
-      await prisma.leaveRequest.update({ where: { id: leaveRequest.id }, data: { status: LeaveStatus.approved } });
+      await prisma.leaveRequest.update({
+        where: { id: leaveRequest.id },
+        data: { status: LeaveStatus.approved, approvedAt: new Date() },
+      });
 
       const employee = await prisma.employee.findUnique({
         where: { id: leaveRequest.employeeId },

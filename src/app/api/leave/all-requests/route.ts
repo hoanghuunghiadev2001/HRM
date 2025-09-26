@@ -127,9 +127,6 @@ export async function GET(req: NextRequest) {
           .map(
             (a) =>
               `${a.name || ""} (${a.employeeCode || ""}) - ${statusMap[a.status] || a.status
-              }${a.approvedAt
-                ? ` lúc ${new Date(a.approvedAt).toLocaleString("vi-VN")}`
-                : ""
               }`
           )
           .join("; "),

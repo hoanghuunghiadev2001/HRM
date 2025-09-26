@@ -413,26 +413,7 @@ export async function getApiAllRequestsNeedApprove(
 //   return await res.json();
 // }
 
-export async function approveLeaveRequest(
-  id: number | string,
-  status: string,
-  approvedByName: string
-) {
-  const res = await fetch("/api/leave/approve", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ leaveRequestId: id, status, approvedByName }),
-  });
 
-  if (!res.ok) {
-    const error = await res.json();
-    throw new Error(error.message || "Lỗi khi phê duyệt đơn");
-  }
-
-  return await res.json();
-}
 
 // lấy danh sách nhân sự
 export async function fetchEmployeeSummary(

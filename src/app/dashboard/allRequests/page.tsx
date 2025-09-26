@@ -8,10 +8,7 @@ import { Form, Input, message, Pagination, Space, Table } from "antd";
 import type { TableProps, TreeSelectProps } from "antd";
 import {
   AllRequests,
-  approveLeaveRequest,
   fetchLeaveRequests,
-  getApiAllRequestsNeedApprove,
-  getUserFromLocalStorage,
   RequestLeave,
 } from "@/components/api";
 import ModalLoading from "@/components/modalLoading";
@@ -27,7 +24,6 @@ import { Department } from "@/lib/interface";
 import { useAppSelector } from "@/store/hook";
 import ExportLeaveRequests from "@/components/exportLeave";
 import { DatePicker } from "antd";
-const { RangePicker } = DatePicker;
 
 // Extend plugin
 dayjs.extend(utc);
