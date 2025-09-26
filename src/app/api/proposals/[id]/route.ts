@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ProposalService } from "@/lib/proposal-service"
 import { type NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken";
+import { prisma } from "@/lib/prisma";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
@@ -113,3 +115,36 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Lỗi server" }, { status: 500 })
   }
 }
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const token = req.cookies.get("token")?.value;
+    if (!token) return NextResponse.json({ error: "Thiếu token xác thực" }, { status: 401 });
+
+    let employeeId: number;
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
+      employeeId = decoded.id;
+    } catch (err) {
+      return NextResponse.json({ error: "Token không hợp lệ hoặc đã hết hạn" }, { status: 401 });
+    }
+
+    const employee = await prisma.employee.findUnique({ where: { id: employeeId } });
+    if (!employee) return NextResponse.json({ error: "Không tìm thấy nhân viên" }, { status: 404 });
+    if (employee.role !== "ADMIN") return NextResponse.json({ error: "Chỉ admin mới xóa được", status: 403 });
+
+    const proposalId = Number(params.id);
+    if (isNaN(proposalId)) return NextResponse.json({ error: "ID đề xuất không hợp lệ" }, { status: 400 });
+
+    const result = await ProposalService.deleteProposal(proposalId);
+    if (result.success) return NextResponse.json({ message: result.message });
+
+    return NextResponse.json({ error: result.error }, { status: 500 });
+  } catch (error) {
+    console.error("API DELETE Error:", error);
+    return NextResponse.json({ error: "Lỗi server" }, { status: 500 });
+  }
+}
+

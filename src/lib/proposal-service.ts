@@ -318,6 +318,38 @@ static async approveProposal(
   }
 }
 
+static async deleteProposal(proposalId: number) {
+  try {
+    const proposal = await prisma.proposal.findUnique({
+      where: { id: proposalId },
+      include: { file: true, proposer: true },
+    });
+
+    if (!proposal) return { success: false, error: "Đề xuất không tìm thấy" };
+
+    // Xóa file nếu có
+    if (proposal.fileId) {
+      await FileService.deleteFile(proposal.fileId);
+    }
+
+    // Xóa signers
+    await prisma.proposalSigner.deleteMany({ where: { proposalId } });
+
+    // Xóa approvers
+    await prisma.proposalApprover.deleteMany({ where: { proposalId } });
+
+    // Xóa proposal
+    await prisma.proposal.delete({ where: { id: proposalId } });
+
+    // Có thể gửi email thông báo cho proposer
+    // await EmailService.sendProposalDeleted(proposal.proposer, proposal);
+
+    return { success: true, message: "Đề xuất đã được xóa." };
+  } catch (error) {
+    console.error("[ProposalService] Error deleteProposal:", error);
+    return { success: false, error: "Không thể xóa đề xuất" };
+  }
+}
 
   /**
    * Placeholder áp dụng chữ ký số

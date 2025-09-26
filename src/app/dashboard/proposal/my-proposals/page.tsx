@@ -84,7 +84,8 @@ export default function MyProposalsPage() {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [searchText, setSearchText] = useState("")
-  const { id } = useAppSelector((state) => state.user)
+  const { id, employeeCode } = useAppSelector((state) => state.user)
+  const [msg, contextHolder] = message.useMessage();
 
   const getStatusColor = (status: string) => {
     return {
@@ -167,6 +168,31 @@ export default function MyProposalsPage() {
     router.push(`/dashboard/proposal/my-proposals/${proposalId}`)
   }
 
+const handleDeleteProposal = async (proposalId: number) => {
+  if (!confirm("Bạn có chắc muốn xóa đề xuất này?")) return;
+
+  setLoading(true);
+  try {
+    const res = await fetch(`/api/proposals/${proposalId}`, {
+      method: "DELETE",
+      credentials: "include", // gửi cookie token
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      msg.success(data.message || "Xóa đề xuất thành công");
+      fetchProposals();
+    } else {
+      msg.error(data.error || "Xóa thất bại");
+    }
+  } catch (err) {
+    console.error(err);
+    msg.error("Có lỗi xảy ra khi xóa đề xuất");
+  } finally {
+    setLoading(false);
+  }
+};
+
   // ================== COLUMNS ==================
   const createdColumns: ColumnsType<Proposal> = [
     {
@@ -206,14 +232,25 @@ export default function MyProposalsPage() {
       title: "Thao tác",
       key: "actions",
       render: (_, record) => (
-        <Button
-          type="link"
-          icon={<EyeOutlined />}
-          size="small"
-          onClick={() => handleViewDetail(record.id)}
-        >
-          Xem
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            type="link"
+            icon={<EyeOutlined />}
+            size="small"
+            onClick={() => handleViewDetail(record.id)}
+          >
+            Xem
+          </Button>
+          <Button
+            className={`${employeeCode === "01375" || employeeCode === "00965" ? "" : "hidden"}`}
+            type="link"
+            icon={<EyeOutlined />}
+            size="small"
+            onClick={() => handleDeleteProposal(record.id)}
+          >
+            Xóa
+          </Button>
+        </div>
       ),
     },
   ]
@@ -297,6 +334,7 @@ export default function MyProposalsPage() {
 
   return (
     <div style={{ padding: 0, maxWidth: 1400, margin: "0 auto" }} className="proposal-page">
+         {contextHolder}
       <ModalLoading isOpen={loading} />
 
       <Title level={2} style={{ marginBottom: 16 }}>
