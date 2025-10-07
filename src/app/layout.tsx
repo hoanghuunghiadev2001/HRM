@@ -18,10 +18,10 @@ export const metadata: Metadata = {
   description: "HRM-TBD",
   icons: {
     icon: "/storage/icon.png",
-    apple: "/storage/icon.png"
+    apple: "/storage/icon.png",
   },
-  manifest: "/manifest.json",
 };
+
 
 
 
