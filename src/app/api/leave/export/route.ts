@@ -30,7 +30,12 @@ export async function GET(req: NextRequest) {
     const leaveRequests = await prisma.leaveRequest.findMany({
       where: {
         status: LeaveStatus.approved,
-        startDate: { gte: startDate, lte: endDate },
+        OR: [
+          {
+            startDate: { lte: endDate },
+            endDate: { gte: startDate },
+          },
+        ],
       },
       include: {
         employee: {
@@ -92,7 +97,8 @@ export async function GET(req: NextRequest) {
               (a) =>
                 `${a.approver.name} (${a.approver.employeeCode})${
                   a.approvedAt
-                    ? " - " + dayjs(a.approvedAt).tz(TZ).format("DD/MM/YYYY HH:mm")
+                    ? " - " +
+                      dayjs(a.approvedAt).tz(TZ).format("DD/MM/YYYY HH:mm")
                     : ""
                 }`
             )
