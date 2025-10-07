@@ -17,17 +17,16 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const month = searchParams.get("month"); // format: YYYY-MM
 
-    if (!month) {
+    if (!month || !/^\d{4}-\d{2}$/.test(month)) {
       return NextResponse.json(
-        { message: "Thiếu tham số month (YYYY-MM)" },
+        { message: "Thiếu hoặc sai định dạng month (YYYY-MM)" },
         { status: 400 }
       );
     }
 
-    const startDate = dayjs(month + "-01").startOf("month").toDate();
-    const endDate = dayjs(month + "-01").endOf("month").toDate();
+    const startDate = dayjs(`${month}-01`).startOf("month").toDate();
+    const endDate = dayjs(`${month}-01`).endOf("month").toDate();
 
-    // Lấy tất cả đơn đã duyệt trong tháng
     const leaveRequests = await prisma.leaveRequest.findMany({
       where: {
         status: LeaveStatus.approved,
@@ -59,7 +58,7 @@ export async function GET(req: NextRequest) {
       orderBy: { createdAt: "asc" },
     });
 
-    // Nhóm theo tên phòng ban
+    // nhóm theo phòng ban
     const grouped = leaveRequests.reduce((acc, req) => {
       const deptName = req.employee.workInfo?.department?.name || "Khác";
       if (!acc[deptName]) acc[deptName] = [];
@@ -67,7 +66,7 @@ export async function GET(req: NextRequest) {
       return acc;
     }, {} as Record<string, typeof leaveRequests>);
 
-    // Tạo workbook Excel
+    // workbook excel
     const workbook = new ExcelJS.Workbook();
 
     for (const [deptName, requests] of Object.entries(grouped)) {
@@ -87,7 +86,6 @@ export async function GET(req: NextRequest) {
       ];
 
       requests.forEach((req, index) => {
-        // Ghép danh sách người phê duyệt
         const approvers = req.approvalSteps
           .flatMap((step) =>
             step.approvers.map(
@@ -115,7 +113,6 @@ export async function GET(req: NextRequest) {
         });
       });
 
-      // Format header
       sheet.getRow(1).eachCell((cell) => {
         cell.font = { bold: true };
         cell.alignment = { horizontal: "center", vertical: "middle" };
@@ -135,7 +132,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error("Lỗi xuất file Excel:", error);
     return NextResponse.json(
-      { message: "Xuất file thất bại" },
+      { message: "Xuất file thất bại", error: String(error) },
       { status: 500 }
     );
   }
