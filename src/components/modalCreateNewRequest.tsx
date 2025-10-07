@@ -152,8 +152,8 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
             if (dates && dates[0] && dates[1]) setTimeRange([dates[0], dates[1]]);
             else setTimeRange(null);
           }}
-          showTime={{ format: "HH:mm:ss" }}
-          format="DD/MM/YYYY HH:mm:ss"
+          showTime={{ format: "HH:mm" }}
+          format="DD/MM/YYYY HH:mm"
           style={{ width: "100%" }}
         />
       </div>
