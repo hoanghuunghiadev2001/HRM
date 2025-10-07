@@ -1,7 +1,7 @@
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import responsiveSlice from "./slices/responsiveSlice";
-import userSlice from "./slices/userSlice";
+// --- 🔹 store.ts ---
+// Redux Toolkit + Redux Persist + TypeScript cấu hình đầy đủ
 
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import {
@@ -13,27 +13,28 @@ import {
   REGISTER,
 } from "redux-persist";
 
-// --- 1️⃣ Gộp reducer
+import responsiveSlice from "./slices/responsiveSlice";
+import userSlice from "./slices/userSlice";
+
+// --- 1️⃣ Gộp các reducer ---
 const rootReducer = combineReducers({
   responsive: responsiveSlice,
   user: userSlice,
 });
 
-// --- 2️⃣ Cấu hình persist
+// --- 2️⃣ Cấu hình redux-persist ---
 const persistConfig = {
-  key: "root",
-  storage,
+  key: "root",     // tên key trong localStorage
+  storage,         // sử dụng localStorage
+  whitelist: ["user"], // chỉ định slice nào được lưu (tùy chọn)
 };
 
-// --- 3️⃣ Chỉ bật persist ở client
-const persistedReducer =
-  typeof window !== "undefined"
-    ? persistReducer(persistConfig, rootReducer)
-    : rootReducer;
+// --- 3️⃣ Tạo persisted reducer ---
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// --- 4️⃣ Tạo store
+// --- 4️⃣ Tạo store ---
 export const store = configureStore({
-  reducer: persistedReducer as typeof rootReducer, // 👈 ép kiểu an toàn
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -42,9 +43,9 @@ export const store = configureStore({
     }),
 });
 
-// --- 5️⃣ Chỉ khởi tạo persistor ở client
-export const persistor =
-  typeof window !== "undefined" ? persistStore(store) : null;
+// --- 5️⃣ Khởi tạo persistor ---
+export const persistor = persistStore(store);
 
+// --- 6️⃣ Xuất type hỗ trợ ---
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
