@@ -103,8 +103,10 @@ const ModalEditEmployee = ({
         drivingLicense: formData.drivingLicense,
         toyotaCertificate: formData.toyotaCertificate,
         taxCode: formData.taxCode ?? employeeInfo?.employeeCode + "tax",
-        insuranceNumber: formData.insuranceNumber ?? employeeInfo?.employeeCode + "insuranceNumber",
-        insuranceSalary: parseFloat(formData.insuranceSalary) ,
+        insuranceNumber:
+          formData.insuranceNumber ??
+          employeeInfo?.employeeCode + "insuranceNumber",
+        insuranceSalary: parseFloat(formData.insuranceSalary),
       },
 
       contactInfo: {
@@ -257,8 +259,11 @@ const ModalEditEmployee = ({
       education: data.personalInfo?.education ?? "",
       drivingLicense: data.personalInfo?.drivingLicense ?? "",
       toyotaCertificate: data.personalInfo?.toyotaCertificate ?? "",
-      taxCode: data.personalInfo?.taxCode ?? employeeInfo?.employeeCode + "taxCode",
-      insuranceNumber: data.personalInfo?.insuranceNumber ?? employeeInfo?.employeeCode + "insuranceNumber",
+      taxCode:
+        data.personalInfo?.taxCode ?? employeeInfo?.employeeCode + "taxCode",
+      insuranceNumber:
+        data.personalInfo?.insuranceNumber ??
+        employeeInfo?.employeeCode + "insuranceNumber",
       insuranceSalary: data.personalInfo?.insuranceSalary || null,
 
       // contactInfo
@@ -308,7 +313,6 @@ const ModalEditEmployee = ({
   }, [selectedDepartmentId]);
 
   const fetchData = async () => {
-
     try {
       const [positionsData] = await Promise.all([
         selectedDepartmentId
@@ -547,9 +551,7 @@ const ModalEditEmployee = ({
                 <Form.Item
                   name="department"
                   label="Bộ phận"
-                  rules={[
-                    { required: role === "MANAGER" ? false : true },
-                  ]}
+                  rules={[{ required: role === "MANAGER" ? false : true }]}
                 >
                   <Select
                     placeholder="Bộ phận"
