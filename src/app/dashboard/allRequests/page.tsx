@@ -525,6 +525,17 @@ export default function AllRequestPage() {
               />
             </Form.Item>
           </div>
+          {role === "MANAGER" && (
+            <Button
+              type="primary"
+              onClick={() => {
+                setModalCalendarLeave(true);
+              }}
+              loading={loading}
+            >
+              xem ds nghỉ
+            </Button>
+          )}
 
           {role === "ADMIN" && (
             <>
@@ -557,16 +568,6 @@ export default function AllRequestPage() {
                 </Form.Item>
               </div>
               <ExportLeaveRequests />
-
-              <Button
-                type="primary"
-                onClick={() => {
-                  setModalCalendarLeave(true);
-                }}
-                loading={loading}
-              >
-                xem ds nghỉ
-              </Button>
             </>
           )}
 
