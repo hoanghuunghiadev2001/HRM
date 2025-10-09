@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { DatePicker, Form, Modal, Select, Input, Spin } from "antd";
-import  { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { NumericInput } from "./function";
 import { useAppSelector } from "@/store/hook";
 import { CreateLeavePayload } from "@/app/dashboard/request/page";
@@ -85,7 +85,14 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
   // const disabledDate = (current: Dayjs) => current && current.isBefore(dayjs().startOf("day"));
 
   const handleOk = () => {
-    if (!id || !leaveType || !totalHours || !reason || !timeRange || selectedApprovers.length === 0) {
+    if (
+      !id ||
+      !leaveType ||
+      !totalHours ||
+      !reason ||
+      !timeRange ||
+      selectedApprovers.length === 0
+    ) {
       setErrorMsg("Vui lòng điền đầy đủ thông tin và chọn người duyệt.");
       return;
     }
@@ -103,7 +110,9 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
 
   return (
     <Modal
-      title={<p className="text-2xl font-bold text-center">Tạo phiếu yêu cầu</p>}
+      title={
+        <p className="text-2xl font-bold text-center">Tạo phiếu yêu cầu</p>
+      }
       open={open}
       onCancel={onClose}
       onOk={handleOk}
@@ -140,7 +149,12 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
         </Form.Item>
         <div className="flex gap-2 items-center">
           <span className="font-bold text-[#242424]">Tổng giờ:</span>
-          <NumericInput style={{ width: 80 }} value={totalHours} onChange={setTotalHours} />
+          <NumericInput
+            style={{ width: 80 }}
+            value={totalHours}
+            onChange={setTotalHours}
+            placeholder="Tổng giờ"
+          />
         </div>
       </div>
 
@@ -148,11 +162,15 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
         <span className="font-bold text-[#242424]">Thời gian:</span>
         <RangePicker
           value={timeRange || undefined}
+          showTime={{
+            format: "HH:mm",
+            defaultValue: [dayjs("08:00", "HH:mm"), dayjs("17:00", "HH:mm")], // 👈 giờ mặc định hiển thị
+          }}
           onChange={(dates) => {
-            if (dates && dates[0] && dates[1]) setTimeRange([dates[0], dates[1]]);
+            if (dates && dates[0] && dates[1])
+              setTimeRange([dates[0], dates[1]]);
             else setTimeRange(null);
           }}
-          showTime={{ format: "HH:mm" }}
           format="DD/MM/YYYY HH:mm"
           style={{ width: "100%" }}
         />
@@ -163,16 +181,16 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
         {loadingApprovers ? (
           <Spin />
         ) : (
-        <Select
-  mode="multiple"
-  showSearch
-  optionFilterProp="label" // search dựa vào label
-  value={selectedApprovers}
-  onChange={setSelectedApprovers}
-  options={approversList}
-  placeholder="Chọn người duyệt theo thứ tự"
-  style={{ width: "100%" }}
-/>
+          <Select
+            mode="multiple"
+            showSearch
+            optionFilterProp="label" // search dựa vào label
+            value={selectedApprovers}
+            onChange={setSelectedApprovers}
+            options={approversList}
+            placeholder="Chọn người duyệt theo thứ tự"
+            style={{ width: "100%" }}
+          />
         )}
       </div>
 
@@ -186,7 +204,9 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
         />
       </div>
 
-      {errorMsg && <p className="text-center text-sm text-red-600 italic">{errorMsg}</p>}
+      {errorMsg && (
+        <p className="text-center text-sm text-red-600 italic">{errorMsg}</p>
+      )}
     </Modal>
   );
 };

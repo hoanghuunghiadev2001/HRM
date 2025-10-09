@@ -18,7 +18,6 @@ import {
   LockOutlined,
   LogoutOutlined,
   RightCircleFilled,
-
 } from "@ant-design/icons";
 import { Button, Dropdown, Form, Menu, Modal } from "antd";
 import type { MenuProps } from "antd";
@@ -39,8 +38,6 @@ import { useAppSelector } from "@/store/hook";
 //   avatar?: string;
 //   employeeCode: string;
 // }
-
-
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -64,12 +61,9 @@ export default function ClientDashboard({
   const [avt, setAvt] = useState("/storage/avt-default.webp");
   const { name, avatar } = useAppSelector((state) => state.user);
 
-
-
   useEffect(() => {
-    setAvt(avatar ? avatar : '/storage/logo-toyota.webp')
-  }, [avatar])
-
+    setAvt(avatar ? avatar : "/storage/logo-toyota.webp");
+  }, [avatar]);
 
   // Hàm toggle menu thu gọn
   const toggleCollapsed = () => setCollapsed(!collapsed);
@@ -101,75 +95,68 @@ export default function ClientDashboard({
       setLoading(false);
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     console.log(isAdmin);
-    
-  })
+  });
   // Khai báo menu
   const Menus: MenuItem[] = [
     { key: "/dashboard", icon: <UserRoundPen />, label: "Hồ sơ" },
     { key: "/dashboard/request", icon: <FileText />, label: "Phiếu yêu cầu" },
     {
-          key: "/dashboard/proposal1",
-          icon: <FileStack />,
-          label: "Đề xuất",
-          children: [
-            {
-              key: "/dashboard/proposal",
-                   icon: <FileStack  className="ml-4"/>,
-              label: "Tạo đề xuất",
-            },
-            {
-              key: "/dashboard/proposal/my-proposals",
-                   icon: <FileStack className="ml-4"/>,
-              label: "Quản lý đề xuất",
-              
-            },
-             
-          ],
+      key: "/dashboard/proposal1",
+      icon: <FileStack />,
+      label: "Đề xuất",
+      children: [
+        {
+          key: "/dashboard/proposal",
+          icon: <FileStack className="ml-4" />,
+          label: "Tạo đề xuất",
         },
-          {
-          key: "/dashboard/attendance",
-          icon: <Fingerprint />,
-          label: "Chấm công",
+        {
+          key: "/dashboard/proposal/my-proposals",
+          icon: <FileStack className="ml-4" />,
+          label: "Quản lý đề xuất",
         },
+      ],
+    },
+    {
+      key: "/dashboard/attendance",
+      icon: <Fingerprint />,
+      label: "Chấm công",
+    },
 
     ...(isAdmin === "ADMIN" || isAdmin === "MANAGER"
       ? [
-        {
-          key: "/dashboard/allRequests",
-          icon: <FileStack />,
-          label: "DS yêu cầu",
-        },
-        
-      
-
-      
-      ]
+          {
+            key: "/dashboard/allRequests",
+            icon: <FileStack />,
+            label: "DS yêu cầu",
+          },
+        ]
       : []),
     ...(isAdmin === "ADMIN"
       ? [
-        {
-          key: "/dashboard/employees",
-          icon: <UsersRound />,
-          label: "Nhân sự",
-        },
-        {
-          key: "/dashboard/department",
-          icon: <Network />,
-          label: "Phòng ban",
-        },
           {
-          key: "/dashboard/report",
-          icon: <ClipboardPlus />,
-          label: "Báo cáo",
-        },
-        {
-          key: "/dashboard/users",
-          icon: <UserCog />,
-          label: "Người dùng",
-        },
-      ]
+            key: "/dashboard/employees",
+            icon: <UsersRound />,
+            label: "Nhân sự",
+          },
+          {
+            key: "/dashboard/department",
+            icon: <Network />,
+            label: "Phòng ban",
+          },
+          {
+            key: "/dashboard/report",
+            icon: <ClipboardPlus />,
+            label: "Báo cáo",
+          },
+          {
+            key: "/dashboard/users",
+            icon: <UserCog />,
+            label: "Người dùng",
+          },
+        ]
       : []),
   ];
 
@@ -258,9 +245,6 @@ export default function ClientDashboard({
     },
   ];
 
-
-
-
   return (
     <>
       <ModalLoading isOpen={loading} />
@@ -275,7 +259,11 @@ export default function ClientDashboard({
 
       <div className="w-full h-full overflow-hidden ">
         {/* Header */}
-        <div className={`${isMobile ? '' : 'hidden'} h-14 w-full bg-[#ffffff] flex items-center justify-between px-4 border-b border-[#cecece] z-50`}>
+        <div
+          className={`${
+            isMobile ? "" : "hidden"
+          } h-14 w-full bg-[#ffffff] flex items-center justify-between px-4 border-b border-[#cecece] z-50`}
+        >
           <Button
             type="primary"
             onClick={toggleCollapsed}
@@ -283,15 +271,14 @@ export default function ClientDashboard({
           >
             {collapsed ? (
               <LeftCircleFilled className="text-2xl !text-[#ff511a]" />
-
             ) : (
-
               <RightCircleFilled className="text-2xl !text-[#ff511a]" />
-
             )}
           </Button>
           <div className="flex items-center gap-2">
-            <p className="text-xl font-semibold text-[#4a4a6a] italic">{name}</p>
+            <p className="text-xl font-semibold text-[#4a4a6a] italic">
+              {name}
+            </p>
             <Image
               loading="lazy"
               src="/storage/logo-toyota.webp"
@@ -314,27 +301,39 @@ export default function ClientDashboard({
         )} */}
 
         {/* Layout chính */}
-        <div className={`w-full  flex relative ${isMobile? 'h-[calc(100vh-60px)]':'h-[100vh]'} ${isMobile && !collapsed ? 'overflow-hidden':''}`}>
-
-
+        <div
+          className={`w-full  flex relative ${
+            isMobile ? "h-[calc(100vh-60px)]" : "h-[100vh]"
+          } ${isMobile && !collapsed ? "overflow-hidden" : ""}`}
+        >
           {/* Sidebar menu */}
 
           <div className="py-5 pl-4">
             <div
               className={`
-                ${isMobile ? 'flex-col-reverse':''}
-              ${!isMobile && collapsed ? "sm:!w-[70px] justify-between" : "sm:w-[250px] justify-end"}
+                ${isMobile ? "flex-col-reverse" : ""}
+              ${
+                !isMobile && collapsed
+                  ? "sm:!w-[70px] justify-between"
+                  : "sm:w-[250px] justify-end"
+              }
               ${isMobile && !collapsed ? "hidden " : " "}
-              ${collapsed && isMobile ? "!w-full fixed !h-[calc(100vh-56px)] top-14 !rounded-none right-0 z-10" : ""}
+              ${
+                collapsed && isMobile
+                  ? "!w-full fixed !h-[calc(100vh-56px)] top-14 !rounded-none right-0 z-10"
+                  : ""
+              }
                shrink-0  h-full flex flex-col 
-              transition-all duration-300 ease-in-out shadow-2xl rounded-4xl py-6 px-4 border bg-[#e8f4fd] border-[#cecece]
+              transition-all duration-300 ease-in-out shadow-2xl rounded-4xl py-6 px-4 border bg-[#9ecff7] border-[#cecece]
             `}
             >
               <div className="relative w-full ">
                 <Button
                   type="primary"
                   onClick={toggleCollapsed}
-                  className={`!border-none !shadow-none !absolute top-[55px] right-[-28px] sm:hidden !p-0 !bg-transparent hover:!bg-transparent !text-[#ff511a] hover:!text-[#ff511a] z-50 ${isMobile ? "!hidden" : ""}`}
+                  className={`!border-none !shadow-none !absolute top-[55px] right-[-28px] sm:hidden !p-0 !bg-transparent hover:!bg-transparent !text-[#ff511a] hover:!text-[#ff511a] z-50 ${
+                    isMobile ? "!hidden" : ""
+                  }`}
                 >
                   {collapsed ? (
                     <RightCircleFilled className="text-2xl !text-[#ff511a]" />
@@ -342,7 +341,11 @@ export default function ClientDashboard({
                     <LeftCircleFilled className="text-2xl !text-[#ff511a]" />
                   )}
                 </Button>
-                <div className={`${isMobile? 'hidden':''} flex flex-col items-center justify-center w-full  py-2`}>
+                <div
+                  className={`${
+                    isMobile ? "hidden" : ""
+                  } flex flex-col items-center justify-center w-full  py-2`}
+                >
                   <Image
                     loading="lazy"
                     src="/storage/logo-toyota.webp"
@@ -353,7 +356,13 @@ export default function ClientDashboard({
                     quality={70} // giảm chất lượng xuống chút để nhẹ hơn
                     priority={false}
                   />
-                  <p className={`font-medium text-[#070d10] mt-2 text-nowrap transition-opacity ${collapsed ? 'hidden' : ''}`}>TOYOTA BÌNH DƯƠNG</p>
+                  <p
+                    className={`font-medium text-[#070d10] mt-2 text-nowrap transition-opacity ${
+                      collapsed ? "hidden" : ""
+                    }`}
+                  >
+                    TOYOTA BÌNH DƯƠNG
+                  </p>
                 </div>
                 <div className="bg-transparent overflow-y-auto overflow-x-hidden h-[calc(100vh-255px)]">
                   <Menu
@@ -368,35 +377,41 @@ export default function ClientDashboard({
               </div>
 
               <div
-                className={`h-14 flex gap-2 items-center ${collapsed ? '' : 'p-4 border-[1px] border-[#bebebe]'}  rounded-2xl cursor-pointer ${collapsed && !isMobile ? "justify-center" : "justify-between"
-                  } transition-all duration-300 ease-in-out`}
+                className={`h-14 flex gap-2 items-center ${
+                  collapsed ? "" : "p-4 border-[1px] border-[#2a2b70]"
+                }  rounded-2xl cursor-pointer ${
+                  collapsed && !isMobile ? "justify-center" : "justify-between"
+                } transition-all duration-300 ease-in-out`}
               >
-                  <Dropdown menu={{ items }}>
+                <Dropdown menu={{ items }}>
+                  <div className="flex items-center gap-3 justify-between w-full">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={avt}
+                        alt="avatar"
+                        className="h-9 w-9 border-2 border-[#999999] bg-white rounded-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src =
+                            "/storage/avt-default.webp";
+                        }}
+                      />
 
-                <div
-                  className="flex items-center gap-3 justify-between w-full"
-                >
-
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={avt}
-                      alt="avatar"
-                      className="h-9 w-9 border-2 border-[#999999] bg-white rounded-full object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src =
-                          "/storage/avt-default.webp";
-                      }}
+                      <p
+                        className={`text-xs font-normal italic text-[#070d10]  ${
+                          collapsed && !isMobile ? "hidden" : ""
+                        } `}
+                      >
+                        {name}
+                      </p>
+                    </div>
+                    <EllipsisOutlined
+                      className={`${
+                        collapsed && !isMobile ? "!hidden" : ""
+                      } text-3xl`}
+                      onClick={(e) => e.preventDefault()}
                     />
-
-                    <p className={`text-xs font-normal italic text-[#070d10]  ${collapsed && !isMobile ? 'hidden' : ''} `}>
-                      {name}
-                    </p>
                   </div>
-                    <EllipsisOutlined className={`${collapsed && !isMobile ? '!hidden' : ''} text-3xl`} onClick={(e) => e.preventDefault()} />
-
-                </div>
-                  </Dropdown>
-
+                </Dropdown>
               </div>
             </div>
           </div>

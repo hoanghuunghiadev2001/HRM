@@ -40,18 +40,23 @@ interface StatusLeaveProps {
 export const StatusLeave = ({ status }: StatusLeaveProps) => {
   return (
     <div
-      className={`px-4 py-1 rounded-xl w-fit font-medium text-nowrap ${status === "pending"
+      className={`px-4 py-1 rounded-xl w-fit font-medium text-nowrap ${
+        status === "pending"
           ? "bg-[#a5cbe4] text-[#1181c8]"
           : status === "approved"
-            ? "text-[#0b5705] bg-[#c9fab4]"
-            : status === "revoked" ? "bg-blue-600 text-white " : "bg-[#ffc0c2] text-[#eb2128]"
-        }`}
+          ? "text-[#0b5705] bg-[#c9fab4]"
+          : status === "revoked"
+          ? "bg-blue-600 text-white "
+          : "bg-[#ffc0c2] text-[#eb2128]"
+      }`}
     >
       {status === "pending"
         ? "Chờ duyệt"
         : status === "approved"
-          ? "Chấp nhận"
-          : status === "revoked" ? "Đã rút đơn" : "Từ chối"}
+        ? "Chấp nhận"
+        : status === "revoked"
+        ? "Đã rút đơn"
+        : "Từ chối"}
     </div>
   );
 };
@@ -76,11 +81,12 @@ interface NumericInputProps {
   style: React.CSSProperties;
   value: string;
   onChange: (value: string) => void;
+  placeholder?: string;
   disable?: boolean;
 }
 const formatNumber = (value: number) => new Intl.NumberFormat().format(value);
 export const NumericInput = (props: NumericInputProps) => {
-  const { value, onChange } = props;
+  const { value, onChange, placeholder } = props;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value: inputValue } = e.target;
@@ -118,7 +124,7 @@ export const NumericInput = (props: NumericInputProps) => {
         {...props}
         onChange={handleChange}
         onBlur={handleBlur}
-        placeholder=""
+        placeholder={placeholder}
         maxLength={16}
         disabled={props.disable}
       />

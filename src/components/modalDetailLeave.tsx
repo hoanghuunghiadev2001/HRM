@@ -292,10 +292,12 @@ const ModalDetailLeave = ({
           )}
 
           <div>
-            <p className="font-bold text-[#242424] flex gap-2 items-center">
-              Lý do:
-            </p>
-            <div>{original?.trim()}</div>
+            <div className="flex gap-2">
+              <p className="font-bold flex-shrink-0 text-[#242424] flex gap-2 items-center">
+                Lý do:
+              </p>
+              <div>{original?.trim()}</div>
+            </div>
             {rejectPart && (
               <p className="text-red-600">
                 <b>Lý do từ chối:</b>{" "}

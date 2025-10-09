@@ -46,7 +46,7 @@ nextjs-portal {
   background: transparent;
   box-shadow: none;
 }
-.ant-menu{
+.ant-menu {
   border: none !important;
 }
 
@@ -67,25 +67,25 @@ nextjs-portal {
 
 .ant-menu-item:hover {
   border-radius: 0 !important;
-color: #ff511a !important;
+  color: #ff511a !important;
   background-color: transparent !important;
   font-weight: bold;
 }
 .ant-menu-item.ant-menu-item-selected {
   border-radius: 0 !important;
-color: #ff511a !important;
+  color: #ff511a !important;
   background-color: transparent !important;
   font-weight: bold;
 }
 .ant-menu-submenu-title:hover {
   border-radius: 0 !important;
-color: #ff511a !important;
+  color: #ff511a !important;
   background-color: transparent !important;
   font-weight: bold;
 }
 .ant-menu-submenu-selected .ant-menu-submenu-title {
   border-radius: 0 !important;
-color: #ff511a !important;
+  color: #ff511a !important;
   background-color: transparent !important;
   font-weight: bold;
 }
@@ -215,7 +215,8 @@ div::-webkit-scrollbar-thumb {
 /* global.css */
 
 /* Cố định nền trắng, chữ đen */
-html, body {
+html,
+body {
   background-color: #ffffff !important;
   color: #000000 !important;
   transition: none !important; /* tránh animation khi dark/light */
@@ -230,14 +231,13 @@ html, body {
 
 /* Ngăn trình duyệt dark mode */
 @media (prefers-color-scheme: dark) {
-  html, body {
+  html,
+  body {
     background-color: #ffffff !important;
     color: #000000 !important;
   }
-
-
 }
 
-.text-white{
+.text-white {
   color: white !important;
 }
