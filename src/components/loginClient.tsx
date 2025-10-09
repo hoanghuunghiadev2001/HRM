@@ -41,8 +41,18 @@ export default function LoginClient() {
 
     if (res.ok) {
       localStorage.setItem("token", data.token);
-  dispatch(setUser({ name: data.name, avatar: data.avt, id: data.id, employeeCode: data.employeeCode, department: data.department, position:data.position , departmentID: data.departmentID}));
-  dispatch(setUserRole(data.role)) // nên là URL
+      dispatch(
+        setUser({
+          name: data.name,
+          avatar: data.avt,
+          id: data.id,
+          employeeCode: data.employeeCode,
+          department: data.department,
+          position: data.position,
+          departmentID: data.departmentID,
+        })
+      );
+      dispatch(setUserRole(data.role)); // nên là URL
       router.push("/dashboard"); // thay vì redirect từ server
     } else {
       setErr(data.message || "Đăng nhập thất bại");
@@ -75,7 +85,7 @@ export default function LoginClient() {
             <Image
               src="/storage/logo-toyota.webp"
               alt=""
-              className="w-24 "
+              className="w-24 h-auto"
               width={96}
               height={90}
               quality={70} // giảm chất lượng xuống chút để nhẹ hơn

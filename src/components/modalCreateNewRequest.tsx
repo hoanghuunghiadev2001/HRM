@@ -28,6 +28,7 @@ const leaveOptions = [
   { value: "PB", label: "PB - Phép bệnh" },
   { value: "TS", label: "TS - Thai sản" },
   { value: "PR", label: "PR - Phép riêng" },
+  { value: "PT", label: "PT - Phép Tang" },
 ];
 
 const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({

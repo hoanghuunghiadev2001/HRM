@@ -283,7 +283,7 @@ export default function ClientDashboard({
               loading="lazy"
               src="/storage/logo-toyota.webp"
               alt="logo"
-              className="w-14 "
+              className="w-14 h-auto"
               width={56}
               height={50}
               quality={70} // giảm chất lượng xuống chút để nhẹ hơn
@@ -350,7 +350,7 @@ export default function ClientDashboard({
                     loading="lazy"
                     src="/storage/logo-toyota.webp"
                     alt="logo"
-                    className="w-14 "
+                    className="w-14 h-auto"
                     width={56}
                     height={50}
                     quality={70} // giảm chất lượng xuống chút để nhẹ hơn

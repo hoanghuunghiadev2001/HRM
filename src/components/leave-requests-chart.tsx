@@ -55,6 +55,7 @@ export function LeaveRequestsChart({ leaveTypeData }: LeaveRequestsChartProps) {
       { name: "Phép cưới (PC)", value: 0, color: "#f59e0b" }, // Cam đậm (Amber-500)
       { name: "Phép tang (PT)", value: 0, color: "#6b7280" }, // Xám tro (Gray-500)
       { name: "Công tác (Cgt)", value: 0, color: "#8b5cf6" }, // Tím tươi (Violet-500)
+      { name: "Phép tang (PT)", value: 0, color: "#8b5cf9" }, // Tím tươi (Violet-500)
       { name: "Phép bệnh (PB)", value: 0, color: "#ec4899" }, // Hồng sen (Pink-500)
       { name: "Thai sản (TS)", value: 0, color: "#eab308" }, // Vàng sẫm (Yellow-500)
       { name: "Phép riêng (PR)", value: 0, color: "#0d9488" }, // Xanh teal (Teal-600)
