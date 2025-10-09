@@ -64,7 +64,7 @@ const ModalApproveRequest = ({
       }
     };
     fetchCalendarData();
-  }, []);
+  }, [open]);
 
   const dateCellRender = (value: Dayjs) => {
     const dateStr = value.format("YYYY-MM-DD");
