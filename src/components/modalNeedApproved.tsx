@@ -15,9 +15,10 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export interface ApproveRequestPayload {
-  stepId: number;           // ID của step hiện tại
-  approverId: number;       // ID của người đang phê duyệt
+  stepId: number; // ID của step hiện tại
+  approverId: number; // ID của người đang phê duyệt
   decision: "approved" | "rejected"; // trạng thái phê duyệt
+  comment?: string;
 }
 
 interface ModalNeedApprovedProps {
@@ -102,9 +103,24 @@ const ModalNeedApproved = ({
       width: "170px",
       render: (text) => <a>{text}</a>,
     },
-    { title: "Phòng ban", dataIndex: "department", key: "department", width: "80px" },
-    { title: "Ngày nghỉ", dataIndex: "startDate", key: "startDate", width: "170px" },
-    { title: "Loại phép", dataIndex: "leaveType", key: "leaveType", width: "80px" },
+    {
+      title: "Phòng ban",
+      dataIndex: "department",
+      key: "department",
+      width: "80px",
+    },
+    {
+      title: "Ngày nghỉ",
+      dataIndex: "startDate",
+      key: "startDate",
+      width: "170px",
+    },
+    {
+      title: "Loại phép",
+      dataIndex: "leaveType",
+      key: "leaveType",
+      width: "80px",
+    },
     {
       title: "",
       key: "action",
@@ -118,12 +134,17 @@ const ModalNeedApproved = ({
   ];
 
   const handleOpenRequest = (msnv: string) => {
-    const requests = allRequestsApproved.find((emp) => emp.employeeCode === msnv);
+    const requests = allRequestsApproved.find(
+      (emp) => emp.employeeCode === msnv
+    );
     setRequestApprove(requests);
     setApproveRequest(true);
   };
 
-  const handlePutApprovedRequest = async (decision: "approved" | "rejected") => {
+  const handlePutApprovedRequest = async (
+    decision: "approved" | "rejected",
+    comment?: string
+  ) => {
     if (!requestApprove) return;
 
     setLoading(true);
@@ -132,6 +153,7 @@ const ModalNeedApproved = ({
         stepId: requestApprove.stepId,
         approverId: Number(id) ?? 0,
         decision: decision,
+        comment: comment,
       });
       setApproveRequest(false);
     } catch (err) {

@@ -92,7 +92,9 @@ async function sendLeaveRequestEmail({
       </tr>
       <tr>
         <td style="font-weight:bold; padding:6px 8px; border:1px solid #ddd;">Lý do</td>
-        <td style="padding:6px 8px; border:1px solid #ddd;">${reason || "Không có"}</td>
+        <td style="padding:6px 8px; border:1px solid #ddd;">${
+          reason || "Không có"
+        }</td>
       </tr>
     </table>
 
@@ -128,10 +130,16 @@ export async function POST(req: Request) {
     const totalDays = differenceInCalendarDays(end, start) + 1;
 
     if (totalDays <= 0)
-      return NextResponse.json({ error: "Thời gian nghỉ không hợp lệ." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Thời gian nghỉ không hợp lệ." },
+        { status: 400 }
+      );
 
     if (!approverIds?.length)
-      return NextResponse.json({ error: "Cần chọn ít nhất một người duyệt." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Cần chọn ít nhất một người duyệt." },
+        { status: 400 }
+      );
 
     const workInfo = await prisma.workInfo.findUnique({
       where: { employeeId },
@@ -139,7 +147,10 @@ export async function POST(req: Request) {
     });
 
     if (!workInfo)
-      return NextResponse.json({ error: "Không tìm thấy thông tin nhân viên." }, { status: 404 });
+      return NextResponse.json(
+        { error: "Không tìm thấy thông tin nhân viên." },
+        { status: 404 }
+      );
 
     const leaveRequest = await prisma.leaveRequest.create({
       data: {
@@ -184,12 +195,14 @@ export async function POST(req: Request) {
         department: workInfo.department?.name || "",
         position: workInfo.position?.name || "",
         leaveType,
-        startDate: dayjs(start).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm"),
+        startDate: dayjs(start)
+          .tz("Asia/Ho_Chi_Minh")
+          .format("DD/MM/YYYY HH:mm"),
         endDate: dayjs(end).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm"),
         totalHours: Number(totalHours),
         reason: reason || "",
         action: "new",
-        detailUrl: process.env.detailUrlRequest + "/allRequests"
+        detailUrl: process.env.detailUrlRequest + "/allRequests",
       });
     }
 
@@ -209,38 +222,61 @@ export async function POST(req: Request) {
  */
 export async function PUT(req: Request) {
   try {
-    const { stepId, approverId, decision } = await req.json();
+    const { stepId, approverId, decision, comment } = await req.json();
 
-    // Cập nhật trạng thái người duyệt
+    // 1️⃣ Cập nhật trạng thái người duyệt hiện tại
     await prisma.leaveApprovalStepApprover.updateMany({
       where: { leaveApprovalStepId: stepId, approverId },
       data: { status: decision as LeaveStatus, approvedAt: new Date() },
     });
 
+    // 2️⃣ Lấy step hiện tại
     const step = await prisma.leaveApprovalStep.findUnique({
       where: { id: stepId },
       include: { approvers: true, leaveRequest: true },
     });
 
-    if (!step) return NextResponse.json({ error: "Không tìm thấy step." }, { status: 404 });
+    if (!step)
+      return NextResponse.json(
+        { error: "Không tìm thấy step." },
+        { status: 404 }
+      );
 
     const leaveRequest = step.leaveRequest;
 
+    // =====================================================
+    // 🔴 CASE 1: Nếu bị TỪ CHỐI
+    // =====================================================
     if (decision === LeaveStatus.rejected) {
-      // Từ chối → cập nhật toàn bộ
+      // Gộp comment vào reason hiện tại
+      const newReason = leaveRequest.reason
+        ? `${leaveRequest.reason}\n\n---\nLý do từ chối: ${
+            comment || "Không có"
+          }`
+        : `Lý do từ chối: ${comment || "Không có"}`;
+
+      // Cập nhật step và leaveRequest sang trạng thái "rejected"
       await prisma.leaveApprovalStep.update({
         where: { id: step.id },
         data: { status: LeaveStatus.rejected, approvedAt: new Date() },
       });
+
       await prisma.leaveRequest.update({
         where: { id: leaveRequest.id },
-        data: { status: LeaveStatus.rejected, approvedAt: new Date() },
+        data: {
+          status: LeaveStatus.rejected,
+          approvedAt: new Date(),
+          reason: newReason,
+        },
       });
 
-      // Gửi mail thông báo từ chối
+      // Gửi email thông báo từ chối
       const employee = await prisma.employee.findUnique({
         where: { id: leaveRequest.employeeId },
-        include: { contactInfo: true, workInfo: { include: { department: true, position: true } } },
+        include: {
+          contactInfo: true,
+          workInfo: { include: { department: true, position: true } },
+        },
       });
 
       if (employee?.contactInfo?.email) {
@@ -252,37 +288,49 @@ export async function PUT(req: Request) {
           department: employee.workInfo?.department?.name || "",
           position: employee.workInfo?.position?.name || "",
           leaveType: leaveRequest.leaveType,
-          startDate: dayjs(leaveRequest.startDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm"),
-          endDate: dayjs(leaveRequest.endDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm"),
+          startDate: dayjs(leaveRequest.startDate)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY HH:mm"),
+          endDate: dayjs(leaveRequest.endDate)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY HH:mm"),
           totalHours: leaveRequest.totalHours ?? 0,
-          reason: leaveRequest.reason || "",
+          reason: newReason,
           action: "rejected",
-          detailUrl: process.env.detailUrlRequest + "/request"
+          detailUrl: process.env.detailUrlRequest + "/request",
         });
       }
 
       return NextResponse.json({ message: "Đơn đã bị từ chối." });
     }
 
-    // Nếu approved → cập nhật step
+    // =====================================================
+    // 🟢 CASE 2: Nếu ĐƯỢC DUYỆT
+    // =====================================================
     await prisma.leaveApprovalStep.update({
       where: { id: step.id },
       data: { status: LeaveStatus.approved, approvedAt: new Date() },
     });
 
-    // Tìm step tiếp theo
+    // 3️⃣ Tìm step kế tiếp (nếu có)
     const nextStep = await prisma.leaveApprovalStep.findFirst({
       where: { leaveRequestId: leaveRequest.id, level: step.level + 1 },
-      include: { approvers: { include: { approver: { include: { contactInfo: true } } } } },
+      include: {
+        approvers: {
+          include: { approver: { include: { contactInfo: true } } },
+        },
+      },
     });
 
+    // =====================================================
+    // 🟡 Có step kế tiếp → chuyển trạng thái "pending" và gửi mail
+    // =====================================================
     if (nextStep) {
       await prisma.leaveApprovalStep.update({
         where: { id: nextStep.id },
         data: { status: LeaveStatus.pending },
       });
 
-      // Gửi mail cho approver tiếp theo
       const nextApprover = nextStep.approvers[0]?.approver;
       if (nextApprover?.contactInfo?.email) {
         await sendLeaveRequestEmail({
@@ -293,16 +341,24 @@ export async function PUT(req: Request) {
           department: "",
           position: "",
           leaveType: leaveRequest.leaveType,
-          startDate: dayjs(leaveRequest.startDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm"),
-          endDate: dayjs(leaveRequest.endDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm"),
+          startDate: dayjs(leaveRequest.startDate)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY HH:mm"),
+          endDate: dayjs(leaveRequest.endDate)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY HH:mm"),
           totalHours: leaveRequest.totalHours ?? 0,
           reason: leaveRequest.reason || "",
           action: "new",
-          detailUrl: process.env.detailUrlRequest + "/allRequests"
+          detailUrl: process.env.detailUrlRequest + "/allRequests",
         });
       }
-    } else {
-      // Nếu không còn step → request được duyệt hoàn toàn
+    }
+
+    // =====================================================
+    // 🟢 Nếu KHÔNG còn step nào → đơn được duyệt hoàn toàn
+    // =====================================================
+    else {
       await prisma.leaveRequest.update({
         where: { id: leaveRequest.id },
         data: { status: LeaveStatus.approved, approvedAt: new Date() },
@@ -310,7 +366,10 @@ export async function PUT(req: Request) {
 
       const employee = await prisma.employee.findUnique({
         where: { id: leaveRequest.employeeId },
-        include: { contactInfo: true, workInfo: { include: { department: true, position: true } } },
+        include: {
+          contactInfo: true,
+          workInfo: { include: { department: true, position: true } },
+        },
       });
 
       if (employee?.contactInfo?.email) {
@@ -322,17 +381,21 @@ export async function PUT(req: Request) {
           department: employee.workInfo?.department?.name || "",
           position: employee.workInfo?.position?.name || "",
           leaveType: leaveRequest.leaveType,
-          startDate: dayjs(leaveRequest.startDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm"),
-          endDate: dayjs(leaveRequest.endDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm"),
+          startDate: dayjs(leaveRequest.startDate)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY HH:mm"),
+          endDate: dayjs(leaveRequest.endDate)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("DD/MM/YYYY HH:mm"),
           totalHours: leaveRequest.totalHours ?? 0,
           reason: leaveRequest.reason || "",
           action: "approved",
-          detailUrl: process.env.detailUrlRequest + "/request"
+          detailUrl: process.env.detailUrlRequest + "/request",
         });
       }
     }
 
-    return NextResponse.json({ message: "Cập nhật quyết định thành công" });
+    return NextResponse.json({ message: "Cập nhật quyết định thành công." });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Lỗi server" }, { status: 500 });

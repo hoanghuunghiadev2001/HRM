@@ -108,7 +108,7 @@ interface DataType {
   totalHours: string;
   leaveType: string;
   status: string;
-  approvers: string
+  approvers: string;
 }
 
 const useStyle = createStyles((utils) => {
@@ -131,7 +131,6 @@ const useStyle = createStyles((utils) => {
   };
 });
 
-
 export interface ApproverInfo {
   name: string | null;
   employeeCode: string | null;
@@ -142,28 +141,28 @@ export interface ApproverInfo {
 }
 
 export interface PendingApprovalItem {
-  stepId: number;               // ID của step hiện tại
-  leaveRequestId: number;       // ID đơn nghỉ phép
-  employeeId: number;           // ID nhân viên gửi đơn
-  employeeName: string | null;  // Tên nhân viên
-  employeeCode: string | null;  // Mã nhân viên
-  leaveType: string;            // Loại phép
-  startDate: string;            // ISO string
-  endDate: string;              // ISO string
+  stepId: number; // ID của step hiện tại
+  leaveRequestId: number; // ID đơn nghỉ phép
+  employeeId: number; // ID nhân viên gửi đơn
+  employeeName: string | null; // Tên nhân viên
+  employeeCode: string | null; // Mã nhân viên
+  leaveType: string; // Loại phép
+  startDate: string; // ISO string
+  endDate: string; // ISO string
   totalHours: number;
   reason: string | null;
-  status: string;          // Trạng thái step hiện tại
-  department: string | null;    // Tên phòng ban
-  position: string | null;      // Tên chức vụ
-  currentStepLevel: number;     // Level step hiện tại
+  status: string; // Trạng thái step hiện tại
+  department: string | null; // Tên phòng ban
+  position: string | null; // Tên chức vụ
+  currentStepLevel: number; // Level step hiện tại
   approversWhoApproved?: ApproverInfo[]; // Danh sách những người đã duyệt trước đó
 }
 
-
 export interface ApproveRequestPayload {
-  stepId: number;           // ID của step hiện tại
-  approverId: number;       // ID của người đang phê duyệt
+  stepId: number; // ID của step hiện tại
+  approverId: number; // ID của người đang phê duyệt
   decision: "approved" | "rejected"; // trạng thái phê duyệt
+  comment?: string;
 }
 
 export default function AllRequestPage() {
@@ -178,7 +177,9 @@ export default function AllRequestPage() {
   const [requestsNeedApprove, setRequestsNeedApprove] = useState<
     PendingApprovalItem[]
   >([]);
-  const { role, id, department, departmentID } = useAppSelector((state) => state.user);
+  const { role, id, department, departmentID } = useAppSelector(
+    (state) => state.user
+  );
 
   const [departments, setDepartments] = useState<Department[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
@@ -194,9 +195,13 @@ export default function AllRequestPage() {
     console.log(newValue);
   };
 
-  const getPendingApprovals = async (userId: number): Promise<PendingApprovalItem[]> => {
+  const getPendingApprovals = async (
+    userId: number
+  ): Promise<PendingApprovalItem[]> => {
     try {
-      const res = await fetch(`/api/leave/all-requests-need-approve?userId=${userId}`);
+      const res = await fetch(
+        `/api/leave/all-requests-need-approve?userId=${userId}`
+      );
       if (!res.ok) {
         throw new Error("Lấy danh sách cần phê duyệt thất bại");
       }
@@ -232,9 +237,7 @@ export default function AllRequestPage() {
         pageSize: pageSize,
         role: role,
         department:
-          role === "ADMIN"
-            ? filterDepartment
-            : String(departmentID) ?? '',
+          role === "ADMIN" ? filterDepartment : String(departmentID) ?? "",
         employeeCode: filterMSNV,
         name: filterName,
         status: "",
@@ -250,7 +253,6 @@ export default function AllRequestPage() {
     }
   };
 
-
   // const getApiAllRequestsNeed = async () => {
 
   //   setLoading(true);
@@ -262,7 +264,6 @@ export default function AllRequestPage() {
   //       name: "",
   //       employeeCode: localUser.id,
   //     });
-
 
   //     setLoading(false);
   //   } catch (err) {
@@ -293,8 +294,7 @@ export default function AllRequestPage() {
       leaveType: item.leaveType,
       status: item.status,
       approvedBy: item.approversSummary,
-      approvers: item.approversSummary ?? '',
-
+      approvers: item.approversSummary ?? "",
     })) || [];
 
   const columns: TableProps<DataType>["columns"] = [
@@ -378,7 +378,7 @@ export default function AllRequestPage() {
         const errorData = await res.json();
         throw new Error(errorData?.error || "Phê duyệt thất bại");
       } else {
-        getPendingApprovals(Number(id) ?? 0)
+        getPendingApprovals(Number(id) ?? 0);
       }
 
       return await res.json();
@@ -407,7 +407,7 @@ export default function AllRequestPage() {
   };
 
   useEffect(() => {
-    getPendingApprovals(Number(id) ?? 0)
+    getPendingApprovals(Number(id) ?? 0);
     getApiAllRequestsApproved(pageTable, pageSize);
     listDepartment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -419,7 +419,7 @@ export default function AllRequestPage() {
     <div>
       <ModalNeedApproved
         onClose={() => {
-          getPendingApprovals(Number(id) ?? 0)
+          getPendingApprovals(Number(id) ?? 0);
           setModalNeedApproved(false);
           getApiAllRequestsApproved(pageTable, pageSize);
         }}
@@ -429,7 +429,10 @@ export default function AllRequestPage() {
       />
       <ModalDetailLeave
         infoRequetLeave={infoRequetLeave}
-        onClose={() => { setModalDetailLeave(false); getApiAllRequestsApproved(pageTable, pageSize); }}
+        onClose={() => {
+          setModalDetailLeave(false);
+          getApiAllRequestsApproved(pageTable, pageSize);
+        }}
         open={modalDetailLeave}
         title="Chi Tiết Đơn Xin Phép"
       />
@@ -446,13 +449,13 @@ export default function AllRequestPage() {
             className="flex mt-4 relative  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
             onClick={() => {
               setModalNeedApproved(true);
-
             }}
           >
             Phê duyệt
             <div
-              className={`h-8 right-[-15px] top-[-20px] flex justify-center items-center w-8 rounded-[50%] bg-red-600 text-white font-semibold absolute ${requestsNeedApprove.length < 1 ? "hidden" : ""
-                }`}
+              className={`h-8 right-[-15px] top-[-20px] flex justify-center items-center w-8 rounded-[50%] bg-red-600 text-white font-semibold absolute ${
+                requestsNeedApprove.length < 1 ? "hidden" : ""
+              }`}
             >
               {requestsNeedApprove.length > 99
                 ? "99+"
@@ -543,11 +546,9 @@ export default function AllRequestPage() {
                     onPopupScroll={onPopupScroll}
                   />
                 </Form.Item>
-
               </div>
               <ExportLeaveRequests />
             </>
-
           )}
 
           <button

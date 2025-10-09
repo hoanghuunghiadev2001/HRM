@@ -2,7 +2,6 @@
 "use client";
 
 import { DatePicker, Drawer, Form, InputNumber, Select, message } from "antd";
-import TextArea from "antd/es/input/TextArea";
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -18,11 +17,11 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 interface UpdateLeaveRequestPayload {
-  id: number;           // ID đơn nghỉ phép
-  leaveType?: string;   // loại phép mới (tùy chọn)
-  startDate?: string;   // ngày bắt đầu mới (ISO)
-  endDate?: string;     // ngày kết thúc mới (ISO)
-  totalHours?: number
+  id: number; // ID đơn nghỉ phép
+  leaveType?: string; // loại phép mới (tùy chọn)
+  startDate?: string; // ngày bắt đầu mới (ISO)
+  endDate?: string; // ngày kết thúc mới (ISO)
+  totalHours?: number;
 }
 
 interface ApiResponse<T> {
@@ -54,17 +53,32 @@ const leaveOptions = [
   { value: "PR", label: "PR - Phép riêng" },
 ];
 
-const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetailLeaveProps) => {
+const ModalDetailLeave = ({
+  onClose,
+  open,
+  title,
+  infoRequetLeave,
+}: ModalDetailLeaveProps) => {
   const { employeeCode } = useAppSelector((state) => state.user);
-  const [leaveType, setLeaveType] = useState<string>(infoRequetLeave?.leaveType || "PN");
+  const [leaveType, setLeaveType] = useState<string>(
+    infoRequetLeave?.leaveType || "PN"
+  );
   const [startDate, setStartDate] = useState<Dayjs | null>(
-    infoRequetLeave ? dayjs.utc(infoRequetLeave.startDate).tz("Asia/Ho_Chi_Minh") : null
+    infoRequetLeave
+      ? dayjs.utc(infoRequetLeave.startDate).tz("Asia/Ho_Chi_Minh")
+      : null
   );
   const [endDate, setEndDate] = useState<Dayjs | null>(
-    infoRequetLeave ? dayjs.utc(infoRequetLeave.endDate).tz("Asia/Ho_Chi_Minh") : null
+    infoRequetLeave
+      ? dayjs.utc(infoRequetLeave.endDate).tz("Asia/Ho_Chi_Minh")
+      : null
   );
   const [loading, setLoading] = useState(false);
-  const [totalHours, setTotalHours] = useState<number>(infoRequetLeave?.totalHours || 0);
+  const [totalHours, setTotalHours] = useState<number>(
+    infoRequetLeave?.totalHours || 0
+  );
+
+  const [original, rejectPart] = (infoRequetLeave?.reason || "").split("---");
 
   useEffect(() => {
     if (infoRequetLeave) {
@@ -107,7 +121,7 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
       leaveType,
       startDate: startDate?.toISOString(),
       endDate: endDate?.toISOString(),
-      totalHours: totalHours
+      totalHours: totalHours,
     });
   };
 
@@ -138,10 +152,13 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
     if (!infoRequetLeave) return;
     try {
       setLoading(true);
-      const response = await fetch(`/api/leave/all-requests?id=${infoRequetLeave.id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await fetch(
+        `/api/leave/all-requests?id=${infoRequetLeave.id}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       const result: ApiResponse<any> = await response.json();
       if (!response.ok) throw new Error(result.message || "Xóa đơn thất bại");
       message.success(result.message);
@@ -156,11 +173,11 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
 
   // Kiểm tra điều kiện hiển thị nút rút đơn
   const now = dayjs().tz("Asia/Ho_Chi_Minh");
-  const start = infoRequetLeave ? dayjs.utc(infoRequetLeave.startDate).tz("Asia/Ho_Chi_Minh") : null;
+  const start = infoRequetLeave
+    ? dayjs.utc(infoRequetLeave.startDate).tz("Asia/Ho_Chi_Minh")
+    : null;
   const canRevoke =
-    infoRequetLeave?.status === "approved" &&
-    start &&
-    start.isAfter(now);
+    infoRequetLeave?.status === "approved" && start && start.isAfter(now);
 
   return (
     <Drawer
@@ -184,25 +201,43 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
             width={100}
             height={100}
             quality={70}
-            src={infoRequetLeave?.employee.avatar || "/storage/avt-default.webp"}
+            src={
+              infoRequetLeave?.employee.avatar || "/storage/avt-default.webp"
+            }
             alt="avatar"
             className="h-[100px] w-[100px] rounded-[50%] object-cover"
           />
         </div>
         <div className="pl-4 mt-2">
-          <InfoPersonal titleValue="Họ và tên" value={infoRequetLeave?.employee.name} />
-          <InfoPersonal titleValue="MSNV" value={infoRequetLeave?.employee.employeeCode} />
-          <InfoPersonal titleValue="Bộ phận" value={infoRequetLeave?.employee.workInfo.department?.name} />
-          <InfoPersonal titleValue="Chức vụ" value={infoRequetLeave?.employee.workInfo.position?.name} />
+          <InfoPersonal
+            titleValue="Họ và tên"
+            value={infoRequetLeave?.employee.name}
+          />
+          <InfoPersonal
+            titleValue="MSNV"
+            value={infoRequetLeave?.employee.employeeCode}
+          />
+          <InfoPersonal
+            titleValue="Bộ phận"
+            value={infoRequetLeave?.employee.workInfo.department?.name}
+          />
+          <InfoPersonal
+            titleValue="Chức vụ"
+            value={infoRequetLeave?.employee.workInfo.position?.name}
+          />
         </div>
 
         {/* Chi tiết đơn nghỉ */}
         <p className="text-xl font-bold mt-4">Chi tiết:</p>
         <div className="pl-4 mt-1">
-          {(employeeCode === "01375" || employeeCode === "00898") ? (
+          {employeeCode === "01375" || employeeCode === "00898" ? (
             <>
               <Form.Item label="Loại phép">
-                <Select value={leaveType} onChange={setLeaveType} options={leaveOptions} />
+                <Select
+                  value={leaveType}
+                  onChange={setLeaveType}
+                  options={leaveOptions}
+                />
               </Form.Item>
               <Form.Item label="Bắt đầu">
                 <DatePicker
@@ -231,22 +266,42 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
             </>
           ) : (
             <>
-              <InfoPersonal titleValue="Loại phép" value={infoRequetLeave?.leaveType} />
+              <InfoPersonal
+                titleValue="Loại phép"
+                value={infoRequetLeave?.leaveType}
+              />
               <InfoPersonal
                 titleValue="Bắt đầu"
-                value={dayjs.utc(infoRequetLeave?.startDate).tz("Asia/Ho_Chi_Minh").format("HH:mm giờ, ngày DD/MM/YYYY")}
+                value={dayjs
+                  .utc(infoRequetLeave?.startDate)
+                  .tz("Asia/Ho_Chi_Minh")
+                  .format("HH:mm giờ, ngày DD/MM/YYYY")}
               />
               <InfoPersonal
                 titleValue="Kết thúc"
-                value={dayjs.utc(infoRequetLeave?.endDate).tz("Asia/Ho_Chi_Minh").format("HH:mm giờ, ngày DD/MM/YYYY")}
+                value={dayjs
+                  .utc(infoRequetLeave?.endDate)
+                  .tz("Asia/Ho_Chi_Minh")
+                  .format("HH:mm giờ, ngày DD/MM/YYYY")}
               />
-              <InfoPersonal titleValue="Tổng thời gian" value={`${infoRequetLeave?.totalHours} Giờ`} />
+              <InfoPersonal
+                titleValue="Tổng thời gian"
+                value={`${infoRequetLeave?.totalHours} Giờ`}
+              />
             </>
           )}
 
           <div>
-            <p className="font-bold text-[#242424] flex gap-2 items-center">Lý do:</p>
-            <TextArea disabled rows={4} value={infoRequetLeave?.reason} />
+            <p className="font-bold text-[#242424] flex gap-2 items-center">
+              Lý do:
+            </p>
+            <div>{original?.trim()}</div>
+            {rejectPart && (
+              <p className="text-red-600">
+                <b>Lý do từ chối:</b>{" "}
+                {rejectPart.replace("Lý do từ chối:", "").trim()}
+              </p>
+            )}
           </div>
         </div>
 
@@ -254,11 +309,16 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
         <p className="text-xl font-bold mt-4">Kết quả:</p>
         <div className="px-4">
           <div className="flex gap-2 mt-2 mb-2 items-center">
-            <p className="font-bold text-[#242424] flex gap-2 items-center">Trạng thái</p>
+            <p className="font-bold text-[#242424] flex gap-2 items-center">
+              Trạng thái
+            </p>
             <StatusLeave status={infoRequetLeave?.status ?? "pending"} />
           </div>
           {infoRequetLeave?.approvedBy && (
-            <InfoPersonal titleValue="Người phê duyệt" value={infoRequetLeave?.approvedBy} />
+            <InfoPersonal
+              titleValue="Người phê duyệt"
+              value={infoRequetLeave?.approvedBy}
+            />
           )}
 
           {/* --- Lịch sử phê duyệt --- */}
@@ -295,12 +355,13 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
                           )}
                         </div>
                         <span
-                          className={`font-semibold ${step.status === "approved"
-                            ? "text-green-600"
-                            : step.status === "rejected"
+                          className={`font-semibold ${
+                            step.status === "approved"
+                              ? "text-green-600"
+                              : step.status === "rejected"
                               ? "text-red-600"
                               : "text-orange-500"
-                            }`}
+                          }`}
                         >
                           {statusMap[step.status]}
                         </span>
@@ -311,7 +372,6 @@ const ModalDetailLeave = ({ onClose, open, title, infoRequetLeave }: ModalDetail
               </ul>
             </div>
           )}
-
         </div>
 
         {/* Nút cập nhật và rút/xóa đơn */}

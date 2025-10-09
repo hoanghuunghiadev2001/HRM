@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, DatePicker, Form, Modal, Select } from "antd";
 import dayjs from "dayjs";
 import TextArea from "antd/es/input/TextArea";
@@ -6,7 +6,7 @@ import { NumericInput } from "./function";
 
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import {  PendingApprovalItem } from "@/app/dashboard/allRequests/page";
+import { PendingApprovalItem } from "@/app/dashboard/allRequests/page";
 
 // Kích hoạt plugin
 dayjs.extend(utc);
@@ -16,7 +16,10 @@ interface ModalApproveRequestProps {
   open: boolean;
   onClose: () => void;
   requestApprove?: PendingApprovalItem;
-  putApprovedRequest: (decision: "approved" | "rejected") => void;
+  putApprovedRequest: (
+    decision: "approved" | "rejected",
+    comment?: string
+  ) => void;
 }
 const ModalApproveRequest = ({
   onClose,
@@ -25,6 +28,7 @@ const ModalApproveRequest = ({
   putApprovedRequest,
 }: ModalApproveRequestProps) => {
   const { RangePicker } = DatePicker;
+  const [rejectedReason, setRejectedReason] = useState("");
 
   const disabledDate = (currentDate: dayjs.Dayjs) => {
     // Không cho chọn ngày trước hôm nay (chỉ chọn hôm nay trở đi)
@@ -52,24 +56,17 @@ const ModalApproveRequest = ({
         footer={[
           <Button
             key="reject"
-            onClick={() =>
-              putApprovedRequest(
-         
-                "rejected"
-              )
-            }
+            type="dashed"
+            color="danger"
+            className="!bg-red-500 !text-white"
+            onClick={() => putApprovedRequest("rejected", rejectedReason)}
           >
             Từ chối
           </Button>,
           <Button
             key="approve"
             type="primary"
-            onClick={() =>
-              putApprovedRequest(
-
-                "approved"
-              )
-            }
+            onClick={() => putApprovedRequest("approved")}
           >
             Chấp nhận
           </Button>,
@@ -153,11 +150,15 @@ const ModalApproveRequest = ({
           <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             Lý do:
           </p>
+          <div className="pl-4">{requestApprove?.reason ?? ""}</div>
+          <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
+            Lý do từ chối:
+          </p>
           <TextArea
             rows={4}
             placeholder="Nhập lý do"
-            value={requestApprove?.reason ?? ''}
-            disabled={true}
+            value={rejectedReason}
+            onChange={(e) => setRejectedReason(e.target.value)}
           />
         </div>
         <div>
