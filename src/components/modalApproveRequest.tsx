@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Button, DatePicker, Form, Modal, Select } from "antd";
-import dayjs from "dayjs";
+import React, { useEffect, useState } from "react";
+import { Button, Calendar, DatePicker, Drawer, Form, Select, Spin } from "antd";
+import dayjs, { Dayjs } from "dayjs";
 import TextArea from "antd/es/input/TextArea";
 import { NumericInput } from "./function";
 
@@ -21,11 +21,16 @@ interface ModalApproveRequestProps {
     comment?: string
   ) => void;
 }
+interface LeaveCount {
+  date: string;
+  count: number;
+}
+
 const ModalApproveRequest = ({
-  onClose,
   open,
   requestApprove,
   putApprovedRequest,
+  onClose,
 }: ModalApproveRequestProps) => {
   const { RangePicker } = DatePicker;
   const [rejectedReason, setRejectedReason] = useState("");
@@ -40,38 +45,85 @@ const ModalApproveRequest = ({
     dayjs.utc(requestApprove?.endDate).tz("Asia/Ho_Chi_Minh"),
   ];
 
+  const [data, setData] = useState<LeaveCount[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCalendarData = async () => {
+      try {
+        const res = await fetch("/api/leave/calendar", {
+          credentials: "include",
+        });
+        const json = await res.json();
+        if (res.ok) setData(json);
+        else console.error(json.error);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCalendarData();
+  }, []);
+
+  const dateCellRender = (value: Dayjs) => {
+    const dateStr = value.format("YYYY-MM-DD");
+    const found = data.find((item) => item.date === dateStr);
+    if (!found) return null;
+    return (
+      <div className="text-right text-red-600 font-bold">{found.count}</div>
+    );
+  };
+
   return (
     <>
-      <Modal
+      <Drawer
         style={{ top: 20 }}
         title={
           <p className="text-2xl font-bold text-center">
             Phê duyệt phiếu yêu cầu
           </p>
         }
+        width={600}
         // loading={loading}
         open={open}
+        onClose={onClose}
         closable={{ "aria-label": "Close Button" }}
-        onCancel={onClose}
-        footer={[
-          <Button
-            key="reject"
-            type="dashed"
-            color="danger"
-            className="!bg-red-500 !text-white"
-            onClick={() => putApprovedRequest("rejected", rejectedReason)}
-          >
-            Từ chối
-          </Button>,
-          <Button
-            key="approve"
-            type="primary"
-            onClick={() => putApprovedRequest("approved")}
-          >
-            Chấp nhận
-          </Button>,
-        ]}
+        footer={
+          <div className="flex gap-6 justify-end">
+            <Button
+              key="reject"
+              type="dashed"
+              color="danger"
+              className="!bg-red-500 !text-white"
+              onClick={() => putApprovedRequest("rejected", rejectedReason)}
+            >
+              Từ chối
+            </Button>
+            <Button
+              key="approve"
+              type="primary"
+              onClick={() => putApprovedRequest("approved")}
+            >
+              Chấp nhận
+            </Button>
+          </div>
+        }
       >
+        {loading ? (
+          <Spin size="large" className="flex justify-center mt-10" />
+        ) : (
+          <div className="p-4 bg-white rounded-lg shadow">
+            <h2 className="text-xl font-semibold mb-4">
+              📅 Lịch nghỉ phép đã duyệt
+            </h2>
+            <Calendar
+              dateCellRender={dateCellRender}
+              className="!p-0 antd-calendar"
+            />
+          </div>
+        )}
+
         {/* <ModalLoading isOpen={loading} /> */}
         <div className="grid grid-cols-1 sm:grid-cols-2 mt-4 gap-4 sm:mt-2">
           <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
@@ -99,7 +151,6 @@ const ModalApproveRequest = ({
             </p>
           </div>
         </div>
-
         <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Form.Item
             label={<p className="font-bold text-[#242424]">Loại Phép</p>}
@@ -173,7 +224,7 @@ const ModalApproveRequest = ({
             ))}
           </div>
         </div>
-      </Modal>
+      </Drawer>
     </>
   );
 };
