@@ -199,19 +199,16 @@ const ModalApproveRequest = ({
             />
           </div>
         </div>
-        <div className="flex gap-2 items-center mt-3">
+        <div className="flex gap-2 items-center mt-3 flex-wrap">
           <p className="font-bold text-[#242424] shrink-0">Thời gian</p>
           <RangePicker
             disabledDate={disabledDate}
             placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
             showTime={{
               hideDisabledOptions: true,
-              defaultValue: [
-                dayjs("00:00:00", "HH:mm:ss"),
-                dayjs("00:00:00", "HH:mm:ss"),
-              ],
+              defaultValue: [dayjs("00:00", "HH:mm"), dayjs("00:00", "HH:mm")],
             }}
-            format="DD/MM/YYYY HH:mm:ss"
+            format="DD/MM/YYYY HH:mm"
             value={rangeValue}
             disabled
           />
