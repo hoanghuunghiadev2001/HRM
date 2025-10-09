@@ -73,6 +73,7 @@ const ModalDetailLeave = ({
       ? dayjs.utc(infoRequetLeave.endDate).tz("Asia/Ho_Chi_Minh")
       : null
   );
+  const [createdAt, setcreatedAt] = useState<Dayjs | null>();
   const [loading, setLoading] = useState(false);
   const [totalHours, setTotalHours] = useState<number>(
     infoRequetLeave?.totalHours || 0
@@ -86,6 +87,7 @@ const ModalDetailLeave = ({
       setStartDate(dayjs.utc(infoRequetLeave.startDate).tz("Asia/Ho_Chi_Minh"));
       setEndDate(dayjs.utc(infoRequetLeave.endDate).tz("Asia/Ho_Chi_Minh"));
       setTotalHours(infoRequetLeave.totalHours || 0);
+      setcreatedAt(dayjs(infoRequetLeave.createdAt).tz("Asia/Ho_Chi_Minh"));
     }
   }, [infoRequetLeave]);
 
@@ -194,7 +196,12 @@ const ModalDetailLeave = ({
     >
       <div>
         {/* Thông tin nhân viên */}
-        <p className="text-xl font-bold">Thông tin:</p>
+        <div className="flex justify-between items-center">
+          <p className="text-xl font-bold">Thông tin:</p>
+          <p className="text-base font-medium italic">
+            Ngày tạo: {createdAt?.format("HH:mm DD-MM-YYYY ")}
+          </p>
+        </div>
         <div className="flex justify-center mt-2">
           <Image
             loading="lazy"
@@ -205,7 +212,7 @@ const ModalDetailLeave = ({
               infoRequetLeave?.employee.avatar || "/storage/avt-default.webp"
             }
             alt="avatar"
-            className="h-[100px] w-[100px] rounded-[50%] object-cover"
+            className="h-[100px] w-[100px] rounded-[50%] object-cover border-2 border-[#4a4a6a] mt-2"
           />
         </div>
         <div className="pl-4 mt-2">
@@ -239,7 +246,7 @@ const ModalDetailLeave = ({
                   options={leaveOptions}
                 />
               </Form.Item>
-              <Form.Item label="Bắt đầu">
+              <Form.Item label="Bắt đầu" className="!mt-2">
                 <DatePicker
                   showTime
                   value={startDate}
@@ -247,7 +254,7 @@ const ModalDetailLeave = ({
                   format="DD/MM/YYYY HH:mm"
                 />
               </Form.Item>
-              <Form.Item label="Kết thúc">
+              <Form.Item label="Kết thúc" className="!mt-2">
                 <DatePicker
                   showTime
                   value={endDate}
@@ -255,7 +262,7 @@ const ModalDetailLeave = ({
                   format="DD/MM/YYYY HH:mm"
                 />
               </Form.Item>
-              <Form.Item label="Tổng thời gian (Giờ)">
+              <Form.Item label="Tổng thời gian (Giờ)" className="!mt-2">
                 <InputNumber
                   min={0}
                   value={totalHours}
@@ -291,7 +298,7 @@ const ModalDetailLeave = ({
             </>
           )}
 
-          <div>
+          <div className="!mt-2">
             <div className="flex gap-2">
               <p className="font-bold flex-shrink-0 text-[#242424] flex gap-2 items-center">
                 Lý do:
@@ -299,7 +306,7 @@ const ModalDetailLeave = ({
               <div>{original?.trim()}</div>
             </div>
             {rejectPart && (
-              <p className="text-red-600">
+              <p className="text-red-600 mt-2">
                 <b>Lý do từ chối:</b>{" "}
                 {rejectPart.replace("Lý do từ chối:", "").trim()}
               </p>

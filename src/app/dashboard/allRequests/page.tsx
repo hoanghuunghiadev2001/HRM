@@ -567,7 +567,17 @@ export default function AllRequestPage() {
                   />
                 </Form.Item>
               </div>
+
               <ExportLeaveRequests />
+              <Button
+                type="primary"
+                onClick={() => {
+                  setModalCalendarLeave(true);
+                }}
+                loading={loading}
+              >
+                xem ds nghỉ
+              </Button>
             </>
           )}
 
