@@ -7,6 +7,11 @@ import { NumericInput } from "./function";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { PendingApprovalItem } from "@/app/dashboard/allRequests/page";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 // Kích hoạt plugin
 dayjs.extend(utc);
@@ -69,9 +74,23 @@ const ModalApproveRequest = ({
   const dateCellRender = (value: Dayjs) => {
     const dateStr = value.format("YYYY-MM-DD");
     const found = data.find((item) => item.date === dateStr);
-    if (!found) return null;
+
+    // Kiểm tra ngày trong khoảng rangeValue
+    const inRange =
+      rangeValue &&
+      value.isSameOrAfter(rangeValue[0].startOf("day")) &&
+      value.isSameOrBefore(rangeValue[1].endOf("day"));
+
     return (
-      <div className="text-right text-red-600 font-bold">{found.count}</div>
+      <div
+        className={`relative h-full flex items-end justify-end p-1 rounded-md ${
+          inRange ? "bg-yellow-500" : ""
+        }`}
+      >
+        {found && (
+          <div className="text-red-600 font-bold text-sm">{found.count}</div>
+        )}
+      </div>
     );
   };
 

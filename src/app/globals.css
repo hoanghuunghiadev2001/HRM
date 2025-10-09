@@ -244,11 +244,11 @@ body {
 .antd-calendar > .ant-picker-cell,
 .antd-calendar .ant-picker-cell .ant-picker-cell-inner {
   padding: 0 !important;
-  height: 50px;
+  height: 60px;
 }
 .antd-calendar
   .ant-picker-cell
   .ant-picker-cell-inner
   .ant-picker-calendar-date-content {
-  height: fit-content !important;
+  height: 30px !important;
 }
