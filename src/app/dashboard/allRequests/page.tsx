@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 
 import React from "react";
-import { Form, Input, message, Pagination, Space, Table } from "antd";
+import { Button, Form, Input, message, Pagination, Space, Table } from "antd";
 import type { TableProps, TreeSelectProps } from "antd";
 import {
   AllRequests,
@@ -24,6 +24,7 @@ import { Department } from "@/lib/interface";
 import { useAppSelector } from "@/store/hook";
 import ExportLeaveRequests from "@/components/exportLeave";
 import { DatePicker } from "antd";
+import ModalCalendarLeave from "@/components/modalCalendarLeave";
 
 // Extend plugin
 dayjs.extend(utc);
@@ -171,6 +172,8 @@ export default function AllRequestPage() {
   const [modalDetailLeave, setModalDetailLeave] = useState<boolean>(false);
   const [infoRequetLeave, setInfoRequestLeave] = useState<RequestLeave>();
   const [modalNeedApproved, setModalNeedApproved] = useState<boolean>(false);
+  const [modalCalendarLeave, setModalCalendarLeave] = useState<boolean>(false);
+
   const [pageSize, setPageSize] = useState(10);
   const [pageTable, setPageTable] = useState(1);
   const [totalTable, setTotalTable] = useState();
@@ -427,6 +430,12 @@ export default function AllRequestPage() {
         allRequestsApproved={requestsNeedApprove}
         putApprovedRequest={putApprovedRequest}
       />
+      <ModalCalendarLeave
+        onClose={() => {
+          setModalCalendarLeave(false);
+        }}
+        open={modalCalendarLeave}
+      />
       <ModalDetailLeave
         infoRequetLeave={infoRequetLeave}
         onClose={() => {
@@ -548,6 +557,16 @@ export default function AllRequestPage() {
                 </Form.Item>
               </div>
               <ExportLeaveRequests />
+
+              <Button
+                type="primary"
+                onClick={() => {
+                  setModalCalendarLeave(true);
+                }}
+                loading={loading}
+              >
+                xem ds nghỉ
+              </Button>
             </>
           )}
 
