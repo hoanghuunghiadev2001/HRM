@@ -68,7 +68,7 @@ const ModalCalendarLeave = ({ open, onClose }: ModalCalendarLeaveProps) => {
         style={{ top: 20 }}
         title={
           <p className="text-2xl font-bold text-center">
-            Phê duyệt phiếu yêu cầu
+            Lịch Nghỉ phép đã duyệt
           </p>
         }
         width={600}

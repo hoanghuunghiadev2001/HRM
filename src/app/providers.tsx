@@ -7,18 +7,21 @@ import vnVN from "antd/locale/vi_VN";
 import { Provider } from "react-redux";
 import { persistor, store } from "@/store";
 import { PersistGate } from "redux-persist/integration/react";
+import dayjs from "dayjs";
+import "dayjs/locale/vi";
+
+dayjs.locale("vi");
 
 export default function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
     <Provider store={store}>
-         <PersistGate loading={null} persistor={persistor}>
-<QueryClientProvider client={queryClient}>
-        <ConfigProvider locale={vnVN}>{children}</ConfigProvider>
-      </QueryClientProvider>
-         </PersistGate>
-      
+      <PersistGate loading={null} persistor={persistor}>
+        <QueryClientProvider client={queryClient}>
+          <ConfigProvider locale={vnVN}>{children}</ConfigProvider>
+        </QueryClientProvider>
+      </PersistGate>
     </Provider>
   );
 }
