@@ -276,7 +276,7 @@ export default function ClientDashboard({
             )}
           </Button>
           <div className="flex items-center gap-2">
-            <p className="text-xl font-semibold text-[#4a4a6a] italic">
+            <p className="text-xl font-semibold text-[#001231] italic">
               {name}
             </p>
             <Image
@@ -353,11 +353,11 @@ export default function ClientDashboard({
                     className="w-14 h-auto"
                     width={56}
                     height={50}
-                    quality={70} // giảm chất lượng xuống chút để nhẹ hơn
+                    quality={100} // giảm chất lượng xuống chút để nhẹ hơn
                     priority={false}
                   />
                   <p
-                    className={`font-medium text-[#070d10] mt-2 text-nowrap transition-opacity ${
+                    className={`font-medium text-[#001231] mt-2 text-nowrap transition-opacity ${
                       collapsed ? "hidden" : ""
                     }`}
                   >
@@ -370,7 +370,9 @@ export default function ClientDashboard({
                     mode="inline"
                     inlineCollapsed={isMobile ? !collapsed : collapsed}
                     items={Menus}
-                    className="bg-transparent !text-[#4a4a6a]"
+                    className={`bg-transparent !text-[#4a4a6a] ${
+                      collapsed ? "reponsive-menu" : ""
+                    }`}
                     onClick={handleClick}
                   />
                 </div>
@@ -397,7 +399,7 @@ export default function ClientDashboard({
                       />
 
                       <p
-                        className={`text-xs font-normal italic text-[#070d10]  ${
+                        className={`text-xs font-normal italic text-[#001231]  ${
                           collapsed && !isMobile ? "hidden" : ""
                         } `}
                       >

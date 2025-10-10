@@ -54,7 +54,7 @@ nextjs-portal {
 .ant-menu-submenu-title {
   margin: 0 !important;
   width: 100% !important;
-  color: #070d10 !important;
+  color: #001231 !important;
   font-size: 18px !important;
   border-radius: 0 !important;
   border-bottom: none;
@@ -251,4 +251,13 @@ body {
   .ant-picker-cell-inner
   .ant-picker-calendar-date-content {
   height: 30px !important;
+}
+
+.reponsive-menu li .ant-menu-title-content {
+  display: none !important;
+}
+
+.reponsive-menu li {
+  width: fit-content !important;
+  padding-right: 16px;
 }
