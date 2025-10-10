@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import {
   Card,
   Table,
@@ -13,185 +13,189 @@ import {
   Tabs,
   message,
   Input,
-} from "antd"
+} from "antd";
 import {
   FileTextOutlined,
   EyeOutlined,
   CheckCircleOutlined,
   CloseOutlined,
   ClockCircleOutlined,
-} from "@ant-design/icons"
-import type { ColumnsType } from "antd/es/table"
-import { useRouter } from "next/navigation"
-import axios from "axios"
+} from "@ant-design/icons";
+import type { ColumnsType } from "antd/es/table";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
-import ModalLoading from "@/components/modalLoading"
-import { useAppSelector } from "@/store/hook"
+import ModalLoading from "@/components/modalLoading";
+import { useAppSelector } from "@/store/hook";
 
-const { Title, Text } = Typography
-const { TabPane } = Tabs
-const { Search } = Input
+const { Title, Text } = Typography;
+const { TabPane } = Tabs;
+const { Search } = Input;
 
 interface Proposal {
-  id: number
-  name: string
-  title: string
-  description?: string
-  status: string
-  createdAt: string
+  id: number;
+  name: string;
+  title: string;
+  description?: string;
+  status: string;
+  createdAt: string;
   proposer: {
-    id: number
-    name: string
-    employeeCode: string
-  }
+    id: number;
+    name: string;
+    employeeCode: string;
+  };
   file?: {
-    id: number
-    filename: string
-    mimeType: string
-    fileSize: number
-    createdAt: string
-  }
+    id: number;
+    filename: string;
+    mimeType: string;
+    fileSize: number;
+    createdAt: string;
+  };
   signers: Array<{
     signer: {
-      id: number
-      name: string
-      employeeCode: string
-    }
-    status: string
-  }>
+      id: number;
+      name: string;
+      employeeCode: string;
+    };
+    status: string;
+  }>;
   approvers: Array<{
     approver: {
-      id: number
-      name: string
-      employeeCode: string
-    }
-    status: string
-  }>
+      id: number;
+      name: string;
+      employeeCode: string;
+    };
+    status: string;
+  }>;
 }
 
 interface resultData {
-  data: Proposal[]
-  total: number
+  data: Proposal[];
+  total: number;
 }
 
 export default function MyProposalsPage() {
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [createdProposals, setCreatedProposals] = useState<resultData>()
-  const [pendingSignatures, setPendingSignatures] = useState<resultData>()
-  const [pendingApprovals, setPendingApprovals] = useState<resultData>()
-  const [actionLoading, setActionLoading] = useState<number | null>(null)
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
-  const [searchText, setSearchText] = useState("")
-  const { id, employeeCode } = useAppSelector((state) => state.user)
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [createdProposals, setCreatedProposals] = useState<resultData>();
+  const [pendingSignatures, setPendingSignatures] = useState<resultData>();
+  const [pendingApprovals, setPendingApprovals] = useState<resultData>();
+  const [actionLoading, setActionLoading] = useState<number | null>(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [searchText, setSearchText] = useState("");
+  const { employeeCode, role } = useAppSelector((state) => state.user);
   const [msg, contextHolder] = message.useMessage();
 
   const getStatusColor = (status: string) => {
-    return {
-      pending_signatures: "orange",
-      waiting_approval: "blue",
-      approved: "green",
-      rejected: "red",
-    }[status] || "default"
-  }
+    return (
+      {
+        pending_signatures: "orange",
+        waiting_approval: "blue",
+        approved: "green",
+        rejected: "red",
+      }[status] || "default"
+    );
+  };
 
   const getStatusText = (status: string) => {
-    return {
-      pending_signatures: "Đang chờ ký",
-      waiting_approval: "Đang chờ duyệt",
-      approved: "Đã duyệt",
-      rejected: "Đã từ chối",
-    }[status] || status
-  }
+    return (
+      {
+        pending_signatures: "Đang chờ ký",
+        waiting_approval: "Đang chờ duyệt",
+        approved: "Đã duyệt",
+        rejected: "Đã từ chối",
+      }[status] || status
+    );
+  };
 
   const fetchProposals = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const response = await fetch(
         `/api/proposals/my-proposals?page=${page}&pageSize=${pageSize}&search=${encodeURIComponent(
           searchText
         )}`
-      )
-      const data = await response.json()
+      );
+      const data = await response.json();
 
       if (response.ok) {
-        setCreatedProposals(data.created)
-        setPendingApprovals(data.need_to_approve)
-        setPendingSignatures(data.need_to_sign)
+        setCreatedProposals(data.created);
+        setPendingApprovals(data.need_to_approve);
+        setPendingSignatures(data.need_to_sign);
       } else {
-        message.error(data.error || "Không thể tải danh sách đề xuất")
+        message.error(data.error || "Không thể tải danh sách đề xuất");
       }
     } catch (error) {
-      console.error("Fetch error:", error)
-      message.error("Không thể kết nối đến server")
+      console.error("Fetch error:", error);
+      message.error("Không thể kết nối đến server");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   // Debounce search
   useEffect(() => {
     const delay = setTimeout(() => {
-      setPage(1) // reset page khi search
-      fetchProposals()
-    }, 500)
-    return () => clearTimeout(delay)
-  }, [searchText, page, pageSize])
+      setPage(1); // reset page khi search
+      fetchProposals();
+    }, 500);
+    return () => clearTimeout(delay);
+  }, [searchText, page, pageSize]);
 
   const showConfirm = async (
     proposalId: number,
     action: "sign" | "approve",
     status: "approved" | "rejected"
   ) => {
-    setActionLoading(proposalId)
+    setActionLoading(proposalId);
     try {
       await axios.post(`/api/proposals/${proposalId}/${action}`, {
         proposalId,
         status,
-      })
+      });
 
       message.success(
         status === "approved" ? "Đã phê duyệt!" : "Đã từ chối đề xuất!"
-      )
-      fetchProposals()
+      );
+      fetchProposals();
     } catch (error) {
-      console.error("Approval error:", error)
-      message.error("Có lỗi xảy ra khi gửi phê duyệt.")
+      console.error("Approval error:", error);
+      message.error("Có lỗi xảy ra khi gửi phê duyệt.");
     } finally {
-      setActionLoading(null)
+      setActionLoading(null);
     }
-  }
+  };
 
   const handleViewDetail = (proposalId: number) => {
-    setLoading(true)
-    router.push(`/dashboard/proposal/my-proposals/${proposalId}`)
-  }
+    setLoading(true);
+    router.push(`/dashboard/proposal/my-proposals/${proposalId}`);
+  };
 
-const handleDeleteProposal = async (proposalId: number) => {
-  if (!confirm("Bạn có chắc muốn xóa đề xuất này?")) return;
+  const handleDeleteProposal = async (proposalId: number) => {
+    if (!confirm("Bạn có chắc muốn xóa đề xuất này?")) return;
 
-  setLoading(true);
-  try {
-    const res = await fetch(`/api/proposals/${proposalId}`, {
-      method: "DELETE",
-      credentials: "include", // gửi cookie token
-    });
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/proposals/${proposalId}`, {
+        method: "DELETE",
+        credentials: "include", // gửi cookie token
+      });
 
-    const data = await res.json();
-    if (res.ok) {
-      msg.success(data.message || "Xóa đề xuất thành công");
-      fetchProposals();
-    } else {
-      msg.error(data.error || "Xóa thất bại");
+      const data = await res.json();
+      if (res.ok) {
+        msg.success(data.message || "Xóa đề xuất thành công");
+        fetchProposals();
+      } else {
+        msg.error(data.error || "Xóa thất bại");
+      }
+    } catch (err) {
+      console.error(err);
+      msg.error("Có lỗi xảy ra khi xóa đề xuất");
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error(err);
-    msg.error("Có lỗi xảy ra khi xóa đề xuất");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   // ================== COLUMNS ==================
   const createdColumns: ColumnsType<Proposal> = [
@@ -241,19 +245,25 @@ const handleDeleteProposal = async (proposalId: number) => {
           >
             Xem
           </Button>
-          <Button
-            className={`${employeeCode === "01375" || employeeCode === "00965" ? "" : "hidden"}`}
-            type="link"
-            icon={<EyeOutlined />}
-            size="small"
-            onClick={() => handleDeleteProposal(record.id)}
-          >
-            Xóa
-          </Button>
+          {role === "ADMIN" && (
+            <Button
+              className={`${
+                employeeCode === "01375" || employeeCode === "00965"
+                  ? ""
+                  : "hidden"
+              }`}
+              type="link"
+              icon={<EyeOutlined />}
+              size="small"
+              onClick={() => handleDeleteProposal(record.id)}
+            >
+              Xóa
+            </Button>
+          )}
         </div>
       ),
     },
-  ]
+  ];
 
   const pendingColumns: ColumnsType<Proposal> = [
     {
@@ -294,47 +304,51 @@ const handleDeleteProposal = async (proposalId: number) => {
       responsive: ["md"],
       render: (date) => new Date(date).toLocaleDateString("vi-VN"),
     },
-  ]
+  ];
 
-  const actionColumn =
-    (actionType: "sign" | "approve"): ColumnsType<Proposal>[number] => ({
-      title: "Thao tác",
-      key: "actions",
-      render: (_, record) => (
-        <Space>
-          <Button
-            type="primary"
-            icon={<CheckCircleOutlined />}
-            size="small"
-            loading={actionLoading === record.id}
-            onClick={() => showConfirm(record.id, actionType, "approved")}
-          >
-            {actionType === "sign" ? "Đồng ý" : "Phê duyệt"}
-          </Button>
-          <Button
-            danger
-            icon={<CloseOutlined />}
-            size="small"
-            loading={actionLoading === record.id}
-            onClick={() => showConfirm(record.id, actionType, "rejected")}
-          >
-            Từ chối
-          </Button>
-          <Button
-            type="link"
-            icon={<EyeOutlined />}
-            size="small"
-            onClick={() => handleViewDetail(record.id)}
-          >
-            Xem
-          </Button>
-        </Space>
-      ),
-    })
+  const actionColumn = (
+    actionType: "sign" | "approve"
+  ): ColumnsType<Proposal>[number] => ({
+    title: "Thao tác",
+    key: "actions",
+    render: (_, record) => (
+      <Space>
+        <Button
+          type="primary"
+          icon={<CheckCircleOutlined />}
+          size="small"
+          loading={actionLoading === record.id}
+          onClick={() => showConfirm(record.id, actionType, "approved")}
+        >
+          {actionType === "sign" ? "Đồng ý" : "Phê duyệt"}
+        </Button>
+        <Button
+          danger
+          icon={<CloseOutlined />}
+          size="small"
+          loading={actionLoading === record.id}
+          onClick={() => showConfirm(record.id, actionType, "rejected")}
+        >
+          Từ chối
+        </Button>
+        <Button
+          type="link"
+          icon={<EyeOutlined />}
+          size="small"
+          onClick={() => handleViewDetail(record.id)}
+        >
+          Xem
+        </Button>
+      </Space>
+    ),
+  });
 
   return (
-    <div style={{ padding: 0, maxWidth: 1400, margin: "0 auto" }} className="proposal-page">
-         {contextHolder}
+    <div
+      style={{ padding: 0, maxWidth: 1400, margin: "0 auto" }}
+      className="proposal-page"
+    >
+      {contextHolder}
       <ModalLoading isOpen={loading} />
 
       <Title level={2} style={{ marginBottom: 16 }}>
@@ -356,12 +370,16 @@ const handleDeleteProposal = async (proposalId: number) => {
         size="large"
         style={{ overflowX: "auto" }}
         onChange={() => {
-          setPage(1)
-          setPageSize(10)
+          setPage(1);
+          setPageSize(10);
         }}
       >
         <TabPane
-          tab={<span><FileTextOutlined /> Đề xuất ({createdProposals?.data.length})</span>}
+          tab={
+            <span>
+              <FileTextOutlined /> Đề xuất ({createdProposals?.data.length})
+            </span>
+          }
           key="created"
         >
           <Card className="proposal-table">
@@ -378,8 +396,8 @@ const handleDeleteProposal = async (proposalId: number) => {
                 showSizeChanger: true,
                 showQuickJumper: true,
                 onChange: (newPage, newPageSize) => {
-                  setPage(newPage)
-                  setPageSize(newPageSize)
+                  setPage(newPage);
+                  setPageSize(newPageSize);
                 },
               }}
             />
@@ -387,7 +405,11 @@ const handleDeleteProposal = async (proposalId: number) => {
         </TabPane>
 
         <TabPane
-          tab={<span><ClockCircleOutlined /> Cần ký ({pendingSignatures?.data.length})</span>}
+          tab={
+            <span>
+              <ClockCircleOutlined /> Cần ký ({pendingSignatures?.data.length})
+            </span>
+          }
           key="pending_signature"
         >
           <Card className="proposal-table">
@@ -404,8 +426,8 @@ const handleDeleteProposal = async (proposalId: number) => {
                 showSizeChanger: true,
                 showQuickJumper: true,
                 onChange: (newPage, newPageSize) => {
-                  setPage(newPage)
-                  setPageSize(newPageSize)
+                  setPage(newPage);
+                  setPageSize(newPageSize);
                 },
               }}
             />
@@ -413,7 +435,12 @@ const handleDeleteProposal = async (proposalId: number) => {
         </TabPane>
 
         <TabPane
-          tab={<span><CheckCircleOutlined /> Cần phê duyệt ({pendingApprovals?.data.length})</span>}
+          tab={
+            <span>
+              <CheckCircleOutlined /> Cần phê duyệt (
+              {pendingApprovals?.data.length})
+            </span>
+          }
           key="pending_approval"
         >
           <Card className="proposal-table">
@@ -430,8 +457,8 @@ const handleDeleteProposal = async (proposalId: number) => {
                 showSizeChanger: true,
                 showQuickJumper: true,
                 onChange: (newPage, newPageSize) => {
-                  setPage(newPage)
-                  setPageSize(newPageSize)
+                  setPage(newPage);
+                  setPageSize(newPageSize);
                 },
               }}
             />
@@ -439,5 +466,5 @@ const handleDeleteProposal = async (proposalId: number) => {
         </TabPane>
       </Tabs>
     </div>
-  )
+  );
 }
