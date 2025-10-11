@@ -1,26 +1,45 @@
 // app/api/leaveRequests/pending/route.ts
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { LeaveStatus } from "../../../../../generated/prisma";
+import jwt from "jsonwebtoken";
 
-export async function GET(req: Request) {
+interface JWTPayload {
+  id: number;
+  role: string;
+  employeeCode: string;
+  departmentId?: number;
+}
+
+export async function GET(req: NextRequest) {
   try {
-    const url = new URL(req.url);
-    const userIdStr = url.searchParams.get("userId");
-    if (!userIdStr) {
-      return NextResponse.json({ error: "Thiếu userId" }, { status: 400 });
+    const token = req.cookies.get("token")?.value;
+    if (!token) {
+      return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
     }
-    const userId = Number(userIdStr);
 
-    // Lấy tất cả step pending mà user này là approver
-    const steps = await prisma.leaveApprovalStep.findMany({
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
+    const userId = decoded.id;
+
+    if (!decoded.role || decoded.role === "USER") {
+      return NextResponse.json(
+        { message: "Không có quyền xem" },
+        { status: 403 }
+      );
+    }
+
+    // 🔹 Lấy tất cả đơn nghỉ mà user là approver đang pending
+    const pendingSteps = await prisma.leaveApprovalStep.findMany({
       where: {
         status: LeaveStatus.pending,
         approvers: {
           some: {
             approverId: userId,
-            status: LeaveStatus.pending, // chỉ lấy approver chưa xử lý
+            status: LeaveStatus.pending, // user chưa xử lý
           },
+        },
+        leaveRequest: {
+          status: LeaveStatus.pending, // chỉ lấy đơn đang chờ duyệt
         },
       },
       include: {
@@ -65,14 +84,14 @@ export async function GET(req: Request) {
       },
     });
 
-    // Chỉ giữ lại step active (step pending có level nhỏ nhất)
-    const formatted = steps
+    // 🔹 Giữ lại step active (level thấp nhất còn pending)
+    const formatted = pendingSteps
       .filter((step) => {
         const leaveReq = step.leaveRequest;
         const activeStep = leaveReq.approvalSteps.find(
           (s) => s.status === LeaveStatus.pending
         );
-        return activeStep?.id === step.id; // chỉ step active mới được trả
+        return activeStep?.id === step.id;
       })
       .map((step) => {
         const leaveReq = step.leaveRequest;
