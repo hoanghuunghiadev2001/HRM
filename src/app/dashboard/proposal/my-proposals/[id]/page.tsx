@@ -100,34 +100,17 @@ export default function ProposalDetailPage() {
   const fetchProposal = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/proposals?id=${proposalId}?userId=${id}`);
+      const res = await fetch(`/api/proposals?id=${proposalId}`);
       const result = await res.json();
+
       if (res.ok) {
-        setProposal(result);
+        const data = result;
+        setProposal(data);
 
-        if (result.file?.data) {
-          const bufferData = Object.values(result.file.data) as number[];
-          const uint8Array = new Uint8Array(bufferData);
-          const blob = new Blob([uint8Array], { type: result.file.mimeType });
-          setCurrentPreviewUrl(URL.createObjectURL(blob));
-
-          // Nếu là Word, render trực tiếp
-          if (
-            result.file.mimeType.includes("officedocument") ||
-            result.file.mimeType.includes("msword")
-          ) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-              const arrayBuffer = e.target!.result as ArrayBuffer;
-              const container = document.getElementById("docx-container");
-              if (container instanceof HTMLElement) {
-                renderAsync(arrayBuffer, container!, undefined);
-              }
-              // Nếu muốn chắc chắn TS không complain, có thể dùng dấu !
-              // renderAsync(arrayBuffer, container!, null);
-            };
-            reader.readAsArrayBuffer(blob);
-          }
+        // ✅ Nếu có file, tạo link xem trực tiếp
+        if (data.file?.id) {
+          const previewUrl = `/api/files/view/${data.file.id}`;
+          setCurrentPreviewUrl(previewUrl);
         }
       } else {
         message.error(result.error || "Không thể tải thông tin đề xuất");
@@ -557,22 +540,13 @@ export default function ProposalDetailPage() {
 
       {/* Preview file */}
       {currentPreviewUrl && (
-        <Card
-          title={
-            <>
-              <FolderViewOutlined /> Xem trước File: {proposal.file?.filename}
-            </>
-          }
-          style={{ marginBottom: 24 }}
-        >
+        <Card title="Xem trước File">
           <div className="w-full flex justify-center max-h-[80vh] overflow-auto">
             {proposal.file?.mimeType === "application/pdf" ? (
-              <Worker workerUrl="https://unpkg.com/pdfjs-dist/build/pdf.worker.min.js">
-                <Viewer
-                  fileUrl={currentPreviewUrl}
-                  plugins={[defaultLayoutPluginInstance]}
-                />
-              </Worker>
+              <iframe
+                src={currentPreviewUrl}
+                style={{ width: "100%", height: "80vh", border: "none" }}
+              />
             ) : proposal.file?.mimeType.startsWith("image/") ? (
               <img
                 src={currentPreviewUrl}
@@ -581,24 +555,16 @@ export default function ProposalDetailPage() {
               />
             ) : proposal.file?.mimeType.includes("officedocument") ||
               proposal.file?.mimeType.includes("msword") ? (
-              <div
-                id="docx-container"
-                style={{ width: "100%", minHeight: 600, overflow: "auto" }}
-              ></div>
+              <div className="w-full h-[90vh]">
+                <iframe
+                  src={`/api/files/view/${proposal.id}`}
+                  width="100%"
+                  height="100%"
+                ></iframe>
+              </div>
             ) : (
               <Text>Không thể xem trực tiếp file này.</Text>
             )}
-          </div>
-          <div style={{ marginTop: 12 }}>
-            <Button
-              type="primary"
-              icon={<DownloadOutlined />}
-              href={`/api/files/${proposalId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Tải xuống
-            </Button>
           </div>
         </Card>
       )}

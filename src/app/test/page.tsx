@@ -21,7 +21,18 @@ export default function TestPage() {
         onClick={handleDownload}
         className="px-4 py-2 bg-blue-500 text-white rounded"
       >
-        Test Generate DOCX
+        <iframe
+          src={`https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(
+            `https://hrm-ten-pi.vercel.app/api/files/83`
+          )}&embedded=true`}
+          width="100%"
+          height="600px"
+          style={{
+            border: "none",
+            borderRadius: "12px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+          }}
+        ></iframe>
       </button>
     </div>
   );

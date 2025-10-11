@@ -592,7 +592,13 @@ export class ProposalService {
    */
   static getFullIncludeObject() {
     return {
-      file: true,
+      file: {
+        select: {
+          id: true,
+          filename: true,
+          mimeType: true,
+        },
+      },
       proposer: {
         include: {
           contactInfo: true,
