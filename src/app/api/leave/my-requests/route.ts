@@ -107,10 +107,12 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(enriched, { status: 200 });
   } catch (error) {
     console.error("Lỗi token hoặc truy vấn:", error);
-    return NextResponse.json({ message: "Token không hợp lệ" }, { status: 401 });
+    return NextResponse.json(
+      { message: "Token không hợp lệ" },
+      { status: 401 }
+    );
   }
 }
-
 
 // PUT: Thu hồi đơn nghỉ phép
 export async function PUT(req: NextRequest) {
@@ -131,13 +133,15 @@ export async function PUT(req: NextRequest) {
     const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
     const userId = decoded.id;
     console.log(userId);
-    
 
     const body = await req.json();
     const { leaveRequestId } = body;
 
     if (!leaveRequestId) {
-      return NextResponse.json({ message: "Thiếu leaveRequestId" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Thiếu leaveRequestId" },
+        { status: 400 }
+      );
     }
 
     const leave = await prisma.leaveRequest.findUnique({
@@ -147,7 +151,11 @@ export async function PUT(req: NextRequest) {
         approvalSteps: {
           include: {
             approvers: {
-              include: { approver: { select: { id: true, name: true, contactInfo: true } } },
+              include: {
+                approver: {
+                  select: { id: true, name: true, contactInfo: true },
+                },
+              },
             },
           },
         },
@@ -155,22 +163,24 @@ export async function PUT(req: NextRequest) {
     });
 
     if (!leave) {
-      return NextResponse.json({ message: "Không tìm thấy đơn nghỉ phép" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Không tìm thấy đơn nghỉ phép" },
+        { status: 404 }
+      );
     }
 
     // if (leave.employeeId !== userId) {
     //   return NextResponse.json({ message: "Bạn không có quyền thu hồi đơn này" }, { status: 403 });
     // }
 
-    if (leave.status !== "approved") {
-      return NextResponse.json({ message: "Chỉ đơn đã duyệt mới có thể thu hồi" }, { status: 400 });
-    }
-
     const now = dayjs().tz("Asia/Ho_Chi_Minh");
     const startDate = dayjs.utc(leave.startDate).tz("Asia/Ho_Chi_Minh");
 
     if (now.isAfter(startDate)) {
-      return NextResponse.json({ message: "Không thể thu hồi đơn vì đã tới ngày nghỉ" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Không thể thu hồi đơn vì đã tới ngày nghỉ" },
+        { status: 400 }
+      );
     }
 
     // Cập nhật trạng thái thành revoked
@@ -181,15 +191,18 @@ export async function PUT(req: NextRequest) {
 
     // Lấy danh sách email người đã duyệt
     const approverEmails = leave.approvalSteps
-      .flatMap(step => step.approvers)
-      .map(a => a.approver?.contactInfo?.email)
+      .flatMap((step) => step.approvers)
+      .map((a) => a.approver?.contactInfo?.email)
       .filter(Boolean) as string[];
 
     // Gửi mail thông báo
     if (approverEmails.length > 0) {
       const employeeName = leave.employee?.name || "Nhân viên";
       const startVN = startDate.format("DD/MM/YYYY HH:mm");
-      const endVN = dayjs.utc(leave.endDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm");
+      const endVN = dayjs
+        .utc(leave.endDate)
+        .tz("Asia/Ho_Chi_Minh")
+        .format("DD/MM/YYYY HH:mm");
 
       await sendEmail({
         to: approverEmails,
@@ -216,7 +229,10 @@ export async function PUT(req: NextRequest) {
       });
     }
 
-    return NextResponse.json({ message: "Thu hồi thành công", data: revokedLeave });
+    return NextResponse.json({
+      message: "Thu hồi thành công",
+      data: revokedLeave,
+    });
   } catch (error) {
     console.error("Lỗi khi thu hồi đơn nghỉ phép:", error);
     return NextResponse.json({ message: "Thu hồi thất bại" }, { status: 500 });

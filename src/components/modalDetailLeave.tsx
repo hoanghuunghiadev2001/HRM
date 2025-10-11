@@ -180,7 +180,14 @@ const ModalDetailLeave = ({
     ? dayjs.utc(infoRequetLeave.startDate).tz("Asia/Ho_Chi_Minh")
     : null;
   const canRevoke =
-    infoRequetLeave?.status === "approved" && start && start.isAfter(now);
+    (infoRequetLeave?.status === "approved" ||
+      infoRequetLeave?.status === "pending") &&
+    start &&
+    start.isAfter(now);
+  useEffect(() => {
+    console.log(canRevoke);
+    console.log(start && start.isAfter(now));
+  }, []);
 
   return (
     <Drawer
@@ -383,7 +390,15 @@ const ModalDetailLeave = ({
             </div>
           )}
         </div>
-
+        {canRevoke && (
+          <button
+            onClick={handleRevoke}
+            disabled={loading}
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+          >
+            {loading ? "Đang rút đơn..." : "Rút đơn"}
+          </button>
+        )}
         {/* Nút cập nhật và rút/xóa đơn */}
         {(employeeCode === "01375" || employeeCode === "00898") && (
           <div className="mt-4 flex justify-end gap-2">
@@ -394,15 +409,7 @@ const ModalDetailLeave = ({
             >
               {loading ? "Đang cập nhật..." : "Cập nhật"}
             </button>
-            {canRevoke && (
-              <button
-                onClick={handleRevoke}
-                disabled={loading}
-                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-              >
-                {loading ? "Đang rút đơn..." : "Rút đơn"}
-              </button>
-            )}
+
             <button
               onClick={handleDelete}
               disabled={loading}

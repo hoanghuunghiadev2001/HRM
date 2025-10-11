@@ -137,16 +137,14 @@ export default function RequestPage() {
   };
 
   // Tạo đơn mới
-  const CreateRequestLeave = async (
-   payload: CreateLeavePayload
-  ) => {
+  const CreateRequestLeave = async (payload: CreateLeavePayload) => {
     try {
       setLoading(true);
       const res = await fetch("/api/leave/create-requests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-       payload
+          payload,
         }),
       });
 
@@ -194,7 +192,10 @@ export default function RequestPage() {
       />
       <ModalDetailLeave
         infoRequetLeave={infoRequetLeave}
-        onClose={() => {setModalDetailLeave(false); getRequestsLeave()}}
+        onClose={() => {
+          setModalDetailLeave(false);
+          getRequestsLeave();
+        }}
         open={modalDetailLeave}
         title="Chi Tiết Đơn Xin Phép"
       />
@@ -228,6 +229,8 @@ export default function RequestPage() {
                         ? " text-[#1181c8]"
                         : item.status === "approved"
                         ? "text-[#0b5705] "
+                        : item.status === "revoked"
+                        ? "text-blue-600"
                         : " text-[#eb2128]"
                     }`}
                   >
@@ -235,6 +238,8 @@ export default function RequestPage() {
                       ? "Đang chờ"
                       : item.status === "approved"
                       ? "Chấp nhận"
+                      : item.status === "revoked"
+                      ? "Đã rút đơn"
                       : "Từ chối"}
                   </p>
 
