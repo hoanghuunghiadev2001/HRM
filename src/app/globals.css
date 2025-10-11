@@ -253,11 +253,11 @@ body {
   height: 30px !important;
 }
 
-.reponsive-menu li .ant-menu-title-content {
+/* .reponsive-menu li .ant-menu-title-content {
   display: none !important;
-}
+} */
 
 .reponsive-menu li {
-  width: fit-content !important;
+  width: auto !important;
   padding-right: 16px;
 }
