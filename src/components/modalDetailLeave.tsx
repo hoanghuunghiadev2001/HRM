@@ -201,6 +201,39 @@ const ModalDetailLeave = ({
       onClose={onClose}
       open={open}
       width={600}
+      footer={
+        <div className="flex gap-4 justify-end items-center">
+          {canRevoke && (
+            <button
+              onClick={handleRevoke}
+              disabled={loading}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 mt-4"
+            >
+              {loading ? "Đang rút đơn..." : "Rút đơn"}
+            </button>
+          )}
+          {/* Nút cập nhật và rút/xóa đơn */}
+          {(employeeCode === "01375" || employeeCode === "00898") && (
+            <div className="mt-4 flex  gap-2">
+              <button
+                onClick={handleUpdate}
+                disabled={loading}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                {loading ? "Đang cập nhật..." : "Cập nhật"}
+              </button>
+
+              <button
+                onClick={handleDelete}
+                disabled={loading}
+                className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+              >
+                {loading ? "Đang xóa..." : "Xóa đơn"}
+              </button>
+            </div>
+          )}
+        </div>
+      }
     >
       <div>
         {/* Thông tin nhân viên */}
@@ -390,35 +423,6 @@ const ModalDetailLeave = ({
             </div>
           )}
         </div>
-        {canRevoke && (
-          <button
-            onClick={handleRevoke}
-            disabled={loading}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-          >
-            {loading ? "Đang rút đơn..." : "Rút đơn"}
-          </button>
-        )}
-        {/* Nút cập nhật và rút/xóa đơn */}
-        {(employeeCode === "01375" || employeeCode === "00898") && (
-          <div className="mt-4 flex justify-end gap-2">
-            <button
-              onClick={handleUpdate}
-              disabled={loading}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              {loading ? "Đang cập nhật..." : "Cập nhật"}
-            </button>
-
-            <button
-              onClick={handleDelete}
-              disabled={loading}
-              className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
-            >
-              {loading ? "Đang xóa..." : "Xóa đơn"}
-            </button>
-          </div>
-        )}
       </div>
     </Drawer>
   );
