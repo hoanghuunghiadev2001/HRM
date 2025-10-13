@@ -607,14 +607,14 @@ export class ProposalService {
           },
         },
       },
-      createdBy: {
-        include: {
-          contactInfo: true,
-          workInfo: {
-            include: { position: true, department: true },
-          },
-        },
-      },
+      // createdBy: {
+      //   include: {
+      //     contactInfo: true,
+      //     workInfo: {
+      //       include: { position: true, department: true },
+      //     },
+      //   },
+      // },
       signers: {
         include: {
           signer: {
