@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -107,10 +108,16 @@ export default function ProposalDetailPage() {
         const data = result;
         setProposal(data);
 
-        // ✅ Nếu có file, tạo link xem trực tiếp
-        if (data.file?.id) {
-          const previewUrl = `/api/files/view/${data.file.id}`;
-          setCurrentPreviewUrl(previewUrl);
+        if (
+          data.file?.mimeType.includes("officedocument") ||
+          data.file?.mimeType.includes("msword")
+        ) {
+        } else {
+          if (data.file?.id) {
+            // ✅ Nếu có file, tạo link xem trực tiếp
+            const previewUrl = `/api/files/view/${data.file.id}`;
+            setCurrentPreviewUrl(previewUrl);
+          }
         }
       } else {
         message.error(result.error || "Không thể tải thông tin đề xuất");
@@ -400,7 +407,23 @@ export default function ProposalDetailPage() {
 
   const statusConfigFinal = getStatusConfig(proposal.status);
   const progress = getProgress();
+  // 🔍 Regex bắt thời gian bắt đầu & kết thúc trong mô tả
+  const desc = proposal.description || "";
 
+  // Regex: bắt cả dòng có “thời gian bắt đầu”, “thời gian kết thúc”, “from”, “to”... (không phân biệt hoa thường)
+  const cleanedDescription = desc
+    .replace(/thời gian bắt đầu.*(\r?\n)?/gi, "")
+    .replace(/thời gian kết thúc.*(\r?\n)?/gi, "")
+    .replace(/from.*(\r?\n)?/gi, "")
+    .replace(/to.*(\r?\n)?/gi, "")
+    .trim(); // xóa khoảng trắng/thừa dòng cuối
+
+  // Nếu bạn vẫn muốn hiển thị thời gian riêng:
+  const startTimeMatch = desc.match(/thời gian bắt đầu[:\-]?\s*([\d/:\-\s]+)/i);
+  const endTimeMatch = desc.match(/thời gian kết thúc[:\-]?\s*([\d/:\-\s]+)/i);
+
+  const startTime = startTimeMatch ? startTimeMatch[1].trim() : null;
+  const endTime = endTimeMatch ? endTimeMatch[1].trim() : null;
   return (
     <div
       style={{
@@ -518,12 +541,29 @@ export default function ProposalDetailPage() {
             {proposal.name}
           </Descriptions.Item>
           {proposal.description && (
-            <Descriptions.Item label="Mô tả">
-              <Paragraph style={{ margin: 0, whiteSpace: "pre-wrap" }}>
-                {proposal.description}
-              </Paragraph>
-            </Descriptions.Item>
+            <>
+              <Descriptions.Item label="Mô tả">
+                <Paragraph style={{ margin: 0, whiteSpace: "pre-wrap" }}>
+                  {cleanedDescription}
+                </Paragraph>
+              </Descriptions.Item>
+              {startTime && (
+                <>
+                  <Descriptions.Item label="Bắt đầu">
+                    <Paragraph style={{ margin: 0, whiteSpace: "pre-wrap" }}>
+                      {startTime}
+                    </Paragraph>
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Kết thúc">
+                    <Paragraph style={{ margin: 0, whiteSpace: "pre-wrap" }}>
+                      {endTime}
+                    </Paragraph>
+                  </Descriptions.Item>
+                </>
+              )}
+            </>
           )}
+
           <Descriptions.Item label="Trạng thái">
             <Tag color={statusConfigFinal.color}>
               {statusConfigFinal.icon} {statusConfigFinal.text}
