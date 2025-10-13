@@ -97,52 +97,58 @@ export class ProposalService {
     try {
       const proposal = await prisma.proposal.findUnique({
         where: { id: proposalId },
-        include: this.getLightIncludeObject(),
+        include: this.getFullIncludeObject(),
       });
 
       if (!proposal) {
         return { success: false, error: "Không tìm thấy đề xuất" };
       }
 
+      // --- Sắp xếp lại để đảm bảo đúng thứ tự ---
+      const sortedSigners = [...proposal.signers].sort(
+        (a, b) => a.level - b.level
+      );
+      const sortedApprovers = [...proposal.approvers].sort(
+        (a, b) => a.level - b.level
+      );
+
       // 🚨 Kiểm tra có bị reject không
       const isRejected =
-        proposal.signers.some((s) => s.status === "rejected") ||
-        proposal.approvers.some((a) => a.status === "rejected");
+        sortedSigners.some((s) => s.status === "rejected") ||
+        sortedApprovers.some((a) => a.status === "rejected");
 
       // --- Xác định signer tiếp theo ---
       let nextSignerIndex = -1;
       if (!isRejected) {
-        nextSignerIndex = proposal.signers.findIndex(
+        nextSignerIndex = sortedSigners.findIndex(
           (s, idx) =>
             s.status === "pending" &&
-            proposal.signers
-              .slice(0, idx)
-              .every((s2) => s2.status === "approved")
+            sortedSigners.slice(0, idx).every((s2) => s2.status === "approved")
         );
       }
 
       // --- Xác định approver tiếp theo ---
-      const allSignersApproved = proposal.signers.every(
+      const allSignersApproved = sortedSigners.every(
         (s) => s.status === "approved"
       );
       let nextApproverIndex = -1;
       if (!isRejected && allSignersApproved) {
-        nextApproverIndex = proposal.approvers.findIndex(
+        nextApproverIndex = sortedApprovers.findIndex(
           (a, idx) =>
             a.status === "pending" &&
-            proposal.approvers
+            sortedApprovers
               .slice(0, idx)
               .every((a2) => a2.status === "approved")
         );
       }
 
       // --- Map danh sách signer và approver với isCurrent ---
-      const signers = proposal.signers.map((s, idx) => ({
+      const signers = sortedSigners.map((s, idx) => ({
         ...s,
         isCurrent: idx === nextSignerIndex,
       }));
 
-      const approvers = proposal.approvers.map((a, idx) => ({
+      const approvers = sortedApprovers.map((a, idx) => ({
         ...a,
         isCurrent: idx === nextApproverIndex,
       }));
@@ -152,6 +158,7 @@ export class ProposalService {
         step: "done",
         userId: null,
       };
+
       if (isRejected) {
         currentStep = { step: "rejected", userId: null };
       } else if (nextSignerIndex >= 0) {
