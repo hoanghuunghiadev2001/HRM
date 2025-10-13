@@ -378,7 +378,7 @@ export default function ProposalDetailPage() {
           justifyContent: "center",
         }}
       >
-        <Spin size="large" tip="Đang tải thông tin đề xuất..." />
+        <Spin size="large" tip="Đang tải thông tin đề xuất..." fullscreen />
       </div>
     );
   if (!proposal)
@@ -444,85 +444,87 @@ export default function ProposalDetailPage() {
       <Card style={{ marginBottom: 24 }}>
         <Row gutter={24} align="middle">
           <Col flex="auto">
-            <Space direction="vertical" size="small">
+            <Space direction="vertical" className="w-full">
               <Title level={2}>
                 <FileTextOutlined /> {proposal.name}
               </Title>
-              <Space>
-                <Tag color={statusConfigFinal.color}>
-                  {statusConfigFinal.icon}{" "}
-                  <span style={{ marginLeft: 4 }}>
-                    {statusConfigFinal.text}
-                  </span>
-                </Tag>
-                <Text type="secondary">
-                  <CalendarOutlined /> Tạo lúc:{" "}
-                  {new Date(proposal.createdAt).toLocaleString("vi-VN")}
-                </Text>
-              </Space>
-            </Space>
-          </Col>
-          <Col flex="none">
-            <div className="gap-2">
-              <a
-                href={`/api/files/${proposalId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button type="primary" icon={<DownloadOutlined />}>
-                  Tải xuống
-                </Button>
-              </a>
+              <Col className="flex justify-between items-start w-full flex-wrap">
+                <Space className="h-16">
+                  <Tag color={statusConfigFinal.color}>
+                    {statusConfigFinal.icon}{" "}
+                    <span style={{ marginLeft: 4 }}>
+                      {statusConfigFinal.text}
+                    </span>
+                  </Tag>
+                  <Text type="secondary">
+                    <CalendarOutlined /> Tạo lúc:{" "}
+                    {new Date(proposal.createdAt).toLocaleString("vi-VN")}
+                  </Text>
+                </Space>
+                <Col flex="none" className="!p-0">
+                  <div className="gap-2">
+                    <a
+                      href={`/api/files/${proposalId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button type="primary" icon={<DownloadOutlined />}>
+                        Tải xuống
+                      </Button>
+                    </a>
 
-              {proposal.statusSign ? (
-                <Space style={{ marginTop: 8, marginLeft: 8 }}>
-                  <Button
-                    type="primary"
-                    loading={actionLoading}
-                    onClick={() => confirmAction("sign", "approved")}
-                  >
-                    Đồng ý
-                  </Button>
-                  <Button
-                    danger
-                    loading={actionLoading}
-                    onClick={() => confirmAction("sign", "rejected")}
-                  >
-                    Từ chối
-                  </Button>
-                </Space>
-              ) : (
-                ""
-              )}
-              {proposal.statusApprove ? (
-                <Space style={{ marginTop: 8, marginLeft: 8 }}>
-                  <Button
-                    type="primary"
-                    loading={actionLoading}
-                    onClick={() => confirmAction("approve", "approved")}
-                  >
-                    Đồng ý
-                  </Button>
-                  <Button
-                    danger
-                    loading={actionLoading}
-                    onClick={() => confirmAction("approve", "rejected")}
-                  >
-                    Từ chối
-                  </Button>
-                </Space>
-              ) : (
-                ""
-              )}
-            </div>
-            <div style={{ textAlign: "right", minWidth: 200 }}>
-              <Text strong>Tiến độ xử lý</Text>
-              <Progress
-                percent={progress.percent}
-                status={progress.status}
-                strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
-              />
-            </div>
+                    {proposal.statusSign ? (
+                      <Space style={{ marginTop: 8, marginLeft: 8 }}>
+                        <Button
+                          type="primary"
+                          loading={actionLoading}
+                          onClick={() => confirmAction("sign", "approved")}
+                        >
+                          Đồng ý
+                        </Button>
+                        <Button
+                          danger
+                          loading={actionLoading}
+                          onClick={() => confirmAction("sign", "rejected")}
+                        >
+                          Từ chối
+                        </Button>
+                      </Space>
+                    ) : (
+                      ""
+                    )}
+                    {proposal.statusApprove ? (
+                      <Space style={{ marginTop: 8, marginLeft: 8 }}>
+                        <Button
+                          type="primary"
+                          loading={actionLoading}
+                          onClick={() => confirmAction("approve", "approved")}
+                        >
+                          Đồng ý
+                        </Button>
+                        <Button
+                          danger
+                          loading={actionLoading}
+                          onClick={() => confirmAction("approve", "rejected")}
+                        >
+                          Từ chối
+                        </Button>
+                      </Space>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  <div style={{ textAlign: "right", minWidth: 200 }}>
+                    <Text strong>Tiến độ xử lý</Text>
+                    <Progress
+                      percent={progress.percent}
+                      status={progress.status}
+                      strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
+                    />
+                  </div>
+                </Col>
+              </Col>
+            </Space>
           </Col>
         </Row>
       </Card>
@@ -625,15 +627,17 @@ export default function ProposalDetailPage() {
               "proposer",
               proposal.currentStep.userId
             )}
-            {proposal.signers.map((s) =>
-              renderPersonCard(
-                s.signer,
-                "signer",
-                proposal.currentStep.userId,
-                s.status,
-                s.signedAt
-              )
-            )}
+            {proposal.signers.map((s) => (
+              <div key={s.signer.id}>
+                {renderPersonCard(
+                  s.signer,
+                  "signer",
+                  proposal.currentStep.userId,
+                  s.status,
+                  s.signedAt
+                )}
+              </div>
+            ))}
           </Card>
         </Col>
         <Col xs={24} md={12}>
@@ -645,15 +649,17 @@ export default function ProposalDetailPage() {
             }
             style={{ marginBottom: 24 }}
           >
-            {proposal.approvers.map((a) =>
-              renderPersonCard(
-                a.approver,
-                "approver",
-                proposal.currentStep.userId,
-                a.status,
-                a.approvedAt
-              )
-            )}
+            {proposal.approvers.map((a) => (
+              <div key={a.approver.id}>
+                {renderPersonCard(
+                  a.approver,
+                  "approver",
+                  proposal.currentStep.userId,
+                  a.status,
+                  a.approvedAt
+                )}
+              </div>
+            ))}
           </Card>
         </Col>
       </Row>

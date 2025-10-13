@@ -365,7 +365,12 @@ export default function ProposalCreator() {
     ? employees.map((user) => ({
         label: (
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Avatar size="small" src={user.avatar} icon={<UserOutlined />} />
+            <Avatar
+              size="small"
+              src={user.avatar}
+              icon={<UserOutlined />}
+              className="flex-shrink-0"
+            />
             <div>
               <div>{user.name}</div>
               <Text type="secondary" style={{ fontSize: 12 }}>

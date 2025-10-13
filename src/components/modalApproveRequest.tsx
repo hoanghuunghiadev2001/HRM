@@ -130,7 +130,7 @@ const ModalApproveRequest = ({
         }
       >
         {loading ? (
-          <Spin size="large" className="flex justify-center mt-10" />
+          <Spin size="large" className="flex justify-center mt-10" fullscreen />
         ) : (
           <div className="p-4 bg-white rounded-lg shadow">
             <h2 className="text-xl font-semibold mb-4">
