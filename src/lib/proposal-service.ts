@@ -775,9 +775,7 @@ export class ProposalService {
     try {
       const fileBuffer = await FileService.getFileBuffer(fileId);
       if (!fileBuffer) return null;
-      console.log(
-        `[Digital Signature] Placeholder signing for ${signerInfo.name} (${signatureType})`
-      );
+
       return fileBuffer;
     } catch (error) {
       console.error(

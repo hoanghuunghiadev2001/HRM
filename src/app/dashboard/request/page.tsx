@@ -150,8 +150,6 @@ export default function RequestPage() {
 
       const data = await res.json();
       if (!res.ok) {
-        console.log(res);
-
         message.error(data.message || "Gửi đơn nghỉ thất bại");
         messageApi.open({
           type: "error",

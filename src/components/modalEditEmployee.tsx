@@ -339,13 +339,11 @@ const ModalEditEmployee = ({
       const date = dayjs
         .utc(employeeInfo.workInfo?.joinedTBD)
         .tz("Asia/Ho_Chi_Minh");
-      console.log(date.format("DD/MM/YYYY"));
 
       form.setFieldsValue(transformEmployeeDataToFormData(employeeInfo));
       if (employeeInfo.workInfo?.department?.id) {
         setSelectedDepartmentId(employeeInfo.workInfo?.department?.id);
       }
-      console.log(employeeInfo.workInfo?.department?.id ?? 0);
     }
     setDepartments(department);
 

@@ -337,7 +337,6 @@ export default function ProposalCreator() {
         setTimeend(null);
         setLocation("");
         setProposalType("general");
-        console.log("Proposal created:", result);
         message.info("Email đã được gửi đến những người cần ký duyệt", 3);
       } else {
         message.error(result.error || "Có lỗi xảy ra khi tạo đề xuất");

@@ -89,14 +89,12 @@ export default function EmployeeList() {
   }));
 
   const onPageChange = (page: number, pageSizeEnter?: number) => {
-    console.log(page, pageSizeEnter);
-    
     if (pageSizeEnter) {
       setPageSize(pageSizeEnter);
-      fetchEmployees(pageSizeEnter, page );
+      fetchEmployees(pageSizeEnter, page);
     } else {
       setPageTable(page);
-      fetchEmployees(pageSize,page );
+      fetchEmployees(pageSize, page);
     }
   };
 
@@ -342,7 +340,6 @@ export default function EmployeeList() {
     setLoading(true);
     const res = await updateEmployee(employeeCode, infoEmployee);
     if (res.status === 1) {
-
       fetchEmployees(pageSize, pageTable);
       setModalEditEmployee(false);
       setLoading(false);
@@ -370,7 +367,7 @@ export default function EmployeeList() {
           {isActiveFilter ? "đã kích hoạt" : " chưa kích hoạt"}
         </Title>
         <Button
-          style={{ marginBottom: 16 , marginLeft: 16}}
+          style={{ marginBottom: 16, marginLeft: 16 }}
           onClick={() => setIsActiveFilter((prev) => !prev)}
         >
           Hiển thị nhân viên{" "}
@@ -435,7 +432,7 @@ export default function EmployeeList() {
           >
             <TreeSelect
               showSearch
-              style={{ width: '100%' }}
+              style={{ width: "100%" }}
               value={filterDepartment}
               styles={{
                 popup: { root: { maxHeight: 400, overflow: "auto" } },

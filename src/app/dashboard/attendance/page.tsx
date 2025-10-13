@@ -36,7 +36,6 @@ import { formatDateTime } from "@/utils/formatDateTime";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 
-
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -54,12 +53,11 @@ interface DataType {
   totalHours?: number;
 }
 
-
 export interface ImportHistory {
   id: number;
   filename: string;
   importedAt: string;
-  recordCount: number;  // sửa lại đúng tên recordCount (không phải totalRecords)
+  recordCount: number; // sửa lại đúng tên recordCount (không phải totalRecords)
   importedBy: ImportedBy | null;
 }
 
@@ -67,7 +65,6 @@ export interface ImportedBy {
   code: string;
   name: string;
 }
-
 
 const useStyle = createStyles((utils) => {
   const { css, token } = utils;
@@ -100,7 +97,9 @@ function getTodayVNDateString() {
 }
 
 export default function AttendancePage() {
-  const { role, department, departmentID, name, id } = useAppSelector((state) => state.user);
+  const { role, department, departmentID, name, id } = useAppSelector(
+    (state) => state.user
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState(10);
   const [pageTable, setPageTable] = useState(1);
@@ -216,9 +215,8 @@ export default function AttendancePage() {
     setLoading(true);
     const res = await fetchAttendances({
       msnv: filterMSNV,
-      name: role === "USER" ? name ?? '' : filterName,
-      department:
-        role === "ADMIN" ? filterDepartment : departmentID ?? '',
+      name: role === "USER" ? name ?? "" : filterName,
+      department: role === "ADMIN" ? filterDepartment : departmentID ?? "",
       fromDate: timeStart,
       toDate: timeEnd,
       page: pageTable,
@@ -296,9 +294,6 @@ export default function AttendancePage() {
     },
   };
 
-
-
-
   useEffect(() => {
     listDepartment();
     handleFetchAttendances(pageTable, pageSize);
@@ -329,22 +324,21 @@ export default function AttendancePage() {
     if (!dates || dates.length !== 2) return;
 
     // luôn ép sang VN timezone
-    const startDate = dayjs(dates[0]).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD");
+    const startDate = dayjs(dates[0])
+      .tz("Asia/Ho_Chi_Minh")
+      .format("YYYY-MM-DD");
     const endDate = dayjs(dates[1]).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD");
 
     setTimeStart(startDate);
     setTimeEnd(endDate);
-
-    console.log("Start:", startDate, "End:", endDate);
   };
-
 
   const handleExportExcel = async () => {
     const res = await fetch("/api/attendance/export", {
       method: "POST",
       body: JSON.stringify({
         week: todayVN,
-        department: role ? "" : department ?? '',
+        department: role ? "" : department ?? "",
       }),
       headers: { "Content-Type": "application/json" },
     });
@@ -372,7 +366,8 @@ export default function AttendancePage() {
       title: "Ngày import",
       dataIndex: "importedAt",
       width: "180px",
-      render: (value) => dayjs(value).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm"),
+      render: (value) =>
+        dayjs(value).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm"),
     },
     { title: "Số bản ghi", dataIndex: "recordCount", width: "100px" },
     {
@@ -426,8 +421,9 @@ export default function AttendancePage() {
                         <p className="hidden sm:block">Xuất file tuần này</p>
                       </Button>
                     </div>
-                  ) : ''}
-
+                  ) : (
+                    ""
+                  )}
                 </div>
 
                 {/* Bộ lọc + bảng danh sách giữ nguyên code cũ */}
@@ -435,7 +431,11 @@ export default function AttendancePage() {
                   <p className="font-bold  text-xl text-[#4a4a6a]">Tìm kiếm:</p>
                   <div className="grid grid-cols-2 md:flex md:items-center gap-4 mb-4 w-full mt-2 pl-0 md:px-4 flex-wrap">
                     {/* MSNV */}
-                    <div className={`${role === "USER" ? 'hidden' : ''} flex gap-2 items-center`}>
+                    <div
+                      className={`${
+                        role === "USER" ? "hidden" : ""
+                      } flex gap-2 items-center`}
+                    >
                       <Form.Item
                         layout="horizontal"
                         label={
@@ -457,7 +457,11 @@ export default function AttendancePage() {
                       </Form.Item>
                     </div>
                     {/* Tên NV */}
-                    <div className={`${role === "USER" ? 'hidden' : ''} flex gap-2 items-center`}>
+                    <div
+                      className={`${
+                        role === "USER" ? "hidden" : ""
+                      } flex gap-2 items-center`}
+                    >
                       <Form.Item
                         layout="horizontal"
                         label={
@@ -563,20 +567,20 @@ export default function AttendancePage() {
           },
           ...(role === "ADMIN"
             ? [
-              {
-                key: "2",
-                label: "Lịch sử import",
-                children: (
-                  <Table<ImportHistory>
-                    rowKey="id"
-                    columns={historyColumns}
-                    dataSource={importHistory}
-                    pagination={false}
-                    size="small"
-                  />
-                ),
-              },
-            ]
+                {
+                  key: "2",
+                  label: "Lịch sử import",
+                  children: (
+                    <Table<ImportHistory>
+                      rowKey="id"
+                      columns={historyColumns}
+                      dataSource={importHistory}
+                      pagination={false}
+                      size="small"
+                    />
+                  ),
+                },
+              ]
             : []),
         ]}
       />

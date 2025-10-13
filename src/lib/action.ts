@@ -95,7 +95,6 @@ export async function importEmployees(formData: FormData) {
     });
 
     // Log the first few rows to understand the structure
-    console.log("First 10 rows of Excel data:");
     rawData.slice(0, 10).forEach((row, index) => {
       console.log(`Row ${index + 1}:`, row);
     });
@@ -183,9 +182,6 @@ export async function importEmployees(formData: FormData) {
       .slice(headerRowIndex + 2)
       .filter((row) => row && row.length > 0 && row.some((cell) => cell));
 
-    console.log(`Found ${dataRows.length} data rows`);
-    console.log("First data row:", dataRows[0]);
-
     // Convert to objects using the headers
     const jsonData: ExcelRow[] = dataRows.map((row, index) => {
       const obj: ExcelRow = {};
@@ -200,11 +196,6 @@ export async function importEmployees(formData: FormData) {
 
       return obj;
     });
-
-    console.log("Sample processed data:");
-    console.log("Headers:", headers);
-    console.log("First data object:", jsonData[0]);
-    console.log("Available keys:", Object.keys(jsonData[0] || {}));
 
     const result = {
       success: 0,
@@ -231,7 +222,6 @@ export async function importEmployees(formData: FormData) {
       try {
         // Skip empty rows or rows without employee code
         if (Object.keys(row).length === 0) {
-          console.log(`Skipping row ${rowIndex} - no employee code`);
           continue;
         }
 
@@ -242,13 +232,7 @@ export async function importEmployees(formData: FormData) {
           getColumnValue(row, "Employee Code", "Code", "STT")?.toString();
 
         // Log available columns and the found employee code
-        console.log("Available columns:", Object.keys(row));
-        console.log(
-          "Found employee code:",
-          employeeCode,
-          "from column Mã NV:",
-          row["Mã NV "]
-        );
+
         const employeeName = getColumnValue(
           row,
           "Tên",
@@ -285,10 +269,6 @@ export async function importEmployees(formData: FormData) {
           }
           // If no dash, use the entire value as department (role remains USER)
         }
-
-        console.log(
-          `Department mapping: "${departmentValue}" -> Department: "${department}", Role: "${role}"`
-        );
 
         // Parse seniority from "X năm Y tháng" format
         const seniorityMonths = row["Thâm niên"];
@@ -327,10 +307,6 @@ export async function importEmployees(formData: FormData) {
         if (!employeeData.name || employeeData.name === "Unknown") {
           throw new Error("Tên nhân viên là bắt buộc");
         }
-
-        console.log(
-          `Processing employee: ${employeeData.employeeCode} - ${employeeData.name}`
-        );
 
         // Check if employee already exists
         const existingEmployee = await prisma.employee.findUnique({
@@ -436,7 +412,6 @@ export async function importEmployees(formData: FormData) {
           });
 
           result.updated++;
-          console.log(`Updated employee: ${employeeData.employeeCode}`);
         } else {
           // Create new employee with related information
           await prisma.employee.create({
@@ -459,7 +434,6 @@ export async function importEmployees(formData: FormData) {
           });
 
           result.created++;
-          console.log(`Created employee: ${employeeData.employeeCode}`);
         }
 
         result.success++;

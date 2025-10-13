@@ -184,10 +184,6 @@ const ModalDetailLeave = ({
       infoRequetLeave?.status === "pending") &&
     start &&
     start.isAfter(now);
-  useEffect(() => {
-    console.log(canRevoke);
-    console.log(start && start.isAfter(now));
-  }, []);
 
   return (
     <Drawer

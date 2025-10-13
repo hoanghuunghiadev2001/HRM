@@ -60,9 +60,6 @@ export async function POST(req: NextRequest) {
       departmentId: employee.workInfo?.departmentId || null, // 🔑 thêm dòng này
     };
 
-    console.log("11111"+employee.id);
-    
-
     const expiresIn = remember ? "7d" : "1d";
     const maxAge = remember ? 7 * 24 * 60 * 60 : 24 * 60 * 60;
 
@@ -71,7 +68,7 @@ export async function POST(req: NextRequest) {
     // ✅ Ghi token vào cookie
     (
       await // ✅ Ghi token vào cookie
-        cookies()
+      cookies()
     ).set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -80,7 +77,17 @@ export async function POST(req: NextRequest) {
       path: "/",
     });
 
-    return NextResponse.json({ success: true, name: employee.name, avt: employee.avatar, role: employee.role, id: employee.id, employeeCode: employee.employeeCode, department: employee.workInfo?.department?.name, position: employee.workInfo?.position?.name, departmentID: employee.workInfo?.departmentId });
+    return NextResponse.json({
+      success: true,
+      name: employee.name,
+      avt: employee.avatar,
+      role: employee.role,
+      id: employee.id,
+      employeeCode: employee.employeeCode,
+      department: employee.workInfo?.department?.name,
+      position: employee.workInfo?.position?.name,
+      departmentID: employee.workInfo?.departmentId,
+    });
   } catch (err) {
     console.error("Login error:", err);
     return NextResponse.json(

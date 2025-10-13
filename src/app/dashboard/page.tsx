@@ -36,13 +36,13 @@ const Profile = () => {
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
 
-
   function formatSeniorityText(months: number): string {
     const years = Math.floor(months / 12);
     const m = months % 12;
     return (
-      `${years > 0 ? `${years} năm ` : ""}${m > 0 ? `${m} tháng` : ""
-        }`.trim() || "0 tháng"
+      `${years > 0 ? `${years} năm ` : ""}${
+        m > 0 ? `${m} tháng` : ""
+      }`.trim() || "0 tháng"
     );
   }
   function handleDateChange(date: dayjs.Dayjs | null): number {
@@ -69,7 +69,6 @@ const Profile = () => {
       }
 
       // Handle user response if needed
-      console.log("User data fetched concurrently");
     } catch (error) {
       console.error("Error fetching data:", error);
       message.error("Có lỗi xảy ra khi tải dữ liệu");
@@ -106,10 +105,10 @@ const Profile = () => {
     if (dataProfile) {
       // Set giá trị ban đầu cho form
       form.setFieldsValue({
-        phoneNumber: dataProfile?.contactInfo?.phoneNumber ?? '',
-        relativePhone: dataProfile?.contactInfo?.relativePhone ?? '',
-        companyPhone: dataProfile?.contactInfo?.companyPhone ?? '',
-        email: dataProfile?.contactInfo?.email ?? '',
+        phoneNumber: dataProfile?.contactInfo?.phoneNumber ?? "",
+        relativePhone: dataProfile?.contactInfo?.relativePhone ?? "",
+        companyPhone: dataProfile?.contactInfo?.companyPhone ?? "",
+        email: dataProfile?.contactInfo?.email ?? "",
       });
 
       setImageUrl(dataProfile?.avatar);
@@ -169,7 +168,7 @@ const Profile = () => {
       });
 
       if (req.ok) {
-        dispatch(setUserAvatar(avt)) // nên là URL
+        dispatch(setUserAvatar(avt)); // nên là URL
 
         // Thực hiện các operations sau update song song
         await Promise.all([
@@ -300,7 +299,7 @@ const Profile = () => {
           <InfoPersonal titleValue="Mã NV" value={dataProfile?.employeeCode} />
           <InfoPersonal
             titleValue="Bộ phận"
-            value={dataProfile?.workInfo?.department?.name ?? 'Chưa cập nhật'}
+            value={dataProfile?.workInfo?.department?.name ?? "Chưa cập nhật"}
           />
           <InfoPersonal
             titleValue="Chức vụ"
@@ -377,7 +376,6 @@ const Profile = () => {
           </Form.Item>
           <Form.Item
             name="companyPhone"
-
             label={
               <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
                 SĐT công ty
@@ -430,7 +428,11 @@ const Profile = () => {
           />
           <InfoPersonal
             titleValue="Thâm niên"
-            value={formatSeniorityText(handleDateChange(dayjs(dataProfile?.workInfo?.seniorityStart, "DD/MM/YYYY")))}
+            value={formatSeniorityText(
+              handleDateChange(
+                dayjs(dataProfile?.workInfo?.seniorityStart, "DD/MM/YYYY")
+              )
+            )}
           />
           <InfoPersonal
             titleValue="Số hợp đồng"
@@ -501,8 +503,8 @@ const Profile = () => {
               dataProfile?.otherInfo?.workStatus === "OFFICIAL"
                 ? "Chính thức"
                 : dataProfile?.otherInfo?.workStatus === "PROBATION"
-                  ? "Thử việc"
-                  : "Nghỉ việc"
+                ? "Thử việc"
+                : "Nghỉ việc"
             }
           />
           <InfoPersonal
