@@ -97,7 +97,7 @@ export class ProposalService {
     try {
       const proposal = await prisma.proposal.findUnique({
         where: { id: proposalId },
-        include: this.getFullIncludeObject(),
+        include: this.getLightIncludeObject(),
       });
 
       if (!proposal) {
@@ -634,6 +634,59 @@ export class ProposalService {
               contactInfo: true,
               workInfo: {
                 include: { position: true, department: true },
+              },
+            },
+          },
+        },
+      },
+    };
+  }
+
+  static getLightIncludeObject() {
+    return {
+      file: {
+        select: { id: true, filename: true, mimeType: true },
+      },
+      proposer: {
+        select: {
+          id: true,
+          name: true,
+          contactInfo: { select: { email: true } },
+          workInfo: {
+            select: {
+              position: { select: { name: true } },
+              department: { select: { name: true } },
+            },
+          },
+        },
+      },
+      signers: {
+        include: {
+          signer: {
+            select: {
+              id: true,
+              name: true,
+              workInfo: {
+                select: {
+                  position: { select: { name: true } },
+                  department: { select: { name: true } },
+                },
+              },
+            },
+          },
+        },
+      },
+      approvers: {
+        include: {
+          approver: {
+            select: {
+              id: true,
+              name: true,
+              workInfo: {
+                select: {
+                  position: { select: { name: true } },
+                  department: { select: { name: true } },
+                },
               },
             },
           },
