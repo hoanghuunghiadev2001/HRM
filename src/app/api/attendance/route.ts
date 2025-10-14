@@ -9,26 +9,23 @@ import timezone from "dayjs/plugin/timezone";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
+dayjs.tz.setDefault("Asia/Ho_Chi_Minh");
 
-function parseDateVN(dateStr?: string, endOfDay = false): Date | undefined {
+// ⚙️ Hàm chuyển đổi ngày tìm kiếm theo múi giờ VN → UTC tương ứng
+function getUtcRange(dateStr?: string, endOfDay = false): Date | undefined {
   if (!dateStr) return undefined;
-  const parts = dateStr.split("/");
-  if (parts.length === 3) {
-    const [day, month, year] = parts.map(Number);
-    const d = dayjs.tz(
-      `${year}-${month}-${day} ${endOfDay ? "23:59:59" : "00:00:00"}`,
-      "YYYY-M-D HH:mm:ss",
-      "Asia/Ho_Chi_Minh"
-    );
-    return d.utc().toDate();
-  }
-  const d = dayjs.tz(dateStr, "Asia/Ho_Chi_Minh");
-  return endOfDay ? d.endOf("day").utc().toDate() : d.startOf("day").utc().toDate();
+  const d = dayjs.tz(
+    `${dateStr} ${endOfDay ? "23:59:59" : "00:00:00"}`,
+    "Asia/Ho_Chi_Minh"
+  );
+  return d.utc().toDate();
 }
 
 function calcHours(checkIn: Date | null, checkOut: Date | null): number {
   if (!checkIn || !checkOut) return 0;
-  return +((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60)).toFixed(2);
+  return +((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60)).toFixed(
+    2
+  );
 }
 
 export async function GET(req: NextRequest) {
@@ -38,46 +35,59 @@ export async function GET(req: NextRequest) {
     const msnv = searchParams.get("msnv") ?? undefined;
     const name = searchParams.get("name") ?? undefined;
     const department = searchParams.get("department") ?? undefined;
-    const fromDate = parseDateVN(searchParams.get("fromDate") ?? undefined);
-    const toDate = parseDateVN(searchParams.get("toDate") ?? undefined, true);
+    const fromDate = searchParams.get("fromDate") ?? undefined;
+    const toDate = searchParams.get("toDate") ?? undefined;
     const page = parseInt(searchParams.get("page") ?? "1", 10);
     const pageSize = parseInt(searchParams.get("pageSize") ?? "20", 10);
 
-    // 1️⃣ Lấy danh sách employeeId theo filter
+    // Tạo range UTC tương ứng với ngày ở VN
+    const fromUtc = fromDate ? getUtcRange(fromDate, false) : undefined;
+    const toUtc = toDate ? getUtcRange(toDate, true) : undefined;
+
+    // 1️⃣ Lấy danh sách nhân viên theo bộ lọc
     const employeeWhere: Prisma.EmployeeWhereInput = {};
     if (msnv) employeeWhere.employeeCode = { contains: msnv };
     if (name) employeeWhere.name = { contains: name };
     if (department) {
-      const parts = department.split("-");
-      const departmentId = parts[0] ? parseInt(parts[0], 10) : undefined;
-      const positionId = parts[1] ? parseInt(parts[1], 10) : undefined;
+      const [deptId, posId] = department.split("-").map(Number);
       employeeWhere.workInfo = {
-        ...(departmentId && { departmentId }),
-        ...(positionId && { positionId }),
+        ...(deptId ? { departmentId: deptId } : {}),
+        ...(posId ? { positionId: posId } : {}),
       };
     }
 
     const employees = await prisma.employee.findMany({
       where: employeeWhere,
-      select: { id: true, employeeCode: true, name: true, avatar: true, workInfo: { select: { department: { select: { name: true } }, position: { select: { name: true } } } } } 
+      select: {
+        id: true,
+        employeeCode: true,
+        name: true,
+        avatar: true,
+        workInfo: {
+          select: {
+            department: { select: { name: true } },
+            position: { select: { name: true } },
+          },
+        },
+      },
     });
-    const employeeMap = new Map(employees.map(e => [e.id, e]));
 
     if (employees.length === 0) {
       return NextResponse.json({ total: 0, page, pageSize, data: [] });
     }
 
-    const employeeIds = employees.map(e => e.id);
+    const employeeMap = new Map(employees.map((e) => [e.id, e]));
+    const employeeIds = employees.map((e) => e.id);
 
-    // 2️⃣ Lấy Attendance theo employeeId và date
+    // 2️⃣ Lọc Attendance theo employeeId + ngày UTC
     const attendanceWhere: Prisma.AttendanceWhereInput = {
       employeeId: { in: employeeIds },
-      ...(fromDate && toDate
-        ? { date: { gte: fromDate, lte: toDate } }
-        : fromDate
-        ? { date: { gte: fromDate } }
-        : toDate
-        ? { date: { lte: toDate } }
+      ...(fromUtc && toUtc
+        ? { date: { gte: fromUtc, lte: toUtc } }
+        : fromUtc
+        ? { date: { gte: fromUtc } }
+        : toUtc
+        ? { date: { lte: toUtc } }
         : {}),
     };
 
@@ -86,7 +96,7 @@ export async function GET(req: NextRequest) {
       orderBy: { date: "asc" },
     });
 
-    // 3️⃣ Gom nhóm theo employeeId + date
+    // 3️⃣ Gom nhóm theo employeeId + ngày (theo giờ VN)
     const grouped = new Map<
       string,
       {
@@ -103,9 +113,12 @@ export async function GET(req: NextRequest) {
       }
     >();
 
-    attendances.forEach(att => {
+    attendances.forEach((att) => {
       const emp = employeeMap.get(att.employeeId)!;
-      const dateVN = dayjs(att.date).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD");
+      // Lấy ngày theo giờ VN
+      const dateVN = dayjs(att.date)
+        .tz("Asia/Ho_Chi_Minh")
+        .format("YYYY-MM-DD");
       const key = `${att.employeeId}-${dateVN}`;
 
       if (!grouped.has(key)) {
@@ -123,22 +136,26 @@ export async function GET(req: NextRequest) {
         });
       }
 
-      const group = grouped.get(key)!;
-
-      if (att.checkInTime && (!group.firstCheckIn || att.checkInTime < group.firstCheckIn)) {
-        group.firstCheckIn = att.checkInTime;
+      const g = grouped.get(key)!;
+      if (
+        att.checkInTime &&
+        (!g.firstCheckIn || att.checkInTime < g.firstCheckIn)
+      ) {
+        g.firstCheckIn = att.checkInTime;
       }
-
-      if (att.checkOutTime && (!group.lastCheckOut || att.checkOutTime > group.lastCheckOut)) {
-        group.lastCheckOut = att.checkOutTime;
+      if (
+        att.checkOutTime &&
+        (!g.lastCheckOut || att.checkOutTime > g.lastCheckOut)
+      ) {
+        g.lastCheckOut = att.checkOutTime;
       }
-
       if (att.checkInTime && att.checkOutTime) {
-        group.totalMs += att.checkOutTime.getTime() - att.checkInTime.getTime();
+        g.totalMs += att.checkOutTime.getTime() - att.checkInTime.getTime();
       }
     });
 
-    const summary = Array.from(grouped.values()).map(g => ({
+    // 4️⃣ Kết quả cuối cùng
+    const summary = Array.from(grouped.values()).map((g) => ({
       employeeId: g.employeeId,
       employeeCode: g.employeeCode,
       avatar: g.avatar,
@@ -146,8 +163,16 @@ export async function GET(req: NextRequest) {
       department: g.department,
       position: g.position,
       date: g.date,
-      firstCheckIn: g.firstCheckIn?.toISOString() ?? null,
-      lastCheckOut: g.lastCheckOut?.toISOString() ?? null,
+      firstCheckIn: g.firstCheckIn
+        ? dayjs(g.firstCheckIn)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("YYYY-MM-DD HH:mm:ss")
+        : null,
+      lastCheckOut: g.lastCheckOut
+        ? dayjs(g.lastCheckOut)
+            .tz("Asia/Ho_Chi_Minh")
+            .format("YYYY-MM-DD HH:mm:ss")
+        : null,
       totalHours: calcHours(g.firstCheckIn, g.lastCheckOut),
     }));
 
@@ -162,7 +187,7 @@ export async function GET(req: NextRequest) {
       data: pagedSummary,
     });
   } catch (error) {
-    console.error("Error fetching attendance summary:", error);
+    console.error("❌ Error fetching attendance summary:", error);
     return NextResponse.json({ message: "Lỗi máy chủ" }, { status: 500 });
   }
 }

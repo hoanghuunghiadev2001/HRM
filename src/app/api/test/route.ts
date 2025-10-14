@@ -1,46 +1,43 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
-import PizZip from "pizzip";
-import Docxtemplater from "docxtemplater";
-import fs from "fs";
-import path from "path";
+import ZKLib from "node-zklib";
+
+const ZK_IP = "192.168.48.49"; // IP máy chấm công
+const ZK_PORT = 4370; // Port mặc định
 
 export async function GET() {
+  const zk = new ZKLib(ZK_IP, ZK_PORT, 10000, 4000);
+
   try {
-    const filePath = path.join(process.cwd(), "templates", "test.docx");
-    const content = fs.readFileSync(filePath, "binary");
+    await zk.createSocket();
 
-    const zip = new PizZip(content);
-    const doc = new Docxtemplater(zip, {
-      paragraphLoop: true,
-      linebreaks: true,
+    const deviceInfo = await zk.getInfo();
+    const logs = await zk.getAttendances();
+
+    await zk.disconnect();
+
+    // 🧠 Lấy ngày hiện tại (theo múi giờ hệ thống)
+    const today = new Date();
+    const todayString = today.toISOString().split("T")[0]; // "2025-10-14"
+
+    // 🧩 Lọc log có ngày = hôm nay
+    const todayLogs = logs.data.filter((log: any) => {
+      if (!log.recordTime) return false;
+      const logDate = new Date(log.recordTime).toISOString().split("T")[0];
+      return logDate === todayString;
     });
 
-    doc.render({
-      username: "Hoàng Hữu Nghĩa",
+    return NextResponse.json({
+      success: true,
+      message: "Kết nối thành công!",
+      device: deviceInfo,
+      logs: todayLogs,
     });
-
-    // Node Buffer
-    const buffer = doc.getZip().generate({
-      type: "nodebuffer",
+  } catch (err: any) {
+    console.error("❌ Lỗi kết nối:", err);
+    return NextResponse.json({
+      success: false,
+      error: err.message || err.toString(),
     });
-
-    // ✅ Chuyển Node Buffer -> Uint8Array
-    const uint8Array = new Uint8Array(buffer);
-
-    return new NextResponse(uint8Array, {
-      status: 200,
-      headers: {
-        "Content-Disposition": `attachment; filename="output.docx"`,
-        "Content-Type":
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      },
-    });
-  } catch (error: any) {
-    console.error("generateDocxFromTemplate error:", error);
-    return NextResponse.json(
-      { error: "Failed to generate DOCX", details: error.message },
-      { status: 500 }
-    );
   }
 }

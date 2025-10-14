@@ -15,7 +15,6 @@ export async function POST(request: NextRequest) {
     const signerIds = JSON.parse(formData.get("signerIds") as string);
     const approverIds = JSON.parse(formData.get("approverIds") as string);
     const file = formData.get("file") as File | null;
-    console.log(file);
 
     const token = request.cookies.get("token")?.value;
 
@@ -30,7 +29,6 @@ export async function POST(request: NextRequest) {
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
       employeeId = decoded.id;
-      console.log("Employee ID from token:", employeeId);
     } catch (err) {
       console.error("Token verification error:", err);
       return NextResponse.json(
@@ -108,7 +106,6 @@ export async function GET(request: NextRequest) {
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
       employeeId = decoded.id;
-      console.log("Employee ID from token:", employeeId);
     } catch (err) {
       console.error("Token verification error:", err);
       return NextResponse.json(

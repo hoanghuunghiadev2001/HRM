@@ -95,9 +95,7 @@ export default function ClientDashboard({
       setLoading(false);
     }
   };
-  useEffect(() => {
-    console.log(isAdmin);
-  });
+  useEffect(() => {});
   // Khai báo menu
   const Menus: MenuItem[] = [
     { key: "/dashboard", icon: <UserRoundPen />, label: "Hồ sơ" },

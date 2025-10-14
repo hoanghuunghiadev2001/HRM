@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // /app/api/leave/my-requests/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
@@ -132,7 +133,6 @@ export async function PUT(req: NextRequest) {
 
     const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
     const userId = decoded.id;
-    console.log(userId);
 
     const body = await req.json();
     const { leaveRequestId } = body;
