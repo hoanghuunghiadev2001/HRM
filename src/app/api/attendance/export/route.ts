@@ -1,34 +1,38 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "server-only";
 import { NextRequest, NextResponse } from "next/server";
-import { format, startOfWeek, addDays, isWithinInterval } from "date-fns";
 import ExcelJS from "exceljs";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import isBetween from "dayjs/plugin/isBetween";
 import { prisma } from "@/lib/prisma";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(isBetween);
+
+const TIME_ZONE = "Asia/Ho_Chi_Minh";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { week, department } = body;
 
-    if (!week) {
+    if (!week)
       return NextResponse.json(
         { error: "Thiếu ngày bắt đầu tuần" },
         { status: 400 }
       );
-    }
 
-    const startDate = new Date(week);
-    const monday = startOfWeek(startDate, { weekStartsOn: 1 });
-    const saturday = addDays(monday, 5);
+    const monday = dayjs(week).tz(TIME_ZONE).startOf("week").add(1, "day");
+    const saturday = monday.add(5, "day");
 
-    // Lấy danh sách nhân viên
     const employees = await prisma.employee.findMany({
       where: {
         otherInfo: { workStatus: { not: "RESIGNED" } },
         ...(department
-          ? {
-              workInfo: { departmentId: Number(department) },
-            }
+          ? { workInfo: { departmentId: Number(department) } }
           : {}),
       },
       include: {
@@ -36,28 +40,39 @@ export async function POST(req: NextRequest) {
         LeaveRequest: {
           where: {
             status: "approved",
-            OR: [{ startDate: { lte: saturday }, endDate: { gte: monday } }],
+            OR: [
+              {
+                startDate: { lte: saturday.toDate() },
+                endDate: { gte: monday.toDate() },
+              },
+            ],
           },
         },
       },
     });
 
-    if (employees.length === 0) {
+    if (!employees.length)
       return NextResponse.json(
         { error: "Không có nhân viên nào trong phòng ban" },
         { status: 404 }
       );
-    }
 
-    // Lấy tất cả attendance của các nhân viên trong tuần
     const attendances = await prisma.attendance.findMany({
       where: {
-        employeeId: { in: employees.map(e => e.id) },
-        date: { gte: monday, lte: saturday },
+        employeeId: { in: employees.map((e) => e.id) },
+        date: { gte: monday.toDate(), lte: saturday.toDate() },
       },
     });
 
-    // Gom nhóm nhân viên theo bộ phận
+    // Map lookup nhanh
+    const attendanceMap: Record<string, any> = {};
+    attendances.forEach((att) => {
+      const key = `${att.employeeId}-${dayjs(att.date)
+        .tz(TIME_ZONE)
+        .format("YYYY-MM-DD")}`;
+      attendanceMap[key] = att;
+    });
+
     const grouped: Record<string, typeof employees> = {};
     for (const emp of employees) {
       const depName = emp.workInfo?.department?.name || "Không xác định";
@@ -70,76 +85,91 @@ export async function POST(req: NextRequest) {
     for (const [depName, empList] of Object.entries(grouped)) {
       const ws = workbook.addWorksheet(depName);
 
-      // Tiêu đề cột
-      ws.addRow([
+      const header = [
         "Mã NV",
         "Tên NV",
         "Bộ phận",
         ...Array.from({ length: 6 }, (_, i) => {
-          const d = addDays(monday, i);
-          return `${format(d, "dd/MM")} (${["T2", "T3", "T4", "T5", "T6", "T7"][i]})`;
+          const d = monday.add(i, "day");
+          return `${d.format("DD/MM")} (${
+            ["T2", "T3", "T4", "T5", "T6", "T7"][i]
+          })`;
         }),
         "Số ngày đi làm",
         "Số ngày nghỉ có phép",
         "Số ngày nghỉ không phép",
-      ]).font = { bold: true };
+      ];
+      ws.addRow(header).font = { bold: true };
+      ws.columns.forEach((col) => (col.width = 18));
 
       for (const emp of empList) {
         const row: (string | null)[] = [emp.employeeCode, emp.name, depName];
-        const cellStyles: { style?: Partial<ExcelJS.Style> }[] = [{}, {}, {}];
-
         let countPresent = 0;
         let countLeave = 0;
         let countAbsent = 0;
 
         for (let i = 0; i < 6; i++) {
-          const date = addDays(monday, i);
+          const date = monday.add(i, "day");
+          const dateStr = date.format("YYYY-MM-DD");
 
-          // Attendance của nhân viên ngày đó
-          const att = attendances.find(
-            a => a.employeeId === emp.id && a.date.toDateString() === date.toDateString()
+          const att = attendanceMap[`${emp.id}-${dateStr}`];
+
+          const leave = emp.LeaveRequest.find((lr) =>
+            date.isBetween(
+              dayjs(lr.startDate).tz(TIME_ZONE, true),
+              dayjs(lr.endDate).tz(TIME_ZONE, true),
+              "day",
+              "[]"
+            )
           );
 
-          // Đơn nghỉ ngày đó
-          const leave = emp.LeaveRequest.find(lr =>
-            isWithinInterval(date, { start: lr.startDate, end: lr.endDate })
-          );
-
-          const inTime = att?.checkInTime ? format(att.checkInTime, "HH:mm") : null;
-          const outTime = att?.checkOutTime ? format(att.checkOutTime, "HH:mm") : null;
-
-          if (inTime && outTime) {
+          if (att?.checkInTime || att?.checkOutTime) {
+            // có ít nhất giờ vào hoặc giờ ra
+            const inTime = att.checkInTime
+              ? dayjs(att.checkInTime).tz(TIME_ZONE).format("HH:mm")
+              : "--:--";
+            const outTime = att.checkOutTime
+              ? dayjs(att.checkOutTime).tz(TIME_ZONE).format("HH:mm")
+              : "--:--";
             row.push(`${inTime} → ${outTime}`);
-            cellStyles.push({});
             countPresent++;
           } else if (leave) {
             row.push(leave.leaveType);
-            cellStyles.push({ style: { font: { color: { argb: "FFFF9900" } } } });
             countLeave++;
           } else {
             row.push("Nghỉ không phép");
-            cellStyles.push({ style: { font: { color: { argb: "FFFF0000" } } } });
             countAbsent++;
           }
         }
 
-        row.push(countPresent.toString(), countLeave.toString(), countAbsent.toString());
+        row.push(
+          countPresent.toString(),
+          countLeave.toString(),
+          countAbsent.toString()
+        );
         const newRow = ws.addRow(row);
 
-        cellStyles.forEach((s, idx) => {
-          if (s.style) newRow.getCell(idx + 1).style = s.style;
-        });
+        for (let i = 3; i < 9; i++) {
+          const cell = newRow.getCell(i + 1);
+          if (cell.value === "Nghỉ không phép") {
+            cell.font = { color: { argb: "FFFF0000" } }; // đỏ
+          } else if (
+            emp.LeaveRequest.some((lr) => cell.value === lr.leaveType)
+          ) {
+            cell.font = { color: { argb: "FFFF9900" } }; // cam
+          }
+        }
       }
-
-      ws.columns.forEach(col => { col.width = 18; });
     }
 
     const buffer = await workbook.xlsx.writeBuffer();
-
     return new NextResponse(buffer, {
       headers: {
-        "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "Content-Disposition": `attachment; filename=attendance_report_${format(monday, "yyyyMMdd")}.xlsx`,
+        "Content-Type":
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "Content-Disposition": `attachment; filename=attendance_report_${monday.format(
+          "YYYYMMDD"
+        )}.xlsx`,
       },
     });
   } catch (error) {

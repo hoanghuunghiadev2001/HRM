@@ -98,17 +98,27 @@ function filterDuplicateLogs(logs: { time: Date }[]) {
  */
 async function findEmployeeByDeviceId(rawUserId: string, maxCodeLen: number) {
   const numeric = parseInt(rawUserId, 10);
-  const candidates = new Set<string>([rawUserId]);
+  const candidates = new Set<string>();
 
+  // 1️⃣ Thêm chính rawUserId
+  if (rawUserId) candidates.add(rawUserId);
+
+  // 2️⃣ Nếu là số, thêm dạng không 0 đầu và có 0 đầu đủ maxCodeLen
   if (!Number.isNaN(numeric)) {
-    candidates.add(String(numeric));
-    if (maxCodeLen > 0)
-      candidates.add(String(numeric).padStart(maxCodeLen, "0"));
+    candidates.add(String(numeric)); // dạng số thực tế
+    if (maxCodeLen > 0) {
+      candidates.add(String(numeric).padStart(maxCodeLen, "0")); // dạng 0 đầu đủ
+    }
   }
+
+  // 3️⃣ Luôn thêm dạng 5 ký tự có 0 đầu
   candidates.add(rawUserId.padStart(5, "0"));
 
+  // 4️⃣ Tìm employeeCode trong DB
   return prisma.employee.findFirst({
-    where: { employeeCode: { in: Array.from(candidates) } },
+    where: {
+      employeeCode: { in: Array.from(candidates) },
+    },
   });
 }
 
@@ -277,16 +287,32 @@ export async function GET(req: Request) {
 
     // Tính giờ vào / ra
     const earliestIn = filtered[0].time;
-    const latestOut =
+    let latestOut =
       filtered.length > 1 ? filtered[filtered.length - 1].time : undefined;
+
+    // Nếu giờ ra cách giờ vào dưới 5 phút thì bỏ giờ ra
+    if (latestOut) {
+      const diffMinutes = (latestOut.getTime() - earliestIn.getTime()) / 60000;
+      if (diffMinutes < 5) {
+        latestOut = undefined; // hoặc null
+      }
+    }
+
     const totalMs = latestOut ? latestOut.getTime() - earliestIn.getTime() : 0;
     const totalHours =
       totalMs > 0 ? Math.round((totalMs / 3600000) * 100) / 100 : 0;
 
-    const attendanceDateUTC = dayjs(earliestIn).utc().startOf("day").toDate();
+    const attendanceDateVN = dayjs(earliestIn)
+      .tz(TIME_ZONE)
+      .hour(8) // đặt giờ 08:00
+      .minute(0)
+      .second(0)
+      .millisecond(0)
+      .toDate();
+
     const updated = await upsertAttendance(
       emp.id,
-      attendanceDateUTC,
+      attendanceDateVN,
       earliestIn,
       latestOut,
       totalHours
