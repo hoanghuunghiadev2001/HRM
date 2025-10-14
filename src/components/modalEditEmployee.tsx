@@ -336,10 +336,6 @@ const ModalEditEmployee = ({
     if (isMounted && employeeInfo && open) {
       setImageUrl(employeeInfo.avatar);
 
-      const date = dayjs
-        .utc(employeeInfo.workInfo?.joinedTBD)
-        .tz("Asia/Ho_Chi_Minh");
-
       form.setFieldsValue(transformEmployeeDataToFormData(employeeInfo));
       if (employeeInfo.workInfo?.department?.id) {
         setSelectedDepartmentId(employeeInfo.workInfo?.department?.id);
