@@ -54,7 +54,6 @@ model Employee {
 
   @@index([employeeCode])
   @@index([managerId])
-  Attendance Attendance[]
 }
 
 model Department {
@@ -132,6 +131,7 @@ model ContactInfo {
   companyPhone  String?
   email         String?
   employeeId    Int      @unique
+  zalo_user_id  String?  @unique(map: "zalo_user_id") @db.VarChar(255)
   employee      Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 }
 
@@ -208,7 +208,6 @@ model AttendanceImportLog {
 model Attendance {
   id           Int                  @id @default(autoincrement())
   employeeId   Int
-  employee     Employee             @relation(fields: [employeeId], references: [id])  // <-- thêm
   date         DateTime             @db.Date
   checkInTime  DateTime?
   checkOutTime DateTime?

@@ -2484,7 +2484,6 @@ export namespace Prisma {
     proposalsProposed: number
     proposalApprovals: number
     proposalSignatures: number
-    Attendance: number
   }
 
   export type EmployeeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2497,7 +2496,6 @@ export namespace Prisma {
     proposalsProposed?: boolean | EmployeeCountOutputTypeCountProposalsProposedArgs
     proposalApprovals?: boolean | EmployeeCountOutputTypeCountProposalApprovalsArgs
     proposalSignatures?: boolean | EmployeeCountOutputTypeCountProposalSignaturesArgs
-    Attendance?: boolean | EmployeeCountOutputTypeCountAttendanceArgs
   }
 
   // Custom InputTypes
@@ -2572,13 +2570,6 @@ export namespace Prisma {
    */
   export type EmployeeCountOutputTypeCountProposalSignaturesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProposalSignerWhereInput
-  }
-
-  /**
-   * EmployeeCountOutputType without action
-   */
-  export type EmployeeCountOutputTypeCountAttendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AttendanceWhereInput
   }
 
 
@@ -4141,7 +4132,6 @@ export namespace Prisma {
     proposalApprovals?: boolean | Employee$proposalApprovalsArgs<ExtArgs>
     proposalSignatures?: boolean | Employee$proposalSignaturesArgs<ExtArgs>
     workInfo?: boolean | Employee$workInfoArgs<ExtArgs>
-    Attendance?: boolean | Employee$AttendanceArgs<ExtArgs>
     _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["employee"]>
 
@@ -4180,7 +4170,6 @@ export namespace Prisma {
     proposalApprovals?: boolean | Employee$proposalApprovalsArgs<ExtArgs>
     proposalSignatures?: boolean | Employee$proposalSignaturesArgs<ExtArgs>
     workInfo?: boolean | Employee$workInfoArgs<ExtArgs>
-    Attendance?: boolean | Employee$AttendanceArgs<ExtArgs>
     _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -4203,7 +4192,6 @@ export namespace Prisma {
       proposalApprovals: Prisma.$ProposalApproverPayload<ExtArgs>[]
       proposalSignatures: Prisma.$ProposalSignerPayload<ExtArgs>[]
       workInfo: Prisma.$WorkInfoPayload<ExtArgs> | null
-      Attendance: Prisma.$AttendancePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -4574,7 +4562,6 @@ export namespace Prisma {
     proposalApprovals<T extends Employee$proposalApprovalsArgs<ExtArgs> = {}>(args?: Subset<T, Employee$proposalApprovalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalApproverPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     proposalSignatures<T extends Employee$proposalSignaturesArgs<ExtArgs> = {}>(args?: Subset<T, Employee$proposalSignaturesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalSignerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     workInfo<T extends Employee$workInfoArgs<ExtArgs> = {}>(args?: Subset<T, Employee$workInfoArgs<ExtArgs>>): Prisma__WorkInfoClient<$Result.GetResult<Prisma.$WorkInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    Attendance<T extends Employee$AttendanceArgs<ExtArgs> = {}>(args?: Subset<T, Employee$AttendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5305,30 +5292,6 @@ export namespace Prisma {
      */
     include?: WorkInfoInclude<ExtArgs> | null
     where?: WorkInfoWhereInput
-  }
-
-  /**
-   * Employee.Attendance
-   */
-  export type Employee$AttendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Attendance
-     */
-    select?: AttendanceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Attendance
-     */
-    omit?: AttendanceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AttendanceInclude<ExtArgs> | null
-    where?: AttendanceWhereInput
-    orderBy?: AttendanceOrderByWithRelationInput | AttendanceOrderByWithRelationInput[]
-    cursor?: AttendanceWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
   }
 
   /**
@@ -9674,6 +9637,7 @@ export namespace Prisma {
     companyPhone: string | null
     email: string | null
     employeeId: number | null
+    zalo_user_id: string | null
   }
 
   export type ContactInfoMaxAggregateOutputType = {
@@ -9683,6 +9647,7 @@ export namespace Prisma {
     companyPhone: string | null
     email: string | null
     employeeId: number | null
+    zalo_user_id: string | null
   }
 
   export type ContactInfoCountAggregateOutputType = {
@@ -9692,6 +9657,7 @@ export namespace Prisma {
     companyPhone: number
     email: number
     employeeId: number
+    zalo_user_id: number
     _all: number
   }
 
@@ -9713,6 +9679,7 @@ export namespace Prisma {
     companyPhone?: true
     email?: true
     employeeId?: true
+    zalo_user_id?: true
   }
 
   export type ContactInfoMaxAggregateInputType = {
@@ -9722,6 +9689,7 @@ export namespace Prisma {
     companyPhone?: true
     email?: true
     employeeId?: true
+    zalo_user_id?: true
   }
 
   export type ContactInfoCountAggregateInputType = {
@@ -9731,6 +9699,7 @@ export namespace Prisma {
     companyPhone?: true
     email?: true
     employeeId?: true
+    zalo_user_id?: true
     _all?: true
   }
 
@@ -9827,6 +9796,7 @@ export namespace Prisma {
     companyPhone: string | null
     email: string | null
     employeeId: number
+    zalo_user_id: string | null
     _count: ContactInfoCountAggregateOutputType | null
     _avg: ContactInfoAvgAggregateOutputType | null
     _sum: ContactInfoSumAggregateOutputType | null
@@ -9855,6 +9825,7 @@ export namespace Prisma {
     companyPhone?: boolean
     email?: boolean
     employeeId?: boolean
+    zalo_user_id?: boolean
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["contactInfo"]>
 
@@ -9867,9 +9838,10 @@ export namespace Prisma {
     companyPhone?: boolean
     email?: boolean
     employeeId?: boolean
+    zalo_user_id?: boolean
   }
 
-  export type ContactInfoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "phoneNumber" | "relativePhone" | "companyPhone" | "email" | "employeeId", ExtArgs["result"]["contactInfo"]>
+  export type ContactInfoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "phoneNumber" | "relativePhone" | "companyPhone" | "email" | "employeeId" | "zalo_user_id", ExtArgs["result"]["contactInfo"]>
   export type ContactInfoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
   }
@@ -9886,6 +9858,7 @@ export namespace Prisma {
       companyPhone: string | null
       email: string | null
       employeeId: number
+      zalo_user_id: string | null
     }, ExtArgs["result"]["contactInfo"]>
     composites: {}
   }
@@ -10262,6 +10235,7 @@ export namespace Prisma {
     readonly companyPhone: FieldRef<"ContactInfo", 'String'>
     readonly email: FieldRef<"ContactInfo", 'String'>
     readonly employeeId: FieldRef<"ContactInfo", 'Int'>
+    readonly zalo_user_id: FieldRef<"ContactInfo", 'String'>
   }
     
 
@@ -15919,7 +15893,6 @@ export namespace Prisma {
     checkOutTime?: boolean
     workingHours?: boolean
     importId?: boolean
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
     importLog?: boolean | Attendance$importLogArgs<ExtArgs>
   }, ExtArgs["result"]["attendance"]>
 
@@ -15937,14 +15910,12 @@ export namespace Prisma {
 
   export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "date" | "checkInTime" | "checkOutTime" | "workingHours" | "importId", ExtArgs["result"]["attendance"]>
   export type AttendanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
     importLog?: boolean | Attendance$importLogArgs<ExtArgs>
   }
 
   export type $AttendancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Attendance"
     objects: {
-      employee: Prisma.$EmployeePayload<ExtArgs>
       importLog: Prisma.$AttendanceImportLogPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -16295,7 +16266,6 @@ export namespace Prisma {
    */
   export interface Prisma__AttendanceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     importLog<T extends Attendance$importLogArgs<ExtArgs> = {}>(args?: Subset<T, Attendance$importLogArgs<ExtArgs>>): Prisma__AttendanceImportLogClient<$Result.GetResult<Prisma.$AttendanceImportLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -22963,7 +22933,8 @@ export namespace Prisma {
     relativePhone: 'relativePhone',
     companyPhone: 'companyPhone',
     email: 'email',
-    employeeId: 'employeeId'
+    employeeId: 'employeeId',
+    zalo_user_id: 'zalo_user_id'
   };
 
   export type ContactInfoScalarFieldEnum = (typeof ContactInfoScalarFieldEnum)[keyof typeof ContactInfoScalarFieldEnum]
@@ -23206,7 +23177,8 @@ export namespace Prisma {
     phoneNumber: 'phoneNumber',
     relativePhone: 'relativePhone',
     companyPhone: 'companyPhone',
-    email: 'email'
+    email: 'email',
+    zalo_user_id: 'zalo_user_id'
   };
 
   export type ContactInfoOrderByRelevanceFieldEnum = (typeof ContactInfoOrderByRelevanceFieldEnum)[keyof typeof ContactInfoOrderByRelevanceFieldEnum]
@@ -23453,7 +23425,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverListRelationFilter
     proposalSignatures?: ProposalSignerListRelationFilter
     workInfo?: XOR<WorkInfoNullableScalarRelationFilter, WorkInfoWhereInput> | null
-    Attendance?: AttendanceListRelationFilter
   }
 
   export type EmployeeOrderByWithRelationInput = {
@@ -23485,7 +23456,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverOrderByRelationAggregateInput
     proposalSignatures?: ProposalSignerOrderByRelationAggregateInput
     workInfo?: WorkInfoOrderByWithRelationInput
-    Attendance?: AttendanceOrderByRelationAggregateInput
     _relevance?: EmployeeOrderByRelevanceInput
   }
 
@@ -23521,7 +23491,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverListRelationFilter
     proposalSignatures?: ProposalSignerListRelationFilter
     workInfo?: XOR<WorkInfoNullableScalarRelationFilter, WorkInfoWhereInput> | null
-    Attendance?: AttendanceListRelationFilter
   }, "id" | "employeeCode">
 
   export type EmployeeOrderByWithAggregationInput = {
@@ -23927,6 +23896,7 @@ export namespace Prisma {
     companyPhone?: StringNullableFilter<"ContactInfo"> | string | null
     email?: StringNullableFilter<"ContactInfo"> | string | null
     employeeId?: IntFilter<"ContactInfo"> | number
+    zalo_user_id?: StringNullableFilter<"ContactInfo"> | string | null
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
   }
 
@@ -23937,6 +23907,7 @@ export namespace Prisma {
     companyPhone?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     employeeId?: SortOrder
+    zalo_user_id?: SortOrderInput | SortOrder
     employee?: EmployeeOrderByWithRelationInput
     _relevance?: ContactInfoOrderByRelevanceInput
   }
@@ -23945,6 +23916,7 @@ export namespace Prisma {
     id?: number
     phoneNumber?: string
     employeeId?: number
+    zalo_user_id?: string
     AND?: ContactInfoWhereInput | ContactInfoWhereInput[]
     OR?: ContactInfoWhereInput[]
     NOT?: ContactInfoWhereInput | ContactInfoWhereInput[]
@@ -23952,7 +23924,7 @@ export namespace Prisma {
     companyPhone?: StringNullableFilter<"ContactInfo"> | string | null
     email?: StringNullableFilter<"ContactInfo"> | string | null
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
-  }, "id" | "phoneNumber" | "employeeId">
+  }, "id" | "phoneNumber" | "employeeId" | "zalo_user_id">
 
   export type ContactInfoOrderByWithAggregationInput = {
     id?: SortOrder
@@ -23961,6 +23933,7 @@ export namespace Prisma {
     companyPhone?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     employeeId?: SortOrder
+    zalo_user_id?: SortOrderInput | SortOrder
     _count?: ContactInfoCountOrderByAggregateInput
     _avg?: ContactInfoAvgOrderByAggregateInput
     _max?: ContactInfoMaxOrderByAggregateInput
@@ -23978,6 +23951,7 @@ export namespace Prisma {
     companyPhone?: StringNullableWithAggregatesFilter<"ContactInfo"> | string | null
     email?: StringNullableWithAggregatesFilter<"ContactInfo"> | string | null
     employeeId?: IntWithAggregatesFilter<"ContactInfo"> | number
+    zalo_user_id?: StringNullableWithAggregatesFilter<"ContactInfo"> | string | null
   }
 
   export type OtherInfoWhereInput = {
@@ -24343,7 +24317,6 @@ export namespace Prisma {
     checkOutTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     workingHours?: FloatNullableFilter<"Attendance"> | number | null
     importId?: IntNullableFilter<"Attendance"> | number | null
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     importLog?: XOR<AttendanceImportLogNullableScalarRelationFilter, AttendanceImportLogWhereInput> | null
   }
 
@@ -24355,7 +24328,6 @@ export namespace Prisma {
     checkOutTime?: SortOrderInput | SortOrder
     workingHours?: SortOrderInput | SortOrder
     importId?: SortOrderInput | SortOrder
-    employee?: EmployeeOrderByWithRelationInput
     importLog?: AttendanceImportLogOrderByWithRelationInput
   }
 
@@ -24370,7 +24342,6 @@ export namespace Prisma {
     checkOutTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     workingHours?: FloatNullableFilter<"Attendance"> | number | null
     importId?: IntNullableFilter<"Attendance"> | number | null
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     importLog?: XOR<AttendanceImportLogNullableScalarRelationFilter, AttendanceImportLogWhereInput> | null
   }, "id">
 
@@ -24938,7 +24909,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateInput = {
@@ -24969,7 +24939,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUpdateInput = {
@@ -24999,7 +24968,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateInput = {
@@ -25030,7 +24998,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeCreateManyInput = {
@@ -25445,6 +25412,7 @@ export namespace Prisma {
     relativePhone?: string | null
     companyPhone?: string | null
     email?: string | null
+    zalo_user_id?: string | null
     employee: EmployeeCreateNestedOneWithoutContactInfoInput
   }
 
@@ -25455,6 +25423,7 @@ export namespace Prisma {
     companyPhone?: string | null
     email?: string | null
     employeeId: number
+    zalo_user_id?: string | null
   }
 
   export type ContactInfoUpdateInput = {
@@ -25462,6 +25431,7 @@ export namespace Prisma {
     relativePhone?: NullableStringFieldUpdateOperationsInput | string | null
     companyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    zalo_user_id?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: EmployeeUpdateOneRequiredWithoutContactInfoNestedInput
   }
 
@@ -25472,6 +25442,7 @@ export namespace Prisma {
     companyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: IntFieldUpdateOperationsInput | number
+    zalo_user_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ContactInfoCreateManyInput = {
@@ -25481,6 +25452,7 @@ export namespace Prisma {
     companyPhone?: string | null
     email?: string | null
     employeeId: number
+    zalo_user_id?: string | null
   }
 
   export type ContactInfoUpdateManyMutationInput = {
@@ -25488,6 +25460,7 @@ export namespace Prisma {
     relativePhone?: NullableStringFieldUpdateOperationsInput | string | null
     companyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    zalo_user_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ContactInfoUncheckedUpdateManyInput = {
@@ -25497,6 +25470,7 @@ export namespace Prisma {
     companyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: IntFieldUpdateOperationsInput | number
+    zalo_user_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OtherInfoCreateInput = {
@@ -25841,11 +25815,11 @@ export namespace Prisma {
   }
 
   export type AttendanceCreateInput = {
+    employeeId: number
     date: Date | string
     checkInTime?: Date | string | null
     checkOutTime?: Date | string | null
     workingHours?: number | null
-    employee: EmployeeCreateNestedOneWithoutAttendanceInput
     importLog?: AttendanceImportLogCreateNestedOneWithoutAttendancesInput
   }
 
@@ -25860,11 +25834,11 @@ export namespace Prisma {
   }
 
   export type AttendanceUpdateInput = {
+    employeeId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
-    employee?: EmployeeUpdateOneRequiredWithoutAttendanceNestedInput
     importLog?: AttendanceImportLogUpdateOneWithoutAttendancesNestedInput
   }
 
@@ -25889,6 +25863,7 @@ export namespace Prisma {
   }
 
   export type AttendanceUpdateManyMutationInput = {
+    employeeId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -26606,12 +26581,6 @@ export namespace Prisma {
     isNot?: WorkInfoWhereInput | null
   }
 
-  export type AttendanceListRelationFilter = {
-    every?: AttendanceWhereInput
-    some?: AttendanceWhereInput
-    none?: AttendanceWhereInput
-  }
-
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -26642,10 +26611,6 @@ export namespace Prisma {
   }
 
   export type ProposalSignerOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type AttendanceOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -27067,6 +27032,7 @@ export namespace Prisma {
     companyPhone?: SortOrder
     email?: SortOrder
     employeeId?: SortOrder
+    zalo_user_id?: SortOrder
   }
 
   export type ContactInfoAvgOrderByAggregateInput = {
@@ -27081,6 +27047,7 @@ export namespace Prisma {
     companyPhone?: SortOrder
     email?: SortOrder
     employeeId?: SortOrder
+    zalo_user_id?: SortOrder
   }
 
   export type ContactInfoMinOrderByAggregateInput = {
@@ -27090,6 +27057,7 @@ export namespace Prisma {
     companyPhone?: SortOrder
     email?: SortOrder
     employeeId?: SortOrder
+    zalo_user_id?: SortOrder
   }
 
   export type ContactInfoSumOrderByAggregateInput = {
@@ -27390,6 +27358,16 @@ export namespace Prisma {
     id?: SortOrder
     leaveApprovalStepId?: SortOrder
     approverId?: SortOrder
+  }
+
+  export type AttendanceListRelationFilter = {
+    every?: AttendanceWhereInput
+    some?: AttendanceWhereInput
+    none?: AttendanceWhereInput
+  }
+
+  export type AttendanceOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type AttendanceImportLogOrderByRelevanceInput = {
@@ -28018,13 +27996,6 @@ export namespace Prisma {
     connect?: WorkInfoWhereUniqueInput
   }
 
-  export type AttendanceCreateNestedManyWithoutEmployeeInput = {
-    create?: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput> | AttendanceCreateWithoutEmployeeInput[] | AttendanceUncheckedCreateWithoutEmployeeInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutEmployeeInput | AttendanceCreateOrConnectWithoutEmployeeInput[]
-    createMany?: AttendanceCreateManyEmployeeInputEnvelope
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-  }
-
   export type AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput = {
     create?: XOR<AttendanceImportLogCreateWithoutImportedByInput, AttendanceImportLogUncheckedCreateWithoutImportedByInput> | AttendanceImportLogCreateWithoutImportedByInput[] | AttendanceImportLogUncheckedCreateWithoutImportedByInput[]
     connectOrCreate?: AttendanceImportLogCreateOrConnectWithoutImportedByInput | AttendanceImportLogCreateOrConnectWithoutImportedByInput[]
@@ -28122,13 +28093,6 @@ export namespace Prisma {
     create?: XOR<WorkInfoCreateWithoutEmployeeInput, WorkInfoUncheckedCreateWithoutEmployeeInput>
     connectOrCreate?: WorkInfoCreateOrConnectWithoutEmployeeInput
     connect?: WorkInfoWhereUniqueInput
-  }
-
-  export type AttendanceUncheckedCreateNestedManyWithoutEmployeeInput = {
-    create?: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput> | AttendanceCreateWithoutEmployeeInput[] | AttendanceUncheckedCreateWithoutEmployeeInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutEmployeeInput | AttendanceCreateOrConnectWithoutEmployeeInput[]
-    createMany?: AttendanceCreateManyEmployeeInputEnvelope
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
   }
 
   export type EnumSexFieldUpdateOperationsInput = {
@@ -28347,20 +28311,6 @@ export namespace Prisma {
     update?: XOR<XOR<WorkInfoUpdateToOneWithWhereWithoutEmployeeInput, WorkInfoUpdateWithoutEmployeeInput>, WorkInfoUncheckedUpdateWithoutEmployeeInput>
   }
 
-  export type AttendanceUpdateManyWithoutEmployeeNestedInput = {
-    create?: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput> | AttendanceCreateWithoutEmployeeInput[] | AttendanceUncheckedCreateWithoutEmployeeInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutEmployeeInput | AttendanceCreateOrConnectWithoutEmployeeInput[]
-    upsert?: AttendanceUpsertWithWhereUniqueWithoutEmployeeInput | AttendanceUpsertWithWhereUniqueWithoutEmployeeInput[]
-    createMany?: AttendanceCreateManyEmployeeInputEnvelope
-    set?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    disconnect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    delete?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    update?: AttendanceUpdateWithWhereUniqueWithoutEmployeeInput | AttendanceUpdateWithWhereUniqueWithoutEmployeeInput[]
-    updateMany?: AttendanceUpdateManyWithWhereWithoutEmployeeInput | AttendanceUpdateManyWithWhereWithoutEmployeeInput[]
-    deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
-  }
-
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -28553,20 +28503,6 @@ export namespace Prisma {
     delete?: WorkInfoWhereInput | boolean
     connect?: WorkInfoWhereUniqueInput
     update?: XOR<XOR<WorkInfoUpdateToOneWithWhereWithoutEmployeeInput, WorkInfoUpdateWithoutEmployeeInput>, WorkInfoUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput = {
-    create?: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput> | AttendanceCreateWithoutEmployeeInput[] | AttendanceUncheckedCreateWithoutEmployeeInput[]
-    connectOrCreate?: AttendanceCreateOrConnectWithoutEmployeeInput | AttendanceCreateOrConnectWithoutEmployeeInput[]
-    upsert?: AttendanceUpsertWithWhereUniqueWithoutEmployeeInput | AttendanceUpsertWithWhereUniqueWithoutEmployeeInput[]
-    createMany?: AttendanceCreateManyEmployeeInputEnvelope
-    set?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    disconnect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    delete?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
-    update?: AttendanceUpdateWithWhereUniqueWithoutEmployeeInput | AttendanceUpdateWithWhereUniqueWithoutEmployeeInput[]
-    updateMany?: AttendanceUpdateManyWithWhereWithoutEmployeeInput | AttendanceUpdateManyWithWhereWithoutEmployeeInput[]
-    deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
   }
 
   export type EmployeeCreateNestedOneWithoutDepartmentDirectorOfInput = {
@@ -29047,24 +28983,10 @@ export namespace Prisma {
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
   }
 
-  export type EmployeeCreateNestedOneWithoutAttendanceInput = {
-    create?: XOR<EmployeeCreateWithoutAttendanceInput, EmployeeUncheckedCreateWithoutAttendanceInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutAttendanceInput
-    connect?: EmployeeWhereUniqueInput
-  }
-
   export type AttendanceImportLogCreateNestedOneWithoutAttendancesInput = {
     create?: XOR<AttendanceImportLogCreateWithoutAttendancesInput, AttendanceImportLogUncheckedCreateWithoutAttendancesInput>
     connectOrCreate?: AttendanceImportLogCreateOrConnectWithoutAttendancesInput
     connect?: AttendanceImportLogWhereUniqueInput
-  }
-
-  export type EmployeeUpdateOneRequiredWithoutAttendanceNestedInput = {
-    create?: XOR<EmployeeCreateWithoutAttendanceInput, EmployeeUncheckedCreateWithoutAttendanceInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutAttendanceInput
-    upsert?: EmployeeUpsertWithoutAttendanceInput
-    connect?: EmployeeWhereUniqueInput
-    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutAttendanceInput, EmployeeUpdateWithoutAttendanceInput>, EmployeeUncheckedUpdateWithoutAttendanceInput>
   }
 
   export type AttendanceImportLogUpdateOneWithoutAttendancesNestedInput = {
@@ -29852,6 +29774,7 @@ export namespace Prisma {
     relativePhone?: string | null
     companyPhone?: string | null
     email?: string | null
+    zalo_user_id?: string | null
   }
 
   export type ContactInfoUncheckedCreateWithoutEmployeeInput = {
@@ -29860,6 +29783,7 @@ export namespace Prisma {
     relativePhone?: string | null
     companyPhone?: string | null
     email?: string | null
+    zalo_user_id?: string | null
   }
 
   export type ContactInfoCreateOrConnectWithoutEmployeeInput = {
@@ -29949,7 +29873,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutSubordinatesInput = {
@@ -29979,7 +29902,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutSubordinatesInput = {
@@ -30013,7 +29935,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutManagerInput = {
@@ -30043,7 +29964,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutManagerInput = {
@@ -30361,33 +30281,6 @@ export namespace Prisma {
     create: XOR<WorkInfoCreateWithoutEmployeeInput, WorkInfoUncheckedCreateWithoutEmployeeInput>
   }
 
-  export type AttendanceCreateWithoutEmployeeInput = {
-    date: Date | string
-    checkInTime?: Date | string | null
-    checkOutTime?: Date | string | null
-    workingHours?: number | null
-    importLog?: AttendanceImportLogCreateNestedOneWithoutAttendancesInput
-  }
-
-  export type AttendanceUncheckedCreateWithoutEmployeeInput = {
-    id?: number
-    date: Date | string
-    checkInTime?: Date | string | null
-    checkOutTime?: Date | string | null
-    workingHours?: number | null
-    importId?: number | null
-  }
-
-  export type AttendanceCreateOrConnectWithoutEmployeeInput = {
-    where: AttendanceWhereUniqueInput
-    create: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput>
-  }
-
-  export type AttendanceCreateManyEmployeeInputEnvelope = {
-    data: AttendanceCreateManyEmployeeInput | AttendanceCreateManyEmployeeInput[]
-    skipDuplicates?: boolean
-  }
-
   export type AttendanceImportLogUpsertWithWhereUniqueWithoutImportedByInput = {
     where: AttendanceImportLogWhereUniqueInput
     update: XOR<AttendanceImportLogUpdateWithoutImportedByInput, AttendanceImportLogUncheckedUpdateWithoutImportedByInput>
@@ -30430,6 +30323,7 @@ export namespace Prisma {
     relativePhone?: NullableStringFieldUpdateOperationsInput | string | null
     companyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    zalo_user_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ContactInfoUncheckedUpdateWithoutEmployeeInput = {
@@ -30438,6 +30332,7 @@ export namespace Prisma {
     relativePhone?: NullableStringFieldUpdateOperationsInput | string | null
     companyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    zalo_user_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type DepartmentUpsertWithoutDirectorInput = {
@@ -30545,7 +30440,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutSubordinatesInput = {
@@ -30575,7 +30469,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUpsertWithWhereUniqueWithoutManagerInput = {
@@ -30900,35 +30793,6 @@ export namespace Prisma {
     contractEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type AttendanceUpsertWithWhereUniqueWithoutEmployeeInput = {
-    where: AttendanceWhereUniqueInput
-    update: XOR<AttendanceUpdateWithoutEmployeeInput, AttendanceUncheckedUpdateWithoutEmployeeInput>
-    create: XOR<AttendanceCreateWithoutEmployeeInput, AttendanceUncheckedCreateWithoutEmployeeInput>
-  }
-
-  export type AttendanceUpdateWithWhereUniqueWithoutEmployeeInput = {
-    where: AttendanceWhereUniqueInput
-    data: XOR<AttendanceUpdateWithoutEmployeeInput, AttendanceUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type AttendanceUpdateManyWithWhereWithoutEmployeeInput = {
-    where: AttendanceScalarWhereInput
-    data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyWithoutEmployeeInput>
-  }
-
-  export type AttendanceScalarWhereInput = {
-    AND?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
-    OR?: AttendanceScalarWhereInput[]
-    NOT?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
-    id?: IntFilter<"Attendance"> | number
-    employeeId?: IntFilter<"Attendance"> | number
-    date?: DateTimeFilter<"Attendance"> | Date | string
-    checkInTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
-    checkOutTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
-    workingHours?: FloatNullableFilter<"Attendance"> | number | null
-    importId?: IntNullableFilter<"Attendance"> | number | null
-  }
-
   export type EmployeeCreateWithoutDepartmentDirectorOfInput = {
     employeeCode: string
     name: string
@@ -30955,7 +30819,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutDepartmentDirectorOfInput = {
@@ -30985,7 +30848,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutDepartmentDirectorOfInput = {
@@ -31019,7 +30881,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutDepartmentHeadOfInput = {
@@ -31049,7 +30910,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutDepartmentHeadOfInput = {
@@ -31162,7 +31022,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutDepartmentDirectorOfInput = {
@@ -31192,7 +31051,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUpsertWithoutDepartmentHeadOfInput = {
@@ -31232,7 +31090,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutDepartmentHeadOfInput = {
@@ -31262,7 +31119,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type PositionUpsertWithWhereUniqueWithoutDepartmentInput = {
@@ -31500,7 +31356,6 @@ export namespace Prisma {
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutWorkInfoInput = {
@@ -31530,7 +31385,6 @@ export namespace Prisma {
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutWorkInfoInput = {
@@ -31633,7 +31487,6 @@ export namespace Prisma {
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutWorkInfoInput = {
@@ -31663,7 +31516,6 @@ export namespace Prisma {
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type PositionUpsertWithoutEmployeesInput = {
@@ -31722,7 +31574,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutPersonalInfoInput = {
@@ -31752,7 +31603,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutPersonalInfoInput = {
@@ -31797,7 +31647,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutPersonalInfoInput = {
@@ -31827,7 +31676,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeCreateWithoutContactInfoInput = {
@@ -31856,7 +31704,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutContactInfoInput = {
@@ -31886,7 +31733,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutContactInfoInput = {
@@ -31931,7 +31777,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutContactInfoInput = {
@@ -31961,7 +31806,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeCreateWithoutOtherInfoInput = {
@@ -31990,7 +31834,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutOtherInfoInput = {
@@ -32020,7 +31863,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutOtherInfoInput = {
@@ -32065,7 +31907,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutOtherInfoInput = {
@@ -32095,7 +31936,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type LeaveApprovalStepCreateWithoutLeaveRequestInput = {
@@ -32149,7 +31989,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutLeaveRequestInput = {
@@ -32179,7 +32018,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutLeaveRequestInput = {
@@ -32251,7 +32089,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutLeaveRequestInput = {
@@ -32281,7 +32118,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type LeaveRequestCreateWithoutApprovalStepsInput = {
@@ -32423,7 +32259,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutLeaveApprovalStepsInput = {
@@ -32453,7 +32288,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutLeaveApprovalStepsInput = {
@@ -32518,7 +32352,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutLeaveApprovalStepsInput = {
@@ -32548,7 +32381,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type LeaveApprovalStepUpsertWithoutApproversInput = {
@@ -32578,11 +32410,11 @@ export namespace Prisma {
   }
 
   export type AttendanceCreateWithoutImportLogInput = {
+    employeeId: number
     date: Date | string
     checkInTime?: Date | string | null
     checkOutTime?: Date | string | null
     workingHours?: number | null
-    employee: EmployeeCreateNestedOneWithoutAttendanceInput
   }
 
   export type AttendanceUncheckedCreateWithoutImportLogInput = {
@@ -32630,7 +32462,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutAttendanceImportLogInput = {
@@ -32660,7 +32491,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutAttendanceImportLogInput = {
@@ -32682,6 +32512,19 @@ export namespace Prisma {
   export type AttendanceUpdateManyWithWhereWithoutImportLogInput = {
     where: AttendanceScalarWhereInput
     data: XOR<AttendanceUpdateManyMutationInput, AttendanceUncheckedUpdateManyWithoutImportLogInput>
+  }
+
+  export type AttendanceScalarWhereInput = {
+    AND?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+    OR?: AttendanceScalarWhereInput[]
+    NOT?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+    id?: IntFilter<"Attendance"> | number
+    employeeId?: IntFilter<"Attendance"> | number
+    date?: DateTimeFilter<"Attendance"> | Date | string
+    checkInTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
+    checkOutTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
+    workingHours?: FloatNullableFilter<"Attendance"> | number | null
+    importId?: IntNullableFilter<"Attendance"> | number | null
   }
 
   export type EmployeeUpsertWithoutAttendanceImportLogInput = {
@@ -32721,7 +32564,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutAttendanceImportLogInput = {
@@ -32751,71 +32593,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
-  }
-
-  export type EmployeeCreateWithoutAttendanceInput = {
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
-    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-  }
-
-  export type EmployeeUncheckedCreateWithoutAttendanceInput = {
-    id?: number
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    managerId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-  }
-
-  export type EmployeeCreateOrConnectWithoutAttendanceInput = {
-    where: EmployeeWhereUniqueInput
-    create: XOR<EmployeeCreateWithoutAttendanceInput, EmployeeUncheckedCreateWithoutAttendanceInput>
   }
 
   export type AttendanceImportLogCreateWithoutAttendancesInput = {
@@ -32834,76 +32611,6 @@ export namespace Prisma {
   export type AttendanceImportLogCreateOrConnectWithoutAttendancesInput = {
     where: AttendanceImportLogWhereUniqueInput
     create: XOR<AttendanceImportLogCreateWithoutAttendancesInput, AttendanceImportLogUncheckedCreateWithoutAttendancesInput>
-  }
-
-  export type EmployeeUpsertWithoutAttendanceInput = {
-    update: XOR<EmployeeUpdateWithoutAttendanceInput, EmployeeUncheckedUpdateWithoutAttendanceInput>
-    create: XOR<EmployeeCreateWithoutAttendanceInput, EmployeeUncheckedCreateWithoutAttendanceInput>
-    where?: EmployeeWhereInput
-  }
-
-  export type EmployeeUpdateToOneWithWhereWithoutAttendanceInput = {
-    where?: EmployeeWhereInput
-    data: XOR<EmployeeUpdateWithoutAttendanceInput, EmployeeUncheckedUpdateWithoutAttendanceInput>
-  }
-
-  export type EmployeeUpdateWithoutAttendanceInput = {
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
-    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-  }
-
-  export type EmployeeUncheckedUpdateWithoutAttendanceInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    managerId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
   }
 
   export type AttendanceImportLogUpsertWithoutAttendancesInput = {
@@ -32997,7 +32704,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutKPIEmployeeInput = {
@@ -33027,7 +32733,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutKPIEmployeeInput = {
@@ -33127,7 +32832,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutKPIEmployeeInput = {
@@ -33157,7 +32861,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type KPIUpsertWithoutKpiEmployeesInput = {
@@ -33293,7 +32996,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalsCreatedInput = {
@@ -33323,7 +33025,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalsCreatedInput = {
@@ -33381,7 +33082,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalsProposedInput = {
@@ -33411,7 +33111,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalsProposedInput = {
@@ -33506,7 +33205,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalsCreatedInput = {
@@ -33536,7 +33234,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type FileUpsertWithoutProposalsInput = {
@@ -33606,7 +33303,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalsProposedInput = {
@@ -33636,7 +33332,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type ProposalApproverUpsertWithWhereUniqueWithoutProposalInput = {
@@ -33729,7 +33424,6 @@ export namespace Prisma {
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalSignaturesInput = {
@@ -33759,7 +33453,6 @@ export namespace Prisma {
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalSignaturesInput = {
@@ -33842,7 +33535,6 @@ export namespace Prisma {
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalSignaturesInput = {
@@ -33872,7 +33564,6 @@ export namespace Prisma {
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeCreateWithoutProposalApprovalsInput = {
@@ -33901,7 +33592,6 @@ export namespace Prisma {
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalApprovalsInput = {
@@ -33931,7 +33621,6 @@ export namespace Prisma {
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalApprovalsInput = {
@@ -34008,7 +33697,6 @@ export namespace Prisma {
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalApprovalsInput = {
@@ -34038,7 +33726,6 @@ export namespace Prisma {
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type ProposalUpsertWithoutApproversInput = {
@@ -34218,15 +33905,6 @@ export namespace Prisma {
     level: number
   }
 
-  export type AttendanceCreateManyEmployeeInput = {
-    id?: number
-    date: Date | string
-    checkInTime?: Date | string | null
-    checkOutTime?: Date | string | null
-    workingHours?: number | null
-    importId?: number | null
-  }
-
   export type AttendanceImportLogUpdateWithoutImportedByInput = {
     filename?: StringFieldUpdateOperationsInput | string
     importedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34272,7 +33950,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutManagerInput = {
@@ -34302,7 +33979,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateManyWithoutManagerInput = {
@@ -34528,32 +34204,6 @@ export namespace Prisma {
     level?: IntFieldUpdateOperationsInput | number
   }
 
-  export type AttendanceUpdateWithoutEmployeeInput = {
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
-    importLog?: AttendanceImportLogUpdateOneWithoutAttendancesNestedInput
-  }
-
-  export type AttendanceUncheckedUpdateWithoutEmployeeInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
-    importId?: NullableIntFieldUpdateOperationsInput | number | null
-  }
-
-  export type AttendanceUncheckedUpdateManyWithoutEmployeeInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
-    importId?: NullableIntFieldUpdateOperationsInput | number | null
-  }
-
   export type PositionCreateManyDepartmentInput = {
     id?: number
     name: string
@@ -34775,11 +34425,11 @@ export namespace Prisma {
   }
 
   export type AttendanceUpdateWithoutImportLogInput = {
+    employeeId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
-    employee?: EmployeeUpdateOneRequiredWithoutAttendanceNestedInput
   }
 
   export type AttendanceUncheckedUpdateWithoutImportLogInput = {

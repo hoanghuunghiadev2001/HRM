@@ -204,7 +204,8 @@ exports.Prisma.ContactInfoScalarFieldEnum = {
   relativePhone: 'relativePhone',
   companyPhone: 'companyPhone',
   email: 'email',
-  employeeId: 'employeeId'
+  employeeId: 'employeeId',
+  zalo_user_id: 'zalo_user_id'
 };
 
 exports.Prisma.OtherInfoScalarFieldEnum = {
@@ -384,7 +385,8 @@ exports.Prisma.ContactInfoOrderByRelevanceFieldEnum = {
   phoneNumber: 'phoneNumber',
   relativePhone: 'relativePhone',
   companyPhone: 'companyPhone',
-  email: 'email'
+  email: 'email',
+  zalo_user_id: 'zalo_user_id'
 };
 
 exports.Prisma.OtherInfoOrderByRelevanceFieldEnum = {
