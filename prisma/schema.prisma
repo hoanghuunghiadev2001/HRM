@@ -51,6 +51,7 @@ model Employee {
   proposalApprovals    ProposalApprover[]
   proposalSignatures   ProposalSigner[]
   workInfo             WorkInfo?
+  Attendance           Attendance[]
 
   @@index([employeeCode])
   @@index([managerId])
@@ -208,6 +209,7 @@ model AttendanceImportLog {
 model Attendance {
   id           Int                  @id @default(autoincrement())
   employeeId   Int
+  employee     Employee             @relation(fields: [employeeId], references: [id])
   date         DateTime             @db.Date
   checkInTime  DateTime?
   checkOutTime DateTime?

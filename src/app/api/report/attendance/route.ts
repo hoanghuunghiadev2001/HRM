@@ -34,12 +34,13 @@ export async function GET(request: Request) {
 
     const where: Prisma.AttendanceWhereInput = {};
 
-    if (startDate && endDate) where.date = { gte: new Date(startDate), lte: new Date(endDate) };
+    if (startDate && endDate)
+      where.date = { gte: new Date(startDate), lte: new Date(endDate) };
     else if (startDate) where.date = { gte: new Date(startDate) };
     else if (endDate) where.date = { lte: new Date(endDate) };
     if (employeeId) where.employeeId = Number.parseInt(employeeId);
 
-    const attendanceDataRaw = await prisma.attendance.findMany({
+    const attendanceDataRaw = (await prisma.attendance.findMany({
       where,
       include: {
         employee: {
@@ -57,23 +58,33 @@ export async function GET(request: Request) {
           },
         },
       },
-      orderBy: { date: "asc" },
-    });
+    })) as (Attendance & {
+      employee: {
+        id: number;
+        name: string;
+        employeeCode: string;
+        workInfo: { department: { name: string } | null } | null;
+      };
+    })[];
 
     // Flatten department
-    let attendanceData: AttendanceWithEmployeeFlat[] = attendanceDataRaw.map(record => ({
-      ...record,
-      employee: {
-        ...record.employee,
-        workInfo: record.employee.workInfo
-          ? { department: record.employee.workInfo.department?.name ?? null }
-          : null,
-      },
-    }));
+    let attendanceData: AttendanceWithEmployeeFlat[] = attendanceDataRaw.map(
+      (record) => ({
+        ...record,
+        employee: {
+          ...record.employee,
+          workInfo: record.employee.workInfo
+            ? { department: record.employee.workInfo.department?.name ?? null }
+            : null,
+        },
+      })
+    );
 
     // Filter theo department nếu có
     if (department) {
-      attendanceData = attendanceData.filter(r => r.employee.workInfo?.department === department);
+      attendanceData = attendanceData.filter(
+        (r) => r.employee.workInfo?.department === department
+      );
     }
 
     const stats = calculateAttendanceStats(attendanceData);
@@ -81,7 +92,10 @@ export async function GET(request: Request) {
     return NextResponse.json({ data: attendanceData, stats });
   } catch (error) {
     console.error("Error fetching attendance data:", error);
-    return NextResponse.json({ error: "Failed to fetch attendance data" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch attendance data" },
+      { status: 500 }
+    );
   }
 }
 
@@ -106,55 +120,92 @@ type AttendanceStats = {
   };
 };
 
-function calculateAttendanceStats(data: AttendanceWithEmployeeFlat[]): AttendanceStats {
+function calculateAttendanceStats(
+  data: AttendanceWithEmployeeFlat[]
+): AttendanceStats {
   const groupedByDate: Record<string, AttendanceWithEmployeeFlat[]> = {};
 
   for (const record of data) {
-    const dateStr = dayjs(record.date).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD");
+    const dateStr = dayjs(record.date)
+      .tz("Asia/Ho_Chi_Minh")
+      .format("YYYY-MM-DD");
     if (!groupedByDate[dateStr]) groupedByDate[dateStr] = [];
     groupedByDate[dateStr].push(record);
   }
 
-  const dailyStats: DailyStat[] = Object.entries(groupedByDate).map(([dateStr, records]) => {
-    const shiftStart = dayjs.tz(`${dateStr} 08:00`, "YYYY-MM-DD HH:mm", "Asia/Ho_Chi_Minh");
-    const shiftEnd = dayjs.tz(`${dateStr} 17:00`, "YYYY-MM-DD HH:mm", "Asia/Ho_Chi_Minh");
+  const dailyStats: DailyStat[] = Object.entries(groupedByDate).map(
+    ([dateStr, records]) => {
+      const shiftStart = dayjs.tz(
+        `${dateStr} 08:00`,
+        "YYYY-MM-DD HH:mm",
+        "Asia/Ho_Chi_Minh"
+      );
+      const shiftEnd = dayjs.tz(
+        `${dateStr} 17:00`,
+        "YYYY-MM-DD HH:mm",
+        "Asia/Ho_Chi_Minh"
+      );
 
-    let onTime = 0;
-    let late = 0;
-    let absent = 0;
-    let earlyLeave = 0;
+      let onTime = 0;
+      let late = 0;
+      let absent = 0;
+      let earlyLeave = 0;
 
-    for (const r of records) {
-      const checkInLocal = r.checkInTime ? dayjs.tz(r.checkInTime.toISOString(), "Asia/Ho_Chi_Minh") : null;
-      const checkOutLocal = r.checkOutTime ? dayjs.tz(r.checkOutTime.toISOString(), "Asia/Ho_Chi_Minh") : null;
+      for (const r of records) {
+        const checkInLocal = r.checkInTime
+          ? dayjs.tz(r.checkInTime.toISOString(), "Asia/Ho_Chi_Minh")
+          : null;
+        const checkOutLocal = r.checkOutTime
+          ? dayjs.tz(r.checkOutTime.toISOString(), "Asia/Ho_Chi_Minh")
+          : null;
 
-      if (!checkInLocal) {
-        absent++;
-        continue;
+        if (!checkInLocal) {
+          absent++;
+          continue;
+        }
+
+        const checkInTimeOnly = checkInLocal
+          .set("year", shiftStart.year())
+          .set("month", shiftStart.month())
+          .set("date", shiftStart.date());
+        const checkOutTimeOnly = checkOutLocal
+          ? checkOutLocal
+              .set("year", shiftStart.year())
+              .set("month", shiftStart.month())
+              .set("date", shiftStart.date())
+          : null;
+
+        if (checkInTimeOnly.isAfter(shiftStart)) late++;
+        else onTime++;
+
+        if (checkOutTimeOnly && checkOutTimeOnly.isBefore(shiftEnd))
+          earlyLeave++;
       }
 
-      const checkInTimeOnly = checkInLocal.set("year", shiftStart.year()).set("month", shiftStart.month()).set("date", shiftStart.date());
-      const checkOutTimeOnly = checkOutLocal ? checkOutLocal.set("year", shiftStart.year()).set("month", shiftStart.month()).set("date", shiftStart.date()) : null;
-
-      if (checkInTimeOnly.isAfter(shiftStart)) late++;
-      else onTime++;
-
-      if (checkOutTimeOnly && checkOutTimeOnly.isBefore(shiftEnd)) earlyLeave++;
+      return {
+        date: dateStr,
+        onTime,
+        late,
+        absent,
+        earlyLeave,
+        total: records.length,
+      };
     }
-
-    return { date: dateStr, onTime, late, absent, earlyLeave, total: records.length };
-  });
+  );
 
   dailyStats.sort((a, b) => dayjs(a.date).valueOf() - dayjs(b.date).valueOf());
 
-  const summary = dailyStats.reduce((acc, day) => {
-    acc.onTime += day.onTime;
-    acc.late += day.late;
-    acc.absent += day.absent;
-    acc.earlyLeave += day.earlyLeave;
-    acc.total += day.total;
-    return acc;
-  }, { onTime: 0, late: 0, absent: 0, earlyLeave: 0, total: 0 });
+  const summary = dailyStats.reduce(
+    (acc, day) => {
+      acc.onTime += day.onTime;
+      acc.late += day.late;
+      acc.absent += day.absent;
+      acc.earlyLeave += day.earlyLeave;
+      acc.total += day.total;
+      return acc;
+    },
+    { onTime: 0, late: 0, absent: 0, earlyLeave: 0, total: 0 }
+  );
 
   return { dailyStats, summary };
 }
@@ -166,21 +217,30 @@ export async function POST(request: Request) {
     const { employeeId, date, checkInTime, checkOutTime } = body;
 
     if (!employeeId || !date) {
-      return NextResponse.json({ error: "Employee ID and date are required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Employee ID and date are required" },
+        { status: 400 }
+      );
     }
 
     const parsedEmployeeId = Number.parseInt(employeeId);
     const parsedDate = new Date(date);
 
-    const existingRecord = await prisma.attendance.findFirst({ where: { employeeId: parsedEmployeeId, date: parsedDate } });
+    const existingRecord = await prisma.attendance.findFirst({
+      where: { employeeId: parsedEmployeeId, date: parsedDate },
+    });
 
     let attendance;
     if (existingRecord) {
       attendance = await prisma.attendance.update({
         where: { id: existingRecord.id },
         data: {
-          checkInTime: checkInTime ? new Date(checkInTime) : existingRecord.checkInTime,
-          checkOutTime: checkOutTime ? new Date(checkOutTime) : existingRecord.checkOutTime,
+          checkInTime: checkInTime
+            ? new Date(checkInTime)
+            : existingRecord.checkInTime,
+          checkOutTime: checkOutTime
+            ? new Date(checkOutTime)
+            : existingRecord.checkOutTime,
         },
       });
     } else {
@@ -197,6 +257,9 @@ export async function POST(request: Request) {
     return NextResponse.json(attendance);
   } catch (error) {
     console.error("Error saving attendance data:", error);
-    return NextResponse.json({ error: "Failed to save attendance data" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to save attendance data" },
+      { status: 500 }
+    );
   }
 }
