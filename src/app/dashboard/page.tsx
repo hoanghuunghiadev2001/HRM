@@ -35,6 +35,21 @@ const Profile = () => {
   const [modal, contextHolder] = Modal.useModal();
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
+  const [zaloId, setZaloId] = useState<string | null>(null);
+  const employeeId = 1; // TODO: lấy employeeId hiện tại của người dùng từ session
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
+
+    if (code) {
+      fetch(`/api/zalo/callback?code=${code}&employeeId=${employeeId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) setZaloId(data.zalo_user_id);
+        });
+    }
+  }, []);
 
   function formatSeniorityText(months: number): string {
     const years = Math.floor(months / 12);
@@ -544,6 +559,15 @@ const Profile = () => {
         <Send />
         Cập nhật
       </button>
+
+      <div>
+        <a
+          href="/api/zalo/login"
+          className="px-4 py-2 bg-blue-600 text-black rounded"
+        >
+          Login với Zalo
+        </a>
+      </div>
     </div>
   );
 };
