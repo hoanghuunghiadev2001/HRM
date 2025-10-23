@@ -93,7 +93,7 @@ export async function GET(req: NextRequest) {
 
     const attendances = await prisma.attendance.findMany({
       where: attendanceWhere,
-      orderBy: { date: "asc" },
+      orderBy: { date: "desc" },
     });
 
     // 3️⃣ Gom nhóm theo employeeId + ngày (theo giờ VN)
