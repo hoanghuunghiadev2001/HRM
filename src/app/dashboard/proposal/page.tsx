@@ -67,6 +67,7 @@ export default function ProposalCreator() {
   const [timestart, setTimestart] = useState<dayjs.Dayjs | null>(null);
   const [timeend, setTimeend] = useState<dayjs.Dayjs | null>(null);
   const [location, setLocation] = useState("");
+  const [managerId, setManagerId] = useState<number>();
 
   // trạng thái checkbox (mảng giá trị)
 
@@ -110,9 +111,49 @@ export default function ProposalCreator() {
     }
   };
 
+  const fetchManager = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/profile/manager`);
+
+      if (!res.ok) {
+        throw new Error("Lỗi khi lấy dữ liệu nhân viên");
+      }
+      const data = await res.json();
+      setManagerId(data.managerId);
+    } catch (err) {
+      console.error("Lỗi:", err);
+      message.error("Không thể tải danh sách nhân viên");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchEmployees();
+    fetchManager();
   }, []);
+
+  useEffect(() => {
+    if (proposalType === "vehicle") {
+      // Nếu là đề xuất xe thì auto set người ký & người duyệt
+      if (managerId) {
+        setSigners([Number(managerId)]); // người ký = quản lý trực tiếp
+      }
+
+      // Người duyệt thêm id 2 và 965, nhưng không thêm trùng
+      setApprovers((prev) => {
+        const base = new Set(prev);
+        base.add(6);
+        base.add(132);
+        return Array.from(base);
+      });
+    } else {
+      // Nếu trở lại "general", reset lại cho người dùng tự chọn
+      setSigners([]);
+      setApprovers([]);
+    }
+  }, [proposalType, managerId]);
 
   // ---------- file upload handling (existing) ----------
   const beforeUpload = (file: RcFile) => {
@@ -550,58 +591,63 @@ export default function ProposalCreator() {
           )}
 
           {/* Bàn giao tình trạng xe: show only vehicle */}
-
-          <Card title="Phân Quyền">
-            <Space direction="vertical" size="large" style={{ width: "100%" }}>
-              <div>
-                <Text strong>
-                  <CheckCircleOutlined
-                    style={{ color: "#1890ff", marginRight: 4 }}
+          {proposalType === "general" && (
+            <Card title="Phân Quyền">
+              <Space
+                direction="vertical"
+                size="large"
+                style={{ width: "100%" }}
+              >
+                <div>
+                  <Text strong>
+                    <CheckCircleOutlined
+                      style={{ color: "#1890ff", marginRight: 4 }}
+                    />
+                    Người ký *
+                  </Text>
+                  <Select
+                    mode="multiple"
+                    placeholder="Chọn người ký"
+                    value={signers}
+                    onChange={setSigners}
+                    options={userSelectOptions}
+                    style={{ width: "100%", marginTop: 8 }}
+                    optionLabelProp="customLabel"
+                    optionFilterProp="searchText"
+                    tagRender={customTagRender}
+                    disabled={submitting}
                   />
-                  Người ký *
-                </Text>
-                <Select
-                  mode="multiple"
-                  placeholder="Chọn người ký"
-                  value={signers}
-                  onChange={setSigners}
-                  options={userSelectOptions}
-                  style={{ width: "100%", marginTop: 8 }}
-                  optionLabelProp="customLabel"
-                  optionFilterProp="searchText"
-                  tagRender={customTagRender}
-                  disabled={submitting}
-                />
-                <div style={{ marginTop: 8 }}>
-                  {renderSelectedUsers(signers, "signer")}
+                  <div style={{ marginTop: 8 }}>
+                    {renderSelectedUsers(signers, "signer")}
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <Text strong>
-                  <CheckCircleOutlined
-                    style={{ color: "#52c41a", marginRight: 4 }}
+                <div>
+                  <Text strong>
+                    <CheckCircleOutlined
+                      style={{ color: "#52c41a", marginRight: 4 }}
+                    />
+                    Người duyệt *
+                  </Text>
+                  <Select
+                    mode="multiple"
+                    placeholder="Chọn người duyệt"
+                    value={approvers}
+                    onChange={setApprovers}
+                    options={userSelectOptions}
+                    style={{ width: "100%", marginTop: 8 }}
+                    optionLabelProp="customLabel"
+                    optionFilterProp="searchText"
+                    tagRender={customTagRender}
+                    disabled={submitting}
                   />
-                  Người duyệt *
-                </Text>
-                <Select
-                  mode="multiple"
-                  placeholder="Chọn người duyệt"
-                  value={approvers}
-                  onChange={setApprovers}
-                  options={userSelectOptions}
-                  style={{ width: "100%", marginTop: 8 }}
-                  optionLabelProp="customLabel"
-                  optionFilterProp="searchText"
-                  tagRender={customTagRender}
-                  disabled={submitting}
-                />
-                <div style={{ marginTop: 8 }}>
-                  {renderSelectedUsers(approvers, "approver")}
+                  <div style={{ marginTop: 8 }}>
+                    {renderSelectedUsers(approvers, "approver")}
+                  </div>
                 </div>
-              </div>
-            </Space>
-          </Card>
+              </Space>
+            </Card>
+          )}
         </Col>
 
         <Col xs={24} lg={12}>

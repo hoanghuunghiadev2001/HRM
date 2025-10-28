@@ -95,6 +95,7 @@ export interface ProfileInfo {
   contactInfo: ContactInfo;
   workInfo: WorkInfo;
   otherInfo: OtherInfo;
+  managerId: string;
 }
 
 export interface PersonalInfo {
@@ -164,8 +165,6 @@ export interface RequestLeave {
   approvedBy: string;
 }
 
-
-
 export interface Employee {
   name: string;
   employeeCode: string;
@@ -182,40 +181,39 @@ export interface FormattedEmployee {
 }
 
 export interface CreateProposalRequest {
-  name: string
-  title: string
-  description?: string
-  file?: File // Thay đổi từ fileUrl thành file
-  proposerId: number
-  signerIds: number[]
-  approverIds: number[]
+  name: string;
+  title: string;
+  description?: string;
+  file?: File; // Thay đổi từ fileUrl thành file
+  proposerId: number;
+  signerIds: number[];
+  approverIds: number[];
 }
 
 // Thêm interface cho form data
 export interface CreateProposalFormData {
-  name: string
-  title: string
-  description?: string
-  proposerId: number
-  signerIds: number[]
-  approverIds: number[]
+  name: string;
+  title: string;
+  description?: string;
+  proposerId: number;
+  signerIds: number[];
+  approverIds: number[];
 }
 
 export interface ProposalResponse {
-  id: number
-  name: string
-  title: string
-  status: string
-  createdAt: string
+  id: number;
+  name: string;
+  title: string;
+  status: string;
+  createdAt: string;
 }
 
 export interface SignApproveRequest {
-  proposalId: number
-  employeeId: number
-  action: "sign" | "approve"
-  status: "approved" | "rejected"
+  proposalId: number;
+  employeeId: number;
+  action: "sign" | "approve";
+  status: "approved" | "rejected";
 }
-
 
 export type ListRequestLeave = RequestLeave[];
 
@@ -290,8 +288,8 @@ export interface RequestsLeave {
   approvedBy: string;
   createdAt: string;
   employee: Employee;
-  approvers?: string
-  approversSummary?: string
+  approvers?: string;
+  approversSummary?: string;
 }
 
 export interface Employee {
@@ -309,9 +307,8 @@ export interface LeaveFilters {
   name?: string;
   status?: string;
   startDate?: string; // thêm ngày bắt đầu
-  endDate?: string;   // thêm ngày kết thúc
+  endDate?: string; // thêm ngày kết thúc
 }
-
 
 type LeavePendingFilters = {
   role: string;
@@ -370,7 +367,6 @@ export async function fetchLeaveRequests(
   return await res.json();
 }
 
-
 export async function getApiAllRequestsNeedApprove(
   filters: LeavePendingFilters
 ) {
@@ -412,8 +408,6 @@ export async function getApiAllRequestsNeedApprove(
 
 //   return await res.json();
 // }
-
-
 
 // lấy danh sách nhân sự
 export async function fetchEmployeeSummary(

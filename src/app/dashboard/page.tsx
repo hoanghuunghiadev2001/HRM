@@ -2,17 +2,25 @@
 "use client";
 import { useEffect, useState } from "react";
 import {
+  Avatar,
   Form,
   type GetProp,
   Input,
   message,
   Modal,
+  Select,
+  Tag,
   Upload,
   type UploadProps,
 } from "antd";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  LoadingOutlined,
+  PlusOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { Send } from "lucide-react";
-import { ProfileInfo } from "@/components/api";
+import { FormattedEmployee, ProfileInfo } from "@/components/api";
 import { formatCurrency } from "@/components/function";
 import ModalLoading from "@/components/modalLoading";
 import Image from "next/image";
@@ -23,10 +31,15 @@ import { useAppDispatch } from "@/store/hook";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import dayjs from "dayjs";
+import { CustomTagProps } from "rc-select/lib/BaseSelect";
+import { Typography } from "antd/lib";
 
 // Extend plugin
 dayjs.extend(utc);
 dayjs.extend(timezone);
+
+const { Title, Text } = Typography;
+const { TextArea } = Input;
 
 const Profile = () => {
   const [loading, setLoading] = useState(false);
@@ -35,21 +48,73 @@ const Profile = () => {
   const [modal, contextHolder] = Modal.useModal();
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
-  const [zaloId, setZaloId] = useState<string | null>(null);
-  const employeeId = 1; // TODO: lấy employeeId hiện tại của người dùng từ session
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get("code");
+  const [managerUser, setManagerUser] = useState<number>();
+  const [employees, setEmployees] = useState<FormattedEmployee[]>([]);
 
-    if (code) {
-      fetch(`/api/zalo/callback?code=${code}&employeeId=${employeeId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success) setZaloId(data.zalo_user_id);
-        });
-    }
-  }, []);
+  const customTagRender = (props: CustomTagProps) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { label, value, closable, onClose } = props;
+    const user = employees.find((u) => u.id === value);
+    if (!user) return <span />;
+    return (
+      <Tag
+        closable={closable}
+        onClose={onClose}
+        style={{ display: "flex", alignItems: "center", margin: 2 }}
+      >
+        <Avatar
+          size="small"
+          src={user.avatar}
+          icon={<UserOutlined />}
+          style={{ marginRight: 6 }}
+        />
+        {user.name}
+      </Tag>
+    );
+  };
+
+  const renderSelectedUsers = (
+    userIds: number,
+    type: "signer" | "approver"
+  ) => {
+    const user = employees.find((u) => String(u.id) === String(userIds));
+    if (!user) return null;
+    return (
+      <Tag style={{ marginBottom: 4 }}>
+        <Avatar
+          size="small"
+          src={user.avatar}
+          icon={<UserOutlined />}
+          style={{ marginRight: 4 }}
+        />
+        {user.name}
+      </Tag>
+    );
+  };
+
+  const userSelectOptions = Array.isArray(employees)
+    ? employees.map((user) => ({
+        label: (
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <Avatar
+              size="small"
+              src={user.avatar}
+              icon={<UserOutlined />}
+              className="flex-shrink-0"
+            />
+            <div>
+              <div>{user.name}</div>
+              {/* <Text type="secondary" style={{ fontSize: 12 }}>
+                {user.position} • {user.email}
+              </Text> */}
+            </div>
+          </div>
+        ),
+        value: user.id,
+        searchText: `${user.name} ${user.position} ${user.email}`,
+      }))
+    : [];
 
   function formatSeniorityText(months: number): string {
     const years = Math.floor(months / 12);
@@ -114,6 +179,12 @@ const Profile = () => {
     fetchAllData();
   }, []);
 
+  useEffect(() => {
+    if (dataProfile?.managerId) {
+      setManagerUser(Number(dataProfile.managerId));
+    }
+  }, [dataProfile]);
+
   type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
   useEffect(() => {
@@ -148,7 +219,8 @@ const Profile = () => {
           values.phoneNumber ?? "",
           values.relativePhone ?? "",
           values.companyPhone ?? "",
-          values.email ?? ""
+          values.email ?? "",
+          managerUser ?? 0
         ),
         // Có thể thêm các API calls khác nếu cần
       ]);
@@ -162,12 +234,35 @@ const Profile = () => {
     }
   };
 
+  const fetchEmployees = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/employees/employeeProposal");
+      if (!res.ok) {
+        throw new Error("Lỗi khi lấy dữ liệu nhân viên");
+      }
+      const data = await res.json();
+      setEmployees(data);
+      setManagerUser(data.managerId);
+    } catch (err) {
+      console.error("Lỗi:", err);
+      message.error("Không thể tải danh sách nhân viên");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
+
   const updateProfile = async (
     avt: string,
     phoneNumber: string,
     relativePhone: string,
     companyPhone: string,
-    email: string
+    email: string,
+    managerId: number
   ) => {
     try {
       const req = await fetch("/api/profile/update", {
@@ -179,6 +274,7 @@ const Profile = () => {
           personalPhone: relativePhone,
           companyPhone: companyPhone,
           email: email,
+          managerId: managerId,
         }),
       });
 
@@ -465,6 +561,25 @@ const Profile = () => {
             titleValue="Ngày hết hạn HĐ"
             value={dataProfile?.workInfo?.contractEndDate}
           />
+
+          <Select
+            placeholder="Chọn người quản lý"
+            value={
+              managerUser
+                ? {
+                    value: managerUser,
+                    label: userSelectOptions.find(
+                      (opt) => String(opt.value) === String(managerUser)
+                    )?.label,
+                  }
+                : undefined
+            }
+            onChange={(value) => setManagerUser(Number(value))} // value là ID
+            options={userSelectOptions}
+            style={{ width: "100%", marginTop: 8 }}
+            optionFilterProp="label"
+            showSearch
+          />
         </div>
       </div>
       <div className="w-full mt-5">
@@ -559,15 +674,6 @@ const Profile = () => {
         <Send />
         Cập nhật
       </button>
-
-      <div>
-        <a
-          href="/api/zalo/login"
-          className="px-4 py-2 bg-blue-600 text-black rounded"
-        >
-          Login với Zalo
-        </a>
-      </div>
     </div>
   );
 };

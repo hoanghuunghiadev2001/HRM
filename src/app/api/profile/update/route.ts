@@ -1,4 +1,4 @@
-// app/api/auth/update/route.ts
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import "server-only";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
@@ -32,7 +32,7 @@ export async function PUT(req: NextRequest) {
     const body = await req.json();
 
     let avatar = body.avatar;
-    const { phone, personalPhone, companyPhone, email } = body;
+    const { phone, personalPhone, companyPhone, email, managerId } = body;
 
     // Xử lý avatar nếu là base64 image
     if (typeof avatar === "string" && isBase64Image(avatar)) {
@@ -57,11 +57,16 @@ export async function PUT(req: NextRequest) {
       avatar = undefined;
     }
 
-    // Cập nhật avatar nếu có thay đổi
-    if (avatar !== undefined) {
+    // Cập nhật avatar và managerId nếu có thay đổi
+    const updateEmployeeData: any = {};
+    if (avatar !== undefined) updateEmployeeData.avatar = avatar;
+    if (managerId !== undefined)
+      updateEmployeeData.managerId = Number(managerId);
+
+    if (Object.keys(updateEmployeeData).length > 0) {
       await prisma.employee.update({
         where: { id: userId },
-        data: { avatar },
+        data: updateEmployeeData,
       });
     }
 
