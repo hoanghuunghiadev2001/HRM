@@ -288,24 +288,23 @@ export default function ProposalCreator() {
       // attach vehicle data either as extraData and/or as generated file
       if (proposalType === "vehicle") {
         // Build template data mapping
-        const tplData = buildTemplateDataForVehicle();
-        // Add extraData (in case backend wants fields)
-        formData.append("extraData", JSON.stringify(tplData));
-
-        // Generate docx file from template and append as 'file'
-        // Template path (public folder): /templates/vehicle_proposal_template.docx
-        try {
-          const generatedFile = await generateDocxFromTemplate(
-            "/templates/vehicle_proposal_template.docx",
-            tplData
-          );
-          formData.append("file", generatedFile);
-        } catch (err) {
-          console.error("Lỗi tạo file DOCX từ template:", err);
-          message.error("Không thể tạo file từ mẫu. Vui lòng thử lại.");
-          setSubmitting(false);
-          return;
-        }
+        // const tplData = buildTemplateDataForVehicle();
+        // // Add extraData (in case backend wants fields)
+        // formData.append("extraData", JSON.stringify(tplData));
+        // // Generate docx file from template and append as 'file'
+        // // Template path (public folder): /templates/vehicle_proposal_template.docx
+        // try {
+        //   const generatedFile = await generateDocxFromTemplate(
+        //     "/templates/vehicle_proposal_template.docx",
+        //     tplData
+        //   );
+        //   formData.append("file", generatedFile);
+        // } catch (err) {
+        //   console.error("Lỗi tạo file DOCX từ template:", err);
+        //   message.error("Không thể tạo file từ mẫu. Vui lòng thử lại.");
+        //   setSubmitting(false);
+        //   return;
+        // }
       } else {
         // general: append currentPdfFile (or image converted earlier)
         if (currentPdfFile) {
