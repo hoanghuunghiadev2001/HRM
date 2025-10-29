@@ -255,7 +255,7 @@ export default function ClientDashboard({
 
       <title>TOYOTA</title>
 
-      <div className="w-full h-full overflow-hidden ">
+      <div className="w-[100vw] h-full overflow-hidden ">
         {/* Header */}
         <div
           className={`${
