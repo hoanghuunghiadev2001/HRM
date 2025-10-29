@@ -574,11 +574,17 @@ const Profile = () => {
                   }
                 : undefined
             }
-            onChange={(value) => setManagerUser(Number(value))} // value là ID
+            onChange={(value) => setManagerUser(Number(value))}
             options={userSelectOptions}
             style={{ width: "100%", marginTop: 8 }}
-            optionFilterProp="label"
             showSearch
+            optionFilterProp="searchText"
+            filterOption={(input, option) => {
+              // ép kiểu option cho chắc chắn
+              const searchText =
+                (option as { searchText?: string })?.searchText ?? "";
+              return searchText.toLowerCase().includes(input.toLowerCase());
+            }}
           />
         </div>
       </div>
