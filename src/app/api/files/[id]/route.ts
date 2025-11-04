@@ -106,7 +106,13 @@ export async function GET(
           .filter((s) => s.status === "approved")
           .forEach((s) => {
             page.drawText(
-              `- ${s.signer.name} • ${s.signedAt?.toLocaleDateString() || ""}`,
+              `- ${s.signer.name} • ${
+                s.signedAt
+                  ? dayjs(s.signedAt)
+                      .tz("Asia/Ho_Chi_Minh")
+                      .format("DD/MM/YYYY HH:mm")
+                  : ""
+              }`,
               { x: margin + 20, y, size: 14, font }
             );
             y -= lineHeight;
@@ -125,7 +131,11 @@ export async function GET(
           .forEach((a) => {
             page.drawText(
               `- ${a.approver.name} • ${
-                a.approvedAt?.toLocaleDateString() || ""
+                a.approvedAt
+                  ? dayjs(a.approvedAt)
+                      .tz("Asia/Ho_Chi_Minh")
+                      .format("DD/MM/YYYY HH:mm")
+                  : ""
               }`,
               { x: margin + 20, y, size: 14, font }
             );
