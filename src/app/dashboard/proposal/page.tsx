@@ -20,6 +20,7 @@ import {
   DatePicker,
   Checkbox,
   Form,
+  Modal,
 } from "antd";
 import {
   UploadOutlined,
@@ -55,6 +56,7 @@ export default function ProposalCreator() {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false); // Thêm state cho submit loading
   const [employees, setEmployees] = useState<FormattedEmployee[]>([]);
+  const [modal, contextHolder] = Modal.useModal();
 
   // ---------- new: proposal type ----------
   const [proposalType, setProposalType] = useState<"general" | "vehicle">(
@@ -362,7 +364,9 @@ export default function ProposalCreator() {
       const result = await response.json();
 
       if (response.ok) {
-        message.success("Đề xuất đã được tạo thành công!");
+        modal.success({
+          title: "Tạo đề xuất thành công",
+        });
         // reset everything
         setProposalName("");
         setDescription("");
@@ -379,10 +383,16 @@ export default function ProposalCreator() {
         setProposalType("general");
         message.info("Email đã được gửi đến những người cần ký duyệt", 3);
       } else {
+        modal.error({
+          title: "Có lỗi xảy ra khi tạo đề xuất",
+        });
         message.error(result.error || "Có lỗi xảy ra khi tạo đề xuất");
         console.error("API Error:", result);
       }
     } catch (error) {
+      modal.error({
+        title: "Không thể kết nối đến server. Vui lòng thử lại!",
+      });
       console.error("Submit error:", error);
       message.error("Không thể kết nối đến server. Vui lòng thử lại!");
     } finally {
@@ -448,6 +458,8 @@ export default function ProposalCreator() {
   return (
     <div style={{ padding: 0, maxWidth: 1400, margin: "0 auto" }}>
       <ModalLoading isOpen={loading || submitting} />
+      {contextHolder}
+
       <Title level={2}>
         <EditOutlined /> Tạo Đề Xuất Mới
       </Title>

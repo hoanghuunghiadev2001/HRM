@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { ProposalService } from "@/lib/proposal-service";
 import { type NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
@@ -10,10 +9,16 @@ export async function GET(request: NextRequest) {
     // ===== Xác thực token =====
     const token = request.cookies.get("token")?.value;
     if (!token) {
-      return NextResponse.json({ error: "Thiếu token xác thực" }, { status: 401 });
+      return NextResponse.json(
+        { error: "Thiếu token xác thực" },
+        { status: 401 }
+      );
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: number; role: string };
+    const decoded = jwt.verify(token, JWT_SECRET) as {
+      id: number;
+      role: string;
+    };
     const employeeId = decoded.id;
     const role = decoded.role;
 
@@ -68,7 +73,9 @@ export async function GET(request: NextRequest) {
       const pending = p.signers.filter((s) => s.status === "pending");
       if (pending.length === 0) return false;
       const minLevel = Math.min(...pending.map((s) => s.level));
-      return pending.some((s) => s.level === minLevel && s.signerId === employeeId);
+      return pending.some(
+        (s) => s.level === minLevel && s.signerId === employeeId
+      );
     });
 
     const needToSignTotal = need_to_sign_filtered.length;
@@ -89,11 +96,16 @@ export async function GET(request: NextRequest) {
       const pending = p.approvers.filter((a) => a.status === "pending");
       if (pending.length === 0) return false;
       const minLevel = Math.min(...pending.map((a) => a.level));
-      return pending.some((a) => a.level === minLevel && a.approverId === employeeId);
+      return pending.some(
+        (a) => a.level === minLevel && a.approverId === employeeId
+      );
     });
 
     const needToApproveTotal = need_to_approve_filtered.length;
-    const need_to_approve = need_to_approve_filtered.slice(skip, skip + pageSize);
+    const need_to_approve = need_to_approve_filtered.slice(
+      skip,
+      skip + pageSize
+    );
 
     // ===== Response =====
     return NextResponse.json({
@@ -106,14 +118,19 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("❌ Lỗi khi lấy proposal:", error);
-    return NextResponse.json({ message: "Lỗi máy chủ nội bộ" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Lỗi máy chủ nội bộ" },
+      { status: 500 }
+    );
   }
 }
 
 // ===== INCLUDE MẶC ĐỊNH =====
 function defaultInclude() {
   return {
-    file: { select: { id: true, filename: true, mimeType: true, fileSize: true } },
+    file: {
+      select: { id: true, filename: true, mimeType: true, fileSize: true },
+    },
     proposer: { select: { id: true, name: true, employeeCode: true } },
     createdBy: { select: { id: true, name: true, employeeCode: true } },
     signers: {

@@ -34,7 +34,7 @@ export async function GET() {
       },
     });
 
-    const formatted = employees.map(emp => ({
+    const formatted = employees.map((emp) => ({
       id: emp.id,
       name: emp.name,
       avatar: emp.avatar,
@@ -46,6 +46,9 @@ export async function GET() {
     return NextResponse.json(formatted);
   } catch (error) {
     console.error("Error fetching employees:", error);
-    return NextResponse.json({ error: "Failed to fetch employees" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch employees" },
+      { status: 500 }
+    );
   }
 }

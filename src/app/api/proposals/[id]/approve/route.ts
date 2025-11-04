@@ -1,4 +1,5 @@
 // app/api/proposals/[id]/approve/route.ts
+
 import { NextRequest, NextResponse } from "next/server";
 import { ProposalService } from "@/lib/proposal-service";
 import jwt from "jsonwebtoken";

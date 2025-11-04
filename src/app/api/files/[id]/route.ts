@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import jwt from "jsonwebtoken";
@@ -6,6 +7,12 @@ import { PDFDocument, rgb } from "pdf-lib";
 import fs from "fs";
 import path from "path";
 import fontkit from "@pdf-lib/fontkit";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
@@ -168,7 +175,13 @@ export async function GET(
         .filter((s) => s.status === "approved")
         .forEach((s) => {
           page2.drawText(
-            `- ${s.signer.name} • ${s.signedAt?.toLocaleDateString() || ""}`,
+            `- ${s.signer.name} • ${
+              s.signedAt
+                ? dayjs(s.signedAt)
+                    .tz("Asia/Ho_Chi_Minh")
+                    .format("DD/MM/YYYY HH:mm")
+                : ""
+            }`,
             { x: margin + 20, y, size: 14, font }
           );
           y -= lineHeight;
@@ -187,7 +200,11 @@ export async function GET(
         .forEach((a) => {
           page2.drawText(
             `- ${a.approver.name} • ${
-              a.approvedAt?.toLocaleDateString() || ""
+              a.approvedAt
+                ? dayjs(a.approvedAt)
+                    .tz("Asia/Ho_Chi_Minh")
+                    .format("DD/MM/YYYY HH:mm")
+                : ""
             }`,
             { x: margin + 20, y, size: 14, font }
           );

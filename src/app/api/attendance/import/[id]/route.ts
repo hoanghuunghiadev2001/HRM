@@ -37,7 +37,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-   const importId = Number((await params).id);
+    const importId = Number((await params).id);
 
     // Xoá toàn bộ attendance thuộc import
     await prisma.attendance.deleteMany({ where: { importId } });

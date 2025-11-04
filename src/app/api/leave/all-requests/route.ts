@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // app/api/leaveRequests/route.ts
+
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { LeaveStatus, Prisma } from "../../../../../generated/prisma";
@@ -43,7 +44,8 @@ export async function GET(req: NextRequest) {
 
     if (decoded.role === "ADMIN") {
       if (name) employeeFilter.name = { contains: name };
-      if (employeeCode) employeeFilter.employeeCode = { contains: employeeCode };
+      if (employeeCode)
+        employeeFilter.employeeCode = { contains: employeeCode };
       if (departmentIdParam) {
         const departmentIdNum = parseInt(departmentIdParam, 10);
         if (!isNaN(departmentIdNum)) {
@@ -53,7 +55,8 @@ export async function GET(req: NextRequest) {
     } else if (decoded.role === "MANAGER") {
       employeeFilter.workInfo = { is: { departmentId: decoded.departmentId } };
       if (name) employeeFilter.name = { contains: name };
-      if (employeeCode) employeeFilter.employeeCode = { contains: employeeCode };
+      if (employeeCode)
+        employeeFilter.employeeCode = { contains: employeeCode };
     }
 
     // Build filter leave request
@@ -63,11 +66,11 @@ export async function GET(req: NextRequest) {
       status: status ? status : undefined,
       ...(filterDate
         ? {
-          AND: [
-            { startDate: { lte: endOfDay(filterDate) } },
-            { endDate: { gte: startOfDay(filterDate) } },
-          ],
-        }
+            AND: [
+              { startDate: { lte: endOfDay(filterDate) } },
+              { endDate: { gte: startOfDay(filterDate) } },
+            ],
+          }
         : {}),
     };
 
@@ -126,7 +129,8 @@ export async function GET(req: NextRequest) {
         approversSummary: approvalHistory
           .map(
             (a) =>
-              `${a.name || ""} (${a.employeeCode || ""}) - ${statusMap[a.status] || a.status
+              `${a.name || ""} (${a.employeeCode || ""}) - ${
+                statusMap[a.status] || a.status
               }`
           )
           .join("; "),
@@ -136,10 +140,12 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ data: processedData, total, page, pageSize });
   } catch (err) {
     console.error("❌ Lỗi API leave:", err);
-    return NextResponse.json({ message: "Lấy danh sách thất bại" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Lấy danh sách thất bại" },
+      { status: 500 }
+    );
   }
 }
-
 
 export async function PUT(req: NextRequest) {
   try {
@@ -150,7 +156,10 @@ export async function PUT(req: NextRequest) {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
     if (decoded.role !== "ADMIN") {
-      return NextResponse.json({ message: "Bạn không có quyền" }, { status: 403 });
+      return NextResponse.json(
+        { message: "Bạn không có quyền" },
+        { status: 403 }
+      );
     }
 
     const body = await req.json();
@@ -200,10 +209,7 @@ export async function PUT(req: NextRequest) {
     });
   } catch (error) {
     console.error("❌ Lỗi khi cập nhật đơn nghỉ:", error);
-    return NextResponse.json(
-      { message: "Cập nhật thất bại" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Cập nhật thất bại" }, { status: 500 });
   }
 }
 
@@ -225,7 +231,10 @@ export async function DELETE(req: NextRequest) {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
     if (decoded.role !== "ADMIN") {
-      return NextResponse.json({ message: "Bạn không có quyền" }, { status: 403 });
+      return NextResponse.json(
+        { message: "Bạn không có quyền" },
+        { status: 403 }
+      );
     }
 
     const leaveRequest = await prisma.leaveRequest.findUnique({
@@ -246,9 +255,6 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ message: "Xóa đơn nghỉ thành công" });
   } catch (error) {
     console.error("❌ Lỗi khi xóa đơn nghỉ:", error);
-    return NextResponse.json(
-      { message: "Xóa đơn thất bại" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Xóa đơn thất bại" }, { status: 500 });
   }
 }

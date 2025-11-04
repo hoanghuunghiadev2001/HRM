@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
@@ -20,7 +19,10 @@ export async function PATCH(req: NextRequest) {
     const positionId = Number(posIdStr);
 
     if (isNaN(positionId)) {
-      return NextResponse.json({ error: "Invalid position ID" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid position ID" },
+        { status: 400 }
+      );
     }
 
     const body = await req.json();
@@ -30,14 +32,20 @@ export async function PATCH(req: NextRequest) {
     let level: number | undefined = body.level;
 
     if (!name) {
-      return NextResponse.json({ error: "Position name required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Position name required" },
+        { status: 400 }
+      );
     }
 
     // Ép kiểu level về number
     if (level !== undefined && level !== null) {
       level = Number(level);
       if (isNaN(level)) {
-        return NextResponse.json({ error: "Level phải là số" }, { status: 400 });
+        return NextResponse.json(
+          { error: "Level phải là số" },
+          { status: 400 }
+        );
       }
     } else {
       level = getLevelFromPositionName(name);
@@ -65,7 +73,10 @@ export async function DELETE(req: NextRequest) {
     const positionId = Number(posIdStr);
 
     if (isNaN(positionId)) {
-      return NextResponse.json({ error: "Invalid position ID" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid position ID" },
+        { status: 400 }
+      );
     }
 
     await prisma.position.delete({ where: { id: positionId } });

@@ -1,4 +1,5 @@
 // app/api/leaveRequests/pending/route.ts
+
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { LeaveStatus } from "../../../../../generated/prisma";

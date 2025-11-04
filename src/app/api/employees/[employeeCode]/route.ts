@@ -46,12 +46,20 @@ function isBase64Image(str: string): boolean {
 export async function GET(req: NextRequest) {
   const employeeCode = getEmployeeCodeFromUrl(req.url);
   const token = req.cookies.get("token")?.value;
-  if (!token) return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
+  if (!token)
+    return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
 
   const user = verifyToken(token);
-  if (!user) return NextResponse.json({ message: "Token không hợp lệ" }, { status: 401 });
+  if (!user)
+    return NextResponse.json(
+      { message: "Token không hợp lệ" },
+      { status: 401 }
+    );
   if (user.role !== "ADMIN" && user.role !== "MANAGER") {
-    return NextResponse.json({ message: "Không có quyền truy cập" }, { status: 403 });
+    return NextResponse.json(
+      { message: "Không có quyền truy cập" },
+      { status: 403 }
+    );
   }
 
   try {
@@ -66,7 +74,11 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    if (!employee) return NextResponse.json({ message: "Không tìm thấy nhân viên" }, { status: 404 });
+    if (!employee)
+      return NextResponse.json(
+        { message: "Không tìm thấy nhân viên" },
+        { status: 404 }
+      );
 
     const formattedEmployee = {
       ...employee,
@@ -82,7 +94,10 @@ export async function GET(req: NextRequest) {
           }
         : null,
       personalInfo: employee.personalInfo
-        ? { ...employee.personalInfo, issueDate: formatDate(employee.personalInfo.issueDate) }
+        ? {
+            ...employee.personalInfo,
+            issueDate: formatDate(employee.personalInfo.issueDate),
+          }
         : null,
       contactInfo: employee.contactInfo ?? null,
       otherInfo: employee.otherInfo
@@ -111,16 +126,30 @@ export async function GET(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   const employeeCode = getEmployeeCodeFromUrl(req.url);
   const token = req.cookies.get("token")?.value;
-  if (!token) return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
+  if (!token)
+    return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
 
   const user = verifyToken(token);
-  if (!user) return NextResponse.json({ message: "Token không hợp lệ" }, { status: 401 });
+  if (!user)
+    return NextResponse.json(
+      { message: "Token không hợp lệ" },
+      { status: 401 }
+    );
 
   try {
-    const employee = await prisma.employee.findUnique({ where: { employeeCode } });
-    if (!employee) return NextResponse.json({ message: "Không tìm thấy nhân viên" }, { status: 404 });
+    const employee = await prisma.employee.findUnique({
+      where: { employeeCode },
+    });
+    if (!employee)
+      return NextResponse.json(
+        { message: "Không tìm thấy nhân viên" },
+        { status: 404 }
+      );
     if (user.role !== "ADMIN" && employee.id !== user.id) {
-      return NextResponse.json({ message: "Không có quyền sửa nhân viên này" }, { status: 403 });
+      return NextResponse.json(
+        { message: "Không có quyền sửa nhân viên này" },
+        { status: 403 }
+      );
     }
 
     const body = await req.json();
@@ -132,7 +161,10 @@ export async function PATCH(req: NextRequest) {
         public_id: `employee-${employee.id}-${Date.now()}`,
       });
       avatar = res.secure_url;
-    } else if (typeof avatar !== "string" || (!avatar.startsWith("http") && avatar !== null)) {
+    } else if (
+      typeof avatar !== "string" ||
+      (!avatar.startsWith("http") && avatar !== null)
+    ) {
       avatar = undefined;
     }
 
@@ -151,7 +183,9 @@ export async function PATCH(req: NextRequest) {
 
     // Hàm upsert cho các bảng liên quan
     const upsert = async (model: any, data: any) => {
-      const exists = await model.findUnique({ where: { employeeId: employee.id } });
+      const exists = await model.findUnique({
+        where: { employeeId: employee.id },
+      });
       if (exists) {
         return model.update({ where: { employeeId: employee.id }, data });
       } else {
@@ -193,9 +227,18 @@ export async function PATCH(req: NextRequest) {
 
     if (body.contactInfo) {
       await upsert(prisma.contactInfo, {
-        phoneNumber: body.contactInfo.phoneNumber || body.contactInfo.phoneNumber != "" ?body.contactInfo.phoneNumber:  null,
-        relativePhone: body.contactInfo.relativePhone  || body.contactInfo.relativePhone != "" ?body.contactInfo.relativePhone: null,
-        companyPhone: body.contactInfo.companyPhone  || body.contactInfo.companyPhone != "" ?body.contactInfo.companyPhone: null,
+        phoneNumber:
+          body.contactInfo.phoneNumber || body.contactInfo.phoneNumber != ""
+            ? body.contactInfo.phoneNumber
+            : null,
+        relativePhone:
+          body.contactInfo.relativePhone || body.contactInfo.relativePhone != ""
+            ? body.contactInfo.relativePhone
+            : null,
+        companyPhone:
+          body.contactInfo.companyPhone || body.contactInfo.companyPhone != ""
+            ? body.contactInfo.companyPhone
+            : null,
         email: body.contactInfo.email,
       });
     }

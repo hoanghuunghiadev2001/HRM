@@ -188,7 +188,7 @@ export async function POST(req: NextRequest) {
     // Xử lý contactInfo
     const contactInfoData = contactInfo
       ? {
-          phoneNumber: contactInfo.phoneNumber?? null,
+          phoneNumber: contactInfo.phoneNumber ?? null,
           relativePhone: contactInfo.relativePhone ?? null,
           companyPhone: contactInfo.companyPhone ?? null,
           email: contactInfo.email ?? null,

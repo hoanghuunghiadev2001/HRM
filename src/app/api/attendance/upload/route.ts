@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { NextResponse } from "next/server";
 import * as XLSX from "xlsx";
 import { prisma } from "@/lib/prisma";
@@ -10,8 +11,10 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 function cellToHHmm(val: any): string | null {
-  if (val === undefined || val === null || String(val).trim() === "") return null;
-  if (val instanceof Date && !isNaN(val.getTime())) return dayjs(val).format("HH:mm");
+  if (val === undefined || val === null || String(val).trim() === "")
+    return null;
+  if (val instanceof Date && !isNaN(val.getTime()))
+    return dayjs(val).format("HH:mm");
 
   const s = String(val).trim();
   const m = s.match(/(\d{1,2}):(\d{1,2})(?::\d{1,2})?/);
@@ -44,14 +47,21 @@ function parseTimeToUTC(workDate: Date, hhmm: string | null): Date | null {
   const [hh, mm] = hhmm.split(":").map(Number);
 
   // Tạo dayjs ở VN
-  const dt = dayjs(workDate).tz("Asia/Ho_Chi_Minh").hour(hh).minute(mm).second(0).millisecond(0);
-  
+  const dt = dayjs(workDate)
+    .tz("Asia/Ho_Chi_Minh")
+    .hour(hh)
+    .minute(mm)
+    .second(0)
+    .millisecond(0);
+
   // Lấy UTC Date
   return dt.utc().toDate();
 }
 
-
-function calcHours(checkInHHmm: string | null, checkOutHHmm: string | null): number {
+function calcHours(
+  checkInHHmm: string | null,
+  checkOutHHmm: string | null
+): number {
   if (!checkInHHmm || !checkOutHHmm) return 0;
   const [h1, m1] = checkInHHmm.split(":").map(Number);
   const [h2, m2] = checkOutHHmm.split(":").map(Number);
@@ -64,29 +74,49 @@ export async function POST(req: Request) {
     const file = formData.get("file") as File | null;
     const importedById = formData.get("importedById") as string | null; // id nhân viên gửi file
 
-    if (!file) return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
+    if (!file)
+      return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const workbook = XLSX.read(buffer, { type: "buffer" });
 
     const sheetName = "ThongKe";
     const sheet = workbook.Sheets[sheetName];
-    if (!sheet) return NextResponse.json({ error: `Sheet '${sheetName}' not found` }, { status: 400 });
+    if (!sheet)
+      return NextResponse.json(
+        { error: `Sheet '${sheetName}' not found` },
+        { status: 400 }
+      );
 
-    const rows: any[][] = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: true });
+    const rows: any[][] = XLSX.utils.sheet_to_json(sheet, {
+      header: 1,
+      raw: true,
+    });
 
     const dateRow = rows[3]?.[0] || "";
     const match = String(dateRow).match(/(\d{2}\/\d{2}\/\d{4})/);
-    if (!match) return NextResponse.json({ error: "Không đọc được ngày từ file Excel" }, { status: 400 });
+    if (!match)
+      return NextResponse.json(
+        { error: "Không đọc được ngày từ file Excel" },
+        { status: 400 }
+      );
 
     const [dd, mm, yyyy] = match[1].split("/");
     const workDate = dayjs(`${yyyy}-${mm}-${dd}`).startOf("day").toDate();
     workDate.setUTCHours(0, 0, 0, 0);
 
-    let startIndex = rows.findIndex(r => r && (r[0] === 1 || r[0] === "1" || r[0] === "STT"));
+    let startIndex = rows.findIndex(
+      (r) => r && (r[0] === 1 || r[0] === "1" || r[0] === "STT")
+    );
     if (startIndex === -1) {
-      startIndex = rows.findIndex(r => r && r[1] && String(r[1]).trim() && String(r[2] ?? "").trim());
-      if (startIndex === -1) return NextResponse.json({ error: "Không tìm thấy dữ liệu nhân viên trong file" }, { status: 400 });
+      startIndex = rows.findIndex(
+        (r) => r && r[1] && String(r[1]).trim() && String(r[2] ?? "").trim()
+      );
+      if (startIndex === -1)
+        return NextResponse.json(
+          { error: "Không tìm thấy dữ liệu nhân viên trong file" },
+          { status: 400 }
+        );
     }
 
     // Tạo log import

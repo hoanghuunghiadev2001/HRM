@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // app/api/user/route.ts
+
 import "server-only";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
@@ -46,7 +47,10 @@ export async function GET(req: NextRequest) {
     });
 
     if (!employee) {
-      return NextResponse.json({ message: "Không tìm thấy nhân viên" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Không tìm thấy nhân viên" },
+        { status: 404 }
+      );
     }
 
     // Xóa password trước khi trả về
@@ -77,6 +81,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(formattedEmployee);
   } catch (err) {
     console.error("Lỗi API /user:", err);
-    return NextResponse.json({ message: "Token không hợp lệ" }, { status: 401 });
+    return NextResponse.json(
+      { message: "Token không hợp lệ" },
+      { status: 401 }
+    );
   }
 }
