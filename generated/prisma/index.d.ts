@@ -15930,8 +15930,8 @@ export namespace Prisma {
     checkOutTime?: boolean
     workingHours?: boolean
     importId?: boolean
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
     importLog?: boolean | Attendance$importLogArgs<ExtArgs>
+    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["attendance"]>
 
 
@@ -15948,15 +15948,15 @@ export namespace Prisma {
 
   export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "date" | "checkInTime" | "checkOutTime" | "workingHours" | "importId", ExtArgs["result"]["attendance"]>
   export type AttendanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
     importLog?: boolean | Attendance$importLogArgs<ExtArgs>
+    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
   }
 
   export type $AttendancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Attendance"
     objects: {
-      employee: Prisma.$EmployeePayload<ExtArgs>
       importLog: Prisma.$AttendanceImportLogPayload<ExtArgs> | null
+      employee: Prisma.$EmployeePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -16306,8 +16306,8 @@ export namespace Prisma {
    */
   export interface Prisma__AttendanceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     importLog<T extends Attendance$importLogArgs<ExtArgs> = {}>(args?: Subset<T, Attendance$importLogArgs<ExtArgs>>): Prisma__AttendanceImportLogClient<$Result.GetResult<Prisma.$AttendanceImportLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -24361,8 +24361,8 @@ export namespace Prisma {
     checkOutTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     workingHours?: FloatNullableFilter<"Attendance"> | number | null
     importId?: IntNullableFilter<"Attendance"> | number | null
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     importLog?: XOR<AttendanceImportLogNullableScalarRelationFilter, AttendanceImportLogWhereInput> | null
+    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
   }
 
   export type AttendanceOrderByWithRelationInput = {
@@ -24373,8 +24373,8 @@ export namespace Prisma {
     checkOutTime?: SortOrderInput | SortOrder
     workingHours?: SortOrderInput | SortOrder
     importId?: SortOrderInput | SortOrder
-    employee?: EmployeeOrderByWithRelationInput
     importLog?: AttendanceImportLogOrderByWithRelationInput
+    employee?: EmployeeOrderByWithRelationInput
   }
 
   export type AttendanceWhereUniqueInput = Prisma.AtLeast<{
@@ -24388,8 +24388,8 @@ export namespace Prisma {
     checkOutTime?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     workingHours?: FloatNullableFilter<"Attendance"> | number | null
     importId?: IntNullableFilter<"Attendance"> | number | null
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     importLog?: XOR<AttendanceImportLogNullableScalarRelationFilter, AttendanceImportLogWhereInput> | null
+    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
   }, "id">
 
   export type AttendanceOrderByWithAggregationInput = {
@@ -25870,8 +25870,8 @@ export namespace Prisma {
     checkInTime?: Date | string | null
     checkOutTime?: Date | string | null
     workingHours?: number | null
-    employee: EmployeeCreateNestedOneWithoutAttendanceInput
     importLog?: AttendanceImportLogCreateNestedOneWithoutAttendancesInput
+    employee: EmployeeCreateNestedOneWithoutAttendanceInput
   }
 
   export type AttendanceUncheckedCreateInput = {
@@ -25889,8 +25889,8 @@ export namespace Prisma {
     checkInTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
-    employee?: EmployeeUpdateOneRequiredWithoutAttendanceNestedInput
     importLog?: AttendanceImportLogUpdateOneWithoutAttendancesNestedInput
+    employee?: EmployeeUpdateOneRequiredWithoutAttendanceNestedInput
   }
 
   export type AttendanceUncheckedUpdateInput = {
@@ -29075,24 +29075,16 @@ export namespace Prisma {
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
   }
 
-  export type EmployeeCreateNestedOneWithoutAttendanceInput = {
-    create?: XOR<EmployeeCreateWithoutAttendanceInput, EmployeeUncheckedCreateWithoutAttendanceInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutAttendanceInput
-    connect?: EmployeeWhereUniqueInput
-  }
-
   export type AttendanceImportLogCreateNestedOneWithoutAttendancesInput = {
     create?: XOR<AttendanceImportLogCreateWithoutAttendancesInput, AttendanceImportLogUncheckedCreateWithoutAttendancesInput>
     connectOrCreate?: AttendanceImportLogCreateOrConnectWithoutAttendancesInput
     connect?: AttendanceImportLogWhereUniqueInput
   }
 
-  export type EmployeeUpdateOneRequiredWithoutAttendanceNestedInput = {
+  export type EmployeeCreateNestedOneWithoutAttendanceInput = {
     create?: XOR<EmployeeCreateWithoutAttendanceInput, EmployeeUncheckedCreateWithoutAttendanceInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutAttendanceInput
-    upsert?: EmployeeUpsertWithoutAttendanceInput
     connect?: EmployeeWhereUniqueInput
-    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutAttendanceInput, EmployeeUpdateWithoutAttendanceInput>, EmployeeUncheckedUpdateWithoutAttendanceInput>
   }
 
   export type AttendanceImportLogUpdateOneWithoutAttendancesNestedInput = {
@@ -29103,6 +29095,14 @@ export namespace Prisma {
     delete?: AttendanceImportLogWhereInput | boolean
     connect?: AttendanceImportLogWhereUniqueInput
     update?: XOR<XOR<AttendanceImportLogUpdateToOneWithWhereWithoutAttendancesInput, AttendanceImportLogUpdateWithoutAttendancesInput>, AttendanceImportLogUncheckedUpdateWithoutAttendancesInput>
+  }
+
+  export type EmployeeUpdateOneRequiredWithoutAttendanceNestedInput = {
+    create?: XOR<EmployeeCreateWithoutAttendanceInput, EmployeeUncheckedCreateWithoutAttendanceInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutAttendanceInput
+    upsert?: EmployeeUpsertWithoutAttendanceInput
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutAttendanceInput, EmployeeUpdateWithoutAttendanceInput>, EmployeeUncheckedUpdateWithoutAttendanceInput>
   }
 
   export type KPIEmployeeCreateNestedManyWithoutKpiInput = {
@@ -32786,6 +32786,24 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
+  export type AttendanceImportLogCreateWithoutAttendancesInput = {
+    filename: string
+    importedAt?: Date | string
+    importedBy?: EmployeeCreateNestedOneWithoutAttendanceImportLogInput
+  }
+
+  export type AttendanceImportLogUncheckedCreateWithoutAttendancesInput = {
+    id?: number
+    filename: string
+    importedAt?: Date | string
+    importedById?: number | null
+  }
+
+  export type AttendanceImportLogCreateOrConnectWithoutAttendancesInput = {
+    where: AttendanceImportLogWhereUniqueInput
+    create: XOR<AttendanceImportLogCreateWithoutAttendancesInput, AttendanceImportLogUncheckedCreateWithoutAttendancesInput>
+  }
+
   export type EmployeeCreateWithoutAttendanceInput = {
     employeeCode: string
     name: string
@@ -32850,22 +32868,28 @@ export namespace Prisma {
     create: XOR<EmployeeCreateWithoutAttendanceInput, EmployeeUncheckedCreateWithoutAttendanceInput>
   }
 
-  export type AttendanceImportLogCreateWithoutAttendancesInput = {
-    filename: string
-    importedAt?: Date | string
-    importedBy?: EmployeeCreateNestedOneWithoutAttendanceImportLogInput
-  }
-
-  export type AttendanceImportLogUncheckedCreateWithoutAttendancesInput = {
-    id?: number
-    filename: string
-    importedAt?: Date | string
-    importedById?: number | null
-  }
-
-  export type AttendanceImportLogCreateOrConnectWithoutAttendancesInput = {
-    where: AttendanceImportLogWhereUniqueInput
+  export type AttendanceImportLogUpsertWithoutAttendancesInput = {
+    update: XOR<AttendanceImportLogUpdateWithoutAttendancesInput, AttendanceImportLogUncheckedUpdateWithoutAttendancesInput>
     create: XOR<AttendanceImportLogCreateWithoutAttendancesInput, AttendanceImportLogUncheckedCreateWithoutAttendancesInput>
+    where?: AttendanceImportLogWhereInput
+  }
+
+  export type AttendanceImportLogUpdateToOneWithWhereWithoutAttendancesInput = {
+    where?: AttendanceImportLogWhereInput
+    data: XOR<AttendanceImportLogUpdateWithoutAttendancesInput, AttendanceImportLogUncheckedUpdateWithoutAttendancesInput>
+  }
+
+  export type AttendanceImportLogUpdateWithoutAttendancesInput = {
+    filename?: StringFieldUpdateOperationsInput | string
+    importedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    importedBy?: EmployeeUpdateOneWithoutAttendanceImportLogNestedInput
+  }
+
+  export type AttendanceImportLogUncheckedUpdateWithoutAttendancesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    filename?: StringFieldUpdateOperationsInput | string
+    importedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    importedById?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type EmployeeUpsertWithoutAttendanceInput = {
@@ -32936,30 +32960,6 @@ export namespace Prisma {
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-  }
-
-  export type AttendanceImportLogUpsertWithoutAttendancesInput = {
-    update: XOR<AttendanceImportLogUpdateWithoutAttendancesInput, AttendanceImportLogUncheckedUpdateWithoutAttendancesInput>
-    create: XOR<AttendanceImportLogCreateWithoutAttendancesInput, AttendanceImportLogUncheckedCreateWithoutAttendancesInput>
-    where?: AttendanceImportLogWhereInput
-  }
-
-  export type AttendanceImportLogUpdateToOneWithWhereWithoutAttendancesInput = {
-    where?: AttendanceImportLogWhereInput
-    data: XOR<AttendanceImportLogUpdateWithoutAttendancesInput, AttendanceImportLogUncheckedUpdateWithoutAttendancesInput>
-  }
-
-  export type AttendanceImportLogUpdateWithoutAttendancesInput = {
-    filename?: StringFieldUpdateOperationsInput | string
-    importedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    importedBy?: EmployeeUpdateOneWithoutAttendanceImportLogNestedInput
-  }
-
-  export type AttendanceImportLogUncheckedUpdateWithoutAttendancesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    filename?: StringFieldUpdateOperationsInput | string
-    importedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    importedById?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type KPIEmployeeCreateWithoutKpiInput = {

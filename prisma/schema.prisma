@@ -51,6 +51,7 @@ model Employee {
   proposalApprovals    ProposalApprover[]
   proposalSignatures   ProposalSigner[]
   workInfo             WorkInfo?
+  Attendance           Attendance[]
 
   @@index([employeeCode])
   @@index([managerId])
@@ -214,6 +215,7 @@ model Attendance {
   workingHours Float?
   importId     Int?
   importLog    AttendanceImportLog? @relation(fields: [importId], references: [id])
+  employee     Employee             @relation(fields: [employeeId], references: [id]) // 👈 thêm dòng này
 
   @@index([date])
   @@index([importId], map: "Attendance_importId_fkey")
