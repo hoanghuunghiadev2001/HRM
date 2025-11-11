@@ -318,14 +318,14 @@ export class ProposalService {
       if (signer.status !== "pending")
         return { success: false, error: "Bạn đã xử lý đề xuất này rồi" };
 
-      const minPendingLevel = Math.min(
-        ...proposal.signers
-          .filter((s) => s.status === "pending")
-          .map((s) => s.level)
-      );
+      // const minPendingLevel = Math.min(
+      //   ...proposal.signers
+      //     .filter((s) => s.status === "pending")
+      //     .map((s) => s.level)
+      // );
 
-      if (signer.level !== minPendingLevel)
-        return { success: false, error: "Chưa đến lượt ký của bạn" };
+      // if (signer.level !== minPendingLevel)
+      //   return { success: false, error: "Chưa đến lượt ký của bạn" };
 
       // ⚙️ Transaction cập nhật an toàn
       await prisma.$transaction(async (tx) => {
