@@ -412,11 +412,17 @@ export default function ProposalDetailPage() {
 
   // Regex: bắt cả dòng có “thời gian bắt đầu”, “thời gian kết thúc”, “from”, “to”... (không phân biệt hoa thường)
   const cleanedDescription = desc
-    .replace(/thời gian bắt đầu.*(\r?\n)?/gi, "")
-    .replace(/thời gian kết thúc.*(\r?\n)?/gi, "")
-    .replace(/from.*(\r?\n)?/gi, "")
-    .replace(/to.*(\r?\n)?/gi, "")
-    .trim(); // xóa khoảng trắng/thừa dòng cuối
+    .replace(/^\s*thời gian bắt đầu.*$/gim, "")
+    // Xóa dòng chứa "thời gian kết thúc"
+    .replace(/^\s*thời gian kết thúc.*$/gim, "")
+    // Xóa dòng chứa từ "from" đứng riêng
+    .replace(/^\s*\bfrom\b.*$/gim, "")
+    // Xóa dòng chứa từ "to" đứng riêng
+    .replace(/^\s*\bto\b.*$/gim, "")
+    // Xóa các dòng trống dư
+    .replace(/^\s*$/gim, "")
+    // Xóa khoảng trắng đầu/cuối
+    .trim();
 
   // Nếu bạn vẫn muốn hiển thị thời gian riêng:
   const startTimeMatch = desc.match(/thời gian bắt đầu[:\-]?\s*([\d/:\-\s]+)/i);
