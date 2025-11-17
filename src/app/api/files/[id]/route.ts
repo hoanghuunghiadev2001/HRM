@@ -146,7 +146,11 @@ export async function GET(
       }
     }
     // === Ảnh JPG/PNG → PDF ===
-    else if (fileType === "image/png" || fileType === "image/jpeg") {
+    else if (
+      fileType === "image/png" ||
+      fileType === "image/jpeg" ||
+      fileType === "image/webp"
+    ) {
       const pdfDoc = await PDFDocument.create();
       pdfDoc.registerFontkit(fontkit);
       const font = await pdfDoc.embedFont(fontBytes);
