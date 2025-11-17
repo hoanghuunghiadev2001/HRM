@@ -367,13 +367,13 @@ export class ProposalService {
           .filter((a) => a.status === "pending")
           .map((a) => a.level)
       );
-
       if (approver.level !== minPendingLevel)
         return { success: false, error: "Chưa đến lượt duyệt của bạn" };
 
       const now = new Date();
 
-      await prisma.$transaction(async (tx) => {
+      // Transaction: cập nhật trạng thái người duyệt và (nếu cần) đề xuất
+      const updatedProposal = await prisma.$transaction(async (tx) => {
         await tx.proposalApprover.update({
           where: { id: approver.id },
           data: { status, approvedAt: now },
@@ -385,25 +385,28 @@ export class ProposalService {
             data: { status: "rejected" },
           });
         }
+
+        return tx.proposal.findUnique({
+          where: { id: proposalId },
+          include: this.FULL_PROPOSAL_INCLUDE,
+        });
       });
 
+      if (!updatedProposal)
+        return { success: false, error: "Không thể tải lại đề xuất" };
+
+      // Nếu bị từ chối → gửi mail và kết thúc
       if (status === "rejected") {
-        setTimeout(() => {
-          EmailService.sendStatusUpdate(
-            proposal.proposer,
-            proposal,
-            "rejected"
-          ).catch((err) => console.error("[Mail error]", err));
-        }, 100);
+        void EmailService.sendStatusUpdate(
+          updatedProposal.proposer,
+          updatedProposal,
+          "rejected"
+        );
         return { success: true, message: "Đề xuất đã bị từ chối." };
       }
 
-      const updatedProposal = await prisma.proposal.findUnique({
-        where: { id: proposalId },
-        include: this.FULL_PROPOSAL_INCLUDE,
-      });
-
-      const nextApprover = updatedProposal?.approvers
+      // Lấy người duyệt tiếp theo
+      const nextApprover = updatedProposal.approvers
         .filter((a) => a.status === "pending")
         .sort((a, b) => a.level - b.level)[0];
 
@@ -412,26 +415,40 @@ export class ProposalService {
           where: { id: nextApprover.approverId },
           include: this.FULL_EMPLOYEE_INCLUDE,
         });
+
         if (approverInfo) {
-          setTimeout(() => {
-            EmailService.sendApprovalRequest(
-              approverInfo,
-              updatedProposal!
-            ).catch((err) => console.error("[Mail error]", err));
-          }, 100);
+          // ✅ Tạo token approve/reject cho mail
+          const approveAction = generateActionToken({
+            proposalId: updatedProposal.id,
+            actorId: approverInfo.id,
+            role: "approver",
+            action: "approve",
+          });
+          const rejectAction = generateActionToken({
+            proposalId: updatedProposal.id,
+            actorId: approverInfo.id,
+            role: "approver",
+            action: "reject",
+          });
+
+          // Gửi mail trực tiếp
+          void EmailService.sendApprovalRequest(approverInfo, {
+            ...updatedProposal,
+            approveLink: approveAction.directApi,
+            rejectLink: rejectAction.directApi,
+          });
         }
       } else {
+        // Nếu hết người duyệt → cập nhật approved
         await prisma.proposal.update({
           where: { id: proposalId },
           data: { status: "approved" },
         });
-        setTimeout(() => {
-          EmailService.sendStatusUpdate(
-            updatedProposal!.proposer,
-            updatedProposal!,
-            "approved"
-          ).catch((err) => console.error("[Mail error]", err));
-        }, 100);
+        void EmailService.sendStatusUpdate(
+          updatedProposal.proposer,
+          updatedProposal,
+          "approved"
+        );
       }
 
       return { success: true, message: "Đã phê duyệt đề xuất." };
