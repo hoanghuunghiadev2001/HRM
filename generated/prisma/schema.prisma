@@ -312,6 +312,20 @@ model ProposalApprover {
   @@index([approverId], map: "ProposalApprover_approverId_fkey")
 }
 
+model EmailActionToken {
+  id         Int       @id @default(autoincrement())
+  token      String    @unique
+  proposalId Int
+  actorId    String
+  role       String // "signer" | "approver"
+  action     String // "approve" | "reject"
+  usedAt     DateTime?
+  createdAt  DateTime  @default(now())
+  expiresAt  DateTime
+  ip         String?
+  userAgent  String?
+}
+
 enum Role {
   USER
   MANAGER

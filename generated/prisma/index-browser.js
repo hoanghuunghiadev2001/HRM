@@ -329,6 +329,20 @@ exports.Prisma.ProposalApproverScalarFieldEnum = {
   level: 'level'
 };
 
+exports.Prisma.EmailActionTokenScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  proposalId: 'proposalId',
+  actorId: 'actorId',
+  role: 'role',
+  action: 'action',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt',
+  ip: 'ip',
+  userAgent: 'userAgent'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -419,6 +433,15 @@ exports.Prisma.ProposalOrderByRelevanceFieldEnum = {
   title: 'title',
   description: 'description'
 };
+
+exports.Prisma.EmailActionTokenOrderByRelevanceFieldEnum = {
+  token: 'token',
+  actorId: 'actorId',
+  role: 'role',
+  action: 'action',
+  ip: 'ip',
+  userAgent: 'userAgent'
+};
 exports.Sex = exports.$Enums.Sex = {
   MALE: 'MALE',
   FEMALE: 'FEMALE'
@@ -480,7 +503,8 @@ exports.Prisma.ModelName = {
   KPIEntry: 'KPIEntry',
   Proposal: 'Proposal',
   ProposalSigner: 'ProposalSigner',
-  ProposalApprover: 'ProposalApprover'
+  ProposalApprover: 'ProposalApprover',
+  EmailActionToken: 'EmailActionToken'
 };
 
 /**

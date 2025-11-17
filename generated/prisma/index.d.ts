@@ -108,6 +108,11 @@ export type ProposalSigner = $Result.DefaultSelection<Prisma.$ProposalSignerPayl
  * 
  */
 export type ProposalApprover = $Result.DefaultSelection<Prisma.$ProposalApproverPayload>
+/**
+ * Model EmailActionToken
+ * 
+ */
+export type EmailActionToken = $Result.DefaultSelection<Prisma.$EmailActionTokenPayload>
 
 /**
  * Enums
@@ -512,6 +517,16 @@ export class PrismaClient<
     * ```
     */
   get proposalApprover(): Prisma.ProposalApproverDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.emailActionToken`: Exposes CRUD operations for the **EmailActionToken** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EmailActionTokens
+    * const emailActionTokens = await prisma.emailActionToken.findMany()
+    * ```
+    */
+  get emailActionToken(): Prisma.EmailActionTokenDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -970,7 +985,8 @@ export namespace Prisma {
     KPIEntry: 'KPIEntry',
     Proposal: 'Proposal',
     ProposalSigner: 'ProposalSigner',
-    ProposalApprover: 'ProposalApprover'
+    ProposalApprover: 'ProposalApprover',
+    EmailActionToken: 'EmailActionToken'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -989,7 +1005,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "file" | "employee" | "department" | "position" | "workInfo" | "personalInfo" | "contactInfo" | "otherInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover"
+      modelProps: "file" | "employee" | "department" | "position" | "workInfo" | "personalInfo" | "contactInfo" | "otherInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover" | "emailActionToken"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2247,6 +2263,72 @@ export namespace Prisma {
           }
         }
       }
+      EmailActionToken: {
+        payload: Prisma.$EmailActionTokenPayload<ExtArgs>
+        fields: Prisma.EmailActionTokenFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EmailActionTokenFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailActionTokenPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EmailActionTokenFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailActionTokenPayload>
+          }
+          findFirst: {
+            args: Prisma.EmailActionTokenFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailActionTokenPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EmailActionTokenFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailActionTokenPayload>
+          }
+          findMany: {
+            args: Prisma.EmailActionTokenFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailActionTokenPayload>[]
+          }
+          create: {
+            args: Prisma.EmailActionTokenCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailActionTokenPayload>
+          }
+          createMany: {
+            args: Prisma.EmailActionTokenCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.EmailActionTokenDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailActionTokenPayload>
+          }
+          update: {
+            args: Prisma.EmailActionTokenUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailActionTokenPayload>
+          }
+          deleteMany: {
+            args: Prisma.EmailActionTokenDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EmailActionTokenUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.EmailActionTokenUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailActionTokenPayload>
+          }
+          aggregate: {
+            args: Prisma.EmailActionTokenAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEmailActionToken>
+          }
+          groupBy: {
+            args: Prisma.EmailActionTokenGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EmailActionTokenGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EmailActionTokenCountArgs<ExtArgs>
+            result: $Utils.Optional<EmailActionTokenCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2350,6 +2432,7 @@ export namespace Prisma {
     proposal?: ProposalOmit
     proposalSigner?: ProposalSignerOmit
     proposalApprover?: ProposalApproverOmit
+    emailActionToken?: EmailActionTokenOmit
   }
 
   /* Types for Logging */
@@ -22859,6 +22942,992 @@ export namespace Prisma {
 
 
   /**
+   * Model EmailActionToken
+   */
+
+  export type AggregateEmailActionToken = {
+    _count: EmailActionTokenCountAggregateOutputType | null
+    _avg: EmailActionTokenAvgAggregateOutputType | null
+    _sum: EmailActionTokenSumAggregateOutputType | null
+    _min: EmailActionTokenMinAggregateOutputType | null
+    _max: EmailActionTokenMaxAggregateOutputType | null
+  }
+
+  export type EmailActionTokenAvgAggregateOutputType = {
+    id: number | null
+    proposalId: number | null
+  }
+
+  export type EmailActionTokenSumAggregateOutputType = {
+    id: number | null
+    proposalId: number | null
+  }
+
+  export type EmailActionTokenMinAggregateOutputType = {
+    id: number | null
+    token: string | null
+    proposalId: number | null
+    actorId: string | null
+    role: string | null
+    action: string | null
+    usedAt: Date | null
+    createdAt: Date | null
+    expiresAt: Date | null
+    ip: string | null
+    userAgent: string | null
+  }
+
+  export type EmailActionTokenMaxAggregateOutputType = {
+    id: number | null
+    token: string | null
+    proposalId: number | null
+    actorId: string | null
+    role: string | null
+    action: string | null
+    usedAt: Date | null
+    createdAt: Date | null
+    expiresAt: Date | null
+    ip: string | null
+    userAgent: string | null
+  }
+
+  export type EmailActionTokenCountAggregateOutputType = {
+    id: number
+    token: number
+    proposalId: number
+    actorId: number
+    role: number
+    action: number
+    usedAt: number
+    createdAt: number
+    expiresAt: number
+    ip: number
+    userAgent: number
+    _all: number
+  }
+
+
+  export type EmailActionTokenAvgAggregateInputType = {
+    id?: true
+    proposalId?: true
+  }
+
+  export type EmailActionTokenSumAggregateInputType = {
+    id?: true
+    proposalId?: true
+  }
+
+  export type EmailActionTokenMinAggregateInputType = {
+    id?: true
+    token?: true
+    proposalId?: true
+    actorId?: true
+    role?: true
+    action?: true
+    usedAt?: true
+    createdAt?: true
+    expiresAt?: true
+    ip?: true
+    userAgent?: true
+  }
+
+  export type EmailActionTokenMaxAggregateInputType = {
+    id?: true
+    token?: true
+    proposalId?: true
+    actorId?: true
+    role?: true
+    action?: true
+    usedAt?: true
+    createdAt?: true
+    expiresAt?: true
+    ip?: true
+    userAgent?: true
+  }
+
+  export type EmailActionTokenCountAggregateInputType = {
+    id?: true
+    token?: true
+    proposalId?: true
+    actorId?: true
+    role?: true
+    action?: true
+    usedAt?: true
+    createdAt?: true
+    expiresAt?: true
+    ip?: true
+    userAgent?: true
+    _all?: true
+  }
+
+  export type EmailActionTokenAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EmailActionToken to aggregate.
+     */
+    where?: EmailActionTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailActionTokens to fetch.
+     */
+    orderBy?: EmailActionTokenOrderByWithRelationInput | EmailActionTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EmailActionTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailActionTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailActionTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EmailActionTokens
+    **/
+    _count?: true | EmailActionTokenCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: EmailActionTokenAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EmailActionTokenSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EmailActionTokenMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EmailActionTokenMaxAggregateInputType
+  }
+
+  export type GetEmailActionTokenAggregateType<T extends EmailActionTokenAggregateArgs> = {
+        [P in keyof T & keyof AggregateEmailActionToken]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEmailActionToken[P]>
+      : GetScalarType<T[P], AggregateEmailActionToken[P]>
+  }
+
+
+
+
+  export type EmailActionTokenGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmailActionTokenWhereInput
+    orderBy?: EmailActionTokenOrderByWithAggregationInput | EmailActionTokenOrderByWithAggregationInput[]
+    by: EmailActionTokenScalarFieldEnum[] | EmailActionTokenScalarFieldEnum
+    having?: EmailActionTokenScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EmailActionTokenCountAggregateInputType | true
+    _avg?: EmailActionTokenAvgAggregateInputType
+    _sum?: EmailActionTokenSumAggregateInputType
+    _min?: EmailActionTokenMinAggregateInputType
+    _max?: EmailActionTokenMaxAggregateInputType
+  }
+
+  export type EmailActionTokenGroupByOutputType = {
+    id: number
+    token: string
+    proposalId: number
+    actorId: string
+    role: string
+    action: string
+    usedAt: Date | null
+    createdAt: Date
+    expiresAt: Date
+    ip: string | null
+    userAgent: string | null
+    _count: EmailActionTokenCountAggregateOutputType | null
+    _avg: EmailActionTokenAvgAggregateOutputType | null
+    _sum: EmailActionTokenSumAggregateOutputType | null
+    _min: EmailActionTokenMinAggregateOutputType | null
+    _max: EmailActionTokenMaxAggregateOutputType | null
+  }
+
+  type GetEmailActionTokenGroupByPayload<T extends EmailActionTokenGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EmailActionTokenGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EmailActionTokenGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EmailActionTokenGroupByOutputType[P]>
+            : GetScalarType<T[P], EmailActionTokenGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EmailActionTokenSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    token?: boolean
+    proposalId?: boolean
+    actorId?: boolean
+    role?: boolean
+    action?: boolean
+    usedAt?: boolean
+    createdAt?: boolean
+    expiresAt?: boolean
+    ip?: boolean
+    userAgent?: boolean
+  }, ExtArgs["result"]["emailActionToken"]>
+
+
+
+  export type EmailActionTokenSelectScalar = {
+    id?: boolean
+    token?: boolean
+    proposalId?: boolean
+    actorId?: boolean
+    role?: boolean
+    action?: boolean
+    usedAt?: boolean
+    createdAt?: boolean
+    expiresAt?: boolean
+    ip?: boolean
+    userAgent?: boolean
+  }
+
+  export type EmailActionTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "proposalId" | "actorId" | "role" | "action" | "usedAt" | "createdAt" | "expiresAt" | "ip" | "userAgent", ExtArgs["result"]["emailActionToken"]>
+
+  export type $EmailActionTokenPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EmailActionToken"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      token: string
+      proposalId: number
+      actorId: string
+      role: string
+      action: string
+      usedAt: Date | null
+      createdAt: Date
+      expiresAt: Date
+      ip: string | null
+      userAgent: string | null
+    }, ExtArgs["result"]["emailActionToken"]>
+    composites: {}
+  }
+
+  type EmailActionTokenGetPayload<S extends boolean | null | undefined | EmailActionTokenDefaultArgs> = $Result.GetResult<Prisma.$EmailActionTokenPayload, S>
+
+  type EmailActionTokenCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EmailActionTokenFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EmailActionTokenCountAggregateInputType | true
+    }
+
+  export interface EmailActionTokenDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EmailActionToken'], meta: { name: 'EmailActionToken' } }
+    /**
+     * Find zero or one EmailActionToken that matches the filter.
+     * @param {EmailActionTokenFindUniqueArgs} args - Arguments to find a EmailActionToken
+     * @example
+     * // Get one EmailActionToken
+     * const emailActionToken = await prisma.emailActionToken.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EmailActionTokenFindUniqueArgs>(args: SelectSubset<T, EmailActionTokenFindUniqueArgs<ExtArgs>>): Prisma__EmailActionTokenClient<$Result.GetResult<Prisma.$EmailActionTokenPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EmailActionToken that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EmailActionTokenFindUniqueOrThrowArgs} args - Arguments to find a EmailActionToken
+     * @example
+     * // Get one EmailActionToken
+     * const emailActionToken = await prisma.emailActionToken.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EmailActionTokenFindUniqueOrThrowArgs>(args: SelectSubset<T, EmailActionTokenFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EmailActionTokenClient<$Result.GetResult<Prisma.$EmailActionTokenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EmailActionToken that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailActionTokenFindFirstArgs} args - Arguments to find a EmailActionToken
+     * @example
+     * // Get one EmailActionToken
+     * const emailActionToken = await prisma.emailActionToken.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EmailActionTokenFindFirstArgs>(args?: SelectSubset<T, EmailActionTokenFindFirstArgs<ExtArgs>>): Prisma__EmailActionTokenClient<$Result.GetResult<Prisma.$EmailActionTokenPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EmailActionToken that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailActionTokenFindFirstOrThrowArgs} args - Arguments to find a EmailActionToken
+     * @example
+     * // Get one EmailActionToken
+     * const emailActionToken = await prisma.emailActionToken.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EmailActionTokenFindFirstOrThrowArgs>(args?: SelectSubset<T, EmailActionTokenFindFirstOrThrowArgs<ExtArgs>>): Prisma__EmailActionTokenClient<$Result.GetResult<Prisma.$EmailActionTokenPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EmailActionTokens that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailActionTokenFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EmailActionTokens
+     * const emailActionTokens = await prisma.emailActionToken.findMany()
+     * 
+     * // Get first 10 EmailActionTokens
+     * const emailActionTokens = await prisma.emailActionToken.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const emailActionTokenWithIdOnly = await prisma.emailActionToken.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EmailActionTokenFindManyArgs>(args?: SelectSubset<T, EmailActionTokenFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailActionTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EmailActionToken.
+     * @param {EmailActionTokenCreateArgs} args - Arguments to create a EmailActionToken.
+     * @example
+     * // Create one EmailActionToken
+     * const EmailActionToken = await prisma.emailActionToken.create({
+     *   data: {
+     *     // ... data to create a EmailActionToken
+     *   }
+     * })
+     * 
+     */
+    create<T extends EmailActionTokenCreateArgs>(args: SelectSubset<T, EmailActionTokenCreateArgs<ExtArgs>>): Prisma__EmailActionTokenClient<$Result.GetResult<Prisma.$EmailActionTokenPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EmailActionTokens.
+     * @param {EmailActionTokenCreateManyArgs} args - Arguments to create many EmailActionTokens.
+     * @example
+     * // Create many EmailActionTokens
+     * const emailActionToken = await prisma.emailActionToken.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EmailActionTokenCreateManyArgs>(args?: SelectSubset<T, EmailActionTokenCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a EmailActionToken.
+     * @param {EmailActionTokenDeleteArgs} args - Arguments to delete one EmailActionToken.
+     * @example
+     * // Delete one EmailActionToken
+     * const EmailActionToken = await prisma.emailActionToken.delete({
+     *   where: {
+     *     // ... filter to delete one EmailActionToken
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EmailActionTokenDeleteArgs>(args: SelectSubset<T, EmailActionTokenDeleteArgs<ExtArgs>>): Prisma__EmailActionTokenClient<$Result.GetResult<Prisma.$EmailActionTokenPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EmailActionToken.
+     * @param {EmailActionTokenUpdateArgs} args - Arguments to update one EmailActionToken.
+     * @example
+     * // Update one EmailActionToken
+     * const emailActionToken = await prisma.emailActionToken.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EmailActionTokenUpdateArgs>(args: SelectSubset<T, EmailActionTokenUpdateArgs<ExtArgs>>): Prisma__EmailActionTokenClient<$Result.GetResult<Prisma.$EmailActionTokenPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EmailActionTokens.
+     * @param {EmailActionTokenDeleteManyArgs} args - Arguments to filter EmailActionTokens to delete.
+     * @example
+     * // Delete a few EmailActionTokens
+     * const { count } = await prisma.emailActionToken.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EmailActionTokenDeleteManyArgs>(args?: SelectSubset<T, EmailActionTokenDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EmailActionTokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailActionTokenUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EmailActionTokens
+     * const emailActionToken = await prisma.emailActionToken.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EmailActionTokenUpdateManyArgs>(args: SelectSubset<T, EmailActionTokenUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one EmailActionToken.
+     * @param {EmailActionTokenUpsertArgs} args - Arguments to update or create a EmailActionToken.
+     * @example
+     * // Update or create a EmailActionToken
+     * const emailActionToken = await prisma.emailActionToken.upsert({
+     *   create: {
+     *     // ... data to create a EmailActionToken
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EmailActionToken we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EmailActionTokenUpsertArgs>(args: SelectSubset<T, EmailActionTokenUpsertArgs<ExtArgs>>): Prisma__EmailActionTokenClient<$Result.GetResult<Prisma.$EmailActionTokenPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EmailActionTokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailActionTokenCountArgs} args - Arguments to filter EmailActionTokens to count.
+     * @example
+     * // Count the number of EmailActionTokens
+     * const count = await prisma.emailActionToken.count({
+     *   where: {
+     *     // ... the filter for the EmailActionTokens we want to count
+     *   }
+     * })
+    **/
+    count<T extends EmailActionTokenCountArgs>(
+      args?: Subset<T, EmailActionTokenCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EmailActionTokenCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EmailActionToken.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailActionTokenAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EmailActionTokenAggregateArgs>(args: Subset<T, EmailActionTokenAggregateArgs>): Prisma.PrismaPromise<GetEmailActionTokenAggregateType<T>>
+
+    /**
+     * Group by EmailActionToken.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailActionTokenGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EmailActionTokenGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EmailActionTokenGroupByArgs['orderBy'] }
+        : { orderBy?: EmailActionTokenGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EmailActionTokenGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEmailActionTokenGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EmailActionToken model
+   */
+  readonly fields: EmailActionTokenFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EmailActionToken.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EmailActionTokenClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EmailActionToken model
+   */
+  interface EmailActionTokenFieldRefs {
+    readonly id: FieldRef<"EmailActionToken", 'Int'>
+    readonly token: FieldRef<"EmailActionToken", 'String'>
+    readonly proposalId: FieldRef<"EmailActionToken", 'Int'>
+    readonly actorId: FieldRef<"EmailActionToken", 'String'>
+    readonly role: FieldRef<"EmailActionToken", 'String'>
+    readonly action: FieldRef<"EmailActionToken", 'String'>
+    readonly usedAt: FieldRef<"EmailActionToken", 'DateTime'>
+    readonly createdAt: FieldRef<"EmailActionToken", 'DateTime'>
+    readonly expiresAt: FieldRef<"EmailActionToken", 'DateTime'>
+    readonly ip: FieldRef<"EmailActionToken", 'String'>
+    readonly userAgent: FieldRef<"EmailActionToken", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EmailActionToken findUnique
+   */
+  export type EmailActionTokenFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailActionToken
+     */
+    select?: EmailActionTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailActionToken
+     */
+    omit?: EmailActionTokenOmit<ExtArgs> | null
+    /**
+     * Filter, which EmailActionToken to fetch.
+     */
+    where: EmailActionTokenWhereUniqueInput
+  }
+
+  /**
+   * EmailActionToken findUniqueOrThrow
+   */
+  export type EmailActionTokenFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailActionToken
+     */
+    select?: EmailActionTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailActionToken
+     */
+    omit?: EmailActionTokenOmit<ExtArgs> | null
+    /**
+     * Filter, which EmailActionToken to fetch.
+     */
+    where: EmailActionTokenWhereUniqueInput
+  }
+
+  /**
+   * EmailActionToken findFirst
+   */
+  export type EmailActionTokenFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailActionToken
+     */
+    select?: EmailActionTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailActionToken
+     */
+    omit?: EmailActionTokenOmit<ExtArgs> | null
+    /**
+     * Filter, which EmailActionToken to fetch.
+     */
+    where?: EmailActionTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailActionTokens to fetch.
+     */
+    orderBy?: EmailActionTokenOrderByWithRelationInput | EmailActionTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EmailActionTokens.
+     */
+    cursor?: EmailActionTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailActionTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailActionTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EmailActionTokens.
+     */
+    distinct?: EmailActionTokenScalarFieldEnum | EmailActionTokenScalarFieldEnum[]
+  }
+
+  /**
+   * EmailActionToken findFirstOrThrow
+   */
+  export type EmailActionTokenFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailActionToken
+     */
+    select?: EmailActionTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailActionToken
+     */
+    omit?: EmailActionTokenOmit<ExtArgs> | null
+    /**
+     * Filter, which EmailActionToken to fetch.
+     */
+    where?: EmailActionTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailActionTokens to fetch.
+     */
+    orderBy?: EmailActionTokenOrderByWithRelationInput | EmailActionTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EmailActionTokens.
+     */
+    cursor?: EmailActionTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailActionTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailActionTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EmailActionTokens.
+     */
+    distinct?: EmailActionTokenScalarFieldEnum | EmailActionTokenScalarFieldEnum[]
+  }
+
+  /**
+   * EmailActionToken findMany
+   */
+  export type EmailActionTokenFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailActionToken
+     */
+    select?: EmailActionTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailActionToken
+     */
+    omit?: EmailActionTokenOmit<ExtArgs> | null
+    /**
+     * Filter, which EmailActionTokens to fetch.
+     */
+    where?: EmailActionTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailActionTokens to fetch.
+     */
+    orderBy?: EmailActionTokenOrderByWithRelationInput | EmailActionTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EmailActionTokens.
+     */
+    cursor?: EmailActionTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailActionTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailActionTokens.
+     */
+    skip?: number
+    distinct?: EmailActionTokenScalarFieldEnum | EmailActionTokenScalarFieldEnum[]
+  }
+
+  /**
+   * EmailActionToken create
+   */
+  export type EmailActionTokenCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailActionToken
+     */
+    select?: EmailActionTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailActionToken
+     */
+    omit?: EmailActionTokenOmit<ExtArgs> | null
+    /**
+     * The data needed to create a EmailActionToken.
+     */
+    data: XOR<EmailActionTokenCreateInput, EmailActionTokenUncheckedCreateInput>
+  }
+
+  /**
+   * EmailActionToken createMany
+   */
+  export type EmailActionTokenCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EmailActionTokens.
+     */
+    data: EmailActionTokenCreateManyInput | EmailActionTokenCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EmailActionToken update
+   */
+  export type EmailActionTokenUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailActionToken
+     */
+    select?: EmailActionTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailActionToken
+     */
+    omit?: EmailActionTokenOmit<ExtArgs> | null
+    /**
+     * The data needed to update a EmailActionToken.
+     */
+    data: XOR<EmailActionTokenUpdateInput, EmailActionTokenUncheckedUpdateInput>
+    /**
+     * Choose, which EmailActionToken to update.
+     */
+    where: EmailActionTokenWhereUniqueInput
+  }
+
+  /**
+   * EmailActionToken updateMany
+   */
+  export type EmailActionTokenUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EmailActionTokens.
+     */
+    data: XOR<EmailActionTokenUpdateManyMutationInput, EmailActionTokenUncheckedUpdateManyInput>
+    /**
+     * Filter which EmailActionTokens to update
+     */
+    where?: EmailActionTokenWhereInput
+    /**
+     * Limit how many EmailActionTokens to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EmailActionToken upsert
+   */
+  export type EmailActionTokenUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailActionToken
+     */
+    select?: EmailActionTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailActionToken
+     */
+    omit?: EmailActionTokenOmit<ExtArgs> | null
+    /**
+     * The filter to search for the EmailActionToken to update in case it exists.
+     */
+    where: EmailActionTokenWhereUniqueInput
+    /**
+     * In case the EmailActionToken found by the `where` argument doesn't exist, create a new EmailActionToken with this data.
+     */
+    create: XOR<EmailActionTokenCreateInput, EmailActionTokenUncheckedCreateInput>
+    /**
+     * In case the EmailActionToken was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EmailActionTokenUpdateInput, EmailActionTokenUncheckedUpdateInput>
+  }
+
+  /**
+   * EmailActionToken delete
+   */
+  export type EmailActionTokenDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailActionToken
+     */
+    select?: EmailActionTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailActionToken
+     */
+    omit?: EmailActionTokenOmit<ExtArgs> | null
+    /**
+     * Filter which EmailActionToken to delete.
+     */
+    where: EmailActionTokenWhereUniqueInput
+  }
+
+  /**
+   * EmailActionToken deleteMany
+   */
+  export type EmailActionTokenDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EmailActionTokens to delete
+     */
+    where?: EmailActionTokenWhereInput
+    /**
+     * Limit how many EmailActionTokens to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EmailActionToken without action
+   */
+  export type EmailActionTokenDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailActionToken
+     */
+    select?: EmailActionTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailActionToken
+     */
+    omit?: EmailActionTokenOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -23138,6 +24207,23 @@ export namespace Prisma {
   export type ProposalApproverScalarFieldEnum = (typeof ProposalApproverScalarFieldEnum)[keyof typeof ProposalApproverScalarFieldEnum]
 
 
+  export const EmailActionTokenScalarFieldEnum: {
+    id: 'id',
+    token: 'token',
+    proposalId: 'proposalId',
+    actorId: 'actorId',
+    role: 'role',
+    action: 'action',
+    usedAt: 'usedAt',
+    createdAt: 'createdAt',
+    expiresAt: 'expiresAt',
+    ip: 'ip',
+    userAgent: 'userAgent'
+  };
+
+  export type EmailActionTokenScalarFieldEnum = (typeof EmailActionTokenScalarFieldEnum)[keyof typeof EmailActionTokenScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -23272,6 +24358,18 @@ export namespace Prisma {
   };
 
   export type ProposalOrderByRelevanceFieldEnum = (typeof ProposalOrderByRelevanceFieldEnum)[keyof typeof ProposalOrderByRelevanceFieldEnum]
+
+
+  export const EmailActionTokenOrderByRelevanceFieldEnum: {
+    token: 'token',
+    actorId: 'actorId',
+    role: 'role',
+    action: 'action',
+    ip: 'ip',
+    userAgent: 'userAgent'
+  };
+
+  export type EmailActionTokenOrderByRelevanceFieldEnum = (typeof EmailActionTokenOrderByRelevanceFieldEnum)[keyof typeof EmailActionTokenOrderByRelevanceFieldEnum]
 
 
   /**
@@ -24858,6 +25956,91 @@ export namespace Prisma {
     level?: IntWithAggregatesFilter<"ProposalApprover"> | number
   }
 
+  export type EmailActionTokenWhereInput = {
+    AND?: EmailActionTokenWhereInput | EmailActionTokenWhereInput[]
+    OR?: EmailActionTokenWhereInput[]
+    NOT?: EmailActionTokenWhereInput | EmailActionTokenWhereInput[]
+    id?: IntFilter<"EmailActionToken"> | number
+    token?: StringFilter<"EmailActionToken"> | string
+    proposalId?: IntFilter<"EmailActionToken"> | number
+    actorId?: StringFilter<"EmailActionToken"> | string
+    role?: StringFilter<"EmailActionToken"> | string
+    action?: StringFilter<"EmailActionToken"> | string
+    usedAt?: DateTimeNullableFilter<"EmailActionToken"> | Date | string | null
+    createdAt?: DateTimeFilter<"EmailActionToken"> | Date | string
+    expiresAt?: DateTimeFilter<"EmailActionToken"> | Date | string
+    ip?: StringNullableFilter<"EmailActionToken"> | string | null
+    userAgent?: StringNullableFilter<"EmailActionToken"> | string | null
+  }
+
+  export type EmailActionTokenOrderByWithRelationInput = {
+    id?: SortOrder
+    token?: SortOrder
+    proposalId?: SortOrder
+    actorId?: SortOrder
+    role?: SortOrder
+    action?: SortOrder
+    usedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    expiresAt?: SortOrder
+    ip?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    _relevance?: EmailActionTokenOrderByRelevanceInput
+  }
+
+  export type EmailActionTokenWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    token?: string
+    AND?: EmailActionTokenWhereInput | EmailActionTokenWhereInput[]
+    OR?: EmailActionTokenWhereInput[]
+    NOT?: EmailActionTokenWhereInput | EmailActionTokenWhereInput[]
+    proposalId?: IntFilter<"EmailActionToken"> | number
+    actorId?: StringFilter<"EmailActionToken"> | string
+    role?: StringFilter<"EmailActionToken"> | string
+    action?: StringFilter<"EmailActionToken"> | string
+    usedAt?: DateTimeNullableFilter<"EmailActionToken"> | Date | string | null
+    createdAt?: DateTimeFilter<"EmailActionToken"> | Date | string
+    expiresAt?: DateTimeFilter<"EmailActionToken"> | Date | string
+    ip?: StringNullableFilter<"EmailActionToken"> | string | null
+    userAgent?: StringNullableFilter<"EmailActionToken"> | string | null
+  }, "id" | "token">
+
+  export type EmailActionTokenOrderByWithAggregationInput = {
+    id?: SortOrder
+    token?: SortOrder
+    proposalId?: SortOrder
+    actorId?: SortOrder
+    role?: SortOrder
+    action?: SortOrder
+    usedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    expiresAt?: SortOrder
+    ip?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    _count?: EmailActionTokenCountOrderByAggregateInput
+    _avg?: EmailActionTokenAvgOrderByAggregateInput
+    _max?: EmailActionTokenMaxOrderByAggregateInput
+    _min?: EmailActionTokenMinOrderByAggregateInput
+    _sum?: EmailActionTokenSumOrderByAggregateInput
+  }
+
+  export type EmailActionTokenScalarWhereWithAggregatesInput = {
+    AND?: EmailActionTokenScalarWhereWithAggregatesInput | EmailActionTokenScalarWhereWithAggregatesInput[]
+    OR?: EmailActionTokenScalarWhereWithAggregatesInput[]
+    NOT?: EmailActionTokenScalarWhereWithAggregatesInput | EmailActionTokenScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"EmailActionToken"> | number
+    token?: StringWithAggregatesFilter<"EmailActionToken"> | string
+    proposalId?: IntWithAggregatesFilter<"EmailActionToken"> | number
+    actorId?: StringWithAggregatesFilter<"EmailActionToken"> | string
+    role?: StringWithAggregatesFilter<"EmailActionToken"> | string
+    action?: StringWithAggregatesFilter<"EmailActionToken"> | string
+    usedAt?: DateTimeNullableWithAggregatesFilter<"EmailActionToken"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"EmailActionToken"> | Date | string
+    expiresAt?: DateTimeWithAggregatesFilter<"EmailActionToken"> | Date | string
+    ip?: StringNullableWithAggregatesFilter<"EmailActionToken"> | string | null
+    userAgent?: StringNullableWithAggregatesFilter<"EmailActionToken"> | string | null
+  }
+
   export type FileCreateInput = {
     filename: string
     mimeType: string
@@ -26343,6 +27526,101 @@ export namespace Prisma {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type EmailActionTokenCreateInput = {
+    token: string
+    proposalId: number
+    actorId: string
+    role: string
+    action: string
+    usedAt?: Date | string | null
+    createdAt?: Date | string
+    expiresAt: Date | string
+    ip?: string | null
+    userAgent?: string | null
+  }
+
+  export type EmailActionTokenUncheckedCreateInput = {
+    id?: number
+    token: string
+    proposalId: number
+    actorId: string
+    role: string
+    action: string
+    usedAt?: Date | string | null
+    createdAt?: Date | string
+    expiresAt: Date | string
+    ip?: string | null
+    userAgent?: string | null
+  }
+
+  export type EmailActionTokenUpdateInput = {
+    token?: StringFieldUpdateOperationsInput | string
+    proposalId?: IntFieldUpdateOperationsInput | number
+    actorId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type EmailActionTokenUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    token?: StringFieldUpdateOperationsInput | string
+    proposalId?: IntFieldUpdateOperationsInput | number
+    actorId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type EmailActionTokenCreateManyInput = {
+    id?: number
+    token: string
+    proposalId: number
+    actorId: string
+    role: string
+    action: string
+    usedAt?: Date | string | null
+    createdAt?: Date | string
+    expiresAt: Date | string
+    ip?: string | null
+    userAgent?: string | null
+  }
+
+  export type EmailActionTokenUpdateManyMutationInput = {
+    token?: StringFieldUpdateOperationsInput | string
+    proposalId?: IntFieldUpdateOperationsInput | number
+    actorId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type EmailActionTokenUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    token?: StringFieldUpdateOperationsInput | string
+    proposalId?: IntFieldUpdateOperationsInput | number
+    actorId?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ip?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -27877,6 +29155,64 @@ export namespace Prisma {
     proposalId?: SortOrder
     approverId?: SortOrder
     level?: SortOrder
+  }
+
+  export type EmailActionTokenOrderByRelevanceInput = {
+    fields: EmailActionTokenOrderByRelevanceFieldEnum | EmailActionTokenOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type EmailActionTokenCountOrderByAggregateInput = {
+    id?: SortOrder
+    token?: SortOrder
+    proposalId?: SortOrder
+    actorId?: SortOrder
+    role?: SortOrder
+    action?: SortOrder
+    usedAt?: SortOrder
+    createdAt?: SortOrder
+    expiresAt?: SortOrder
+    ip?: SortOrder
+    userAgent?: SortOrder
+  }
+
+  export type EmailActionTokenAvgOrderByAggregateInput = {
+    id?: SortOrder
+    proposalId?: SortOrder
+  }
+
+  export type EmailActionTokenMaxOrderByAggregateInput = {
+    id?: SortOrder
+    token?: SortOrder
+    proposalId?: SortOrder
+    actorId?: SortOrder
+    role?: SortOrder
+    action?: SortOrder
+    usedAt?: SortOrder
+    createdAt?: SortOrder
+    expiresAt?: SortOrder
+    ip?: SortOrder
+    userAgent?: SortOrder
+  }
+
+  export type EmailActionTokenMinOrderByAggregateInput = {
+    id?: SortOrder
+    token?: SortOrder
+    proposalId?: SortOrder
+    actorId?: SortOrder
+    role?: SortOrder
+    action?: SortOrder
+    usedAt?: SortOrder
+    createdAt?: SortOrder
+    expiresAt?: SortOrder
+    ip?: SortOrder
+    userAgent?: SortOrder
+  }
+
+  export type EmailActionTokenSumOrderByAggregateInput = {
+    id?: SortOrder
+    proposalId?: SortOrder
   }
 
   export type ProposalCreateNestedManyWithoutFileInput = {
