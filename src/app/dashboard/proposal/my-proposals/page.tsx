@@ -141,8 +141,13 @@ export default function MyProposalsPage() {
       fetchProposals();
     }, 500);
     return () => clearTimeout(delay);
-  }, [searchText, page, pageSize]);
-
+  }, [searchText, pageSize]);
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      fetchProposals();
+    }, 500);
+    return () => clearTimeout(delay);
+  }, [searchText, page]);
   const showConfirm = async (
     proposalId: number,
     action: "sign" | "approve",
