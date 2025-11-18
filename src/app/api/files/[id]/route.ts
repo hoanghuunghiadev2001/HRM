@@ -19,7 +19,89 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 /**
  * Chuẩn hoá mọi dữ liệu nhị phân về Uint8Array.
+ *
  */
+
+// đặt trước `export async function GET(...) { ... }`
+function drawWrappedText({
+  page,
+  text,
+  x,
+  y,
+  maxWidth,
+  font,
+  size = 12,
+  lineHeight,
+  color,
+}: {
+  page: any;
+  text: string;
+  x: number;
+  y: number;
+  maxWidth: number;
+  font: any;
+  size?: number;
+  lineHeight?: number;
+  color?: any;
+}) {
+  if (!lineHeight) lineHeight = Math.round(size * 1.3);
+
+  // split paragraphs by newline
+  const paragraphs = text.split(/\r?\n/);
+
+  for (const para of paragraphs) {
+    const words = para.split(" ");
+    let line = "";
+
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+      const testLine = line ? `${line} ${word}` : word;
+      const width = font.widthOfTextAtSize(testLine, size);
+
+      if (width > maxWidth) {
+        if (line) {
+          page.drawText(line, { x, y, size, font, color });
+          y -= lineHeight;
+          line = word;
+        } else {
+          // một từ dài hơn maxWidth -> cắt theo ký tự
+          let fragment = "";
+          for (const ch of word) {
+            const testFrag = fragment + ch;
+            const fragWidth = font.widthOfTextAtSize(testFrag, size);
+            if (fragWidth > maxWidth) {
+              if (fragment) {
+                page.drawText(fragment, { x, y, size, font, color });
+                y -= lineHeight;
+              }
+              fragment = ch;
+            } else {
+              fragment = testFrag;
+            }
+          }
+          if (fragment) {
+            page.drawText(fragment, { x, y, size, font, color });
+            y -= lineHeight;
+          }
+          line = "";
+        }
+      } else {
+        line = testLine;
+      }
+    }
+
+    if (line) {
+      page.drawText(line, { x, y, size, font, color });
+      y -= lineHeight;
+    }
+
+    // small paragraph gap
+    y -= Math.round(lineHeight * 0.1);
+  }
+
+  return y;
+}
+
 function normalizeToUint8Array(input: unknown): Uint8Array {
   if (input instanceof Uint8Array) return input;
   if (input instanceof ArrayBuffer) return new Uint8Array(input);
@@ -131,11 +213,30 @@ export async function GET(
         const margin = 50;
         const lineHeight = 22;
 
-        page.drawText(`Tên đề xuất: ${proposal.title || "Không có tên"}`, {
+        const textTitle = `Tên đề xuất: ${proposal.title || "Không có tên"}`;
+        y = drawWrappedText({
+          page,
+          text: textTitle,
           x: margin,
           y,
-          size: 14,
+          maxWidth: page.getWidth() - margin * 2,
           font,
+          size: 14,
+          lineHeight: lineHeight,
+        });
+
+        const textDecreptios = `Mô tả: ${
+          proposal.description || "Không có mô tả"
+        }`;
+        y = drawWrappedText({
+          page,
+          text: textDecreptios,
+          x: margin,
+          y,
+          maxWidth: page.getWidth() - margin * 2,
+          font,
+          size: 14,
+          lineHeight: lineHeight,
         });
         y -= lineHeight;
         page.drawText(`Người tạo: ${proposal.proposer?.name || ""}`, {
@@ -244,11 +345,30 @@ export async function GET(
       const margin = 50;
       const lineHeight = 22;
 
-      page2.drawText(`Tên đề xuất: ${proposal.title || "Không có tên"}`, {
+      const textTitle = `Tên đề xuất: ${proposal.title || "Không có tên"}`;
+      y = drawWrappedText({
+        page: page2,
+        text: textTitle,
         x: margin,
         y,
-        size: 14,
+        maxWidth: page2.getWidth() - margin * 2,
         font,
+        size: 14,
+        lineHeight: lineHeight,
+      });
+
+      const textDecreptios = `Mô tả: ${
+        proposal.description || "Không có mô tả"
+      }`;
+      y = drawWrappedText({
+        page: page2,
+        text: textDecreptios,
+        x: margin,
+        y,
+        maxWidth: page2.getWidth() - margin * 2,
+        font,
+        size: 14,
+        lineHeight: lineHeight,
       });
       y -= lineHeight;
       page2.drawText(`Người tạo: ${proposal.proposer?.name || ""}`, {
