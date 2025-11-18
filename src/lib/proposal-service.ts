@@ -132,6 +132,94 @@ export class ProposalService {
     }
   }
 
+  static async getProposal(proposalId: number, userId?: string) {
+    try {
+      const proposal = await prisma.proposal.findUnique({
+        where: { id: proposalId },
+        include: this.getFullIncludeObject(),
+      });
+      if (!proposal) return { success: false, error: "Không tìm thấy đề xuất" };
+
+      const sortedSigners = proposal.signers.sort((a, b) => a.level - b.level);
+      const sortedApprovers = proposal.approvers.sort(
+        (a, b) => a.level - b.level
+      );
+
+      const isRejected =
+        sortedSigners.some((s) => s.status === "rejected") ||
+        sortedApprovers.some((a) => a.status === "rejected");
+
+      const nextSignerIndex = !isRejected
+        ? sortedSigners.findIndex(
+            (s, idx) =>
+              s.status === "pending" &&
+              sortedSigners.slice(0, idx).every((p) => p.status === "approved")
+          )
+        : -1;
+
+      const allSignersApproved = sortedSigners.every(
+        (s) => s.status === "approved"
+      );
+      const nextApproverIndex =
+        !isRejected && allSignersApproved
+          ? sortedApprovers.findIndex(
+              (a, idx) =>
+                a.status === "pending" &&
+                sortedApprovers
+                  .slice(0, idx)
+                  .every((p) => p.status === "approved")
+            )
+          : -1;
+
+      const signers = sortedSigners.map((s, i) => ({
+        ...s,
+        isCurrent: i === nextSignerIndex,
+      }));
+      const approvers = sortedApprovers.map((a, i) => ({
+        ...a,
+        isCurrent: i === nextApproverIndex,
+      }));
+
+      let currentStep: { step: string; userId: string | null } = {
+        step: "done",
+        userId: null,
+      };
+      if (isRejected) currentStep = { step: "rejected", userId: null };
+      else if (nextSignerIndex >= 0)
+        currentStep = {
+          step: "sign",
+          userId: String(signers[nextSignerIndex].signerId),
+        };
+      else if (nextApproverIndex >= 0)
+        currentStep = {
+          step: "approve",
+          userId: String(approvers[nextApproverIndex].approverId),
+        };
+
+      const statusSign = signers.some(
+        (s) => s.isCurrent && String(s.signerId) === String(userId)
+      );
+      const statusApprove = approvers.some(
+        (a) => a.isCurrent && String(a.approverId) === String(userId)
+      );
+
+      return {
+        success: true,
+        data: {
+          ...proposal,
+          signers,
+          approvers,
+          currentStep,
+          statusSign,
+          statusApprove,
+        },
+      };
+    } catch (error) {
+      console.error("[ProposalService] ❌ getProposal error:", error);
+      return { success: false, error: "Lỗi khi lấy thông tin đề xuất" };
+    }
+  }
+
   /**
    * 🟩 Ký đề xuất
    */
@@ -394,6 +482,32 @@ export class ProposalService {
       console.error("[ProposalService] ❌ approveProposal error:", error);
       return { success: false, error: "Không thể phê duyệt đề xuất" };
     }
+  }
+
+  static async deleteProposal(proposalId: number) {
+    try {
+      const proposal = await prisma.proposal.findUnique({
+        where: { id: proposalId },
+        include: { file: true, proposer: true },
+      });
+      if (!proposal) return { success: false, error: "Đề xuất không tìm thấy" };
+
+      await Promise.all([
+        proposal.fileId ? FileService.deleteFile(proposal.fileId) : null,
+        prisma.proposalSigner.deleteMany({ where: { proposalId } }),
+        prisma.proposalApprover.deleteMany({ where: { proposalId } }),
+      ]);
+
+      await prisma.proposal.delete({ where: { id: proposalId } });
+      return { success: true, message: "Đề xuất đã được xóa." };
+    } catch (error) {
+      console.error("[ProposalService] ❌ deleteProposal error:", error);
+      return { success: false, error: "Không thể xóa đề xuất" };
+    }
+  }
+
+  static getFullIncludeObject() {
+    return this.FULL_PROPOSAL_INCLUDE;
   }
 
   /** FULL INCLUDE cấu hình */
