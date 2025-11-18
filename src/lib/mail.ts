@@ -16,7 +16,7 @@ export async function sendEmail({
   to,
   subject,
   html,
-  retry = 2,
+  retry = 3,
 }: {
   to: string[];
   subject: string;
