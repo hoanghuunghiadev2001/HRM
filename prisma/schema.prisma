@@ -9,6 +9,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ProposalType {
+  REGULAR
+  VEHICLE
+}
+
 model File {
   id        Int        @id @default(autoincrement())
   filename  String
@@ -20,6 +25,19 @@ model File {
   proposals Proposal[]
 
   @@index([createdAt])
+}
+
+model Vehicle {
+  id          Int      @id @default(autoincrement())
+  code        String   @unique // mã loại/xe, ví dụ: "CAR-7"
+  name        String // tên loại/xe, ví dụ: "Xe 7 chỗ"
+  plateNumber String?  @unique // biển số nếu là xe cụ thể (nullable nếu là loại chung)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // quan hệ ngược (nếu cần)
+
+  proposals Proposal[]
 }
 
 model Employee {
@@ -262,26 +280,38 @@ model KPIEntry {
 }
 
 model Proposal {
-  id          Int                @id @default(autoincrement())
+  id          Int            @id @default(autoincrement())
   name        String
   title       String
-  description String?            @db.Text
+  description String?        @db.Text
   fileId      Int?
-  status      ProposalStatus     @default(pending_signatures)
+  status      ProposalStatus @default(pending_signatures)
   proposerId  Int
   createdById Int
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
-  createdBy   Employee           @relation("ProposalCreatedBy", fields: [createdById], references: [id])
-  file        File?              @relation(fields: [fileId], references: [id])
-  proposer    Employee           @relation("ProposalProposer", fields: [proposerId], references: [id])
-  approvers   ProposalApprover[]
-  signers     ProposalSigner[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  // NEW fields for vehicle proposals
+  proposalType ProposalType @default(REGULAR) // phân biệt loại đề xuất
+  vehicleId    Int? // FK tới Vehicle (nullable)
+  startAt      DateTime? // giờ bắt đầu sử dụng xe
+  endAt        DateTime? // giờ kết thúc sử dụng xe
+  dropoffPlace String?
+
+  // relations
+  vehicle   Vehicle?           @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  createdBy Employee           @relation("ProposalCreatedBy", fields: [createdById], references: [id])
+  file      File?              @relation(fields: [fileId], references: [id])
+  proposer  Employee           @relation("ProposalProposer", fields: [proposerId], references: [id])
+  approvers ProposalApprover[]
+  signers   ProposalSigner[]
 
   @@index([status])
   @@index([proposerId])
   @@index([createdById])
   @@index([fileId])
+  @@index([proposalType])
+  @@index([vehicleId])
 }
 
 model ProposalSigner {

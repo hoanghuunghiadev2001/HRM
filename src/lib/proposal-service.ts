@@ -43,6 +43,7 @@ export class ProposalService {
       let fileId: number | null = null;
       let fileUrl: string | undefined;
 
+      // Upload file nếu có
       if (file) {
         const { valid, error } = FileService.validateFile(file);
         if (!valid)
@@ -53,6 +54,7 @@ export class ProposalService {
         fileUrl = `${baseUrl}/api/files/${fileId}`;
       }
 
+      // Tạo proposal
       const newProposal = await prisma.proposal.create({
         data: {
           name: proposalData.name,
@@ -61,6 +63,11 @@ export class ProposalService {
           proposerId: proposalData.proposerId,
           createdById,
           fileId,
+          proposalType: proposalData.proposalType || "REGULAR",
+          vehicleId: proposalData.vehicleId || null,
+          startAt: proposalData.startAt || null,
+          endAt: proposalData.endAt || null,
+          dropoffPlace: proposalData.dropoffPlace || null,
           signers: {
             create: proposalData.signerIds.map((id, idx) => ({
               level: idx + 1,
@@ -89,7 +96,7 @@ export class ProposalService {
         })
       );
 
-      // Gửi cho người ký đầu tiên
+      // Gửi email cho signer đầu tiên
       const firstSigner = newProposal.signers
         .filter((s) => s.status === "pending")
         .sort((a, b) => a.level - b.level)[0];
@@ -530,7 +537,9 @@ export class ProposalService {
 
   static FULL_PROPOSAL_INCLUDE: Prisma.ProposalInclude = {
     file: true,
+    vehicle: true, // thêm vehicle info
     proposer: { include: this.FULL_EMPLOYEE_INCLUDE },
+    createdBy: { include: this.FULL_EMPLOYEE_INCLUDE }, // thêm createdBy
     signers: {
       include: { signer: { include: this.FULL_EMPLOYEE_INCLUDE } },
     },

@@ -3,6 +3,7 @@
 
 import React, { useEffect, useState } from "react";
 import {
+  CarFrontIcon,
   ClipboardPlus,
   FileStack,
   FileText,
@@ -105,6 +106,20 @@ export default function ClientDashboard({
       icon: <FileStack />,
       label: "Đề xuất",
       children: [
+        ...(isAdmin === "ADMIN" || isAdmin === "MANAGER"
+          ? [
+              {
+                key: "/dashboard/vehicles",
+                icon: <CarFrontIcon className="ml-4" />,
+                label: "Quản lý xe",
+              },
+            ]
+          : []),
+        {
+          key: "/dashboard/vehicles-reports",
+          icon: <FileStack className="ml-4" />,
+          label: "Lịch xe",
+        },
         {
           key: "/dashboard/proposal",
           icon: <FileStack className="ml-4" />,

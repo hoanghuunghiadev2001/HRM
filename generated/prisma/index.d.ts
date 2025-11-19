@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type File = $Result.DefaultSelection<Prisma.$FilePayload>
 /**
+ * Model Vehicle
+ * 
+ */
+export type Vehicle = $Result.DefaultSelection<Prisma.$VehiclePayload>
+/**
  * Model Employee
  * 
  */
@@ -118,7 +123,15 @@ export type EmailActionToken = $Result.DefaultSelection<Prisma.$EmailActionToken
  * Enums
  */
 export namespace $Enums {
-  export const Role: {
+  export const ProposalType: {
+  REGULAR: 'REGULAR',
+  VEHICLE: 'VEHICLE'
+};
+
+export type ProposalType = (typeof ProposalType)[keyof typeof ProposalType]
+
+
+export const Role: {
   USER: 'USER',
   MANAGER: 'MANAGER',
   ADMIN: 'ADMIN'
@@ -178,6 +191,10 @@ export const ProposalStatus: {
 export type ProposalStatus = (typeof ProposalStatus)[keyof typeof ProposalStatus]
 
 }
+
+export type ProposalType = $Enums.ProposalType
+
+export const ProposalType: typeof $Enums.ProposalType
 
 export type Role = $Enums.Role
 
@@ -337,6 +354,16 @@ export class PrismaClient<
     * ```
     */
   get file(): Prisma.FileDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.vehicle`: Exposes CRUD operations for the **Vehicle** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Vehicles
+    * const vehicles = await prisma.vehicle.findMany()
+    * ```
+    */
+  get vehicle(): Prisma.VehicleDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.employee`: Exposes CRUD operations for the **Employee** model.
@@ -968,6 +995,7 @@ export namespace Prisma {
 
   export const ModelName: {
     File: 'File',
+    Vehicle: 'Vehicle',
     Employee: 'Employee',
     Department: 'Department',
     Position: 'Position',
@@ -1005,7 +1033,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "file" | "employee" | "department" | "position" | "workInfo" | "personalInfo" | "contactInfo" | "otherInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover" | "emailActionToken"
+      modelProps: "file" | "vehicle" | "employee" | "department" | "position" | "workInfo" | "personalInfo" | "contactInfo" | "otherInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover" | "emailActionToken"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1072,6 +1100,72 @@ export namespace Prisma {
           count: {
             args: Prisma.FileCountArgs<ExtArgs>
             result: $Utils.Optional<FileCountAggregateOutputType> | number
+          }
+        }
+      }
+      Vehicle: {
+        payload: Prisma.$VehiclePayload<ExtArgs>
+        fields: Prisma.VehicleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.VehicleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VehiclePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.VehicleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VehiclePayload>
+          }
+          findFirst: {
+            args: Prisma.VehicleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VehiclePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.VehicleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VehiclePayload>
+          }
+          findMany: {
+            args: Prisma.VehicleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VehiclePayload>[]
+          }
+          create: {
+            args: Prisma.VehicleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VehiclePayload>
+          }
+          createMany: {
+            args: Prisma.VehicleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.VehicleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VehiclePayload>
+          }
+          update: {
+            args: Prisma.VehicleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VehiclePayload>
+          }
+          deleteMany: {
+            args: Prisma.VehicleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.VehicleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.VehicleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VehiclePayload>
+          }
+          aggregate: {
+            args: Prisma.VehicleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVehicle>
+          }
+          groupBy: {
+            args: Prisma.VehicleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<VehicleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.VehicleCountArgs<ExtArgs>
+            result: $Utils.Optional<VehicleCountAggregateOutputType> | number
           }
         }
       }
@@ -2414,6 +2508,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     file?: FileOmit
+    vehicle?: VehicleOmit
     employee?: EmployeeOmit
     department?: DepartmentOmit
     position?: PositionOmit
@@ -2549,6 +2644,37 @@ export namespace Prisma {
    * FileCountOutputType without action
    */
   export type FileCountOutputTypeCountProposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProposalWhereInput
+  }
+
+
+  /**
+   * Count Type VehicleCountOutputType
+   */
+
+  export type VehicleCountOutputType = {
+    proposals: number
+  }
+
+  export type VehicleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    proposals?: boolean | VehicleCountOutputTypeCountProposalsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * VehicleCountOutputType without action
+   */
+  export type VehicleCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VehicleCountOutputType
+     */
+    select?: VehicleCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * VehicleCountOutputType without action
+   */
+  export type VehicleCountOutputTypeCountProposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProposalWhereInput
   }
 
@@ -3947,6 +4073,1006 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FileInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Vehicle
+   */
+
+  export type AggregateVehicle = {
+    _count: VehicleCountAggregateOutputType | null
+    _avg: VehicleAvgAggregateOutputType | null
+    _sum: VehicleSumAggregateOutputType | null
+    _min: VehicleMinAggregateOutputType | null
+    _max: VehicleMaxAggregateOutputType | null
+  }
+
+  export type VehicleAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type VehicleSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type VehicleMinAggregateOutputType = {
+    id: number | null
+    code: string | null
+    name: string | null
+    plateNumber: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VehicleMaxAggregateOutputType = {
+    id: number | null
+    code: string | null
+    name: string | null
+    plateNumber: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VehicleCountAggregateOutputType = {
+    id: number
+    code: number
+    name: number
+    plateNumber: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type VehicleAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type VehicleSumAggregateInputType = {
+    id?: true
+  }
+
+  export type VehicleMinAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    plateNumber?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VehicleMaxAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    plateNumber?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VehicleCountAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    plateNumber?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type VehicleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Vehicle to aggregate.
+     */
+    where?: VehicleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Vehicles to fetch.
+     */
+    orderBy?: VehicleOrderByWithRelationInput | VehicleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: VehicleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Vehicles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Vehicles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Vehicles
+    **/
+    _count?: true | VehicleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: VehicleAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: VehicleSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: VehicleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: VehicleMaxAggregateInputType
+  }
+
+  export type GetVehicleAggregateType<T extends VehicleAggregateArgs> = {
+        [P in keyof T & keyof AggregateVehicle]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVehicle[P]>
+      : GetScalarType<T[P], AggregateVehicle[P]>
+  }
+
+
+
+
+  export type VehicleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VehicleWhereInput
+    orderBy?: VehicleOrderByWithAggregationInput | VehicleOrderByWithAggregationInput[]
+    by: VehicleScalarFieldEnum[] | VehicleScalarFieldEnum
+    having?: VehicleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: VehicleCountAggregateInputType | true
+    _avg?: VehicleAvgAggregateInputType
+    _sum?: VehicleSumAggregateInputType
+    _min?: VehicleMinAggregateInputType
+    _max?: VehicleMaxAggregateInputType
+  }
+
+  export type VehicleGroupByOutputType = {
+    id: number
+    code: string
+    name: string
+    plateNumber: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: VehicleCountAggregateOutputType | null
+    _avg: VehicleAvgAggregateOutputType | null
+    _sum: VehicleSumAggregateOutputType | null
+    _min: VehicleMinAggregateOutputType | null
+    _max: VehicleMaxAggregateOutputType | null
+  }
+
+  type GetVehicleGroupByPayload<T extends VehicleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<VehicleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof VehicleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], VehicleGroupByOutputType[P]>
+            : GetScalarType<T[P], VehicleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type VehicleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    plateNumber?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    proposals?: boolean | Vehicle$proposalsArgs<ExtArgs>
+    _count?: boolean | VehicleCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["vehicle"]>
+
+
+
+  export type VehicleSelectScalar = {
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    plateNumber?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type VehicleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "name" | "plateNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["vehicle"]>
+  export type VehicleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    proposals?: boolean | Vehicle$proposalsArgs<ExtArgs>
+    _count?: boolean | VehicleCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $VehiclePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Vehicle"
+    objects: {
+      proposals: Prisma.$ProposalPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      code: string
+      name: string
+      plateNumber: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["vehicle"]>
+    composites: {}
+  }
+
+  type VehicleGetPayload<S extends boolean | null | undefined | VehicleDefaultArgs> = $Result.GetResult<Prisma.$VehiclePayload, S>
+
+  type VehicleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<VehicleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: VehicleCountAggregateInputType | true
+    }
+
+  export interface VehicleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Vehicle'], meta: { name: 'Vehicle' } }
+    /**
+     * Find zero or one Vehicle that matches the filter.
+     * @param {VehicleFindUniqueArgs} args - Arguments to find a Vehicle
+     * @example
+     * // Get one Vehicle
+     * const vehicle = await prisma.vehicle.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends VehicleFindUniqueArgs>(args: SelectSubset<T, VehicleFindUniqueArgs<ExtArgs>>): Prisma__VehicleClient<$Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Vehicle that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {VehicleFindUniqueOrThrowArgs} args - Arguments to find a Vehicle
+     * @example
+     * // Get one Vehicle
+     * const vehicle = await prisma.vehicle.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends VehicleFindUniqueOrThrowArgs>(args: SelectSubset<T, VehicleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__VehicleClient<$Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Vehicle that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VehicleFindFirstArgs} args - Arguments to find a Vehicle
+     * @example
+     * // Get one Vehicle
+     * const vehicle = await prisma.vehicle.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends VehicleFindFirstArgs>(args?: SelectSubset<T, VehicleFindFirstArgs<ExtArgs>>): Prisma__VehicleClient<$Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Vehicle that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VehicleFindFirstOrThrowArgs} args - Arguments to find a Vehicle
+     * @example
+     * // Get one Vehicle
+     * const vehicle = await prisma.vehicle.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends VehicleFindFirstOrThrowArgs>(args?: SelectSubset<T, VehicleFindFirstOrThrowArgs<ExtArgs>>): Prisma__VehicleClient<$Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Vehicles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VehicleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Vehicles
+     * const vehicles = await prisma.vehicle.findMany()
+     * 
+     * // Get first 10 Vehicles
+     * const vehicles = await prisma.vehicle.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const vehicleWithIdOnly = await prisma.vehicle.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends VehicleFindManyArgs>(args?: SelectSubset<T, VehicleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Vehicle.
+     * @param {VehicleCreateArgs} args - Arguments to create a Vehicle.
+     * @example
+     * // Create one Vehicle
+     * const Vehicle = await prisma.vehicle.create({
+     *   data: {
+     *     // ... data to create a Vehicle
+     *   }
+     * })
+     * 
+     */
+    create<T extends VehicleCreateArgs>(args: SelectSubset<T, VehicleCreateArgs<ExtArgs>>): Prisma__VehicleClient<$Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Vehicles.
+     * @param {VehicleCreateManyArgs} args - Arguments to create many Vehicles.
+     * @example
+     * // Create many Vehicles
+     * const vehicle = await prisma.vehicle.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends VehicleCreateManyArgs>(args?: SelectSubset<T, VehicleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Vehicle.
+     * @param {VehicleDeleteArgs} args - Arguments to delete one Vehicle.
+     * @example
+     * // Delete one Vehicle
+     * const Vehicle = await prisma.vehicle.delete({
+     *   where: {
+     *     // ... filter to delete one Vehicle
+     *   }
+     * })
+     * 
+     */
+    delete<T extends VehicleDeleteArgs>(args: SelectSubset<T, VehicleDeleteArgs<ExtArgs>>): Prisma__VehicleClient<$Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Vehicle.
+     * @param {VehicleUpdateArgs} args - Arguments to update one Vehicle.
+     * @example
+     * // Update one Vehicle
+     * const vehicle = await prisma.vehicle.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends VehicleUpdateArgs>(args: SelectSubset<T, VehicleUpdateArgs<ExtArgs>>): Prisma__VehicleClient<$Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Vehicles.
+     * @param {VehicleDeleteManyArgs} args - Arguments to filter Vehicles to delete.
+     * @example
+     * // Delete a few Vehicles
+     * const { count } = await prisma.vehicle.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends VehicleDeleteManyArgs>(args?: SelectSubset<T, VehicleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Vehicles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VehicleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Vehicles
+     * const vehicle = await prisma.vehicle.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends VehicleUpdateManyArgs>(args: SelectSubset<T, VehicleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Vehicle.
+     * @param {VehicleUpsertArgs} args - Arguments to update or create a Vehicle.
+     * @example
+     * // Update or create a Vehicle
+     * const vehicle = await prisma.vehicle.upsert({
+     *   create: {
+     *     // ... data to create a Vehicle
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Vehicle we want to update
+     *   }
+     * })
+     */
+    upsert<T extends VehicleUpsertArgs>(args: SelectSubset<T, VehicleUpsertArgs<ExtArgs>>): Prisma__VehicleClient<$Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Vehicles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VehicleCountArgs} args - Arguments to filter Vehicles to count.
+     * @example
+     * // Count the number of Vehicles
+     * const count = await prisma.vehicle.count({
+     *   where: {
+     *     // ... the filter for the Vehicles we want to count
+     *   }
+     * })
+    **/
+    count<T extends VehicleCountArgs>(
+      args?: Subset<T, VehicleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], VehicleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Vehicle.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VehicleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends VehicleAggregateArgs>(args: Subset<T, VehicleAggregateArgs>): Prisma.PrismaPromise<GetVehicleAggregateType<T>>
+
+    /**
+     * Group by Vehicle.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VehicleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends VehicleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: VehicleGroupByArgs['orderBy'] }
+        : { orderBy?: VehicleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, VehicleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVehicleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Vehicle model
+   */
+  readonly fields: VehicleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Vehicle.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__VehicleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    proposals<T extends Vehicle$proposalsArgs<ExtArgs> = {}>(args?: Subset<T, Vehicle$proposalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Vehicle model
+   */
+  interface VehicleFieldRefs {
+    readonly id: FieldRef<"Vehicle", 'Int'>
+    readonly code: FieldRef<"Vehicle", 'String'>
+    readonly name: FieldRef<"Vehicle", 'String'>
+    readonly plateNumber: FieldRef<"Vehicle", 'String'>
+    readonly createdAt: FieldRef<"Vehicle", 'DateTime'>
+    readonly updatedAt: FieldRef<"Vehicle", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Vehicle findUnique
+   */
+  export type VehicleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vehicle
+     */
+    select?: VehicleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vehicle
+     */
+    omit?: VehicleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VehicleInclude<ExtArgs> | null
+    /**
+     * Filter, which Vehicle to fetch.
+     */
+    where: VehicleWhereUniqueInput
+  }
+
+  /**
+   * Vehicle findUniqueOrThrow
+   */
+  export type VehicleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vehicle
+     */
+    select?: VehicleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vehicle
+     */
+    omit?: VehicleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VehicleInclude<ExtArgs> | null
+    /**
+     * Filter, which Vehicle to fetch.
+     */
+    where: VehicleWhereUniqueInput
+  }
+
+  /**
+   * Vehicle findFirst
+   */
+  export type VehicleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vehicle
+     */
+    select?: VehicleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vehicle
+     */
+    omit?: VehicleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VehicleInclude<ExtArgs> | null
+    /**
+     * Filter, which Vehicle to fetch.
+     */
+    where?: VehicleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Vehicles to fetch.
+     */
+    orderBy?: VehicleOrderByWithRelationInput | VehicleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Vehicles.
+     */
+    cursor?: VehicleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Vehicles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Vehicles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Vehicles.
+     */
+    distinct?: VehicleScalarFieldEnum | VehicleScalarFieldEnum[]
+  }
+
+  /**
+   * Vehicle findFirstOrThrow
+   */
+  export type VehicleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vehicle
+     */
+    select?: VehicleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vehicle
+     */
+    omit?: VehicleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VehicleInclude<ExtArgs> | null
+    /**
+     * Filter, which Vehicle to fetch.
+     */
+    where?: VehicleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Vehicles to fetch.
+     */
+    orderBy?: VehicleOrderByWithRelationInput | VehicleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Vehicles.
+     */
+    cursor?: VehicleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Vehicles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Vehicles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Vehicles.
+     */
+    distinct?: VehicleScalarFieldEnum | VehicleScalarFieldEnum[]
+  }
+
+  /**
+   * Vehicle findMany
+   */
+  export type VehicleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vehicle
+     */
+    select?: VehicleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vehicle
+     */
+    omit?: VehicleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VehicleInclude<ExtArgs> | null
+    /**
+     * Filter, which Vehicles to fetch.
+     */
+    where?: VehicleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Vehicles to fetch.
+     */
+    orderBy?: VehicleOrderByWithRelationInput | VehicleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Vehicles.
+     */
+    cursor?: VehicleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Vehicles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Vehicles.
+     */
+    skip?: number
+    distinct?: VehicleScalarFieldEnum | VehicleScalarFieldEnum[]
+  }
+
+  /**
+   * Vehicle create
+   */
+  export type VehicleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vehicle
+     */
+    select?: VehicleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vehicle
+     */
+    omit?: VehicleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VehicleInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Vehicle.
+     */
+    data: XOR<VehicleCreateInput, VehicleUncheckedCreateInput>
+  }
+
+  /**
+   * Vehicle createMany
+   */
+  export type VehicleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Vehicles.
+     */
+    data: VehicleCreateManyInput | VehicleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Vehicle update
+   */
+  export type VehicleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vehicle
+     */
+    select?: VehicleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vehicle
+     */
+    omit?: VehicleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VehicleInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Vehicle.
+     */
+    data: XOR<VehicleUpdateInput, VehicleUncheckedUpdateInput>
+    /**
+     * Choose, which Vehicle to update.
+     */
+    where: VehicleWhereUniqueInput
+  }
+
+  /**
+   * Vehicle updateMany
+   */
+  export type VehicleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Vehicles.
+     */
+    data: XOR<VehicleUpdateManyMutationInput, VehicleUncheckedUpdateManyInput>
+    /**
+     * Filter which Vehicles to update
+     */
+    where?: VehicleWhereInput
+    /**
+     * Limit how many Vehicles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Vehicle upsert
+   */
+  export type VehicleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vehicle
+     */
+    select?: VehicleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vehicle
+     */
+    omit?: VehicleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VehicleInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Vehicle to update in case it exists.
+     */
+    where: VehicleWhereUniqueInput
+    /**
+     * In case the Vehicle found by the `where` argument doesn't exist, create a new Vehicle with this data.
+     */
+    create: XOR<VehicleCreateInput, VehicleUncheckedCreateInput>
+    /**
+     * In case the Vehicle was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<VehicleUpdateInput, VehicleUncheckedUpdateInput>
+  }
+
+  /**
+   * Vehicle delete
+   */
+  export type VehicleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vehicle
+     */
+    select?: VehicleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vehicle
+     */
+    omit?: VehicleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VehicleInclude<ExtArgs> | null
+    /**
+     * Filter which Vehicle to delete.
+     */
+    where: VehicleWhereUniqueInput
+  }
+
+  /**
+   * Vehicle deleteMany
+   */
+  export type VehicleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Vehicles to delete
+     */
+    where?: VehicleWhereInput
+    /**
+     * Limit how many Vehicles to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Vehicle.proposals
+   */
+  export type Vehicle$proposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Proposal
+     */
+    select?: ProposalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Proposal
+     */
+    omit?: ProposalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProposalInclude<ExtArgs> | null
+    where?: ProposalWhereInput
+    orderBy?: ProposalOrderByWithRelationInput | ProposalOrderByWithRelationInput[]
+    cursor?: ProposalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProposalScalarFieldEnum | ProposalScalarFieldEnum[]
+  }
+
+  /**
+   * Vehicle without action
+   */
+  export type VehicleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vehicle
+     */
+    select?: VehicleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vehicle
+     */
+    omit?: VehicleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VehicleInclude<ExtArgs> | null
   }
 
 
@@ -19863,6 +20989,7 @@ export namespace Prisma {
     fileId: number | null
     proposerId: number | null
     createdById: number | null
+    vehicleId: number | null
   }
 
   export type ProposalSumAggregateOutputType = {
@@ -19870,6 +20997,7 @@ export namespace Prisma {
     fileId: number | null
     proposerId: number | null
     createdById: number | null
+    vehicleId: number | null
   }
 
   export type ProposalMinAggregateOutputType = {
@@ -19883,6 +21011,11 @@ export namespace Prisma {
     createdById: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    proposalType: $Enums.ProposalType | null
+    vehicleId: number | null
+    startAt: Date | null
+    endAt: Date | null
+    dropoffPlace: string | null
   }
 
   export type ProposalMaxAggregateOutputType = {
@@ -19896,6 +21029,11 @@ export namespace Prisma {
     createdById: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    proposalType: $Enums.ProposalType | null
+    vehicleId: number | null
+    startAt: Date | null
+    endAt: Date | null
+    dropoffPlace: string | null
   }
 
   export type ProposalCountAggregateOutputType = {
@@ -19909,6 +21047,11 @@ export namespace Prisma {
     createdById: number
     createdAt: number
     updatedAt: number
+    proposalType: number
+    vehicleId: number
+    startAt: number
+    endAt: number
+    dropoffPlace: number
     _all: number
   }
 
@@ -19918,6 +21061,7 @@ export namespace Prisma {
     fileId?: true
     proposerId?: true
     createdById?: true
+    vehicleId?: true
   }
 
   export type ProposalSumAggregateInputType = {
@@ -19925,6 +21069,7 @@ export namespace Prisma {
     fileId?: true
     proposerId?: true
     createdById?: true
+    vehicleId?: true
   }
 
   export type ProposalMinAggregateInputType = {
@@ -19938,6 +21083,11 @@ export namespace Prisma {
     createdById?: true
     createdAt?: true
     updatedAt?: true
+    proposalType?: true
+    vehicleId?: true
+    startAt?: true
+    endAt?: true
+    dropoffPlace?: true
   }
 
   export type ProposalMaxAggregateInputType = {
@@ -19951,6 +21101,11 @@ export namespace Prisma {
     createdById?: true
     createdAt?: true
     updatedAt?: true
+    proposalType?: true
+    vehicleId?: true
+    startAt?: true
+    endAt?: true
+    dropoffPlace?: true
   }
 
   export type ProposalCountAggregateInputType = {
@@ -19964,6 +21119,11 @@ export namespace Prisma {
     createdById?: true
     createdAt?: true
     updatedAt?: true
+    proposalType?: true
+    vehicleId?: true
+    startAt?: true
+    endAt?: true
+    dropoffPlace?: true
     _all?: true
   }
 
@@ -20064,6 +21224,11 @@ export namespace Prisma {
     createdById: number
     createdAt: Date
     updatedAt: Date
+    proposalType: $Enums.ProposalType
+    vehicleId: number | null
+    startAt: Date | null
+    endAt: Date | null
+    dropoffPlace: string | null
     _count: ProposalCountAggregateOutputType | null
     _avg: ProposalAvgAggregateOutputType | null
     _sum: ProposalSumAggregateOutputType | null
@@ -20096,6 +21261,12 @@ export namespace Prisma {
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    proposalType?: boolean
+    vehicleId?: boolean
+    startAt?: boolean
+    endAt?: boolean
+    dropoffPlace?: boolean
+    vehicle?: boolean | Proposal$vehicleArgs<ExtArgs>
     createdBy?: boolean | EmployeeDefaultArgs<ExtArgs>
     file?: boolean | Proposal$fileArgs<ExtArgs>
     proposer?: boolean | EmployeeDefaultArgs<ExtArgs>
@@ -20117,10 +21288,16 @@ export namespace Prisma {
     createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    proposalType?: boolean
+    vehicleId?: boolean
+    startAt?: boolean
+    endAt?: boolean
+    dropoffPlace?: boolean
   }
 
-  export type ProposalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "title" | "description" | "fileId" | "status" | "proposerId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["proposal"]>
+  export type ProposalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "title" | "description" | "fileId" | "status" | "proposerId" | "createdById" | "createdAt" | "updatedAt" | "proposalType" | "vehicleId" | "startAt" | "endAt" | "dropoffPlace", ExtArgs["result"]["proposal"]>
   export type ProposalInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    vehicle?: boolean | Proposal$vehicleArgs<ExtArgs>
     createdBy?: boolean | EmployeeDefaultArgs<ExtArgs>
     file?: boolean | Proposal$fileArgs<ExtArgs>
     proposer?: boolean | EmployeeDefaultArgs<ExtArgs>
@@ -20132,6 +21309,7 @@ export namespace Prisma {
   export type $ProposalPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Proposal"
     objects: {
+      vehicle: Prisma.$VehiclePayload<ExtArgs> | null
       createdBy: Prisma.$EmployeePayload<ExtArgs>
       file: Prisma.$FilePayload<ExtArgs> | null
       proposer: Prisma.$EmployeePayload<ExtArgs>
@@ -20149,6 +21327,11 @@ export namespace Prisma {
       createdById: number
       createdAt: Date
       updatedAt: Date
+      proposalType: $Enums.ProposalType
+      vehicleId: number | null
+      startAt: Date | null
+      endAt: Date | null
+      dropoffPlace: string | null
     }, ExtArgs["result"]["proposal"]>
     composites: {}
   }
@@ -20489,6 +21672,7 @@ export namespace Prisma {
    */
   export interface Prisma__ProposalClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    vehicle<T extends Proposal$vehicleArgs<ExtArgs> = {}>(args?: Subset<T, Proposal$vehicleArgs<ExtArgs>>): Prisma__VehicleClient<$Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     createdBy<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     file<T extends Proposal$fileArgs<ExtArgs> = {}>(args?: Subset<T, Proposal$fileArgs<ExtArgs>>): Prisma__FileClient<$Result.GetResult<Prisma.$FilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     proposer<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -20533,6 +21717,11 @@ export namespace Prisma {
     readonly createdById: FieldRef<"Proposal", 'Int'>
     readonly createdAt: FieldRef<"Proposal", 'DateTime'>
     readonly updatedAt: FieldRef<"Proposal", 'DateTime'>
+    readonly proposalType: FieldRef<"Proposal", 'ProposalType'>
+    readonly vehicleId: FieldRef<"Proposal", 'Int'>
+    readonly startAt: FieldRef<"Proposal", 'DateTime'>
+    readonly endAt: FieldRef<"Proposal", 'DateTime'>
+    readonly dropoffPlace: FieldRef<"Proposal", 'String'>
   }
     
 
@@ -20873,6 +22062,25 @@ export namespace Prisma {
      * Limit how many Proposals to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Proposal.vehicle
+   */
+  export type Proposal$vehicleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vehicle
+     */
+    select?: VehicleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vehicle
+     */
+    omit?: VehicleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VehicleInclude<ExtArgs> | null
+    where?: VehicleWhereInput
   }
 
   /**
@@ -23954,6 +25162,18 @@ export namespace Prisma {
   export type FileScalarFieldEnum = (typeof FileScalarFieldEnum)[keyof typeof FileScalarFieldEnum]
 
 
+  export const VehicleScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    name: 'name',
+    plateNumber: 'plateNumber',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type VehicleScalarFieldEnum = (typeof VehicleScalarFieldEnum)[keyof typeof VehicleScalarFieldEnum]
+
+
   export const EmployeeScalarFieldEnum: {
     id: 'id',
     employeeCode: 'employeeCode',
@@ -24177,7 +25397,12 @@ export namespace Prisma {
     proposerId: 'proposerId',
     createdById: 'createdById',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    proposalType: 'proposalType',
+    vehicleId: 'vehicleId',
+    startAt: 'startAt',
+    endAt: 'endAt',
+    dropoffPlace: 'dropoffPlace'
   };
 
   export type ProposalScalarFieldEnum = (typeof ProposalScalarFieldEnum)[keyof typeof ProposalScalarFieldEnum]
@@ -24246,6 +25471,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const VehicleOrderByRelevanceFieldEnum: {
+    code: 'code',
+    name: 'name',
+    plateNumber: 'plateNumber'
+  };
+
+  export type VehicleOrderByRelevanceFieldEnum = (typeof VehicleOrderByRelevanceFieldEnum)[keyof typeof VehicleOrderByRelevanceFieldEnum]
 
 
   export const EmployeeOrderByRelevanceFieldEnum: {
@@ -24354,7 +25588,8 @@ export namespace Prisma {
   export const ProposalOrderByRelevanceFieldEnum: {
     name: 'name',
     title: 'title',
-    description: 'description'
+    description: 'description',
+    dropoffPlace: 'dropoffPlace'
   };
 
   export type ProposalOrderByRelevanceFieldEnum = (typeof ProposalOrderByRelevanceFieldEnum)[keyof typeof ProposalOrderByRelevanceFieldEnum]
@@ -24459,6 +25694,13 @@ export namespace Prisma {
    */
   export type EnumProposalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProposalStatus'>
     
+
+
+  /**
+   * Reference to a field of type 'ProposalType'
+   */
+  export type EnumProposalTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProposalType'>
+    
   /**
    * Deep Input Types
    */
@@ -24530,6 +25772,69 @@ export namespace Prisma {
     data?: BytesWithAggregatesFilter<"File"> | Uint8Array
     createdAt?: DateTimeWithAggregatesFilter<"File"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"File"> | Date | string
+  }
+
+  export type VehicleWhereInput = {
+    AND?: VehicleWhereInput | VehicleWhereInput[]
+    OR?: VehicleWhereInput[]
+    NOT?: VehicleWhereInput | VehicleWhereInput[]
+    id?: IntFilter<"Vehicle"> | number
+    code?: StringFilter<"Vehicle"> | string
+    name?: StringFilter<"Vehicle"> | string
+    plateNumber?: StringNullableFilter<"Vehicle"> | string | null
+    createdAt?: DateTimeFilter<"Vehicle"> | Date | string
+    updatedAt?: DateTimeFilter<"Vehicle"> | Date | string
+    proposals?: ProposalListRelationFilter
+  }
+
+  export type VehicleOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    plateNumber?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    proposals?: ProposalOrderByRelationAggregateInput
+    _relevance?: VehicleOrderByRelevanceInput
+  }
+
+  export type VehicleWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    code?: string
+    plateNumber?: string
+    AND?: VehicleWhereInput | VehicleWhereInput[]
+    OR?: VehicleWhereInput[]
+    NOT?: VehicleWhereInput | VehicleWhereInput[]
+    name?: StringFilter<"Vehicle"> | string
+    createdAt?: DateTimeFilter<"Vehicle"> | Date | string
+    updatedAt?: DateTimeFilter<"Vehicle"> | Date | string
+    proposals?: ProposalListRelationFilter
+  }, "id" | "code" | "plateNumber">
+
+  export type VehicleOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    plateNumber?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: VehicleCountOrderByAggregateInput
+    _avg?: VehicleAvgOrderByAggregateInput
+    _max?: VehicleMaxOrderByAggregateInput
+    _min?: VehicleMinOrderByAggregateInput
+    _sum?: VehicleSumOrderByAggregateInput
+  }
+
+  export type VehicleScalarWhereWithAggregatesInput = {
+    AND?: VehicleScalarWhereWithAggregatesInput | VehicleScalarWhereWithAggregatesInput[]
+    OR?: VehicleScalarWhereWithAggregatesInput[]
+    NOT?: VehicleScalarWhereWithAggregatesInput | VehicleScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Vehicle"> | number
+    code?: StringWithAggregatesFilter<"Vehicle"> | string
+    name?: StringWithAggregatesFilter<"Vehicle"> | string
+    plateNumber?: StringNullableWithAggregatesFilter<"Vehicle"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Vehicle"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Vehicle"> | Date | string
   }
 
   export type EmployeeWhereInput = {
@@ -25743,6 +27048,12 @@ export namespace Prisma {
     createdById?: IntFilter<"Proposal"> | number
     createdAt?: DateTimeFilter<"Proposal"> | Date | string
     updatedAt?: DateTimeFilter<"Proposal"> | Date | string
+    proposalType?: EnumProposalTypeFilter<"Proposal"> | $Enums.ProposalType
+    vehicleId?: IntNullableFilter<"Proposal"> | number | null
+    startAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
+    endAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
+    dropoffPlace?: StringNullableFilter<"Proposal"> | string | null
+    vehicle?: XOR<VehicleNullableScalarRelationFilter, VehicleWhereInput> | null
     createdBy?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     file?: XOR<FileNullableScalarRelationFilter, FileWhereInput> | null
     proposer?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
@@ -25761,6 +27072,12 @@ export namespace Prisma {
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    proposalType?: SortOrder
+    vehicleId?: SortOrderInput | SortOrder
+    startAt?: SortOrderInput | SortOrder
+    endAt?: SortOrderInput | SortOrder
+    dropoffPlace?: SortOrderInput | SortOrder
+    vehicle?: VehicleOrderByWithRelationInput
     createdBy?: EmployeeOrderByWithRelationInput
     file?: FileOrderByWithRelationInput
     proposer?: EmployeeOrderByWithRelationInput
@@ -25783,6 +27100,12 @@ export namespace Prisma {
     createdById?: IntFilter<"Proposal"> | number
     createdAt?: DateTimeFilter<"Proposal"> | Date | string
     updatedAt?: DateTimeFilter<"Proposal"> | Date | string
+    proposalType?: EnumProposalTypeFilter<"Proposal"> | $Enums.ProposalType
+    vehicleId?: IntNullableFilter<"Proposal"> | number | null
+    startAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
+    endAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
+    dropoffPlace?: StringNullableFilter<"Proposal"> | string | null
+    vehicle?: XOR<VehicleNullableScalarRelationFilter, VehicleWhereInput> | null
     createdBy?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     file?: XOR<FileNullableScalarRelationFilter, FileWhereInput> | null
     proposer?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
@@ -25801,6 +27124,11 @@ export namespace Prisma {
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    proposalType?: SortOrder
+    vehicleId?: SortOrderInput | SortOrder
+    startAt?: SortOrderInput | SortOrder
+    endAt?: SortOrderInput | SortOrder
+    dropoffPlace?: SortOrderInput | SortOrder
     _count?: ProposalCountOrderByAggregateInput
     _avg?: ProposalAvgOrderByAggregateInput
     _max?: ProposalMaxOrderByAggregateInput
@@ -25822,6 +27150,11 @@ export namespace Prisma {
     createdById?: IntWithAggregatesFilter<"Proposal"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Proposal"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Proposal"> | Date | string
+    proposalType?: EnumProposalTypeWithAggregatesFilter<"Proposal"> | $Enums.ProposalType
+    vehicleId?: IntNullableWithAggregatesFilter<"Proposal"> | number | null
+    startAt?: DateTimeNullableWithAggregatesFilter<"Proposal"> | Date | string | null
+    endAt?: DateTimeNullableWithAggregatesFilter<"Proposal"> | Date | string | null
+    dropoffPlace?: StringNullableWithAggregatesFilter<"Proposal"> | string | null
   }
 
   export type ProposalSignerWhereInput = {
@@ -26108,6 +27441,70 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     data?: BytesFieldUpdateOperationsInput | Uint8Array
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VehicleCreateInput = {
+    code: string
+    name: string
+    plateNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    proposals?: ProposalCreateNestedManyWithoutVehicleInput
+  }
+
+  export type VehicleUncheckedCreateInput = {
+    id?: number
+    code: string
+    name: string
+    plateNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    proposals?: ProposalUncheckedCreateNestedManyWithoutVehicleInput
+  }
+
+  export type VehicleUpdateInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposals?: ProposalUpdateManyWithoutVehicleNestedInput
+  }
+
+  export type VehicleUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposals?: ProposalUncheckedUpdateManyWithoutVehicleNestedInput
+  }
+
+  export type VehicleCreateManyInput = {
+    id?: number
+    code: string
+    name: string
+    plateNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VehicleUpdateManyMutationInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VehicleUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -27326,6 +28723,11 @@ export namespace Prisma {
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
+    vehicle?: VehicleCreateNestedOneWithoutProposalsInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
     file?: FileCreateNestedOneWithoutProposalsInput
     proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
@@ -27344,6 +28746,11 @@ export namespace Prisma {
     createdById: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    vehicleId?: number | null
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
   }
@@ -27355,6 +28762,11 @@ export namespace Prisma {
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
     file?: FileUpdateOneWithoutProposalsNestedInput
     proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
@@ -27373,6 +28785,11 @@ export namespace Prisma {
     createdById?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
   }
@@ -27388,6 +28805,11 @@ export namespace Prisma {
     createdById: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    vehicleId?: number | null
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
   }
 
   export type ProposalUpdateManyMutationInput = {
@@ -27397,6 +28819,10 @@ export namespace Prisma {
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProposalUncheckedUpdateManyInput = {
@@ -27410,6 +28836,11 @@ export namespace Prisma {
     createdById?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProposalSignerCreateInput = {
@@ -27781,6 +29212,85 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type VehicleOrderByRelevanceInput = {
+    fields: VehicleOrderByRelevanceFieldEnum | VehicleOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type VehicleCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    plateNumber?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VehicleAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type VehicleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    plateNumber?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VehicleMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    plateNumber?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VehicleSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
   export type EnumSexFilter<$PrismaModel = never> = {
     equals?: $Enums.Sex | EnumSexFieldRefInput<$PrismaModel>
     in?: $Enums.Sex[]
@@ -27804,21 +29314,6 @@ export namespace Prisma {
     in?: $Enums.Role[]
     notIn?: $Enums.Role[]
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
-  }
-
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type BoolFilter<$PrismaModel = never> = {
@@ -27913,11 +29408,6 @@ export namespace Prisma {
     every?: AttendanceWhereInput
     some?: AttendanceWhereInput
     none?: AttendanceWhereInput
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type AttendanceImportLogOrderByRelationAggregateInput = {
@@ -28045,24 +29535,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -28986,6 +30458,18 @@ export namespace Prisma {
     not?: NestedEnumProposalStatusFilter<$PrismaModel> | $Enums.ProposalStatus
   }
 
+  export type EnumProposalTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProposalType | EnumProposalTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ProposalType[]
+    notIn?: $Enums.ProposalType[]
+    not?: NestedEnumProposalTypeFilter<$PrismaModel> | $Enums.ProposalType
+  }
+
+  export type VehicleNullableScalarRelationFilter = {
+    is?: VehicleWhereInput | null
+    isNot?: VehicleWhereInput | null
+  }
+
   export type FileNullableScalarRelationFilter = {
     is?: FileWhereInput | null
     isNot?: FileWhereInput | null
@@ -29008,6 +30492,11 @@ export namespace Prisma {
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    proposalType?: SortOrder
+    vehicleId?: SortOrder
+    startAt?: SortOrder
+    endAt?: SortOrder
+    dropoffPlace?: SortOrder
   }
 
   export type ProposalAvgOrderByAggregateInput = {
@@ -29015,6 +30504,7 @@ export namespace Prisma {
     fileId?: SortOrder
     proposerId?: SortOrder
     createdById?: SortOrder
+    vehicleId?: SortOrder
   }
 
   export type ProposalMaxOrderByAggregateInput = {
@@ -29028,6 +30518,11 @@ export namespace Prisma {
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    proposalType?: SortOrder
+    vehicleId?: SortOrder
+    startAt?: SortOrder
+    endAt?: SortOrder
+    dropoffPlace?: SortOrder
   }
 
   export type ProposalMinOrderByAggregateInput = {
@@ -29041,6 +30536,11 @@ export namespace Prisma {
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    proposalType?: SortOrder
+    vehicleId?: SortOrder
+    startAt?: SortOrder
+    endAt?: SortOrder
+    dropoffPlace?: SortOrder
   }
 
   export type ProposalSumOrderByAggregateInput = {
@@ -29048,6 +30548,7 @@ export namespace Prisma {
     fileId?: SortOrder
     proposerId?: SortOrder
     createdById?: SortOrder
+    vehicleId?: SortOrder
   }
 
   export type EnumProposalStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -29058,6 +30559,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumProposalStatusFilter<$PrismaModel>
     _max?: NestedEnumProposalStatusFilter<$PrismaModel>
+  }
+
+  export type EnumProposalTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProposalType | EnumProposalTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ProposalType[]
+    notIn?: $Enums.ProposalType[]
+    not?: NestedEnumProposalTypeWithAggregatesFilter<$PrismaModel> | $Enums.ProposalType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProposalTypeFilter<$PrismaModel>
+    _max?: NestedEnumProposalTypeFilter<$PrismaModel>
   }
 
   export type ProposalScalarRelationFilter = {
@@ -29274,6 +30785,52 @@ export namespace Prisma {
     connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
     update?: ProposalUpdateWithWhereUniqueWithoutFileInput | ProposalUpdateWithWhereUniqueWithoutFileInput[]
     updateMany?: ProposalUpdateManyWithWhereWithoutFileInput | ProposalUpdateManyWithWhereWithoutFileInput[]
+    deleteMany?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
+  }
+
+  export type ProposalCreateNestedManyWithoutVehicleInput = {
+    create?: XOR<ProposalCreateWithoutVehicleInput, ProposalUncheckedCreateWithoutVehicleInput> | ProposalCreateWithoutVehicleInput[] | ProposalUncheckedCreateWithoutVehicleInput[]
+    connectOrCreate?: ProposalCreateOrConnectWithoutVehicleInput | ProposalCreateOrConnectWithoutVehicleInput[]
+    createMany?: ProposalCreateManyVehicleInputEnvelope
+    connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+  }
+
+  export type ProposalUncheckedCreateNestedManyWithoutVehicleInput = {
+    create?: XOR<ProposalCreateWithoutVehicleInput, ProposalUncheckedCreateWithoutVehicleInput> | ProposalCreateWithoutVehicleInput[] | ProposalUncheckedCreateWithoutVehicleInput[]
+    connectOrCreate?: ProposalCreateOrConnectWithoutVehicleInput | ProposalCreateOrConnectWithoutVehicleInput[]
+    createMany?: ProposalCreateManyVehicleInputEnvelope
+    connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
+  export type ProposalUpdateManyWithoutVehicleNestedInput = {
+    create?: XOR<ProposalCreateWithoutVehicleInput, ProposalUncheckedCreateWithoutVehicleInput> | ProposalCreateWithoutVehicleInput[] | ProposalUncheckedCreateWithoutVehicleInput[]
+    connectOrCreate?: ProposalCreateOrConnectWithoutVehicleInput | ProposalCreateOrConnectWithoutVehicleInput[]
+    upsert?: ProposalUpsertWithWhereUniqueWithoutVehicleInput | ProposalUpsertWithWhereUniqueWithoutVehicleInput[]
+    createMany?: ProposalCreateManyVehicleInputEnvelope
+    set?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    disconnect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    delete?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    update?: ProposalUpdateWithWhereUniqueWithoutVehicleInput | ProposalUpdateWithWhereUniqueWithoutVehicleInput[]
+    updateMany?: ProposalUpdateManyWithWhereWithoutVehicleInput | ProposalUpdateManyWithWhereWithoutVehicleInput[]
+    deleteMany?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
+  }
+
+  export type ProposalUncheckedUpdateManyWithoutVehicleNestedInput = {
+    create?: XOR<ProposalCreateWithoutVehicleInput, ProposalUncheckedCreateWithoutVehicleInput> | ProposalCreateWithoutVehicleInput[] | ProposalUncheckedCreateWithoutVehicleInput[]
+    connectOrCreate?: ProposalCreateOrConnectWithoutVehicleInput | ProposalCreateOrConnectWithoutVehicleInput[]
+    upsert?: ProposalUpsertWithWhereUniqueWithoutVehicleInput | ProposalUpsertWithWhereUniqueWithoutVehicleInput[]
+    createMany?: ProposalCreateManyVehicleInputEnvelope
+    set?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    disconnect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    delete?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+    update?: ProposalUpdateWithWhereUniqueWithoutVehicleInput | ProposalUpdateWithWhereUniqueWithoutVehicleInput[]
+    updateMany?: ProposalUpdateManyWithWhereWithoutVehicleInput | ProposalUpdateManyWithWhereWithoutVehicleInput[]
     deleteMany?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
   }
 
@@ -29505,10 +31062,6 @@ export namespace Prisma {
 
   export type EnumRoleFieldUpdateOperationsInput = {
     set?: $Enums.Role
-  }
-
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -30575,6 +32128,12 @@ export namespace Prisma {
     update?: XOR<XOR<KPIEmployeeUpdateToOneWithWhereWithoutEntriesInput, KPIEmployeeUpdateWithoutEntriesInput>, KPIEmployeeUncheckedUpdateWithoutEntriesInput>
   }
 
+  export type VehicleCreateNestedOneWithoutProposalsInput = {
+    create?: XOR<VehicleCreateWithoutProposalsInput, VehicleUncheckedCreateWithoutProposalsInput>
+    connectOrCreate?: VehicleCreateOrConnectWithoutProposalsInput
+    connect?: VehicleWhereUniqueInput
+  }
+
   export type EmployeeCreateNestedOneWithoutProposalsCreatedInput = {
     create?: XOR<EmployeeCreateWithoutProposalsCreatedInput, EmployeeUncheckedCreateWithoutProposalsCreatedInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutProposalsCreatedInput
@@ -30623,6 +32182,20 @@ export namespace Prisma {
 
   export type EnumProposalStatusFieldUpdateOperationsInput = {
     set?: $Enums.ProposalStatus
+  }
+
+  export type EnumProposalTypeFieldUpdateOperationsInput = {
+    set?: $Enums.ProposalType
+  }
+
+  export type VehicleUpdateOneWithoutProposalsNestedInput = {
+    create?: XOR<VehicleCreateWithoutProposalsInput, VehicleUncheckedCreateWithoutProposalsInput>
+    connectOrCreate?: VehicleCreateOrConnectWithoutProposalsInput
+    upsert?: VehicleUpsertWithoutProposalsInput
+    disconnect?: VehicleWhereInput | boolean
+    delete?: VehicleWhereInput | boolean
+    connect?: VehicleWhereUniqueInput
+    update?: XOR<XOR<VehicleUpdateToOneWithWhereWithoutProposalsInput, VehicleUpdateWithoutProposalsInput>, VehicleUncheckedUpdateWithoutProposalsInput>
   }
 
   export type EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput = {
@@ -30876,6 +32449,50 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedEnumSexFilter<$PrismaModel = never> = {
     equals?: $Enums.Sex | EnumSexFieldRefInput<$PrismaModel>
     in?: $Enums.Sex[]
@@ -30901,35 +32518,9 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumSexWithAggregatesFilter<$PrismaModel = never> = {
@@ -30964,24 +32555,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -31109,6 +32682,13 @@ export namespace Prisma {
     not?: NestedEnumProposalStatusFilter<$PrismaModel> | $Enums.ProposalStatus
   }
 
+  export type NestedEnumProposalTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProposalType | EnumProposalTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ProposalType[]
+    notIn?: $Enums.ProposalType[]
+    not?: NestedEnumProposalTypeFilter<$PrismaModel> | $Enums.ProposalType
+  }
+
   export type NestedEnumProposalStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ProposalStatus | EnumProposalStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ProposalStatus[]
@@ -31119,6 +32699,16 @@ export namespace Prisma {
     _max?: NestedEnumProposalStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumProposalTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProposalType | EnumProposalTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ProposalType[]
+    notIn?: $Enums.ProposalType[]
+    not?: NestedEnumProposalTypeWithAggregatesFilter<$PrismaModel> | $Enums.ProposalType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProposalTypeFilter<$PrismaModel>
+    _max?: NestedEnumProposalTypeFilter<$PrismaModel>
+  }
+
   export type ProposalCreateWithoutFileInput = {
     name: string
     title: string
@@ -31126,6 +32716,11 @@ export namespace Prisma {
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
+    vehicle?: VehicleCreateNestedOneWithoutProposalsInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
     proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     approvers?: ProposalApproverCreateNestedManyWithoutProposalInput
@@ -31142,6 +32737,11 @@ export namespace Prisma {
     createdById: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    vehicleId?: number | null
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
   }
@@ -31186,6 +32786,74 @@ export namespace Prisma {
     createdById?: IntFilter<"Proposal"> | number
     createdAt?: DateTimeFilter<"Proposal"> | Date | string
     updatedAt?: DateTimeFilter<"Proposal"> | Date | string
+    proposalType?: EnumProposalTypeFilter<"Proposal"> | $Enums.ProposalType
+    vehicleId?: IntNullableFilter<"Proposal"> | number | null
+    startAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
+    endAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
+    dropoffPlace?: StringNullableFilter<"Proposal"> | string | null
+  }
+
+  export type ProposalCreateWithoutVehicleInput = {
+    name: string
+    title: string
+    description?: string | null
+    status?: $Enums.ProposalStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
+    createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
+    file?: FileCreateNestedOneWithoutProposalsInput
+    proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
+    approvers?: ProposalApproverCreateNestedManyWithoutProposalInput
+    signers?: ProposalSignerCreateNestedManyWithoutProposalInput
+  }
+
+  export type ProposalUncheckedCreateWithoutVehicleInput = {
+    id?: number
+    name: string
+    title: string
+    description?: string | null
+    fileId?: number | null
+    status?: $Enums.ProposalStatus
+    proposerId: number
+    createdById: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
+    approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
+    signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
+  }
+
+  export type ProposalCreateOrConnectWithoutVehicleInput = {
+    where: ProposalWhereUniqueInput
+    create: XOR<ProposalCreateWithoutVehicleInput, ProposalUncheckedCreateWithoutVehicleInput>
+  }
+
+  export type ProposalCreateManyVehicleInputEnvelope = {
+    data: ProposalCreateManyVehicleInput | ProposalCreateManyVehicleInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProposalUpsertWithWhereUniqueWithoutVehicleInput = {
+    where: ProposalWhereUniqueInput
+    update: XOR<ProposalUpdateWithoutVehicleInput, ProposalUncheckedUpdateWithoutVehicleInput>
+    create: XOR<ProposalCreateWithoutVehicleInput, ProposalUncheckedCreateWithoutVehicleInput>
+  }
+
+  export type ProposalUpdateWithWhereUniqueWithoutVehicleInput = {
+    where: ProposalWhereUniqueInput
+    data: XOR<ProposalUpdateWithoutVehicleInput, ProposalUncheckedUpdateWithoutVehicleInput>
+  }
+
+  export type ProposalUpdateManyWithWhereWithoutVehicleInput = {
+    where: ProposalScalarWhereInput
+    data: XOR<ProposalUpdateManyMutationInput, ProposalUncheckedUpdateManyWithoutVehicleInput>
   }
 
   export type AttendanceImportLogCreateWithoutImportedByInput = {
@@ -31576,6 +33244,11 @@ export namespace Prisma {
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
+    vehicle?: VehicleCreateNestedOneWithoutProposalsInput
     file?: FileCreateNestedOneWithoutProposalsInput
     proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     approvers?: ProposalApproverCreateNestedManyWithoutProposalInput
@@ -31592,6 +33265,11 @@ export namespace Prisma {
     proposerId: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    vehicleId?: number | null
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
   }
@@ -31613,6 +33291,11 @@ export namespace Prisma {
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
+    vehicle?: VehicleCreateNestedOneWithoutProposalsInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
     file?: FileCreateNestedOneWithoutProposalsInput
     approvers?: ProposalApproverCreateNestedManyWithoutProposalInput
@@ -31629,6 +33312,11 @@ export namespace Prisma {
     createdById: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    vehicleId?: number | null
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
   }
@@ -34635,6 +36323,28 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type VehicleCreateWithoutProposalsInput = {
+    code: string
+    name: string
+    plateNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VehicleUncheckedCreateWithoutProposalsInput = {
+    id?: number
+    code: string
+    name: string
+    plateNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VehicleCreateOrConnectWithoutProposalsInput = {
+    where: VehicleWhereUniqueInput
+    create: XOR<VehicleCreateWithoutProposalsInput, VehicleUncheckedCreateWithoutProposalsInput>
+  }
+
   export type EmployeeCreateWithoutProposalsCreatedInput = {
     employeeCode: string
     name: string
@@ -34835,6 +36545,34 @@ export namespace Prisma {
   export type ProposalSignerCreateManyProposalInputEnvelope = {
     data: ProposalSignerCreateManyProposalInput | ProposalSignerCreateManyProposalInput[]
     skipDuplicates?: boolean
+  }
+
+  export type VehicleUpsertWithoutProposalsInput = {
+    update: XOR<VehicleUpdateWithoutProposalsInput, VehicleUncheckedUpdateWithoutProposalsInput>
+    create: XOR<VehicleCreateWithoutProposalsInput, VehicleUncheckedCreateWithoutProposalsInput>
+    where?: VehicleWhereInput
+  }
+
+  export type VehicleUpdateToOneWithWhereWithoutProposalsInput = {
+    where?: VehicleWhereInput
+    data: XOR<VehicleUpdateWithoutProposalsInput, VehicleUncheckedUpdateWithoutProposalsInput>
+  }
+
+  export type VehicleUpdateWithoutProposalsInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VehicleUncheckedUpdateWithoutProposalsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EmployeeUpsertWithoutProposalsCreatedInput = {
@@ -35046,6 +36784,11 @@ export namespace Prisma {
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
+    vehicle?: VehicleCreateNestedOneWithoutProposalsInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
     file?: FileCreateNestedOneWithoutProposalsInput
     proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
@@ -35063,6 +36806,11 @@ export namespace Prisma {
     createdById: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    vehicleId?: number | null
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
   }
 
@@ -35153,6 +36901,11 @@ export namespace Prisma {
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
     file?: FileUpdateOneWithoutProposalsNestedInput
     proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
@@ -35170,6 +36923,11 @@ export namespace Prisma {
     createdById?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
   }
 
@@ -35314,6 +37072,11 @@ export namespace Prisma {
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
+    vehicle?: VehicleCreateNestedOneWithoutProposalsInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
     file?: FileCreateNestedOneWithoutProposalsInput
     proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
@@ -35331,6 +37094,11 @@ export namespace Prisma {
     createdById: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    vehicleId?: number | null
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
   }
 
@@ -35427,6 +37195,11 @@ export namespace Prisma {
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
     file?: FileUpdateOneWithoutProposalsNestedInput
     proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
@@ -35444,6 +37217,11 @@ export namespace Prisma {
     createdById?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
   }
 
@@ -35457,6 +37235,11 @@ export namespace Prisma {
     createdById: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    vehicleId?: number | null
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
   }
 
   export type ProposalUpdateWithoutFileInput = {
@@ -35466,6 +37249,11 @@ export namespace Prisma {
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
     proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
     approvers?: ProposalApproverUpdateManyWithoutProposalNestedInput
@@ -35482,6 +37270,11 @@ export namespace Prisma {
     createdById?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
   }
@@ -35496,6 +37289,82 @@ export namespace Prisma {
     createdById?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProposalCreateManyVehicleInput = {
+    id?: number
+    name: string
+    title: string
+    description?: string | null
+    fileId?: number | null
+    status?: $Enums.ProposalStatus
+    proposerId: number
+    createdById: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
+  }
+
+  export type ProposalUpdateWithoutVehicleInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
+    file?: FileUpdateOneWithoutProposalsNestedInput
+    proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
+    approvers?: ProposalApproverUpdateManyWithoutProposalNestedInput
+    signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
+  }
+
+  export type ProposalUncheckedUpdateWithoutVehicleInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileId?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
+    proposerId?: IntFieldUpdateOperationsInput | number
+    createdById?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
+    signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
+  }
+
+  export type ProposalUncheckedUpdateManyWithoutVehicleInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileId?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
+    proposerId?: IntFieldUpdateOperationsInput | number
+    createdById?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AttendanceImportLogCreateManyImportedByInput = {
@@ -35556,6 +37425,11 @@ export namespace Prisma {
     proposerId: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    vehicleId?: number | null
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
   }
 
   export type ProposalCreateManyProposerInput = {
@@ -35568,6 +37442,11 @@ export namespace Prisma {
     createdById: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalType?: $Enums.ProposalType
+    vehicleId?: number | null
+    startAt?: Date | string | null
+    endAt?: Date | string | null
+    dropoffPlace?: string | null
   }
 
   export type ProposalApproverCreateManyApproverInput = {
@@ -35779,6 +37658,11 @@ export namespace Prisma {
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
     file?: FileUpdateOneWithoutProposalsNestedInput
     proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
     approvers?: ProposalApproverUpdateManyWithoutProposalNestedInput
@@ -35795,6 +37679,11 @@ export namespace Prisma {
     proposerId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
   }
@@ -35809,6 +37698,11 @@ export namespace Prisma {
     proposerId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProposalUpdateWithoutProposerInput = {
@@ -35818,6 +37712,11 @@ export namespace Prisma {
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
     file?: FileUpdateOneWithoutProposalsNestedInput
     approvers?: ProposalApproverUpdateManyWithoutProposalNestedInput
@@ -35834,6 +37733,11 @@ export namespace Prisma {
     createdById?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
   }
@@ -35848,6 +37752,11 @@ export namespace Prisma {
     createdById?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProposalApproverUpdateWithoutApproverInput = {

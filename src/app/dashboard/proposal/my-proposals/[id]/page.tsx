@@ -71,6 +71,10 @@ interface ProposalDetail {
   statusApprove: boolean;
   statusSign: boolean;
   currentStep: currentStep;
+  vehicle?: any | null; // có thể thay bằng type Vehicle
+  startAt?: string | null;
+  endAt?: string | null;
+  dropoffPlace?: string | null;
 }
 
 export interface currentStep {
@@ -90,6 +94,45 @@ export default function ProposalDetailPage() {
   const proposalId = Number(params.id);
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const { id } = useAppSelector((state) => state.user);
+  const [vehicles, setVehicles] = useState<
+    Array<{ id: number; name: string; plateNumber?: string }>
+  >([]);
+
+  useEffect(() => {
+    fetchVehicles();
+  }, []);
+
+  const fetchVehicles = async () => {
+    try {
+      const res = await fetch("/api/vehicles"); // giả sử API GET /api/vehicles trả về { vehicles: Vehicle[] }
+      const result = await res.json();
+      if (res.ok) {
+        setVehicles(result.vehicles);
+      } else {
+        message.error(result.message || "Không thể tải danh sách xe");
+      }
+    } catch (error) {
+      console.error(error);
+      message.error("Có lỗi khi tải danh sách xe");
+    }
+  };
+
+  function toVietnamTime(isoString: string): string {
+    const date = new Date(isoString);
+
+    // Chuyển sang múi giờ Việt Nam (UTC+7)
+    // Intl.DateTimeFormat sẽ tự động xử lý timezone
+    return new Intl.DateTimeFormat("vi-VN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+      timeZone: "Asia/Ho_Chi_Minh",
+    }).format(date);
+  }
 
   useEffect(() => {
     fetchProposal();
@@ -548,6 +591,19 @@ export default function ProposalDetailPage() {
           <Descriptions.Item label="Tên đề xuất">
             {proposal.name}
           </Descriptions.Item>
+          {proposal.vehicle && (
+            <Descriptions.Item label="Xe đã chọn">
+              {(() => {
+                const vehicle = vehicles.find(
+                  (v) => v.id === proposal.vehicle.id
+                );
+                if (!vehicle) return "Không xác định";
+                return vehicle.plateNumber
+                  ? `${vehicle.name} (${vehicle.plateNumber})`
+                  : vehicle.name;
+              })()}
+            </Descriptions.Item>
+          )}
           {proposal.description && (
             <>
               <Descriptions.Item label="Mô tả">
@@ -555,20 +611,21 @@ export default function ProposalDetailPage() {
                   {cleanedDescription}
                 </Paragraph>
               </Descriptions.Item>
-              {startTime && (
-                <>
-                  <Descriptions.Item label="Bắt đầu">
-                    <Paragraph style={{ margin: 0, whiteSpace: "pre-wrap" }}>
-                      {startTime}
-                    </Paragraph>
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Kết thúc">
-                    <Paragraph style={{ margin: 0, whiteSpace: "pre-wrap" }}>
-                      {endTime}
-                    </Paragraph>
-                  </Descriptions.Item>
-                </>
-              )}
+              {startTime ||
+                (proposal.startAt && (
+                  <>
+                    <Descriptions.Item label="Bắt đầu">
+                      <Paragraph style={{ margin: 0, whiteSpace: "pre-wrap" }}>
+                        {startTime} {toVietnamTime(proposal.startAt)}
+                      </Paragraph>
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Kết thúc">
+                      <Paragraph style={{ margin: 0, whiteSpace: "pre-wrap" }}>
+                        {endTime} {toVietnamTime(proposal.endAt ?? "")}
+                      </Paragraph>
+                    </Descriptions.Item>
+                  </>
+                ))}
             </>
           )}
 

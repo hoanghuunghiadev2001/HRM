@@ -198,6 +198,13 @@ export interface CreateProposalFormData {
   proposerId: number;
   signerIds: number[];
   approverIds: number[];
+
+  // Các field mới cho proposal loại xe
+  proposalType?: "REGULAR" | "VEHICLE"; // Loại đề xuất
+  vehicleId?: number; // Nếu là đề xuất xe, id của xe
+  startAt?: Date | string; // Giờ bắt đầu sử dụng xe
+  endAt?: Date | string; // Giờ kết thúc sử dụng xe
+  dropoffPlace?: string; // Điểm trả (tùy chọn)
 }
 
 export interface ProposalResponse {

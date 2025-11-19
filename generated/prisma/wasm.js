@@ -130,6 +130,15 @@ exports.Prisma.FileScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.VehicleScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  plateNumber: 'plateNumber',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.EmployeeScalarFieldEnum = {
   id: 'id',
   employeeCode: 'employeeCode',
@@ -308,7 +317,12 @@ exports.Prisma.ProposalScalarFieldEnum = {
   proposerId: 'proposerId',
   createdById: 'createdById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  proposalType: 'proposalType',
+  vehicleId: 'vehicleId',
+  startAt: 'startAt',
+  endAt: 'endAt',
+  dropoffPlace: 'dropoffPlace'
 };
 
 exports.Prisma.ProposalSignerScalarFieldEnum = {
@@ -356,6 +370,12 @@ exports.Prisma.FileOrderByRelevanceFieldEnum = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.VehicleOrderByRelevanceFieldEnum = {
+  code: 'code',
+  name: 'name',
+  plateNumber: 'plateNumber'
 };
 
 exports.Prisma.EmployeeOrderByRelevanceFieldEnum = {
@@ -431,7 +451,8 @@ exports.Prisma.KPIEntryOrderByRelevanceFieldEnum = {
 exports.Prisma.ProposalOrderByRelevanceFieldEnum = {
   name: 'name',
   title: 'title',
-  description: 'description'
+  description: 'description',
+  dropoffPlace: 'dropoffPlace'
 };
 
 exports.Prisma.EmailActionTokenOrderByRelevanceFieldEnum = {
@@ -484,8 +505,14 @@ exports.ProposalStatus = exports.$Enums.ProposalStatus = {
   rejected: 'rejected'
 };
 
+exports.ProposalType = exports.$Enums.ProposalType = {
+  REGULAR: 'REGULAR',
+  VEHICLE: 'VEHICLE'
+};
+
 exports.Prisma.ModelName = {
   File: 'File',
+  Vehicle: 'Vehicle',
   Employee: 'Employee',
   Department: 'Department',
   Position: 'Position',
