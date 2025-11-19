@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Table, Typography, Spin } from "antd";
+import { Table, Typography, Spin, Tooltip } from "antd";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -31,6 +31,15 @@ export default function VehicleReportPage() {
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [tableHeight, setTableHeight] = useState(600);
+
+  useEffect(() => {
+    fetchReport();
+    // Tính chiều cao bảng = 100vh - 200px
+    const height = window.innerHeight - 200;
+    setTableHeight(height > 200 ? height : 400); // tối thiểu 400px
+  }, []);
+
   useEffect(() => {
     fetchReport();
   }, []);
@@ -49,14 +58,16 @@ export default function VehicleReportPage() {
     }
   };
 
-  // Tạo khung giờ trong ngày (ví dụ 08:00 - 20:00, mỗi 30 phút)
+  // Tạo khung giờ trong ngày (08:00-20:00, mỗi 30 phút)
   const generateTimeSlots = () => {
     const slots: string[] = [];
     let start = dayjs().hour(8).minute(0).second(0);
     const end = dayjs().hour(20).minute(0).second(0);
 
-    while (start.isBefore(end) || start.isSame(end)) {
-      slots.push(start.format("HH:mm"));
+    while (start.isBefore(end)) {
+      const slotStart = start.format("HH:mm");
+      const slotEnd = start.add(30, "minute").format("HH:mm");
+      slots.push(`${slotStart}-${slotEnd}`);
       start = start.add(30, "minute");
     }
     return slots;
@@ -64,21 +75,28 @@ export default function VehicleReportPage() {
 
   const timeSlots = generateTimeSlots();
 
-  // Tạo dữ liệu bảng
+  // Dữ liệu bảng: hàng = khung giờ
   const tableData = timeSlots.map((slot) => {
+    const [slotStartStr, slotEndStr] = slot.split("-");
     const row: any = { key: slot, time: slot };
     vehicles.forEach((v) => {
       const proposal = proposals.find((p) => {
         const start = dayjs(p.startAt).tz("Asia/Ho_Chi_Minh");
         const end = dayjs(p.endAt).tz("Asia/Ho_Chi_Minh");
-        const slotTime = dayjs()
-          .hour(parseInt(slot.split(":")[0]))
-          .minute(parseInt(slot.split(":")[1]));
+        const slotStart = dayjs()
+          .hour(parseInt(slotStartStr.split(":")[0]))
+          .minute(parseInt(slotStartStr.split(":")[1]));
+        const slotEnd = dayjs()
+          .hour(parseInt(slotEndStr.split(":")[0]))
+          .minute(parseInt(slotEndStr.split(":")[1]));
+        // Kiểm tra overlap: slotStart < proposalEnd && slotEnd > proposalStart
         return (
-          p.vehicleId === v.id && slotTime.isBetween(start, end, null, "[)")
+          p.vehicleId === v.id &&
+          slotStart.isBefore(end) &&
+          slotEnd.isAfter(start)
         );
       });
-      row[v.id] = proposal ? proposal : null;
+      row[v.id] = proposal || null;
     });
     return row;
   });
@@ -89,7 +107,7 @@ export default function VehicleReportPage() {
       dataIndex: "time",
       key: "time",
       fixed: "left",
-      width: 100,
+      width: 120,
     },
     ...vehicles.map((v) => ({
       title: (
@@ -103,17 +121,19 @@ export default function VehicleReportPage() {
       width: 150,
       render: (proposal: Proposal) =>
         proposal ? (
-          <div
-            style={{
-              backgroundColor: "#fadb14",
-              textAlign: "center",
-              borderRadius: 4,
-              padding: 4,
-              fontSize: 12,
-            }}
-          >
-            Đã chọn
-          </div>
+          <Tooltip title={`${proposal.name} - ${proposal.proposerName}`}>
+            <div
+              style={{
+                backgroundColor: "#fadb14",
+                textAlign: "center",
+                borderRadius: 4,
+                padding: 4,
+                fontSize: 12,
+              }}
+            >
+              Đã chọn
+            </div>
+          </Tooltip>
         ) : null,
     })),
   ];
@@ -129,9 +149,10 @@ export default function VehicleReportPage() {
         <Table
           dataSource={tableData}
           columns={columns}
-          scroll={{ x: "max-content", y: 1000 }}
+          scroll={{ x: "max-content", y: tableHeight }}
           bordered
           size="small"
+          pagination={false} // <-- thêm dòng này
         />
       )}
     </div>
