@@ -453,8 +453,10 @@ export default function ProposalCreator() {
 
               {proposalType === "VEHICLE" && (
                 <div>
-                  <div style={{ marginTop: 8 }}>
-                    <Text strong>Chọn xe *</Text>
+                  <div className="my-2 flex gap-4 items-center">
+                    <Text className="flex-shrink-0" strong>
+                      Chọn xe *
+                    </Text>
                     <Select
                       placeholder="Chọn xe"
                       value={selectedVehicle}
@@ -468,6 +470,7 @@ export default function ProposalCreator() {
                     />
                   </div>
                   <DatePicker
+                    className="mt-2"
                     showTime
                     format="DD-MM-YYYY HH:mm"
                     placeholder="Thời gian bắt đầu"
@@ -486,7 +489,7 @@ export default function ProposalCreator() {
                     disabled={submitting}
                   />
                   <Input
-                    placeholder="Địa điểm trả xe"
+                    placeholder="Địa điểm"
                     value={dropoffPlace}
                     onChange={(e) => setDropoffPlace(e.target.value)}
                     style={{ marginTop: 8 }}
@@ -503,7 +506,7 @@ export default function ProposalCreator() {
                 size="large"
                 style={{ width: "100%" }}
               >
-                <div className="w-full flex gap-4">
+                <div className="w-full  gap-4">
                   <Text className="flex-shrink-0" strong>
                     Người ký *
                   </Text>
@@ -517,11 +520,11 @@ export default function ProposalCreator() {
                     optionFilterProp="searchText"
                     tagRender={customTagRender}
                     disabled={submitting}
-                    className="w-full"
+                    className="w-full mt-2"
                   />
-                  <div>{renderSelectedUsers(signers)}</div>
+                  <div className="mt-2">{renderSelectedUsers(signers)}</div>
                 </div>
-                <div className="w-full flex gap-4">
+                <div className="w-full  gap-4">
                   <Text className="flex-shrink-0" strong>
                     Người duyệt *
                   </Text>
@@ -535,9 +538,9 @@ export default function ProposalCreator() {
                     optionFilterProp="searchText"
                     tagRender={customTagRender}
                     disabled={submitting}
-                    className="w-full"
+                    className="w-full mt-2"
                   />
-                  <div>{renderSelectedUsers(approvers)}</div>
+                  <div className="mt-2">{renderSelectedUsers(approvers)}</div>
                 </div>
               </Space>
             </Card>
