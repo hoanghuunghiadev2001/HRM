@@ -24,6 +24,8 @@ interface Proposal {
   endAt: string;
   name: string;
   proposerName: string;
+  title: string;
+  description: string;
 }
 
 export default function VehicleReportPage() {
@@ -121,7 +123,7 @@ export default function VehicleReportPage() {
       width: 150,
       render: (proposal: Proposal) =>
         proposal ? (
-          <Tooltip title={`${proposal.name} - ${proposal.proposerName}`}>
+          <Tooltip title={`${proposal.name} - ${proposal.description}`}>
             <div
               style={{
                 backgroundColor: "#fadb14",

@@ -70,7 +70,7 @@ export default function ProposalCreator() {
   const [employees, setEmployees] = useState<FormattedEmployee[]>([]);
   const [modal, contextHolder] = Modal.useModal();
   const [vehicles, setVehicles] = useState<
-    { id: number; name: string; code: string }[]
+    { id: number; name: string; code: string; plateNumber: string }[]
   >([]);
   const [selectedVehicle, setSelectedVehicle] = useState<number | null>(null);
 
@@ -462,7 +462,7 @@ export default function ProposalCreator() {
                       value={selectedVehicle}
                       onChange={setSelectedVehicle}
                       options={vehicles.map((v) => ({
-                        label: `${v.code} - ${v.name}`,
+                        label: `${v.code} - ${v.name} - ${v.plateNumber}`,
                         value: v.id,
                       }))}
                       style={{ width: "100%", marginTop: 4 }}

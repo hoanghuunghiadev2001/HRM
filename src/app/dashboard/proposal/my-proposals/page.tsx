@@ -29,7 +29,7 @@ import ModalLoading from "@/components/modalLoading";
 import { useAppSelector } from "@/store/hook";
 
 const { Title, Text } = Typography;
-const { TabPane } = Tabs;
+const { TabPane } = Tabs as any;
 const { Search } = Input;
 
 interface Proposal {
@@ -77,15 +77,61 @@ interface resultData {
 export default function MyProposalsPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [createdProposals, setCreatedProposals] = useState<resultData>();
-  const [pendingSignatures, setPendingSignatures] = useState<resultData>();
-  const [pendingApprovals, setPendingApprovals] = useState<resultData>();
+  const [createdProposals, setCreatedProposals] = useState<resultData>({
+    data: [],
+    total: 0,
+  });
+  const [pendingSignatures, setPendingSignatures] = useState<resultData>({
+    data: [],
+    total: 0,
+  });
+  const [pendingApprovals, setPendingApprovals] = useState<resultData>({
+    data: [],
+    total: 0,
+  });
   const [actionLoading, setActionLoading] = useState<number | null>(null);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchText, setSearchText] = useState("");
   const { employeeCode, role } = useAppSelector((state) => state.user);
   const [msg, contextHolder] = message.useMessage();
+
+  // dynamic table height to avoid "calc(...)" string in virtual list
+  const [tableHeight, setTableHeight] = useState<number>(600);
+
+  (() => {
+    const orig: any = Node.prototype.insertBefore;
+    Node.prototype.insertBefore = function <T extends Node>(
+      this: Node,
+      newNode: T,
+      refNode?: Node | null
+    ): T {
+      try {
+        return orig.call(this, newNode, refNode) as T;
+      } catch (err) {
+        console.error("DEBUG insertBefore error:", {
+          parent: this,
+          newNode,
+          refNode,
+          err,
+        });
+        console.groupCollapsed("Stack trace");
+        console.trace();
+        console.groupEnd();
+        throw err;
+      }
+    };
+  })();
+
+  useEffect(() => {
+    const update = () => {
+      const h = typeof window !== "undefined" ? window.innerHeight - 380 : 600;
+      setTableHeight(h > 200 ? h : 600);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
   const getStatusColor = (status: string) => {
     return (
@@ -120,34 +166,36 @@ export default function MyProposalsPage() {
       const data = await response.json();
 
       if (response.ok) {
-        setCreatedProposals(data.created);
-        setPendingApprovals(data.need_to_approve);
-        setPendingSignatures(data.need_to_sign);
+        setCreatedProposals(data.created || { data: [], total: 0 });
+        setPendingApprovals(data.need_to_approve || { data: [], total: 0 });
+        setPendingSignatures(data.need_to_sign || { data: [], total: 0 });
       } else {
-        message.error(data.error || "Không thể tải danh sách đề xuất");
+        msg.error(data.error || "Không thể tải danh sách đề xuất");
       }
     } catch (error) {
       console.error("Fetch error:", error);
-      message.error("Không thể kết nối đến server");
+      msg.error("Không thể kết nối đến server");
     } finally {
       setLoading(false);
     }
   };
 
-  // Debounce search
+  // Debounce search -> reset to page 1 and fetch
   useEffect(() => {
-    const delay = setTimeout(() => {
-      setPage(1); // reset page khi search
+    const t = setTimeout(() => {
+      setPage(1);
       fetchProposals();
     }, 500);
-    return () => clearTimeout(delay);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText, pageSize]);
+
+  // Fetch when page changes (immediate)
   useEffect(() => {
-    const delay = setTimeout(() => {
-      fetchProposals();
-    }, 500);
-    return () => clearTimeout(delay);
-  }, [searchText, page]);
+    fetchProposals();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
+
   const showConfirm = async (
     proposalId: number,
     action: "sign" | "approve",
@@ -160,13 +208,13 @@ export default function MyProposalsPage() {
         status,
       });
 
-      message.success(
+      msg.success(
         status === "approved" ? "Đã phê duyệt!" : "Đã từ chối đề xuất!"
       );
       fetchProposals();
     } catch (error) {
       console.error("Approval error:", error);
-      message.error("Có lỗi xảy ra khi gửi phê duyệt.");
+      msg.error("Có lỗi xảy ra khi gửi phê duyệt.");
     } finally {
       setActionLoading(null);
     }
@@ -184,7 +232,7 @@ export default function MyProposalsPage() {
     try {
       const res = await fetch(`/api/proposals/${proposalId}`, {
         method: "DELETE",
-        credentials: "include", // gửi cookie token
+        credentials: "include",
       });
 
       const data = await res.json();
@@ -378,11 +426,13 @@ export default function MyProposalsPage() {
           setPage(1);
           setPageSize(10);
         }}
+        destroyInactiveTabPane
       >
         <TabPane
           tab={
             <span>
-              <FileTextOutlined /> Đề xuất ({createdProposals?.data.length})
+              <FileTextOutlined /> Đề xuất ({createdProposals?.data.length ?? 0}
+              )
             </span>
           }
           key="created"
@@ -390,19 +440,20 @@ export default function MyProposalsPage() {
           <Card className="proposal-table">
             <Table
               columns={createdColumns}
-              dataSource={createdProposals?.data}
-              rowKey="id"
+              dataSource={createdProposals?.data || []}
+              rowKey={(r) => String(r.id)}
               loading={loading}
-              scroll={{ x: 600, y: "calc(100vh - 380px)" }}
+              scroll={{ x: 600, y: tableHeight }}
               pagination={{
                 current: page,
                 pageSize,
-                total: createdProposals?.total,
+                total: createdProposals?.total ?? 0,
                 showSizeChanger: true,
                 showQuickJumper: true,
                 onChange: (newPage, newPageSize) => {
                   setPage(newPage);
-                  setPageSize(newPageSize);
+                  setPageSize(newPageSize || pageSize);
+                  // immediate fetch handled by page effect
                 },
               }}
             />
@@ -412,7 +463,8 @@ export default function MyProposalsPage() {
         <TabPane
           tab={
             <span>
-              <ClockCircleOutlined /> Cần ký ({pendingSignatures?.data.length})
+              <ClockCircleOutlined /> Cần ký (
+              {pendingSignatures?.data.length ?? 0})
             </span>
           }
           key="pending_signature"
@@ -420,19 +472,19 @@ export default function MyProposalsPage() {
           <Card className="proposal-table">
             <Table
               columns={[...pendingColumns, actionColumn("sign")]}
-              dataSource={pendingSignatures?.data}
-              rowKey="id"
+              dataSource={pendingSignatures?.data || []}
+              rowKey={(r) => String(r.id)}
               loading={loading}
-              scroll={{ x: 600 }}
+              scroll={{ x: 600, y: tableHeight }}
               pagination={{
                 current: page,
                 pageSize,
-                total: pendingSignatures?.total,
+                total: pendingSignatures?.total ?? 0,
                 showSizeChanger: true,
                 showQuickJumper: true,
                 onChange: (newPage, newPageSize) => {
                   setPage(newPage);
-                  setPageSize(newPageSize);
+                  setPageSize(newPageSize || pageSize);
                 },
               }}
             />
@@ -443,7 +495,7 @@ export default function MyProposalsPage() {
           tab={
             <span>
               <CheckCircleOutlined /> Cần phê duyệt (
-              {pendingApprovals?.data.length})
+              {pendingApprovals?.data.length ?? 0})
             </span>
           }
           key="pending_approval"
@@ -451,19 +503,19 @@ export default function MyProposalsPage() {
           <Card className="proposal-table">
             <Table
               columns={[...pendingColumns, actionColumn("approve")]}
-              dataSource={pendingApprovals?.data}
-              rowKey="id"
+              dataSource={pendingApprovals?.data || []}
+              rowKey={(r) => String(r.id)}
               loading={loading}
               scroll={{ x: 600 }}
               pagination={{
                 current: page,
                 pageSize,
-                total: pendingApprovals?.total,
+                total: pendingApprovals?.total ?? 0,
                 showSizeChanger: true,
                 showQuickJumper: true,
                 onChange: (newPage, newPageSize) => {
                   setPage(newPage);
-                  setPageSize(newPageSize);
+                  setPageSize(newPageSize || pageSize);
                 },
               }}
             />
