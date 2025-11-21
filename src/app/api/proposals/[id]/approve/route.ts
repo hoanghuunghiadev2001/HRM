@@ -1,5 +1,4 @@
 // app/api/proposals/[id]/approve/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
 import { ProposalService } from "@/lib/proposal-service";
 import jwt from "jsonwebtoken";
@@ -11,7 +10,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // 1. Validate proposal ID
+    // 1️⃣ Validate proposal ID
     const proposalId = Number((await params).id);
     if (isNaN(proposalId)) {
       return NextResponse.json(
@@ -20,10 +19,8 @@ export async function POST(
       );
     }
 
-    // 2. Lấy và kiểm tra token từ header Authorization
-
+    // 2️⃣ Lấy token từ cookie
     const token = request.cookies.get("token")?.value;
-
     if (!token) {
       return NextResponse.json(
         { error: "Thiếu token xác thực" },
@@ -31,6 +28,7 @@ export async function POST(
       );
     }
 
+    // 3️⃣ Giải mã token
     let employeeId: number;
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
@@ -43,9 +41,9 @@ export async function POST(
       );
     }
 
-    // 3. Parse body
+    // 4️⃣ Parse body
     const body = await request.json();
-    const { status } = body;
+    const { status, reason } = body;
 
     if (!status || !["approved", "rejected"].includes(status)) {
       return NextResponse.json(
@@ -54,11 +52,20 @@ export async function POST(
       );
     }
 
-    // 4. Gọi service để xử lý logic phê duyệt
+    // Nếu từ chối nhưng không có lý do
+    if (status === "rejected" && (!reason || reason.trim() === "")) {
+      return NextResponse.json(
+        { error: "Phải nhập lý do khi từ chối" },
+        { status: 400 }
+      );
+    }
+
+    // 5️⃣ Gọi service xử lý
     const result = await ProposalService.approveProposal(
       proposalId,
       employeeId,
-      status
+      status,
+      reason
     );
 
     if (result.success) {

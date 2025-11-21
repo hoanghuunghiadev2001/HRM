@@ -22211,6 +22211,7 @@ export namespace Prisma {
     proposalId: number | null
     signerId: number | null
     status: $Enums.LeaveStatus | null
+    reason: string | null
     signedAt: Date | null
     level: number | null
   }
@@ -22220,6 +22221,7 @@ export namespace Prisma {
     proposalId: number | null
     signerId: number | null
     status: $Enums.LeaveStatus | null
+    reason: string | null
     signedAt: Date | null
     level: number | null
   }
@@ -22229,6 +22231,7 @@ export namespace Prisma {
     proposalId: number
     signerId: number
     status: number
+    reason: number
     signedAt: number
     level: number
     _all: number
@@ -22254,6 +22257,7 @@ export namespace Prisma {
     proposalId?: true
     signerId?: true
     status?: true
+    reason?: true
     signedAt?: true
     level?: true
   }
@@ -22263,6 +22267,7 @@ export namespace Prisma {
     proposalId?: true
     signerId?: true
     status?: true
+    reason?: true
     signedAt?: true
     level?: true
   }
@@ -22272,6 +22277,7 @@ export namespace Prisma {
     proposalId?: true
     signerId?: true
     status?: true
+    reason?: true
     signedAt?: true
     level?: true
     _all?: true
@@ -22368,6 +22374,7 @@ export namespace Prisma {
     proposalId: number
     signerId: number
     status: $Enums.LeaveStatus
+    reason: string | null
     signedAt: Date | null
     level: number
     _count: ProposalSignerCountAggregateOutputType | null
@@ -22396,6 +22403,7 @@ export namespace Prisma {
     proposalId?: boolean
     signerId?: boolean
     status?: boolean
+    reason?: boolean
     signedAt?: boolean
     level?: boolean
     proposal?: boolean | ProposalDefaultArgs<ExtArgs>
@@ -22409,11 +22417,12 @@ export namespace Prisma {
     proposalId?: boolean
     signerId?: boolean
     status?: boolean
+    reason?: boolean
     signedAt?: boolean
     level?: boolean
   }
 
-  export type ProposalSignerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "proposalId" | "signerId" | "status" | "signedAt" | "level", ExtArgs["result"]["proposalSigner"]>
+  export type ProposalSignerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "proposalId" | "signerId" | "status" | "reason" | "signedAt" | "level", ExtArgs["result"]["proposalSigner"]>
   export type ProposalSignerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     proposal?: boolean | ProposalDefaultArgs<ExtArgs>
     signer?: boolean | EmployeeDefaultArgs<ExtArgs>
@@ -22430,6 +22439,7 @@ export namespace Prisma {
       proposalId: number
       signerId: number
       status: $Enums.LeaveStatus
+      reason: string | null
       signedAt: Date | null
       level: number
     }, ExtArgs["result"]["proposalSigner"]>
@@ -22807,6 +22817,7 @@ export namespace Prisma {
     readonly proposalId: FieldRef<"ProposalSigner", 'Int'>
     readonly signerId: FieldRef<"ProposalSigner", 'Int'>
     readonly status: FieldRef<"ProposalSigner", 'LeaveStatus'>
+    readonly reason: FieldRef<"ProposalSigner", 'String'>
     readonly signedAt: FieldRef<"ProposalSigner", 'DateTime'>
     readonly level: FieldRef<"ProposalSigner", 'Int'>
   }
@@ -23200,6 +23211,7 @@ export namespace Prisma {
     id: number | null
     proposalId: number | null
     approverId: number | null
+    reason: string | null
     status: $Enums.LeaveStatus | null
     approvedAt: Date | null
     level: number | null
@@ -23209,6 +23221,7 @@ export namespace Prisma {
     id: number | null
     proposalId: number | null
     approverId: number | null
+    reason: string | null
     status: $Enums.LeaveStatus | null
     approvedAt: Date | null
     level: number | null
@@ -23218,6 +23231,7 @@ export namespace Prisma {
     id: number
     proposalId: number
     approverId: number
+    reason: number
     status: number
     approvedAt: number
     level: number
@@ -23243,6 +23257,7 @@ export namespace Prisma {
     id?: true
     proposalId?: true
     approverId?: true
+    reason?: true
     status?: true
     approvedAt?: true
     level?: true
@@ -23252,6 +23267,7 @@ export namespace Prisma {
     id?: true
     proposalId?: true
     approverId?: true
+    reason?: true
     status?: true
     approvedAt?: true
     level?: true
@@ -23261,6 +23277,7 @@ export namespace Prisma {
     id?: true
     proposalId?: true
     approverId?: true
+    reason?: true
     status?: true
     approvedAt?: true
     level?: true
@@ -23357,6 +23374,7 @@ export namespace Prisma {
     id: number
     proposalId: number
     approverId: number
+    reason: string | null
     status: $Enums.LeaveStatus
     approvedAt: Date | null
     level: number
@@ -23385,6 +23403,7 @@ export namespace Prisma {
     id?: boolean
     proposalId?: boolean
     approverId?: boolean
+    reason?: boolean
     status?: boolean
     approvedAt?: boolean
     level?: boolean
@@ -23398,12 +23417,13 @@ export namespace Prisma {
     id?: boolean
     proposalId?: boolean
     approverId?: boolean
+    reason?: boolean
     status?: boolean
     approvedAt?: boolean
     level?: boolean
   }
 
-  export type ProposalApproverOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "proposalId" | "approverId" | "status" | "approvedAt" | "level", ExtArgs["result"]["proposalApprover"]>
+  export type ProposalApproverOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "proposalId" | "approverId" | "reason" | "status" | "approvedAt" | "level", ExtArgs["result"]["proposalApprover"]>
   export type ProposalApproverInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     approver?: boolean | EmployeeDefaultArgs<ExtArgs>
     proposal?: boolean | ProposalDefaultArgs<ExtArgs>
@@ -23419,6 +23439,7 @@ export namespace Prisma {
       id: number
       proposalId: number
       approverId: number
+      reason: string | null
       status: $Enums.LeaveStatus
       approvedAt: Date | null
       level: number
@@ -23796,6 +23817,7 @@ export namespace Prisma {
     readonly id: FieldRef<"ProposalApprover", 'Int'>
     readonly proposalId: FieldRef<"ProposalApprover", 'Int'>
     readonly approverId: FieldRef<"ProposalApprover", 'Int'>
+    readonly reason: FieldRef<"ProposalApprover", 'String'>
     readonly status: FieldRef<"ProposalApprover", 'LeaveStatus'>
     readonly approvedAt: FieldRef<"ProposalApprover", 'DateTime'>
     readonly level: FieldRef<"ProposalApprover", 'Int'>
@@ -25425,6 +25447,7 @@ export namespace Prisma {
     proposalId: 'proposalId',
     signerId: 'signerId',
     status: 'status',
+    reason: 'reason',
     signedAt: 'signedAt',
     level: 'level'
   };
@@ -25436,6 +25459,7 @@ export namespace Prisma {
     id: 'id',
     proposalId: 'proposalId',
     approverId: 'approverId',
+    reason: 'reason',
     status: 'status',
     approvedAt: 'approvedAt',
     level: 'level'
@@ -25605,6 +25629,20 @@ export namespace Prisma {
   };
 
   export type ProposalOrderByRelevanceFieldEnum = (typeof ProposalOrderByRelevanceFieldEnum)[keyof typeof ProposalOrderByRelevanceFieldEnum]
+
+
+  export const ProposalSignerOrderByRelevanceFieldEnum: {
+    reason: 'reason'
+  };
+
+  export type ProposalSignerOrderByRelevanceFieldEnum = (typeof ProposalSignerOrderByRelevanceFieldEnum)[keyof typeof ProposalSignerOrderByRelevanceFieldEnum]
+
+
+  export const ProposalApproverOrderByRelevanceFieldEnum: {
+    reason: 'reason'
+  };
+
+  export type ProposalApproverOrderByRelevanceFieldEnum = (typeof ProposalApproverOrderByRelevanceFieldEnum)[keyof typeof ProposalApproverOrderByRelevanceFieldEnum]
 
 
   export const EmailActionTokenOrderByRelevanceFieldEnum: {
@@ -27182,6 +27220,7 @@ export namespace Prisma {
     proposalId?: IntFilter<"ProposalSigner"> | number
     signerId?: IntFilter<"ProposalSigner"> | number
     status?: EnumLeaveStatusFilter<"ProposalSigner"> | $Enums.LeaveStatus
+    reason?: StringNullableFilter<"ProposalSigner"> | string | null
     signedAt?: DateTimeNullableFilter<"ProposalSigner"> | Date | string | null
     level?: IntFilter<"ProposalSigner"> | number
     proposal?: XOR<ProposalScalarRelationFilter, ProposalWhereInput>
@@ -27193,10 +27232,12 @@ export namespace Prisma {
     proposalId?: SortOrder
     signerId?: SortOrder
     status?: SortOrder
+    reason?: SortOrderInput | SortOrder
     signedAt?: SortOrderInput | SortOrder
     level?: SortOrder
     proposal?: ProposalOrderByWithRelationInput
     signer?: EmployeeOrderByWithRelationInput
+    _relevance?: ProposalSignerOrderByRelevanceInput
   }
 
   export type ProposalSignerWhereUniqueInput = Prisma.AtLeast<{
@@ -27208,6 +27249,7 @@ export namespace Prisma {
     proposalId?: IntFilter<"ProposalSigner"> | number
     signerId?: IntFilter<"ProposalSigner"> | number
     status?: EnumLeaveStatusFilter<"ProposalSigner"> | $Enums.LeaveStatus
+    reason?: StringNullableFilter<"ProposalSigner"> | string | null
     signedAt?: DateTimeNullableFilter<"ProposalSigner"> | Date | string | null
     level?: IntFilter<"ProposalSigner"> | number
     proposal?: XOR<ProposalScalarRelationFilter, ProposalWhereInput>
@@ -27219,6 +27261,7 @@ export namespace Prisma {
     proposalId?: SortOrder
     signerId?: SortOrder
     status?: SortOrder
+    reason?: SortOrderInput | SortOrder
     signedAt?: SortOrderInput | SortOrder
     level?: SortOrder
     _count?: ProposalSignerCountOrderByAggregateInput
@@ -27236,6 +27279,7 @@ export namespace Prisma {
     proposalId?: IntWithAggregatesFilter<"ProposalSigner"> | number
     signerId?: IntWithAggregatesFilter<"ProposalSigner"> | number
     status?: EnumLeaveStatusWithAggregatesFilter<"ProposalSigner"> | $Enums.LeaveStatus
+    reason?: StringNullableWithAggregatesFilter<"ProposalSigner"> | string | null
     signedAt?: DateTimeNullableWithAggregatesFilter<"ProposalSigner"> | Date | string | null
     level?: IntWithAggregatesFilter<"ProposalSigner"> | number
   }
@@ -27247,6 +27291,7 @@ export namespace Prisma {
     id?: IntFilter<"ProposalApprover"> | number
     proposalId?: IntFilter<"ProposalApprover"> | number
     approverId?: IntFilter<"ProposalApprover"> | number
+    reason?: StringNullableFilter<"ProposalApprover"> | string | null
     status?: EnumLeaveStatusFilter<"ProposalApprover"> | $Enums.LeaveStatus
     approvedAt?: DateTimeNullableFilter<"ProposalApprover"> | Date | string | null
     level?: IntFilter<"ProposalApprover"> | number
@@ -27258,11 +27303,13 @@ export namespace Prisma {
     id?: SortOrder
     proposalId?: SortOrder
     approverId?: SortOrder
+    reason?: SortOrderInput | SortOrder
     status?: SortOrder
     approvedAt?: SortOrderInput | SortOrder
     level?: SortOrder
     approver?: EmployeeOrderByWithRelationInput
     proposal?: ProposalOrderByWithRelationInput
+    _relevance?: ProposalApproverOrderByRelevanceInput
   }
 
   export type ProposalApproverWhereUniqueInput = Prisma.AtLeast<{
@@ -27273,6 +27320,7 @@ export namespace Prisma {
     NOT?: ProposalApproverWhereInput | ProposalApproverWhereInput[]
     proposalId?: IntFilter<"ProposalApprover"> | number
     approverId?: IntFilter<"ProposalApprover"> | number
+    reason?: StringNullableFilter<"ProposalApprover"> | string | null
     status?: EnumLeaveStatusFilter<"ProposalApprover"> | $Enums.LeaveStatus
     approvedAt?: DateTimeNullableFilter<"ProposalApprover"> | Date | string | null
     level?: IntFilter<"ProposalApprover"> | number
@@ -27284,6 +27332,7 @@ export namespace Prisma {
     id?: SortOrder
     proposalId?: SortOrder
     approverId?: SortOrder
+    reason?: SortOrderInput | SortOrder
     status?: SortOrder
     approvedAt?: SortOrderInput | SortOrder
     level?: SortOrder
@@ -27301,6 +27350,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"ProposalApprover"> | number
     proposalId?: IntWithAggregatesFilter<"ProposalApprover"> | number
     approverId?: IntWithAggregatesFilter<"ProposalApprover"> | number
+    reason?: StringNullableWithAggregatesFilter<"ProposalApprover"> | string | null
     status?: EnumLeaveStatusWithAggregatesFilter<"ProposalApprover"> | $Enums.LeaveStatus
     approvedAt?: DateTimeNullableWithAggregatesFilter<"ProposalApprover"> | Date | string | null
     level?: IntWithAggregatesFilter<"ProposalApprover"> | number
@@ -28869,6 +28919,7 @@ export namespace Prisma {
 
   export type ProposalSignerCreateInput = {
     status?: $Enums.LeaveStatus
+    reason?: string | null
     signedAt?: Date | string | null
     level: number
     proposal: ProposalCreateNestedOneWithoutSignersInput
@@ -28880,12 +28931,14 @@ export namespace Prisma {
     proposalId: number
     signerId: number
     status?: $Enums.LeaveStatus
+    reason?: string | null
     signedAt?: Date | string | null
     level: number
   }
 
   export type ProposalSignerUpdateInput = {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
     proposal?: ProposalUpdateOneRequiredWithoutSignersNestedInput
@@ -28897,6 +28950,7 @@ export namespace Prisma {
     proposalId?: IntFieldUpdateOperationsInput | number
     signerId?: IntFieldUpdateOperationsInput | number
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
   }
@@ -28906,12 +28960,14 @@ export namespace Prisma {
     proposalId: number
     signerId: number
     status?: $Enums.LeaveStatus
+    reason?: string | null
     signedAt?: Date | string | null
     level: number
   }
 
   export type ProposalSignerUpdateManyMutationInput = {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
   }
@@ -28921,11 +28977,13 @@ export namespace Prisma {
     proposalId?: IntFieldUpdateOperationsInput | number
     signerId?: IntFieldUpdateOperationsInput | number
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProposalApproverCreateInput = {
+    reason?: string | null
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
     level: number
@@ -28937,12 +28995,14 @@ export namespace Prisma {
     id?: number
     proposalId: number
     approverId: number
+    reason?: string | null
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
     level: number
   }
 
   export type ProposalApproverUpdateInput = {
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
@@ -28954,6 +29014,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     proposalId?: IntFieldUpdateOperationsInput | number
     approverId?: IntFieldUpdateOperationsInput | number
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
@@ -28963,12 +29024,14 @@ export namespace Prisma {
     id?: number
     proposalId: number
     approverId: number
+    reason?: string | null
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
     level: number
   }
 
   export type ProposalApproverUpdateManyMutationInput = {
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
@@ -28978,6 +29041,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     proposalId?: IntFieldUpdateOperationsInput | number
     approverId?: IntFieldUpdateOperationsInput | number
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
@@ -30603,6 +30667,12 @@ export namespace Prisma {
     isNot?: ProposalWhereInput
   }
 
+  export type ProposalSignerOrderByRelevanceInput = {
+    fields: ProposalSignerOrderByRelevanceFieldEnum | ProposalSignerOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
   export type ProposalSignerProposalIdSignerIdCompoundUniqueInput = {
     proposalId: number
     signerId: number
@@ -30613,6 +30683,7 @@ export namespace Prisma {
     proposalId?: SortOrder
     signerId?: SortOrder
     status?: SortOrder
+    reason?: SortOrder
     signedAt?: SortOrder
     level?: SortOrder
   }
@@ -30629,6 +30700,7 @@ export namespace Prisma {
     proposalId?: SortOrder
     signerId?: SortOrder
     status?: SortOrder
+    reason?: SortOrder
     signedAt?: SortOrder
     level?: SortOrder
   }
@@ -30638,6 +30710,7 @@ export namespace Prisma {
     proposalId?: SortOrder
     signerId?: SortOrder
     status?: SortOrder
+    reason?: SortOrder
     signedAt?: SortOrder
     level?: SortOrder
   }
@@ -30649,6 +30722,12 @@ export namespace Prisma {
     level?: SortOrder
   }
 
+  export type ProposalApproverOrderByRelevanceInput = {
+    fields: ProposalApproverOrderByRelevanceFieldEnum | ProposalApproverOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
   export type ProposalApproverProposalIdApproverIdCompoundUniqueInput = {
     proposalId: number
     approverId: number
@@ -30658,6 +30737,7 @@ export namespace Prisma {
     id?: SortOrder
     proposalId?: SortOrder
     approverId?: SortOrder
+    reason?: SortOrder
     status?: SortOrder
     approvedAt?: SortOrder
     level?: SortOrder
@@ -30674,6 +30754,7 @@ export namespace Prisma {
     id?: SortOrder
     proposalId?: SortOrder
     approverId?: SortOrder
+    reason?: SortOrder
     status?: SortOrder
     approvedAt?: SortOrder
     level?: SortOrder
@@ -30683,6 +30764,7 @@ export namespace Prisma {
     id?: SortOrder
     proposalId?: SortOrder
     approverId?: SortOrder
+    reason?: SortOrder
     status?: SortOrder
     approvedAt?: SortOrder
     level?: SortOrder
@@ -33359,6 +33441,7 @@ export namespace Prisma {
   }
 
   export type ProposalApproverCreateWithoutApproverInput = {
+    reason?: string | null
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
     level: number
@@ -33368,6 +33451,7 @@ export namespace Prisma {
   export type ProposalApproverUncheckedCreateWithoutApproverInput = {
     id?: number
     proposalId: number
+    reason?: string | null
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
     level: number
@@ -33385,6 +33469,7 @@ export namespace Prisma {
 
   export type ProposalSignerCreateWithoutSignerInput = {
     status?: $Enums.LeaveStatus
+    reason?: string | null
     signedAt?: Date | string | null
     level: number
     proposal: ProposalCreateNestedOneWithoutSignersInput
@@ -33394,6 +33479,7 @@ export namespace Prisma {
     id?: number
     proposalId: number
     status?: $Enums.LeaveStatus
+    reason?: string | null
     signedAt?: Date | string | null
     level: number
   }
@@ -33910,6 +33996,7 @@ export namespace Prisma {
     id?: IntFilter<"ProposalApprover"> | number
     proposalId?: IntFilter<"ProposalApprover"> | number
     approverId?: IntFilter<"ProposalApprover"> | number
+    reason?: StringNullableFilter<"ProposalApprover"> | string | null
     status?: EnumLeaveStatusFilter<"ProposalApprover"> | $Enums.LeaveStatus
     approvedAt?: DateTimeNullableFilter<"ProposalApprover"> | Date | string | null
     level?: IntFilter<"ProposalApprover"> | number
@@ -33939,6 +34026,7 @@ export namespace Prisma {
     proposalId?: IntFilter<"ProposalSigner"> | number
     signerId?: IntFilter<"ProposalSigner"> | number
     status?: EnumLeaveStatusFilter<"ProposalSigner"> | $Enums.LeaveStatus
+    reason?: StringNullableFilter<"ProposalSigner"> | string | null
     signedAt?: DateTimeNullableFilter<"ProposalSigner"> | Date | string | null
     level?: IntFilter<"ProposalSigner"> | number
   }
@@ -36527,6 +36615,7 @@ export namespace Prisma {
   }
 
   export type ProposalApproverCreateWithoutProposalInput = {
+    reason?: string | null
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
     level: number
@@ -36536,6 +36625,7 @@ export namespace Prisma {
   export type ProposalApproverUncheckedCreateWithoutProposalInput = {
     id?: number
     approverId: number
+    reason?: string | null
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
     level: number
@@ -36553,6 +36643,7 @@ export namespace Prisma {
 
   export type ProposalSignerCreateWithoutProposalInput = {
     status?: $Enums.LeaveStatus
+    reason?: string | null
     signedAt?: Date | string | null
     level: number
     signer: EmployeeCreateNestedOneWithoutProposalSignaturesInput
@@ -36562,6 +36653,7 @@ export namespace Prisma {
     id?: number
     signerId: number
     status?: $Enums.LeaveStatus
+    reason?: string | null
     signedAt?: Date | string | null
     level: number
   }
@@ -37483,6 +37575,7 @@ export namespace Prisma {
   export type ProposalApproverCreateManyApproverInput = {
     id?: number
     proposalId: number
+    reason?: string | null
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
     level: number
@@ -37492,6 +37585,7 @@ export namespace Prisma {
     id?: number
     proposalId: number
     status?: $Enums.LeaveStatus
+    reason?: string | null
     signedAt?: Date | string | null
     level: number
   }
@@ -37791,6 +37885,7 @@ export namespace Prisma {
   }
 
   export type ProposalApproverUpdateWithoutApproverInput = {
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
@@ -37800,6 +37895,7 @@ export namespace Prisma {
   export type ProposalApproverUncheckedUpdateWithoutApproverInput = {
     id?: IntFieldUpdateOperationsInput | number
     proposalId?: IntFieldUpdateOperationsInput | number
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
@@ -37808,6 +37904,7 @@ export namespace Prisma {
   export type ProposalApproverUncheckedUpdateManyWithoutApproverInput = {
     id?: IntFieldUpdateOperationsInput | number
     proposalId?: IntFieldUpdateOperationsInput | number
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
@@ -37815,6 +37912,7 @@ export namespace Prisma {
 
   export type ProposalSignerUpdateWithoutSignerInput = {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
     proposal?: ProposalUpdateOneRequiredWithoutSignersNestedInput
@@ -37824,6 +37922,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     proposalId?: IntFieldUpdateOperationsInput | number
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
   }
@@ -37832,6 +37931,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     proposalId?: IntFieldUpdateOperationsInput | number
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
   }
@@ -38183,6 +38283,7 @@ export namespace Prisma {
   export type ProposalApproverCreateManyProposalInput = {
     id?: number
     approverId: number
+    reason?: string | null
     status?: $Enums.LeaveStatus
     approvedAt?: Date | string | null
     level: number
@@ -38192,11 +38293,13 @@ export namespace Prisma {
     id?: number
     signerId: number
     status?: $Enums.LeaveStatus
+    reason?: string | null
     signedAt?: Date | string | null
     level: number
   }
 
   export type ProposalApproverUpdateWithoutProposalInput = {
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
@@ -38206,6 +38309,7 @@ export namespace Prisma {
   export type ProposalApproverUncheckedUpdateWithoutProposalInput = {
     id?: IntFieldUpdateOperationsInput | number
     approverId?: IntFieldUpdateOperationsInput | number
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
@@ -38214,6 +38318,7 @@ export namespace Prisma {
   export type ProposalApproverUncheckedUpdateManyWithoutProposalInput = {
     id?: IntFieldUpdateOperationsInput | number
     approverId?: IntFieldUpdateOperationsInput | number
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
@@ -38221,6 +38326,7 @@ export namespace Prisma {
 
   export type ProposalSignerUpdateWithoutProposalInput = {
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
     signer?: EmployeeUpdateOneRequiredWithoutProposalSignaturesNestedInput
@@ -38230,6 +38336,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     signerId?: IntFieldUpdateOperationsInput | number
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
   }
@@ -38238,6 +38345,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     signerId?: IntFieldUpdateOperationsInput | number
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
     signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
   }

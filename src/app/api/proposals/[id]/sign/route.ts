@@ -14,11 +14,19 @@ export async function POST(
   try {
     const proposalId = Number.parseInt((await params).id);
     const body = await request.json();
-    const { status } = body;
+    const { status, reason } = body; // <-- thêm reason
 
     if (!["approved", "rejected"].includes(status)) {
       return NextResponse.json(
         { error: "Trạng thái không hợp lệ" },
+        { status: 400 }
+      );
+    }
+
+    // Nếu trạng thái là rejected mà không có reason
+    if (status === "rejected" && (!reason || reason.trim() === "")) {
+      return NextResponse.json(
+        { error: "Phải nhập lý do khi từ chối" },
         { status: 400 }
       );
     }
@@ -44,10 +52,12 @@ export async function POST(
       );
     }
 
+    // Gọi service, truyền cả reason nếu có
     const result = await ProposalService.signProposal(
       proposalId,
       employeeId,
-      status
+      status,
+      reason
     );
 
     if (result.success) {
@@ -56,7 +66,7 @@ export async function POST(
       return NextResponse.json({ error: result.error }, { status: 500 });
     }
   } catch (error) {
-    console.error("API Error:", error); // 🛑 Đây là lỗi quan trọng
+    console.error("API Error:", error);
     return NextResponse.json({ error: "Lỗi server" }, { status: 500 });
   }
 }

@@ -21,6 +21,8 @@ import {
   Descriptions,
   Progress,
   Badge,
+  Modal,
+  Input,
 } from "antd";
 import {
   FileTextOutlined,
@@ -35,21 +37,9 @@ import {
   CalendarOutlined,
   TeamOutlined,
   InfoCircleOutlined,
-  FolderViewOutlined,
 } from "@ant-design/icons";
-import { Worker, Viewer } from "@react-pdf-viewer/core";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import "@react-pdf-viewer/core/lib/styles/index.css";
-import "@react-pdf-viewer/default-layout/lib/styles/index.css";
-import * as pdfjsLib from "pdfjs-dist";
-import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
-import { useAppSelector } from "@/store/hook";
 import axios from "axios";
-
-// Docx preview
-import { renderAsync } from "docx-preview";
-
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+import { useAppSelector } from "@/store/hook";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -64,14 +54,25 @@ interface ProposalDetail {
     filename: string;
     mimeType: string;
     data?: any;
+    id?: number;
   };
   proposer: any;
-  signers: Array<{ signer: any; status: string; signedAt?: string }>;
-  approvers: Array<{ approver: any; status: string; approvedAt?: string }>;
+  signers: Array<{
+    signer: any;
+    status: string;
+    signedAt?: string;
+    reason?: string;
+  }>;
+  approvers: Array<{
+    approver: any;
+    status: string;
+    approvedAt?: string;
+    reason?: string;
+  }>;
   statusApprove: boolean;
   statusSign: boolean;
   currentStep: currentStep;
-  vehicle?: any | null; // có thể thay bằng type Vehicle
+  vehicle?: any | null;
   startAt?: string | null;
   endAt?: string | null;
   dropoffPlace?: string | null;
@@ -85,43 +86,66 @@ export interface currentStep {
 export default function ProposalDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const proposalId = Number(params.id);
+  const { id } = useAppSelector((state) => state.user);
+
   const [proposal, setProposal] = useState<ProposalDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [currentPreviewUrl, setCurrentPreviewUrl] = useState<string | null>(
     null
   );
-  const proposalId = Number(params.id);
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
-  const { id } = useAppSelector((state) => state.user);
   const [vehicles, setVehicles] = useState<
     Array<{ id: number; name: string; plateNumber?: string }>
   >([]);
 
+  // Modal từ chối
+  const [rejectModalVisible, setRejectModalVisible] = useState(false);
+  const [rejectReason, setRejectReason] = useState("");
+  const [currentAction, setCurrentAction] = useState<"sign" | "approve" | null>(
+    null
+  );
+
   useEffect(() => {
     fetchVehicles();
-  }, []);
+    fetchProposal();
+    return () => {
+      if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl);
+    };
+  }, [proposalId]);
 
   const fetchVehicles = async () => {
     try {
-      const res = await fetch("/api/vehicles"); // giả sử API GET /api/vehicles trả về { vehicles: Vehicle[] }
+      const res = await fetch("/api/vehicles");
       const result = await res.json();
-      if (res.ok) {
-        setVehicles(result.vehicles);
-      } else {
-        message.error(result.message || "Không thể tải danh sách xe");
-      }
+      if (res.ok) setVehicles(result.vehicles);
     } catch (error) {
       console.error(error);
       message.error("Có lỗi khi tải danh sách xe");
     }
   };
 
-  function toVietnamTime(isoString: string): string {
-    const date = new Date(isoString);
+  const fetchProposal = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/proposals?id=${proposalId}`);
+      const result = await res.json();
+      if (res.ok) {
+        setProposal(result);
+        if (result.file?.id) {
+          setCurrentPreviewUrl(`/api/files/view/${result.file.id}`);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      message.error("Không thể tải thông tin đề xuất");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    // Chuyển sang múi giờ Việt Nam (UTC+7)
-    // Intl.DateTimeFormat sẽ tự động xử lý timezone
+  const toVietnamTime = (isoString?: string) => {
+    if (!isoString) return "";
     return new Intl.DateTimeFormat("vi-VN", {
       year: "numeric",
       month: "2-digit",
@@ -131,66 +155,83 @@ export default function ProposalDetailPage() {
       second: "2-digit",
       hour12: false,
       timeZone: "Asia/Ho_Chi_Minh",
-    }).format(date);
-  }
-
-  useEffect(() => {
-    fetchProposal();
-    return () => {
-      if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl);
-    };
-  }, [proposalId]);
-
-  const fetchProposal = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/proposals?id=${proposalId}`);
-      const result = await res.json();
-
-      if (res.ok) {
-        const data = result;
-        setProposal(data);
-
-        if (
-          data.file?.mimeType.includes("officedocument") ||
-          data.file?.mimeType.includes("msword")
-        ) {
-        } else {
-          if (data.file?.id) {
-            // ✅ Nếu có file, tạo link xem trực tiếp
-            const previewUrl = `/api/files/view/${data.file.id}`;
-            setCurrentPreviewUrl(previewUrl);
-          }
-        }
-      } else {
-        message.error(result.error || "Không thể tải thông tin đề xuất");
-      }
-    } catch (error) {
-      console.error(error);
-      message.error("Không thể kết nối đến server");
-    } finally {
-      setLoading(false);
-    }
+    }).format(new Date(isoString));
   };
 
-  const confirmAction = async (
-    action: "sign" | "approve",
-    status: "approved" | "rejected"
-  ) => {
+  // Xử lý hành động: Đồng ý
+  const handleApprove = async (action: "sign" | "approve") => {
     setActionLoading(true);
     try {
       await axios.post(`/api/proposals/${proposalId}/${action}`, {
-        proposalId,
-        status,
+        status: "approved",
       });
-      message.success(status === "approved" ? "Đã phê duyệt!" : "Đã từ chối!");
+      message.success("Đã đồng ý!");
       await fetchProposal();
     } catch (error) {
       console.error(error);
-      message.error("Có lỗi xảy ra khi gửi phê duyệt.");
+      message.error("Có lỗi khi xử lý đồng ý");
     } finally {
       setActionLoading(false);
     }
+  };
+
+  // Xử lý hành động: mở modal từ chối
+  const handleRejectClick = (action: "sign" | "approve") => {
+    setCurrentAction(action);
+    setRejectModalVisible(true);
+  };
+
+  const confirmReject = async () => {
+    if (!currentAction) return;
+    setActionLoading(true);
+    try {
+      await axios.post(`/api/proposals/${proposalId}/${currentAction}`, {
+        status: "rejected",
+        reason: rejectReason,
+      });
+      message.success("Đã từ chối!");
+      setRejectReason("");
+      setRejectModalVisible(false);
+      await fetchProposal();
+    } catch (error) {
+      console.error(error);
+      message.error("Có lỗi khi gửi từ chối");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // Progress
+  const getProgress = () => {
+    if (!proposal) return { percent: 0, status: "normal" as const };
+    const totalSigners = proposal.signers.length;
+    const totalApprovers = proposal.approvers.length;
+    const approvedSigners = proposal.signers.filter(
+      (s) => s.status === "approved"
+    ).length;
+    const approvedApprovers = proposal.approvers.filter(
+      (a) => a.status === "approved"
+    ).length;
+
+    if (proposal.status === "rejected")
+      return { percent: 100, status: "exception" as const };
+    if (proposal.status === "approved")
+      return { percent: 100, status: "success" as const };
+    if (proposal.status === "pending_signatures")
+      return {
+        percent: totalSigners > 0 ? (approvedSigners / totalSigners) * 50 : 0,
+        status: "active" as const,
+      };
+    if (proposal.status === "waiting_approval") {
+      const signaturePercent = 50;
+      const approvalPercent =
+        totalApprovers > 0 ? (approvedApprovers / totalApprovers) * 50 : 0;
+      return {
+        percent: signaturePercent + approvalPercent,
+        status: "active" as const,
+      };
+    }
+    return { percent: 0, status: "normal" as const };
   };
 
   const getStatusConfig = (status: string) => {
@@ -216,117 +257,12 @@ export default function ProposalDetailPage() {
       case "rejected":
         return { color: "red", text: "Đã từ chối", icon: <CloseOutlined /> };
       default:
-        return { color: "default", text: status, icon: <InfoCircleOutlined /> };
+        return {
+          color: "default",
+          text: status,
+          icon: <ExclamationCircleOutlined />,
+        };
     }
-  };
-
-  const getProgress = () => {
-    if (!proposal) return { percent: 0, status: "normal" as const };
-    const totalSigners = proposal.signers.length;
-    const totalApprovers = proposal.approvers.length;
-    const approvedSigners = proposal.signers.filter(
-      (s) => s.status === "approved"
-    ).length;
-    const approvedApprovers = proposal.approvers.filter(
-      (a) => a.status === "approved"
-    ).length;
-
-    if (proposal.status === "rejected")
-      return { percent: 100, status: "exception" as const };
-    if (proposal.status === "approved")
-      return { percent: 100, status: "success" as const };
-    if (proposal.status === "pending_signatures") {
-      const percent =
-        totalSigners > 0 ? (approvedSigners / totalSigners) * 50 : 0;
-      return { percent, status: "active" as const };
-    }
-    if (proposal.status === "waiting_approval") {
-      const signaturePercent = 50;
-      const approvalPercent =
-        totalApprovers > 0 ? (approvedApprovers / totalApprovers) * 50 : 0;
-      return {
-        percent: signaturePercent + approvalPercent,
-        status: "active" as const,
-      };
-    }
-    return { percent: 0, status: "normal" as const };
-  };
-
-  const getTimelineItems = () => {
-    if (!proposal) return [];
-    const items: any[] = [];
-    items.push({
-      color: "blue",
-      dot: <CheckCircleOutlined style={{ fontSize: 16 }} />,
-      children: (
-        <div>
-          <Text strong>Đề xuất được tạo</Text>
-          <div>
-            <Text type="secondary">
-              {new Date(proposal.createdAt).toLocaleString("vi-VN")}
-            </Text>
-          </div>
-          <div>
-            <Text type="secondary">Bởi: {proposal.proposer.name}</Text>
-          </div>
-        </div>
-      ),
-    });
-    proposal.signers.forEach((s) => {
-      if (s.status !== "pending")
-        items.push({
-          color: s.status === "approved" ? "green" : "red",
-          dot:
-            s.status === "approved" ? (
-              <CheckCircleOutlined style={{ fontSize: 16 }} />
-            ) : (
-              <CloseOutlined style={{ fontSize: 16 }} />
-            ),
-          children: (
-            <div>
-              <Text strong>
-                {s.signer.name} đã{" "}
-                {s.status === "approved" ? "đồng ý" : "từ chối"}
-              </Text>
-              {s.signedAt && (
-                <div>
-                  <Text type="secondary">
-                    {new Date(s.signedAt).toLocaleString("vi-VN")}
-                  </Text>
-                </div>
-              )}
-            </div>
-          ),
-        });
-    });
-    proposal.approvers.forEach((a) => {
-      if (a.status !== "pending")
-        items.push({
-          color: a.status === "approved" ? "green" : "red",
-          dot:
-            a.status === "approved" ? (
-              <CheckCircleOutlined style={{ fontSize: 16 }} />
-            ) : (
-              <CloseOutlined style={{ fontSize: 16 }} />
-            ),
-          children: (
-            <div>
-              <Text strong>
-                {a.approver.name} đã{" "}
-                {a.status === "approved" ? "phê duyệt" : "từ chối"}
-              </Text>
-              {a.approvedAt && (
-                <div>
-                  <Text type="secondary">
-                    {new Date(a.approvedAt).toLocaleString("vi-VN")}
-                  </Text>
-                </div>
-              )}
-            </div>
-          ),
-        });
-    });
-    return items;
   };
 
   const renderPersonCard = (
@@ -334,7 +270,8 @@ export default function ProposalDetailPage() {
     role: "proposer" | "signer" | "approver",
     currentIdStep: string,
     status?: string,
-    actionDate?: string
+    actionDate?: string,
+    reason?: string
   ) => {
     const roleConfig = {
       proposer: "#1890ff",
@@ -357,9 +294,6 @@ export default function ProposalDetailPage() {
     return (
       <Card
         size="small"
-        className={`${
-          Number(person.id) === Number(currentIdStep) ? "!bg-blue-200" : ""
-        }`}
         style={{
           marginBottom: 12,
           border:
@@ -379,28 +313,22 @@ export default function ProposalDetailPage() {
               <Text strong style={{ fontSize: 16 }}>
                 {person.name} •{" "}
                 <Text type="secondary">{person.employeeCode}</Text>
-                {person.id === id && (
-                  <Tag color={roleConfig[role]} style={{ marginLeft: 8 }}>
-                    Bạn
-                  </Tag>
-                )}
               </Text>
             </div>
             {status && (
               <Tag
                 color={statusConfig[status as keyof typeof statusConfig]?.color}
               >
-                {statusConfig[status as keyof typeof statusConfig]?.icon}
+                {statusConfig[status as keyof typeof statusConfig]?.icon}{" "}
                 <span style={{ marginLeft: 4 }}>
                   {statusConfig[status as keyof typeof statusConfig]?.text}
                 </span>
               </Tag>
             )}
+            {reason && <Text type="secondary">Lý do: {reason}</Text>}
             {actionDate && (
               <div>
-                <Text type="secondary" style={{ fontSize: 11 }}>
-                  {new Date(actionDate).toLocaleString("vi-VN")}
-                </Text>
+                <Text type="secondary">{toVietnamTime(actionDate)}</Text>
               </div>
             )}
           </Col>
@@ -411,68 +339,22 @@ export default function ProposalDetailPage() {
 
   if (loading)
     return (
-      <div
-        style={{
-          padding: 24,
-          textAlign: "center",
-          minHeight: 400,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Spin size="large" tip="Đang tải thông tin đề xuất..." fullscreen />
+      <div className="flex justify-center items-center min-h-[400px]">
+        <Spin size="large" tip="Đang tải..." />
       </div>
     );
   if (!proposal)
     return (
-      <div
-        style={{
-          padding: 24,
-          textAlign: "center",
-          minHeight: 400,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div>
-          <ExclamationCircleOutlined
-            style={{ fontSize: 64, color: "#faad14", marginBottom: 16 }}
-          />
-          <Title level={3}>Không tìm thấy đề xuất</Title>
-          <Button type="primary" onClick={() => router.back()}>
-            Quay lại
-          </Button>
-        </div>
+      <div className="text-center p-12">
+        <ExclamationCircleOutlined style={{ fontSize: 64, color: "#faad14" }} />
+        <Title level={3}>Không tìm thấy đề xuất</Title>
+        <Button onClick={() => router.back()}>Quay lại</Button>
       </div>
     );
 
-  const statusConfigFinal = getStatusConfig(proposal.status);
   const progress = getProgress();
-  // 🔍 Regex bắt thời gian bắt đầu & kết thúc trong mô tả
-  const desc = proposal.description || "";
+  const statusConfigFinal = getStatusConfig(proposal.status);
 
-  // Regex: bắt cả dòng có “thời gian bắt đầu”, “thời gian kết thúc”, “from”, “to”... (không phân biệt hoa thường)
-  const cleanedDescription = desc
-    .replace(/^\s*thời gian bắt đầu.*$/gim, "")
-    // Xóa dòng chứa "thời gian kết thúc"
-    .replace(/^\s*thời gian kết thúc.*$/gim, "")
-    // Xóa dòng chứa từ "from" đứng riêng
-    .replace(/^\s*\bfrom\b.*$/gim, "")
-    // Xóa dòng chứa từ "to" đứng riêng
-    .replace(/^\s*\bto\b.*$/gim, "")
-    // Xóa các dòng trống dư
-    .replace(/^\s*$/gim, "")
-    // Xóa khoảng trắng đầu/cuối
-    .trim();
-
-  // Nếu bạn vẫn muốn hiển thị thời gian riêng:
-  const startTimeMatch = desc.match(/thời gian bắt đầu[:\-]?\s*([\d/:\-\s]+)/i);
-  const endTimeMatch = desc.match(/thời gian kết thúc[:\-]?\s*([\d/:\-\s]+)/i);
-
-  const startTime = startTimeMatch ? startTimeMatch[1].trim() : null;
-  const endTime = endTimeMatch ? endTimeMatch[1].trim() : null;
   return (
     <div
       style={{
@@ -483,96 +365,78 @@ export default function ProposalDetailPage() {
         minHeight: "100vh",
       }}
     >
-      <div style={{ marginBottom: 24 }}>
-        <Button icon={<ArrowLeftOutlined />} onClick={() => router.back()}>
-          Quay lại danh sách
-        </Button>
-      </div>
+      <Button
+        icon={<ArrowLeftOutlined />}
+        onClick={() => router.back()}
+        style={{ marginBottom: 24 }}
+      >
+        Quay lại danh sách
+      </Button>
 
-      {/* Header */}
       <Card style={{ marginBottom: 24 }}>
         <Row gutter={24} align="middle">
-          <Col flex="auto">
-            <Space direction="vertical" className="w-full">
-              <Title level={2}>
-                <FileTextOutlined /> {proposal.name}
-              </Title>
-              <Col className="flex justify-between items-start w-full flex-wrap">
-                <Space className="h-16">
+          <Col className="w-full">
+            <Space className="w-full flex justify-between">
+              <div className="flex-shrink-0">
+                <Title level={2}>
+                  <FileTextOutlined /> {proposal.name}
+                </Title>
+                <Space>
                   <Tag color={statusConfigFinal.color}>
-                    {statusConfigFinal.icon}{" "}
-                    <span style={{ marginLeft: 4 }}>
-                      {statusConfigFinal.text}
-                    </span>
+                    {statusConfigFinal.icon} {statusConfigFinal.text}
                   </Tag>
                   <Text type="secondary">
                     <CalendarOutlined /> Tạo lúc:{" "}
-                    {new Date(proposal.createdAt).toLocaleString("vi-VN")}
+                    {toVietnamTime(proposal.createdAt)}
                   </Text>
                 </Space>
-                <Col flex="none" className="!p-0">
-                  <div className="gap-2">
-                    <a
-                      href={`/api/files/${proposalId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+              </div>
+              <div style={{ marginTop: 12 }} className="w-full min-w-[300px]">
+                {proposal.statusSign && (
+                  <Space>
+                    <Button
+                      type="primary"
+                      loading={actionLoading}
+                      onClick={() => handleApprove("sign")}
                     >
-                      <Button type="primary" icon={<DownloadOutlined />}>
-                        Tải xuống
-                      </Button>
-                    </a>
-
-                    {proposal.statusSign ? (
-                      <Space style={{ marginTop: 8, marginLeft: 8 }}>
-                        <Button
-                          type="primary"
-                          loading={actionLoading}
-                          onClick={() => confirmAction("sign", "approved")}
-                        >
-                          Đồng ý
-                        </Button>
-                        <Button
-                          danger
-                          loading={actionLoading}
-                          onClick={() => confirmAction("sign", "rejected")}
-                        >
-                          Từ chối
-                        </Button>
-                      </Space>
-                    ) : (
-                      ""
-                    )}
-                    {proposal.statusApprove ? (
-                      <Space style={{ marginTop: 8, marginLeft: 8 }}>
-                        <Button
-                          type="primary"
-                          loading={actionLoading}
-                          onClick={() => confirmAction("approve", "approved")}
-                        >
-                          Đồng ý
-                        </Button>
-                        <Button
-                          danger
-                          loading={actionLoading}
-                          onClick={() => confirmAction("approve", "rejected")}
-                        >
-                          Từ chối
-                        </Button>
-                      </Space>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div style={{ textAlign: "right", minWidth: 200 }}>
-                    <Text strong>Tiến độ xử lý</Text>
-                    <Progress
-                      percent={progress.percent}
-                      status={progress.status}
-                      strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
-                    />
-                  </div>
-                </Col>
-              </Col>
+                      Đồng ý
+                    </Button>
+                    <Button
+                      danger
+                      loading={actionLoading}
+                      onClick={() => handleRejectClick("sign")}
+                    >
+                      Từ chối
+                    </Button>
+                  </Space>
+                )}
+                {proposal.statusApprove && (
+                  <Space>
+                    <Button
+                      type="primary"
+                      loading={actionLoading}
+                      onClick={() => handleApprove("approve")}
+                    >
+                      Đồng ý
+                    </Button>
+                    <Button
+                      danger
+                      loading={actionLoading}
+                      onClick={() => handleRejectClick("approve")}
+                    >
+                      Từ chối
+                    </Button>
+                  </Space>
+                )}
+                <div style={{ marginTop: 12 }}>
+                  <Text strong>Tiến độ xử lý</Text>
+                  <Progress
+                    percent={progress.percent}
+                    status={progress.status}
+                    strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
+                  />
+                </div>
+              </div>
             </Space>
           </Col>
         </Row>
@@ -585,97 +449,48 @@ export default function ProposalDetailPage() {
             <InfoCircleOutlined /> Thông tin chi tiết
           </>
         }
-        style={{ marginBottom: 24 }}
       >
         <Descriptions column={1} bordered>
           <Descriptions.Item label="Tên đề xuất">
             {proposal.name}
           </Descriptions.Item>
-          {proposal.vehicle && (
-            <Descriptions.Item label="Xe đã chọn">
-              {(() => {
-                const vehicle = vehicles.find(
-                  (v) => v.id === proposal.vehicle.id
-                );
-                if (!vehicle) return "Không xác định";
-                return vehicle.plateNumber
-                  ? `${vehicle.name} (${vehicle.plateNumber})`
-                  : vehicle.name;
-              })()}
+          {proposal.description && (
+            <Descriptions.Item label="Mô tả">
+              <Paragraph style={{ whiteSpace: "pre-wrap" }}>
+                {proposal.description}
+              </Paragraph>
             </Descriptions.Item>
           )}
-          {proposal.description && (
-            <>
-              <Descriptions.Item label="Mô tả">
-                <Paragraph style={{ margin: 0, whiteSpace: "pre-wrap" }}>
-                  {cleanedDescription}
-                </Paragraph>
-              </Descriptions.Item>
-              {startTime ||
-                (proposal.startAt && (
-                  <>
-                    <Descriptions.Item label="Bắt đầu">
-                      <Paragraph style={{ margin: 0, whiteSpace: "pre-wrap" }}>
-                        {startTime} {toVietnamTime(proposal.startAt)}
-                      </Paragraph>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Kết thúc">
-                      <Paragraph style={{ margin: 0, whiteSpace: "pre-wrap" }}>
-                        {endTime} {toVietnamTime(proposal.endAt ?? "")}
-                      </Paragraph>
-                    </Descriptions.Item>
-                  </>
-                ))}
-            </>
-          )}
-
           <Descriptions.Item label="Trạng thái">
             <Tag color={statusConfigFinal.color}>
               {statusConfigFinal.icon} {statusConfigFinal.text}
             </Tag>
           </Descriptions.Item>
           <Descriptions.Item label="Ngày tạo">
-            {new Date(proposal.createdAt).toLocaleString("vi-VN")}
+            {toVietnamTime(proposal.createdAt)}
           </Descriptions.Item>
           <Descriptions.Item label="Cập nhật lần cuối">
-            {new Date(proposal.updatedAt).toLocaleString("vi-VN")}
+            {toVietnamTime(proposal.updatedAt)}
           </Descriptions.Item>
         </Descriptions>
       </Card>
 
-      {/* Preview file */}
+      {/* Xem file */}
       {currentPreviewUrl && (
-        <Card title="Xem trước File">
-          <div className="w-full flex justify-center max-h-[80vh] overflow-auto">
-            {proposal.file?.mimeType === "application/pdf" ? (
-              <iframe
-                src={currentPreviewUrl}
-                style={{ width: "100%", height: "80vh", border: "none" }}
-              />
-            ) : proposal.file?.mimeType.startsWith("image/") ? (
-              <img
-                src={currentPreviewUrl}
-                alt={proposal.file?.filename}
-                style={{ maxWidth: "100%", maxHeight: "80vh" }}
-              />
-            ) : proposal.file?.mimeType.includes("officedocument") ||
-              proposal.file?.mimeType.includes("msword") ? (
-              <div className="w-full h-[90vh]">
-                <iframe
-                  src={`/api/files/view/${proposal.id}`}
-                  width="100%"
-                  height="100%"
-                ></iframe>
-              </div>
-            ) : (
-              <Text>Không thể xem trực tiếp file này.</Text>
-            )}
-          </div>
+        <Card title="Xem trước file">
+          {proposal.file?.mimeType === "application/pdf" ? (
+            <iframe
+              src={currentPreviewUrl}
+              style={{ width: "100%", height: "80vh", border: "none" }}
+            />
+          ) : (
+            <Text>Không thể xem trực tiếp file</Text>
+          )}
         </Card>
       )}
 
-      {/* Người đề xuất / ký / phê duyệt */}
-      <Row gutter={24}>
+      {/* Người ký / phê duyệt */}
+      <Row gutter={24} style={{ marginTop: 24 }}>
         <Col xs={24} md={12}>
           <Card
             title={
@@ -683,24 +498,22 @@ export default function ProposalDetailPage() {
                 <TeamOutlined /> Người đề xuất / ký
               </>
             }
-            style={{ marginBottom: 24 }}
           >
             {renderPersonCard(
               proposal.proposer,
               "proposer",
               proposal.currentStep.userId
             )}
-            {proposal.signers.map((s) => (
-              <div key={s.signer.id}>
-                {renderPersonCard(
-                  s.signer,
-                  "signer",
-                  proposal.currentStep.userId,
-                  s.status,
-                  s.signedAt
-                )}
-              </div>
-            ))}
+            {proposal.signers.map((s) =>
+              renderPersonCard(
+                s.signer,
+                "signer",
+                proposal.currentStep.userId,
+                s.status,
+                s.signedAt,
+                s.reason
+              )
+            )}
           </Card>
         </Col>
         <Col xs={24} md={12}>
@@ -710,34 +523,38 @@ export default function ProposalDetailPage() {
                 <CheckOutlined /> Người phê duyệt
               </>
             }
-            style={{ marginBottom: 24 }}
           >
-            {proposal.approvers.map((a) => (
-              <div key={a.approver.id}>
-                {renderPersonCard(
-                  a.approver,
-                  "approver",
-                  proposal.currentStep.userId,
-                  a.status,
-                  a.approvedAt
-                )}
-              </div>
-            ))}
+            {proposal.approvers.map((a) =>
+              renderPersonCard(
+                a.approver,
+                "approver",
+                proposal.currentStep.userId,
+                a.status,
+                a.approvedAt,
+                a.reason
+              )
+            )}
           </Card>
         </Col>
       </Row>
 
-      {/* Timeline */}
-      <Card
-        title={
-          <>
-            <ClockCircleOutlined /> Lịch sử xử lý
-          </>
-        }
-        style={{ marginBottom: 24 }}
+      {/* Modal nhập lý do từ chối */}
+      <Modal
+        title="Nhập lý do từ chối"
+        open={rejectModalVisible}
+        onOk={confirmReject}
+        onCancel={() => setRejectModalVisible(false)}
+        okText="Xác nhận"
+        cancelText="Hủy"
+        confirmLoading={actionLoading}
       >
-        <Timeline items={getTimelineItems()} />
-      </Card>
+        <Input.TextArea
+          rows={4}
+          value={rejectReason}
+          onChange={(e) => setRejectReason(e.target.value)}
+          placeholder="Nhập lý do từ chối..."
+        />
+      </Modal>
     </div>
   );
 }

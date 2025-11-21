@@ -233,7 +233,8 @@ export class ProposalService {
   static async signProposal(
     proposalId: number,
     employeeId: number,
-    status: "approved" | "rejected"
+    status: "approved" | "rejected",
+    reason?: string
   ) {
     try {
       const proposal = await prisma.proposal.findUnique({
@@ -249,11 +250,17 @@ export class ProposalService {
         return { success: false, error: "Bạn đã xử lý đề xuất này rồi" };
 
       const updated = await prisma.$transaction(async (tx) => {
+        // Cập nhật trạng thái + signedAt + reason nếu từ chối
         await tx.proposalSigner.update({
           where: { id: signer.id },
-          data: { status, signedAt: new Date() },
+          data: {
+            status,
+            signedAt: new Date(),
+            reason: status === "rejected" ? reason : null,
+          },
         });
 
+        // Nếu bị từ chối → đổi status proposal
         if (status === "rejected") {
           await tx.proposal.update({
             where: { id: proposalId },
@@ -276,7 +283,8 @@ export class ProposalService {
           EmailService.sendProposalRejectedBySigner(
             updated.proposer,
             updated,
-            "Người ký"
+            signer,
+            reason || "" // <-- gửi kèm lý do
           )
         );
         return { success: true, message: "Đề xuất đã bị từ chối." };
@@ -370,7 +378,8 @@ export class ProposalService {
   static async approveProposal(
     proposalId: number,
     employeeId: number,
-    status: "approved" | "rejected"
+    status: "approved" | "rejected",
+    reason?: string
   ) {
     try {
       const proposal = await prisma.proposal.findUnique({
@@ -404,7 +413,7 @@ export class ProposalService {
       const updatedProposal = await prisma.$transaction(async (tx) => {
         await tx.proposalApprover.update({
           where: { id: approver.id },
-          data: { status, approvedAt: now },
+          data: { status, approvedAt: now, reason: reason || null },
         });
 
         if (status === "rejected") {
@@ -423,13 +432,14 @@ export class ProposalService {
       if (!updatedProposal)
         return { success: false, error: "Không thể tải lại đề xuất" };
 
-      // Nếu bị reject
+      // Nếu bị từ chối
       if (status === "rejected") {
         await sendWithRetry(() =>
           EmailService.sendStatusUpdate(
             updatedProposal.proposer,
             updatedProposal,
-            "rejected"
+            "rejected",
+            reason || "" // Gửi kèm lý do
           )
         );
         return { success: true, message: "Đề xuất đã bị từ chối." };

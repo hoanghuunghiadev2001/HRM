@@ -331,6 +331,7 @@ exports.Prisma.ProposalSignerScalarFieldEnum = {
   proposalId: 'proposalId',
   signerId: 'signerId',
   status: 'status',
+  reason: 'reason',
   signedAt: 'signedAt',
   level: 'level'
 };
@@ -339,6 +340,7 @@ exports.Prisma.ProposalApproverScalarFieldEnum = {
   id: 'id',
   proposalId: 'proposalId',
   approverId: 'approverId',
+  reason: 'reason',
   status: 'status',
   approvedAt: 'approvedAt',
   level: 'level'
@@ -454,6 +456,14 @@ exports.Prisma.ProposalOrderByRelevanceFieldEnum = {
   title: 'title',
   description: 'description',
   dropoffPlace: 'dropoffPlace'
+};
+
+exports.Prisma.ProposalSignerOrderByRelevanceFieldEnum = {
+  reason: 'reason'
+};
+
+exports.Prisma.ProposalApproverOrderByRelevanceFieldEnum = {
+  reason: 'reason'
 };
 
 exports.Prisma.EmailActionTokenOrderByRelevanceFieldEnum = {

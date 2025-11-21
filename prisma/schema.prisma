@@ -319,6 +319,7 @@ model ProposalSigner {
   proposalId Int
   signerId   Int
   status     LeaveStatus @default(pending)
+  reason     String?     @db.Text
   signedAt   DateTime?
   level      Int
   proposal   Proposal    @relation(fields: [proposalId], references: [id], onDelete: Cascade)
@@ -332,6 +333,7 @@ model ProposalApprover {
   id         Int         @id @default(autoincrement())
   proposalId Int
   approverId Int
+  reason     String?     @db.Text
   status     LeaveStatus @default(pending)
   approvedAt DateTime?
   level      Int
