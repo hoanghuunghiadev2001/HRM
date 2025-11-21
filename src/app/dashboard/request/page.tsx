@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import React from "react";
-import { message, Table } from "antd";
+import { Button, message, Table } from "antd";
 import type { TableProps } from "antd";
 import { ListRequestLeave } from "@/components/api";
 import ModalLoading from "@/components/modalLoading";
@@ -202,13 +202,13 @@ export default function RequestPage() {
       {/* Header + Nút */}
       <div className="flex flex-col  sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
         <p className="font-bold text-xl text-[#4a4a6a]">Phiếu yêu cầu</p>
-        <button
-          className="flex gap-2 items-center   h-10 px-4 rounded-lg !bg-gradient-to-r !from-[#4c809e] !to-[#001935] text-white text-sm font-semibold w-fit"
+        <Button
+          className="flex gap-2 items-center h-10 px-4 rounded-lg bg-blue-600 !bg-gradient-to-r !from-[#4c809e] !to-[#001935] text-white text-sm font-semibold w-fit"
           onClick={() => setCreateRequest(true)}
         >
           <Plus size={16} />
           Tạo phiếu yêu cầu
-        </button>
+        </Button>
       </div>
 
       {/* Table responsive */}
