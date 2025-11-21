@@ -2,7 +2,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Table, Button, Modal, Form, Input, Space, message } from "antd";
+import {
+  Table,
+  Button,
+  Modal,
+  Form,
+  Input,
+  Space,
+  message,
+  Switch,
+} from "antd";
 import type { ColumnsType } from "antd/es/table";
 
 type Vehicle = {
@@ -10,6 +19,7 @@ type Vehicle = {
   code: string;
   name: string;
   plateNumber?: string;
+  isBusy: boolean;
   createdAt: string;
   updatedAt: string;
 };
@@ -122,6 +132,35 @@ export default function VehiclePage() {
       title: "Biển số",
       dataIndex: "plateNumber",
       render: (text) => text || "-",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "isBusy",
+      render: (isBusy: boolean, record: Vehicle) => (
+        <Switch
+          checked={!isBusy}
+          checkedChildren="Rảnh"
+          unCheckedChildren="Bận"
+          onChange={async (checked) => {
+            try {
+              const res = await fetch(`/api/vehicles/${record.id}/status`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ isBusy: !checked }),
+              });
+              if (res.ok) {
+                message.success("Cập nhật trạng thái thành công");
+                fetchVehicles();
+              } else {
+                const error = await res.json();
+                message.error(error.message || "Cập nhật thất bại");
+              }
+            } catch (err) {
+              message.error("Cập nhật thất bại");
+            }
+          }}
+        />
+      ),
     },
     {
       title: "Hành động",

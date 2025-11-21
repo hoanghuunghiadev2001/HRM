@@ -106,7 +106,7 @@ export default function ClientDashboard({
       icon: <FileStack />,
       label: "Đề xuất",
       children: [
-        ...(isAdmin === "ADMIN" || isAdmin === "MANAGER"
+        ...(isAdmin === "ADMIN"
           ? [
               {
                 key: "/dashboard/vehicles",

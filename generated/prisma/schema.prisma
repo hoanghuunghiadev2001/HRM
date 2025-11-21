@@ -34,7 +34,7 @@ model Vehicle {
   plateNumber String?  @unique // biển số nếu là xe cụ thể (nullable nếu là loại chung)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
+  isBusy      Boolean  @default(false) // 👈 trạng thái xe
   // quan hệ ngược (nếu cần)
 
   proposals Proposal[]

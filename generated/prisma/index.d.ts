@@ -4103,6 +4103,7 @@ export namespace Prisma {
     plateNumber: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    isBusy: boolean | null
   }
 
   export type VehicleMaxAggregateOutputType = {
@@ -4112,6 +4113,7 @@ export namespace Prisma {
     plateNumber: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    isBusy: boolean | null
   }
 
   export type VehicleCountAggregateOutputType = {
@@ -4121,6 +4123,7 @@ export namespace Prisma {
     plateNumber: number
     createdAt: number
     updatedAt: number
+    isBusy: number
     _all: number
   }
 
@@ -4140,6 +4143,7 @@ export namespace Prisma {
     plateNumber?: true
     createdAt?: true
     updatedAt?: true
+    isBusy?: true
   }
 
   export type VehicleMaxAggregateInputType = {
@@ -4149,6 +4153,7 @@ export namespace Prisma {
     plateNumber?: true
     createdAt?: true
     updatedAt?: true
+    isBusy?: true
   }
 
   export type VehicleCountAggregateInputType = {
@@ -4158,6 +4163,7 @@ export namespace Prisma {
     plateNumber?: true
     createdAt?: true
     updatedAt?: true
+    isBusy?: true
     _all?: true
   }
 
@@ -4254,6 +4260,7 @@ export namespace Prisma {
     plateNumber: string | null
     createdAt: Date
     updatedAt: Date
+    isBusy: boolean
     _count: VehicleCountAggregateOutputType | null
     _avg: VehicleAvgAggregateOutputType | null
     _sum: VehicleSumAggregateOutputType | null
@@ -4282,6 +4289,7 @@ export namespace Prisma {
     plateNumber?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    isBusy?: boolean
     proposals?: boolean | Vehicle$proposalsArgs<ExtArgs>
     _count?: boolean | VehicleCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["vehicle"]>
@@ -4295,9 +4303,10 @@ export namespace Prisma {
     plateNumber?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    isBusy?: boolean
   }
 
-  export type VehicleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "name" | "plateNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["vehicle"]>
+  export type VehicleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "name" | "plateNumber" | "createdAt" | "updatedAt" | "isBusy", ExtArgs["result"]["vehicle"]>
   export type VehicleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     proposals?: boolean | Vehicle$proposalsArgs<ExtArgs>
     _count?: boolean | VehicleCountOutputTypeDefaultArgs<ExtArgs>
@@ -4315,6 +4324,7 @@ export namespace Prisma {
       plateNumber: string | null
       createdAt: Date
       updatedAt: Date
+      isBusy: boolean
     }, ExtArgs["result"]["vehicle"]>
     composites: {}
   }
@@ -4691,6 +4701,7 @@ export namespace Prisma {
     readonly plateNumber: FieldRef<"Vehicle", 'String'>
     readonly createdAt: FieldRef<"Vehicle", 'DateTime'>
     readonly updatedAt: FieldRef<"Vehicle", 'DateTime'>
+    readonly isBusy: FieldRef<"Vehicle", 'Boolean'>
   }
     
 
@@ -25168,7 +25179,8 @@ export namespace Prisma {
     name: 'name',
     plateNumber: 'plateNumber',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    isBusy: 'isBusy'
   };
 
   export type VehicleScalarFieldEnum = (typeof VehicleScalarFieldEnum)[keyof typeof VehicleScalarFieldEnum]
@@ -25641,6 +25653,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Sex'
    */
   export type EnumSexFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Sex'>
@@ -25651,13 +25670,6 @@ export namespace Prisma {
    * Reference to a field of type 'Role'
    */
   export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -25784,6 +25796,7 @@ export namespace Prisma {
     plateNumber?: StringNullableFilter<"Vehicle"> | string | null
     createdAt?: DateTimeFilter<"Vehicle"> | Date | string
     updatedAt?: DateTimeFilter<"Vehicle"> | Date | string
+    isBusy?: BoolFilter<"Vehicle"> | boolean
     proposals?: ProposalListRelationFilter
   }
 
@@ -25794,6 +25807,7 @@ export namespace Prisma {
     plateNumber?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    isBusy?: SortOrder
     proposals?: ProposalOrderByRelationAggregateInput
     _relevance?: VehicleOrderByRelevanceInput
   }
@@ -25808,6 +25822,7 @@ export namespace Prisma {
     name?: StringFilter<"Vehicle"> | string
     createdAt?: DateTimeFilter<"Vehicle"> | Date | string
     updatedAt?: DateTimeFilter<"Vehicle"> | Date | string
+    isBusy?: BoolFilter<"Vehicle"> | boolean
     proposals?: ProposalListRelationFilter
   }, "id" | "code" | "plateNumber">
 
@@ -25818,6 +25833,7 @@ export namespace Prisma {
     plateNumber?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    isBusy?: SortOrder
     _count?: VehicleCountOrderByAggregateInput
     _avg?: VehicleAvgOrderByAggregateInput
     _max?: VehicleMaxOrderByAggregateInput
@@ -25835,6 +25851,7 @@ export namespace Prisma {
     plateNumber?: StringNullableWithAggregatesFilter<"Vehicle"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Vehicle"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Vehicle"> | Date | string
+    isBusy?: BoolWithAggregatesFilter<"Vehicle"> | boolean
   }
 
   export type EmployeeWhereInput = {
@@ -27451,6 +27468,7 @@ export namespace Prisma {
     plateNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBusy?: boolean
     proposals?: ProposalCreateNestedManyWithoutVehicleInput
   }
 
@@ -27461,6 +27479,7 @@ export namespace Prisma {
     plateNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBusy?: boolean
     proposals?: ProposalUncheckedCreateNestedManyWithoutVehicleInput
   }
 
@@ -27470,6 +27489,7 @@ export namespace Prisma {
     plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBusy?: BoolFieldUpdateOperationsInput | boolean
     proposals?: ProposalUpdateManyWithoutVehicleNestedInput
   }
 
@@ -27480,6 +27500,7 @@ export namespace Prisma {
     plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBusy?: BoolFieldUpdateOperationsInput | boolean
     proposals?: ProposalUncheckedUpdateManyWithoutVehicleNestedInput
   }
 
@@ -27490,6 +27511,7 @@ export namespace Prisma {
     plateNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBusy?: boolean
   }
 
   export type VehicleUpdateManyMutationInput = {
@@ -27498,6 +27520,7 @@ export namespace Prisma {
     plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBusy?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type VehicleUncheckedUpdateManyInput = {
@@ -27507,6 +27530,7 @@ export namespace Prisma {
     plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBusy?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type EmployeeCreateInput = {
@@ -29227,6 +29251,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -29245,6 +29274,7 @@ export namespace Prisma {
     plateNumber?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    isBusy?: SortOrder
   }
 
   export type VehicleAvgOrderByAggregateInput = {
@@ -29258,6 +29288,7 @@ export namespace Prisma {
     plateNumber?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    isBusy?: SortOrder
   }
 
   export type VehicleMinOrderByAggregateInput = {
@@ -29267,6 +29298,7 @@ export namespace Prisma {
     plateNumber?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    isBusy?: SortOrder
   }
 
   export type VehicleSumOrderByAggregateInput = {
@@ -29289,6 +29321,14 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EnumSexFilter<$PrismaModel = never> = {
@@ -29314,11 +29354,6 @@ export namespace Prisma {
     in?: $Enums.Role[]
     notIn?: $Enums.Role[]
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -29535,14 +29570,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -30806,6 +30833,10 @@ export namespace Prisma {
     set?: string | null
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type ProposalUpdateManyWithoutVehicleNestedInput = {
     create?: XOR<ProposalCreateWithoutVehicleInput, ProposalUncheckedCreateWithoutVehicleInput> | ProposalCreateWithoutVehicleInput[] | ProposalUncheckedCreateWithoutVehicleInput[]
     connectOrCreate?: ProposalCreateOrConnectWithoutVehicleInput | ProposalCreateOrConnectWithoutVehicleInput[]
@@ -31062,10 +31093,6 @@ export namespace Prisma {
 
   export type EnumRoleFieldUpdateOperationsInput = {
     set?: $Enums.Role
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type AttendanceImportLogUpdateManyWithoutImportedByNestedInput = {
@@ -32464,6 +32491,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | null
@@ -32493,6 +32525,14 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedEnumSexFilter<$PrismaModel = never> = {
     equals?: $Enums.Sex | EnumSexFieldRefInput<$PrismaModel>
     in?: $Enums.Sex[]
@@ -32516,11 +32556,6 @@ export namespace Prisma {
     in?: $Enums.Role[]
     notIn?: $Enums.Role[]
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedEnumSexWithAggregatesFilter<$PrismaModel = never> = {
@@ -32555,14 +32590,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -36329,6 +36356,7 @@ export namespace Prisma {
     plateNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBusy?: boolean
   }
 
   export type VehicleUncheckedCreateWithoutProposalsInput = {
@@ -36338,6 +36366,7 @@ export namespace Prisma {
     plateNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    isBusy?: boolean
   }
 
   export type VehicleCreateOrConnectWithoutProposalsInput = {
@@ -36564,6 +36593,7 @@ export namespace Prisma {
     plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBusy?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type VehicleUncheckedUpdateWithoutProposalsInput = {
@@ -36573,6 +36603,7 @@ export namespace Prisma {
     plateNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isBusy?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type EmployeeUpsertWithoutProposalsCreatedInput = {

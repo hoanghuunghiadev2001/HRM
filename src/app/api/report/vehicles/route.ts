@@ -1,12 +1,35 @@
 import { NextResponse } from "next/server";
-// Giả sử bạn dùng Prisma
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
-    // Lấy tất cả đề xuất đã duyệt
+    // TÍNH NGÀY HÔM NAY (MÚI GIỜ VN)
+    const now = new Date();
+    const startOfDay = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
+    // const endOfDay = new Date(
+    //   now.getFullYear(),
+    //   now.getMonth(),
+    //   now.getDate(),
+    //   23,
+    //   59,
+    //   59,
+    //   999
+    // );
+
+    // Lấy tất cả đề xuất đã duyệt TRONG NGÀY HÔM NAY
     const proposals = await prisma.proposal.findMany({
-      where: { status: "approved", vehicleId: { not: null } },
+      where: {
+        status: "approved",
+        vehicleId: { not: null },
+        startAt: {
+          gte: startOfDay,
+          // lte: endOfDay,
+        },
+      },
       include: {
         vehicle: true,
       },
@@ -15,7 +38,7 @@ export async function GET() {
       },
     });
 
-    // Lấy tất cả xe để hiển thị cột
+    // Lấy toàn bộ xe
     const vehicles = await prisma.vehicle.findMany({
       orderBy: { name: "asc" },
     });

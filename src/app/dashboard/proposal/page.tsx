@@ -114,7 +114,10 @@ export default function ProposalCreator() {
       const res = await fetch("/api/vehicles");
       if (!res.ok) throw new Error("Lỗi khi lấy danh sách xe");
       const data = await res.json();
-      setVehicles(data.vehicles || []);
+
+      // lọc chỉ lấy xe rảnh
+      const freeVehicles = (data.vehicles || []).filter((v: any) => !v.isBusy);
+      setVehicles(freeVehicles);
     } catch (err) {
       console.error(err);
       message.error("Không thể tải danh sách xe");

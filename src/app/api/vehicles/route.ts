@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
         code: true,
         name: true,
         plateNumber: true,
+        isBusy: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -37,6 +38,12 @@ export async function POST(request: NextRequest) {
     if (!token) {
       return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
     }
+
+    const user = verifyToken(token);
+    if (!user || user.role !== "ADMIN") {
+      return NextResponse.json({ message: "Không có quyền" }, { status: 403 });
+    }
+
     const body = await request.json();
     const { code, name, plateNumber } = body;
 
@@ -74,7 +81,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const user = verifyToken(token);
-    if (!user || user.role === "USER") {
+    if (!user || user.role !== "ADMIN") {
       return NextResponse.json({ message: "Không có quyền" }, { status: 403 });
     }
 
@@ -122,7 +129,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
     }
     const user = verifyToken(token);
-    if (!user || user.role === "USER") {
+    if (!user || user.role !== "ADMIN") {
       return NextResponse.json({ message: "Không có quyền" }, { status: 403 });
     }
 

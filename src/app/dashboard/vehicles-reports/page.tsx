@@ -42,10 +42,6 @@ export default function VehicleReportPage() {
     setTableHeight(height > 200 ? height : 400); // tối thiểu 400px
   }, []);
 
-  useEffect(() => {
-    fetchReport();
-  }, []);
-
   const fetchReport = async () => {
     setLoading(true);
     try {

@@ -136,7 +136,8 @@ exports.Prisma.VehicleScalarFieldEnum = {
   name: 'name',
   plateNumber: 'plateNumber',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  isBusy: 'isBusy'
 };
 
 exports.Prisma.EmployeeScalarFieldEnum = {
