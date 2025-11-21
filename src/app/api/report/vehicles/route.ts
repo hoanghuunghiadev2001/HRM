@@ -27,11 +27,15 @@ export async function GET() {
         vehicleId: { not: null },
         startAt: {
           gte: startOfDay,
-          // lte: endOfDay,
         },
       },
       include: {
         vehicle: true,
+        proposer: {
+          select: {
+            name: true, // 👈 chỉ lấy tên
+          },
+        }, // 👈 LẤY THÔNG TIN NGƯỜI ĐỀ XUẤT
       },
       orderBy: {
         startAt: "asc",

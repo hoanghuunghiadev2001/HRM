@@ -26,6 +26,9 @@ interface Proposal {
   proposerName: string;
   title: string;
   description: string;
+  proposer: {
+    name: string;
+  };
 }
 
 export default function VehicleReportPage() {
@@ -133,7 +136,9 @@ export default function VehicleReportPage() {
       width: 150,
       render: (proposal: Proposal) =>
         proposal ? (
-          <Tooltip title={`${proposal.proposerName} - ${proposal.description}`}>
+          <Tooltip
+            title={`${proposal.proposer.name} - ${proposal.description}`}
+          >
             <div
               style={{
                 backgroundColor: "#fadb14",
