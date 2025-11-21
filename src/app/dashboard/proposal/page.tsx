@@ -2,7 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { DatePicker, Space, Timeline } from "antd";
 import {
   Upload,
   Button,
@@ -12,12 +13,10 @@ import {
   Row,
   Col,
   Typography,
-  Space,
   Avatar,
   Tag,
   Divider,
   message,
-  DatePicker,
   Form,
   Modal,
 } from "antd";
@@ -38,9 +37,11 @@ import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import ModalLoading from "@/components/modalLoading";
 import dayjs from "dayjs";
 import { useAppSelector } from "@/store/hook";
-
+import isBetween from "dayjs/plugin/isBetween";
+const { RangePicker } = DatePicker;
 const { Title, Text } = Typography;
 const { TextArea } = Input;
+dayjs.extend(isBetween); // bắt buộc phải extend
 
 export interface CreateProposalFormData {
   name: string;
@@ -72,7 +73,15 @@ export default function ProposalCreator() {
   const [vehicles, setVehicles] = useState<
     { id: number; name: string; code: string; plateNumber: string }[]
   >([]);
+  const conflictRef = useRef<string | null>(null);
+  const [rangeTime, setRangeTime] = useState<[dayjs.Dayjs, dayjs.Dayjs] | null>(
+    null
+  );
   const [selectedVehicle, setSelectedVehicle] = useState<number | null>(null);
+
+  const [vehicleBookings, setVehicleBookings] = useState<{
+    [vehicleId: number]: { startAt: dayjs.Dayjs; endAt: dayjs.Dayjs }[];
+  }>({});
 
   // proposal type
   const [proposalType, setProposalType] = useState<"REGULAR" | "VEHICLE">(
@@ -86,6 +95,27 @@ export default function ProposalCreator() {
 
   const { name, department, id } = useAppSelector((state) => state.user);
   const [managerId, setManagerId] = useState<number>();
+
+  const fetchVehicleSchedules = async () => {
+    try {
+      const res = await fetch("/api/report/vehicles");
+      if (!res.ok) throw new Error("Lỗi khi lấy lịch xe");
+      const data = await res.json();
+      const mapBookings: {
+        [key: number]: { startAt: dayjs.Dayjs; endAt: dayjs.Dayjs }[];
+      } = {};
+      (data.proposals || []).forEach((p: any) => {
+        if (!mapBookings[p.vehicleId]) mapBookings[p.vehicleId] = [];
+        mapBookings[p.vehicleId].push({
+          startAt: dayjs(p.startAt),
+          endAt: dayjs(p.endAt),
+        });
+      });
+      setVehicleBookings(mapBookings);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   // ---------- helpers ----------
   const customTagRender = (props: CustomTagProps) => {
@@ -157,8 +187,46 @@ export default function ProposalCreator() {
     fetchEmployees();
     fetchManager();
     fetchVehicles(); // thêm dòng này
+    fetchVehicleSchedules(); // thêm dòng này
   }, []);
 
+  const disabledDate = (current: dayjs.Dayjs) => {
+    // disable ngày trước hôm nay
+    return current && current < dayjs().startOf("day");
+  };
+
+  const disabledRangeTime = (current: dayjs.Dayjs, type: "start" | "end") => {
+    if (!selectedVehicle || !rangeTime) return {};
+
+    const bookings = vehicleBookings[selectedVehicle] || [];
+    const disabledHours: number[] = [];
+    const disabledMinutes: number[] = [];
+
+    for (let h = 0; h < 24; h++) {
+      for (let m = 0; m < 60; m += 30) {
+        const time = current.hour(h).minute(m);
+
+        const overlap = bookings.some((b) => {
+          const start = b.startAt;
+          const end = b.endAt;
+          return (
+            (type === "start" && time.isBetween(start, end, null, "[)")) ||
+            (type === "end" && time.isBetween(start, end, null, "(]"))
+          );
+        });
+
+        if (overlap) {
+          if (current.hour() === h) disabledMinutes.push(m);
+          else disabledHours.push(h);
+        }
+      }
+    }
+
+    return {
+      disabledHours: () => Array.from(new Set(disabledHours)),
+      disabledMinutes: () => Array.from(new Set(disabledMinutes)),
+    };
+  };
   useEffect(() => {
     if (proposalType === "VEHICLE") {
       if (managerId) setSigners([managerId]);
@@ -341,6 +409,22 @@ export default function ProposalCreator() {
     }
   };
 
+  const isRangeOverlap = (
+    start: dayjs.Dayjs,
+    end: dayjs.Dayjs,
+    bookings: Array<{ start: string | dayjs.Dayjs; end: string | dayjs.Dayjs }>
+  ) => {
+    if (!start || !end) return false;
+
+    return bookings.some((b) => {
+      const bStart = dayjs(b.start);
+      const bEnd = dayjs(b.end);
+      // half-open interval check:
+      // overlap khi start < bEnd && end > bStart
+      return start.isBefore(bEnd) && end.isAfter(bStart);
+    });
+  };
+
   const userSelectOptions = employees.map((user) => ({
     label: (
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -383,11 +467,25 @@ export default function ProposalCreator() {
     }
   };
 
+  // const isRangeOverlap = (
+  //   start: dayjs.Dayjs | null,
+  //   end: dayjs.Dayjs | null,
+  //   bookings: { startAt: dayjs.Dayjs; endAt: dayjs.Dayjs }[]
+  // ) => {
+  //   if (!start || !end) return false;
+  //   return bookings.some(
+  //     (b) =>
+  //       start.isBetween(b.startAt, b.endAt, undefined, "[]") || // start nằm trong booking
+  //       end.isBetween(b.startAt, b.endAt, undefined, "[]") || // end nằm trong booking
+  //       (b.startAt.isAfter(start) && b.endAt.isBefore(end)) // booking nằm hoàn toàn trong range
+  //   );
+  // };
+
   // ---------- render ----------
   return (
     <div style={{ padding: 0, maxWidth: 1400, margin: "0 auto" }}>
-      <ModalLoading isOpen={loading || submitting} />
       {contextHolder}
+      <ModalLoading isOpen={loading || submitting} />
 
       <Title level={2}>
         <EditOutlined /> Tạo Đề Xuất Mới
@@ -453,7 +551,6 @@ export default function ProposalCreator() {
                   </Upload>
                 </div>
               )}
-
               {proposalType === "VEHICLE" && (
                 <div>
                   <div className="my-2 flex gap-4 items-center">
@@ -472,25 +569,66 @@ export default function ProposalCreator() {
                       disabled={submitting}
                     />
                   </div>
-                  <DatePicker
-                    className="mt-2"
-                    showTime
+
+                  <RangePicker
+                    showTime={{ format: "HH:mm", minuteStep: 1 }}
                     format="DD-MM-YYYY HH:mm"
-                    placeholder="Thời gian bắt đầu"
+                    placeholder={["Thời gian bắt đầu", "Thời gian kết thúc"]}
                     style={{ width: "100%" }}
-                    value={startAt}
-                    onChange={setStartAt}
+                    value={rangeTime}
+                    onChange={(dates) => {
+                      if (!dates || !dates[0] || !dates[1]) {
+                        setRangeTime(null);
+                        return;
+                      }
+                      const [start, end] = dates;
+                      const rawBookings =
+                        vehicleBookings[selectedVehicle!] || [];
+                      const bookings = rawBookings.map((b) => ({
+                        start: b.startAt,
+                        end: b.endAt,
+                      }));
+
+                      if (isRangeOverlap(start, end, bookings)) {
+                        const key = `${start.valueOf()}_${end.valueOf()}`;
+
+                        // nếu cùng khóa đã hiển thị thì không show lại
+                        if (conflictRef.current === key) {
+                          setRangeTime(null);
+                          setStartAt(null as any);
+                          setEndAt(null as any);
+                          return;
+                        }
+
+                        conflictRef.current = key;
+
+                        modal.error({
+                          title: "Khoảng thời gian này đã có xe bận!",
+                          onOk: () => {
+                            conflictRef.current = null; // reset khi người dùng đóng modal
+                          },
+                          onCancel: () => {
+                            conflictRef.current = null;
+                          },
+                        });
+
+                        setRangeTime(null);
+                        setStartAt(null as any);
+                        setEndAt(null as any);
+                        return;
+                      }
+
+                      // nếu hợp lệ -> reset conflictRef (trường hợp user sửa)
+                      conflictRef.current = null;
+
+                      setRangeTime([start, end]);
+                      setStartAt(start);
+                      setEndAt(end);
+                    }}
+                    // disabledTime={disabledRangeTime} <-- đề nghị: remove hoặc chỉ disable past times
                     disabled={submitting}
                   />
-                  <DatePicker
-                    showTime
-                    format="DD-MM-YYYY HH:mm"
-                    placeholder="Thời gian kết thúc"
-                    style={{ width: "100%", marginTop: 8 }}
-                    value={endAt}
-                    onChange={setEndAt}
-                    disabled={submitting}
-                  />
+
                   <Input
                     placeholder="Địa điểm"
                     value={dropoffPlace}
@@ -583,10 +721,21 @@ export default function ProposalCreator() {
                 title="PDF Preview"
               />
             ) : proposalType === "VEHICLE" ? (
-              <Text>
-                Đây là loại <strong>Đề xuất xe</strong>. File sẽ được tạo tự
-                động từ mẫu Word.
-              </Text>
+              selectedVehicle &&
+              vehicleBookings[selectedVehicle] && (
+                <Card title="Lịch bận xe" style={{ marginTop: 16 }}>
+                  <Timeline>
+                    {vehicleBookings[selectedVehicle].map((b, idx) => (
+                      <Timeline.Item key={idx} color="red">
+                        <Tag color="red">
+                          {b.startAt.format("HH:mm")} -{" "}
+                          {b.endAt.format("HH:mm")}
+                        </Tag>
+                      </Timeline.Item>
+                    ))}
+                  </Timeline>
+                </Card>
+              )
             ) : (
               <div
                 style={{

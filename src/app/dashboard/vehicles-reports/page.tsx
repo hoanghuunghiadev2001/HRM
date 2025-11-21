@@ -77,16 +77,29 @@ export default function VehicleReportPage() {
   const tableData = timeSlots.map((slot) => {
     const [slotStartStr, slotEndStr] = slot.split("-");
     const row: any = { key: slot, time: slot };
+
+    const slotStartHour = parseInt(slotStartStr.split(":")[0]);
+    const slotStartMinute = parseInt(slotStartStr.split(":")[1]);
+    const slotEndHour = parseInt(slotEndStr.split(":")[0]);
+    const slotEndMinute = parseInt(slotEndStr.split(":")[1]);
+
     vehicles.forEach((v) => {
       const proposal = proposals.find((p) => {
         const start = dayjs(p.startAt).tz("Asia/Ho_Chi_Minh");
         const end = dayjs(p.endAt).tz("Asia/Ho_Chi_Minh");
-        const slotStart = dayjs()
-          .hour(parseInt(slotStartStr.split(":")[0]))
-          .minute(parseInt(slotStartStr.split(":")[1]));
-        const slotEnd = dayjs()
-          .hour(parseInt(slotEndStr.split(":")[0]))
-          .minute(parseInt(slotEndStr.split(":")[1]));
+
+        // Tạo slotStart/slotEnd cùng ngày với proposal
+        const slotStart = start
+          .clone()
+          .hour(slotStartHour)
+          .minute(slotStartMinute)
+          .second(0);
+        const slotEnd = start
+          .clone()
+          .hour(slotEndHour)
+          .minute(slotEndMinute)
+          .second(0);
+
         // Kiểm tra overlap: slotStart < proposalEnd && slotEnd > proposalStart
         return (
           p.vehicleId === v.id &&
@@ -96,6 +109,7 @@ export default function VehicleReportPage() {
       });
       row[v.id] = proposal || null;
     });
+
     return row;
   });
 

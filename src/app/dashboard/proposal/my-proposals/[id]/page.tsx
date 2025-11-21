@@ -15,7 +15,6 @@ import {
   Button,
   Spin,
   message,
-  Timeline,
   Row,
   Col,
   Descriptions,
@@ -23,13 +22,15 @@ import {
   Badge,
   Modal,
   Input,
+  Form,
+  Select,
+  DatePicker,
 } from "antd";
 import {
   FileTextOutlined,
   UserOutlined,
   CheckOutlined,
   CloseOutlined,
-  DownloadOutlined,
   ArrowLeftOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined,
@@ -39,14 +40,17 @@ import {
   InfoCircleOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
+import dayjs, { Dayjs } from "dayjs";
 import { useAppSelector } from "@/store/hook";
 
 const { Title, Text, Paragraph } = Typography;
+const { RangePicker } = DatePicker;
 
 interface ProposalDetail {
   id: number;
   name: string;
   description?: string;
+  proposalType?: string;
   status: string;
   createdAt: string;
   updatedAt: string;
@@ -87,7 +91,8 @@ export default function ProposalDetailPage() {
   const params = useParams();
   const router = useRouter();
   const proposalId = Number(params.id);
-  const { id } = useAppSelector((state) => state.user);
+  const { id, role } = useAppSelector((state) => state.user);
+  const isAdmin = role === "ADMIN";
 
   const [proposal, setProposal] = useState<ProposalDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -103,6 +108,13 @@ export default function ProposalDetailPage() {
   const [rejectModalVisible, setRejectModalVisible] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
   const [currentAction, setCurrentAction] = useState<"sign" | "approve" | null>(
+    null
+  );
+
+  // Modal chỉnh sửa (Admin Only)
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [editVehicleId, setEditVehicleId] = useState<number | null>(null);
+  const [editTimeRange, setEditTimeRange] = useState<[Dayjs, Dayjs] | null>(
     null
   );
 
@@ -132,6 +144,10 @@ export default function ProposalDetailPage() {
       const result = await res.json();
       if (res.ok) {
         setProposal(result);
+        setEditVehicleId(result.vehicle?.id ?? null);
+        if (result.startAt && result.endAt) {
+          setEditTimeRange([dayjs(result.startAt), dayjs(result.endAt)]);
+        }
         if (result.file?.id) {
           setCurrentPreviewUrl(`/api/files/view/${result.file.id}`);
         }
@@ -158,7 +174,6 @@ export default function ProposalDetailPage() {
     }).format(new Date(isoString));
   };
 
-  // Xử lý hành động: Đồng ý
   const handleApprove = async (action: "sign" | "approve") => {
     setActionLoading(true);
     try {
@@ -175,7 +190,6 @@ export default function ProposalDetailPage() {
     }
   };
 
-  // Xử lý hành động: mở modal từ chối
   const handleRejectClick = (action: "sign" | "approve") => {
     setCurrentAction(action);
     setRejectModalVisible(true);
@@ -201,7 +215,29 @@ export default function ProposalDetailPage() {
     }
   };
 
-  // Progress
+  const handleUpdateProposal = async () => {
+    if (!editVehicleId || !editTimeRange) {
+      message.error("Vui lòng điền đầy đủ thông tin");
+      return;
+    }
+    setActionLoading(true);
+    try {
+      await axios.patch(`/api/proposals/${proposal?.id}/update`, {
+        vehicleId: editVehicleId,
+        startAt: editTimeRange[0].toISOString(),
+        endAt: editTimeRange[1].toISOString(),
+      });
+      message.success("Cập nhật đề xuất thành công");
+      setEditModalVisible(false);
+      await fetchProposal();
+    } catch (error) {
+      console.error(error);
+      message.error("Cập nhật thất bại");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   const getProgress = () => {
     if (!proposal) return { percent: 0, status: "normal" as const };
     const totalSigners = proposal.signers.length;
@@ -447,6 +483,15 @@ export default function ProposalDetailPage() {
         title={
           <>
             <InfoCircleOutlined /> Thông tin chi tiết
+            {isAdmin && proposal.proposalType !== "REGULAR" && (
+              <Button
+                type="primary"
+                style={{ float: "right" }}
+                onClick={() => setEditModalVisible(true)}
+              >
+                Chỉnh sửa
+              </Button>
+            )}
           </>
         }
       >
@@ -472,6 +517,20 @@ export default function ProposalDetailPage() {
           <Descriptions.Item label="Cập nhật lần cuối">
             {toVietnamTime(proposal.updatedAt)}
           </Descriptions.Item>
+          {proposal.vehicle && (
+            <Descriptions.Item label="Xe sử dụng">
+              {proposal.vehicle.name}{" "}
+              {proposal.vehicle.plateNumber
+                ? `(${proposal.vehicle.plateNumber})`
+                : ""}
+            </Descriptions.Item>
+          )}
+          {proposal.startAt && proposal.endAt && (
+            <Descriptions.Item label="Thời gian sử dụng">
+              {toVietnamTime(proposal.startAt)} →{" "}
+              {toVietnamTime(proposal.endAt)}
+            </Descriptions.Item>
+          )}
         </Descriptions>
       </Card>
 
@@ -555,6 +614,44 @@ export default function ProposalDetailPage() {
           placeholder="Nhập lý do từ chối..."
         />
       </Modal>
+
+      {/* Modal chỉnh sửa (Admin Only) */}
+      {isAdmin && (
+        <Modal
+          title="Chỉnh sửa đề xuất"
+          open={editModalVisible}
+          onCancel={() => setEditModalVisible(false)}
+          onOk={handleUpdateProposal}
+          okText="Lưu"
+          cancelText="Hủy"
+          confirmLoading={actionLoading}
+        >
+          <Form layout="vertical">
+            <Form.Item label="Loại xe" required>
+              <Select
+                value={editVehicleId ?? undefined}
+                onChange={(value) => setEditVehicleId(value)}
+                placeholder="Chọn xe"
+              >
+                {vehicles.map((v) => (
+                  <Select.Option key={v.id} value={v.id}>
+                    {v.name} {v.plateNumber ? `(${v.plateNumber})` : ""}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item label="Thời gian sử dụng" required>
+              <RangePicker
+                showTime
+                value={editTimeRange ?? undefined}
+                onChange={(dates) => setEditTimeRange(dates as [Dayjs, Dayjs])}
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+          </Form>
+        </Modal>
+      )}
     </div>
   );
 }
