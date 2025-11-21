@@ -133,7 +133,7 @@ export default function VehicleReportPage() {
       width: 150,
       render: (proposal: Proposal) =>
         proposal ? (
-          <Tooltip title={`${proposal.name} - ${proposal.description}`}>
+          <Tooltip title={`${proposal.proposerName} - ${proposal.description}`}>
             <div
               style={{
                 backgroundColor: "#fadb14",
