@@ -38,6 +38,7 @@ import {
   CalendarOutlined,
   TeamOutlined,
   InfoCircleOutlined,
+  DownloadOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
 import dayjs, { Dayjs } from "dayjs";
@@ -427,9 +428,21 @@ export default function ProposalDetailPage() {
                   </Text>
                 </Space>
               </div>
+
               <div style={{ marginTop: 12 }} className="w-full min-w-[300px]">
+                <div className="flex justify-end">
+                  <a
+                    href={`/api/files/${proposalId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button type="primary" icon={<DownloadOutlined />}>
+                      Tải xuống
+                    </Button>
+                  </a>
+                </div>
                 {proposal.statusSign && (
-                  <Space>
+                  <Space className="flex justify-end">
                     <Button
                       type="primary"
                       loading={actionLoading}
@@ -447,7 +460,7 @@ export default function ProposalDetailPage() {
                   </Space>
                 )}
                 {proposal.statusApprove && (
-                  <Space>
+                  <Space className="flex justify-end">
                     <Button
                       type="primary"
                       loading={actionLoading}
