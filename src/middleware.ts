@@ -7,19 +7,22 @@ export function middleware(req: NextRequest) {
   if (
     pathname.startsWith("/login") ||
     pathname.startsWith("/api/auth") ||
+    pathname.startsWith("/api/auth") ||
+    pathname.startsWith("/app/lib") ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/favicon") ||
     pathname.startsWith("/icons") ||
     pathname.startsWith("/storage") ||
     pathname.startsWith("/api") ||
-    pathname.startsWith("/manifest") ||   // 👈 THÊM DÒNG NÀY
-    pathname.startsWith("/robots")        // 👈 và thêm robots.txt nếu có
+    pathname.startsWith("/manifest") || // 👈 THÊM DÒNG NÀY
+    pathname.startsWith("/robots") // 👈 và thêm robots.txt nếu có
   ) {
     return NextResponse.next();
   }
 
   // Kiểm tra token
   const token = req.cookies.get("token")?.value;
+  console.log(token);
 
   if (!token) {
     const response = NextResponse.redirect(new URL("/login", req.url));

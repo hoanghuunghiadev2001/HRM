@@ -18,9 +18,11 @@ export async function GET(request: NextRequest) {
     const decoded = jwt.verify(token, JWT_SECRET) as {
       id: number;
       role: string;
+      employeeCode: string;
     };
     const employeeId = decoded.id;
     const role = decoded.role;
+    const employeeCode = decoded.employeeCode;
 
     // ===== Params =====
     const { searchParams } = request.nextUrl;
@@ -33,7 +35,7 @@ export async function GET(request: NextRequest) {
 
     // ===== 1. CREATED PROPOSALS =====
     const createdWhere =
-      role === "ADMIN"
+      role === "ADMIN" || employeeCode === "00016"
         ? { ...searchFilter }
         : {
             AND: [
