@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
@@ -29,9 +30,40 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1", 10);
     const pageSize = parseInt(searchParams.get("pageSize") || "10", 10);
     const search = searchParams.get("search") || "";
+    const status = searchParams.get("status");
+    const proposalType = searchParams.get("proposalType");
+    const createdFrom = searchParams.get("createdFrom");
+    const createdTo = searchParams.get("createdTo");
     const skip = (page - 1) * pageSize;
 
-    const searchFilter = search ? { title: { contains: search } } : {};
+    // ===== Build search filter =====
+    const searchFilter: any = {};
+
+    // Search text: title, name, createdBy.name
+    if (search) {
+      searchFilter.OR = [
+        { title: { contains: search } },
+        { name: { contains: search } },
+        { createdBy: { name: { contains: search } } },
+      ];
+    }
+
+    // Filter theo trạng thái
+    if (status) {
+      searchFilter.status = status;
+    }
+
+    // Filter theo loại proposal
+    if (proposalType) {
+      searchFilter.proposalType = proposalType;
+    }
+
+    // Filter theo ngày tạo
+    if (createdFrom || createdTo) {
+      searchFilter.createdAt = {};
+      if (createdFrom) searchFilter.createdAt.gte = new Date(createdFrom);
+      if (createdTo) searchFilter.createdAt.lte = new Date(createdTo);
+    }
 
     // ===== 1. CREATED PROPOSALS =====
     const createdWhere =
@@ -70,7 +102,6 @@ export async function GET(request: NextRequest) {
       include: { ...defaultInclude(), signers: true },
     });
 
-    // Giữ đúng luồng: chỉ cho phép ký nếu là người đầu tiên "pending" trong cùng cấp
     const need_to_sign_filtered = need_to_sign_all.filter((p) => {
       const pending = p.signers.filter((s) => s.status === "pending");
       if (pending.length === 0) return false;
@@ -93,7 +124,6 @@ export async function GET(request: NextRequest) {
       include: { ...defaultInclude(), approvers: true },
     });
 
-    // Giữ đúng luồng: chỉ cho phép duyệt nếu là người đầu tiên "pending" trong cùng cấp
     const need_to_approve_filtered = need_to_approve_all.filter((p) => {
       const pending = p.approvers.filter((a) => a.status === "pending");
       if (pending.length === 0) return false;
@@ -114,6 +144,8 @@ export async function GET(request: NextRequest) {
       page,
       pageSize,
       search,
+      status,
+      proposalType,
       created: { data: created, total: createdTotal },
       need_to_sign: { data: need_to_sign, total: needToSignTotal },
       need_to_approve: { data: need_to_approve, total: needToApproveTotal },
