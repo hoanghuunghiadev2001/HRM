@@ -157,10 +157,10 @@ export async function GET(
     // tạo hash xác thực (sha256 rút gọn 12 ký tự)
     const hashSource = JSON.stringify({
       id: proposal.id,
-      updatedAt: proposal.updatedAt,
-      approvers: proposal.approvers.map((x) => x.id),
-      timestamp: Date.now(),
-      signers: proposal.signers.map((x) => x.id),
+      name: proposal.name,
+      title: proposal.title,
+      description: proposal.description,
+      proposerId: proposal.proposerId,
     });
     const fullSha = crypto
       .createHash("sha256")
