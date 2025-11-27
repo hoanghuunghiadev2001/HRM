@@ -299,7 +299,7 @@ export async function GET(
       }
       return { page, y };
     }
-
+    const headerColor = rgb(0.33, 0.33, 0.33);
     // Vẽ danh sách ký và phê duyệt
     let result = drawSignersList(page, proposal.signers, y);
     page = result.page;
@@ -324,12 +324,19 @@ export async function GET(
       }`;
 
       const rightWidth = font.widthOfTextAtSize(rightText, 10);
-      p.drawText(leftText, { x: margin, y: headerY, size: 10, font });
+      p.drawText(leftText, {
+        x: margin,
+        y: headerY,
+        size: 8,
+        font,
+        color: headerColor,
+      });
       p.drawText(rightText, {
         x: pWidth - margin - rightWidth,
         y: headerY,
-        size: 10,
+        size: 8,
         font,
+        color: headerColor,
       });
     }
 
