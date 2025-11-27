@@ -159,6 +159,7 @@ export async function GET(
       id: proposal.id,
       updatedAt: proposal.updatedAt,
       approvers: proposal.approvers.map((x) => x.id),
+      timestamp: Date.now(),
       signers: proposal.signers.map((x) => x.id),
     });
     const fullSha = crypto
