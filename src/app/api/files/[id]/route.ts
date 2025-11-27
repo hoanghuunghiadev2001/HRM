@@ -166,7 +166,8 @@ export async function GET(
       .createHash("sha256")
       .update(hashSource)
       .digest("hex");
-    const sha = fullSha.substring(0, 12);
+    const now = dayjs().tz("Asia/Ho_Chi_Minh");
+    const sha = `TBD${now.format("YYYYMM")}${proposal.id}`;
 
     let pdfDoc: PDFDocument;
     if (fileType === "application/pdf") {
