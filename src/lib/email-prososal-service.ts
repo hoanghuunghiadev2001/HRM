@@ -203,7 +203,7 @@ export class EmailService {
         proposal.id
       }" 
                 style="background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
-                Phê duyệt đề xuất
+               Xem chi tiết 
               </a>
             </div>
           </div>
