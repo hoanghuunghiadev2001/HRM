@@ -349,7 +349,9 @@ export async function GET(
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="proposal_${proposal.id}.pdf"`,
+        "Content-Disposition": `attachment; filename="TBD${now.format(
+          "YYYYMM"
+        )}${proposal.id}.pdf"`,
       },
     });
   } catch (err) {
