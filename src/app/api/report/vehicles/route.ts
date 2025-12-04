@@ -1,21 +1,21 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { cookies } from "next/headers";
 
-export async function GET(req: NextResponse) {
+export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const dateParam = searchParams.get("date"); // YYYY-MM-DD
 
-    const token = req.cookies.get("token")?.value;
+    // Lấy token từ cookies (đúng chuẩn App Router)
+    const token = (await cookies()).get("token")?.value;
 
     if (!token) {
       return NextResponse.json({ message: "Không có token" }, { status: 401 });
     }
 
-    // Nếu có date → dùng date đó, không thì dùng hôm nay
     const baseDate = dateParam ? new Date(dateParam) : new Date();
 
-    // Tính đầu ngày theo múi giờ VN
     const startOfDay = new Date(
       baseDate.getFullYear(),
       baseDate.getMonth(),
@@ -32,7 +32,6 @@ export async function GET(req: NextResponse) {
       999
     );
 
-    // Lấy tất cả đề xuất đã duyệt TRONG NGÀY ĐÃ CHỌN
     const proposals = await prisma.proposal.findMany({
       where: {
         status: "approved",
@@ -53,7 +52,6 @@ export async function GET(req: NextResponse) {
       },
     });
 
-    // Lấy toàn bộ xe
     const vehicles = await prisma.vehicle.findMany({
       orderBy: { name: "asc" },
     });
