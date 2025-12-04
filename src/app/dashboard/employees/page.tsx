@@ -17,10 +17,7 @@ import {
   TreeSelectProps,
 } from "antd";
 import { TableProps } from "antd";
-import {
-  EmployeesSumary,
-  fetchEmployeeSummary,
-} from "@/components/api";
+import { EmployeesSumary, fetchEmployeeSummary } from "@/components/api";
 import ModalLoading from "@/components/modalLoading";
 import { ListCollapse, PlusIcon } from "lucide-react";
 import { createStyles } from "antd-style";
@@ -132,7 +129,7 @@ export default function EmployeesPage() {
         department:
           role === "ADMIN" || role === "MANAGER"
             ? filterDepartment
-            : department ?? '',
+            : department ?? "",
         name: filterName,
         employeeCode: filterMSNV,
         page: page,
@@ -494,32 +491,29 @@ export default function EmployeesPage() {
     }
   };
 
-const handleFileEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (!file) return;
+  const handleFileEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-  setLoading(true);
-  const formData = new FormData();
-  formData.append("file", file); // ✅ key "file" trùng với backend
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("file", file); // ✅ key "file" trùng với backend
 
-  fetch("/api/employees/uploadEmail", {
-    method: "POST",
-    body: formData, // browser tự set multipart/form-data
-  })
-    .then(res => res.json())
-    .then(result => {
-      if (result.success) addEmployeeSuccess();
-      else addEmployeeErr();
+    fetch("/api/employees/uploadEmail", {
+      method: "POST",
+      body: formData, // browser tự set multipart/form-data
     })
-    .catch(err => {
-      console.error(err);
-      addEmployeeErr();
-    })
-    .finally(() => setLoading(false));
-};
-
-
-
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.success) addEmployeeSuccess();
+        else addEmployeeErr();
+      })
+      .catch((err) => {
+        console.error(err);
+        addEmployeeErr();
+      })
+      .finally(() => setLoading(false));
+  };
 
   // hàm processExcell
   const processExcelData = (rawData: any[][]) => {
@@ -555,10 +549,7 @@ const handleFileEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
         if (headerCount >= 2) {
           headerRowIndex = i;
-          console.log(
-            `Found header row at index ${headerRowIndex} with headers:`,
-            row
-          );
+
           break;
         }
       }
@@ -653,7 +644,10 @@ const handleFileEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       />
       <ModalAddNewEmployee
         department={departments ?? []}
-        onClose={() => { setModalAddEmployee(false); getEmployeeSumary(pageTable, pageSize); }}
+        onClose={() => {
+          setModalAddEmployee(false);
+          getEmployeeSumary(pageTable, pageSize);
+        }}
         open={modalAddEmployee}
       />
       <ModalLoading isOpen={loading} />
@@ -664,10 +658,10 @@ const handleFileEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           {workStatus === "OFFICIAL"
             ? "chính thức"
             : workStatus === "PROBATION"
-              ? "học việc"
-              : workStatus === "RESIGNED"
-                ? "nghỉ việc"
-                : "đang làm việc"}{" "}
+            ? "học việc"
+            : workStatus === "RESIGNED"
+            ? "nghỉ việc"
+            : "đang làm việc"}{" "}
           :
         </p>
 
@@ -713,8 +707,14 @@ const handleFileEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               </label>
 
               {/* Upload email nhân viên */}
-              <label htmlFor="file-upload-email" className="relative inline-block">
-                <Button icon={<UploadOutlined />} className="!bg-green-600 !text-white">
+              <label
+                htmlFor="file-upload-email"
+                className="relative inline-block"
+              >
+                <Button
+                  icon={<UploadOutlined />}
+                  className="!bg-green-600 !text-white"
+                >
                   <p className="hidden sm:block">Upload Email</p>
                 </Button>
                 <input

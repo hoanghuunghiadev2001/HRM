@@ -26,7 +26,7 @@ import {
 import type { ColumnsType } from "antd/es/table";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 import ModalLoading from "@/components/modalLoading";
 import { useAppSelector } from "@/store/hook";
@@ -34,7 +34,6 @@ import { useAppSelector } from "@/store/hook";
 const { Title, Text } = Typography;
 const { TabPane } = Tabs as any;
 const { Search } = Input;
-const { RangePicker } = DatePicker;
 
 interface Proposal {
   id: number;
@@ -102,7 +101,8 @@ export default function MyProposalsPage() {
   const [proposalTypeFilter, setProposalTypeFilter] = useState<
     string | undefined
   >();
-  const [dateRange, setDateRange] = useState<[any, any] | null>(null);
+  // CHANGED: chọn 1 ngày duy nhất
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
 
   const { employeeCode, role } = useAppSelector((state) => state.user);
   const [msg, contextHolder] = message.useMessage();
@@ -152,9 +152,12 @@ export default function MyProposalsPage() {
 
       if (statusFilter) params.append("status", statusFilter);
       if (proposalTypeFilter) params.append("proposalType", proposalTypeFilter);
-      if (dateRange) {
-        params.append("createdFrom", dateRange[0].format("YYYY-MM-DD"));
-        params.append("createdTo", dateRange[1].format("YYYY-MM-DD"));
+
+      // Nếu có selectedDate -> gửi createdFrom & createdTo cùng ngày (YYYY-MM-DD)
+      if (selectedDate) {
+        const d = selectedDate.format("YYYY-MM-DD");
+        params.append("createdFrom", d);
+        params.append("createdTo", d);
       }
 
       const response = await fetch(
@@ -185,7 +188,7 @@ export default function MyProposalsPage() {
     }, 500);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchText, statusFilter, proposalTypeFilter, dateRange, pageSize]);
+  }, [searchText, statusFilter, proposalTypeFilter, selectedDate, pageSize]);
 
   useEffect(() => {
     fetchProposals();
@@ -445,10 +448,13 @@ export default function MyProposalsPage() {
           <Select.Option value="REGULAR">REGULAR</Select.Option>
           <Select.Option value="VEHICLE">VEHICLE</Select.Option>
         </Select>
-        <RangePicker
-          onChange={(dates) =>
-            setDateRange(dates ? [dates[0], dates[1]] : null)
-          }
+
+        {/* CHANGED: DatePicker cho 1 ngày */}
+        <DatePicker
+          value={selectedDate}
+          onChange={(date) => setSelectedDate(date)}
+          format="DD/MM/YYYY"
+          allowClear
         />
       </div>
 

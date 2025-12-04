@@ -57,7 +57,6 @@ export class KeyManager {
 
       const [payloadBase64, signature] = token.split(".");
       if (!payloadBase64 || !signature) {
-        console.log("Invalid token format: missing payload or signature");
         return { valid: false };
       }
 
@@ -75,12 +74,6 @@ export class KeyManager {
       // Thêm log sau khi verify signature:
 
       if (signature !== expectedSignature) {
-        console.log(
-          "Signature mismatch. Expected:",
-          expectedSignature,
-          "Received:",
-          signature
-        );
         return { valid: false };
       }
 
@@ -90,14 +83,6 @@ export class KeyManager {
       const maxAge = 24 * 60 * 60 * 1000; // 24 giờ
 
       // Thêm log sau khi kiểm tra thời gian hết hạn:
-      console.log(
-        "Token age:",
-        tokenAge,
-        "Max age:",
-        maxAge,
-        "Expired:",
-        tokenAge > maxAge
-      );
 
       if (tokenAge > maxAge) {
         console.log("Token expired.");

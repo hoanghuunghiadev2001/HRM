@@ -47,7 +47,6 @@ export default function DashboardPage() {
       </div>
     );
   }
-  console.log(dashboardData?.departmentDistribution);
 
   return (
     <div className="flex min-h-screen w-full flex-col">

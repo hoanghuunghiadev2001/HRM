@@ -5,6 +5,18 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
+function parseYMDToStart(ymd?: string) {
+  if (!ymd) return undefined;
+  const [y, m, d] = ymd.split("-").map((s) => Number(s));
+  // new Date(year, monthIndex, day, hour, minute, second, ms)
+  return new Date(y, m - 1, d, 0, 0, 0, 0);
+}
+function parseYMDToEnd(ymd?: string) {
+  if (!ymd) return undefined;
+  const [y, m, d] = ymd.split("-").map((s) => Number(s));
+  return new Date(y, m - 1, d, 23, 59, 59, 999);
+}
+
 export async function GET(request: NextRequest) {
   try {
     // ===== Xác thực token =====
@@ -32,8 +44,8 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || "";
     const status = searchParams.get("status");
     const proposalType = searchParams.get("proposalType");
-    const createdFrom = searchParams.get("createdFrom");
-    const createdTo = searchParams.get("createdTo");
+    const createdFrom = searchParams.get("createdFrom") || undefined;
+    const createdTo = searchParams.get("createdTo") || undefined;
     const skip = (page - 1) * pageSize;
 
     // ===== Build search filter =====
@@ -58,11 +70,16 @@ export async function GET(request: NextRequest) {
       searchFilter.proposalType = proposalType;
     }
 
-    // Filter theo ngày tạo
+    // Filter theo ngày tạo (FIXED)
     if (createdFrom || createdTo) {
+      // Nếu cả hai bằng nhau (chọn 1 ngày), dùng startOfDay..endOfDay
+      const fromDate = createdFrom ? parseYMDToStart(createdFrom) : undefined;
+      const toDate = createdTo ? parseYMDToEnd(createdTo) : undefined;
+
+      // Nếu chỉ truyền createdTo từ frontend (ví dụ user chỉ chọn 1 tham số), vẫn xử lý đúng
       searchFilter.createdAt = {};
-      if (createdFrom) searchFilter.createdAt.gte = new Date(createdFrom);
-      if (createdTo) searchFilter.createdAt.lte = new Date(createdTo);
+      if (fromDate) searchFilter.createdAt.gte = fromDate;
+      if (toDate) searchFilter.createdAt.lte = toDate;
     }
 
     // ===== 1. CREATED PROPOSALS =====

@@ -22,8 +22,6 @@ export function middleware(req: NextRequest) {
 
   // Kiểm tra token
   const token = req.cookies.get("token")?.value;
-  console.log(token);
-
   if (!token) {
     const response = NextResponse.redirect(new URL("/login", req.url));
     response.cookies.set("token", "", { maxAge: 0, path: "/" });

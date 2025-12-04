@@ -59,6 +59,7 @@ export async function POST(req: NextRequest) {
       employeeCode: employee.employeeCode,
       role: employee.role,
       departmentId: employee.workInfo?.departmentId || null, // 🔑 thêm dòng này
+      isActive: employee.isActive,
     };
 
     const expiresIn = remember ? "7d" : "1d";

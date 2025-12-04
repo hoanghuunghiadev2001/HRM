@@ -195,7 +195,6 @@ export default function AllRequestPage() {
 
   const onChangeSelectDepartment = (newValue: string) => {
     setDepartment(newValue);
-    console.log(newValue);
   };
 
   const getPendingApprovals = async (
@@ -228,9 +227,7 @@ export default function AllRequestPage() {
     })),
   }));
 
-  const onPopupScroll: TreeSelectProps["onPopupScroll"] = (e) => {
-    console.log("onPopupScroll", e);
-  };
+  const onPopupScroll: TreeSelectProps["onPopupScroll"] = (e) => {};
 
   const getApiAllRequestsApproved = async (page: number, pageSize: number) => {
     setLoading(true);

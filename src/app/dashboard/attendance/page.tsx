@@ -134,9 +134,7 @@ export default function AttendancePage() {
     })),
   }));
 
-  const onPopupScroll: TreeSelectProps["onPopupScroll"] = (e) => {
-    console.log("onPopupScroll", e);
-  };
+  const onPopupScroll: TreeSelectProps["onPopupScroll"] = (e) => {};
 
   const { RangePicker } = DatePicker;
   const maxDate = dayjs();
