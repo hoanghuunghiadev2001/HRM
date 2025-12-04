@@ -66,8 +66,6 @@ export async function DELETE(request: NextRequest) {
     await prisma.attendance.deleteMany({ where: { employeeId } });
     await prisma.workInfo.deleteMany({ where: { employeeId } });
     await prisma.contactInfo.deleteMany({ where: { employeeId } });
-    await prisma.personalInfo.deleteMany({ where: { employeeId } });
-    await prisma.otherInfo.deleteMany({ where: { employeeId } });
 
     // Xoá chính employee
     await prisma.employee.delete({
