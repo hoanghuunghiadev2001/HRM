@@ -48,7 +48,6 @@ const ModalEditEmployee = ({
 }: ModalEditEmployeeProps) => {
   const [imageUrl, setImageUrl] = useState<string>();
   const [loading, setLoading] = useState(false);
-  const [seniorityText, setSeniorityText] = useState<number>(0);
   const [isMounted, setIsMounted] = useState(false);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [selectedDepartmentId, setSelectedDepartmentId] = useState(0);
@@ -93,37 +92,11 @@ const ModalEditEmployee = ({
         contractEndDate: formData.contractEndDate,
       },
 
-      personalInfo: {
-        identityNumber: formData.identityNumber,
-        issueDate: formData.issueDate,
-        issuePlace: formData.issuePlace,
-        hometown: formData.hometown,
-        idAddress: formData.idAddress,
-        education: formData.education,
-        drivingLicense: formData.drivingLicense,
-        toyotaCertificate: formData.toyotaCertificate,
-        taxCode: formData.taxCode ?? employeeInfo?.employeeCode + "tax",
-        insuranceNumber:
-          formData.insuranceNumber ??
-          employeeInfo?.employeeCode + "insuranceNumber",
-        insuranceSalary: parseFloat(formData.insuranceSalary),
-      },
-
       contactInfo: {
         phoneNumber: formData.phoneNumber,
         relativePhone: formData.relativePhone,
         companyPhone: formData.companyPhone,
         email: formData.email,
-      },
-
-      otherInfo: {
-        workStatus: formData.workStatus,
-        resignedDate: formData.resignedDate || null,
-        documentsChecked: formData.documentsChecked ?? "",
-        updatedAt: formData.updatedAt,
-        VCB: formData.VCB,
-        MTCV: formData.MTCV,
-        PNJ: formData.PNJ,
       },
     };
 
@@ -133,26 +106,6 @@ const ModalEditEmployee = ({
       handleUpdateEmployee(employeeInfo?.employeeCode, payload);
     }
   };
-
-  function handleDateChange(date: dayjs.Dayjs | null): number {
-    if (!date) return 0;
-    const today = dayjs();
-    let totalMonths =
-      (today.year() - date.year()) * 12 + (today.month() - date.month());
-    if (today.date() < date.date()) totalMonths -= 1;
-    setSeniorityText(totalMonths);
-    return totalMonths;
-  }
-
-  function formatSeniorityText(months: number): string {
-    const years = Math.floor(months / 12);
-    const m = months % 12;
-    return (
-      `${years > 0 ? `${years} năm ` : ""}${
-        m > 0 ? `${m} tháng` : ""
-      }`.trim() || "0 tháng"
-    );
-  }
 
   //Up ảnh hồ sơ
   const beforeUpload = (file: FileType) => {
@@ -226,67 +179,12 @@ const ModalEditEmployee = ({
       // workInfo
       department: data.workInfo?.department?.id ?? "",
       position: data.workInfo?.position?.id ?? "",
-      specialization: data.workInfo?.specialization ?? "",
-      joinedTBD: data.workInfo?.joinedTBD
-        ? dayjs(data.workInfo?.joinedTBD, "DD/MM/YYYY")
-        : null,
-      joinedTeSCC: data.workInfo?.joinedTeSCC
-        ? dayjs(data.workInfo?.joinedTeSCC, "DD/MM/YYYY")
-        : null,
-      seniorityStart: data.workInfo?.seniorityStart
-        ? dayjs(data.workInfo?.seniorityStart, "DD/MM/YYYY")
-        : null,
-      seniority: formatSeniorityText(
-        handleDateChange(dayjs(data.workInfo?.seniorityStart, "DD/MM/YYYY"))
-      ),
-      contractNumber: data.workInfo?.contractNumber ?? "",
-      contractDate: data.workInfo?.contractDate
-        ? dayjs(data.workInfo?.contractDate, "DD/MM/YYYY")
-        : null,
-      contractType: data.workInfo?.contractType ?? "",
-      contractEndDate: data.workInfo?.contractEndDate
-        ? dayjs(data.workInfo?.contractEndDate, "DD/MM/YYYY")
-        : null,
-
-      // personalInfo
-      identityNumber: data.personalInfo?.identityNumber ?? "",
-      issueDate: data.personalInfo?.issueDate
-        ? dayjs(data.personalInfo?.issueDate, "DD/MM/YYYY")
-        : null,
-      issuePlace: data.personalInfo?.issuePlace ?? "",
-      hometown: data.personalInfo?.hometown ?? "",
-      idAddress: data.personalInfo?.idAddress ?? "",
-      education: data.personalInfo?.education ?? "",
-      drivingLicense: data.personalInfo?.drivingLicense ?? "",
-      toyotaCertificate: data.personalInfo?.toyotaCertificate ?? "",
-      taxCode:
-        data.personalInfo?.taxCode ?? employeeInfo?.employeeCode + "taxCode",
-      insuranceNumber:
-        data.personalInfo?.insuranceNumber ??
-        employeeInfo?.employeeCode + "insuranceNumber",
-      insuranceSalary: data.personalInfo?.insuranceSalary || null,
 
       // contactInfo
       phoneNumber: data.contactInfo?.phoneNumber ?? "",
       relativePhone: data.contactInfo?.relativePhone ?? "",
       companyPhone: data.contactInfo?.companyPhone ?? "",
       email: data.contactInfo?.email ?? "it@toyota.binhduong.vn",
-
-      // otherInfo
-      workStatus: data.otherInfo?.workStatus ?? "",
-      resignedDate: data.otherInfo?.resignedDate
-        ? dayjs
-            .utc(data.otherInfo?.resignedDate)
-            .tz("Asia/Ho_Chi_Minh")
-            .format("DD/MM/YYYY")
-        : null,
-      documentsChecked: data.otherInfo?.documentsChecked ?? "",
-      updatedAt: data.otherInfo?.updatedAt
-        ? dayjs(data.otherInfo?.updatedAt, "DD/MM/YYYY")
-        : null,
-      VCB: data.otherInfo?.VCB ?? "",
-      MTCV: data.otherInfo?.MTCV ?? "",
-      PNJ: data.otherInfo?.PNJ ?? "",
     };
   }
 
@@ -462,48 +360,6 @@ const ModalEditEmployee = ({
                 >
                   <Input />
                 </Form.Item>
-                <Form.Item
-                  name="identityNumber"
-                  label="Số CCCD"
-                  rules={[{ required: true }]}
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  name="issueDate"
-                  label="Ngày cấp"
-                  rules={[{ required: true }]}
-                >
-                  <DatePicker
-                    placeholder="Chọn ngày"
-                    className="w-full"
-                    format="DD/MM/YYYY"
-                    disabledDate={(current) => {
-                      return current && current > maxDate;
-                    }}
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="issuePlace"
-                  label="Nơi cấp"
-                  rules={[{ required: true }]}
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  name="hometown"
-                  label="Nguyên quán"
-                  rules={[{ required: true }]}
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  name="idAddress"
-                  label="Địa chỉ"
-                  rules={[{ required: true }]}
-                >
-                  <Input />
-                </Form.Item>
               </div>
               <div className="mb-2 mt-4">
                 <p className="text-xl ">2. Thông Tin Liên Hệ:</p>
@@ -576,158 +432,8 @@ const ModalEditEmployee = ({
                     }))}
                   ></Select>
                 </Form.Item>
-                <Form.Item name="joinedTBD" label="Ngày vào TBD">
-                  <DatePicker
-                    placeholder="Chọn ngày"
-                    className="w-full"
-                    format="DD/MM/YYYY"
-                    disabledDate={(current) => {
-                      return current && current > maxDate;
-                    }}
-                  />
-                </Form.Item>
-                <Form.Item name="joinedTeSCC" label="Ngày vào TeSCC">
-                  <DatePicker
-                    placeholder="Chọn ngày"
-                    className="w-full"
-                    format="DD/MM/YYYY"
-                    disabledDate={(current) => {
-                      return current && current > maxDate;
-                    }}
-                  />
-                </Form.Item>
-                <Form.Item name="seniorityStart" label="Ngày tính TN">
-                  <DatePicker
-                    placeholder="Chọn ngày"
-                    className="w-full"
-                    format="DD/MM/YYYY"
-                    onChange={handleDateChange}
-                    disabledDate={(current) => {
-                      return current && current > maxDate;
-                    }}
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="seniority"
-                  label="Thâm niên"
-                  valuePropName={formatSeniorityText(seniorityText)}
-                  //   rules={[{ required: true }]}
-                >
-                  <Input
-                    disabled
-                    value={formatSeniorityText(seniorityText)}
-                    // defaultValue={seniorityText}
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="contractNumber"
-                  label="Số HĐ"
-                  //   rules={[{ required: true }]}
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item name="contractType" label="Loại HĐ">
-                  <Input />
-                </Form.Item>
-                <Form.Item name="contractEndDate" label="Ngày hết hạn HĐ">
-                  <DatePicker
-                    placeholder="Chọn ngày"
-                    className="w-full"
-                    format="DD/MM/YYYY"
-                  />
-                </Form.Item>
               </div>
-              <div className="mb-2 mt-4">
-                <p className="text-xl ">4. Chứng chỉ & Trình độ:</p>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <Form.Item name="education" label="Trình độ">
-                  <Select
-                    placeholder="Trình độ"
-                    allowClear
-                    options={[
-                      { value: "TH", label: "Tiểu học" },
-                      { value: "THCS", label: "THCS" },
-                      { value: "THPT", label: "THPT" },
-                      { value: "CD", label: "Cao Đẳng" },
-                      { value: "DH", label: "Đại học" },
-                      { value: "ThS", label: "Thạc sĩ" },
-                      { value: "TS", label: "Tiến sĩ" },
-                      { value: "PGS", label: "Phó giáo sư" },
-                      { value: "GS", label: "Giáo sư" },
-                    ]}
-                  ></Select>
-                </Form.Item>
-                <Form.Item name="specialization" label="Chuyên ngành">
-                  <Input />
-                </Form.Item>
-                <Form.Item name="drivingLicense" label="Bằng lái xe">
-                  <Input />
-                </Form.Item>
-                <Form.Item name="toyotaCertificate" label="Chứng chỉ Toyota">
-                  <Input />
-                </Form.Item>
-              </div>
-              <div className="mb-2 mt-4">
-                <p className="text-xl ">4. Thông tin bảo hiểm / Thuế:</p>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <Form.Item name="taxCode" label="Mã số thuế">
-                  <Input type="number" />
-                </Form.Item>
-                <Form.Item name="insuranceNumber" label="Số sổ BHXH">
-                  <Input type="number" />
-                </Form.Item>
-                <Form.Item name="insuranceSalary" label="Lương đóng BH">
-                  <Input type="number" />
-                </Form.Item>
-              </div>
-              <div className="mb-2 mt-4">
-                <p className="text-xl ">6. Thông tin khác:</p>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <Form.Item
-                  name="workStatus"
-                  label="Trạng thái làm việc"
-                  rules={[{ required: true }]}
-                >
-                  <Select
-                    placeholder="Bộ phận"
-                    allowClear
-                    options={[
-                      { value: "OFFICIAL", label: "Chính thức" },
-                      { value: "PROBATION", label: "Học việc" },
-                      { value: "RESIGNED", label: "Nghỉ việc" },
-                    ]}
-                  ></Select>
-                </Form.Item>
-                <Form.Item name="resignedDate" label="Ngày nghỉ">
-                  <DatePicker
-                    placeholder="Chọn ngày"
-                    className="w-full"
-                    format="DD/MM/YYYY"
-                  />
-                </Form.Item>
-                <Form.Item name="documentsChecked" label="Kiểm tra hồ sơ">
-                  <Input />
-                </Form.Item>
-                <Form.Item name="updatedAt" label="Thời gian cập nhật">
-                  <DatePicker
-                    placeholder="Chọn ngày"
-                    className="w-full"
-                    format="DD/MM/YYYY"
-                  />
-                </Form.Item>
-                <Form.Item name="VCB" label="Ngân hàng VCB">
-                  <Input />
-                </Form.Item>
-                <Form.Item name="MTCV" label="MTCV">
-                  <Input />
-                </Form.Item>
-                <Form.Item name="PNJ" label="PNJ">
-                  <Input />
-                </Form.Item>
-              </div>
+
               {/* <Form.Item {...tailLayout}>
                 <Space>
                   <Button type="primary" htmlType="submit">

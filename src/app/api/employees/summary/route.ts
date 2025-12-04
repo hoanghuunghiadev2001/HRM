@@ -12,7 +12,6 @@ export async function GET(req: NextRequest) {
     const department = searchParams.get("department") || ""; // "departmentId-positionId"
     const name = searchParams.get("name") || "";
     const employeeCode = searchParams.get("employeeCode") || "";
-    const workStatus = searchParams.get("workStatus") || ""; // OFFICIAL | PROBATION | RESIGNED
     const pageSizeParam = searchParams.get("pageSize");
     const pageParam = searchParams.get("page");
 
@@ -55,16 +54,6 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    if (workStatus) {
-      andFilters.push({ otherInfo: { workStatus: workStatus as any } });
-    } else {
-      andFilters.push({
-        otherInfo: {
-          workStatus: { in: ["OFFICIAL", "PROBATION"] },
-        },
-      });
-    }
-
     const whereFilter: Prisma.EmployeeWhereInput = {
       AND: andFilters,
     };
@@ -82,11 +71,6 @@ export async function GET(req: NextRequest) {
           select: {
             department: true,
             position: true,
-          },
-        },
-        otherInfo: {
-          select: {
-            workStatus: true,
           },
         },
       },

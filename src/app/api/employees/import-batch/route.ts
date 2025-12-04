@@ -123,9 +123,7 @@ export async function POST(request: NextRequest) {
           where: { employeeCode },
           include: {
             workInfo: true,
-            personalInfo: true,
             contactInfo: true,
-            otherInfo: true,
           },
         });
 
@@ -281,14 +279,6 @@ export async function POST(request: NextRequest) {
           });
 
           // Update or create PersonalInfo
-          await prisma.personalInfo.upsert({
-            where: { employeeId: existingEmployee.id },
-            update: personalInfoData,
-            create: {
-              ...personalInfoData,
-              employeeId: existingEmployee.id,
-            },
-          });
 
           // Update or create ContactInfo
           await prisma.contactInfo.upsert({
@@ -301,14 +291,6 @@ export async function POST(request: NextRequest) {
           });
 
           // Update or create OtherInfo
-          await prisma.otherInfo.upsert({
-            where: { employeeId: existingEmployee.id },
-            update: otherInfoData,
-            create: {
-              ...otherInfoData,
-              employeeId: existingEmployee.id,
-            },
-          });
 
           result.updated++;
         } else {
@@ -320,14 +302,9 @@ export async function POST(request: NextRequest) {
               workInfo: {
                 create: workInfoData,
               },
-              personalInfo: {
-                create: personalInfoData,
-              },
+
               contactInfo: {
                 create: contactInfoData,
-              },
-              otherInfo: {
-                create: otherInfoData,
               },
             },
           });

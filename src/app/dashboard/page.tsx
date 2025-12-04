@@ -416,44 +416,6 @@ const Profile = () => {
             titleValue="Chức vụ"
             value={dataProfile?.workInfo?.position?.name}
           />
-          <InfoPersonal
-            titleValue="Số CCCD"
-            value={dataProfile?.personalInfo?.identityNumber}
-          />
-          <InfoPersonal
-            titleValue="Ngày cấp"
-            value={dataProfile?.personalInfo?.issueDate}
-          />
-          <InfoPersonal
-            titleValue="Nơi cấp"
-            value={dataProfile?.personalInfo?.issuePlace}
-          />
-          <InfoPersonal
-            titleValue="Số điện thoại"
-            value={dataProfile?.contactInfo?.phoneNumber}
-          />
-          <InfoPersonal
-            titleValue="Nguyên quán"
-            value={dataProfile?.personalInfo?.hometown}
-          />
-          <InfoPersonal
-            titleValue="Địa chỉ"
-            value={dataProfile?.personalInfo?.idAddress}
-          />
-          <InfoPersonal
-            titleValue="Mã số thuế"
-            value={dataProfile?.personalInfo?.taxCode}
-          />
-          <InfoPersonal
-            titleValue="Số sổ BH"
-            value={dataProfile?.personalInfo?.insuranceNumber}
-          />
-          <InfoPersonal
-            titleValue="Lương đóng BH"
-            value={formatCurrency(
-              dataProfile?.personalInfo?.insuranceSalary ?? 0
-            )}
-          />
         </div>
       </div>
       <div className="w-full mt-5">
@@ -525,154 +487,39 @@ const Profile = () => {
             titleValue="Ngành"
             value={dataProfile?.workInfo?.specialization}
           />
-          <InfoPersonal
-            titleValue="Ngày vào TBD"
-            value={dataProfile?.workInfo?.joinedTBD}
-          />
-          <InfoPersonal
-            titleValue="Ngày vào TeSCC"
-            value={dataProfile?.workInfo?.joinedTeSCC}
-          />
-          <InfoPersonal
-            titleValue="Ngày tính thâm niên"
-            value={dataProfile?.workInfo?.seniorityStart}
-          />
-          <InfoPersonal
-            titleValue="Thâm niên"
-            value={formatSeniorityText(
-              handleDateChange(
-                dayjs(dataProfile?.workInfo?.seniorityStart, "DD/MM/YYYY")
-              )
-            )}
-          />
-          <InfoPersonal
-            titleValue="Số hợp đồng"
-            value={dataProfile?.workInfo?.contractNumber}
-          />
-          <InfoPersonal
-            titleValue="Ngày ký HĐ"
-            value={dataProfile?.workInfo?.contractDate}
-          />
-          <InfoPersonal
-            titleValue="Loại hợp đồng"
-            value={dataProfile?.workInfo?.contractType}
-          />
-          <InfoPersonal
-            titleValue="Ngày hết hạn HĐ"
-            value={dataProfile?.workInfo?.contractEndDate}
-          />
 
-          <Select
-            placeholder="Chọn người quản lý"
-            value={
-              managerUser
-                ? {
-                    value: managerUser,
-                    label: userSelectOptions.find(
-                      (opt) => String(opt.value) === String(managerUser)
-                    )?.label,
-                  }
-                : undefined
-            }
-            onChange={(value) => setManagerUser(Number(value))}
-            options={userSelectOptions}
-            style={{ width: "100%", marginTop: 8 }}
-            showSearch
-            optionFilterProp="searchText"
-            filterOption={(input, option) => {
-              // ép kiểu option cho chắc chắn
-              const searchText =
-                (option as { searchText?: string })?.searchText ?? "";
-              return searchText.toLowerCase().includes(input.toLowerCase());
-            }}
-          />
+          <div className="flex items-center gap-2 ">
+            <p className="font-bold  flex-shrink-0   h-fit">
+              Chọn người quản lý :
+            </p>
+            <Select
+              placeholder="Chọn người quản lý"
+              value={
+                managerUser
+                  ? {
+                      value: managerUser,
+                      label: userSelectOptions.find(
+                        (opt) => String(opt.value) === String(managerUser)
+                      )?.label,
+                    }
+                  : undefined
+              }
+              onChange={(value) => setManagerUser(Number(value))}
+              options={userSelectOptions}
+              style={{ width: "100%", marginTop: 8 }}
+              showSearch
+              optionFilterProp="searchText"
+              filterOption={(input, option) => {
+                // ép kiểu option cho chắc chắn
+                const searchText =
+                  (option as { searchText?: string })?.searchText ?? "";
+                return searchText.toLowerCase().includes(input.toLowerCase());
+              }}
+            />
+          </div>
         </div>
       </div>
-      <div className="w-full mt-5">
-        <p className="font-bold text-2xl text-[#4a4a6a]">
-          4. Chứng chỉ & Trình độ:
-        </p>
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4 pr-4 gap-4 border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
-          <InfoPersonal
-            titleValue="Trình độ học vấn"
-            value={dataProfile?.personalInfo?.education}
-          />
-          <InfoPersonal
-            titleValue="Bằng lái xe"
-            value={dataProfile?.personalInfo?.drivingLicense}
-          />
-          <InfoPersonal
-            titleValue="Chứng chỉ Toyota"
-            value={dataProfile?.personalInfo?.toyotaCertificate}
-          />
-        </div>
-      </div>
-      <div className="w-full mt-5">
-        <p className="font-bold text-2xl text-[#4a4a6a]">
-          5. Thông tin bảo hiểm / Thuế:
-        </p>
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4 pr-4 gap-4 border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
-          <InfoPersonal
-            titleValue="Mã số thuế"
-            value={dataProfile?.personalInfo?.taxCode}
-          />
-          <InfoPersonal
-            titleValue="Số sổ BHXH"
-            value={dataProfile?.personalInfo?.insuranceNumber}
-          />
-          <InfoPersonal
-            titleValue="Lương đóng BH"
-            value={formatCurrency(
-              dataProfile?.personalInfo?.insuranceSalary ?? 0
-            )}
-          />
-        </div>
-      </div>
-      <div className="w-full mt-5">
-        <p className="font-bold text-2xl text-[#4a4a6a]">
-          6. Trạng thái và thông tin khác:
-        </p>
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-1 w-full pl-4 pr-4 gap-4 border border-[#e6e6e6] shadow-xl p-4 rounded-xl">
-          <InfoPersonal
-            titleValue="Trạng thái làm việc"
-            value={
-              dataProfile?.otherInfo?.workStatus === "OFFICIAL"
-                ? "Chính thức"
-                : dataProfile?.otherInfo?.workStatus === "PROBATION"
-                ? "Thử việc"
-                : "Nghỉ việc"
-            }
-          />
-          <InfoPersonal
-            titleValue="Ngày nghỉ"
-            value={dataProfile?.otherInfo?.resignedDate ?? ""}
-          />
-          <InfoPersonal
-            titleValue="Đã kiểm tra hồ sơ"
-            value={
-              dataProfile?.otherInfo?.documentsChecked
-                ? "Đã kiểm tra"
-                : "Chưa kiểm tra"
-            }
-          />
-          <InfoPersonal
-            titleValue="Ngân hàng VCB"
-            value={dataProfile?.otherInfo?.VCB}
-          />
-          <InfoPersonal
-            titleValue="MTCV"
-            value={
-              dataProfile?.otherInfo?.MTCV
-                ? "Có bảng MTCV"
-                : "Không có bảng MTCV"
-            }
-          />
-          <InfoPersonal
-            titleValue="PNJ"
-            value={dataProfile?.otherInfo?.PNJ ? "R" : ""}
-          />
-        </div>
-      </div>
+
       <button
         className="flex mt-4 gap-2 items-center h-10 px-4 rounded-2xl bg-gradient-to-r from-[#aa0404] to-[#350000] cursor-pointer !text-white font-semibold"
         onClick={handleUpdateProfile}

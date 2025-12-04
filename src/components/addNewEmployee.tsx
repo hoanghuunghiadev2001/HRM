@@ -33,7 +33,6 @@ const ModalAddNewEmployee = ({
 }: ModalAddNewEmployeeProps) => {
   const [imageUrl, setImageUrl] = useState<string>();
   const [loading, setLoading] = useState(false);
-  const [seniorityText, setSeniorityText] = useState<string>("");
   const [departments, setDepartments] = useState<Department[]>([]);
   const [selectedDepartmentId, setSelectedDepartmentId] = useState(0);
   const [positions, setPositions] = useState<Position[]>([]);
@@ -86,7 +85,7 @@ const ModalAddNewEmployee = ({
         avatar: imageUrl ?? null,
 
         workInfo: {
-          departmentId:formData.department,
+          departmentId: formData.department,
           positionId: formData.position,
           specialization: formData.specialization,
           joinedTBD: formData.joinedTBD,
@@ -154,43 +153,6 @@ const ModalAddNewEmployee = ({
       console.error(" Lỗi gửi dữ liệu:", error);
       throw error;
     }
-  };
-
-  const handleDateChange = (date: dayjs.Dayjs | null) => {
-    if (!date) {
-      setSeniorityText("");
-      return;
-    }
-
-    const today = dayjs();
-    const selected = date;
-
-    // Tính tổng tháng giữa 2 ngày
-    let totalMonths =
-      (today.year() - selected.year()) * 12 +
-      (today.month() - selected.month());
-
-    if (today.date() < selected.date()) {
-      // Nếu ngày hiện tại nhỏ hơn ngày chọn thì trừ 1 tháng (chưa đủ tháng)
-      totalMonths -= 1;
-    }
-
-    // Tính năm và tháng từ tổng tháng
-    const years = Math.floor(totalMonths / 12);
-    const months = totalMonths % 12;
-
-    let result = "";
-    if (years > 0) {
-      result += `${years} năm `;
-    }
-    if (months > 0) {
-      result += `${months} tháng`;
-    }
-    if (!result) {
-      result = "0 tháng";
-    }
-
-    setSeniorityText(result.trim());
   };
 
   //Up ảnh hồ sơ
@@ -274,7 +236,7 @@ const ModalAddNewEmployee = ({
               labelAlign="left"
               labelWrap
               validateMessages={validateMessages}
-            //   style={{ maxWidth: 600 }}
+              //   style={{ maxWidth: 600 }}
             >
               <div className="flex justify-center">
                 <Form.Item
@@ -362,48 +324,6 @@ const ModalAddNewEmployee = ({
                 >
                   <Input />
                 </Form.Item>
-                <Form.Item
-                  name="identityNumber"
-                  label="Số CCCD"
-                  rules={[{ required: true }]}
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  name="issueDate"
-                  label="Ngày cấp"
-                  rules={[{ required: true }]}
-                >
-                  <DatePicker
-                    placeholder="Chọn ngày"
-                    className="w-full"
-                    format="DD/MM/YYYY"
-                    disabledDate={(current) => {
-                      return current && current > maxDate;
-                    }}
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="issuePlace"
-                  label="Nơi cấp"
-                  rules={[{ required: true }]}
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  name="hometown"
-                  label="Nguyên quán"
-                  rules={[{ required: true }]}
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  name="idAddress"
-                  label="Địa chỉ"
-                  rules={[{ required: true }]}
-                >
-                  <Input />
-                </Form.Item>
               </div>
               <div className="mb-2 mt-4">
                 <p className="text-xl ">2. Thông Tin Liên Hệ:</p>
@@ -412,21 +332,21 @@ const ModalAddNewEmployee = ({
                 <Form.Item
                   name="phoneNumber"
                   label="Số DT"
-                //   rules={[{ required: true }]}
+                  //   rules={[{ required: true }]}
                 >
                   <Input type="number" />
                 </Form.Item>
                 <Form.Item
                   name="relativePhone"
                   label="SĐT người thân"
-                //   rules={[{ required: true }]}
+                  //   rules={[{ required: true }]}
                 >
                   <Input type="number" />
                 </Form.Item>
                 <Form.Item
                   name="companyPhone"
                   label="SĐT Cty"
-                //   rules={[{ required: true }]}
+                  //   rules={[{ required: true }]}
                 >
                   <Input type="number" />
                 </Form.Item>
@@ -478,171 +398,8 @@ const ModalAddNewEmployee = ({
                     }))}
                   ></Select>
                 </Form.Item>
-                <Form.Item name="joinedTBD" label="Ngày vào TBD">
-                  <DatePicker
-                    placeholder="Chọn ngày"
-                    className="w-full"
-                    format="DD/MM/YYYY"
-                    disabledDate={(current) => {
-                      return current && current > maxDate;
-                    }}
-                  />
-                </Form.Item>
-                <Form.Item name="joinedTeSCC" label="Ngày vào TeSCC">
-                  <DatePicker
-                    placeholder="Chọn ngày"
-                    className="w-full"
-                    format="DD/MM/YYYY"
-                    disabledDate={(current) => {
-                      return current && current > maxDate;
-                    }}
-                  />
-                </Form.Item>
-                <Form.Item name="seniorityStart" label="Ngày tính TN">
-                  <DatePicker
-                    placeholder="Chọn ngày"
-                    className="w-full"
-                    format="DD/MM/YYYY"
-                    onChange={handleDateChange}
-                    disabledDate={(current) => {
-                      return current && current > maxDate;
-                    }}
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="seniority"
-                  label="Thâm niên"
-                  valuePropName={seniorityText}
-                //   rules={[{ required: true }]}
-                >
-                  <Input
-                    disabled
-                    value={seniorityText}
-                    defaultValue={seniorityText}
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="contractNumber"
-                  label="Số HĐ"
-                //   rules={[{ required: true }]}
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item name="contractType" label="Loại HĐ">
-                  <Input />
-                </Form.Item>
-                <Form.Item name="contractEndDate" label="Ngày hết hạn HĐ">
-                  <DatePicker
-                    placeholder="Chọn ngày"
-                    className="w-full"
-                    format="DD/MM/YYYY"
-                  />
-                </Form.Item>
               </div>
-              <div className="mb-2 mt-4">
-                <p className="text-xl ">4. Chứng chỉ & Trình độ:</p>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <Form.Item name="education" label="Trình độ">
-                  <Select
-                    placeholder="Trình độ"
-                    allowClear
-                    options={[
-                      { value: "TH", label: "Tiểu học" },
-                      { value: "THCS", label: "THCS" },
-                      { value: "THPT", label: "THPT" },
-                      { value: "CD", label: "Cao Đẳng" },
-                      { value: "DH", label: "Đại học" },
-                      { value: "ThS", label: "Thạc sĩ" },
-                      { value: "TS", label: "Tiến sĩ" },
-                      { value: "PGS", label: "Phó giáo sư" },
-                      { value: "GS", label: "Giáo sư" },
-                    ]}
-                  ></Select>
-                </Form.Item>
-                <Form.Item name="specialization" label="Chuyên ngành">
-                  <Input />
-                </Form.Item>
-                <Form.Item name="drivingLicense" label="Bằng lái xe">
-                  <Input />
-                </Form.Item>
-                <Form.Item name="toyotaCertificate" label="Chứng chỉ Toyota">
-                  <Input />
-                </Form.Item>
-              </div>
-              <div className="mb-2 mt-4">
-                <p className="text-xl ">4. Thông tin bảo hiểm / Thuế:</p>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <Form.Item name="taxCode" label="Mã số thuế">
-                  <Input type="number" />
-                </Form.Item>
-                <Form.Item name="insuranceNumber" label="Số sổ BHXH">
-                  <Input type="number" />
-                </Form.Item>
-                <Form.Item name="insuranceSalary" label="Lương đóng BH">
-                  <Input type="number" />
-                </Form.Item>
-              </div>
-              <div className="mb-2 mt-4">
-                <p className="text-xl ">6. Thông tin khác:</p>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <Form.Item
-                  name="workStatus"
-                  label="Trạng thái làm việc"
-                  rules={[{ required: true }]}
-                >
-                  <Select
-                    placeholder="Bộ phận"
-                    allowClear
-                    options={[
-                      { value: "OFFICIAL", label: "Chính thức" },
-                      { value: "PROBATION", label: "Học việc" },
-                      { value: "RESIGNED", label: "Nghỉ việc" },
-                    ]}
-                  ></Select>
-                </Form.Item>
-                <Form.Item name="resignedDate" label="Ngày nghỉ">
-                  <DatePicker
-                    placeholder="Chọn ngày"
-                    className="w-full"
-                    format="DD/MM/YYYY"
-                  />
-                </Form.Item>
-                <Form.Item name="documentsChecked" label="Kiểm tra hồ sơ">
-                  <Input />
-                </Form.Item>
-                <Form.Item name="updatedAt" label="Thời gian cập nhật">
-                  <DatePicker
-                    placeholder="Chọn ngày"
-                    className="w-full"
-                    format="DD/MM/YYYY"
-                  />
-                </Form.Item>
-                <Form.Item name="VCB" label="Ngân hàng VCB">
-                  <Input />
-                </Form.Item>
-                <Form.Item name="MTCV" label="MTCV">
-                  <Input />
-                </Form.Item>
-                <Form.Item name="PNJ" label="PNJ">
-                  <Input />
-                </Form.Item>
-              </div>
-              {/* <Form.Item {...tailLayout}>
-                <Space>
-                  <Button type="primary" htmlType="submit">
-                    Submit
-                  </Button>
-                  <Button htmlType="button" onClick={onReset}>
-                    Reset
-                  </Button>
-                  <Button type="link" htmlType="button" onClick={onFill}>
-                    Fill form
-                  </Button>
-                </Space>
-              </Form.Item> */}
+
               <Form.Item
                 label={null}
                 className="w-full flex justify-center mt-4"

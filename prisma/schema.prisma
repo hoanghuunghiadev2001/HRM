@@ -62,14 +62,15 @@ model Employee {
   KPIEmployee          KPIEmployee[]
   LeaveApprovalSteps   LeaveApprovalStepApprover[] @relation("ApproverSteps")
   LeaveRequest         LeaveRequest[]
-  otherInfo            OtherInfo?
-  personalInfo         PersonalInfo?
   proposalsCreated     Proposal[]                  @relation("ProposalCreatedBy")
   proposalsProposed    Proposal[]                  @relation("ProposalProposer")
   proposalApprovals    ProposalApprover[]
   proposalSignatures   ProposalSigner[]
   workInfo             WorkInfo?
   Attendance           Attendance[]
+
+  assetsReceived AssetAssignment[] @relation("EmployeeAsset")
+  assetsIssued   AssetAssignment[] @relation("IssuedAssets")
 
   @@index([employeeCode])
   @@index([managerId])
@@ -126,23 +127,6 @@ model WorkInfo {
   @@index([positionId])
 }
 
-model PersonalInfo {
-  id                Int       @id @default(autoincrement())
-  identityNumber    String?   @unique
-  issueDate         DateTime?
-  issuePlace        String?
-  hometown          String?
-  idAddress         String?
-  education         String?
-  drivingLicense    String?
-  toyotaCertificate String?
-  taxCode           String?   @unique
-  insuranceNumber   String?   @unique
-  insuranceSalary   Int?
-  employeeId        Int       @unique
-  employee          Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
-}
-
 model ContactInfo {
   id            Int      @id @default(autoincrement())
   phoneNumber   String?  @unique
@@ -152,19 +136,6 @@ model ContactInfo {
   employeeId    Int      @unique
   zalo_user_id  String?  @unique(map: "zalo_user_id") @db.VarChar(255)
   employee      Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
-}
-
-model OtherInfo {
-  id               Int        @id @default(autoincrement())
-  workStatus       WorkStatus @default(OFFICIAL)
-  resignedDate     DateTime?
-  documentsChecked String?
-  updatedAt        DateTime   @updatedAt
-  VCB              String?
-  MTCV             String?
-  PNJ              String?
-  employeeId       Int        @unique
-  employee         Employee   @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 }
 
 model LeaveRequest {
@@ -356,6 +327,33 @@ model EmailActionToken {
   expiresAt  DateTime
   ip         String?
   userAgent  String?
+}
+
+model Asset {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  assignments AssetAssignment[]
+}
+
+model AssetAssignment {
+  id         Int      @id @default(autoincrement())
+  assetId    Int
+  employeeId Int // nhân viên được nhận
+  issuedById Int // nhân viên cấp
+  issuedAt   DateTime @default(now())
+  quantity   Int      @default(1)
+  note       String?
+
+  asset    Asset    @relation(fields: [assetId], references: [id])
+  employee Employee @relation("EmployeeAsset", fields: [employeeId], references: [id])
+  issuedBy Employee @relation("IssuedAssets", fields: [issuedById], references: [id])
+
+  @@index([employeeId])
+  @@index([issuedById])
 }
 
 enum Role {

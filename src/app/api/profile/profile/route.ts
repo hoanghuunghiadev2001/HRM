@@ -34,7 +34,6 @@ export async function GET(req: NextRequest) {
     const employee = await prisma.employee.findUnique({
       where: { id: decoded.id },
       include: {
-        personalInfo: true,
         contactInfo: true,
         workInfo: {
           include: {
@@ -42,7 +41,6 @@ export async function GET(req: NextRequest) {
             position: true,
           },
         },
-        otherInfo: true,
       },
     });
 
@@ -60,22 +58,6 @@ export async function GET(req: NextRequest) {
     const formattedEmployee = {
       ...employee,
       birthDate: formatDate(employee.birthDate),
-      personalInfo: employee.personalInfo
-        ? {
-            ...employee.personalInfo,
-            issueDate: formatDate(employee.personalInfo.issueDate),
-          }
-        : null,
-      workInfo: employee.workInfo
-        ? {
-            ...employee.workInfo,
-            joinedTBD: formatDate(employee.workInfo.joinedTBD),
-            joinedTeSCC: formatDate(employee.workInfo.joinedTeSCC),
-            seniorityStart: formatDate(employee.workInfo.seniorityStart),
-            contractDate: formatDate(employee.workInfo.contractDate),
-            contractEndDate: formatDate(employee.workInfo.contractEndDate),
-          }
-        : null,
     };
 
     return NextResponse.json(formattedEmployee);

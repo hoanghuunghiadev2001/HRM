@@ -166,15 +166,8 @@ export async function POST(req: Request) {
 
       const employee = await prisma.employee.findUnique({
         where: { employeeCode },
-        include: { otherInfo: true },
       });
       if (!employee) {
-        skipped++;
-        i = Math.max(i, consumedIndex);
-        continue;
-      }
-
-      if (employee.otherInfo?.workStatus === "RESIGNED") {
         skipped++;
         i = Math.max(i, consumedIndex);
         continue;

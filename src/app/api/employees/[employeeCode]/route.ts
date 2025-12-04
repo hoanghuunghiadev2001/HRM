@@ -67,9 +67,7 @@ export async function GET(req: NextRequest) {
       where: { employeeCode },
       include: {
         workInfo: { include: { department: true, position: true } },
-        personalInfo: true,
         contactInfo: true,
-        otherInfo: true,
         LeaveRequest: true,
       },
     });
@@ -83,30 +81,9 @@ export async function GET(req: NextRequest) {
     const formattedEmployee = {
       ...employee,
       birthDate: formatDate(employee.birthDate),
-      workInfo: employee.workInfo
-        ? {
-            ...employee.workInfo,
-            joinedTBD: formatDate(employee.workInfo.joinedTBD),
-            joinedTeSCC: formatDate(employee.workInfo.joinedTeSCC),
-            seniorityStart: formatDate(employee.workInfo.seniorityStart),
-            contractDate: formatDate(employee.workInfo.contractDate),
-            contractEndDate: formatDate(employee.workInfo.contractEndDate),
-          }
-        : null,
-      personalInfo: employee.personalInfo
-        ? {
-            ...employee.personalInfo,
-            issueDate: formatDate(employee.personalInfo.issueDate),
-          }
-        : null,
+
       contactInfo: employee.contactInfo ?? null,
-      otherInfo: employee.otherInfo
-        ? {
-            ...employee.otherInfo,
-            resignedDate: formatDate(employee.otherInfo.resignedDate),
-            updatedAt: formatDate(employee.otherInfo.updatedAt),
-          }
-        : null,
+
       LeaveRequest: employee.LeaveRequest?.map((leave: any) => ({
         ...leave,
         startDate: formatDate(leave.startDate),
@@ -209,22 +186,6 @@ export async function PATCH(req: NextRequest) {
       });
     }
 
-    if (body.personalInfo) {
-      await upsert(prisma.personalInfo, {
-        identityNumber: body.personalInfo.identityNumber,
-        issueDate: parseDateToDB(body.personalInfo.issueDate),
-        issuePlace: body.personalInfo.issuePlace,
-        hometown: body.personalInfo.hometown,
-        idAddress: body.personalInfo.idAddress,
-        education: body.personalInfo.education,
-        drivingLicense: body.personalInfo.drivingLicense,
-        toyotaCertificate: body.personalInfo.toyotaCertificate,
-        taxCode: body.personalInfo.taxCode,
-        insuranceNumber: body.personalInfo.insuranceNumber,
-        insuranceSalary: body.personalInfo.insuranceSalary,
-      });
-    }
-
     if (body.contactInfo) {
       await upsert(prisma.contactInfo, {
         phoneNumber:
@@ -240,18 +201,6 @@ export async function PATCH(req: NextRequest) {
             ? body.contactInfo.companyPhone
             : null,
         email: body.contactInfo.email,
-      });
-    }
-
-    if (body.otherInfo) {
-      await upsert(prisma.otherInfo, {
-        workStatus: body.otherInfo.workStatus,
-        resignedDate: parseDateToDB(body.otherInfo.resignedDate),
-        documentsChecked: body.otherInfo.documentsChecked,
-        updatedAt: new Date(),
-        VCB: body.otherInfo.VCB,
-        MTCV: body.otherInfo.MTCV,
-        PNJ: body.otherInfo.PNJ,
       });
     }
 

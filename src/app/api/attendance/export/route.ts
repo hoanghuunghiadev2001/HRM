@@ -32,7 +32,6 @@ export async function POST(req: NextRequest) {
 
     const employees = await prisma.employee.findMany({
       where: {
-        otherInfo: { workStatus: { not: "RESIGNED" } },
         ...(department
           ? { workInfo: { departmentId: Number(department) } }
           : {}),

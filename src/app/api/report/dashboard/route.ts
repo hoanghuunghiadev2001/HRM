@@ -2,7 +2,6 @@
 
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { WorkStatus } from "../../../../../generated/prisma";
 
 export async function GET() {
   try {
@@ -21,15 +20,7 @@ export async function GET() {
     const lastDayOfPrevMonth = new Date(currentYear, currentMonth, 0);
 
     // 1. Total employees count
-    const totalEmployees = await prisma.employee.count({
-      where: {
-        otherInfo: {
-          workStatus: {
-            in: [WorkStatus.OFFICIAL, WorkStatus.PROBATION],
-          },
-        },
-      },
-    });
+    const totalEmployees = await prisma.employee.count();
 
     // 2. New employees this month
     const newEmployees = await prisma.employee.count({
@@ -114,14 +105,6 @@ export async function GET() {
       },
     });
 
-    // 7. Employee status distribution
-    const employeeStatusDistribution = await prisma.otherInfo.groupBy({
-      by: ["workStatus"],
-      _count: {
-        employeeId: true,
-      },
-    });
-
     // 8. Department distribution
     const departmentDistributionRaw = await prisma.workInfo.groupBy({
       by: ["departmentId"], // ✅ Dùng departmentId
@@ -176,7 +159,6 @@ export async function GET() {
         total: totalLeaveRequests,
         pending: pendingLeaveRequests,
       },
-      employeeStatusDistribution,
       departmentDistribution,
       recentLeaveRequests,
     });

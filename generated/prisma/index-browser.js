@@ -192,22 +192,6 @@ exports.Prisma.WorkInfoScalarFieldEnum = {
   employeeId: 'employeeId'
 };
 
-exports.Prisma.PersonalInfoScalarFieldEnum = {
-  id: 'id',
-  identityNumber: 'identityNumber',
-  issueDate: 'issueDate',
-  issuePlace: 'issuePlace',
-  hometown: 'hometown',
-  idAddress: 'idAddress',
-  education: 'education',
-  drivingLicense: 'drivingLicense',
-  toyotaCertificate: 'toyotaCertificate',
-  taxCode: 'taxCode',
-  insuranceNumber: 'insuranceNumber',
-  insuranceSalary: 'insuranceSalary',
-  employeeId: 'employeeId'
-};
-
 exports.Prisma.ContactInfoScalarFieldEnum = {
   id: 'id',
   phoneNumber: 'phoneNumber',
@@ -216,18 +200,6 @@ exports.Prisma.ContactInfoScalarFieldEnum = {
   email: 'email',
   employeeId: 'employeeId',
   zalo_user_id: 'zalo_user_id'
-};
-
-exports.Prisma.OtherInfoScalarFieldEnum = {
-  id: 'id',
-  workStatus: 'workStatus',
-  resignedDate: 'resignedDate',
-  documentsChecked: 'documentsChecked',
-  updatedAt: 'updatedAt',
-  VCB: 'VCB',
-  MTCV: 'MTCV',
-  PNJ: 'PNJ',
-  employeeId: 'employeeId'
 };
 
 exports.Prisma.LeaveRequestScalarFieldEnum = {
@@ -360,6 +332,24 @@ exports.Prisma.EmailActionTokenScalarFieldEnum = {
   userAgent: 'userAgent'
 };
 
+exports.Prisma.AssetScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AssetAssignmentScalarFieldEnum = {
+  id: 'id',
+  assetId: 'assetId',
+  employeeId: 'employeeId',
+  issuedById: 'issuedById',
+  issuedAt: 'issuedAt',
+  quantity: 'quantity',
+  note: 'note'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -406,31 +396,12 @@ exports.Prisma.WorkInfoOrderByRelevanceFieldEnum = {
   contractType: 'contractType'
 };
 
-exports.Prisma.PersonalInfoOrderByRelevanceFieldEnum = {
-  identityNumber: 'identityNumber',
-  issuePlace: 'issuePlace',
-  hometown: 'hometown',
-  idAddress: 'idAddress',
-  education: 'education',
-  drivingLicense: 'drivingLicense',
-  toyotaCertificate: 'toyotaCertificate',
-  taxCode: 'taxCode',
-  insuranceNumber: 'insuranceNumber'
-};
-
 exports.Prisma.ContactInfoOrderByRelevanceFieldEnum = {
   phoneNumber: 'phoneNumber',
   relativePhone: 'relativePhone',
   companyPhone: 'companyPhone',
   email: 'email',
   zalo_user_id: 'zalo_user_id'
-};
-
-exports.Prisma.OtherInfoOrderByRelevanceFieldEnum = {
-  documentsChecked: 'documentsChecked',
-  VCB: 'VCB',
-  MTCV: 'MTCV',
-  PNJ: 'PNJ'
 };
 
 exports.Prisma.LeaveRequestOrderByRelevanceFieldEnum = {
@@ -474,6 +445,15 @@ exports.Prisma.EmailActionTokenOrderByRelevanceFieldEnum = {
   ip: 'ip',
   userAgent: 'userAgent'
 };
+
+exports.Prisma.AssetOrderByRelevanceFieldEnum = {
+  name: 'name',
+  description: 'description'
+};
+
+exports.Prisma.AssetAssignmentOrderByRelevanceFieldEnum = {
+  note: 'note'
+};
 exports.Sex = exports.$Enums.Sex = {
   MALE: 'MALE',
   FEMALE: 'FEMALE'
@@ -483,12 +463,6 @@ exports.Role = exports.$Enums.Role = {
   USER: 'USER',
   MANAGER: 'MANAGER',
   ADMIN: 'ADMIN'
-};
-
-exports.WorkStatus = exports.$Enums.WorkStatus = {
-  OFFICIAL: 'OFFICIAL',
-  PROBATION: 'PROBATION',
-  RESIGNED: 'RESIGNED'
 };
 
 exports.LeaveTypeEnum = exports.$Enums.LeaveTypeEnum = {
@@ -528,9 +502,7 @@ exports.Prisma.ModelName = {
   Department: 'Department',
   Position: 'Position',
   WorkInfo: 'WorkInfo',
-  PersonalInfo: 'PersonalInfo',
   ContactInfo: 'ContactInfo',
-  OtherInfo: 'OtherInfo',
   LeaveRequest: 'LeaveRequest',
   LeaveApprovalStep: 'LeaveApprovalStep',
   LeaveApprovalStepApprover: 'LeaveApprovalStepApprover',
@@ -542,7 +514,9 @@ exports.Prisma.ModelName = {
   Proposal: 'Proposal',
   ProposalSigner: 'ProposalSigner',
   ProposalApprover: 'ProposalApprover',
-  EmailActionToken: 'EmailActionToken'
+  EmailActionToken: 'EmailActionToken',
+  Asset: 'Asset',
+  AssetAssignment: 'AssetAssignment'
 };
 
 /**

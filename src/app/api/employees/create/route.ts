@@ -64,9 +64,7 @@ export async function POST(req: NextRequest) {
       avatar,
 
       workInfo,
-      personalInfo,
       contactInfo,
-      otherInfo,
     } = body;
 
     // Validate các trường bắt buộc
@@ -169,21 +167,6 @@ export async function POST(req: NextRequest) {
       : undefined;
 
     // Xử lý personalInfo
-    const personalInfoData = personalInfo
-      ? {
-          identityNumber: personalInfo.identityNumber ?? null,
-          issueDate: parseDateRequired(personalInfo.issueDate, "issueDate"),
-          issuePlace: personalInfo.issuePlace,
-          hometown: personalInfo.hometown,
-          idAddress: personalInfo.idAddress,
-          education: personalInfo.education ?? null,
-          drivingLicense: personalInfo.drivingLicense ?? null,
-          toyotaCertificate: personalInfo.toyotaCertificate ?? null,
-          taxCode: personalInfo.taxCode ?? null,
-          insuranceNumber: personalInfo.insuranceNumber ?? null,
-          insuranceSalary: personalInfo.insuranceSalary ?? null,
-        }
-      : undefined;
 
     // Xử lý contactInfo
     const contactInfoData = contactInfo
@@ -192,19 +175,6 @@ export async function POST(req: NextRequest) {
           relativePhone: contactInfo.relativePhone ?? null,
           companyPhone: contactInfo.companyPhone ?? null,
           email: contactInfo.email ?? null,
-        }
-      : undefined;
-
-    // Xử lý otherInfo
-    const otherInfoData = otherInfo
-      ? {
-          workStatus: otherInfo.workStatus,
-          resignedDate: parseDateNullable(otherInfo.resignedDate),
-          documentsChecked: otherInfo.documentsChecked ?? "",
-          updatedAt: new Date(),
-          VCB: otherInfo.VCB ?? null,
-          MTCV: otherInfo.MTCV ?? null,
-          PNJ: otherInfo.PNJ ?? null,
         }
       : undefined;
 
@@ -221,17 +191,12 @@ export async function POST(req: NextRequest) {
         avatar: avatarPath,
 
         workInfo: workInfoData ? { create: workInfoData } : undefined,
-        personalInfo: personalInfoData
-          ? { create: personalInfoData }
-          : undefined,
+
         contactInfo: contactInfoData ? { create: contactInfoData } : undefined,
-        otherInfo: otherInfoData ? { create: otherInfoData } : undefined,
       },
       include: {
         workInfo: true,
-        personalInfo: true,
         contactInfo: true,
-        otherInfo: true,
       },
     });
 

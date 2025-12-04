@@ -4,13 +4,7 @@
 import * as XLSX from "xlsx";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
-import {
-  ContactInfo,
-  Employee,
-  OtherInfo,
-  WorkInfo,
-  WorkStatus,
-} from "../../generated/prisma";
+import { ContactInfo, Employee, WorkInfo } from "../../generated/prisma";
 import { prisma } from "@/lib/prisma";
 
 type ExcelRow = {
@@ -22,7 +16,6 @@ type ExcelRow = {
 export type EmployeeWithRelations = Employee & {
   workInfo: WorkInfo | null;
   contactInfo: ContactInfo | null;
-  otherInfo: OtherInfo | null;
 };
 
 export async function getEmployees() {
@@ -43,11 +36,6 @@ export async function getEmployees() {
           select: {
             phoneNumber: true,
             email: true,
-          },
-        },
-        otherInfo: {
-          select: {
-            workStatus: true,
           },
         },
       },
@@ -313,29 +301,9 @@ export async function importEmployees(formData: FormData) {
           where: { employeeCode: employeeData.employeeCode },
           include: {
             workInfo: true,
-            personalInfo: true,
             contactInfo: true,
-            otherInfo: true,
           },
         });
-
-        const personalInfoData = {
-          identityNumber: row["Số CMND/CCCD"]?.toString(),
-          issueDate: parseExcelDate(row["Ngày cấp"]),
-          issuePlace: row["Nơi Cấp"]?.toString(),
-          hometown: row["Nguyên quán"]?.toString(),
-          idAddress: row["Địa chỉ theo chứng minh thư"]?.toString(),
-          education: row["Trình độ"]?.toString(),
-          drivingLicense: (
-            row["Giấy phép\nlái xe"] || row["Giấy phép lái xe"]
-          )?.toString(),
-          toyotaCertificate: row["Chứng chỉ toyota"]?.toString(),
-          taxCode: row["MST"]?.toString(),
-          insuranceNumber: row["Số sổ Bảo hiểm"]?.toString(),
-          insuranceSalary: parseSalary(
-            row[" Lương \nđóng BH "] || row["Lương đóng BH"]
-          ),
-        };
 
         const contactInfoData = {
           phoneNumber: row["Điện thoại cá nhân"]?.toString(),
@@ -344,20 +312,6 @@ export async function importEmployees(formData: FormData) {
             row["Điện thoại \ncông ty cấp"] || row["Điện thoại công ty cấp"]
           )?.toString(),
           email: row["Mail"]?.toString(),
-        };
-
-        const otherInfoData = {
-          workStatus:
-            row["Chính thức"] === "Chính thức"
-              ? WorkStatus.OFFICIAL
-              : row["chính thức"] === "học việc"
-              ? WorkStatus.PROBATION
-              : WorkStatus.RESIGNED,
-          resignedDate: parseExcelDate(row["Ngày nghỉ"]),
-          documentsChecked: row["Check hồ sơ"]?.toString(),
-          VCB: row["VCB"]?.toString(),
-          MTCV: row["Bảng MTCV"]?.toString(),
-          PNJ: row["PNJ"]?.toString(),
         };
 
         if (existingEmployee) {
@@ -381,32 +335,12 @@ export async function importEmployees(formData: FormData) {
             },
           });
 
-          // Update or create PersonalInfo
-          await prisma.personalInfo.upsert({
-            where: { employeeId: existingEmployee.id },
-            update: personalInfoData,
-            create: {
-              ...personalInfoData,
-              employeeId: existingEmployee.id,
-            },
-          });
-
           // Update or create ContactInfo
           await prisma.contactInfo.upsert({
             where: { employeeId: existingEmployee.id },
             update: contactInfoData,
             create: {
               ...contactInfoData,
-              employeeId: existingEmployee.id,
-            },
-          });
-
-          // Update or create OtherInfo
-          await prisma.otherInfo.upsert({
-            where: { employeeId: existingEmployee.id },
-            update: otherInfoData,
-            create: {
-              ...otherInfoData,
               employeeId: existingEmployee.id,
             },
           });
@@ -421,14 +355,9 @@ export async function importEmployees(formData: FormData) {
               workInfo: {
                 create: workInfoData,
               },
-              personalInfo: {
-                create: personalInfoData,
-              },
+
               contactInfo: {
                 create: contactInfoData,
-              },
-              otherInfo: {
-                create: otherInfoData,
               },
             },
           });
@@ -515,14 +444,4 @@ function mapGender(value: any): "MALE" | "FEMALE" {
   }
 
   return "MALE"; // Default
-}
-
-function parseSalary(value: any): number | null {
-  if (!value) return null;
-
-  // Remove spaces, dots, and commas, then parse as integer
-  const cleanValue = value.toString().replace(/[\s.,]/g, "");
-  const parsed = Number.parseInt(cleanValue, 10);
-
-  return isNaN(parsed) ? null : parsed;
 }

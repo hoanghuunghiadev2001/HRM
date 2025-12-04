@@ -44,20 +44,10 @@ export type Position = $Result.DefaultSelection<Prisma.$PositionPayload>
  */
 export type WorkInfo = $Result.DefaultSelection<Prisma.$WorkInfoPayload>
 /**
- * Model PersonalInfo
- * 
- */
-export type PersonalInfo = $Result.DefaultSelection<Prisma.$PersonalInfoPayload>
-/**
  * Model ContactInfo
  * 
  */
 export type ContactInfo = $Result.DefaultSelection<Prisma.$ContactInfoPayload>
-/**
- * Model OtherInfo
- * 
- */
-export type OtherInfo = $Result.DefaultSelection<Prisma.$OtherInfoPayload>
 /**
  * Model LeaveRequest
  * 
@@ -118,6 +108,16 @@ export type ProposalApprover = $Result.DefaultSelection<Prisma.$ProposalApprover
  * 
  */
 export type EmailActionToken = $Result.DefaultSelection<Prisma.$EmailActionTokenPayload>
+/**
+ * Model Asset
+ * 
+ */
+export type Asset = $Result.DefaultSelection<Prisma.$AssetPayload>
+/**
+ * Model AssetAssignment
+ * 
+ */
+export type AssetAssignment = $Result.DefaultSelection<Prisma.$AssetAssignmentPayload>
 
 /**
  * Enums
@@ -406,16 +406,6 @@ export class PrismaClient<
   get workInfo(): Prisma.WorkInfoDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.personalInfo`: Exposes CRUD operations for the **PersonalInfo** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more PersonalInfos
-    * const personalInfos = await prisma.personalInfo.findMany()
-    * ```
-    */
-  get personalInfo(): Prisma.PersonalInfoDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.contactInfo`: Exposes CRUD operations for the **ContactInfo** model.
     * Example usage:
     * ```ts
@@ -424,16 +414,6 @@ export class PrismaClient<
     * ```
     */
   get contactInfo(): Prisma.ContactInfoDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.otherInfo`: Exposes CRUD operations for the **OtherInfo** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more OtherInfos
-    * const otherInfos = await prisma.otherInfo.findMany()
-    * ```
-    */
-  get otherInfo(): Prisma.OtherInfoDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.leaveRequest`: Exposes CRUD operations for the **LeaveRequest** model.
@@ -554,6 +534,26 @@ export class PrismaClient<
     * ```
     */
   get emailActionToken(): Prisma.EmailActionTokenDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.asset`: Exposes CRUD operations for the **Asset** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Assets
+    * const assets = await prisma.asset.findMany()
+    * ```
+    */
+  get asset(): Prisma.AssetDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.assetAssignment`: Exposes CRUD operations for the **AssetAssignment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AssetAssignments
+    * const assetAssignments = await prisma.assetAssignment.findMany()
+    * ```
+    */
+  get assetAssignment(): Prisma.AssetAssignmentDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1000,9 +1000,7 @@ export namespace Prisma {
     Department: 'Department',
     Position: 'Position',
     WorkInfo: 'WorkInfo',
-    PersonalInfo: 'PersonalInfo',
     ContactInfo: 'ContactInfo',
-    OtherInfo: 'OtherInfo',
     LeaveRequest: 'LeaveRequest',
     LeaveApprovalStep: 'LeaveApprovalStep',
     LeaveApprovalStepApprover: 'LeaveApprovalStepApprover',
@@ -1014,7 +1012,9 @@ export namespace Prisma {
     Proposal: 'Proposal',
     ProposalSigner: 'ProposalSigner',
     ProposalApprover: 'ProposalApprover',
-    EmailActionToken: 'EmailActionToken'
+    EmailActionToken: 'EmailActionToken',
+    Asset: 'Asset',
+    AssetAssignment: 'AssetAssignment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1033,7 +1033,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "file" | "vehicle" | "employee" | "department" | "position" | "workInfo" | "personalInfo" | "contactInfo" | "otherInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover" | "emailActionToken"
+      modelProps: "file" | "vehicle" | "employee" | "department" | "position" | "workInfo" | "contactInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover" | "emailActionToken" | "asset" | "assetAssignment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1433,72 +1433,6 @@ export namespace Prisma {
           }
         }
       }
-      PersonalInfo: {
-        payload: Prisma.$PersonalInfoPayload<ExtArgs>
-        fields: Prisma.PersonalInfoFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.PersonalInfoFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PersonalInfoPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.PersonalInfoFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PersonalInfoPayload>
-          }
-          findFirst: {
-            args: Prisma.PersonalInfoFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PersonalInfoPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.PersonalInfoFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PersonalInfoPayload>
-          }
-          findMany: {
-            args: Prisma.PersonalInfoFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PersonalInfoPayload>[]
-          }
-          create: {
-            args: Prisma.PersonalInfoCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PersonalInfoPayload>
-          }
-          createMany: {
-            args: Prisma.PersonalInfoCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          delete: {
-            args: Prisma.PersonalInfoDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PersonalInfoPayload>
-          }
-          update: {
-            args: Prisma.PersonalInfoUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PersonalInfoPayload>
-          }
-          deleteMany: {
-            args: Prisma.PersonalInfoDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.PersonalInfoUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.PersonalInfoUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PersonalInfoPayload>
-          }
-          aggregate: {
-            args: Prisma.PersonalInfoAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregatePersonalInfo>
-          }
-          groupBy: {
-            args: Prisma.PersonalInfoGroupByArgs<ExtArgs>
-            result: $Utils.Optional<PersonalInfoGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.PersonalInfoCountArgs<ExtArgs>
-            result: $Utils.Optional<PersonalInfoCountAggregateOutputType> | number
-          }
-        }
-      }
       ContactInfo: {
         payload: Prisma.$ContactInfoPayload<ExtArgs>
         fields: Prisma.ContactInfoFieldRefs
@@ -1562,72 +1496,6 @@ export namespace Prisma {
           count: {
             args: Prisma.ContactInfoCountArgs<ExtArgs>
             result: $Utils.Optional<ContactInfoCountAggregateOutputType> | number
-          }
-        }
-      }
-      OtherInfo: {
-        payload: Prisma.$OtherInfoPayload<ExtArgs>
-        fields: Prisma.OtherInfoFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.OtherInfoFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$OtherInfoPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.OtherInfoFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$OtherInfoPayload>
-          }
-          findFirst: {
-            args: Prisma.OtherInfoFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$OtherInfoPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.OtherInfoFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$OtherInfoPayload>
-          }
-          findMany: {
-            args: Prisma.OtherInfoFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$OtherInfoPayload>[]
-          }
-          create: {
-            args: Prisma.OtherInfoCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$OtherInfoPayload>
-          }
-          createMany: {
-            args: Prisma.OtherInfoCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          delete: {
-            args: Prisma.OtherInfoDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$OtherInfoPayload>
-          }
-          update: {
-            args: Prisma.OtherInfoUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$OtherInfoPayload>
-          }
-          deleteMany: {
-            args: Prisma.OtherInfoDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.OtherInfoUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.OtherInfoUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$OtherInfoPayload>
-          }
-          aggregate: {
-            args: Prisma.OtherInfoAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateOtherInfo>
-          }
-          groupBy: {
-            args: Prisma.OtherInfoGroupByArgs<ExtArgs>
-            result: $Utils.Optional<OtherInfoGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.OtherInfoCountArgs<ExtArgs>
-            result: $Utils.Optional<OtherInfoCountAggregateOutputType> | number
           }
         }
       }
@@ -2423,6 +2291,138 @@ export namespace Prisma {
           }
         }
       }
+      Asset: {
+        payload: Prisma.$AssetPayload<ExtArgs>
+        fields: Prisma.AssetFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AssetFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AssetFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          findFirst: {
+            args: Prisma.AssetFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AssetFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          findMany: {
+            args: Prisma.AssetFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>[]
+          }
+          create: {
+            args: Prisma.AssetCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          createMany: {
+            args: Prisma.AssetCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.AssetDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          update: {
+            args: Prisma.AssetUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          deleteMany: {
+            args: Prisma.AssetDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AssetUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.AssetUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          aggregate: {
+            args: Prisma.AssetAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAsset>
+          }
+          groupBy: {
+            args: Prisma.AssetGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AssetGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AssetCountArgs<ExtArgs>
+            result: $Utils.Optional<AssetCountAggregateOutputType> | number
+          }
+        }
+      }
+      AssetAssignment: {
+        payload: Prisma.$AssetAssignmentPayload<ExtArgs>
+        fields: Prisma.AssetAssignmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AssetAssignmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AssetAssignmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload>
+          }
+          findFirst: {
+            args: Prisma.AssetAssignmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AssetAssignmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload>
+          }
+          findMany: {
+            args: Prisma.AssetAssignmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload>[]
+          }
+          create: {
+            args: Prisma.AssetAssignmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload>
+          }
+          createMany: {
+            args: Prisma.AssetAssignmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.AssetAssignmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload>
+          }
+          update: {
+            args: Prisma.AssetAssignmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.AssetAssignmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AssetAssignmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.AssetAssignmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload>
+          }
+          aggregate: {
+            args: Prisma.AssetAssignmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAssetAssignment>
+          }
+          groupBy: {
+            args: Prisma.AssetAssignmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AssetAssignmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AssetAssignmentCountArgs<ExtArgs>
+            result: $Utils.Optional<AssetAssignmentCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2513,9 +2513,7 @@ export namespace Prisma {
     department?: DepartmentOmit
     position?: PositionOmit
     workInfo?: WorkInfoOmit
-    personalInfo?: PersonalInfoOmit
     contactInfo?: ContactInfoOmit
-    otherInfo?: OtherInfoOmit
     leaveRequest?: LeaveRequestOmit
     leaveApprovalStep?: LeaveApprovalStepOmit
     leaveApprovalStepApprover?: LeaveApprovalStepApproverOmit
@@ -2528,6 +2526,8 @@ export namespace Prisma {
     proposalSigner?: ProposalSignerOmit
     proposalApprover?: ProposalApproverOmit
     emailActionToken?: EmailActionTokenOmit
+    asset?: AssetOmit
+    assetAssignment?: AssetAssignmentOmit
   }
 
   /* Types for Logging */
@@ -2694,6 +2694,8 @@ export namespace Prisma {
     proposalApprovals: number
     proposalSignatures: number
     Attendance: number
+    assetsReceived: number
+    assetsIssued: number
   }
 
   export type EmployeeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2707,6 +2709,8 @@ export namespace Prisma {
     proposalApprovals?: boolean | EmployeeCountOutputTypeCountProposalApprovalsArgs
     proposalSignatures?: boolean | EmployeeCountOutputTypeCountProposalSignaturesArgs
     Attendance?: boolean | EmployeeCountOutputTypeCountAttendanceArgs
+    assetsReceived?: boolean | EmployeeCountOutputTypeCountAssetsReceivedArgs
+    assetsIssued?: boolean | EmployeeCountOutputTypeCountAssetsIssuedArgs
   }
 
   // Custom InputTypes
@@ -2788,6 +2792,20 @@ export namespace Prisma {
    */
   export type EmployeeCountOutputTypeCountAttendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AttendanceWhereInput
+  }
+
+  /**
+   * EmployeeCountOutputType without action
+   */
+  export type EmployeeCountOutputTypeCountAssetsReceivedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssetAssignmentWhereInput
+  }
+
+  /**
+   * EmployeeCountOutputType without action
+   */
+  export type EmployeeCountOutputTypeCountAssetsIssuedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssetAssignmentWhereInput
   }
 
 
@@ -3054,6 +3072,37 @@ export namespace Prisma {
    */
   export type ProposalCountOutputTypeCountSignersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProposalSignerWhereInput
+  }
+
+
+  /**
+   * Count Type AssetCountOutputType
+   */
+
+  export type AssetCountOutputType = {
+    assignments: number
+  }
+
+  export type AssetCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    assignments?: boolean | AssetCountOutputTypeCountAssignmentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AssetCountOutputType without action
+   */
+  export type AssetCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetCountOutputType
+     */
+    select?: AssetCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AssetCountOutputType without action
+   */
+  export type AssetCountOutputTypeCountAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssetAssignmentWhereInput
   }
 
 
@@ -5354,14 +5403,14 @@ export namespace Prisma {
     KPIEmployee?: boolean | Employee$KPIEmployeeArgs<ExtArgs>
     LeaveApprovalSteps?: boolean | Employee$LeaveApprovalStepsArgs<ExtArgs>
     LeaveRequest?: boolean | Employee$LeaveRequestArgs<ExtArgs>
-    otherInfo?: boolean | Employee$otherInfoArgs<ExtArgs>
-    personalInfo?: boolean | Employee$personalInfoArgs<ExtArgs>
     proposalsCreated?: boolean | Employee$proposalsCreatedArgs<ExtArgs>
     proposalsProposed?: boolean | Employee$proposalsProposedArgs<ExtArgs>
     proposalApprovals?: boolean | Employee$proposalApprovalsArgs<ExtArgs>
     proposalSignatures?: boolean | Employee$proposalSignaturesArgs<ExtArgs>
     workInfo?: boolean | Employee$workInfoArgs<ExtArgs>
     Attendance?: boolean | Employee$AttendanceArgs<ExtArgs>
+    assetsReceived?: boolean | Employee$assetsReceivedArgs<ExtArgs>
+    assetsIssued?: boolean | Employee$assetsIssuedArgs<ExtArgs>
     _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["employee"]>
 
@@ -5393,14 +5442,14 @@ export namespace Prisma {
     KPIEmployee?: boolean | Employee$KPIEmployeeArgs<ExtArgs>
     LeaveApprovalSteps?: boolean | Employee$LeaveApprovalStepsArgs<ExtArgs>
     LeaveRequest?: boolean | Employee$LeaveRequestArgs<ExtArgs>
-    otherInfo?: boolean | Employee$otherInfoArgs<ExtArgs>
-    personalInfo?: boolean | Employee$personalInfoArgs<ExtArgs>
     proposalsCreated?: boolean | Employee$proposalsCreatedArgs<ExtArgs>
     proposalsProposed?: boolean | Employee$proposalsProposedArgs<ExtArgs>
     proposalApprovals?: boolean | Employee$proposalApprovalsArgs<ExtArgs>
     proposalSignatures?: boolean | Employee$proposalSignaturesArgs<ExtArgs>
     workInfo?: boolean | Employee$workInfoArgs<ExtArgs>
     Attendance?: boolean | Employee$AttendanceArgs<ExtArgs>
+    assetsReceived?: boolean | Employee$assetsReceivedArgs<ExtArgs>
+    assetsIssued?: boolean | Employee$assetsIssuedArgs<ExtArgs>
     _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -5416,14 +5465,14 @@ export namespace Prisma {
       KPIEmployee: Prisma.$KPIEmployeePayload<ExtArgs>[]
       LeaveApprovalSteps: Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>[]
       LeaveRequest: Prisma.$LeaveRequestPayload<ExtArgs>[]
-      otherInfo: Prisma.$OtherInfoPayload<ExtArgs> | null
-      personalInfo: Prisma.$PersonalInfoPayload<ExtArgs> | null
       proposalsCreated: Prisma.$ProposalPayload<ExtArgs>[]
       proposalsProposed: Prisma.$ProposalPayload<ExtArgs>[]
       proposalApprovals: Prisma.$ProposalApproverPayload<ExtArgs>[]
       proposalSignatures: Prisma.$ProposalSignerPayload<ExtArgs>[]
       workInfo: Prisma.$WorkInfoPayload<ExtArgs> | null
       Attendance: Prisma.$AttendancePayload<ExtArgs>[]
+      assetsReceived: Prisma.$AssetAssignmentPayload<ExtArgs>[]
+      assetsIssued: Prisma.$AssetAssignmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -5787,14 +5836,14 @@ export namespace Prisma {
     KPIEmployee<T extends Employee$KPIEmployeeArgs<ExtArgs> = {}>(args?: Subset<T, Employee$KPIEmployeeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KPIEmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     LeaveApprovalSteps<T extends Employee$LeaveApprovalStepsArgs<ExtArgs> = {}>(args?: Subset<T, Employee$LeaveApprovalStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveApprovalStepApproverPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     LeaveRequest<T extends Employee$LeaveRequestArgs<ExtArgs> = {}>(args?: Subset<T, Employee$LeaveRequestArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    otherInfo<T extends Employee$otherInfoArgs<ExtArgs> = {}>(args?: Subset<T, Employee$otherInfoArgs<ExtArgs>>): Prisma__OtherInfoClient<$Result.GetResult<Prisma.$OtherInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    personalInfo<T extends Employee$personalInfoArgs<ExtArgs> = {}>(args?: Subset<T, Employee$personalInfoArgs<ExtArgs>>): Prisma__PersonalInfoClient<$Result.GetResult<Prisma.$PersonalInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     proposalsCreated<T extends Employee$proposalsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, Employee$proposalsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     proposalsProposed<T extends Employee$proposalsProposedArgs<ExtArgs> = {}>(args?: Subset<T, Employee$proposalsProposedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     proposalApprovals<T extends Employee$proposalApprovalsArgs<ExtArgs> = {}>(args?: Subset<T, Employee$proposalApprovalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalApproverPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     proposalSignatures<T extends Employee$proposalSignaturesArgs<ExtArgs> = {}>(args?: Subset<T, Employee$proposalSignaturesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalSignerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     workInfo<T extends Employee$workInfoArgs<ExtArgs> = {}>(args?: Subset<T, Employee$workInfoArgs<ExtArgs>>): Prisma__WorkInfoClient<$Result.GetResult<Prisma.$WorkInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     Attendance<T extends Employee$AttendanceArgs<ExtArgs> = {}>(args?: Subset<T, Employee$AttendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assetsReceived<T extends Employee$assetsReceivedArgs<ExtArgs> = {}>(args?: Subset<T, Employee$assetsReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assetsIssued<T extends Employee$assetsIssuedArgs<ExtArgs> = {}>(args?: Subset<T, Employee$assetsIssuedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6375,44 +6424,6 @@ export namespace Prisma {
   }
 
   /**
-   * Employee.otherInfo
-   */
-  export type Employee$otherInfoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the OtherInfo
-     */
-    select?: OtherInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the OtherInfo
-     */
-    omit?: OtherInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: OtherInfoInclude<ExtArgs> | null
-    where?: OtherInfoWhereInput
-  }
-
-  /**
-   * Employee.personalInfo
-   */
-  export type Employee$personalInfoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PersonalInfo
-     */
-    select?: PersonalInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PersonalInfo
-     */
-    omit?: PersonalInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PersonalInfoInclude<ExtArgs> | null
-    where?: PersonalInfoWhereInput
-  }
-
-  /**
    * Employee.proposalsCreated
    */
   export type Employee$proposalsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6549,6 +6560,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AttendanceScalarFieldEnum | AttendanceScalarFieldEnum[]
+  }
+
+  /**
+   * Employee.assetsReceived
+   */
+  export type Employee$assetsReceivedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    where?: AssetAssignmentWhereInput
+    orderBy?: AssetAssignmentOrderByWithRelationInput | AssetAssignmentOrderByWithRelationInput[]
+    cursor?: AssetAssignmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AssetAssignmentScalarFieldEnum | AssetAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * Employee.assetsIssued
+   */
+  export type Employee$assetsIssuedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    where?: AssetAssignmentWhereInput
+    orderBy?: AssetAssignmentOrderByWithRelationInput | AssetAssignmentOrderByWithRelationInput[]
+    cursor?: AssetAssignmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AssetAssignmentScalarFieldEnum | AssetAssignmentScalarFieldEnum[]
   }
 
   /**
@@ -9807,1065 +9866,6 @@ export namespace Prisma {
 
 
   /**
-   * Model PersonalInfo
-   */
-
-  export type AggregatePersonalInfo = {
-    _count: PersonalInfoCountAggregateOutputType | null
-    _avg: PersonalInfoAvgAggregateOutputType | null
-    _sum: PersonalInfoSumAggregateOutputType | null
-    _min: PersonalInfoMinAggregateOutputType | null
-    _max: PersonalInfoMaxAggregateOutputType | null
-  }
-
-  export type PersonalInfoAvgAggregateOutputType = {
-    id: number | null
-    insuranceSalary: number | null
-    employeeId: number | null
-  }
-
-  export type PersonalInfoSumAggregateOutputType = {
-    id: number | null
-    insuranceSalary: number | null
-    employeeId: number | null
-  }
-
-  export type PersonalInfoMinAggregateOutputType = {
-    id: number | null
-    identityNumber: string | null
-    issueDate: Date | null
-    issuePlace: string | null
-    hometown: string | null
-    idAddress: string | null
-    education: string | null
-    drivingLicense: string | null
-    toyotaCertificate: string | null
-    taxCode: string | null
-    insuranceNumber: string | null
-    insuranceSalary: number | null
-    employeeId: number | null
-  }
-
-  export type PersonalInfoMaxAggregateOutputType = {
-    id: number | null
-    identityNumber: string | null
-    issueDate: Date | null
-    issuePlace: string | null
-    hometown: string | null
-    idAddress: string | null
-    education: string | null
-    drivingLicense: string | null
-    toyotaCertificate: string | null
-    taxCode: string | null
-    insuranceNumber: string | null
-    insuranceSalary: number | null
-    employeeId: number | null
-  }
-
-  export type PersonalInfoCountAggregateOutputType = {
-    id: number
-    identityNumber: number
-    issueDate: number
-    issuePlace: number
-    hometown: number
-    idAddress: number
-    education: number
-    drivingLicense: number
-    toyotaCertificate: number
-    taxCode: number
-    insuranceNumber: number
-    insuranceSalary: number
-    employeeId: number
-    _all: number
-  }
-
-
-  export type PersonalInfoAvgAggregateInputType = {
-    id?: true
-    insuranceSalary?: true
-    employeeId?: true
-  }
-
-  export type PersonalInfoSumAggregateInputType = {
-    id?: true
-    insuranceSalary?: true
-    employeeId?: true
-  }
-
-  export type PersonalInfoMinAggregateInputType = {
-    id?: true
-    identityNumber?: true
-    issueDate?: true
-    issuePlace?: true
-    hometown?: true
-    idAddress?: true
-    education?: true
-    drivingLicense?: true
-    toyotaCertificate?: true
-    taxCode?: true
-    insuranceNumber?: true
-    insuranceSalary?: true
-    employeeId?: true
-  }
-
-  export type PersonalInfoMaxAggregateInputType = {
-    id?: true
-    identityNumber?: true
-    issueDate?: true
-    issuePlace?: true
-    hometown?: true
-    idAddress?: true
-    education?: true
-    drivingLicense?: true
-    toyotaCertificate?: true
-    taxCode?: true
-    insuranceNumber?: true
-    insuranceSalary?: true
-    employeeId?: true
-  }
-
-  export type PersonalInfoCountAggregateInputType = {
-    id?: true
-    identityNumber?: true
-    issueDate?: true
-    issuePlace?: true
-    hometown?: true
-    idAddress?: true
-    education?: true
-    drivingLicense?: true
-    toyotaCertificate?: true
-    taxCode?: true
-    insuranceNumber?: true
-    insuranceSalary?: true
-    employeeId?: true
-    _all?: true
-  }
-
-  export type PersonalInfoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which PersonalInfo to aggregate.
-     */
-    where?: PersonalInfoWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PersonalInfos to fetch.
-     */
-    orderBy?: PersonalInfoOrderByWithRelationInput | PersonalInfoOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: PersonalInfoWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PersonalInfos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PersonalInfos.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned PersonalInfos
-    **/
-    _count?: true | PersonalInfoCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: PersonalInfoAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: PersonalInfoSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: PersonalInfoMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: PersonalInfoMaxAggregateInputType
-  }
-
-  export type GetPersonalInfoAggregateType<T extends PersonalInfoAggregateArgs> = {
-        [P in keyof T & keyof AggregatePersonalInfo]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregatePersonalInfo[P]>
-      : GetScalarType<T[P], AggregatePersonalInfo[P]>
-  }
-
-
-
-
-  export type PersonalInfoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PersonalInfoWhereInput
-    orderBy?: PersonalInfoOrderByWithAggregationInput | PersonalInfoOrderByWithAggregationInput[]
-    by: PersonalInfoScalarFieldEnum[] | PersonalInfoScalarFieldEnum
-    having?: PersonalInfoScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: PersonalInfoCountAggregateInputType | true
-    _avg?: PersonalInfoAvgAggregateInputType
-    _sum?: PersonalInfoSumAggregateInputType
-    _min?: PersonalInfoMinAggregateInputType
-    _max?: PersonalInfoMaxAggregateInputType
-  }
-
-  export type PersonalInfoGroupByOutputType = {
-    id: number
-    identityNumber: string | null
-    issueDate: Date | null
-    issuePlace: string | null
-    hometown: string | null
-    idAddress: string | null
-    education: string | null
-    drivingLicense: string | null
-    toyotaCertificate: string | null
-    taxCode: string | null
-    insuranceNumber: string | null
-    insuranceSalary: number | null
-    employeeId: number
-    _count: PersonalInfoCountAggregateOutputType | null
-    _avg: PersonalInfoAvgAggregateOutputType | null
-    _sum: PersonalInfoSumAggregateOutputType | null
-    _min: PersonalInfoMinAggregateOutputType | null
-    _max: PersonalInfoMaxAggregateOutputType | null
-  }
-
-  type GetPersonalInfoGroupByPayload<T extends PersonalInfoGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<PersonalInfoGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof PersonalInfoGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], PersonalInfoGroupByOutputType[P]>
-            : GetScalarType<T[P], PersonalInfoGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type PersonalInfoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    identityNumber?: boolean
-    issueDate?: boolean
-    issuePlace?: boolean
-    hometown?: boolean
-    idAddress?: boolean
-    education?: boolean
-    drivingLicense?: boolean
-    toyotaCertificate?: boolean
-    taxCode?: boolean
-    insuranceNumber?: boolean
-    insuranceSalary?: boolean
-    employeeId?: boolean
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["personalInfo"]>
-
-
-
-  export type PersonalInfoSelectScalar = {
-    id?: boolean
-    identityNumber?: boolean
-    issueDate?: boolean
-    issuePlace?: boolean
-    hometown?: boolean
-    idAddress?: boolean
-    education?: boolean
-    drivingLicense?: boolean
-    toyotaCertificate?: boolean
-    taxCode?: boolean
-    insuranceNumber?: boolean
-    insuranceSalary?: boolean
-    employeeId?: boolean
-  }
-
-  export type PersonalInfoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "identityNumber" | "issueDate" | "issuePlace" | "hometown" | "idAddress" | "education" | "drivingLicense" | "toyotaCertificate" | "taxCode" | "insuranceNumber" | "insuranceSalary" | "employeeId", ExtArgs["result"]["personalInfo"]>
-  export type PersonalInfoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
-  }
-
-  export type $PersonalInfoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "PersonalInfo"
-    objects: {
-      employee: Prisma.$EmployeePayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      identityNumber: string | null
-      issueDate: Date | null
-      issuePlace: string | null
-      hometown: string | null
-      idAddress: string | null
-      education: string | null
-      drivingLicense: string | null
-      toyotaCertificate: string | null
-      taxCode: string | null
-      insuranceNumber: string | null
-      insuranceSalary: number | null
-      employeeId: number
-    }, ExtArgs["result"]["personalInfo"]>
-    composites: {}
-  }
-
-  type PersonalInfoGetPayload<S extends boolean | null | undefined | PersonalInfoDefaultArgs> = $Result.GetResult<Prisma.$PersonalInfoPayload, S>
-
-  type PersonalInfoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<PersonalInfoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: PersonalInfoCountAggregateInputType | true
-    }
-
-  export interface PersonalInfoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PersonalInfo'], meta: { name: 'PersonalInfo' } }
-    /**
-     * Find zero or one PersonalInfo that matches the filter.
-     * @param {PersonalInfoFindUniqueArgs} args - Arguments to find a PersonalInfo
-     * @example
-     * // Get one PersonalInfo
-     * const personalInfo = await prisma.personalInfo.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends PersonalInfoFindUniqueArgs>(args: SelectSubset<T, PersonalInfoFindUniqueArgs<ExtArgs>>): Prisma__PersonalInfoClient<$Result.GetResult<Prisma.$PersonalInfoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one PersonalInfo that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {PersonalInfoFindUniqueOrThrowArgs} args - Arguments to find a PersonalInfo
-     * @example
-     * // Get one PersonalInfo
-     * const personalInfo = await prisma.personalInfo.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends PersonalInfoFindUniqueOrThrowArgs>(args: SelectSubset<T, PersonalInfoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PersonalInfoClient<$Result.GetResult<Prisma.$PersonalInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first PersonalInfo that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PersonalInfoFindFirstArgs} args - Arguments to find a PersonalInfo
-     * @example
-     * // Get one PersonalInfo
-     * const personalInfo = await prisma.personalInfo.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends PersonalInfoFindFirstArgs>(args?: SelectSubset<T, PersonalInfoFindFirstArgs<ExtArgs>>): Prisma__PersonalInfoClient<$Result.GetResult<Prisma.$PersonalInfoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first PersonalInfo that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PersonalInfoFindFirstOrThrowArgs} args - Arguments to find a PersonalInfo
-     * @example
-     * // Get one PersonalInfo
-     * const personalInfo = await prisma.personalInfo.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends PersonalInfoFindFirstOrThrowArgs>(args?: SelectSubset<T, PersonalInfoFindFirstOrThrowArgs<ExtArgs>>): Prisma__PersonalInfoClient<$Result.GetResult<Prisma.$PersonalInfoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more PersonalInfos that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PersonalInfoFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all PersonalInfos
-     * const personalInfos = await prisma.personalInfo.findMany()
-     * 
-     * // Get first 10 PersonalInfos
-     * const personalInfos = await prisma.personalInfo.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const personalInfoWithIdOnly = await prisma.personalInfo.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends PersonalInfoFindManyArgs>(args?: SelectSubset<T, PersonalInfoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PersonalInfoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a PersonalInfo.
-     * @param {PersonalInfoCreateArgs} args - Arguments to create a PersonalInfo.
-     * @example
-     * // Create one PersonalInfo
-     * const PersonalInfo = await prisma.personalInfo.create({
-     *   data: {
-     *     // ... data to create a PersonalInfo
-     *   }
-     * })
-     * 
-     */
-    create<T extends PersonalInfoCreateArgs>(args: SelectSubset<T, PersonalInfoCreateArgs<ExtArgs>>): Prisma__PersonalInfoClient<$Result.GetResult<Prisma.$PersonalInfoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many PersonalInfos.
-     * @param {PersonalInfoCreateManyArgs} args - Arguments to create many PersonalInfos.
-     * @example
-     * // Create many PersonalInfos
-     * const personalInfo = await prisma.personalInfo.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends PersonalInfoCreateManyArgs>(args?: SelectSubset<T, PersonalInfoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a PersonalInfo.
-     * @param {PersonalInfoDeleteArgs} args - Arguments to delete one PersonalInfo.
-     * @example
-     * // Delete one PersonalInfo
-     * const PersonalInfo = await prisma.personalInfo.delete({
-     *   where: {
-     *     // ... filter to delete one PersonalInfo
-     *   }
-     * })
-     * 
-     */
-    delete<T extends PersonalInfoDeleteArgs>(args: SelectSubset<T, PersonalInfoDeleteArgs<ExtArgs>>): Prisma__PersonalInfoClient<$Result.GetResult<Prisma.$PersonalInfoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one PersonalInfo.
-     * @param {PersonalInfoUpdateArgs} args - Arguments to update one PersonalInfo.
-     * @example
-     * // Update one PersonalInfo
-     * const personalInfo = await prisma.personalInfo.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends PersonalInfoUpdateArgs>(args: SelectSubset<T, PersonalInfoUpdateArgs<ExtArgs>>): Prisma__PersonalInfoClient<$Result.GetResult<Prisma.$PersonalInfoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more PersonalInfos.
-     * @param {PersonalInfoDeleteManyArgs} args - Arguments to filter PersonalInfos to delete.
-     * @example
-     * // Delete a few PersonalInfos
-     * const { count } = await prisma.personalInfo.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends PersonalInfoDeleteManyArgs>(args?: SelectSubset<T, PersonalInfoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more PersonalInfos.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PersonalInfoUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many PersonalInfos
-     * const personalInfo = await prisma.personalInfo.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends PersonalInfoUpdateManyArgs>(args: SelectSubset<T, PersonalInfoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one PersonalInfo.
-     * @param {PersonalInfoUpsertArgs} args - Arguments to update or create a PersonalInfo.
-     * @example
-     * // Update or create a PersonalInfo
-     * const personalInfo = await prisma.personalInfo.upsert({
-     *   create: {
-     *     // ... data to create a PersonalInfo
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the PersonalInfo we want to update
-     *   }
-     * })
-     */
-    upsert<T extends PersonalInfoUpsertArgs>(args: SelectSubset<T, PersonalInfoUpsertArgs<ExtArgs>>): Prisma__PersonalInfoClient<$Result.GetResult<Prisma.$PersonalInfoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of PersonalInfos.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PersonalInfoCountArgs} args - Arguments to filter PersonalInfos to count.
-     * @example
-     * // Count the number of PersonalInfos
-     * const count = await prisma.personalInfo.count({
-     *   where: {
-     *     // ... the filter for the PersonalInfos we want to count
-     *   }
-     * })
-    **/
-    count<T extends PersonalInfoCountArgs>(
-      args?: Subset<T, PersonalInfoCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], PersonalInfoCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a PersonalInfo.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PersonalInfoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends PersonalInfoAggregateArgs>(args: Subset<T, PersonalInfoAggregateArgs>): Prisma.PrismaPromise<GetPersonalInfoAggregateType<T>>
-
-    /**
-     * Group by PersonalInfo.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PersonalInfoGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends PersonalInfoGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: PersonalInfoGroupByArgs['orderBy'] }
-        : { orderBy?: PersonalInfoGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, PersonalInfoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPersonalInfoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the PersonalInfo model
-   */
-  readonly fields: PersonalInfoFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for PersonalInfo.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__PersonalInfoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the PersonalInfo model
-   */
-  interface PersonalInfoFieldRefs {
-    readonly id: FieldRef<"PersonalInfo", 'Int'>
-    readonly identityNumber: FieldRef<"PersonalInfo", 'String'>
-    readonly issueDate: FieldRef<"PersonalInfo", 'DateTime'>
-    readonly issuePlace: FieldRef<"PersonalInfo", 'String'>
-    readonly hometown: FieldRef<"PersonalInfo", 'String'>
-    readonly idAddress: FieldRef<"PersonalInfo", 'String'>
-    readonly education: FieldRef<"PersonalInfo", 'String'>
-    readonly drivingLicense: FieldRef<"PersonalInfo", 'String'>
-    readonly toyotaCertificate: FieldRef<"PersonalInfo", 'String'>
-    readonly taxCode: FieldRef<"PersonalInfo", 'String'>
-    readonly insuranceNumber: FieldRef<"PersonalInfo", 'String'>
-    readonly insuranceSalary: FieldRef<"PersonalInfo", 'Int'>
-    readonly employeeId: FieldRef<"PersonalInfo", 'Int'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * PersonalInfo findUnique
-   */
-  export type PersonalInfoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PersonalInfo
-     */
-    select?: PersonalInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PersonalInfo
-     */
-    omit?: PersonalInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PersonalInfoInclude<ExtArgs> | null
-    /**
-     * Filter, which PersonalInfo to fetch.
-     */
-    where: PersonalInfoWhereUniqueInput
-  }
-
-  /**
-   * PersonalInfo findUniqueOrThrow
-   */
-  export type PersonalInfoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PersonalInfo
-     */
-    select?: PersonalInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PersonalInfo
-     */
-    omit?: PersonalInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PersonalInfoInclude<ExtArgs> | null
-    /**
-     * Filter, which PersonalInfo to fetch.
-     */
-    where: PersonalInfoWhereUniqueInput
-  }
-
-  /**
-   * PersonalInfo findFirst
-   */
-  export type PersonalInfoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PersonalInfo
-     */
-    select?: PersonalInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PersonalInfo
-     */
-    omit?: PersonalInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PersonalInfoInclude<ExtArgs> | null
-    /**
-     * Filter, which PersonalInfo to fetch.
-     */
-    where?: PersonalInfoWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PersonalInfos to fetch.
-     */
-    orderBy?: PersonalInfoOrderByWithRelationInput | PersonalInfoOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for PersonalInfos.
-     */
-    cursor?: PersonalInfoWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PersonalInfos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PersonalInfos.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of PersonalInfos.
-     */
-    distinct?: PersonalInfoScalarFieldEnum | PersonalInfoScalarFieldEnum[]
-  }
-
-  /**
-   * PersonalInfo findFirstOrThrow
-   */
-  export type PersonalInfoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PersonalInfo
-     */
-    select?: PersonalInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PersonalInfo
-     */
-    omit?: PersonalInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PersonalInfoInclude<ExtArgs> | null
-    /**
-     * Filter, which PersonalInfo to fetch.
-     */
-    where?: PersonalInfoWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PersonalInfos to fetch.
-     */
-    orderBy?: PersonalInfoOrderByWithRelationInput | PersonalInfoOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for PersonalInfos.
-     */
-    cursor?: PersonalInfoWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PersonalInfos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PersonalInfos.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of PersonalInfos.
-     */
-    distinct?: PersonalInfoScalarFieldEnum | PersonalInfoScalarFieldEnum[]
-  }
-
-  /**
-   * PersonalInfo findMany
-   */
-  export type PersonalInfoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PersonalInfo
-     */
-    select?: PersonalInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PersonalInfo
-     */
-    omit?: PersonalInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PersonalInfoInclude<ExtArgs> | null
-    /**
-     * Filter, which PersonalInfos to fetch.
-     */
-    where?: PersonalInfoWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PersonalInfos to fetch.
-     */
-    orderBy?: PersonalInfoOrderByWithRelationInput | PersonalInfoOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing PersonalInfos.
-     */
-    cursor?: PersonalInfoWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PersonalInfos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PersonalInfos.
-     */
-    skip?: number
-    distinct?: PersonalInfoScalarFieldEnum | PersonalInfoScalarFieldEnum[]
-  }
-
-  /**
-   * PersonalInfo create
-   */
-  export type PersonalInfoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PersonalInfo
-     */
-    select?: PersonalInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PersonalInfo
-     */
-    omit?: PersonalInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PersonalInfoInclude<ExtArgs> | null
-    /**
-     * The data needed to create a PersonalInfo.
-     */
-    data: XOR<PersonalInfoCreateInput, PersonalInfoUncheckedCreateInput>
-  }
-
-  /**
-   * PersonalInfo createMany
-   */
-  export type PersonalInfoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many PersonalInfos.
-     */
-    data: PersonalInfoCreateManyInput | PersonalInfoCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * PersonalInfo update
-   */
-  export type PersonalInfoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PersonalInfo
-     */
-    select?: PersonalInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PersonalInfo
-     */
-    omit?: PersonalInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PersonalInfoInclude<ExtArgs> | null
-    /**
-     * The data needed to update a PersonalInfo.
-     */
-    data: XOR<PersonalInfoUpdateInput, PersonalInfoUncheckedUpdateInput>
-    /**
-     * Choose, which PersonalInfo to update.
-     */
-    where: PersonalInfoWhereUniqueInput
-  }
-
-  /**
-   * PersonalInfo updateMany
-   */
-  export type PersonalInfoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update PersonalInfos.
-     */
-    data: XOR<PersonalInfoUpdateManyMutationInput, PersonalInfoUncheckedUpdateManyInput>
-    /**
-     * Filter which PersonalInfos to update
-     */
-    where?: PersonalInfoWhereInput
-    /**
-     * Limit how many PersonalInfos to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * PersonalInfo upsert
-   */
-  export type PersonalInfoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PersonalInfo
-     */
-    select?: PersonalInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PersonalInfo
-     */
-    omit?: PersonalInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PersonalInfoInclude<ExtArgs> | null
-    /**
-     * The filter to search for the PersonalInfo to update in case it exists.
-     */
-    where: PersonalInfoWhereUniqueInput
-    /**
-     * In case the PersonalInfo found by the `where` argument doesn't exist, create a new PersonalInfo with this data.
-     */
-    create: XOR<PersonalInfoCreateInput, PersonalInfoUncheckedCreateInput>
-    /**
-     * In case the PersonalInfo was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<PersonalInfoUpdateInput, PersonalInfoUncheckedUpdateInput>
-  }
-
-  /**
-   * PersonalInfo delete
-   */
-  export type PersonalInfoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PersonalInfo
-     */
-    select?: PersonalInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PersonalInfo
-     */
-    omit?: PersonalInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PersonalInfoInclude<ExtArgs> | null
-    /**
-     * Filter which PersonalInfo to delete.
-     */
-    where: PersonalInfoWhereUniqueInput
-  }
-
-  /**
-   * PersonalInfo deleteMany
-   */
-  export type PersonalInfoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which PersonalInfos to delete
-     */
-    where?: PersonalInfoWhereInput
-    /**
-     * Limit how many PersonalInfos to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * PersonalInfo without action
-   */
-  export type PersonalInfoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PersonalInfo
-     */
-    select?: PersonalInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PersonalInfo
-     */
-    omit?: PersonalInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PersonalInfoInclude<ExtArgs> | null
-  }
-
-
-  /**
    * Model ContactInfo
    */
 
@@ -11851,1017 +10851,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ContactInfoInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model OtherInfo
-   */
-
-  export type AggregateOtherInfo = {
-    _count: OtherInfoCountAggregateOutputType | null
-    _avg: OtherInfoAvgAggregateOutputType | null
-    _sum: OtherInfoSumAggregateOutputType | null
-    _min: OtherInfoMinAggregateOutputType | null
-    _max: OtherInfoMaxAggregateOutputType | null
-  }
-
-  export type OtherInfoAvgAggregateOutputType = {
-    id: number | null
-    employeeId: number | null
-  }
-
-  export type OtherInfoSumAggregateOutputType = {
-    id: number | null
-    employeeId: number | null
-  }
-
-  export type OtherInfoMinAggregateOutputType = {
-    id: number | null
-    workStatus: $Enums.WorkStatus | null
-    resignedDate: Date | null
-    documentsChecked: string | null
-    updatedAt: Date | null
-    VCB: string | null
-    MTCV: string | null
-    PNJ: string | null
-    employeeId: number | null
-  }
-
-  export type OtherInfoMaxAggregateOutputType = {
-    id: number | null
-    workStatus: $Enums.WorkStatus | null
-    resignedDate: Date | null
-    documentsChecked: string | null
-    updatedAt: Date | null
-    VCB: string | null
-    MTCV: string | null
-    PNJ: string | null
-    employeeId: number | null
-  }
-
-  export type OtherInfoCountAggregateOutputType = {
-    id: number
-    workStatus: number
-    resignedDate: number
-    documentsChecked: number
-    updatedAt: number
-    VCB: number
-    MTCV: number
-    PNJ: number
-    employeeId: number
-    _all: number
-  }
-
-
-  export type OtherInfoAvgAggregateInputType = {
-    id?: true
-    employeeId?: true
-  }
-
-  export type OtherInfoSumAggregateInputType = {
-    id?: true
-    employeeId?: true
-  }
-
-  export type OtherInfoMinAggregateInputType = {
-    id?: true
-    workStatus?: true
-    resignedDate?: true
-    documentsChecked?: true
-    updatedAt?: true
-    VCB?: true
-    MTCV?: true
-    PNJ?: true
-    employeeId?: true
-  }
-
-  export type OtherInfoMaxAggregateInputType = {
-    id?: true
-    workStatus?: true
-    resignedDate?: true
-    documentsChecked?: true
-    updatedAt?: true
-    VCB?: true
-    MTCV?: true
-    PNJ?: true
-    employeeId?: true
-  }
-
-  export type OtherInfoCountAggregateInputType = {
-    id?: true
-    workStatus?: true
-    resignedDate?: true
-    documentsChecked?: true
-    updatedAt?: true
-    VCB?: true
-    MTCV?: true
-    PNJ?: true
-    employeeId?: true
-    _all?: true
-  }
-
-  export type OtherInfoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which OtherInfo to aggregate.
-     */
-    where?: OtherInfoWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of OtherInfos to fetch.
-     */
-    orderBy?: OtherInfoOrderByWithRelationInput | OtherInfoOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: OtherInfoWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` OtherInfos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` OtherInfos.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned OtherInfos
-    **/
-    _count?: true | OtherInfoCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: OtherInfoAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: OtherInfoSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: OtherInfoMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: OtherInfoMaxAggregateInputType
-  }
-
-  export type GetOtherInfoAggregateType<T extends OtherInfoAggregateArgs> = {
-        [P in keyof T & keyof AggregateOtherInfo]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateOtherInfo[P]>
-      : GetScalarType<T[P], AggregateOtherInfo[P]>
-  }
-
-
-
-
-  export type OtherInfoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: OtherInfoWhereInput
-    orderBy?: OtherInfoOrderByWithAggregationInput | OtherInfoOrderByWithAggregationInput[]
-    by: OtherInfoScalarFieldEnum[] | OtherInfoScalarFieldEnum
-    having?: OtherInfoScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: OtherInfoCountAggregateInputType | true
-    _avg?: OtherInfoAvgAggregateInputType
-    _sum?: OtherInfoSumAggregateInputType
-    _min?: OtherInfoMinAggregateInputType
-    _max?: OtherInfoMaxAggregateInputType
-  }
-
-  export type OtherInfoGroupByOutputType = {
-    id: number
-    workStatus: $Enums.WorkStatus
-    resignedDate: Date | null
-    documentsChecked: string | null
-    updatedAt: Date
-    VCB: string | null
-    MTCV: string | null
-    PNJ: string | null
-    employeeId: number
-    _count: OtherInfoCountAggregateOutputType | null
-    _avg: OtherInfoAvgAggregateOutputType | null
-    _sum: OtherInfoSumAggregateOutputType | null
-    _min: OtherInfoMinAggregateOutputType | null
-    _max: OtherInfoMaxAggregateOutputType | null
-  }
-
-  type GetOtherInfoGroupByPayload<T extends OtherInfoGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<OtherInfoGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof OtherInfoGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], OtherInfoGroupByOutputType[P]>
-            : GetScalarType<T[P], OtherInfoGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type OtherInfoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    workStatus?: boolean
-    resignedDate?: boolean
-    documentsChecked?: boolean
-    updatedAt?: boolean
-    VCB?: boolean
-    MTCV?: boolean
-    PNJ?: boolean
-    employeeId?: boolean
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["otherInfo"]>
-
-
-
-  export type OtherInfoSelectScalar = {
-    id?: boolean
-    workStatus?: boolean
-    resignedDate?: boolean
-    documentsChecked?: boolean
-    updatedAt?: boolean
-    VCB?: boolean
-    MTCV?: boolean
-    PNJ?: boolean
-    employeeId?: boolean
-  }
-
-  export type OtherInfoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "workStatus" | "resignedDate" | "documentsChecked" | "updatedAt" | "VCB" | "MTCV" | "PNJ" | "employeeId", ExtArgs["result"]["otherInfo"]>
-  export type OtherInfoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
-  }
-
-  export type $OtherInfoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "OtherInfo"
-    objects: {
-      employee: Prisma.$EmployeePayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      workStatus: $Enums.WorkStatus
-      resignedDate: Date | null
-      documentsChecked: string | null
-      updatedAt: Date
-      VCB: string | null
-      MTCV: string | null
-      PNJ: string | null
-      employeeId: number
-    }, ExtArgs["result"]["otherInfo"]>
-    composites: {}
-  }
-
-  type OtherInfoGetPayload<S extends boolean | null | undefined | OtherInfoDefaultArgs> = $Result.GetResult<Prisma.$OtherInfoPayload, S>
-
-  type OtherInfoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<OtherInfoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: OtherInfoCountAggregateInputType | true
-    }
-
-  export interface OtherInfoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OtherInfo'], meta: { name: 'OtherInfo' } }
-    /**
-     * Find zero or one OtherInfo that matches the filter.
-     * @param {OtherInfoFindUniqueArgs} args - Arguments to find a OtherInfo
-     * @example
-     * // Get one OtherInfo
-     * const otherInfo = await prisma.otherInfo.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends OtherInfoFindUniqueArgs>(args: SelectSubset<T, OtherInfoFindUniqueArgs<ExtArgs>>): Prisma__OtherInfoClient<$Result.GetResult<Prisma.$OtherInfoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one OtherInfo that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {OtherInfoFindUniqueOrThrowArgs} args - Arguments to find a OtherInfo
-     * @example
-     * // Get one OtherInfo
-     * const otherInfo = await prisma.otherInfo.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends OtherInfoFindUniqueOrThrowArgs>(args: SelectSubset<T, OtherInfoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OtherInfoClient<$Result.GetResult<Prisma.$OtherInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first OtherInfo that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {OtherInfoFindFirstArgs} args - Arguments to find a OtherInfo
-     * @example
-     * // Get one OtherInfo
-     * const otherInfo = await prisma.otherInfo.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends OtherInfoFindFirstArgs>(args?: SelectSubset<T, OtherInfoFindFirstArgs<ExtArgs>>): Prisma__OtherInfoClient<$Result.GetResult<Prisma.$OtherInfoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first OtherInfo that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {OtherInfoFindFirstOrThrowArgs} args - Arguments to find a OtherInfo
-     * @example
-     * // Get one OtherInfo
-     * const otherInfo = await prisma.otherInfo.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends OtherInfoFindFirstOrThrowArgs>(args?: SelectSubset<T, OtherInfoFindFirstOrThrowArgs<ExtArgs>>): Prisma__OtherInfoClient<$Result.GetResult<Prisma.$OtherInfoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more OtherInfos that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {OtherInfoFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all OtherInfos
-     * const otherInfos = await prisma.otherInfo.findMany()
-     * 
-     * // Get first 10 OtherInfos
-     * const otherInfos = await prisma.otherInfo.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const otherInfoWithIdOnly = await prisma.otherInfo.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends OtherInfoFindManyArgs>(args?: SelectSubset<T, OtherInfoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OtherInfoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a OtherInfo.
-     * @param {OtherInfoCreateArgs} args - Arguments to create a OtherInfo.
-     * @example
-     * // Create one OtherInfo
-     * const OtherInfo = await prisma.otherInfo.create({
-     *   data: {
-     *     // ... data to create a OtherInfo
-     *   }
-     * })
-     * 
-     */
-    create<T extends OtherInfoCreateArgs>(args: SelectSubset<T, OtherInfoCreateArgs<ExtArgs>>): Prisma__OtherInfoClient<$Result.GetResult<Prisma.$OtherInfoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many OtherInfos.
-     * @param {OtherInfoCreateManyArgs} args - Arguments to create many OtherInfos.
-     * @example
-     * // Create many OtherInfos
-     * const otherInfo = await prisma.otherInfo.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends OtherInfoCreateManyArgs>(args?: SelectSubset<T, OtherInfoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a OtherInfo.
-     * @param {OtherInfoDeleteArgs} args - Arguments to delete one OtherInfo.
-     * @example
-     * // Delete one OtherInfo
-     * const OtherInfo = await prisma.otherInfo.delete({
-     *   where: {
-     *     // ... filter to delete one OtherInfo
-     *   }
-     * })
-     * 
-     */
-    delete<T extends OtherInfoDeleteArgs>(args: SelectSubset<T, OtherInfoDeleteArgs<ExtArgs>>): Prisma__OtherInfoClient<$Result.GetResult<Prisma.$OtherInfoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one OtherInfo.
-     * @param {OtherInfoUpdateArgs} args - Arguments to update one OtherInfo.
-     * @example
-     * // Update one OtherInfo
-     * const otherInfo = await prisma.otherInfo.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends OtherInfoUpdateArgs>(args: SelectSubset<T, OtherInfoUpdateArgs<ExtArgs>>): Prisma__OtherInfoClient<$Result.GetResult<Prisma.$OtherInfoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more OtherInfos.
-     * @param {OtherInfoDeleteManyArgs} args - Arguments to filter OtherInfos to delete.
-     * @example
-     * // Delete a few OtherInfos
-     * const { count } = await prisma.otherInfo.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends OtherInfoDeleteManyArgs>(args?: SelectSubset<T, OtherInfoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more OtherInfos.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {OtherInfoUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many OtherInfos
-     * const otherInfo = await prisma.otherInfo.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends OtherInfoUpdateManyArgs>(args: SelectSubset<T, OtherInfoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one OtherInfo.
-     * @param {OtherInfoUpsertArgs} args - Arguments to update or create a OtherInfo.
-     * @example
-     * // Update or create a OtherInfo
-     * const otherInfo = await prisma.otherInfo.upsert({
-     *   create: {
-     *     // ... data to create a OtherInfo
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the OtherInfo we want to update
-     *   }
-     * })
-     */
-    upsert<T extends OtherInfoUpsertArgs>(args: SelectSubset<T, OtherInfoUpsertArgs<ExtArgs>>): Prisma__OtherInfoClient<$Result.GetResult<Prisma.$OtherInfoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of OtherInfos.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {OtherInfoCountArgs} args - Arguments to filter OtherInfos to count.
-     * @example
-     * // Count the number of OtherInfos
-     * const count = await prisma.otherInfo.count({
-     *   where: {
-     *     // ... the filter for the OtherInfos we want to count
-     *   }
-     * })
-    **/
-    count<T extends OtherInfoCountArgs>(
-      args?: Subset<T, OtherInfoCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], OtherInfoCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a OtherInfo.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {OtherInfoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends OtherInfoAggregateArgs>(args: Subset<T, OtherInfoAggregateArgs>): Prisma.PrismaPromise<GetOtherInfoAggregateType<T>>
-
-    /**
-     * Group by OtherInfo.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {OtherInfoGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends OtherInfoGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: OtherInfoGroupByArgs['orderBy'] }
-        : { orderBy?: OtherInfoGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, OtherInfoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOtherInfoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the OtherInfo model
-   */
-  readonly fields: OtherInfoFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for OtherInfo.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__OtherInfoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the OtherInfo model
-   */
-  interface OtherInfoFieldRefs {
-    readonly id: FieldRef<"OtherInfo", 'Int'>
-    readonly workStatus: FieldRef<"OtherInfo", 'WorkStatus'>
-    readonly resignedDate: FieldRef<"OtherInfo", 'DateTime'>
-    readonly documentsChecked: FieldRef<"OtherInfo", 'String'>
-    readonly updatedAt: FieldRef<"OtherInfo", 'DateTime'>
-    readonly VCB: FieldRef<"OtherInfo", 'String'>
-    readonly MTCV: FieldRef<"OtherInfo", 'String'>
-    readonly PNJ: FieldRef<"OtherInfo", 'String'>
-    readonly employeeId: FieldRef<"OtherInfo", 'Int'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * OtherInfo findUnique
-   */
-  export type OtherInfoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the OtherInfo
-     */
-    select?: OtherInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the OtherInfo
-     */
-    omit?: OtherInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: OtherInfoInclude<ExtArgs> | null
-    /**
-     * Filter, which OtherInfo to fetch.
-     */
-    where: OtherInfoWhereUniqueInput
-  }
-
-  /**
-   * OtherInfo findUniqueOrThrow
-   */
-  export type OtherInfoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the OtherInfo
-     */
-    select?: OtherInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the OtherInfo
-     */
-    omit?: OtherInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: OtherInfoInclude<ExtArgs> | null
-    /**
-     * Filter, which OtherInfo to fetch.
-     */
-    where: OtherInfoWhereUniqueInput
-  }
-
-  /**
-   * OtherInfo findFirst
-   */
-  export type OtherInfoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the OtherInfo
-     */
-    select?: OtherInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the OtherInfo
-     */
-    omit?: OtherInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: OtherInfoInclude<ExtArgs> | null
-    /**
-     * Filter, which OtherInfo to fetch.
-     */
-    where?: OtherInfoWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of OtherInfos to fetch.
-     */
-    orderBy?: OtherInfoOrderByWithRelationInput | OtherInfoOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for OtherInfos.
-     */
-    cursor?: OtherInfoWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` OtherInfos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` OtherInfos.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of OtherInfos.
-     */
-    distinct?: OtherInfoScalarFieldEnum | OtherInfoScalarFieldEnum[]
-  }
-
-  /**
-   * OtherInfo findFirstOrThrow
-   */
-  export type OtherInfoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the OtherInfo
-     */
-    select?: OtherInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the OtherInfo
-     */
-    omit?: OtherInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: OtherInfoInclude<ExtArgs> | null
-    /**
-     * Filter, which OtherInfo to fetch.
-     */
-    where?: OtherInfoWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of OtherInfos to fetch.
-     */
-    orderBy?: OtherInfoOrderByWithRelationInput | OtherInfoOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for OtherInfos.
-     */
-    cursor?: OtherInfoWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` OtherInfos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` OtherInfos.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of OtherInfos.
-     */
-    distinct?: OtherInfoScalarFieldEnum | OtherInfoScalarFieldEnum[]
-  }
-
-  /**
-   * OtherInfo findMany
-   */
-  export type OtherInfoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the OtherInfo
-     */
-    select?: OtherInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the OtherInfo
-     */
-    omit?: OtherInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: OtherInfoInclude<ExtArgs> | null
-    /**
-     * Filter, which OtherInfos to fetch.
-     */
-    where?: OtherInfoWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of OtherInfos to fetch.
-     */
-    orderBy?: OtherInfoOrderByWithRelationInput | OtherInfoOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing OtherInfos.
-     */
-    cursor?: OtherInfoWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` OtherInfos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` OtherInfos.
-     */
-    skip?: number
-    distinct?: OtherInfoScalarFieldEnum | OtherInfoScalarFieldEnum[]
-  }
-
-  /**
-   * OtherInfo create
-   */
-  export type OtherInfoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the OtherInfo
-     */
-    select?: OtherInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the OtherInfo
-     */
-    omit?: OtherInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: OtherInfoInclude<ExtArgs> | null
-    /**
-     * The data needed to create a OtherInfo.
-     */
-    data: XOR<OtherInfoCreateInput, OtherInfoUncheckedCreateInput>
-  }
-
-  /**
-   * OtherInfo createMany
-   */
-  export type OtherInfoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many OtherInfos.
-     */
-    data: OtherInfoCreateManyInput | OtherInfoCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * OtherInfo update
-   */
-  export type OtherInfoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the OtherInfo
-     */
-    select?: OtherInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the OtherInfo
-     */
-    omit?: OtherInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: OtherInfoInclude<ExtArgs> | null
-    /**
-     * The data needed to update a OtherInfo.
-     */
-    data: XOR<OtherInfoUpdateInput, OtherInfoUncheckedUpdateInput>
-    /**
-     * Choose, which OtherInfo to update.
-     */
-    where: OtherInfoWhereUniqueInput
-  }
-
-  /**
-   * OtherInfo updateMany
-   */
-  export type OtherInfoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update OtherInfos.
-     */
-    data: XOR<OtherInfoUpdateManyMutationInput, OtherInfoUncheckedUpdateManyInput>
-    /**
-     * Filter which OtherInfos to update
-     */
-    where?: OtherInfoWhereInput
-    /**
-     * Limit how many OtherInfos to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * OtherInfo upsert
-   */
-  export type OtherInfoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the OtherInfo
-     */
-    select?: OtherInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the OtherInfo
-     */
-    omit?: OtherInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: OtherInfoInclude<ExtArgs> | null
-    /**
-     * The filter to search for the OtherInfo to update in case it exists.
-     */
-    where: OtherInfoWhereUniqueInput
-    /**
-     * In case the OtherInfo found by the `where` argument doesn't exist, create a new OtherInfo with this data.
-     */
-    create: XOR<OtherInfoCreateInput, OtherInfoUncheckedCreateInput>
-    /**
-     * In case the OtherInfo was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<OtherInfoUpdateInput, OtherInfoUncheckedUpdateInput>
-  }
-
-  /**
-   * OtherInfo delete
-   */
-  export type OtherInfoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the OtherInfo
-     */
-    select?: OtherInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the OtherInfo
-     */
-    omit?: OtherInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: OtherInfoInclude<ExtArgs> | null
-    /**
-     * Filter which OtherInfo to delete.
-     */
-    where: OtherInfoWhereUniqueInput
-  }
-
-  /**
-   * OtherInfo deleteMany
-   */
-  export type OtherInfoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which OtherInfos to delete
-     */
-    where?: OtherInfoWhereInput
-    /**
-     * Limit how many OtherInfos to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * OtherInfo without action
-   */
-  export type OtherInfoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the OtherInfo
-     */
-    select?: OtherInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the OtherInfo
-     */
-    omit?: OtherInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: OtherInfoInclude<ExtArgs> | null
   }
 
 
@@ -25169,6 +23158,2004 @@ export namespace Prisma {
 
 
   /**
+   * Model Asset
+   */
+
+  export type AggregateAsset = {
+    _count: AssetCountAggregateOutputType | null
+    _avg: AssetAvgAggregateOutputType | null
+    _sum: AssetSumAggregateOutputType | null
+    _min: AssetMinAggregateOutputType | null
+    _max: AssetMaxAggregateOutputType | null
+  }
+
+  export type AssetAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type AssetSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type AssetMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AssetMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AssetCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AssetAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type AssetSumAggregateInputType = {
+    id?: true
+  }
+
+  export type AssetMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AssetMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AssetCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AssetAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Asset to aggregate.
+     */
+    where?: AssetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Assets to fetch.
+     */
+    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AssetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Assets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Assets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Assets
+    **/
+    _count?: true | AssetCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AssetAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AssetSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AssetMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AssetMaxAggregateInputType
+  }
+
+  export type GetAssetAggregateType<T extends AssetAggregateArgs> = {
+        [P in keyof T & keyof AggregateAsset]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAsset[P]>
+      : GetScalarType<T[P], AggregateAsset[P]>
+  }
+
+
+
+
+  export type AssetGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssetWhereInput
+    orderBy?: AssetOrderByWithAggregationInput | AssetOrderByWithAggregationInput[]
+    by: AssetScalarFieldEnum[] | AssetScalarFieldEnum
+    having?: AssetScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AssetCountAggregateInputType | true
+    _avg?: AssetAvgAggregateInputType
+    _sum?: AssetSumAggregateInputType
+    _min?: AssetMinAggregateInputType
+    _max?: AssetMaxAggregateInputType
+  }
+
+  export type AssetGroupByOutputType = {
+    id: number
+    name: string
+    description: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: AssetCountAggregateOutputType | null
+    _avg: AssetAvgAggregateOutputType | null
+    _sum: AssetSumAggregateOutputType | null
+    _min: AssetMinAggregateOutputType | null
+    _max: AssetMaxAggregateOutputType | null
+  }
+
+  type GetAssetGroupByPayload<T extends AssetGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AssetGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AssetGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AssetGroupByOutputType[P]>
+            : GetScalarType<T[P], AssetGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AssetSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    assignments?: boolean | Asset$assignmentsArgs<ExtArgs>
+    _count?: boolean | AssetCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["asset"]>
+
+
+
+  export type AssetSelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AssetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["asset"]>
+  export type AssetInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    assignments?: boolean | Asset$assignmentsArgs<ExtArgs>
+    _count?: boolean | AssetCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $AssetPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Asset"
+    objects: {
+      assignments: Prisma.$AssetAssignmentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      description: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["asset"]>
+    composites: {}
+  }
+
+  type AssetGetPayload<S extends boolean | null | undefined | AssetDefaultArgs> = $Result.GetResult<Prisma.$AssetPayload, S>
+
+  type AssetCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AssetFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AssetCountAggregateInputType | true
+    }
+
+  export interface AssetDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Asset'], meta: { name: 'Asset' } }
+    /**
+     * Find zero or one Asset that matches the filter.
+     * @param {AssetFindUniqueArgs} args - Arguments to find a Asset
+     * @example
+     * // Get one Asset
+     * const asset = await prisma.asset.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AssetFindUniqueArgs>(args: SelectSubset<T, AssetFindUniqueArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Asset that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AssetFindUniqueOrThrowArgs} args - Arguments to find a Asset
+     * @example
+     * // Get one Asset
+     * const asset = await prisma.asset.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AssetFindUniqueOrThrowArgs>(args: SelectSubset<T, AssetFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Asset that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetFindFirstArgs} args - Arguments to find a Asset
+     * @example
+     * // Get one Asset
+     * const asset = await prisma.asset.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AssetFindFirstArgs>(args?: SelectSubset<T, AssetFindFirstArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Asset that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetFindFirstOrThrowArgs} args - Arguments to find a Asset
+     * @example
+     * // Get one Asset
+     * const asset = await prisma.asset.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AssetFindFirstOrThrowArgs>(args?: SelectSubset<T, AssetFindFirstOrThrowArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Assets that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Assets
+     * const assets = await prisma.asset.findMany()
+     * 
+     * // Get first 10 Assets
+     * const assets = await prisma.asset.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const assetWithIdOnly = await prisma.asset.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AssetFindManyArgs>(args?: SelectSubset<T, AssetFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Asset.
+     * @param {AssetCreateArgs} args - Arguments to create a Asset.
+     * @example
+     * // Create one Asset
+     * const Asset = await prisma.asset.create({
+     *   data: {
+     *     // ... data to create a Asset
+     *   }
+     * })
+     * 
+     */
+    create<T extends AssetCreateArgs>(args: SelectSubset<T, AssetCreateArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Assets.
+     * @param {AssetCreateManyArgs} args - Arguments to create many Assets.
+     * @example
+     * // Create many Assets
+     * const asset = await prisma.asset.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AssetCreateManyArgs>(args?: SelectSubset<T, AssetCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Asset.
+     * @param {AssetDeleteArgs} args - Arguments to delete one Asset.
+     * @example
+     * // Delete one Asset
+     * const Asset = await prisma.asset.delete({
+     *   where: {
+     *     // ... filter to delete one Asset
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AssetDeleteArgs>(args: SelectSubset<T, AssetDeleteArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Asset.
+     * @param {AssetUpdateArgs} args - Arguments to update one Asset.
+     * @example
+     * // Update one Asset
+     * const asset = await prisma.asset.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AssetUpdateArgs>(args: SelectSubset<T, AssetUpdateArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Assets.
+     * @param {AssetDeleteManyArgs} args - Arguments to filter Assets to delete.
+     * @example
+     * // Delete a few Assets
+     * const { count } = await prisma.asset.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AssetDeleteManyArgs>(args?: SelectSubset<T, AssetDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Assets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Assets
+     * const asset = await prisma.asset.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AssetUpdateManyArgs>(args: SelectSubset<T, AssetUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Asset.
+     * @param {AssetUpsertArgs} args - Arguments to update or create a Asset.
+     * @example
+     * // Update or create a Asset
+     * const asset = await prisma.asset.upsert({
+     *   create: {
+     *     // ... data to create a Asset
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Asset we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AssetUpsertArgs>(args: SelectSubset<T, AssetUpsertArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Assets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetCountArgs} args - Arguments to filter Assets to count.
+     * @example
+     * // Count the number of Assets
+     * const count = await prisma.asset.count({
+     *   where: {
+     *     // ... the filter for the Assets we want to count
+     *   }
+     * })
+    **/
+    count<T extends AssetCountArgs>(
+      args?: Subset<T, AssetCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AssetCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Asset.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AssetAggregateArgs>(args: Subset<T, AssetAggregateArgs>): Prisma.PrismaPromise<GetAssetAggregateType<T>>
+
+    /**
+     * Group by Asset.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AssetGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AssetGroupByArgs['orderBy'] }
+        : { orderBy?: AssetGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AssetGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAssetGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Asset model
+   */
+  readonly fields: AssetFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Asset.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AssetClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    assignments<T extends Asset$assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Asset$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Asset model
+   */
+  interface AssetFieldRefs {
+    readonly id: FieldRef<"Asset", 'Int'>
+    readonly name: FieldRef<"Asset", 'String'>
+    readonly description: FieldRef<"Asset", 'String'>
+    readonly createdAt: FieldRef<"Asset", 'DateTime'>
+    readonly updatedAt: FieldRef<"Asset", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Asset findUnique
+   */
+  export type AssetFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter, which Asset to fetch.
+     */
+    where: AssetWhereUniqueInput
+  }
+
+  /**
+   * Asset findUniqueOrThrow
+   */
+  export type AssetFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter, which Asset to fetch.
+     */
+    where: AssetWhereUniqueInput
+  }
+
+  /**
+   * Asset findFirst
+   */
+  export type AssetFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter, which Asset to fetch.
+     */
+    where?: AssetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Assets to fetch.
+     */
+    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Assets.
+     */
+    cursor?: AssetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Assets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Assets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Assets.
+     */
+    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
+  }
+
+  /**
+   * Asset findFirstOrThrow
+   */
+  export type AssetFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter, which Asset to fetch.
+     */
+    where?: AssetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Assets to fetch.
+     */
+    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Assets.
+     */
+    cursor?: AssetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Assets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Assets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Assets.
+     */
+    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
+  }
+
+  /**
+   * Asset findMany
+   */
+  export type AssetFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter, which Assets to fetch.
+     */
+    where?: AssetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Assets to fetch.
+     */
+    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Assets.
+     */
+    cursor?: AssetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Assets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Assets.
+     */
+    skip?: number
+    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
+  }
+
+  /**
+   * Asset create
+   */
+  export type AssetCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Asset.
+     */
+    data: XOR<AssetCreateInput, AssetUncheckedCreateInput>
+  }
+
+  /**
+   * Asset createMany
+   */
+  export type AssetCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Assets.
+     */
+    data: AssetCreateManyInput | AssetCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Asset update
+   */
+  export type AssetUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Asset.
+     */
+    data: XOR<AssetUpdateInput, AssetUncheckedUpdateInput>
+    /**
+     * Choose, which Asset to update.
+     */
+    where: AssetWhereUniqueInput
+  }
+
+  /**
+   * Asset updateMany
+   */
+  export type AssetUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Assets.
+     */
+    data: XOR<AssetUpdateManyMutationInput, AssetUncheckedUpdateManyInput>
+    /**
+     * Filter which Assets to update
+     */
+    where?: AssetWhereInput
+    /**
+     * Limit how many Assets to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Asset upsert
+   */
+  export type AssetUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Asset to update in case it exists.
+     */
+    where: AssetWhereUniqueInput
+    /**
+     * In case the Asset found by the `where` argument doesn't exist, create a new Asset with this data.
+     */
+    create: XOR<AssetCreateInput, AssetUncheckedCreateInput>
+    /**
+     * In case the Asset was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AssetUpdateInput, AssetUncheckedUpdateInput>
+  }
+
+  /**
+   * Asset delete
+   */
+  export type AssetDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter which Asset to delete.
+     */
+    where: AssetWhereUniqueInput
+  }
+
+  /**
+   * Asset deleteMany
+   */
+  export type AssetDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Assets to delete
+     */
+    where?: AssetWhereInput
+    /**
+     * Limit how many Assets to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Asset.assignments
+   */
+  export type Asset$assignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    where?: AssetAssignmentWhereInput
+    orderBy?: AssetAssignmentOrderByWithRelationInput | AssetAssignmentOrderByWithRelationInput[]
+    cursor?: AssetAssignmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AssetAssignmentScalarFieldEnum | AssetAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * Asset without action
+   */
+  export type AssetDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AssetAssignment
+   */
+
+  export type AggregateAssetAssignment = {
+    _count: AssetAssignmentCountAggregateOutputType | null
+    _avg: AssetAssignmentAvgAggregateOutputType | null
+    _sum: AssetAssignmentSumAggregateOutputType | null
+    _min: AssetAssignmentMinAggregateOutputType | null
+    _max: AssetAssignmentMaxAggregateOutputType | null
+  }
+
+  export type AssetAssignmentAvgAggregateOutputType = {
+    id: number | null
+    assetId: number | null
+    employeeId: number | null
+    issuedById: number | null
+    quantity: number | null
+  }
+
+  export type AssetAssignmentSumAggregateOutputType = {
+    id: number | null
+    assetId: number | null
+    employeeId: number | null
+    issuedById: number | null
+    quantity: number | null
+  }
+
+  export type AssetAssignmentMinAggregateOutputType = {
+    id: number | null
+    assetId: number | null
+    employeeId: number | null
+    issuedById: number | null
+    issuedAt: Date | null
+    quantity: number | null
+    note: string | null
+  }
+
+  export type AssetAssignmentMaxAggregateOutputType = {
+    id: number | null
+    assetId: number | null
+    employeeId: number | null
+    issuedById: number | null
+    issuedAt: Date | null
+    quantity: number | null
+    note: string | null
+  }
+
+  export type AssetAssignmentCountAggregateOutputType = {
+    id: number
+    assetId: number
+    employeeId: number
+    issuedById: number
+    issuedAt: number
+    quantity: number
+    note: number
+    _all: number
+  }
+
+
+  export type AssetAssignmentAvgAggregateInputType = {
+    id?: true
+    assetId?: true
+    employeeId?: true
+    issuedById?: true
+    quantity?: true
+  }
+
+  export type AssetAssignmentSumAggregateInputType = {
+    id?: true
+    assetId?: true
+    employeeId?: true
+    issuedById?: true
+    quantity?: true
+  }
+
+  export type AssetAssignmentMinAggregateInputType = {
+    id?: true
+    assetId?: true
+    employeeId?: true
+    issuedById?: true
+    issuedAt?: true
+    quantity?: true
+    note?: true
+  }
+
+  export type AssetAssignmentMaxAggregateInputType = {
+    id?: true
+    assetId?: true
+    employeeId?: true
+    issuedById?: true
+    issuedAt?: true
+    quantity?: true
+    note?: true
+  }
+
+  export type AssetAssignmentCountAggregateInputType = {
+    id?: true
+    assetId?: true
+    employeeId?: true
+    issuedById?: true
+    issuedAt?: true
+    quantity?: true
+    note?: true
+    _all?: true
+  }
+
+  export type AssetAssignmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AssetAssignment to aggregate.
+     */
+    where?: AssetAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AssetAssignments to fetch.
+     */
+    orderBy?: AssetAssignmentOrderByWithRelationInput | AssetAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AssetAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AssetAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AssetAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AssetAssignments
+    **/
+    _count?: true | AssetAssignmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AssetAssignmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AssetAssignmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AssetAssignmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AssetAssignmentMaxAggregateInputType
+  }
+
+  export type GetAssetAssignmentAggregateType<T extends AssetAssignmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateAssetAssignment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAssetAssignment[P]>
+      : GetScalarType<T[P], AggregateAssetAssignment[P]>
+  }
+
+
+
+
+  export type AssetAssignmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssetAssignmentWhereInput
+    orderBy?: AssetAssignmentOrderByWithAggregationInput | AssetAssignmentOrderByWithAggregationInput[]
+    by: AssetAssignmentScalarFieldEnum[] | AssetAssignmentScalarFieldEnum
+    having?: AssetAssignmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AssetAssignmentCountAggregateInputType | true
+    _avg?: AssetAssignmentAvgAggregateInputType
+    _sum?: AssetAssignmentSumAggregateInputType
+    _min?: AssetAssignmentMinAggregateInputType
+    _max?: AssetAssignmentMaxAggregateInputType
+  }
+
+  export type AssetAssignmentGroupByOutputType = {
+    id: number
+    assetId: number
+    employeeId: number
+    issuedById: number
+    issuedAt: Date
+    quantity: number
+    note: string | null
+    _count: AssetAssignmentCountAggregateOutputType | null
+    _avg: AssetAssignmentAvgAggregateOutputType | null
+    _sum: AssetAssignmentSumAggregateOutputType | null
+    _min: AssetAssignmentMinAggregateOutputType | null
+    _max: AssetAssignmentMaxAggregateOutputType | null
+  }
+
+  type GetAssetAssignmentGroupByPayload<T extends AssetAssignmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AssetAssignmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AssetAssignmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AssetAssignmentGroupByOutputType[P]>
+            : GetScalarType<T[P], AssetAssignmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AssetAssignmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    assetId?: boolean
+    employeeId?: boolean
+    issuedById?: boolean
+    issuedAt?: boolean
+    quantity?: boolean
+    note?: boolean
+    asset?: boolean | AssetDefaultArgs<ExtArgs>
+    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    issuedBy?: boolean | EmployeeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["assetAssignment"]>
+
+
+
+  export type AssetAssignmentSelectScalar = {
+    id?: boolean
+    assetId?: boolean
+    employeeId?: boolean
+    issuedById?: boolean
+    issuedAt?: boolean
+    quantity?: boolean
+    note?: boolean
+  }
+
+  export type AssetAssignmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "assetId" | "employeeId" | "issuedById" | "issuedAt" | "quantity" | "note", ExtArgs["result"]["assetAssignment"]>
+  export type AssetAssignmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    asset?: boolean | AssetDefaultArgs<ExtArgs>
+    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    issuedBy?: boolean | EmployeeDefaultArgs<ExtArgs>
+  }
+
+  export type $AssetAssignmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AssetAssignment"
+    objects: {
+      asset: Prisma.$AssetPayload<ExtArgs>
+      employee: Prisma.$EmployeePayload<ExtArgs>
+      issuedBy: Prisma.$EmployeePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      assetId: number
+      employeeId: number
+      issuedById: number
+      issuedAt: Date
+      quantity: number
+      note: string | null
+    }, ExtArgs["result"]["assetAssignment"]>
+    composites: {}
+  }
+
+  type AssetAssignmentGetPayload<S extends boolean | null | undefined | AssetAssignmentDefaultArgs> = $Result.GetResult<Prisma.$AssetAssignmentPayload, S>
+
+  type AssetAssignmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AssetAssignmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AssetAssignmentCountAggregateInputType | true
+    }
+
+  export interface AssetAssignmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AssetAssignment'], meta: { name: 'AssetAssignment' } }
+    /**
+     * Find zero or one AssetAssignment that matches the filter.
+     * @param {AssetAssignmentFindUniqueArgs} args - Arguments to find a AssetAssignment
+     * @example
+     * // Get one AssetAssignment
+     * const assetAssignment = await prisma.assetAssignment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AssetAssignmentFindUniqueArgs>(args: SelectSubset<T, AssetAssignmentFindUniqueArgs<ExtArgs>>): Prisma__AssetAssignmentClient<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AssetAssignment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AssetAssignmentFindUniqueOrThrowArgs} args - Arguments to find a AssetAssignment
+     * @example
+     * // Get one AssetAssignment
+     * const assetAssignment = await prisma.assetAssignment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AssetAssignmentFindUniqueOrThrowArgs>(args: SelectSubset<T, AssetAssignmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AssetAssignmentClient<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AssetAssignment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAssignmentFindFirstArgs} args - Arguments to find a AssetAssignment
+     * @example
+     * // Get one AssetAssignment
+     * const assetAssignment = await prisma.assetAssignment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AssetAssignmentFindFirstArgs>(args?: SelectSubset<T, AssetAssignmentFindFirstArgs<ExtArgs>>): Prisma__AssetAssignmentClient<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AssetAssignment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAssignmentFindFirstOrThrowArgs} args - Arguments to find a AssetAssignment
+     * @example
+     * // Get one AssetAssignment
+     * const assetAssignment = await prisma.assetAssignment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AssetAssignmentFindFirstOrThrowArgs>(args?: SelectSubset<T, AssetAssignmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__AssetAssignmentClient<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AssetAssignments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAssignmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AssetAssignments
+     * const assetAssignments = await prisma.assetAssignment.findMany()
+     * 
+     * // Get first 10 AssetAssignments
+     * const assetAssignments = await prisma.assetAssignment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const assetAssignmentWithIdOnly = await prisma.assetAssignment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AssetAssignmentFindManyArgs>(args?: SelectSubset<T, AssetAssignmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AssetAssignment.
+     * @param {AssetAssignmentCreateArgs} args - Arguments to create a AssetAssignment.
+     * @example
+     * // Create one AssetAssignment
+     * const AssetAssignment = await prisma.assetAssignment.create({
+     *   data: {
+     *     // ... data to create a AssetAssignment
+     *   }
+     * })
+     * 
+     */
+    create<T extends AssetAssignmentCreateArgs>(args: SelectSubset<T, AssetAssignmentCreateArgs<ExtArgs>>): Prisma__AssetAssignmentClient<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AssetAssignments.
+     * @param {AssetAssignmentCreateManyArgs} args - Arguments to create many AssetAssignments.
+     * @example
+     * // Create many AssetAssignments
+     * const assetAssignment = await prisma.assetAssignment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AssetAssignmentCreateManyArgs>(args?: SelectSubset<T, AssetAssignmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a AssetAssignment.
+     * @param {AssetAssignmentDeleteArgs} args - Arguments to delete one AssetAssignment.
+     * @example
+     * // Delete one AssetAssignment
+     * const AssetAssignment = await prisma.assetAssignment.delete({
+     *   where: {
+     *     // ... filter to delete one AssetAssignment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AssetAssignmentDeleteArgs>(args: SelectSubset<T, AssetAssignmentDeleteArgs<ExtArgs>>): Prisma__AssetAssignmentClient<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AssetAssignment.
+     * @param {AssetAssignmentUpdateArgs} args - Arguments to update one AssetAssignment.
+     * @example
+     * // Update one AssetAssignment
+     * const assetAssignment = await prisma.assetAssignment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AssetAssignmentUpdateArgs>(args: SelectSubset<T, AssetAssignmentUpdateArgs<ExtArgs>>): Prisma__AssetAssignmentClient<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AssetAssignments.
+     * @param {AssetAssignmentDeleteManyArgs} args - Arguments to filter AssetAssignments to delete.
+     * @example
+     * // Delete a few AssetAssignments
+     * const { count } = await prisma.assetAssignment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AssetAssignmentDeleteManyArgs>(args?: SelectSubset<T, AssetAssignmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AssetAssignments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAssignmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AssetAssignments
+     * const assetAssignment = await prisma.assetAssignment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AssetAssignmentUpdateManyArgs>(args: SelectSubset<T, AssetAssignmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one AssetAssignment.
+     * @param {AssetAssignmentUpsertArgs} args - Arguments to update or create a AssetAssignment.
+     * @example
+     * // Update or create a AssetAssignment
+     * const assetAssignment = await prisma.assetAssignment.upsert({
+     *   create: {
+     *     // ... data to create a AssetAssignment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AssetAssignment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AssetAssignmentUpsertArgs>(args: SelectSubset<T, AssetAssignmentUpsertArgs<ExtArgs>>): Prisma__AssetAssignmentClient<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AssetAssignments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAssignmentCountArgs} args - Arguments to filter AssetAssignments to count.
+     * @example
+     * // Count the number of AssetAssignments
+     * const count = await prisma.assetAssignment.count({
+     *   where: {
+     *     // ... the filter for the AssetAssignments we want to count
+     *   }
+     * })
+    **/
+    count<T extends AssetAssignmentCountArgs>(
+      args?: Subset<T, AssetAssignmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AssetAssignmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AssetAssignment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAssignmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AssetAssignmentAggregateArgs>(args: Subset<T, AssetAssignmentAggregateArgs>): Prisma.PrismaPromise<GetAssetAssignmentAggregateType<T>>
+
+    /**
+     * Group by AssetAssignment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAssignmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AssetAssignmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AssetAssignmentGroupByArgs['orderBy'] }
+        : { orderBy?: AssetAssignmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AssetAssignmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAssetAssignmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AssetAssignment model
+   */
+  readonly fields: AssetAssignmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AssetAssignment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AssetAssignmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    asset<T extends AssetDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AssetDefaultArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    issuedBy<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AssetAssignment model
+   */
+  interface AssetAssignmentFieldRefs {
+    readonly id: FieldRef<"AssetAssignment", 'Int'>
+    readonly assetId: FieldRef<"AssetAssignment", 'Int'>
+    readonly employeeId: FieldRef<"AssetAssignment", 'Int'>
+    readonly issuedById: FieldRef<"AssetAssignment", 'Int'>
+    readonly issuedAt: FieldRef<"AssetAssignment", 'DateTime'>
+    readonly quantity: FieldRef<"AssetAssignment", 'Int'>
+    readonly note: FieldRef<"AssetAssignment", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AssetAssignment findUnique
+   */
+  export type AssetAssignmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which AssetAssignment to fetch.
+     */
+    where: AssetAssignmentWhereUniqueInput
+  }
+
+  /**
+   * AssetAssignment findUniqueOrThrow
+   */
+  export type AssetAssignmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which AssetAssignment to fetch.
+     */
+    where: AssetAssignmentWhereUniqueInput
+  }
+
+  /**
+   * AssetAssignment findFirst
+   */
+  export type AssetAssignmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which AssetAssignment to fetch.
+     */
+    where?: AssetAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AssetAssignments to fetch.
+     */
+    orderBy?: AssetAssignmentOrderByWithRelationInput | AssetAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AssetAssignments.
+     */
+    cursor?: AssetAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AssetAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AssetAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AssetAssignments.
+     */
+    distinct?: AssetAssignmentScalarFieldEnum | AssetAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * AssetAssignment findFirstOrThrow
+   */
+  export type AssetAssignmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which AssetAssignment to fetch.
+     */
+    where?: AssetAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AssetAssignments to fetch.
+     */
+    orderBy?: AssetAssignmentOrderByWithRelationInput | AssetAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AssetAssignments.
+     */
+    cursor?: AssetAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AssetAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AssetAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AssetAssignments.
+     */
+    distinct?: AssetAssignmentScalarFieldEnum | AssetAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * AssetAssignment findMany
+   */
+  export type AssetAssignmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which AssetAssignments to fetch.
+     */
+    where?: AssetAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AssetAssignments to fetch.
+     */
+    orderBy?: AssetAssignmentOrderByWithRelationInput | AssetAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AssetAssignments.
+     */
+    cursor?: AssetAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AssetAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AssetAssignments.
+     */
+    skip?: number
+    distinct?: AssetAssignmentScalarFieldEnum | AssetAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * AssetAssignment create
+   */
+  export type AssetAssignmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AssetAssignment.
+     */
+    data: XOR<AssetAssignmentCreateInput, AssetAssignmentUncheckedCreateInput>
+  }
+
+  /**
+   * AssetAssignment createMany
+   */
+  export type AssetAssignmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AssetAssignments.
+     */
+    data: AssetAssignmentCreateManyInput | AssetAssignmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AssetAssignment update
+   */
+  export type AssetAssignmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AssetAssignment.
+     */
+    data: XOR<AssetAssignmentUpdateInput, AssetAssignmentUncheckedUpdateInput>
+    /**
+     * Choose, which AssetAssignment to update.
+     */
+    where: AssetAssignmentWhereUniqueInput
+  }
+
+  /**
+   * AssetAssignment updateMany
+   */
+  export type AssetAssignmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AssetAssignments.
+     */
+    data: XOR<AssetAssignmentUpdateManyMutationInput, AssetAssignmentUncheckedUpdateManyInput>
+    /**
+     * Filter which AssetAssignments to update
+     */
+    where?: AssetAssignmentWhereInput
+    /**
+     * Limit how many AssetAssignments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AssetAssignment upsert
+   */
+  export type AssetAssignmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AssetAssignment to update in case it exists.
+     */
+    where: AssetAssignmentWhereUniqueInput
+    /**
+     * In case the AssetAssignment found by the `where` argument doesn't exist, create a new AssetAssignment with this data.
+     */
+    create: XOR<AssetAssignmentCreateInput, AssetAssignmentUncheckedCreateInput>
+    /**
+     * In case the AssetAssignment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AssetAssignmentUpdateInput, AssetAssignmentUncheckedUpdateInput>
+  }
+
+  /**
+   * AssetAssignment delete
+   */
+  export type AssetAssignmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter which AssetAssignment to delete.
+     */
+    where: AssetAssignmentWhereUniqueInput
+  }
+
+  /**
+   * AssetAssignment deleteMany
+   */
+  export type AssetAssignmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AssetAssignments to delete
+     */
+    where?: AssetAssignmentWhereInput
+    /**
+     * Limit how many AssetAssignments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AssetAssignment without action
+   */
+  export type AssetAssignmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -25272,25 +25259,6 @@ export namespace Prisma {
   export type WorkInfoScalarFieldEnum = (typeof WorkInfoScalarFieldEnum)[keyof typeof WorkInfoScalarFieldEnum]
 
 
-  export const PersonalInfoScalarFieldEnum: {
-    id: 'id',
-    identityNumber: 'identityNumber',
-    issueDate: 'issueDate',
-    issuePlace: 'issuePlace',
-    hometown: 'hometown',
-    idAddress: 'idAddress',
-    education: 'education',
-    drivingLicense: 'drivingLicense',
-    toyotaCertificate: 'toyotaCertificate',
-    taxCode: 'taxCode',
-    insuranceNumber: 'insuranceNumber',
-    insuranceSalary: 'insuranceSalary',
-    employeeId: 'employeeId'
-  };
-
-  export type PersonalInfoScalarFieldEnum = (typeof PersonalInfoScalarFieldEnum)[keyof typeof PersonalInfoScalarFieldEnum]
-
-
   export const ContactInfoScalarFieldEnum: {
     id: 'id',
     phoneNumber: 'phoneNumber',
@@ -25302,21 +25270,6 @@ export namespace Prisma {
   };
 
   export type ContactInfoScalarFieldEnum = (typeof ContactInfoScalarFieldEnum)[keyof typeof ContactInfoScalarFieldEnum]
-
-
-  export const OtherInfoScalarFieldEnum: {
-    id: 'id',
-    workStatus: 'workStatus',
-    resignedDate: 'resignedDate',
-    documentsChecked: 'documentsChecked',
-    updatedAt: 'updatedAt',
-    VCB: 'VCB',
-    MTCV: 'MTCV',
-    PNJ: 'PNJ',
-    employeeId: 'employeeId'
-  };
-
-  export type OtherInfoScalarFieldEnum = (typeof OtherInfoScalarFieldEnum)[keyof typeof OtherInfoScalarFieldEnum]
 
 
   export const LeaveRequestScalarFieldEnum: {
@@ -25485,6 +25438,30 @@ export namespace Prisma {
   export type EmailActionTokenScalarFieldEnum = (typeof EmailActionTokenScalarFieldEnum)[keyof typeof EmailActionTokenScalarFieldEnum]
 
 
+  export const AssetScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AssetScalarFieldEnum = (typeof AssetScalarFieldEnum)[keyof typeof AssetScalarFieldEnum]
+
+
+  export const AssetAssignmentScalarFieldEnum: {
+    id: 'id',
+    assetId: 'assetId',
+    employeeId: 'employeeId',
+    issuedById: 'issuedById',
+    issuedAt: 'issuedAt',
+    quantity: 'quantity',
+    note: 'note'
+  };
+
+  export type AssetAssignmentScalarFieldEnum = (typeof AssetAssignmentScalarFieldEnum)[keyof typeof AssetAssignmentScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -25555,21 +25532,6 @@ export namespace Prisma {
   export type WorkInfoOrderByRelevanceFieldEnum = (typeof WorkInfoOrderByRelevanceFieldEnum)[keyof typeof WorkInfoOrderByRelevanceFieldEnum]
 
 
-  export const PersonalInfoOrderByRelevanceFieldEnum: {
-    identityNumber: 'identityNumber',
-    issuePlace: 'issuePlace',
-    hometown: 'hometown',
-    idAddress: 'idAddress',
-    education: 'education',
-    drivingLicense: 'drivingLicense',
-    toyotaCertificate: 'toyotaCertificate',
-    taxCode: 'taxCode',
-    insuranceNumber: 'insuranceNumber'
-  };
-
-  export type PersonalInfoOrderByRelevanceFieldEnum = (typeof PersonalInfoOrderByRelevanceFieldEnum)[keyof typeof PersonalInfoOrderByRelevanceFieldEnum]
-
-
   export const ContactInfoOrderByRelevanceFieldEnum: {
     phoneNumber: 'phoneNumber',
     relativePhone: 'relativePhone',
@@ -25579,16 +25541,6 @@ export namespace Prisma {
   };
 
   export type ContactInfoOrderByRelevanceFieldEnum = (typeof ContactInfoOrderByRelevanceFieldEnum)[keyof typeof ContactInfoOrderByRelevanceFieldEnum]
-
-
-  export const OtherInfoOrderByRelevanceFieldEnum: {
-    documentsChecked: 'documentsChecked',
-    VCB: 'VCB',
-    MTCV: 'MTCV',
-    PNJ: 'PNJ'
-  };
-
-  export type OtherInfoOrderByRelevanceFieldEnum = (typeof OtherInfoOrderByRelevanceFieldEnum)[keyof typeof OtherInfoOrderByRelevanceFieldEnum]
 
 
   export const LeaveRequestOrderByRelevanceFieldEnum: {
@@ -25657,6 +25609,21 @@ export namespace Prisma {
   export type EmailActionTokenOrderByRelevanceFieldEnum = (typeof EmailActionTokenOrderByRelevanceFieldEnum)[keyof typeof EmailActionTokenOrderByRelevanceFieldEnum]
 
 
+  export const AssetOrderByRelevanceFieldEnum: {
+    name: 'name',
+    description: 'description'
+  };
+
+  export type AssetOrderByRelevanceFieldEnum = (typeof AssetOrderByRelevanceFieldEnum)[keyof typeof AssetOrderByRelevanceFieldEnum]
+
+
+  export const AssetAssignmentOrderByRelevanceFieldEnum: {
+    note: 'note'
+  };
+
+  export type AssetAssignmentOrderByRelevanceFieldEnum = (typeof AssetAssignmentOrderByRelevanceFieldEnum)[keyof typeof AssetAssignmentOrderByRelevanceFieldEnum]
+
+
   /**
    * Field references
    */
@@ -25708,13 +25675,6 @@ export namespace Prisma {
    * Reference to a field of type 'Role'
    */
   export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
-    
-
-
-  /**
-   * Reference to a field of type 'WorkStatus'
-   */
-  export type EnumWorkStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WorkStatus'>
     
 
 
@@ -25917,14 +25877,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeListRelationFilter
     LeaveApprovalSteps?: LeaveApprovalStepApproverListRelationFilter
     LeaveRequest?: LeaveRequestListRelationFilter
-    otherInfo?: XOR<OtherInfoNullableScalarRelationFilter, OtherInfoWhereInput> | null
-    personalInfo?: XOR<PersonalInfoNullableScalarRelationFilter, PersonalInfoWhereInput> | null
     proposalsCreated?: ProposalListRelationFilter
     proposalsProposed?: ProposalListRelationFilter
     proposalApprovals?: ProposalApproverListRelationFilter
     proposalSignatures?: ProposalSignerListRelationFilter
     workInfo?: XOR<WorkInfoNullableScalarRelationFilter, WorkInfoWhereInput> | null
     Attendance?: AttendanceListRelationFilter
+    assetsReceived?: AssetAssignmentListRelationFilter
+    assetsIssued?: AssetAssignmentListRelationFilter
   }
 
   export type EmployeeOrderByWithRelationInput = {
@@ -25949,14 +25909,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeOrderByRelationAggregateInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverOrderByRelationAggregateInput
     LeaveRequest?: LeaveRequestOrderByRelationAggregateInput
-    otherInfo?: OtherInfoOrderByWithRelationInput
-    personalInfo?: PersonalInfoOrderByWithRelationInput
     proposalsCreated?: ProposalOrderByRelationAggregateInput
     proposalsProposed?: ProposalOrderByRelationAggregateInput
     proposalApprovals?: ProposalApproverOrderByRelationAggregateInput
     proposalSignatures?: ProposalSignerOrderByRelationAggregateInput
     workInfo?: WorkInfoOrderByWithRelationInput
     Attendance?: AttendanceOrderByRelationAggregateInput
+    assetsReceived?: AssetAssignmentOrderByRelationAggregateInput
+    assetsIssued?: AssetAssignmentOrderByRelationAggregateInput
     _relevance?: EmployeeOrderByRelevanceInput
   }
 
@@ -25985,14 +25945,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeListRelationFilter
     LeaveApprovalSteps?: LeaveApprovalStepApproverListRelationFilter
     LeaveRequest?: LeaveRequestListRelationFilter
-    otherInfo?: XOR<OtherInfoNullableScalarRelationFilter, OtherInfoWhereInput> | null
-    personalInfo?: XOR<PersonalInfoNullableScalarRelationFilter, PersonalInfoWhereInput> | null
     proposalsCreated?: ProposalListRelationFilter
     proposalsProposed?: ProposalListRelationFilter
     proposalApprovals?: ProposalApproverListRelationFilter
     proposalSignatures?: ProposalSignerListRelationFilter
     workInfo?: XOR<WorkInfoNullableScalarRelationFilter, WorkInfoWhereInput> | null
     Attendance?: AttendanceListRelationFilter
+    assetsReceived?: AssetAssignmentListRelationFilter
+    assetsIssued?: AssetAssignmentListRelationFilter
   }, "id" | "employeeCode">
 
   export type EmployeeOrderByWithAggregationInput = {
@@ -26290,104 +26250,6 @@ export namespace Prisma {
     employeeId?: IntWithAggregatesFilter<"WorkInfo"> | number
   }
 
-  export type PersonalInfoWhereInput = {
-    AND?: PersonalInfoWhereInput | PersonalInfoWhereInput[]
-    OR?: PersonalInfoWhereInput[]
-    NOT?: PersonalInfoWhereInput | PersonalInfoWhereInput[]
-    id?: IntFilter<"PersonalInfo"> | number
-    identityNumber?: StringNullableFilter<"PersonalInfo"> | string | null
-    issueDate?: DateTimeNullableFilter<"PersonalInfo"> | Date | string | null
-    issuePlace?: StringNullableFilter<"PersonalInfo"> | string | null
-    hometown?: StringNullableFilter<"PersonalInfo"> | string | null
-    idAddress?: StringNullableFilter<"PersonalInfo"> | string | null
-    education?: StringNullableFilter<"PersonalInfo"> | string | null
-    drivingLicense?: StringNullableFilter<"PersonalInfo"> | string | null
-    toyotaCertificate?: StringNullableFilter<"PersonalInfo"> | string | null
-    taxCode?: StringNullableFilter<"PersonalInfo"> | string | null
-    insuranceNumber?: StringNullableFilter<"PersonalInfo"> | string | null
-    insuranceSalary?: IntNullableFilter<"PersonalInfo"> | number | null
-    employeeId?: IntFilter<"PersonalInfo"> | number
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
-  }
-
-  export type PersonalInfoOrderByWithRelationInput = {
-    id?: SortOrder
-    identityNumber?: SortOrderInput | SortOrder
-    issueDate?: SortOrderInput | SortOrder
-    issuePlace?: SortOrderInput | SortOrder
-    hometown?: SortOrderInput | SortOrder
-    idAddress?: SortOrderInput | SortOrder
-    education?: SortOrderInput | SortOrder
-    drivingLicense?: SortOrderInput | SortOrder
-    toyotaCertificate?: SortOrderInput | SortOrder
-    taxCode?: SortOrderInput | SortOrder
-    insuranceNumber?: SortOrderInput | SortOrder
-    insuranceSalary?: SortOrderInput | SortOrder
-    employeeId?: SortOrder
-    employee?: EmployeeOrderByWithRelationInput
-    _relevance?: PersonalInfoOrderByRelevanceInput
-  }
-
-  export type PersonalInfoWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    identityNumber?: string
-    taxCode?: string
-    insuranceNumber?: string
-    employeeId?: number
-    AND?: PersonalInfoWhereInput | PersonalInfoWhereInput[]
-    OR?: PersonalInfoWhereInput[]
-    NOT?: PersonalInfoWhereInput | PersonalInfoWhereInput[]
-    issueDate?: DateTimeNullableFilter<"PersonalInfo"> | Date | string | null
-    issuePlace?: StringNullableFilter<"PersonalInfo"> | string | null
-    hometown?: StringNullableFilter<"PersonalInfo"> | string | null
-    idAddress?: StringNullableFilter<"PersonalInfo"> | string | null
-    education?: StringNullableFilter<"PersonalInfo"> | string | null
-    drivingLicense?: StringNullableFilter<"PersonalInfo"> | string | null
-    toyotaCertificate?: StringNullableFilter<"PersonalInfo"> | string | null
-    insuranceSalary?: IntNullableFilter<"PersonalInfo"> | number | null
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
-  }, "id" | "identityNumber" | "taxCode" | "insuranceNumber" | "employeeId">
-
-  export type PersonalInfoOrderByWithAggregationInput = {
-    id?: SortOrder
-    identityNumber?: SortOrderInput | SortOrder
-    issueDate?: SortOrderInput | SortOrder
-    issuePlace?: SortOrderInput | SortOrder
-    hometown?: SortOrderInput | SortOrder
-    idAddress?: SortOrderInput | SortOrder
-    education?: SortOrderInput | SortOrder
-    drivingLicense?: SortOrderInput | SortOrder
-    toyotaCertificate?: SortOrderInput | SortOrder
-    taxCode?: SortOrderInput | SortOrder
-    insuranceNumber?: SortOrderInput | SortOrder
-    insuranceSalary?: SortOrderInput | SortOrder
-    employeeId?: SortOrder
-    _count?: PersonalInfoCountOrderByAggregateInput
-    _avg?: PersonalInfoAvgOrderByAggregateInput
-    _max?: PersonalInfoMaxOrderByAggregateInput
-    _min?: PersonalInfoMinOrderByAggregateInput
-    _sum?: PersonalInfoSumOrderByAggregateInput
-  }
-
-  export type PersonalInfoScalarWhereWithAggregatesInput = {
-    AND?: PersonalInfoScalarWhereWithAggregatesInput | PersonalInfoScalarWhereWithAggregatesInput[]
-    OR?: PersonalInfoScalarWhereWithAggregatesInput[]
-    NOT?: PersonalInfoScalarWhereWithAggregatesInput | PersonalInfoScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"PersonalInfo"> | number
-    identityNumber?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
-    issueDate?: DateTimeNullableWithAggregatesFilter<"PersonalInfo"> | Date | string | null
-    issuePlace?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
-    hometown?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
-    idAddress?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
-    education?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
-    drivingLicense?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
-    toyotaCertificate?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
-    taxCode?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
-    insuranceNumber?: StringNullableWithAggregatesFilter<"PersonalInfo"> | string | null
-    insuranceSalary?: IntNullableWithAggregatesFilter<"PersonalInfo"> | number | null
-    employeeId?: IntWithAggregatesFilter<"PersonalInfo"> | number
-  }
-
   export type ContactInfoWhereInput = {
     AND?: ContactInfoWhereInput | ContactInfoWhereInput[]
     OR?: ContactInfoWhereInput[]
@@ -26454,84 +26316,6 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"ContactInfo"> | string | null
     employeeId?: IntWithAggregatesFilter<"ContactInfo"> | number
     zalo_user_id?: StringNullableWithAggregatesFilter<"ContactInfo"> | string | null
-  }
-
-  export type OtherInfoWhereInput = {
-    AND?: OtherInfoWhereInput | OtherInfoWhereInput[]
-    OR?: OtherInfoWhereInput[]
-    NOT?: OtherInfoWhereInput | OtherInfoWhereInput[]
-    id?: IntFilter<"OtherInfo"> | number
-    workStatus?: EnumWorkStatusFilter<"OtherInfo"> | $Enums.WorkStatus
-    resignedDate?: DateTimeNullableFilter<"OtherInfo"> | Date | string | null
-    documentsChecked?: StringNullableFilter<"OtherInfo"> | string | null
-    updatedAt?: DateTimeFilter<"OtherInfo"> | Date | string
-    VCB?: StringNullableFilter<"OtherInfo"> | string | null
-    MTCV?: StringNullableFilter<"OtherInfo"> | string | null
-    PNJ?: StringNullableFilter<"OtherInfo"> | string | null
-    employeeId?: IntFilter<"OtherInfo"> | number
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
-  }
-
-  export type OtherInfoOrderByWithRelationInput = {
-    id?: SortOrder
-    workStatus?: SortOrder
-    resignedDate?: SortOrderInput | SortOrder
-    documentsChecked?: SortOrderInput | SortOrder
-    updatedAt?: SortOrder
-    VCB?: SortOrderInput | SortOrder
-    MTCV?: SortOrderInput | SortOrder
-    PNJ?: SortOrderInput | SortOrder
-    employeeId?: SortOrder
-    employee?: EmployeeOrderByWithRelationInput
-    _relevance?: OtherInfoOrderByRelevanceInput
-  }
-
-  export type OtherInfoWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    employeeId?: number
-    AND?: OtherInfoWhereInput | OtherInfoWhereInput[]
-    OR?: OtherInfoWhereInput[]
-    NOT?: OtherInfoWhereInput | OtherInfoWhereInput[]
-    workStatus?: EnumWorkStatusFilter<"OtherInfo"> | $Enums.WorkStatus
-    resignedDate?: DateTimeNullableFilter<"OtherInfo"> | Date | string | null
-    documentsChecked?: StringNullableFilter<"OtherInfo"> | string | null
-    updatedAt?: DateTimeFilter<"OtherInfo"> | Date | string
-    VCB?: StringNullableFilter<"OtherInfo"> | string | null
-    MTCV?: StringNullableFilter<"OtherInfo"> | string | null
-    PNJ?: StringNullableFilter<"OtherInfo"> | string | null
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
-  }, "id" | "employeeId">
-
-  export type OtherInfoOrderByWithAggregationInput = {
-    id?: SortOrder
-    workStatus?: SortOrder
-    resignedDate?: SortOrderInput | SortOrder
-    documentsChecked?: SortOrderInput | SortOrder
-    updatedAt?: SortOrder
-    VCB?: SortOrderInput | SortOrder
-    MTCV?: SortOrderInput | SortOrder
-    PNJ?: SortOrderInput | SortOrder
-    employeeId?: SortOrder
-    _count?: OtherInfoCountOrderByAggregateInput
-    _avg?: OtherInfoAvgOrderByAggregateInput
-    _max?: OtherInfoMaxOrderByAggregateInput
-    _min?: OtherInfoMinOrderByAggregateInput
-    _sum?: OtherInfoSumOrderByAggregateInput
-  }
-
-  export type OtherInfoScalarWhereWithAggregatesInput = {
-    AND?: OtherInfoScalarWhereWithAggregatesInput | OtherInfoScalarWhereWithAggregatesInput[]
-    OR?: OtherInfoScalarWhereWithAggregatesInput[]
-    NOT?: OtherInfoScalarWhereWithAggregatesInput | OtherInfoScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"OtherInfo"> | number
-    workStatus?: EnumWorkStatusWithAggregatesFilter<"OtherInfo"> | $Enums.WorkStatus
-    resignedDate?: DateTimeNullableWithAggregatesFilter<"OtherInfo"> | Date | string | null
-    documentsChecked?: StringNullableWithAggregatesFilter<"OtherInfo"> | string | null
-    updatedAt?: DateTimeWithAggregatesFilter<"OtherInfo"> | Date | string
-    VCB?: StringNullableWithAggregatesFilter<"OtherInfo"> | string | null
-    MTCV?: StringNullableWithAggregatesFilter<"OtherInfo"> | string | null
-    PNJ?: StringNullableWithAggregatesFilter<"OtherInfo"> | string | null
-    employeeId?: IntWithAggregatesFilter<"OtherInfo"> | number
   }
 
   export type LeaveRequestWhereInput = {
@@ -27441,6 +27225,138 @@ export namespace Prisma {
     userAgent?: StringNullableWithAggregatesFilter<"EmailActionToken"> | string | null
   }
 
+  export type AssetWhereInput = {
+    AND?: AssetWhereInput | AssetWhereInput[]
+    OR?: AssetWhereInput[]
+    NOT?: AssetWhereInput | AssetWhereInput[]
+    id?: IntFilter<"Asset"> | number
+    name?: StringFilter<"Asset"> | string
+    description?: StringNullableFilter<"Asset"> | string | null
+    createdAt?: DateTimeFilter<"Asset"> | Date | string
+    updatedAt?: DateTimeFilter<"Asset"> | Date | string
+    assignments?: AssetAssignmentListRelationFilter
+  }
+
+  export type AssetOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    assignments?: AssetAssignmentOrderByRelationAggregateInput
+    _relevance?: AssetOrderByRelevanceInput
+  }
+
+  export type AssetWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: AssetWhereInput | AssetWhereInput[]
+    OR?: AssetWhereInput[]
+    NOT?: AssetWhereInput | AssetWhereInput[]
+    name?: StringFilter<"Asset"> | string
+    description?: StringNullableFilter<"Asset"> | string | null
+    createdAt?: DateTimeFilter<"Asset"> | Date | string
+    updatedAt?: DateTimeFilter<"Asset"> | Date | string
+    assignments?: AssetAssignmentListRelationFilter
+  }, "id">
+
+  export type AssetOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AssetCountOrderByAggregateInput
+    _avg?: AssetAvgOrderByAggregateInput
+    _max?: AssetMaxOrderByAggregateInput
+    _min?: AssetMinOrderByAggregateInput
+    _sum?: AssetSumOrderByAggregateInput
+  }
+
+  export type AssetScalarWhereWithAggregatesInput = {
+    AND?: AssetScalarWhereWithAggregatesInput | AssetScalarWhereWithAggregatesInput[]
+    OR?: AssetScalarWhereWithAggregatesInput[]
+    NOT?: AssetScalarWhereWithAggregatesInput | AssetScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Asset"> | number
+    name?: StringWithAggregatesFilter<"Asset"> | string
+    description?: StringNullableWithAggregatesFilter<"Asset"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Asset"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Asset"> | Date | string
+  }
+
+  export type AssetAssignmentWhereInput = {
+    AND?: AssetAssignmentWhereInput | AssetAssignmentWhereInput[]
+    OR?: AssetAssignmentWhereInput[]
+    NOT?: AssetAssignmentWhereInput | AssetAssignmentWhereInput[]
+    id?: IntFilter<"AssetAssignment"> | number
+    assetId?: IntFilter<"AssetAssignment"> | number
+    employeeId?: IntFilter<"AssetAssignment"> | number
+    issuedById?: IntFilter<"AssetAssignment"> | number
+    issuedAt?: DateTimeFilter<"AssetAssignment"> | Date | string
+    quantity?: IntFilter<"AssetAssignment"> | number
+    note?: StringNullableFilter<"AssetAssignment"> | string | null
+    asset?: XOR<AssetScalarRelationFilter, AssetWhereInput>
+    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    issuedBy?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+  }
+
+  export type AssetAssignmentOrderByWithRelationInput = {
+    id?: SortOrder
+    assetId?: SortOrder
+    employeeId?: SortOrder
+    issuedById?: SortOrder
+    issuedAt?: SortOrder
+    quantity?: SortOrder
+    note?: SortOrderInput | SortOrder
+    asset?: AssetOrderByWithRelationInput
+    employee?: EmployeeOrderByWithRelationInput
+    issuedBy?: EmployeeOrderByWithRelationInput
+    _relevance?: AssetAssignmentOrderByRelevanceInput
+  }
+
+  export type AssetAssignmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: AssetAssignmentWhereInput | AssetAssignmentWhereInput[]
+    OR?: AssetAssignmentWhereInput[]
+    NOT?: AssetAssignmentWhereInput | AssetAssignmentWhereInput[]
+    assetId?: IntFilter<"AssetAssignment"> | number
+    employeeId?: IntFilter<"AssetAssignment"> | number
+    issuedById?: IntFilter<"AssetAssignment"> | number
+    issuedAt?: DateTimeFilter<"AssetAssignment"> | Date | string
+    quantity?: IntFilter<"AssetAssignment"> | number
+    note?: StringNullableFilter<"AssetAssignment"> | string | null
+    asset?: XOR<AssetScalarRelationFilter, AssetWhereInput>
+    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    issuedBy?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+  }, "id">
+
+  export type AssetAssignmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    assetId?: SortOrder
+    employeeId?: SortOrder
+    issuedById?: SortOrder
+    issuedAt?: SortOrder
+    quantity?: SortOrder
+    note?: SortOrderInput | SortOrder
+    _count?: AssetAssignmentCountOrderByAggregateInput
+    _avg?: AssetAssignmentAvgOrderByAggregateInput
+    _max?: AssetAssignmentMaxOrderByAggregateInput
+    _min?: AssetAssignmentMinOrderByAggregateInput
+    _sum?: AssetAssignmentSumOrderByAggregateInput
+  }
+
+  export type AssetAssignmentScalarWhereWithAggregatesInput = {
+    AND?: AssetAssignmentScalarWhereWithAggregatesInput | AssetAssignmentScalarWhereWithAggregatesInput[]
+    OR?: AssetAssignmentScalarWhereWithAggregatesInput[]
+    NOT?: AssetAssignmentScalarWhereWithAggregatesInput | AssetAssignmentScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"AssetAssignment"> | number
+    assetId?: IntWithAggregatesFilter<"AssetAssignment"> | number
+    employeeId?: IntWithAggregatesFilter<"AssetAssignment"> | number
+    issuedById?: IntWithAggregatesFilter<"AssetAssignment"> | number
+    issuedAt?: DateTimeWithAggregatesFilter<"AssetAssignment"> | Date | string
+    quantity?: IntWithAggregatesFilter<"AssetAssignment"> | number
+    note?: StringNullableWithAggregatesFilter<"AssetAssignment"> | string | null
+  }
+
   export type FileCreateInput = {
     filename: string
     mimeType: string
@@ -27603,14 +27519,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUncheckedCreateInput = {
@@ -27634,14 +27550,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUpdateInput = {
@@ -27664,14 +27580,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateInput = {
@@ -27695,14 +27611,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeCreateManyInput = {
@@ -28004,114 +27920,6 @@ export namespace Prisma {
     employeeId?: IntFieldUpdateOperationsInput | number
   }
 
-  export type PersonalInfoCreateInput = {
-    identityNumber?: string | null
-    issueDate?: Date | string | null
-    issuePlace?: string | null
-    hometown?: string | null
-    idAddress?: string | null
-    education?: string | null
-    drivingLicense?: string | null
-    toyotaCertificate?: string | null
-    taxCode?: string | null
-    insuranceNumber?: string | null
-    insuranceSalary?: number | null
-    employee: EmployeeCreateNestedOneWithoutPersonalInfoInput
-  }
-
-  export type PersonalInfoUncheckedCreateInput = {
-    id?: number
-    identityNumber?: string | null
-    issueDate?: Date | string | null
-    issuePlace?: string | null
-    hometown?: string | null
-    idAddress?: string | null
-    education?: string | null
-    drivingLicense?: string | null
-    toyotaCertificate?: string | null
-    taxCode?: string | null
-    insuranceNumber?: string | null
-    insuranceSalary?: number | null
-    employeeId: number
-  }
-
-  export type PersonalInfoUpdateInput = {
-    identityNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    issuePlace?: NullableStringFieldUpdateOperationsInput | string | null
-    hometown?: NullableStringFieldUpdateOperationsInput | string | null
-    idAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    education?: NullableStringFieldUpdateOperationsInput | string | null
-    drivingLicense?: NullableStringFieldUpdateOperationsInput | string | null
-    toyotaCertificate?: NullableStringFieldUpdateOperationsInput | string | null
-    taxCode?: NullableStringFieldUpdateOperationsInput | string | null
-    insuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    insuranceSalary?: NullableIntFieldUpdateOperationsInput | number | null
-    employee?: EmployeeUpdateOneRequiredWithoutPersonalInfoNestedInput
-  }
-
-  export type PersonalInfoUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    identityNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    issuePlace?: NullableStringFieldUpdateOperationsInput | string | null
-    hometown?: NullableStringFieldUpdateOperationsInput | string | null
-    idAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    education?: NullableStringFieldUpdateOperationsInput | string | null
-    drivingLicense?: NullableStringFieldUpdateOperationsInput | string | null
-    toyotaCertificate?: NullableStringFieldUpdateOperationsInput | string | null
-    taxCode?: NullableStringFieldUpdateOperationsInput | string | null
-    insuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    insuranceSalary?: NullableIntFieldUpdateOperationsInput | number | null
-    employeeId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type PersonalInfoCreateManyInput = {
-    id?: number
-    identityNumber?: string | null
-    issueDate?: Date | string | null
-    issuePlace?: string | null
-    hometown?: string | null
-    idAddress?: string | null
-    education?: string | null
-    drivingLicense?: string | null
-    toyotaCertificate?: string | null
-    taxCode?: string | null
-    insuranceNumber?: string | null
-    insuranceSalary?: number | null
-    employeeId: number
-  }
-
-  export type PersonalInfoUpdateManyMutationInput = {
-    identityNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    issuePlace?: NullableStringFieldUpdateOperationsInput | string | null
-    hometown?: NullableStringFieldUpdateOperationsInput | string | null
-    idAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    education?: NullableStringFieldUpdateOperationsInput | string | null
-    drivingLicense?: NullableStringFieldUpdateOperationsInput | string | null
-    toyotaCertificate?: NullableStringFieldUpdateOperationsInput | string | null
-    taxCode?: NullableStringFieldUpdateOperationsInput | string | null
-    insuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    insuranceSalary?: NullableIntFieldUpdateOperationsInput | number | null
-  }
-
-  export type PersonalInfoUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    identityNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    issuePlace?: NullableStringFieldUpdateOperationsInput | string | null
-    hometown?: NullableStringFieldUpdateOperationsInput | string | null
-    idAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    education?: NullableStringFieldUpdateOperationsInput | string | null
-    drivingLicense?: NullableStringFieldUpdateOperationsInput | string | null
-    toyotaCertificate?: NullableStringFieldUpdateOperationsInput | string | null
-    taxCode?: NullableStringFieldUpdateOperationsInput | string | null
-    insuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    insuranceSalary?: NullableIntFieldUpdateOperationsInput | number | null
-    employeeId?: IntFieldUpdateOperationsInput | number
-  }
-
   export type ContactInfoCreateInput = {
     phoneNumber?: string | null
     relativePhone?: string | null
@@ -28176,86 +27984,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     employeeId?: IntFieldUpdateOperationsInput | number
     zalo_user_id?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type OtherInfoCreateInput = {
-    workStatus?: $Enums.WorkStatus
-    resignedDate?: Date | string | null
-    documentsChecked?: string | null
-    updatedAt?: Date | string
-    VCB?: string | null
-    MTCV?: string | null
-    PNJ?: string | null
-    employee: EmployeeCreateNestedOneWithoutOtherInfoInput
-  }
-
-  export type OtherInfoUncheckedCreateInput = {
-    id?: number
-    workStatus?: $Enums.WorkStatus
-    resignedDate?: Date | string | null
-    documentsChecked?: string | null
-    updatedAt?: Date | string
-    VCB?: string | null
-    MTCV?: string | null
-    PNJ?: string | null
-    employeeId: number
-  }
-
-  export type OtherInfoUpdateInput = {
-    workStatus?: EnumWorkStatusFieldUpdateOperationsInput | $Enums.WorkStatus
-    resignedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    documentsChecked?: NullableStringFieldUpdateOperationsInput | string | null
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    VCB?: NullableStringFieldUpdateOperationsInput | string | null
-    MTCV?: NullableStringFieldUpdateOperationsInput | string | null
-    PNJ?: NullableStringFieldUpdateOperationsInput | string | null
-    employee?: EmployeeUpdateOneRequiredWithoutOtherInfoNestedInput
-  }
-
-  export type OtherInfoUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    workStatus?: EnumWorkStatusFieldUpdateOperationsInput | $Enums.WorkStatus
-    resignedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    documentsChecked?: NullableStringFieldUpdateOperationsInput | string | null
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    VCB?: NullableStringFieldUpdateOperationsInput | string | null
-    MTCV?: NullableStringFieldUpdateOperationsInput | string | null
-    PNJ?: NullableStringFieldUpdateOperationsInput | string | null
-    employeeId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type OtherInfoCreateManyInput = {
-    id?: number
-    workStatus?: $Enums.WorkStatus
-    resignedDate?: Date | string | null
-    documentsChecked?: string | null
-    updatedAt?: Date | string
-    VCB?: string | null
-    MTCV?: string | null
-    PNJ?: string | null
-    employeeId: number
-  }
-
-  export type OtherInfoUpdateManyMutationInput = {
-    workStatus?: EnumWorkStatusFieldUpdateOperationsInput | $Enums.WorkStatus
-    resignedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    documentsChecked?: NullableStringFieldUpdateOperationsInput | string | null
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    VCB?: NullableStringFieldUpdateOperationsInput | string | null
-    MTCV?: NullableStringFieldUpdateOperationsInput | string | null
-    PNJ?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type OtherInfoUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    workStatus?: EnumWorkStatusFieldUpdateOperationsInput | $Enums.WorkStatus
-    resignedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    documentsChecked?: NullableStringFieldUpdateOperationsInput | string | null
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    VCB?: NullableStringFieldUpdateOperationsInput | string | null
-    MTCV?: NullableStringFieldUpdateOperationsInput | string | null
-    PNJ?: NullableStringFieldUpdateOperationsInput | string | null
-    employeeId?: IntFieldUpdateOperationsInput | number
   }
 
   export type LeaveRequestCreateInput = {
@@ -29142,6 +28870,127 @@ export namespace Prisma {
     userAgent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type AssetCreateInput = {
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: AssetAssignmentCreateNestedManyWithoutAssetInput
+  }
+
+  export type AssetUncheckedCreateInput = {
+    id?: number
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: AssetAssignmentUncheckedCreateNestedManyWithoutAssetInput
+  }
+
+  export type AssetUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: AssetAssignmentUpdateManyWithoutAssetNestedInput
+  }
+
+  export type AssetUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: AssetAssignmentUncheckedUpdateManyWithoutAssetNestedInput
+  }
+
+  export type AssetCreateManyInput = {
+    id?: number
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetAssignmentCreateInput = {
+    issuedAt?: Date | string
+    quantity?: number
+    note?: string | null
+    asset: AssetCreateNestedOneWithoutAssignmentsInput
+    employee: EmployeeCreateNestedOneWithoutAssetsReceivedInput
+    issuedBy: EmployeeCreateNestedOneWithoutAssetsIssuedInput
+  }
+
+  export type AssetAssignmentUncheckedCreateInput = {
+    id?: number
+    assetId: number
+    employeeId: number
+    issuedById: number
+    issuedAt?: Date | string
+    quantity?: number
+    note?: string | null
+  }
+
+  export type AssetAssignmentUpdateInput = {
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    asset?: AssetUpdateOneRequiredWithoutAssignmentsNestedInput
+    employee?: EmployeeUpdateOneRequiredWithoutAssetsReceivedNestedInput
+    issuedBy?: EmployeeUpdateOneRequiredWithoutAssetsIssuedNestedInput
+  }
+
+  export type AssetAssignmentUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    assetId?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    issuedById?: IntFieldUpdateOperationsInput | number
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AssetAssignmentCreateManyInput = {
+    id?: number
+    assetId: number
+    employeeId: number
+    issuedById: number
+    issuedAt?: Date | string
+    quantity?: number
+    note?: string | null
+  }
+
+  export type AssetAssignmentUpdateManyMutationInput = {
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AssetAssignmentUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    assetId?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    issuedById?: IntFieldUpdateOperationsInput | number
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -29476,16 +29325,6 @@ export namespace Prisma {
     none?: LeaveRequestWhereInput
   }
 
-  export type OtherInfoNullableScalarRelationFilter = {
-    is?: OtherInfoWhereInput | null
-    isNot?: OtherInfoWhereInput | null
-  }
-
-  export type PersonalInfoNullableScalarRelationFilter = {
-    is?: PersonalInfoWhereInput | null
-    isNot?: PersonalInfoWhereInput | null
-  }
-
   export type ProposalApproverListRelationFilter = {
     every?: ProposalApproverWhereInput
     some?: ProposalApproverWhereInput
@@ -29507,6 +29346,12 @@ export namespace Prisma {
     every?: AttendanceWhereInput
     some?: AttendanceWhereInput
     none?: AttendanceWhereInput
+  }
+
+  export type AssetAssignmentListRelationFilter = {
+    every?: AssetAssignmentWhereInput
+    some?: AssetAssignmentWhereInput
+    none?: AssetAssignmentWhereInput
   }
 
   export type AttendanceImportLogOrderByRelationAggregateInput = {
@@ -29538,6 +29383,10 @@ export namespace Prisma {
   }
 
   export type AttendanceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AssetAssignmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -29854,72 +29703,6 @@ export namespace Prisma {
     employeeId?: SortOrder
   }
 
-  export type PersonalInfoOrderByRelevanceInput = {
-    fields: PersonalInfoOrderByRelevanceFieldEnum | PersonalInfoOrderByRelevanceFieldEnum[]
-    sort: SortOrder
-    search: string
-  }
-
-  export type PersonalInfoCountOrderByAggregateInput = {
-    id?: SortOrder
-    identityNumber?: SortOrder
-    issueDate?: SortOrder
-    issuePlace?: SortOrder
-    hometown?: SortOrder
-    idAddress?: SortOrder
-    education?: SortOrder
-    drivingLicense?: SortOrder
-    toyotaCertificate?: SortOrder
-    taxCode?: SortOrder
-    insuranceNumber?: SortOrder
-    insuranceSalary?: SortOrder
-    employeeId?: SortOrder
-  }
-
-  export type PersonalInfoAvgOrderByAggregateInput = {
-    id?: SortOrder
-    insuranceSalary?: SortOrder
-    employeeId?: SortOrder
-  }
-
-  export type PersonalInfoMaxOrderByAggregateInput = {
-    id?: SortOrder
-    identityNumber?: SortOrder
-    issueDate?: SortOrder
-    issuePlace?: SortOrder
-    hometown?: SortOrder
-    idAddress?: SortOrder
-    education?: SortOrder
-    drivingLicense?: SortOrder
-    toyotaCertificate?: SortOrder
-    taxCode?: SortOrder
-    insuranceNumber?: SortOrder
-    insuranceSalary?: SortOrder
-    employeeId?: SortOrder
-  }
-
-  export type PersonalInfoMinOrderByAggregateInput = {
-    id?: SortOrder
-    identityNumber?: SortOrder
-    issueDate?: SortOrder
-    issuePlace?: SortOrder
-    hometown?: SortOrder
-    idAddress?: SortOrder
-    education?: SortOrder
-    drivingLicense?: SortOrder
-    toyotaCertificate?: SortOrder
-    taxCode?: SortOrder
-    insuranceNumber?: SortOrder
-    insuranceSalary?: SortOrder
-    employeeId?: SortOrder
-  }
-
-  export type PersonalInfoSumOrderByAggregateInput = {
-    id?: SortOrder
-    insuranceSalary?: SortOrder
-    employeeId?: SortOrder
-  }
-
   export type ContactInfoOrderByRelevanceInput = {
     fields: ContactInfoOrderByRelevanceFieldEnum | ContactInfoOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -29964,75 +29747,6 @@ export namespace Prisma {
   export type ContactInfoSumOrderByAggregateInput = {
     id?: SortOrder
     employeeId?: SortOrder
-  }
-
-  export type EnumWorkStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.WorkStatus | EnumWorkStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.WorkStatus[]
-    notIn?: $Enums.WorkStatus[]
-    not?: NestedEnumWorkStatusFilter<$PrismaModel> | $Enums.WorkStatus
-  }
-
-  export type OtherInfoOrderByRelevanceInput = {
-    fields: OtherInfoOrderByRelevanceFieldEnum | OtherInfoOrderByRelevanceFieldEnum[]
-    sort: SortOrder
-    search: string
-  }
-
-  export type OtherInfoCountOrderByAggregateInput = {
-    id?: SortOrder
-    workStatus?: SortOrder
-    resignedDate?: SortOrder
-    documentsChecked?: SortOrder
-    updatedAt?: SortOrder
-    VCB?: SortOrder
-    MTCV?: SortOrder
-    PNJ?: SortOrder
-    employeeId?: SortOrder
-  }
-
-  export type OtherInfoAvgOrderByAggregateInput = {
-    id?: SortOrder
-    employeeId?: SortOrder
-  }
-
-  export type OtherInfoMaxOrderByAggregateInput = {
-    id?: SortOrder
-    workStatus?: SortOrder
-    resignedDate?: SortOrder
-    documentsChecked?: SortOrder
-    updatedAt?: SortOrder
-    VCB?: SortOrder
-    MTCV?: SortOrder
-    PNJ?: SortOrder
-    employeeId?: SortOrder
-  }
-
-  export type OtherInfoMinOrderByAggregateInput = {
-    id?: SortOrder
-    workStatus?: SortOrder
-    resignedDate?: SortOrder
-    documentsChecked?: SortOrder
-    updatedAt?: SortOrder
-    VCB?: SortOrder
-    MTCV?: SortOrder
-    PNJ?: SortOrder
-    employeeId?: SortOrder
-  }
-
-  export type OtherInfoSumOrderByAggregateInput = {
-    id?: SortOrder
-    employeeId?: SortOrder
-  }
-
-  export type EnumWorkStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.WorkStatus | EnumWorkStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.WorkStatus[]
-    notIn?: $Enums.WorkStatus[]
-    not?: NestedEnumWorkStatusWithAggregatesFilter<$PrismaModel> | $Enums.WorkStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumWorkStatusFilter<$PrismaModel>
-    _max?: NestedEnumWorkStatusFilter<$PrismaModel>
   }
 
   export type EnumLeaveTypeEnumFilter<$PrismaModel = never> = {
@@ -30835,6 +30549,101 @@ export namespace Prisma {
     proposalId?: SortOrder
   }
 
+  export type AssetOrderByRelevanceInput = {
+    fields: AssetOrderByRelevanceFieldEnum | AssetOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type AssetCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AssetAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type AssetMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AssetMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AssetSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type AssetScalarRelationFilter = {
+    is?: AssetWhereInput
+    isNot?: AssetWhereInput
+  }
+
+  export type AssetAssignmentOrderByRelevanceInput = {
+    fields: AssetAssignmentOrderByRelevanceFieldEnum | AssetAssignmentOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type AssetAssignmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    assetId?: SortOrder
+    employeeId?: SortOrder
+    issuedById?: SortOrder
+    issuedAt?: SortOrder
+    quantity?: SortOrder
+    note?: SortOrder
+  }
+
+  export type AssetAssignmentAvgOrderByAggregateInput = {
+    id?: SortOrder
+    assetId?: SortOrder
+    employeeId?: SortOrder
+    issuedById?: SortOrder
+    quantity?: SortOrder
+  }
+
+  export type AssetAssignmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    assetId?: SortOrder
+    employeeId?: SortOrder
+    issuedById?: SortOrder
+    issuedAt?: SortOrder
+    quantity?: SortOrder
+    note?: SortOrder
+  }
+
+  export type AssetAssignmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    assetId?: SortOrder
+    employeeId?: SortOrder
+    issuedById?: SortOrder
+    issuedAt?: SortOrder
+    quantity?: SortOrder
+    note?: SortOrder
+  }
+
+  export type AssetAssignmentSumOrderByAggregateInput = {
+    id?: SortOrder
+    assetId?: SortOrder
+    employeeId?: SortOrder
+    issuedById?: SortOrder
+    quantity?: SortOrder
+  }
+
   export type ProposalCreateNestedManyWithoutFileInput = {
     create?: XOR<ProposalCreateWithoutFileInput, ProposalUncheckedCreateWithoutFileInput> | ProposalCreateWithoutFileInput[] | ProposalUncheckedCreateWithoutFileInput[]
     connectOrCreate?: ProposalCreateOrConnectWithoutFileInput | ProposalCreateOrConnectWithoutFileInput[]
@@ -31006,18 +30815,6 @@ export namespace Prisma {
     connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
   }
 
-  export type OtherInfoCreateNestedOneWithoutEmployeeInput = {
-    create?: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: OtherInfoCreateOrConnectWithoutEmployeeInput
-    connect?: OtherInfoWhereUniqueInput
-  }
-
-  export type PersonalInfoCreateNestedOneWithoutEmployeeInput = {
-    create?: XOR<PersonalInfoCreateWithoutEmployeeInput, PersonalInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: PersonalInfoCreateOrConnectWithoutEmployeeInput
-    connect?: PersonalInfoWhereUniqueInput
-  }
-
   export type ProposalCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<ProposalCreateWithoutCreatedByInput, ProposalUncheckedCreateWithoutCreatedByInput> | ProposalCreateWithoutCreatedByInput[] | ProposalUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: ProposalCreateOrConnectWithoutCreatedByInput | ProposalCreateOrConnectWithoutCreatedByInput[]
@@ -31057,6 +30854,20 @@ export namespace Prisma {
     connectOrCreate?: AttendanceCreateOrConnectWithoutEmployeeInput | AttendanceCreateOrConnectWithoutEmployeeInput[]
     createMany?: AttendanceCreateManyEmployeeInputEnvelope
     connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+  }
+
+  export type AssetAssignmentCreateNestedManyWithoutEmployeeInput = {
+    create?: XOR<AssetAssignmentCreateWithoutEmployeeInput, AssetAssignmentUncheckedCreateWithoutEmployeeInput> | AssetAssignmentCreateWithoutEmployeeInput[] | AssetAssignmentUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutEmployeeInput | AssetAssignmentCreateOrConnectWithoutEmployeeInput[]
+    createMany?: AssetAssignmentCreateManyEmployeeInputEnvelope
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+  }
+
+  export type AssetAssignmentCreateNestedManyWithoutIssuedByInput = {
+    create?: XOR<AssetAssignmentCreateWithoutIssuedByInput, AssetAssignmentUncheckedCreateWithoutIssuedByInput> | AssetAssignmentCreateWithoutIssuedByInput[] | AssetAssignmentUncheckedCreateWithoutIssuedByInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutIssuedByInput | AssetAssignmentCreateOrConnectWithoutIssuedByInput[]
+    createMany?: AssetAssignmentCreateManyIssuedByInputEnvelope
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
   }
 
   export type AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput = {
@@ -31112,18 +30923,6 @@ export namespace Prisma {
     connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
   }
 
-  export type OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput = {
-    create?: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: OtherInfoCreateOrConnectWithoutEmployeeInput
-    connect?: OtherInfoWhereUniqueInput
-  }
-
-  export type PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput = {
-    create?: XOR<PersonalInfoCreateWithoutEmployeeInput, PersonalInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: PersonalInfoCreateOrConnectWithoutEmployeeInput
-    connect?: PersonalInfoWhereUniqueInput
-  }
-
   export type ProposalUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<ProposalCreateWithoutCreatedByInput, ProposalUncheckedCreateWithoutCreatedByInput> | ProposalCreateWithoutCreatedByInput[] | ProposalUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: ProposalCreateOrConnectWithoutCreatedByInput | ProposalCreateOrConnectWithoutCreatedByInput[]
@@ -31163,6 +30962,20 @@ export namespace Prisma {
     connectOrCreate?: AttendanceCreateOrConnectWithoutEmployeeInput | AttendanceCreateOrConnectWithoutEmployeeInput[]
     createMany?: AttendanceCreateManyEmployeeInputEnvelope
     connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
+  }
+
+  export type AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput = {
+    create?: XOR<AssetAssignmentCreateWithoutEmployeeInput, AssetAssignmentUncheckedCreateWithoutEmployeeInput> | AssetAssignmentCreateWithoutEmployeeInput[] | AssetAssignmentUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutEmployeeInput | AssetAssignmentCreateOrConnectWithoutEmployeeInput[]
+    createMany?: AssetAssignmentCreateManyEmployeeInputEnvelope
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+  }
+
+  export type AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput = {
+    create?: XOR<AssetAssignmentCreateWithoutIssuedByInput, AssetAssignmentUncheckedCreateWithoutIssuedByInput> | AssetAssignmentCreateWithoutIssuedByInput[] | AssetAssignmentUncheckedCreateWithoutIssuedByInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutIssuedByInput | AssetAssignmentCreateOrConnectWithoutIssuedByInput[]
+    createMany?: AssetAssignmentCreateManyIssuedByInputEnvelope
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
   }
 
   export type EnumSexFieldUpdateOperationsInput = {
@@ -31287,26 +31100,6 @@ export namespace Prisma {
     deleteMany?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
   }
 
-  export type OtherInfoUpdateOneWithoutEmployeeNestedInput = {
-    create?: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: OtherInfoCreateOrConnectWithoutEmployeeInput
-    upsert?: OtherInfoUpsertWithoutEmployeeInput
-    disconnect?: OtherInfoWhereInput | boolean
-    delete?: OtherInfoWhereInput | boolean
-    connect?: OtherInfoWhereUniqueInput
-    update?: XOR<XOR<OtherInfoUpdateToOneWithWhereWithoutEmployeeInput, OtherInfoUpdateWithoutEmployeeInput>, OtherInfoUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type PersonalInfoUpdateOneWithoutEmployeeNestedInput = {
-    create?: XOR<PersonalInfoCreateWithoutEmployeeInput, PersonalInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: PersonalInfoCreateOrConnectWithoutEmployeeInput
-    upsert?: PersonalInfoUpsertWithoutEmployeeInput
-    disconnect?: PersonalInfoWhereInput | boolean
-    delete?: PersonalInfoWhereInput | boolean
-    connect?: PersonalInfoWhereUniqueInput
-    update?: XOR<XOR<PersonalInfoUpdateToOneWithWhereWithoutEmployeeInput, PersonalInfoUpdateWithoutEmployeeInput>, PersonalInfoUncheckedUpdateWithoutEmployeeInput>
-  }
-
   export type ProposalUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<ProposalCreateWithoutCreatedByInput, ProposalUncheckedCreateWithoutCreatedByInput> | ProposalCreateWithoutCreatedByInput[] | ProposalUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: ProposalCreateOrConnectWithoutCreatedByInput | ProposalCreateOrConnectWithoutCreatedByInput[]
@@ -31385,6 +31178,34 @@ export namespace Prisma {
     update?: AttendanceUpdateWithWhereUniqueWithoutEmployeeInput | AttendanceUpdateWithWhereUniqueWithoutEmployeeInput[]
     updateMany?: AttendanceUpdateManyWithWhereWithoutEmployeeInput | AttendanceUpdateManyWithWhereWithoutEmployeeInput[]
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+  }
+
+  export type AssetAssignmentUpdateManyWithoutEmployeeNestedInput = {
+    create?: XOR<AssetAssignmentCreateWithoutEmployeeInput, AssetAssignmentUncheckedCreateWithoutEmployeeInput> | AssetAssignmentCreateWithoutEmployeeInput[] | AssetAssignmentUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutEmployeeInput | AssetAssignmentCreateOrConnectWithoutEmployeeInput[]
+    upsert?: AssetAssignmentUpsertWithWhereUniqueWithoutEmployeeInput | AssetAssignmentUpsertWithWhereUniqueWithoutEmployeeInput[]
+    createMany?: AssetAssignmentCreateManyEmployeeInputEnvelope
+    set?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    disconnect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    delete?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    update?: AssetAssignmentUpdateWithWhereUniqueWithoutEmployeeInput | AssetAssignmentUpdateWithWhereUniqueWithoutEmployeeInput[]
+    updateMany?: AssetAssignmentUpdateManyWithWhereWithoutEmployeeInput | AssetAssignmentUpdateManyWithWhereWithoutEmployeeInput[]
+    deleteMany?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
+  }
+
+  export type AssetAssignmentUpdateManyWithoutIssuedByNestedInput = {
+    create?: XOR<AssetAssignmentCreateWithoutIssuedByInput, AssetAssignmentUncheckedCreateWithoutIssuedByInput> | AssetAssignmentCreateWithoutIssuedByInput[] | AssetAssignmentUncheckedCreateWithoutIssuedByInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutIssuedByInput | AssetAssignmentCreateOrConnectWithoutIssuedByInput[]
+    upsert?: AssetAssignmentUpsertWithWhereUniqueWithoutIssuedByInput | AssetAssignmentUpsertWithWhereUniqueWithoutIssuedByInput[]
+    createMany?: AssetAssignmentCreateManyIssuedByInputEnvelope
+    set?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    disconnect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    delete?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    update?: AssetAssignmentUpdateWithWhereUniqueWithoutIssuedByInput | AssetAssignmentUpdateWithWhereUniqueWithoutIssuedByInput[]
+    updateMany?: AssetAssignmentUpdateManyWithWhereWithoutIssuedByInput | AssetAssignmentUpdateManyWithWhereWithoutIssuedByInput[]
+    deleteMany?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -31495,26 +31316,6 @@ export namespace Prisma {
     deleteMany?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
   }
 
-  export type OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput = {
-    create?: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: OtherInfoCreateOrConnectWithoutEmployeeInput
-    upsert?: OtherInfoUpsertWithoutEmployeeInput
-    disconnect?: OtherInfoWhereInput | boolean
-    delete?: OtherInfoWhereInput | boolean
-    connect?: OtherInfoWhereUniqueInput
-    update?: XOR<XOR<OtherInfoUpdateToOneWithWhereWithoutEmployeeInput, OtherInfoUpdateWithoutEmployeeInput>, OtherInfoUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput = {
-    create?: XOR<PersonalInfoCreateWithoutEmployeeInput, PersonalInfoUncheckedCreateWithoutEmployeeInput>
-    connectOrCreate?: PersonalInfoCreateOrConnectWithoutEmployeeInput
-    upsert?: PersonalInfoUpsertWithoutEmployeeInput
-    disconnect?: PersonalInfoWhereInput | boolean
-    delete?: PersonalInfoWhereInput | boolean
-    connect?: PersonalInfoWhereUniqueInput
-    update?: XOR<XOR<PersonalInfoUpdateToOneWithWhereWithoutEmployeeInput, PersonalInfoUpdateWithoutEmployeeInput>, PersonalInfoUncheckedUpdateWithoutEmployeeInput>
-  }
-
   export type ProposalUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<ProposalCreateWithoutCreatedByInput, ProposalUncheckedCreateWithoutCreatedByInput> | ProposalCreateWithoutCreatedByInput[] | ProposalUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: ProposalCreateOrConnectWithoutCreatedByInput | ProposalCreateOrConnectWithoutCreatedByInput[]
@@ -31593,6 +31394,34 @@ export namespace Prisma {
     update?: AttendanceUpdateWithWhereUniqueWithoutEmployeeInput | AttendanceUpdateWithWhereUniqueWithoutEmployeeInput[]
     updateMany?: AttendanceUpdateManyWithWhereWithoutEmployeeInput | AttendanceUpdateManyWithWhereWithoutEmployeeInput[]
     deleteMany?: AttendanceScalarWhereInput | AttendanceScalarWhereInput[]
+  }
+
+  export type AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput = {
+    create?: XOR<AssetAssignmentCreateWithoutEmployeeInput, AssetAssignmentUncheckedCreateWithoutEmployeeInput> | AssetAssignmentCreateWithoutEmployeeInput[] | AssetAssignmentUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutEmployeeInput | AssetAssignmentCreateOrConnectWithoutEmployeeInput[]
+    upsert?: AssetAssignmentUpsertWithWhereUniqueWithoutEmployeeInput | AssetAssignmentUpsertWithWhereUniqueWithoutEmployeeInput[]
+    createMany?: AssetAssignmentCreateManyEmployeeInputEnvelope
+    set?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    disconnect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    delete?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    update?: AssetAssignmentUpdateWithWhereUniqueWithoutEmployeeInput | AssetAssignmentUpdateWithWhereUniqueWithoutEmployeeInput[]
+    updateMany?: AssetAssignmentUpdateManyWithWhereWithoutEmployeeInput | AssetAssignmentUpdateManyWithWhereWithoutEmployeeInput[]
+    deleteMany?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
+  }
+
+  export type AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput = {
+    create?: XOR<AssetAssignmentCreateWithoutIssuedByInput, AssetAssignmentUncheckedCreateWithoutIssuedByInput> | AssetAssignmentCreateWithoutIssuedByInput[] | AssetAssignmentUncheckedCreateWithoutIssuedByInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutIssuedByInput | AssetAssignmentCreateOrConnectWithoutIssuedByInput[]
+    upsert?: AssetAssignmentUpsertWithWhereUniqueWithoutIssuedByInput | AssetAssignmentUpsertWithWhereUniqueWithoutIssuedByInput[]
+    createMany?: AssetAssignmentCreateManyIssuedByInputEnvelope
+    set?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    disconnect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    delete?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    update?: AssetAssignmentUpdateWithWhereUniqueWithoutIssuedByInput | AssetAssignmentUpdateWithWhereUniqueWithoutIssuedByInput[]
+    updateMany?: AssetAssignmentUpdateManyWithWhereWithoutIssuedByInput | AssetAssignmentUpdateManyWithWhereWithoutIssuedByInput[]
+    deleteMany?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
   }
 
   export type EmployeeCreateNestedOneWithoutDepartmentDirectorOfInput = {
@@ -31813,20 +31642,6 @@ export namespace Prisma {
     update?: XOR<XOR<PositionUpdateToOneWithWhereWithoutEmployeesInput, PositionUpdateWithoutEmployeesInput>, PositionUncheckedUpdateWithoutEmployeesInput>
   }
 
-  export type EmployeeCreateNestedOneWithoutPersonalInfoInput = {
-    create?: XOR<EmployeeCreateWithoutPersonalInfoInput, EmployeeUncheckedCreateWithoutPersonalInfoInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutPersonalInfoInput
-    connect?: EmployeeWhereUniqueInput
-  }
-
-  export type EmployeeUpdateOneRequiredWithoutPersonalInfoNestedInput = {
-    create?: XOR<EmployeeCreateWithoutPersonalInfoInput, EmployeeUncheckedCreateWithoutPersonalInfoInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutPersonalInfoInput
-    upsert?: EmployeeUpsertWithoutPersonalInfoInput
-    connect?: EmployeeWhereUniqueInput
-    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutPersonalInfoInput, EmployeeUpdateWithoutPersonalInfoInput>, EmployeeUncheckedUpdateWithoutPersonalInfoInput>
-  }
-
   export type EmployeeCreateNestedOneWithoutContactInfoInput = {
     create?: XOR<EmployeeCreateWithoutContactInfoInput, EmployeeUncheckedCreateWithoutContactInfoInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutContactInfoInput
@@ -31839,24 +31654,6 @@ export namespace Prisma {
     upsert?: EmployeeUpsertWithoutContactInfoInput
     connect?: EmployeeWhereUniqueInput
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutContactInfoInput, EmployeeUpdateWithoutContactInfoInput>, EmployeeUncheckedUpdateWithoutContactInfoInput>
-  }
-
-  export type EmployeeCreateNestedOneWithoutOtherInfoInput = {
-    create?: XOR<EmployeeCreateWithoutOtherInfoInput, EmployeeUncheckedCreateWithoutOtherInfoInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutOtherInfoInput
-    connect?: EmployeeWhereUniqueInput
-  }
-
-  export type EnumWorkStatusFieldUpdateOperationsInput = {
-    set?: $Enums.WorkStatus
-  }
-
-  export type EmployeeUpdateOneRequiredWithoutOtherInfoNestedInput = {
-    create?: XOR<EmployeeCreateWithoutOtherInfoInput, EmployeeUncheckedCreateWithoutOtherInfoInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutOtherInfoInput
-    upsert?: EmployeeUpsertWithoutOtherInfoInput
-    connect?: EmployeeWhereUniqueInput
-    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutOtherInfoInput, EmployeeUpdateWithoutOtherInfoInput>, EmployeeUncheckedUpdateWithoutOtherInfoInput>
   }
 
   export type LeaveApprovalStepCreateNestedManyWithoutLeaveRequestInput = {
@@ -32445,6 +32242,90 @@ export namespace Prisma {
     update?: XOR<XOR<ProposalUpdateToOneWithWhereWithoutApproversInput, ProposalUpdateWithoutApproversInput>, ProposalUncheckedUpdateWithoutApproversInput>
   }
 
+  export type AssetAssignmentCreateNestedManyWithoutAssetInput = {
+    create?: XOR<AssetAssignmentCreateWithoutAssetInput, AssetAssignmentUncheckedCreateWithoutAssetInput> | AssetAssignmentCreateWithoutAssetInput[] | AssetAssignmentUncheckedCreateWithoutAssetInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutAssetInput | AssetAssignmentCreateOrConnectWithoutAssetInput[]
+    createMany?: AssetAssignmentCreateManyAssetInputEnvelope
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+  }
+
+  export type AssetAssignmentUncheckedCreateNestedManyWithoutAssetInput = {
+    create?: XOR<AssetAssignmentCreateWithoutAssetInput, AssetAssignmentUncheckedCreateWithoutAssetInput> | AssetAssignmentCreateWithoutAssetInput[] | AssetAssignmentUncheckedCreateWithoutAssetInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutAssetInput | AssetAssignmentCreateOrConnectWithoutAssetInput[]
+    createMany?: AssetAssignmentCreateManyAssetInputEnvelope
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+  }
+
+  export type AssetAssignmentUpdateManyWithoutAssetNestedInput = {
+    create?: XOR<AssetAssignmentCreateWithoutAssetInput, AssetAssignmentUncheckedCreateWithoutAssetInput> | AssetAssignmentCreateWithoutAssetInput[] | AssetAssignmentUncheckedCreateWithoutAssetInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutAssetInput | AssetAssignmentCreateOrConnectWithoutAssetInput[]
+    upsert?: AssetAssignmentUpsertWithWhereUniqueWithoutAssetInput | AssetAssignmentUpsertWithWhereUniqueWithoutAssetInput[]
+    createMany?: AssetAssignmentCreateManyAssetInputEnvelope
+    set?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    disconnect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    delete?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    update?: AssetAssignmentUpdateWithWhereUniqueWithoutAssetInput | AssetAssignmentUpdateWithWhereUniqueWithoutAssetInput[]
+    updateMany?: AssetAssignmentUpdateManyWithWhereWithoutAssetInput | AssetAssignmentUpdateManyWithWhereWithoutAssetInput[]
+    deleteMany?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
+  }
+
+  export type AssetAssignmentUncheckedUpdateManyWithoutAssetNestedInput = {
+    create?: XOR<AssetAssignmentCreateWithoutAssetInput, AssetAssignmentUncheckedCreateWithoutAssetInput> | AssetAssignmentCreateWithoutAssetInput[] | AssetAssignmentUncheckedCreateWithoutAssetInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutAssetInput | AssetAssignmentCreateOrConnectWithoutAssetInput[]
+    upsert?: AssetAssignmentUpsertWithWhereUniqueWithoutAssetInput | AssetAssignmentUpsertWithWhereUniqueWithoutAssetInput[]
+    createMany?: AssetAssignmentCreateManyAssetInputEnvelope
+    set?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    disconnect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    delete?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    update?: AssetAssignmentUpdateWithWhereUniqueWithoutAssetInput | AssetAssignmentUpdateWithWhereUniqueWithoutAssetInput[]
+    updateMany?: AssetAssignmentUpdateManyWithWhereWithoutAssetInput | AssetAssignmentUpdateManyWithWhereWithoutAssetInput[]
+    deleteMany?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
+  }
+
+  export type AssetCreateNestedOneWithoutAssignmentsInput = {
+    create?: XOR<AssetCreateWithoutAssignmentsInput, AssetUncheckedCreateWithoutAssignmentsInput>
+    connectOrCreate?: AssetCreateOrConnectWithoutAssignmentsInput
+    connect?: AssetWhereUniqueInput
+  }
+
+  export type EmployeeCreateNestedOneWithoutAssetsReceivedInput = {
+    create?: XOR<EmployeeCreateWithoutAssetsReceivedInput, EmployeeUncheckedCreateWithoutAssetsReceivedInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutAssetsReceivedInput
+    connect?: EmployeeWhereUniqueInput
+  }
+
+  export type EmployeeCreateNestedOneWithoutAssetsIssuedInput = {
+    create?: XOR<EmployeeCreateWithoutAssetsIssuedInput, EmployeeUncheckedCreateWithoutAssetsIssuedInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutAssetsIssuedInput
+    connect?: EmployeeWhereUniqueInput
+  }
+
+  export type AssetUpdateOneRequiredWithoutAssignmentsNestedInput = {
+    create?: XOR<AssetCreateWithoutAssignmentsInput, AssetUncheckedCreateWithoutAssignmentsInput>
+    connectOrCreate?: AssetCreateOrConnectWithoutAssignmentsInput
+    upsert?: AssetUpsertWithoutAssignmentsInput
+    connect?: AssetWhereUniqueInput
+    update?: XOR<XOR<AssetUpdateToOneWithWhereWithoutAssignmentsInput, AssetUpdateWithoutAssignmentsInput>, AssetUncheckedUpdateWithoutAssignmentsInput>
+  }
+
+  export type EmployeeUpdateOneRequiredWithoutAssetsReceivedNestedInput = {
+    create?: XOR<EmployeeCreateWithoutAssetsReceivedInput, EmployeeUncheckedCreateWithoutAssetsReceivedInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutAssetsReceivedInput
+    upsert?: EmployeeUpsertWithoutAssetsReceivedInput
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutAssetsReceivedInput, EmployeeUpdateWithoutAssetsReceivedInput>, EmployeeUncheckedUpdateWithoutAssetsReceivedInput>
+  }
+
+  export type EmployeeUpdateOneRequiredWithoutAssetsIssuedNestedInput = {
+    create?: XOR<EmployeeCreateWithoutAssetsIssuedInput, EmployeeUncheckedCreateWithoutAssetsIssuedInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutAssetsIssuedInput
+    upsert?: EmployeeUpsertWithoutAssetsIssuedInput
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutAssetsIssuedInput, EmployeeUpdateWithoutAssetsIssuedInput>, EmployeeUncheckedUpdateWithoutAssetsIssuedInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -32699,23 +32580,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedEnumWorkStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.WorkStatus | EnumWorkStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.WorkStatus[]
-    notIn?: $Enums.WorkStatus[]
-    not?: NestedEnumWorkStatusFilter<$PrismaModel> | $Enums.WorkStatus
-  }
-
-  export type NestedEnumWorkStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.WorkStatus | EnumWorkStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.WorkStatus[]
-    notIn?: $Enums.WorkStatus[]
-    not?: NestedEnumWorkStatusWithAggregatesFilter<$PrismaModel> | $Enums.WorkStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumWorkStatusFilter<$PrismaModel>
-    _max?: NestedEnumWorkStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumLeaveTypeEnumFilter<$PrismaModel = never> = {
@@ -33085,14 +32949,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutSubordinatesInput = {
@@ -33115,14 +32979,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutSubordinatesInput = {
@@ -33149,14 +33013,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutManagerInput = {
@@ -33179,14 +33043,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutManagerInput = {
@@ -33284,66 +33148,6 @@ export namespace Prisma {
   export type LeaveRequestCreateManyEmployeeInputEnvelope = {
     data: LeaveRequestCreateManyEmployeeInput | LeaveRequestCreateManyEmployeeInput[]
     skipDuplicates?: boolean
-  }
-
-  export type OtherInfoCreateWithoutEmployeeInput = {
-    workStatus?: $Enums.WorkStatus
-    resignedDate?: Date | string | null
-    documentsChecked?: string | null
-    updatedAt?: Date | string
-    VCB?: string | null
-    MTCV?: string | null
-    PNJ?: string | null
-  }
-
-  export type OtherInfoUncheckedCreateWithoutEmployeeInput = {
-    id?: number
-    workStatus?: $Enums.WorkStatus
-    resignedDate?: Date | string | null
-    documentsChecked?: string | null
-    updatedAt?: Date | string
-    VCB?: string | null
-    MTCV?: string | null
-    PNJ?: string | null
-  }
-
-  export type OtherInfoCreateOrConnectWithoutEmployeeInput = {
-    where: OtherInfoWhereUniqueInput
-    create: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
-  }
-
-  export type PersonalInfoCreateWithoutEmployeeInput = {
-    identityNumber?: string | null
-    issueDate?: Date | string | null
-    issuePlace?: string | null
-    hometown?: string | null
-    idAddress?: string | null
-    education?: string | null
-    drivingLicense?: string | null
-    toyotaCertificate?: string | null
-    taxCode?: string | null
-    insuranceNumber?: string | null
-    insuranceSalary?: number | null
-  }
-
-  export type PersonalInfoUncheckedCreateWithoutEmployeeInput = {
-    id?: number
-    identityNumber?: string | null
-    issueDate?: Date | string | null
-    issuePlace?: string | null
-    hometown?: string | null
-    idAddress?: string | null
-    education?: string | null
-    drivingLicense?: string | null
-    toyotaCertificate?: string | null
-    taxCode?: string | null
-    insuranceNumber?: string | null
-    insuranceSalary?: number | null
-  }
-
-  export type PersonalInfoCreateOrConnectWithoutEmployeeInput = {
-    where: PersonalInfoWhereUniqueInput
-    create: XOR<PersonalInfoCreateWithoutEmployeeInput, PersonalInfoUncheckedCreateWithoutEmployeeInput>
   }
 
   export type ProposalCreateWithoutCreatedByInput = {
@@ -33555,6 +33359,60 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AssetAssignmentCreateWithoutEmployeeInput = {
+    issuedAt?: Date | string
+    quantity?: number
+    note?: string | null
+    asset: AssetCreateNestedOneWithoutAssignmentsInput
+    issuedBy: EmployeeCreateNestedOneWithoutAssetsIssuedInput
+  }
+
+  export type AssetAssignmentUncheckedCreateWithoutEmployeeInput = {
+    id?: number
+    assetId: number
+    issuedById: number
+    issuedAt?: Date | string
+    quantity?: number
+    note?: string | null
+  }
+
+  export type AssetAssignmentCreateOrConnectWithoutEmployeeInput = {
+    where: AssetAssignmentWhereUniqueInput
+    create: XOR<AssetAssignmentCreateWithoutEmployeeInput, AssetAssignmentUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type AssetAssignmentCreateManyEmployeeInputEnvelope = {
+    data: AssetAssignmentCreateManyEmployeeInput | AssetAssignmentCreateManyEmployeeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AssetAssignmentCreateWithoutIssuedByInput = {
+    issuedAt?: Date | string
+    quantity?: number
+    note?: string | null
+    asset: AssetCreateNestedOneWithoutAssignmentsInput
+    employee: EmployeeCreateNestedOneWithoutAssetsReceivedInput
+  }
+
+  export type AssetAssignmentUncheckedCreateWithoutIssuedByInput = {
+    id?: number
+    assetId: number
+    employeeId: number
+    issuedAt?: Date | string
+    quantity?: number
+    note?: string | null
+  }
+
+  export type AssetAssignmentCreateOrConnectWithoutIssuedByInput = {
+    where: AssetAssignmentWhereUniqueInput
+    create: XOR<AssetAssignmentCreateWithoutIssuedByInput, AssetAssignmentUncheckedCreateWithoutIssuedByInput>
+  }
+
+  export type AssetAssignmentCreateManyIssuedByInputEnvelope = {
+    data: AssetAssignmentCreateManyIssuedByInput | AssetAssignmentCreateManyIssuedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AttendanceImportLogUpsertWithWhereUniqueWithoutImportedByInput = {
     where: AttendanceImportLogWhereUniqueInput
     update: XOR<AttendanceImportLogUpdateWithoutImportedByInput, AttendanceImportLogUncheckedUpdateWithoutImportedByInput>
@@ -33707,14 +33565,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutSubordinatesInput = {
@@ -33737,14 +33595,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUpsertWithWhereUniqueWithoutManagerInput = {
@@ -33867,78 +33725,6 @@ export namespace Prisma {
     approvedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
     updatedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
-  }
-
-  export type OtherInfoUpsertWithoutEmployeeInput = {
-    update: XOR<OtherInfoUpdateWithoutEmployeeInput, OtherInfoUncheckedUpdateWithoutEmployeeInput>
-    create: XOR<OtherInfoCreateWithoutEmployeeInput, OtherInfoUncheckedCreateWithoutEmployeeInput>
-    where?: OtherInfoWhereInput
-  }
-
-  export type OtherInfoUpdateToOneWithWhereWithoutEmployeeInput = {
-    where?: OtherInfoWhereInput
-    data: XOR<OtherInfoUpdateWithoutEmployeeInput, OtherInfoUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type OtherInfoUpdateWithoutEmployeeInput = {
-    workStatus?: EnumWorkStatusFieldUpdateOperationsInput | $Enums.WorkStatus
-    resignedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    documentsChecked?: NullableStringFieldUpdateOperationsInput | string | null
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    VCB?: NullableStringFieldUpdateOperationsInput | string | null
-    MTCV?: NullableStringFieldUpdateOperationsInput | string | null
-    PNJ?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type OtherInfoUncheckedUpdateWithoutEmployeeInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    workStatus?: EnumWorkStatusFieldUpdateOperationsInput | $Enums.WorkStatus
-    resignedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    documentsChecked?: NullableStringFieldUpdateOperationsInput | string | null
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    VCB?: NullableStringFieldUpdateOperationsInput | string | null
-    MTCV?: NullableStringFieldUpdateOperationsInput | string | null
-    PNJ?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type PersonalInfoUpsertWithoutEmployeeInput = {
-    update: XOR<PersonalInfoUpdateWithoutEmployeeInput, PersonalInfoUncheckedUpdateWithoutEmployeeInput>
-    create: XOR<PersonalInfoCreateWithoutEmployeeInput, PersonalInfoUncheckedCreateWithoutEmployeeInput>
-    where?: PersonalInfoWhereInput
-  }
-
-  export type PersonalInfoUpdateToOneWithWhereWithoutEmployeeInput = {
-    where?: PersonalInfoWhereInput
-    data: XOR<PersonalInfoUpdateWithoutEmployeeInput, PersonalInfoUncheckedUpdateWithoutEmployeeInput>
-  }
-
-  export type PersonalInfoUpdateWithoutEmployeeInput = {
-    identityNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    issuePlace?: NullableStringFieldUpdateOperationsInput | string | null
-    hometown?: NullableStringFieldUpdateOperationsInput | string | null
-    idAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    education?: NullableStringFieldUpdateOperationsInput | string | null
-    drivingLicense?: NullableStringFieldUpdateOperationsInput | string | null
-    toyotaCertificate?: NullableStringFieldUpdateOperationsInput | string | null
-    taxCode?: NullableStringFieldUpdateOperationsInput | string | null
-    insuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    insuranceSalary?: NullableIntFieldUpdateOperationsInput | number | null
-  }
-
-  export type PersonalInfoUncheckedUpdateWithoutEmployeeInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    identityNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    issueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    issuePlace?: NullableStringFieldUpdateOperationsInput | string | null
-    hometown?: NullableStringFieldUpdateOperationsInput | string | null
-    idAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    education?: NullableStringFieldUpdateOperationsInput | string | null
-    drivingLicense?: NullableStringFieldUpdateOperationsInput | string | null
-    toyotaCertificate?: NullableStringFieldUpdateOperationsInput | string | null
-    taxCode?: NullableStringFieldUpdateOperationsInput | string | null
-    insuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    insuranceSalary?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ProposalUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -34100,6 +33886,51 @@ export namespace Prisma {
     importId?: IntNullableFilter<"Attendance"> | number | null
   }
 
+  export type AssetAssignmentUpsertWithWhereUniqueWithoutEmployeeInput = {
+    where: AssetAssignmentWhereUniqueInput
+    update: XOR<AssetAssignmentUpdateWithoutEmployeeInput, AssetAssignmentUncheckedUpdateWithoutEmployeeInput>
+    create: XOR<AssetAssignmentCreateWithoutEmployeeInput, AssetAssignmentUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type AssetAssignmentUpdateWithWhereUniqueWithoutEmployeeInput = {
+    where: AssetAssignmentWhereUniqueInput
+    data: XOR<AssetAssignmentUpdateWithoutEmployeeInput, AssetAssignmentUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type AssetAssignmentUpdateManyWithWhereWithoutEmployeeInput = {
+    where: AssetAssignmentScalarWhereInput
+    data: XOR<AssetAssignmentUpdateManyMutationInput, AssetAssignmentUncheckedUpdateManyWithoutEmployeeInput>
+  }
+
+  export type AssetAssignmentScalarWhereInput = {
+    AND?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
+    OR?: AssetAssignmentScalarWhereInput[]
+    NOT?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
+    id?: IntFilter<"AssetAssignment"> | number
+    assetId?: IntFilter<"AssetAssignment"> | number
+    employeeId?: IntFilter<"AssetAssignment"> | number
+    issuedById?: IntFilter<"AssetAssignment"> | number
+    issuedAt?: DateTimeFilter<"AssetAssignment"> | Date | string
+    quantity?: IntFilter<"AssetAssignment"> | number
+    note?: StringNullableFilter<"AssetAssignment"> | string | null
+  }
+
+  export type AssetAssignmentUpsertWithWhereUniqueWithoutIssuedByInput = {
+    where: AssetAssignmentWhereUniqueInput
+    update: XOR<AssetAssignmentUpdateWithoutIssuedByInput, AssetAssignmentUncheckedUpdateWithoutIssuedByInput>
+    create: XOR<AssetAssignmentCreateWithoutIssuedByInput, AssetAssignmentUncheckedCreateWithoutIssuedByInput>
+  }
+
+  export type AssetAssignmentUpdateWithWhereUniqueWithoutIssuedByInput = {
+    where: AssetAssignmentWhereUniqueInput
+    data: XOR<AssetAssignmentUpdateWithoutIssuedByInput, AssetAssignmentUncheckedUpdateWithoutIssuedByInput>
+  }
+
+  export type AssetAssignmentUpdateManyWithWhereWithoutIssuedByInput = {
+    where: AssetAssignmentScalarWhereInput
+    data: XOR<AssetAssignmentUpdateManyMutationInput, AssetAssignmentUncheckedUpdateManyWithoutIssuedByInput>
+  }
+
   export type EmployeeCreateWithoutDepartmentDirectorOfInput = {
     employeeCode: string
     name: string
@@ -34119,14 +33950,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutDepartmentDirectorOfInput = {
@@ -34149,14 +33980,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutDepartmentDirectorOfInput = {
@@ -34183,14 +34014,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutDepartmentHeadOfInput = {
@@ -34213,14 +34044,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutDepartmentHeadOfInput = {
@@ -34326,14 +34157,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutDepartmentDirectorOfInput = {
@@ -34356,14 +34187,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUpsertWithoutDepartmentHeadOfInput = {
@@ -34396,14 +34227,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutDepartmentHeadOfInput = {
@@ -34426,14 +34257,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type PositionUpsertWithWhereUniqueWithoutDepartmentInput = {
@@ -34665,13 +34496,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutWorkInfoInput = {
@@ -34695,13 +34526,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutWorkInfoInput = {
@@ -34798,13 +34629,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutWorkInfoInput = {
@@ -34828,13 +34659,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type PositionUpsertWithoutEmployeesInput = {
@@ -34867,140 +34698,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type EmployeeCreateWithoutPersonalInfoInput = {
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
-    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
-  }
-
-  export type EmployeeUncheckedCreateWithoutPersonalInfoInput = {
-    id?: number
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    managerId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
-  }
-
-  export type EmployeeCreateOrConnectWithoutPersonalInfoInput = {
-    where: EmployeeWhereUniqueInput
-    create: XOR<EmployeeCreateWithoutPersonalInfoInput, EmployeeUncheckedCreateWithoutPersonalInfoInput>
-  }
-
-  export type EmployeeUpsertWithoutPersonalInfoInput = {
-    update: XOR<EmployeeUpdateWithoutPersonalInfoInput, EmployeeUncheckedUpdateWithoutPersonalInfoInput>
-    create: XOR<EmployeeCreateWithoutPersonalInfoInput, EmployeeUncheckedCreateWithoutPersonalInfoInput>
-    where?: EmployeeWhereInput
-  }
-
-  export type EmployeeUpdateToOneWithWhereWithoutPersonalInfoInput = {
-    where?: EmployeeWhereInput
-    data: XOR<EmployeeUpdateWithoutPersonalInfoInput, EmployeeUncheckedUpdateWithoutPersonalInfoInput>
-  }
-
-  export type EmployeeUpdateWithoutPersonalInfoInput = {
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
-    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
-  }
-
-  export type EmployeeUncheckedUpdateWithoutPersonalInfoInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    managerId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
-  }
-
   export type EmployeeCreateWithoutContactInfoInput = {
     employeeCode: string
     name: string
@@ -35020,14 +34717,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutContactInfoInput = {
@@ -35050,14 +34747,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutContactInfoInput = {
@@ -35095,14 +34792,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutContactInfoInput = {
@@ -35125,148 +34822,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
-  }
-
-  export type EmployeeCreateWithoutOtherInfoInput = {
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
-    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
-    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
-    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
-    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
-    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
-    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
-    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
-    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
-    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
-    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
-  }
-
-  export type EmployeeUncheckedCreateWithoutOtherInfoInput = {
-    id?: number
-    employeeCode: string
-    name: string
-    gender?: $Enums.Sex
-    birthDate?: Date | string | null
-    password: string
-    role?: $Enums.Role
-    avatar?: string | null
-    isActive?: boolean
-    managerId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
-    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
-    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
-    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
-    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
-    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
-    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
-    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
-    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
-    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
-  }
-
-  export type EmployeeCreateOrConnectWithoutOtherInfoInput = {
-    where: EmployeeWhereUniqueInput
-    create: XOR<EmployeeCreateWithoutOtherInfoInput, EmployeeUncheckedCreateWithoutOtherInfoInput>
-  }
-
-  export type EmployeeUpsertWithoutOtherInfoInput = {
-    update: XOR<EmployeeUpdateWithoutOtherInfoInput, EmployeeUncheckedUpdateWithoutOtherInfoInput>
-    create: XOR<EmployeeCreateWithoutOtherInfoInput, EmployeeUncheckedCreateWithoutOtherInfoInput>
-    where?: EmployeeWhereInput
-  }
-
-  export type EmployeeUpdateToOneWithWhereWithoutOtherInfoInput = {
-    where?: EmployeeWhereInput
-    data: XOR<EmployeeUpdateWithoutOtherInfoInput, EmployeeUncheckedUpdateWithoutOtherInfoInput>
-  }
-
-  export type EmployeeUpdateWithoutOtherInfoInput = {
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
-    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
-    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
-    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
-    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
-    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
-    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
-    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
-    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
-    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
-  }
-
-  export type EmployeeUncheckedUpdateWithoutOtherInfoInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    employeeCode?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    managerId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
-    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
-    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
-    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
-    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
-    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
-    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
-    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
-    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
-    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
-    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type LeaveApprovalStepCreateWithoutLeaveRequestInput = {
@@ -35313,14 +34876,14 @@ export namespace Prisma {
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutLeaveRequestInput = {
@@ -35343,14 +34906,14 @@ export namespace Prisma {
     subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutLeaveRequestInput = {
@@ -35415,14 +34978,14 @@ export namespace Prisma {
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutLeaveRequestInput = {
@@ -35445,14 +35008,14 @@ export namespace Prisma {
     subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type LeaveRequestCreateWithoutApprovalStepsInput = {
@@ -35587,14 +35150,14 @@ export namespace Prisma {
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutLeaveApprovalStepsInput = {
@@ -35617,14 +35180,14 @@ export namespace Prisma {
     subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutLeaveApprovalStepsInput = {
@@ -35682,14 +35245,14 @@ export namespace Prisma {
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutLeaveApprovalStepsInput = {
@@ -35712,14 +35275,14 @@ export namespace Prisma {
     subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type LeaveApprovalStepUpsertWithoutApproversInput = {
@@ -35794,14 +35357,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutAttendanceImportLogInput = {
@@ -35824,14 +35387,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutAttendanceImportLogInput = {
@@ -35885,14 +35448,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutAttendanceImportLogInput = {
@@ -35915,14 +35478,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type AttendanceImportLogCreateWithoutAttendancesInput = {
@@ -35963,13 +35526,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutAttendanceInput = {
@@ -35993,13 +35556,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutAttendanceInput = {
@@ -36062,13 +35625,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutAttendanceInput = {
@@ -36092,13 +35655,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type KPIEmployeeCreateWithoutKpiInput = {
@@ -36161,14 +35724,14 @@ export namespace Prisma {
     subordinates?: EmployeeCreateNestedManyWithoutManagerInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutKPIEmployeeInput = {
@@ -36191,14 +35754,14 @@ export namespace Prisma {
     subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutKPIEmployeeInput = {
@@ -36291,14 +35854,14 @@ export namespace Prisma {
     subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutKPIEmployeeInput = {
@@ -36321,14 +35884,14 @@ export namespace Prisma {
     subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type KPIUpsertWithoutKpiEmployeesInput = {
@@ -36482,13 +36045,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalsCreatedInput = {
@@ -36512,13 +36075,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalsCreatedInput = {
@@ -36570,13 +36133,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalsProposedInput = {
@@ -36600,13 +36163,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalsProposedInput = {
@@ -36729,13 +36292,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalsCreatedInput = {
@@ -36759,13 +36322,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type FileUpsertWithoutProposalsInput = {
@@ -36829,13 +36392,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalsProposedInput = {
@@ -36859,13 +36422,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type ProposalApproverUpsertWithWhereUniqueWithoutProposalInput = {
@@ -36962,13 +36525,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalSignaturesInput = {
@@ -36992,13 +36555,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalSignaturesInput = {
@@ -37085,13 +36648,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalSignaturesInput = {
@@ -37115,13 +36678,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeCreateWithoutProposalApprovalsInput = {
@@ -37144,13 +36707,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
     proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalApprovalsInput = {
@@ -37174,13 +36737,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
     LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
-    otherInfo?: OtherInfoUncheckedCreateNestedOneWithoutEmployeeInput
-    personalInfo?: PersonalInfoUncheckedCreateNestedOneWithoutEmployeeInput
     proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
     proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
     proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalApprovalsInput = {
@@ -37261,13 +36824,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalApprovalsInput = {
@@ -37291,13 +36854,13 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type ProposalUpsertWithoutApproversInput = {
@@ -37346,6 +36909,363 @@ export namespace Prisma {
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
+  }
+
+  export type AssetAssignmentCreateWithoutAssetInput = {
+    issuedAt?: Date | string
+    quantity?: number
+    note?: string | null
+    employee: EmployeeCreateNestedOneWithoutAssetsReceivedInput
+    issuedBy: EmployeeCreateNestedOneWithoutAssetsIssuedInput
+  }
+
+  export type AssetAssignmentUncheckedCreateWithoutAssetInput = {
+    id?: number
+    employeeId: number
+    issuedById: number
+    issuedAt?: Date | string
+    quantity?: number
+    note?: string | null
+  }
+
+  export type AssetAssignmentCreateOrConnectWithoutAssetInput = {
+    where: AssetAssignmentWhereUniqueInput
+    create: XOR<AssetAssignmentCreateWithoutAssetInput, AssetAssignmentUncheckedCreateWithoutAssetInput>
+  }
+
+  export type AssetAssignmentCreateManyAssetInputEnvelope = {
+    data: AssetAssignmentCreateManyAssetInput | AssetAssignmentCreateManyAssetInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AssetAssignmentUpsertWithWhereUniqueWithoutAssetInput = {
+    where: AssetAssignmentWhereUniqueInput
+    update: XOR<AssetAssignmentUpdateWithoutAssetInput, AssetAssignmentUncheckedUpdateWithoutAssetInput>
+    create: XOR<AssetAssignmentCreateWithoutAssetInput, AssetAssignmentUncheckedCreateWithoutAssetInput>
+  }
+
+  export type AssetAssignmentUpdateWithWhereUniqueWithoutAssetInput = {
+    where: AssetAssignmentWhereUniqueInput
+    data: XOR<AssetAssignmentUpdateWithoutAssetInput, AssetAssignmentUncheckedUpdateWithoutAssetInput>
+  }
+
+  export type AssetAssignmentUpdateManyWithWhereWithoutAssetInput = {
+    where: AssetAssignmentScalarWhereInput
+    data: XOR<AssetAssignmentUpdateManyMutationInput, AssetAssignmentUncheckedUpdateManyWithoutAssetInput>
+  }
+
+  export type AssetCreateWithoutAssignmentsInput = {
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetUncheckedCreateWithoutAssignmentsInput = {
+    id?: number
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetCreateOrConnectWithoutAssignmentsInput = {
+    where: AssetWhereUniqueInput
+    create: XOR<AssetCreateWithoutAssignmentsInput, AssetUncheckedCreateWithoutAssignmentsInput>
+  }
+
+  export type EmployeeCreateWithoutAssetsReceivedInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
+    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
+    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutAssetsReceivedInput = {
+    id?: number
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutAssetsReceivedInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutAssetsReceivedInput, EmployeeUncheckedCreateWithoutAssetsReceivedInput>
+  }
+
+  export type EmployeeCreateWithoutAssetsIssuedInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
+    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
+    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutAssetsIssuedInput = {
+    id?: number
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutAssetsIssuedInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutAssetsIssuedInput, EmployeeUncheckedCreateWithoutAssetsIssuedInput>
+  }
+
+  export type AssetUpsertWithoutAssignmentsInput = {
+    update: XOR<AssetUpdateWithoutAssignmentsInput, AssetUncheckedUpdateWithoutAssignmentsInput>
+    create: XOR<AssetCreateWithoutAssignmentsInput, AssetUncheckedCreateWithoutAssignmentsInput>
+    where?: AssetWhereInput
+  }
+
+  export type AssetUpdateToOneWithWhereWithoutAssignmentsInput = {
+    where?: AssetWhereInput
+    data: XOR<AssetUpdateWithoutAssignmentsInput, AssetUncheckedUpdateWithoutAssignmentsInput>
+  }
+
+  export type AssetUpdateWithoutAssignmentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetUncheckedUpdateWithoutAssignmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmployeeUpsertWithoutAssetsReceivedInput = {
+    update: XOR<EmployeeUpdateWithoutAssetsReceivedInput, EmployeeUncheckedUpdateWithoutAssetsReceivedInput>
+    create: XOR<EmployeeCreateWithoutAssetsReceivedInput, EmployeeUncheckedCreateWithoutAssetsReceivedInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutAssetsReceivedInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutAssetsReceivedInput, EmployeeUncheckedUpdateWithoutAssetsReceivedInput>
+  }
+
+  export type EmployeeUpdateWithoutAssetsReceivedInput = {
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
+    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutAssetsReceivedInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+  }
+
+  export type EmployeeUpsertWithoutAssetsIssuedInput = {
+    update: XOR<EmployeeUpdateWithoutAssetsIssuedInput, EmployeeUncheckedUpdateWithoutAssetsIssuedInput>
+    create: XOR<EmployeeCreateWithoutAssetsIssuedInput, EmployeeUncheckedCreateWithoutAssetsIssuedInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutAssetsIssuedInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutAssetsIssuedInput, EmployeeUncheckedUpdateWithoutAssetsIssuedInput>
+  }
+
+  export type EmployeeUpdateWithoutAssetsIssuedInput = {
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
+    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutAssetsIssuedInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type ProposalCreateManyFileInput = {
@@ -37599,6 +37519,24 @@ export namespace Prisma {
     importId?: number | null
   }
 
+  export type AssetAssignmentCreateManyEmployeeInput = {
+    id?: number
+    assetId: number
+    issuedById: number
+    issuedAt?: Date | string
+    quantity?: number
+    note?: string | null
+  }
+
+  export type AssetAssignmentCreateManyIssuedByInput = {
+    id?: number
+    assetId: number
+    employeeId: number
+    issuedAt?: Date | string
+    quantity?: number
+    note?: string | null
+  }
+
   export type AttendanceImportLogUpdateWithoutImportedByInput = {
     filename?: StringFieldUpdateOperationsInput | string
     importedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37637,14 +37575,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutManagerInput = {
@@ -37667,14 +37605,14 @@ export namespace Prisma {
     KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
     LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
     LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
-    otherInfo?: OtherInfoUncheckedUpdateOneWithoutEmployeeNestedInput
-    personalInfo?: PersonalInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
     proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
     proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
     proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateManyWithoutManagerInput = {
@@ -37960,6 +37898,58 @@ export namespace Prisma {
     checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workingHours?: NullableFloatFieldUpdateOperationsInput | number | null
     importId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type AssetAssignmentUpdateWithoutEmployeeInput = {
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    asset?: AssetUpdateOneRequiredWithoutAssignmentsNestedInput
+    issuedBy?: EmployeeUpdateOneRequiredWithoutAssetsIssuedNestedInput
+  }
+
+  export type AssetAssignmentUncheckedUpdateWithoutEmployeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    assetId?: IntFieldUpdateOperationsInput | number
+    issuedById?: IntFieldUpdateOperationsInput | number
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AssetAssignmentUncheckedUpdateManyWithoutEmployeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    assetId?: IntFieldUpdateOperationsInput | number
+    issuedById?: IntFieldUpdateOperationsInput | number
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AssetAssignmentUpdateWithoutIssuedByInput = {
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    asset?: AssetUpdateOneRequiredWithoutAssignmentsNestedInput
+    employee?: EmployeeUpdateOneRequiredWithoutAssetsReceivedNestedInput
+  }
+
+  export type AssetAssignmentUncheckedUpdateWithoutIssuedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    assetId?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AssetAssignmentUncheckedUpdateManyWithoutIssuedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    assetId?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PositionCreateManyDepartmentInput = {
@@ -38348,6 +38338,41 @@ export namespace Prisma {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type AssetAssignmentCreateManyAssetInput = {
+    id?: number
+    employeeId: number
+    issuedById: number
+    issuedAt?: Date | string
+    quantity?: number
+    note?: string | null
+  }
+
+  export type AssetAssignmentUpdateWithoutAssetInput = {
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    employee?: EmployeeUpdateOneRequiredWithoutAssetsReceivedNestedInput
+    issuedBy?: EmployeeUpdateOneRequiredWithoutAssetsIssuedNestedInput
+  }
+
+  export type AssetAssignmentUncheckedUpdateWithoutAssetInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    issuedById?: IntFieldUpdateOperationsInput | number
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AssetAssignmentUncheckedUpdateManyWithoutAssetInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    issuedById?: IntFieldUpdateOperationsInput | number
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 

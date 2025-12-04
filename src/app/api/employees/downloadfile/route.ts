@@ -12,9 +12,7 @@ export async function GET() {
             position: true,
           },
         },
-        personalInfo: true,
         contactInfo: true,
-        otherInfo: true,
       },
     });
 
@@ -85,29 +83,13 @@ export async function GET() {
         contractEndDate: formatDate(emp.workInfo?.contractEndDate),
         birthDate: formatDate(emp.birthDate),
         gender: emp.gender === "MALE" ? "Nam" : "Nữ",
-        identityNumber: emp.personalInfo?.identityNumber,
-        issueDate: formatDate(emp.personalInfo?.issueDate),
-        issuePlace: emp.personalInfo?.issuePlace,
-        hometown: emp.personalInfo?.hometown,
-        idAddress: emp.personalInfo?.idAddress,
-        education: emp.personalInfo?.education,
-        drivingLicense: emp.personalInfo?.drivingLicense,
-        toyotaCertificate: emp.personalInfo?.toyotaCertificate,
-        insuranceNumber: emp.personalInfo?.insuranceNumber,
-        insuranceSalary: emp.personalInfo?.insuranceSalary,
+
         phoneNumber: emp.contactInfo?.phoneNumber,
         companyPhone: emp.contactInfo?.companyPhone,
         email: emp.contactInfo?.email,
-        workStatus: emp.otherInfo?.workStatus,
-        resignedDate: formatDate(emp.otherInfo?.resignedDate),
-        taxCode: emp.personalInfo?.taxCode,
+
         relativePhone: emp.contactInfo?.relativePhone,
-        documentsChecked: emp.otherInfo?.documentsChecked,
-        updatedAt: formatDate(emp.otherInfo?.updatedAt),
-        VCB: emp.otherInfo?.VCB,
-        MTCV: emp.otherInfo?.MTCV,
         specialization: emp.workInfo?.specialization,
-        PNJ: emp.otherInfo?.PNJ,
       });
     }
 
