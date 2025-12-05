@@ -104,7 +104,7 @@ export class EmailService {
               Email này được gửi tự động từ hệ thống HRM. Vui lòng không trả lời email này.
             </p>
             <p style="font-size: 12px; color: #888888; margin: 5px 0 0;">
-              © ${new Date().getFullYear()} Công ty TNHH Toyota Bình Dương. All rights reserved.
+              © ${new Date().getFullYear()} Công ty cổ phần Toyota Bình Dương. All rights reserved.
             </p>
           </div>
         </div>
@@ -213,7 +213,7 @@ export class EmailService {
               Email này được gửi tự động từ hệ thống HRM. Vui lòng không trả lời email này.
             </p>
             <p style="font-size: 12px; color: #888888; margin: 5px 0 0;">
-              © ${new Date().getFullYear()} Công ty TNHH Toyota Bình Dương. All rights reserved.
+              © ${new Date().getFullYear()} Công ty cổ phần Toyota Bình Dương. All rights reserved.
             </p>
           </div>
         </div>
@@ -323,7 +323,7 @@ export class EmailService {
             Email này được gửi tự động từ hệ thống HRM. Vui lòng không trả lời email này.
           </p>
           <p style="font-size: 12px; color: #888888; margin: 5px 0 0;">
-            © ${new Date().getFullYear()} Công ty TNHH Toyota Bình Dương. All rights reserved.
+            © ${new Date().getFullYear()} Công ty cổ phần Toyota Bình Dương. All rights reserved.
           </p>
         </div>
       </div>
@@ -407,7 +407,7 @@ export class EmailService {
               Email này được gửi tự động từ hệ thống HRM. Vui lòng không trả lời email này.
             </p>
             <p style="font-size: 12px; color: #888888; margin: 5px 0 0;">
-              © ${new Date().getFullYear()} Công ty TNHH Toyota Bình Dương. All rights reserved.
+              © ${new Date().getFullYear()} Công ty cổ phần Toyota Bình Dương. All rights reserved.
             </p>
           </div>
         </div>
@@ -482,7 +482,7 @@ export class EmailService {
               Email này được gửi tự động từ hệ thống HRM. Vui lòng không trả lời email này.
             </p>
             <p style="font-size: 12px; color: #888888; margin: 5px 0 0;">
-              © ${new Date().getFullYear()} Công ty TNHH Toyota Bình Dương. All rights reserved.
+              © ${new Date().getFullYear()} Công ty cổ phần Toyota Bình Dương. All rights reserved.
             </p>
           </div>
         </div>
@@ -560,7 +560,7 @@ export class EmailService {
             Email này được gửi tự động từ hệ thống HRM. Vui lòng không trả lời email này.
           </p>
           <p style="font-size: 12px; color: #888888; margin: 5px 0 0;">
-            © ${new Date().getFullYear()} Công ty TNHH Toyota Bình Dương. All rights reserved.
+            © ${new Date().getFullYear()} Công ty cổ phần Toyota Bình Dương. All rights reserved.
           </p>
         </div>
       </div>
