@@ -356,7 +356,7 @@ const Profile = () => {
                   Mã NV: {issuedBy.employeeCode || "-"}
                 </div>
                 <div className="mt-2 flex items-center gap-2">
-                  <Tag className="text-xs">{issuedBy.role}</Tag>
+                  <RoleTag role={issuedBy.role} />
                   {issuedBy.isActive === false && (
                     <Tag color="warning" className="text-xs">
                       Inactive

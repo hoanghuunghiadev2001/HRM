@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
           issuedById: decoded.id,
         },
       });
-    } else {
+    } else if (quantity > 0) {
       // ➕ Nếu không có → tạo mới
       record = await prisma.assetAssignment.create({
         data: {
