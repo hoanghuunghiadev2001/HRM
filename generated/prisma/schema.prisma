@@ -333,6 +333,7 @@ model Asset {
   id          Int      @id @default(autoincrement())
   name        String
   description String?
+  unit        String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -342,15 +343,17 @@ model Asset {
 model AssetAssignment {
   id         Int      @id @default(autoincrement())
   assetId    Int
-  employeeId Int // nhân viên được nhận
-  issuedById Int // nhân viên cấp
+  employeeId Int
+  issuedById Int? // nullable → quan hệ phải nullable theo
   issuedAt   DateTime @default(now())
   quantity   Int      @default(1)
   note       String?
 
-  asset    Asset    @relation(fields: [assetId], references: [id])
-  employee Employee @relation("EmployeeAsset", fields: [employeeId], references: [id])
-  issuedBy Employee @relation("IssuedAssets", fields: [issuedById], references: [id])
+  asset    Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  employee Employee @relation("EmployeeAsset", fields: [employeeId], references: [id], onDelete: Cascade)
+
+  // 👇 PHẢI OPTIONAL vì issuedById optional
+  issuedBy Employee? @relation("IssuedAssets", fields: [issuedById], references: [id], onDelete: SetNull)
 
   @@index([employeeId])
   @@index([issuedById])

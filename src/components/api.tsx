@@ -325,7 +325,7 @@ type LeavePendingFilters = {
 };
 
 type EmployeeFilters = {
-  workStatus?: string;
+  workStatus?: boolean;
   page?: number;
   pageSize?: number;
   role: string; // "ADMIN" | "MANAGER"
@@ -419,7 +419,7 @@ export async function getApiAllRequestsNeedApprove(
 // lấy danh sách nhân sự
 export async function fetchEmployeeSummary(
   filters: EmployeeFilters = {
-    workStatus: "",
+    workStatus: true,
     role: "MANAGER",
     department: "",
     name: "",

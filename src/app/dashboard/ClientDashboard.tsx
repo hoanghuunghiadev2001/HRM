@@ -160,6 +160,23 @@ export default function ClientDashboard({
             label: "Phòng ban",
           },
           {
+            key: "/dashboard/all-assets",
+            icon: <ClipboardPlus />,
+            label: "QL Tài sản",
+            children: [
+              {
+                key: "/dashboard/assets",
+                icon: <FileStack className="ml-4" />,
+                label: "Tài sản",
+              },
+              {
+                key: "/dashboard/assets/assign",
+                icon: <FileStack className="ml-4" />,
+                label: "Cấp tài sản",
+              },
+            ],
+          },
+          {
             key: "/dashboard/report",
             icon: <ClipboardPlus />,
             label: "Báo cáo",

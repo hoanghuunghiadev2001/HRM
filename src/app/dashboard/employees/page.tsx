@@ -77,7 +77,7 @@ export default function EmployeesPage() {
 
   const [departments, setDepartments] = useState<Department[]>([]);
   const [modalEditEmployee, setModalEditEmployee] = useState<boolean>(false);
-  const [workStatus, setWorkStatus] = useState<string>();
+  const [workStatus, setWorkStatus] = useState<boolean>(true);
 
   const [modal, contextHolder] = Modal.useModal();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -124,7 +124,7 @@ export default function EmployeesPage() {
     setLoading(true);
     try {
       const res = await fetchEmployeeSummary({
-        workStatus: workStatus ?? "",
+        workStatus: workStatus,
         role: role,
         department:
           role === "ADMIN" || role === "MANAGER"
@@ -620,6 +620,8 @@ export default function EmployeesPage() {
   };
 
   useEffect(() => {
+    console.log(workStatus);
+
     getEmployeeSumary(1, 10);
   }, [workStatus]);
 
@@ -654,15 +656,7 @@ export default function EmployeesPage() {
       {contextHolder}
       <div className="w-full flex justify-between items-center">
         <p className="font-bold  text-2xl text-[#4a4a6a]">
-          Danh sách nhân viên{" "}
-          {workStatus === "OFFICIAL"
-            ? "chính thức"
-            : workStatus === "PROBATION"
-            ? "học việc"
-            : workStatus === "RESIGNED"
-            ? "nghỉ việc"
-            : "đang làm việc"}{" "}
-          :
+          Danh sách nhân viên {workStatus ? "đang làm việc" : "nghỉ việc"}
         </p>
 
         <Select
@@ -676,9 +670,8 @@ export default function EmployeesPage() {
             setWorkStatus(e);
           }}
           options={[
-            { value: "OFFICIAL", label: "Chính thức" },
-            { value: "PROBATION", label: "Học việc" },
-            { value: "RESIGNED", label: "Nghỉ việc" },
+            { value: true, label: "đang làm việc" },
+            { value: false, label: "nghỉ việc" },
           ]}
         />
       </div>

@@ -23181,6 +23181,7 @@ export namespace Prisma {
     id: number | null
     name: string | null
     description: string | null
+    unit: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -23189,6 +23190,7 @@ export namespace Prisma {
     id: number | null
     name: string | null
     description: string | null
+    unit: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -23197,6 +23199,7 @@ export namespace Prisma {
     id: number
     name: number
     description: number
+    unit: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -23215,6 +23218,7 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
+    unit?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -23223,6 +23227,7 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
+    unit?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -23231,6 +23236,7 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
+    unit?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -23326,6 +23332,7 @@ export namespace Prisma {
     id: number
     name: string
     description: string | null
+    unit: string | null
     createdAt: Date
     updatedAt: Date
     _count: AssetCountAggregateOutputType | null
@@ -23353,6 +23360,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    unit?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     assignments?: boolean | Asset$assignmentsArgs<ExtArgs>
@@ -23365,11 +23373,12 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    unit?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AssetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["asset"]>
+  export type AssetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "unit" | "createdAt" | "updatedAt", ExtArgs["result"]["asset"]>
   export type AssetInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     assignments?: boolean | Asset$assignmentsArgs<ExtArgs>
     _count?: boolean | AssetCountOutputTypeDefaultArgs<ExtArgs>
@@ -23384,6 +23393,7 @@ export namespace Prisma {
       id: number
       name: string
       description: string | null
+      unit: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["asset"]>
@@ -23759,6 +23769,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Asset", 'Int'>
     readonly name: FieldRef<"Asset", 'String'>
     readonly description: FieldRef<"Asset", 'String'>
+    readonly unit: FieldRef<"Asset", 'String'>
     readonly createdAt: FieldRef<"Asset", 'DateTime'>
     readonly updatedAt: FieldRef<"Asset", 'DateTime'>
   }
@@ -24343,7 +24354,7 @@ export namespace Prisma {
     id: number
     assetId: number
     employeeId: number
-    issuedById: number
+    issuedById: number | null
     issuedAt: Date
     quantity: number
     note: string | null
@@ -24378,7 +24389,7 @@ export namespace Prisma {
     note?: boolean
     asset?: boolean | AssetDefaultArgs<ExtArgs>
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
-    issuedBy?: boolean | EmployeeDefaultArgs<ExtArgs>
+    issuedBy?: boolean | AssetAssignment$issuedByArgs<ExtArgs>
   }, ExtArgs["result"]["assetAssignment"]>
 
 
@@ -24397,7 +24408,7 @@ export namespace Prisma {
   export type AssetAssignmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     asset?: boolean | AssetDefaultArgs<ExtArgs>
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
-    issuedBy?: boolean | EmployeeDefaultArgs<ExtArgs>
+    issuedBy?: boolean | AssetAssignment$issuedByArgs<ExtArgs>
   }
 
   export type $AssetAssignmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -24405,13 +24416,13 @@ export namespace Prisma {
     objects: {
       asset: Prisma.$AssetPayload<ExtArgs>
       employee: Prisma.$EmployeePayload<ExtArgs>
-      issuedBy: Prisma.$EmployeePayload<ExtArgs>
+      issuedBy: Prisma.$EmployeePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       assetId: number
       employeeId: number
-      issuedById: number
+      issuedById: number | null
       issuedAt: Date
       quantity: number
       note: string | null
@@ -24757,7 +24768,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     asset<T extends AssetDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AssetDefaultArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    issuedBy<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    issuedBy<T extends AssetAssignment$issuedByArgs<ExtArgs> = {}>(args?: Subset<T, AssetAssignment$issuedByArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -25137,6 +25148,25 @@ export namespace Prisma {
   }
 
   /**
+   * AssetAssignment.issuedBy
+   */
+  export type AssetAssignment$issuedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    where?: EmployeeWhereInput
+  }
+
+  /**
    * AssetAssignment without action
    */
   export type AssetAssignmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -25442,6 +25472,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     description: 'description',
+    unit: 'unit',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -25611,7 +25642,8 @@ export namespace Prisma {
 
   export const AssetOrderByRelevanceFieldEnum: {
     name: 'name',
-    description: 'description'
+    description: 'description',
+    unit: 'unit'
   };
 
   export type AssetOrderByRelevanceFieldEnum = (typeof AssetOrderByRelevanceFieldEnum)[keyof typeof AssetOrderByRelevanceFieldEnum]
@@ -27232,6 +27264,7 @@ export namespace Prisma {
     id?: IntFilter<"Asset"> | number
     name?: StringFilter<"Asset"> | string
     description?: StringNullableFilter<"Asset"> | string | null
+    unit?: StringNullableFilter<"Asset"> | string | null
     createdAt?: DateTimeFilter<"Asset"> | Date | string
     updatedAt?: DateTimeFilter<"Asset"> | Date | string
     assignments?: AssetAssignmentListRelationFilter
@@ -27241,6 +27274,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    unit?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     assignments?: AssetAssignmentOrderByRelationAggregateInput
@@ -27254,6 +27288,7 @@ export namespace Prisma {
     NOT?: AssetWhereInput | AssetWhereInput[]
     name?: StringFilter<"Asset"> | string
     description?: StringNullableFilter<"Asset"> | string | null
+    unit?: StringNullableFilter<"Asset"> | string | null
     createdAt?: DateTimeFilter<"Asset"> | Date | string
     updatedAt?: DateTimeFilter<"Asset"> | Date | string
     assignments?: AssetAssignmentListRelationFilter
@@ -27263,6 +27298,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    unit?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AssetCountOrderByAggregateInput
@@ -27279,6 +27315,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Asset"> | number
     name?: StringWithAggregatesFilter<"Asset"> | string
     description?: StringNullableWithAggregatesFilter<"Asset"> | string | null
+    unit?: StringNullableWithAggregatesFilter<"Asset"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Asset"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Asset"> | Date | string
   }
@@ -27290,20 +27327,20 @@ export namespace Prisma {
     id?: IntFilter<"AssetAssignment"> | number
     assetId?: IntFilter<"AssetAssignment"> | number
     employeeId?: IntFilter<"AssetAssignment"> | number
-    issuedById?: IntFilter<"AssetAssignment"> | number
+    issuedById?: IntNullableFilter<"AssetAssignment"> | number | null
     issuedAt?: DateTimeFilter<"AssetAssignment"> | Date | string
     quantity?: IntFilter<"AssetAssignment"> | number
     note?: StringNullableFilter<"AssetAssignment"> | string | null
     asset?: XOR<AssetScalarRelationFilter, AssetWhereInput>
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
-    issuedBy?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    issuedBy?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
   }
 
   export type AssetAssignmentOrderByWithRelationInput = {
     id?: SortOrder
     assetId?: SortOrder
     employeeId?: SortOrder
-    issuedById?: SortOrder
+    issuedById?: SortOrderInput | SortOrder
     issuedAt?: SortOrder
     quantity?: SortOrder
     note?: SortOrderInput | SortOrder
@@ -27320,20 +27357,20 @@ export namespace Prisma {
     NOT?: AssetAssignmentWhereInput | AssetAssignmentWhereInput[]
     assetId?: IntFilter<"AssetAssignment"> | number
     employeeId?: IntFilter<"AssetAssignment"> | number
-    issuedById?: IntFilter<"AssetAssignment"> | number
+    issuedById?: IntNullableFilter<"AssetAssignment"> | number | null
     issuedAt?: DateTimeFilter<"AssetAssignment"> | Date | string
     quantity?: IntFilter<"AssetAssignment"> | number
     note?: StringNullableFilter<"AssetAssignment"> | string | null
     asset?: XOR<AssetScalarRelationFilter, AssetWhereInput>
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
-    issuedBy?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    issuedBy?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
   }, "id">
 
   export type AssetAssignmentOrderByWithAggregationInput = {
     id?: SortOrder
     assetId?: SortOrder
     employeeId?: SortOrder
-    issuedById?: SortOrder
+    issuedById?: SortOrderInput | SortOrder
     issuedAt?: SortOrder
     quantity?: SortOrder
     note?: SortOrderInput | SortOrder
@@ -27351,7 +27388,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"AssetAssignment"> | number
     assetId?: IntWithAggregatesFilter<"AssetAssignment"> | number
     employeeId?: IntWithAggregatesFilter<"AssetAssignment"> | number
-    issuedById?: IntWithAggregatesFilter<"AssetAssignment"> | number
+    issuedById?: IntNullableWithAggregatesFilter<"AssetAssignment"> | number | null
     issuedAt?: DateTimeWithAggregatesFilter<"AssetAssignment"> | Date | string
     quantity?: IntWithAggregatesFilter<"AssetAssignment"> | number
     note?: StringNullableWithAggregatesFilter<"AssetAssignment"> | string | null
@@ -28873,6 +28910,7 @@ export namespace Prisma {
   export type AssetCreateInput = {
     name: string
     description?: string | null
+    unit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     assignments?: AssetAssignmentCreateNestedManyWithoutAssetInput
@@ -28882,6 +28920,7 @@ export namespace Prisma {
     id?: number
     name: string
     description?: string | null
+    unit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     assignments?: AssetAssignmentUncheckedCreateNestedManyWithoutAssetInput
@@ -28890,6 +28929,7 @@ export namespace Prisma {
   export type AssetUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignments?: AssetAssignmentUpdateManyWithoutAssetNestedInput
@@ -28899,6 +28939,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignments?: AssetAssignmentUncheckedUpdateManyWithoutAssetNestedInput
@@ -28908,6 +28949,7 @@ export namespace Prisma {
     id?: number
     name: string
     description?: string | null
+    unit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -28915,6 +28957,7 @@ export namespace Prisma {
   export type AssetUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -28923,6 +28966,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -28933,14 +28977,14 @@ export namespace Prisma {
     note?: string | null
     asset: AssetCreateNestedOneWithoutAssignmentsInput
     employee: EmployeeCreateNestedOneWithoutAssetsReceivedInput
-    issuedBy: EmployeeCreateNestedOneWithoutAssetsIssuedInput
+    issuedBy?: EmployeeCreateNestedOneWithoutAssetsIssuedInput
   }
 
   export type AssetAssignmentUncheckedCreateInput = {
     id?: number
     assetId: number
     employeeId: number
-    issuedById: number
+    issuedById?: number | null
     issuedAt?: Date | string
     quantity?: number
     note?: string | null
@@ -28952,14 +28996,14 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
     asset?: AssetUpdateOneRequiredWithoutAssignmentsNestedInput
     employee?: EmployeeUpdateOneRequiredWithoutAssetsReceivedNestedInput
-    issuedBy?: EmployeeUpdateOneRequiredWithoutAssetsIssuedNestedInput
+    issuedBy?: EmployeeUpdateOneWithoutAssetsIssuedNestedInput
   }
 
   export type AssetAssignmentUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     assetId?: IntFieldUpdateOperationsInput | number
     employeeId?: IntFieldUpdateOperationsInput | number
-    issuedById?: IntFieldUpdateOperationsInput | number
+    issuedById?: NullableIntFieldUpdateOperationsInput | number | null
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     quantity?: IntFieldUpdateOperationsInput | number
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28969,7 +29013,7 @@ export namespace Prisma {
     id?: number
     assetId: number
     employeeId: number
-    issuedById: number
+    issuedById?: number | null
     issuedAt?: Date | string
     quantity?: number
     note?: string | null
@@ -28985,7 +29029,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     assetId?: IntFieldUpdateOperationsInput | number
     employeeId?: IntFieldUpdateOperationsInput | number
-    issuedById?: IntFieldUpdateOperationsInput | number
+    issuedById?: NullableIntFieldUpdateOperationsInput | number | null
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     quantity?: IntFieldUpdateOperationsInput | number
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30559,6 +30603,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    unit?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -30571,6 +30616,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    unit?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -30579,6 +30625,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    unit?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -32318,10 +32365,12 @@ export namespace Prisma {
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutAssetsReceivedInput, EmployeeUpdateWithoutAssetsReceivedInput>, EmployeeUncheckedUpdateWithoutAssetsReceivedInput>
   }
 
-  export type EmployeeUpdateOneRequiredWithoutAssetsIssuedNestedInput = {
+  export type EmployeeUpdateOneWithoutAssetsIssuedNestedInput = {
     create?: XOR<EmployeeCreateWithoutAssetsIssuedInput, EmployeeUncheckedCreateWithoutAssetsIssuedInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutAssetsIssuedInput
     upsert?: EmployeeUpsertWithoutAssetsIssuedInput
+    disconnect?: EmployeeWhereInput | boolean
+    delete?: EmployeeWhereInput | boolean
     connect?: EmployeeWhereUniqueInput
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutAssetsIssuedInput, EmployeeUpdateWithoutAssetsIssuedInput>, EmployeeUncheckedUpdateWithoutAssetsIssuedInput>
   }
@@ -33364,13 +33413,13 @@ export namespace Prisma {
     quantity?: number
     note?: string | null
     asset: AssetCreateNestedOneWithoutAssignmentsInput
-    issuedBy: EmployeeCreateNestedOneWithoutAssetsIssuedInput
+    issuedBy?: EmployeeCreateNestedOneWithoutAssetsIssuedInput
   }
 
   export type AssetAssignmentUncheckedCreateWithoutEmployeeInput = {
     id?: number
     assetId: number
-    issuedById: number
+    issuedById?: number | null
     issuedAt?: Date | string
     quantity?: number
     note?: string | null
@@ -33909,7 +33958,7 @@ export namespace Prisma {
     id?: IntFilter<"AssetAssignment"> | number
     assetId?: IntFilter<"AssetAssignment"> | number
     employeeId?: IntFilter<"AssetAssignment"> | number
-    issuedById?: IntFilter<"AssetAssignment"> | number
+    issuedById?: IntNullableFilter<"AssetAssignment"> | number | null
     issuedAt?: DateTimeFilter<"AssetAssignment"> | Date | string
     quantity?: IntFilter<"AssetAssignment"> | number
     note?: StringNullableFilter<"AssetAssignment"> | string | null
@@ -36916,13 +36965,13 @@ export namespace Prisma {
     quantity?: number
     note?: string | null
     employee: EmployeeCreateNestedOneWithoutAssetsReceivedInput
-    issuedBy: EmployeeCreateNestedOneWithoutAssetsIssuedInput
+    issuedBy?: EmployeeCreateNestedOneWithoutAssetsIssuedInput
   }
 
   export type AssetAssignmentUncheckedCreateWithoutAssetInput = {
     id?: number
     employeeId: number
-    issuedById: number
+    issuedById?: number | null
     issuedAt?: Date | string
     quantity?: number
     note?: string | null
@@ -36957,6 +37006,7 @@ export namespace Prisma {
   export type AssetCreateWithoutAssignmentsInput = {
     name: string
     description?: string | null
+    unit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -36965,6 +37015,7 @@ export namespace Prisma {
     id?: number
     name: string
     description?: string | null
+    unit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -37116,6 +37167,7 @@ export namespace Prisma {
   export type AssetUpdateWithoutAssignmentsInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -37124,6 +37176,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -37522,7 +37575,7 @@ export namespace Prisma {
   export type AssetAssignmentCreateManyEmployeeInput = {
     id?: number
     assetId: number
-    issuedById: number
+    issuedById?: number | null
     issuedAt?: Date | string
     quantity?: number
     note?: string | null
@@ -37905,13 +37958,13 @@ export namespace Prisma {
     quantity?: IntFieldUpdateOperationsInput | number
     note?: NullableStringFieldUpdateOperationsInput | string | null
     asset?: AssetUpdateOneRequiredWithoutAssignmentsNestedInput
-    issuedBy?: EmployeeUpdateOneRequiredWithoutAssetsIssuedNestedInput
+    issuedBy?: EmployeeUpdateOneWithoutAssetsIssuedNestedInput
   }
 
   export type AssetAssignmentUncheckedUpdateWithoutEmployeeInput = {
     id?: IntFieldUpdateOperationsInput | number
     assetId?: IntFieldUpdateOperationsInput | number
-    issuedById?: IntFieldUpdateOperationsInput | number
+    issuedById?: NullableIntFieldUpdateOperationsInput | number | null
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     quantity?: IntFieldUpdateOperationsInput | number
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37920,7 +37973,7 @@ export namespace Prisma {
   export type AssetAssignmentUncheckedUpdateManyWithoutEmployeeInput = {
     id?: IntFieldUpdateOperationsInput | number
     assetId?: IntFieldUpdateOperationsInput | number
-    issuedById?: IntFieldUpdateOperationsInput | number
+    issuedById?: NullableIntFieldUpdateOperationsInput | number | null
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     quantity?: IntFieldUpdateOperationsInput | number
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38343,7 +38396,7 @@ export namespace Prisma {
   export type AssetAssignmentCreateManyAssetInput = {
     id?: number
     employeeId: number
-    issuedById: number
+    issuedById?: number | null
     issuedAt?: Date | string
     quantity?: number
     note?: string | null
@@ -38354,13 +38407,13 @@ export namespace Prisma {
     quantity?: IntFieldUpdateOperationsInput | number
     note?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: EmployeeUpdateOneRequiredWithoutAssetsReceivedNestedInput
-    issuedBy?: EmployeeUpdateOneRequiredWithoutAssetsIssuedNestedInput
+    issuedBy?: EmployeeUpdateOneWithoutAssetsIssuedNestedInput
   }
 
   export type AssetAssignmentUncheckedUpdateWithoutAssetInput = {
     id?: IntFieldUpdateOperationsInput | number
     employeeId?: IntFieldUpdateOperationsInput | number
-    issuedById?: IntFieldUpdateOperationsInput | number
+    issuedById?: NullableIntFieldUpdateOperationsInput | number | null
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     quantity?: IntFieldUpdateOperationsInput | number
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38369,7 +38422,7 @@ export namespace Prisma {
   export type AssetAssignmentUncheckedUpdateManyWithoutAssetInput = {
     id?: IntFieldUpdateOperationsInput | number
     employeeId?: IntFieldUpdateOperationsInput | number
-    issuedById?: IntFieldUpdateOperationsInput | number
+    issuedById?: NullableIntFieldUpdateOperationsInput | number | null
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     quantity?: IntFieldUpdateOperationsInput | number
     note?: NullableStringFieldUpdateOperationsInput | string | null

@@ -336,6 +336,7 @@ exports.Prisma.AssetScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  unit: 'unit',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -448,7 +449,8 @@ exports.Prisma.EmailActionTokenOrderByRelevanceFieldEnum = {
 
 exports.Prisma.AssetOrderByRelevanceFieldEnum = {
   name: 'name',
-  description: 'description'
+  description: 'description',
+  unit: 'unit'
 };
 
 exports.Prisma.AssetAssignmentOrderByRelevanceFieldEnum = {

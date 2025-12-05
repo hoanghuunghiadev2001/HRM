@@ -3,22 +3,36 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "../../../../../generated/prisma";
+import jwt from "jsonwebtoken";
+
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
 
-    const role = searchParams.get("role") || "USER";
+    const token = req.cookies.get("token")?.value;
+
+    if (!token) {
+      return NextResponse.json({ message: "Không có token" }, { status: 401 });
+    }
+
+    // Lấy thông tin từ token
+    const decoded = jwt.verify(token, JWT_SECRET) as {
+      role: string;
+      id: number; // <-- chính là issuedById
+    };
     const department = searchParams.get("department") || ""; // "departmentId-positionId"
     const name = searchParams.get("name") || "";
     const employeeCode = searchParams.get("employeeCode") || "";
     const pageSizeParam = searchParams.get("pageSize");
     const pageParam = searchParams.get("page");
+    const workStatusParam = searchParams.get("workStatus");
 
     const pageSize = pageSizeParam ? parseInt(pageSizeParam, 10) : undefined;
     const page = pageParam ? parseInt(pageParam, 10) : 1;
 
-    if (role === "USER") {
+    if (decoded.role === "USER") {
       return NextResponse.json(
         { message: "Bạn không có quyền truy cập" },
         { status: 401 }
@@ -53,6 +67,9 @@ export async function GET(req: NextRequest) {
         },
       });
     }
+
+    const workStatus = workStatusParam === "true" ? true : false;
+    andFilters.push({ isActive: workStatus });
 
     const whereFilter: Prisma.EmployeeWhereInput = {
       AND: andFilters,
