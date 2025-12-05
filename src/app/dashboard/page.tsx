@@ -27,6 +27,8 @@ import { setUserAvatar } from "@/store/slices/userSlice";
 import { useAppDispatch } from "@/store/hook";
 import dayjs from "dayjs";
 import RoleTag from "@/components/RoleTag";
+import { UploadChangeParam } from "antd/es/upload";
+import ModalLoading from "@/components/modalLoading";
 
 const { Title, Text } = Typography;
 
@@ -164,14 +166,15 @@ const Profile = () => {
     });
   };
 
-  const handleChangeAvatar = async (e: any) => {
-    const file = e.target.files?.[0] ?? e.file?.originFileObj;
+  const handleChangeAvatar = async (info: UploadChangeParam) => {
+    const file = info.file.originFileObj;
     if (!file) return;
+
     if (!beforeUpload(file)) return;
+
     const url = await getBase64(file);
     setImageUrl(url);
   };
-
   // select options
   const userSelectOptions = employees.map((user) => ({
     label: (
@@ -378,6 +381,7 @@ const Profile = () => {
 
   return (
     <div className="flex justify-center w-full px-4 py-8">
+      <ModalLoading isOpen={loading} />
       <div className="w-full max-w-[1200px]">
         <div className="mb-6">
           <Title level={2} className="!mb-0">
