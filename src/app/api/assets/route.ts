@@ -105,21 +105,6 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
-    // Kiểm tra còn cấp phát không
-    const countAssignments = await prisma.assetAssignment.count({
-      where: { assetId: id },
-    });
-
-    if (countAssignments > 0) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Không thể xóa. Tài sản đang có người được cấp.",
-        },
-        { status: 400 }
-      );
-    }
-
     await prisma.asset.delete({ where: { id } });
 
     return NextResponse.json({ success: true, message: "Đã xóa tài sản" });
