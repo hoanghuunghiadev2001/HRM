@@ -27,10 +27,10 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { name, description } = body;
+    const { name, description, unit } = body;
 
     const asset = await prisma.asset.create({
-      data: { name, description },
+      data: { name, description, unit },
     });
 
     return NextResponse.json({ success: true, asset });
@@ -65,11 +65,11 @@ export async function PUT(req: NextRequest) {
       );
 
     const body = await req.json();
-    const { id, name, description } = body;
+    const { id, name, description, unit } = body;
 
     const asset = await prisma.asset.update({
       where: { id },
-      data: { name, description },
+      data: { name, description, unit },
     });
 
     return NextResponse.json({ success: true, asset });
