@@ -181,6 +181,7 @@ const Profile = () => {
       </div>
     ),
     value: user.id,
+    searchText: `${user.name} ${user.employeeCode}`,
   }));
 
   // columns with tailwind-friendly render
@@ -469,12 +470,21 @@ const Profile = () => {
                       className="mb-0 font-bold text-[#4a4a6a]"
                     >
                       <Select
+                        showSearch
                         placeholder="Chọn người quản lý"
                         value={managerUser}
                         onChange={(value) => setManagerUser(value)}
                         options={userSelectOptions}
                         style={{ width: "100%" }}
                         size="middle"
+                        filterOption={(input, option) => {
+                          // đảm bảo luôn trả boolean, không trả undefined
+                          const text = (option as any)?.searchText;
+                          if (!text) return false;
+                          return String(text)
+                            .toLowerCase()
+                            .includes(input.toLowerCase());
+                        }}
                       />
                     </Form.Item>
                   </Form>
