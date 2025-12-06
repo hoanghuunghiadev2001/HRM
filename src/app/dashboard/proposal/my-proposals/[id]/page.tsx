@@ -311,6 +311,9 @@ export default function ProposalDetailPage() {
     actionDate?: string,
     reason?: string
   ) => {
+    console.log(person.id);
+    console.log(currentIdStep);
+
     const roleConfig = {
       proposer: "#1890ff",
       signer: "#722ed1",
@@ -332,12 +335,21 @@ export default function ProposalDetailPage() {
     return (
       <Card
         size="small"
+        className={`!relative ${
+          Number(person.id) === Number(currentIdStep) ? "!bg-[#FFA50020]" : ""
+        }`}
         style={{
           marginBottom: 12,
           border:
-            person.id === id ? `2px solid ${roleConfig[role]}` : undefined,
+            Number(person.id) === Number(currentIdStep)
+              ? `2px solid #FFA500`
+              : person.id === id
+              ? "2px solid #42A5F5"
+              : "",
           boxShadow:
-            person.id === id ? `0 0 10px ${roleConfig[role]}20` : undefined,
+            Number(person.id) === Number(currentIdStep)
+              ? `0 0 10px #FFA50020`
+              : undefined,
         }}
       >
         <Row gutter={16} align="middle">
@@ -359,20 +371,19 @@ export default function ProposalDetailPage() {
               </Tag>
             )}
             {role !== "proposer" &&
-              (totalStatus !== "rejected" ||
-                (status !== "pending" && (
-                  <Tag
-                    className="mt-1"
-                    color={
-                      statusConfig[status as keyof typeof statusConfig]?.color
-                    }
-                  >
-                    {statusConfig[status as keyof typeof statusConfig]?.icon}{" "}
-                    <span style={{ marginLeft: 4 }}>
-                      {statusConfig[status as keyof typeof statusConfig]?.text}
-                    </span>
-                  </Tag>
-                )))}
+              (totalStatus !== "rejected" || status !== "pending") && (
+                <Tag
+                  className="mt-1"
+                  color={
+                    statusConfig[status as keyof typeof statusConfig]?.color
+                  }
+                >
+                  {statusConfig[status as keyof typeof statusConfig]?.icon}{" "}
+                  <span style={{ marginLeft: 4 }}>
+                    {statusConfig[status as keyof typeof statusConfig]?.text}
+                  </span>
+                </Tag>
+              )}
             {reason && <Text type="secondary">Lý do: {reason}</Text>}
             {actionDate && (
               <div className="mt-1 flex w-full justify-end italic text-xs">
@@ -383,6 +394,11 @@ export default function ProposalDetailPage() {
             )}
           </Col>
         </Row>
+        {person.id === id && (
+          <Tag color={"#42A5F5"} className="!absolute top-[-10px] right-0">
+            <span>Bạn</span>
+          </Tag>
+        )}
       </Card>
     );
   };
