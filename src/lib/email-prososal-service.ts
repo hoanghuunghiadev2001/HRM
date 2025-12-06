@@ -505,7 +505,7 @@ export class EmailService {
       to: [
         proposer.contactInfo?.email || `${proposer.employeeCode}@company.com`,
       ],
-      subject: `❌ Đề xuất "${proposal.title}" bị từ chối bởi ${signer.name}`,
+      subject: `❌ Đề xuất "${proposal.title}" bị từ chối.`,
       html: `
       <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
         <div style="text-align: center; padding-bottom: 20px; border-bottom: 1px solid #eeeeee;">
