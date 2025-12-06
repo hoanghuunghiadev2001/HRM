@@ -120,7 +120,11 @@ export async function GET(request: NextRequest) {
     });
 
     const need_to_sign_filtered = need_to_sign_all.filter((p) => {
+      if (p.status !== "pending_signatures") return false;
+
       const pending = p.signers.filter((s) => s.status === "pending");
+      console.log(pending);
+
       if (pending.length === 0) return false;
       const minLevel = Math.min(...pending.map((s) => s.level));
       return pending.some(

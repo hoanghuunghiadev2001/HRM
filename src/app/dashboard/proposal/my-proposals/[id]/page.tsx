@@ -306,6 +306,7 @@ export default function ProposalDetailPage() {
     person: any,
     role: "proposer" | "signer" | "approver",
     currentIdStep: string,
+    totalStatus: string,
     status?: string,
     actionDate?: string,
     reason?: string
@@ -346,26 +347,38 @@ export default function ProposalDetailPage() {
             </Badge>
           </Col>
           <Col flex="auto">
-            <div className="flex items-center gap-2 justify-between ">
+            <div className=" items-center gap-2 justify-between ">
               <Text strong style={{ fontSize: 16 }}>
-                {person.name} •{" "}
-                <Text type="secondary">{person.employeeCode}</Text>
+                {person.name}
               </Text>
+              <Text type="secondary">• {person.employeeCode}</Text>
             </div>
-            {status && (
-              <Tag
-                color={statusConfig[status as keyof typeof statusConfig]?.color}
-              >
-                {statusConfig[status as keyof typeof statusConfig]?.icon}{" "}
-                <span style={{ marginLeft: 4 }}>
-                  {statusConfig[status as keyof typeof statusConfig]?.text}
-                </span>
+            {role === "proposer" && (
+              <Tag color={"#1890ff"}>
+                <span style={{ marginLeft: 4 }}>Người tạo đề xuất</span>
               </Tag>
             )}
+            {role !== "proposer" &&
+              (totalStatus !== "rejected" ||
+                (status !== "pending" && (
+                  <Tag
+                    className="mt-1"
+                    color={
+                      statusConfig[status as keyof typeof statusConfig]?.color
+                    }
+                  >
+                    {statusConfig[status as keyof typeof statusConfig]?.icon}{" "}
+                    <span style={{ marginLeft: 4 }}>
+                      {statusConfig[status as keyof typeof statusConfig]?.text}
+                    </span>
+                  </Tag>
+                )))}
             {reason && <Text type="secondary">Lý do: {reason}</Text>}
             {actionDate && (
-              <div>
-                <Text type="secondary">{toVietnamTime(actionDate)}</Text>
+              <div className="mt-1 flex w-full justify-end italic text-xs">
+                <Text type="secondary" className="text-[6px]">
+                  •{toVietnamTime(actionDate)}
+                </Text>
               </div>
             )}
           </Col>
@@ -574,13 +587,17 @@ export default function ProposalDetailPage() {
             {renderPersonCard(
               proposal.proposer,
               "proposer",
-              proposal.currentStep.userId
+              proposal.currentStep.userId,
+              proposal.status,
+              proposal.status,
+              proposal.createdAt
             )}
             {proposal.signers.map((s) =>
               renderPersonCard(
                 s.signer,
                 "signer",
                 proposal.currentStep.userId,
+                proposal.status,
                 s.status,
                 s.signedAt,
                 s.reason
@@ -601,6 +618,7 @@ export default function ProposalDetailPage() {
                 a.approver,
                 "approver",
                 proposal.currentStep.userId,
+                proposal.status,
                 a.status,
                 a.approvedAt,
                 a.reason
