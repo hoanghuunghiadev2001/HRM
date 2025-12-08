@@ -24,12 +24,6 @@ export async function POST(
     }
 
     // Nếu trạng thái là rejected mà không có reason
-    if (status === "rejected" && (!reason || reason.trim() === "")) {
-      return NextResponse.json(
-        { error: "Phải nhập lý do khi từ chối" },
-        { status: 400 }
-      );
-    }
 
     const token = request.cookies.get("token")?.value;
 

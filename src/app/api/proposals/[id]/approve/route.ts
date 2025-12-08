@@ -52,14 +52,6 @@ export async function POST(
       );
     }
 
-    // Nếu từ chối nhưng không có lý do
-    if (status === "rejected" && (!reason || reason.trim() === "")) {
-      return NextResponse.json(
-        { error: "Phải nhập lý do khi từ chối" },
-        { status: 400 }
-      );
-    }
-
     // 5️⃣ Gọi service xử lý
     const result = await ProposalService.approveProposal(
       proposalId,

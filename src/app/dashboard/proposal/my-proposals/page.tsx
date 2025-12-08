@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-
-import { useEffect, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useEffect, useState, useMemo } from "react";
+import type { ColumnType } from "antd/es/table";
 import {
   Card,
   Table,
@@ -15,6 +15,9 @@ import {
   Input,
   Select,
   DatePicker,
+  Badge,
+  Row,
+  Col,
 } from "antd";
 import {
   FileTextOutlined,
@@ -22,6 +25,7 @@ import {
   CheckCircleOutlined,
   CloseOutlined,
   ClockCircleOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { useRouter } from "next/navigation";
@@ -43,34 +47,10 @@ interface Proposal {
   status: string;
   proposalType?: string;
   createdAt: string;
-  proposer: {
-    id: number;
-    name: string;
-    employeeCode: string;
-  };
-  file?: {
-    id: number;
-    filename: string;
-    mimeType: string;
-    fileSize: number;
-    createdAt: string;
-  };
-  signers: Array<{
-    signer: {
-      id: number;
-      name: string;
-      employeeCode: string;
-    };
-    status: string;
-  }>;
-  approvers: Array<{
-    approver: {
-      id: number;
-      name: string;
-      employeeCode: string;
-    };
-    status: string;
-  }>;
+  proposer: { id: number; name: string; employeeCode: string };
+  file?: { id: number; filename: string };
+  signers: Array<{ signer: { id: number; name: string }; status: string }>;
+  approvers: Array<{ approver: { id: number; name: string }; status: string }>;
 }
 
 interface resultData {
@@ -78,7 +58,7 @@ interface resultData {
   total: number;
 }
 
-export default function MyProposalsPage() {
+export default function MyProposalsPolished() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [createdProposals, setCreatedProposals] = useState<resultData>({
@@ -101,59 +81,33 @@ export default function MyProposalsPage() {
   const [proposalTypeFilter, setProposalTypeFilter] = useState<
     string | undefined
   >();
-  // CHANGED: chọn 1 ngày duy nhất
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
 
   const { employeeCode, role } = useAppSelector((state) => state.user);
   const [msg, contextHolder] = message.useMessage();
 
-  const [tableHeight, setTableHeight] = useState<number>(600);
-
+  // nicer layout sizing
+  const [tableHeight, setTableHeight] = useState<number>(520);
   useEffect(() => {
     const update = () => {
-      const h = typeof window !== "undefined" ? window.innerHeight - 380 : 600;
-      setTableHeight(h > 200 ? h : 600);
+      const h = typeof window !== "undefined" ? window.innerHeight - 380 : 520;
+      setTableHeight(h > 240 ? h : 520);
     };
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  const getStatusColor = (status: string) => {
-    return (
-      {
-        pending_signatures: "orange",
-        waiting_approval: "blue",
-        approved: "green",
-        rejected: "red",
-      }[status] || "default"
-    );
-  };
-
-  const getStatusText = (status: string) => {
-    return (
-      {
-        pending_signatures: "Đang chờ ký",
-        waiting_approval: "Đang chờ duyệt",
-        approved: "Đã duyệt",
-        rejected: "Đã từ chối",
-      }[status] || status
-    );
-  };
-
-  const fetchProposals = async () => {
+  const fetchProposals = async (p = page, ps = pageSize) => {
     setLoading(true);
     try {
       const params = new URLSearchParams({
-        page: page.toString(),
-        pageSize: pageSize.toString(),
-        search: searchText,
+        page: String(p),
+        pageSize: String(ps),
+        search: searchText || "",
       });
-
       if (statusFilter) params.append("status", statusFilter);
       if (proposalTypeFilter) params.append("proposalType", proposalTypeFilter);
-
-      // Nếu có selectedDate -> gửi createdFrom & createdTo cùng ngày (YYYY-MM-DD)
       if (selectedDate) {
         const d = selectedDate.format("YYYY-MM-DD");
         params.append("createdFrom", d);
@@ -180,19 +134,17 @@ export default function MyProposalsPage() {
     }
   };
 
-  // Debounce search -> reset to page 1 and fetch
   useEffect(() => {
     const t = setTimeout(() => {
       setPage(1);
-      fetchProposals();
-    }, 500);
+      fetchProposals(1, pageSize);
+    }, 400);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText, statusFilter, proposalTypeFilter, selectedDate, pageSize]);
 
   useEffect(() => {
-    fetchProposals();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchProposals(); /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [page]);
 
   const showConfirm = async (
@@ -206,9 +158,7 @@ export default function MyProposalsPage() {
         proposalId,
         status,
       });
-      msg.success(
-        status === "approved" ? "Đã phê duyệt!" : "Đã từ chối đề xuất!"
-      );
+      msg.success(status === "approved" ? "Hoàn tất thành công" : "Đã từ chối");
       fetchProposals();
     } catch (error) {
       console.error("Approval error:", error);
@@ -219,13 +169,11 @@ export default function MyProposalsPage() {
   };
 
   const handleViewDetail = (proposalId: number) => {
-    setLoading(true);
     router.push(`/dashboard/proposal/my-proposals/${proposalId}`);
   };
 
   const handleDeleteProposal = async (proposalId: number) => {
     if (!confirm("Bạn có chắc muốn xóa đề xuất này?")) return;
-
     setLoading(true);
     try {
       const res = await fetch(`/api/proposals/${proposalId}`, {
@@ -247,130 +195,115 @@ export default function MyProposalsPage() {
     }
   };
 
-  // ================== COLUMNS ==================
-  const createdColumns: ColumnsType<Proposal> = [
-    {
-      title: "Tên đề xuất",
-      dataIndex: "name",
-      key: "name",
-      render: (text) => <Text strong>{text}</Text>,
-    },
-    {
-      title: "Người lập đề xuất",
-      key: "employeeProposer",
-      responsive: ["md"],
-      render: (_, record) =>
-        record.proposer.name && (
-          <Text type="secondary" style={{ fontSize: 12, display: "block" }}>
-            {record.proposer.name} ({record.proposer.employeeCode})
+  // columns
+  const columnsCommon = useMemo<ColumnsType<Proposal>>(
+    () => [
+      {
+        title: "Tên đề xuất",
+        dataIndex: "name",
+        key: "name",
+        render: (text, record) => (
+          <div>
+            <Text strong>{text}</Text>
+            <div style={{ fontSize: 12, color: "rgba(0,0,0,0.45)" }}>
+              {record.description}
+            </div>
+          </div>
+        ),
+        width: 180,
+      },
+      {
+        title: "Người lập",
+        key: "proposer",
+        render: (_, r) => (
+          <Text type="secondary">
+            {r.proposer?.name} • {r.proposer?.employeeCode}
           </Text>
         ),
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      responsive: ["sm"],
-      render: (status) => (
-        <Tag color={getStatusColor(status)}>{getStatusText(status)}</Tag>
-      ),
-    },
-    {
-      title: "Loại đề xuất",
-      dataIndex: "proposalType",
-      key: "proposalType",
-      responsive: ["md"],
-      render: (type) => (
-        <Text>{type === "REGULAR" ? "Đề xuất chung" : "đề xuất xe"}</Text>
-      ),
-    },
-    {
-      title: "Ngày tạo",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      responsive: ["lg"],
-      render: (date) => new Date(date).toLocaleDateString("vi-VN"),
-    },
-    {
-      title: "Thao tác",
-      key: "actions",
-      render: (_, record) => (
-        <div className="flex gap-2">
-          <Button
-            type="link"
-            icon={<EyeOutlined />}
-            size="small"
-            onClick={() => handleViewDetail(record.id)}
-          >
-            Xem
-          </Button>
-          {role === "ADMIN" && (
+        responsive: ["md"] as const,
+        width: 180,
+      },
+      {
+        title: "Trạng thái",
+        dataIndex: "status",
+        key: "status",
+        render: (status) => {
+          const map: any = {
+            pending_signatures: ["warning", "Đang chờ ký"],
+            waiting_approval: ["processing", "Đang chờ duyệt"],
+            approved: ["success", "Đã duyệt"],
+            rejected: ["error", "Đã từ chối"],
+          };
+          const [color, text] = map[status] || ["default", status];
+          return <Tag color={color}>{text}</Tag>;
+        },
+        width: 100,
+      },
+      {
+        title: "Loại",
+        dataIndex: "proposalType",
+        key: "proposalType",
+        responsive: ["md"] as const,
+        render: (t) => (t === "REGULAR" ? "Đề xuất chung" : "Đề xuất xe"),
+        width: 100,
+      },
+      {
+        title: "Ngày tạo",
+        dataIndex: "createdAt",
+        key: "createdAt",
+        responsive: ["lg"] as const,
+        render: (d) => new Date(d).toLocaleString("vi-VN"),
+        width: 120,
+      },
+    ],
+    []
+  );
+
+  const createdColumns: ColumnsType<Proposal> = useMemo(() => {
+    return [
+      ...columnsCommon,
+      {
+        title: "Thao tác",
+        key: "actions",
+        render: (_: any, record: { id: number }) => (
+          <Space>
             <Button
-              className={`${
-                employeeCode === "01375" || employeeCode === "00965"
-                  ? ""
-                  : "hidden"
-              }`}
               type="link"
               icon={<EyeOutlined />}
               size="small"
-              onClick={() => handleDeleteProposal(record.id)}
+              onClick={() => handleViewDetail(record.id)}
             >
-              Xóa
+              Xem
             </Button>
-          )}
-        </div>
-      ),
-    },
-  ];
-
-  const pendingColumns: ColumnsType<Proposal> = [
-    {
-      title: "Tên đề xuất",
-      dataIndex: "name",
-      key: "name",
-      render: (text, record) => (
-        <div>
-          <Text strong>{text}</Text>
-          <Text type="secondary" style={{ fontSize: 12, display: "block" }}>
-            Người đề xuất: {record.proposer.name}
-          </Text>
-          {record.description && (
-            <Text type="secondary" style={{ fontSize: 12, display: "block" }}>
-              {record.description}
-            </Text>
-          )}
-        </div>
-      ),
-    },
-    {
-      title: "File",
-      key: "file",
-      responsive: ["sm"],
-      render: (_, record) =>
-        record.file ? (
-          <Button type="link" icon={<FileTextOutlined />} size="small">
-            {record.file.filename}
-          </Button>
-        ) : (
-          <Text type="secondary">Không có file</Text>
+            {role === "ADMIN" && (
+              <Button
+                type="link"
+                danger
+                size="small"
+                onClick={() => handleDeleteProposal(record.id)}
+              >
+                Xóa
+              </Button>
+            )}
+          </Space>
         ),
-    },
-    {
-      title: "Ngày tạo",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      responsive: ["md"],
-      render: (date) => new Date(date).toLocaleDateString("vi-VN"),
-    },
-  ];
+        width: 160,
+        fixed: "right",
+      },
+    ];
+  }, [columnsCommon, role]);
+
+  const pendingColumns: ColumnsType<Proposal> = useMemo(
+    () => [...columnsCommon],
+    [columnsCommon]
+  );
 
   const actionColumn = (
     actionType: "sign" | "approve"
-  ): ColumnsType<Proposal>[number] => ({
-    title: "Thao tác",
-    key: "actions",
-    render: (_, record) => (
+  ): ColumnType<Proposal> => ({
+    title: "Hành động",
+    key: "action",
+    render: (_: any, record: Proposal) => (
       <Space>
         <Button
           type="primary"
@@ -400,101 +333,169 @@ export default function MyProposalsPage() {
         </Button>
       </Space>
     ),
+    width: 180,
   });
 
+  const rowClassName = (record: Proposal) => {
+    if (record.status === "pending_signatures") return "row-highlight-pending";
+    if (record.status === "waiting_approval") return "row-highlight-approve";
+    return "";
+  };
+
   return (
-    <div
-      style={{ padding: 0, maxWidth: 1400, margin: "0 auto" }}
-      className="proposal-page"
-    >
+    <div style={{ padding: 16, maxWidth: 1400, margin: "0 auto" }}>
       {contextHolder}
       <ModalLoading isOpen={loading} />
 
-      <Title level={2} style={{ marginBottom: 16 }}>
-        <FileTextOutlined /> Quản lý đề xuất
-      </Title>
+      <Row align="middle" justify="space-between" style={{ marginBottom: 18 }}>
+        <Col>
+          <Title level={2} style={{ margin: 0 }}>
+            <FileTextOutlined /> Quản lý đề xuất
+          </Title>
+          <Text type="secondary">
+            Xem và quản lý các đề xuất của bạn — ưu tiên những đề xuất cần hành
+            động.
+          </Text>
+        </Col>
+        <Col>
+          <Space>
+            <Button
+              icon={<SearchOutlined />}
+              onClick={() => fetchProposals(1, pageSize)}
+            >
+              Làm mới
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => router.push("/dashboard/proposal/new")}
+            >
+              Tạo đề xuất mới
+            </Button>
+          </Space>
+        </Col>
+      </Row>
 
-      <div
-        style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 24 }}
+      <Card
+        style={{ marginBottom: 18, borderRadius: 10 }}
+        bodyStyle={{ padding: 12 }}
       >
-        <Search
-          placeholder="Tìm theo tên đề xuất..."
-          allowClear
-          enterButton
-          size="middle"
-          style={{ width: 250 }}
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
-        <Select
-          placeholder="Trạng thái"
-          allowClear
-          style={{ width: 180 }}
-          value={statusFilter}
-          onChange={(val) => setStatusFilter(val)}
-        >
-          <Select.Option value="pending_signatures">Đang chờ ký</Select.Option>
-          <Select.Option value="waiting_approval">Đang chờ duyệt</Select.Option>
-          <Select.Option value="approved">Đã duyệt</Select.Option>
-          <Select.Option value="rejected">Đã từ chối</Select.Option>
-        </Select>
-        <Select
-          placeholder="Loại đề xuất"
-          allowClear
-          style={{ width: 180 }}
-          value={proposalTypeFilter}
-          onChange={(val) => setProposalTypeFilter(val)}
-        >
-          <Select.Option value="REGULAR">REGULAR</Select.Option>
-          <Select.Option value="VEHICLE">VEHICLE</Select.Option>
-        </Select>
+        <Row gutter={[12, 12]} align="middle">
+          <Col xs={24} sm={12} md={8} lg={6}>
+            <Search
+              placeholder="Tìm theo tên đề xuất..."
+              allowClear
+              enterButton
+              size="middle"
+              onChange={(e) => setSearchText(e.target.value)}
+              value={searchText}
+            />
+          </Col>
 
-        {/* CHANGED: DatePicker cho 1 ngày */}
-        <DatePicker
-          value={selectedDate}
-          onChange={(date) => setSelectedDate(date)}
-          format="DD/MM/YYYY"
-          allowClear
-        />
-      </div>
+          <Col xs={12} sm={8} md={6} lg={5}>
+            <Select
+              placeholder="Trạng thái"
+              allowClear
+              style={{ width: "100%" }}
+              value={statusFilter}
+              onChange={(val) => setStatusFilter(val)}
+            >
+              <Select.Option value="pending_signatures">
+                Đang chờ ký
+              </Select.Option>
+              <Select.Option value="waiting_approval">
+                Đang chờ duyệt
+              </Select.Option>
+              <Select.Option value="approved">Đã duyệt</Select.Option>
+              <Select.Option value="rejected">Đã từ chối</Select.Option>
+            </Select>
+          </Col>
 
-      <Tabs
-        defaultActiveKey="created"
-        size="large"
-        style={{ overflowX: "auto" }}
-        onChange={() => {
-          setPage(1);
-          setPageSize(10);
-        }}
-        destroyInactiveTabPane
-      >
+          <Col xs={12} sm={8} md={6} lg={5}>
+            <Select
+              placeholder="Loại đề xuất"
+              allowClear
+              style={{ width: "100%" }}
+              value={proposalTypeFilter}
+              onChange={(val) => setProposalTypeFilter(val)}
+            >
+              <Select.Option value="REGULAR">Đề xuất chung</Select.Option>
+              <Select.Option value="VEHICLE">Đề xuất xe</Select.Option>
+            </Select>
+          </Col>
+
+          <Col xs={12} sm={12} md={6} lg={4}>
+            <DatePicker
+              value={selectedDate}
+              onChange={(d) => setSelectedDate(d)}
+              format="DD/MM/YYYY"
+              allowClear
+              style={{ width: "100%" }}
+            />
+          </Col>
+
+          <Col xs={24} sm={24} md={24} lg={4} style={{ textAlign: "right" }}>
+            <Space>
+              <Badge
+                count={pendingSignatures.total}
+                overflowCount={99}
+                size="small"
+              >
+                <Button
+                  type="default"
+                  onClick={() => {
+                    /* switch to tab handled below */
+                  }}
+                >
+                  Cần ký
+                </Button>
+              </Badge>
+              <Badge
+                count={pendingApprovals.total}
+                overflowCount={99}
+                size="small"
+              >
+                <Button
+                  type="default"
+                  onClick={() => {
+                    /* switch to tab handled below */
+                  }}
+                >
+                  Cần duyệt
+                </Button>
+              </Badge>
+            </Space>
+          </Col>
+        </Row>
+      </Card>
+
+      <Tabs defaultActiveKey="created" size="large" destroyInactiveTabPane>
         <TabPane
           tab={
             <span>
-              <FileTextOutlined /> Đề xuất ({createdProposals?.data.length ?? 0}
-              )
+              <FileTextOutlined /> Đề xuất{" "}
+              <Text type="secondary">({createdProposals.data.length})</Text>
             </span>
           }
           key="created"
         >
-          <Card className="proposal-table">
+          <Card className="proposal-table" bodyStyle={{ padding: 8 }}>
             <Table
               columns={createdColumns}
-              dataSource={createdProposals?.data || []}
+              dataSource={createdProposals.data}
               rowKey={(r) => String(r.id)}
               loading={loading}
-              scroll={{ x: 600, y: tableHeight }}
+              scroll={{ x: 1100, y: tableHeight }}
               pagination={{
                 current: page,
                 pageSize,
-                total: createdProposals?.total ?? 0,
+                total: createdProposals.total,
                 showSizeChanger: true,
-                showQuickJumper: true,
-                onChange: (newPage, newPageSize) => {
-                  setPage(newPage);
-                  setPageSize(newPageSize || pageSize);
+                onChange: (p, ps) => {
+                  setPage(p);
+                  setPageSize(ps || pageSize);
                 },
               }}
+              rowClassName={rowClassName}
             />
           </Card>
         </TabPane>
@@ -502,30 +503,31 @@ export default function MyProposalsPage() {
         <TabPane
           tab={
             <span>
-              <ClockCircleOutlined /> Cần ký (
-              {pendingSignatures?.data.length ?? 0})
+              <Badge dot={pendingSignatures.total > 0}>
+                <ClockCircleOutlined /> Cần ký ({pendingSignatures.total})
+              </Badge>
             </span>
           }
           key="pending_signature"
         >
-          <Card className="proposal-table">
+          <Card bodyStyle={{ padding: 8 }}>
             <Table
               columns={[...pendingColumns, actionColumn("sign")]}
-              dataSource={pendingSignatures?.data || []}
+              dataSource={pendingSignatures.data}
               rowKey={(r) => String(r.id)}
               loading={loading}
-              scroll={{ x: 600, y: tableHeight }}
+              scroll={{ x: 1100, y: tableHeight }}
               pagination={{
                 current: page,
                 pageSize,
-                total: pendingSignatures?.total ?? 0,
+                total: pendingSignatures.total,
                 showSizeChanger: true,
-                showQuickJumper: true,
-                onChange: (newPage, newPageSize) => {
-                  setPage(newPage);
-                  setPageSize(newPageSize || pageSize);
+                onChange: (p, ps) => {
+                  setPage(p);
+                  setPageSize(ps || pageSize);
                 },
               }}
+              rowClassName={rowClassName}
             />
           </Card>
         </TabPane>
@@ -533,34 +535,47 @@ export default function MyProposalsPage() {
         <TabPane
           tab={
             <span>
-              <CheckCircleOutlined /> Cần phê duyệt (
-              {pendingApprovals?.data.length ?? 0})
+              <Badge dot={pendingApprovals.total > 0}>
+                <CheckCircleOutlined /> Cần phê duyệt ({pendingApprovals.total})
+              </Badge>
             </span>
           }
           key="pending_approval"
         >
-          <Card className="proposal-table">
+          <Card bodyStyle={{ padding: 8 }}>
             <Table
               columns={[...pendingColumns, actionColumn("approve")]}
-              dataSource={pendingApprovals?.data || []}
+              dataSource={pendingApprovals.data}
               rowKey={(r) => String(r.id)}
               loading={loading}
-              scroll={{ x: 600, y: tableHeight }}
+              scroll={{ x: 1100, y: tableHeight }}
               pagination={{
                 current: page,
                 pageSize,
-                total: pendingApprovals?.total ?? 0,
+                total: pendingApprovals.total,
                 showSizeChanger: true,
-                showQuickJumper: true,
-                onChange: (newPage, newPageSize) => {
-                  setPage(newPage);
-                  setPageSize(newPageSize || pageSize);
+                onChange: (p, ps) => {
+                  setPage(p);
+                  setPageSize(ps || pageSize);
                 },
               }}
+              rowClassName={rowClassName}
             />
           </Card>
         </TabPane>
       </Tabs>
+
+      <style jsx>{`
+        .row-highlight-pending {
+          background: rgba(255, 244, 229, 0.8);
+        }
+        .row-highlight-approve {
+          background: rgba(230, 245, 255, 0.9);
+        }
+        .proposal-table .ant-table-thead > tr > th {
+          background: #fafafa;
+        }
+      `}</style>
     </div>
   );
 }

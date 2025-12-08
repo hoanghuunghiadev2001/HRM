@@ -442,7 +442,7 @@ export default function ProposalDetailPage() {
       <Card style={{ marginBottom: 24 }}>
         <Row gutter={24} align="middle">
           <Col className="w-full">
-            <Space className="w-full flex justify-between">
+            <Space className="w-full flex justify-between flex-wrap">
               <div className="flex-shrink-0">
                 <Title level={2}>
                   <FileTextOutlined /> {proposal.name}
