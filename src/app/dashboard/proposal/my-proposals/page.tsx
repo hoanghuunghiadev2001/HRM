@@ -205,7 +205,10 @@ export default function MyProposalsPolished() {
         render: (text, record) => (
           <div>
             <Text strong>{text}</Text>
-            <div style={{ fontSize: 12, color: "rgba(0,0,0,0.45)" }}>
+            <div
+              style={{ fontSize: 12, color: "rgba(0,0,0,0.45)" }}
+              className="line-clamp-2"
+            >
               {record.description}
             </div>
           </div>
@@ -287,8 +290,7 @@ export default function MyProposalsPolished() {
             )}
           </Space>
         ),
-        width: 160,
-        fixed: "right",
+        width: 90,
       },
     ];
   }, [columnsCommon, role]);
@@ -431,39 +433,6 @@ export default function MyProposalsPolished() {
               allowClear
               style={{ width: "100%" }}
             />
-          </Col>
-
-          <Col xs={24} sm={24} md={24} lg={4} style={{ textAlign: "right" }}>
-            <Space>
-              <Badge
-                count={pendingSignatures.total}
-                overflowCount={99}
-                size="small"
-              >
-                <Button
-                  type="default"
-                  onClick={() => {
-                    /* switch to tab handled below */
-                  }}
-                >
-                  Cần ký
-                </Button>
-              </Badge>
-              <Badge
-                count={pendingApprovals.total}
-                overflowCount={99}
-                size="small"
-              >
-                <Button
-                  type="default"
-                  onClick={() => {
-                    /* switch to tab handled below */
-                  }}
-                >
-                  Cần duyệt
-                </Button>
-              </Badge>
-            </Space>
           </Col>
         </Row>
       </Card>
