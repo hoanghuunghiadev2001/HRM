@@ -9,6 +9,7 @@ import timezone from "dayjs/plugin/timezone";
 import { PendingApprovalItem } from "@/app/dashboard/allRequests/page";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import { DownloadOutlined } from "@ant-design/icons";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -230,13 +231,13 @@ const ModalApproveRequest = ({
                 <div className="mt-2">
                   <div className="flex justify-between items-center">
                     <p className="font-bold">Biên bản bàn giao:</p>
-
                     <a
                       href={fileUrl ?? ""}
                       download={filename}
-                      className="text-sm ml-2 px-2 py-1 bg-gray-100 rounded"
+                      target="_blank"
+                      rel="noreferrer"
                     >
-                      Tải xuống
+                      <Button icon={<DownloadOutlined />}>Tải xuống</Button>
                     </a>
                   </div>
                   <div className="">

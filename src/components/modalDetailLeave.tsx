@@ -2,7 +2,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { DatePicker, Drawer, Form, InputNumber, Select, message } from "antd";
+import {
+  Button,
+  DatePicker,
+  Drawer,
+  Form,
+  InputNumber,
+  Select,
+  message,
+} from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -12,6 +20,7 @@ import InfoPersonal from "./infoPersonal";
 // import { RequestLeave } from "./api";
 import { StatusLeave } from "./function";
 import { useAppSelector } from "@/store/hook";
+import { DownloadOutlined } from "@ant-design/icons";
 
 // Extend plugin
 dayjs.extend(utc);
@@ -352,30 +361,21 @@ const ModalDetailLeave = ({
                     infoRequetLeave?.handoverFileId ?? file?.id ?? null;
                   const filename =
                     file?.filename ?? file?.name ?? `File-${fileId}`;
-                  const mime = file?.mimeType ?? file?.mime ?? "";
 
                   // URL để tải / xem — endpoint bạn đã có: /api/files/:id
-                  const fileUrl =
-                    file?.url ?? (fileId ? `/api/files/${fileId}` : null);
-
-                  // helper: là ảnh?
-                  const isImage =
-                    mime?.startsWith?.("image/") ||
-                    /\.(jpe?g|png|gif|webp)$/i.test(filename);
-                  const isPdf =
-                    mime === "application/pdf" || /\.pdf$/i.test(filename);
-
+                  const fileUrl = fileId ? `/api/files/${fileId}` : null;
                   return (
                     <div className="mt-2">
                       <div className="flex justify-between items-center">
                         <p className="font-bold">Biên bản bàn giao:</p>
 
                         <a
-                          href={fileUrl}
+                          href={fileUrl ?? ""}
                           download={filename}
-                          className="text-sm ml-2 px-2 py-1 bg-gray-100 rounded"
+                          target="_blank"
+                          rel="noreferrer"
                         >
-                          Tải xuống
+                          <Button icon={<DownloadOutlined />}>Tải xuống</Button>
                         </a>
                       </div>
                       <div className="">
@@ -398,34 +398,6 @@ const ModalDetailLeave = ({
                           </span>
                         )}
                       </div>
-
-                      {/* Preview: ảnh hoặc PDF */}
-                      {isImage && fileUrl && (
-                        <div className="mt-2">
-                          {/* Dùng <img> thay vì next/image để dễ hiển thị URL blob */}
-                          <img
-                            src={fileUrl}
-                            alt={filename}
-                            className="max-h-64 rounded border"
-                            style={{ maxWidth: "100%", objectFit: "contain" }}
-                          />
-                        </div>
-                      )}
-
-                      {isPdf && fileUrl && (
-                        <div className="mt-2 border rounded overflow-hidden">
-                          {/* nhỏ gọn — nếu muốn xem lớn hơn thì mở tab bằng link 'Mở' */}
-                          <iframe
-                            src={fileUrl}
-                            title={filename}
-                            style={{
-                              width: "100%",
-                              height: 400,
-                              border: "none",
-                            }}
-                          />
-                        </div>
-                      )}
                     </div>
                   );
                 })()
