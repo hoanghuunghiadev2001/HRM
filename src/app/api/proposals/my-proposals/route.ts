@@ -148,7 +148,7 @@ export async function GET(request: NextRequest) {
     const need_to_approve_filtered = need_to_approve_all.filter((p) => {
       const pending = p.approvers.filter((a) => a.status === "pending");
       if (pending.length === 0) return false;
-      const minLevel = Math.min(...pending.map((a) => a.level));
+      const minLevel = Math.min(...pending.map((a) => Number(a.level)));
       return pending.some(
         (a) => a.level === minLevel && a.approverId === employeeId
       );
