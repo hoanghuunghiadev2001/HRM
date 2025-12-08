@@ -260,7 +260,7 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
           fileList={fileList}
           onRemove={handleRemove}
           maxCount={1}
-          accept=".pdf,.jpg,.jpeg,.png"
+          accept=".pdf"
           multiple={false}
           showUploadList={{ showRemoveIcon: true }}
           // không dùng action để tránh upload tự động
@@ -269,7 +269,7 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
           <Button icon={<UploadOutlined />}>Chọn file</Button>
         </Upload>
         <p className="text-sm text-gray-500 mt-2">
-          File tối đa 10MB. Định dạng: pdf, doc, docx, jpg, png.
+          File tối đa 10MB. Định dạng: pdf.
         </p>
       </div>
       {errorMsg && (

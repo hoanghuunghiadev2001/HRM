@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
 
-    if (!decoded.role || decoded.role === "USER") {
+    if (!decoded.role) {
       return NextResponse.json(
         { message: "Không có quyền xem danh sách" },
         { status: 403 }
@@ -39,7 +39,9 @@ export async function GET(req: NextRequest) {
     const status = url.searchParams.get("status") as LeaveStatus | undefined;
     const startDate = url.searchParams.get("startDate");
 
-    // Build filter nhân viên
+    // --------------------------
+    // 🔹 FILTER EMPLOYEE
+    // --------------------------
     const employeeFilter: Prisma.EmployeeWhereInput = {};
 
     if (decoded.role === "ADMIN") {
@@ -57,12 +59,17 @@ export async function GET(req: NextRequest) {
       if (name) employeeFilter.name = { contains: name };
       if (employeeCode)
         employeeFilter.employeeCode = { contains: employeeCode };
+    } else if (decoded.role === "USER") {
+      // USER chỉ thấy đơn của chính mình
+      employeeFilter.id = decoded.id;
     }
 
-    // Build filter leave request
+    // --------------------------
+    // 🔹 FILTER LEAVE REQUEST
+    // --------------------------
     const filterDate = startDate ? new Date(startDate) : undefined;
+
     const leaveFilter: Prisma.LeaveRequestWhereInput = {
-      employee: employeeFilter,
       status: status ? status : undefined,
       ...(filterDate
         ? {
@@ -74,7 +81,30 @@ export async function GET(req: NextRequest) {
         : {}),
     };
 
-    // Lấy dữ liệu
+    // ADMIN + MANAGER → xem theo employeeFilter
+    if (decoded.role !== "USER") {
+      leaveFilter.employee = employeeFilter;
+    } else {
+      // USER → thấy đơn của mình + đơn mình là người duyệt
+      leaveFilter.OR = [
+        { employeeId: decoded.id },
+        {
+          approvalSteps: {
+            some: {
+              approvers: {
+                some: {
+                  approverId: decoded.id, // mình là người ký duyệt
+                },
+              },
+            },
+          },
+        },
+      ];
+    }
+
+    // --------------------------
+    // 🔹 QUERY DATABASE
+    // --------------------------
     const [data, total] = await Promise.all([
       prisma.leaveRequest.findMany({
         where: leaveFilter,
@@ -105,12 +135,16 @@ export async function GET(req: NextRequest) {
       }),
       prisma.leaveRequest.count({ where: leaveFilter }),
     ]);
+
     const statusMap: Record<string, string> = {
       approved: "Đã duyệt",
       rejected: "Từ chối",
       pending: "Đang chờ",
     };
-    // Map dữ liệu
+
+    // --------------------------
+    // 🔹 MAP KẾT QUẢ
+    // --------------------------
     const processedData = data.map((req) => {
       const approvalHistory = req.approvalSteps.flatMap((step) =>
         step.approvers.map((a) => ({
@@ -187,7 +221,7 @@ export async function PUT(req: NextRequest) {
     if (leaveType) dataToUpdate.leaveType = leaveType;
     if (startDate) dataToUpdate.startDate = new Date(startDate);
     if (endDate) dataToUpdate.endDate = new Date(endDate);
-    if (typeof totalHours === "number") dataToUpdate.totalHours = totalHours; // <-- thêm dòng này
+    if (typeof totalHours === "number") dataToUpdate.totalHours = totalHours;
 
     if (dataToUpdate.startDate && dataToUpdate.endDate) {
       if (dataToUpdate.startDate > dataToUpdate.endDate) {

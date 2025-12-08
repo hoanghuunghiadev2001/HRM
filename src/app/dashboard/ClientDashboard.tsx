@@ -138,15 +138,11 @@ export default function ClientDashboard({
       label: "Chấm công",
     },
 
-    ...(isAdmin === "ADMIN" || isAdmin === "MANAGER"
-      ? [
-          {
-            key: "/dashboard/allRequests",
-            icon: <FileStack />,
-            label: "DS yêu cầu",
-          },
-        ]
-      : []),
+    {
+      key: "/dashboard/allRequests",
+      icon: <FileStack />,
+      label: "DS yêu cầu",
+    },
     ...(isAdmin === "ADMIN"
       ? [
           {

@@ -202,9 +202,7 @@ export default function AllRequestPage() {
     userId: number
   ): Promise<PendingApprovalItem[]> => {
     try {
-      const res = await fetch(
-        `/api/leave/all-requests-need-approve?userId=${userId}`
-      );
+      const res = await fetch(`/api/leave/all-requests-need-approve`);
       if (!res.ok) {
         throw new Error("Lấy danh sách cần phê duyệt thất bại");
       }

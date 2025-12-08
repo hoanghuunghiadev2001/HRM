@@ -22,13 +22,6 @@ export async function GET(req: NextRequest) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
     const userId = decoded.id;
 
-    if (!decoded.role || decoded.role === "USER") {
-      return NextResponse.json(
-        { message: "Không có quyền xem" },
-        { status: 403 }
-      );
-    }
-
     // 🔹 Lấy tất cả đơn nghỉ mà user là approver đang pending
     const pendingSteps = await prisma.leaveApprovalStep.findMany({
       where: {
