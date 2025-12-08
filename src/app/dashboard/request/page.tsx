@@ -64,6 +64,7 @@ export interface CreateLeavePayload {
   reason: string;
   totalHours: string;
   approverIds: number[];
+  handoverFile?: File | null; // ← thêm file
 }
 
 export default function RequestPage() {
@@ -137,15 +138,25 @@ export default function RequestPage() {
   };
 
   // Tạo đơn mới
+  // Tạo đơn mới — gửi multipart/form-data (data JSON + file)
   const CreateRequestLeave = async (payload: CreateLeavePayload) => {
     try {
       setLoading(true);
+
+      // Tách file ra để gửi riêng
+      const { handoverFile, ...rest } = payload as any;
+
+      const formData = new FormData();
+      formData.append("data", JSON.stringify({ payload: rest }));
+
+      if (handoverFile) {
+        formData.append("handoverFile", handoverFile);
+      }
+
       const res = await fetch("/api/leave/create-requests", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          payload,
-        }),
+        body: formData,
+        // NOTE: không set Content-Type — browser tự đặt multipart boundary
       });
 
       const data = await res.json();
@@ -164,10 +175,11 @@ export default function RequestPage() {
         setCreateRequest(false);
         getRequestsLeave();
       }
-    } catch {
+    } catch (err) {
+      console.error(err);
       message.error("Lỗi gửi đơn nghỉ");
       messageApi.open({
-        type: "success",
+        type: "error",
         content: "Lỗi gửi đơn nghỉ",
       });
     } finally {

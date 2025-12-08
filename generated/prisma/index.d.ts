@@ -2623,10 +2623,12 @@ export namespace Prisma {
 
   export type FileCountOutputType = {
     proposals: number
+    leaveRequests: number
   }
 
   export type FileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     proposals?: boolean | FileCountOutputTypeCountProposalsArgs
+    leaveRequests?: boolean | FileCountOutputTypeCountLeaveRequestsArgs
   }
 
   // Custom InputTypes
@@ -2645,6 +2647,13 @@ export namespace Prisma {
    */
   export type FileCountOutputTypeCountProposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProposalWhereInput
+  }
+
+  /**
+   * FileCountOutputType without action
+   */
+  export type FileCountOutputTypeCountLeaveRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeaveRequestWhereInput
   }
 
 
@@ -3329,6 +3338,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     proposals?: boolean | File$proposalsArgs<ExtArgs>
+    leaveRequests?: boolean | File$leaveRequestsArgs<ExtArgs>
     _count?: boolean | FileCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["file"]>
 
@@ -3347,6 +3357,7 @@ export namespace Prisma {
   export type FileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filename" | "mimeType" | "fileSize" | "data" | "createdAt" | "updatedAt", ExtArgs["result"]["file"]>
   export type FileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     proposals?: boolean | File$proposalsArgs<ExtArgs>
+    leaveRequests?: boolean | File$leaveRequestsArgs<ExtArgs>
     _count?: boolean | FileCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -3354,6 +3365,7 @@ export namespace Prisma {
     name: "File"
     objects: {
       proposals: Prisma.$ProposalPayload<ExtArgs>[]
+      leaveRequests: Prisma.$LeaveRequestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -3704,6 +3716,7 @@ export namespace Prisma {
   export interface Prisma__FileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     proposals<T extends File$proposalsArgs<ExtArgs> = {}>(args?: Subset<T, File$proposalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    leaveRequests<T extends File$leaveRequestsArgs<ExtArgs> = {}>(args?: Subset<T, File$leaveRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4104,6 +4117,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProposalScalarFieldEnum | ProposalScalarFieldEnum[]
+  }
+
+  /**
+   * File.leaveRequests
+   */
+  export type File$leaveRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LeaveRequest
+     */
+    select?: LeaveRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LeaveRequest
+     */
+    omit?: LeaveRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LeaveRequestInclude<ExtArgs> | null
+    where?: LeaveRequestWhereInput
+    orderBy?: LeaveRequestOrderByWithRelationInput | LeaveRequestOrderByWithRelationInput[]
+    cursor?: LeaveRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LeaveRequestScalarFieldEnum | LeaveRequestScalarFieldEnum[]
   }
 
   /**
@@ -10870,12 +10907,14 @@ export namespace Prisma {
     id: number | null
     employeeId: number | null
     totalHours: number | null
+    handoverFileId: number | null
   }
 
   export type LeaveRequestSumAggregateOutputType = {
     id: number | null
     employeeId: number | null
     totalHours: number | null
+    handoverFileId: number | null
   }
 
   export type LeaveRequestMinAggregateOutputType = {
@@ -10891,6 +10930,7 @@ export namespace Prisma {
     approvedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    handoverFileId: number | null
   }
 
   export type LeaveRequestMaxAggregateOutputType = {
@@ -10906,6 +10946,7 @@ export namespace Prisma {
     approvedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    handoverFileId: number | null
   }
 
   export type LeaveRequestCountAggregateOutputType = {
@@ -10921,6 +10962,7 @@ export namespace Prisma {
     approvedAt: number
     createdAt: number
     updatedAt: number
+    handoverFileId: number
     _all: number
   }
 
@@ -10929,12 +10971,14 @@ export namespace Prisma {
     id?: true
     employeeId?: true
     totalHours?: true
+    handoverFileId?: true
   }
 
   export type LeaveRequestSumAggregateInputType = {
     id?: true
     employeeId?: true
     totalHours?: true
+    handoverFileId?: true
   }
 
   export type LeaveRequestMinAggregateInputType = {
@@ -10950,6 +10994,7 @@ export namespace Prisma {
     approvedAt?: true
     createdAt?: true
     updatedAt?: true
+    handoverFileId?: true
   }
 
   export type LeaveRequestMaxAggregateInputType = {
@@ -10965,6 +11010,7 @@ export namespace Prisma {
     approvedAt?: true
     createdAt?: true
     updatedAt?: true
+    handoverFileId?: true
   }
 
   export type LeaveRequestCountAggregateInputType = {
@@ -10980,6 +11026,7 @@ export namespace Prisma {
     approvedAt?: true
     createdAt?: true
     updatedAt?: true
+    handoverFileId?: true
     _all?: true
   }
 
@@ -11082,6 +11129,7 @@ export namespace Prisma {
     approvedAt: Date | null
     createdAt: Date
     updatedAt: Date
+    handoverFileId: number | null
     _count: LeaveRequestCountAggregateOutputType | null
     _avg: LeaveRequestAvgAggregateOutputType | null
     _sum: LeaveRequestSumAggregateOutputType | null
@@ -11116,8 +11164,10 @@ export namespace Prisma {
     approvedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    handoverFileId?: boolean
     approvalSteps?: boolean | LeaveRequest$approvalStepsArgs<ExtArgs>
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    handoverFile?: boolean | LeaveRequest$handoverFileArgs<ExtArgs>
     _count?: boolean | LeaveRequestCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["leaveRequest"]>
 
@@ -11136,12 +11186,14 @@ export namespace Prisma {
     approvedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    handoverFileId?: boolean
   }
 
-  export type LeaveRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "leaveType" | "startDate" | "endDate" | "totalHours" | "reason" | "status" | "approvedBy" | "approvedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["leaveRequest"]>
+  export type LeaveRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "leaveType" | "startDate" | "endDate" | "totalHours" | "reason" | "status" | "approvedBy" | "approvedAt" | "createdAt" | "updatedAt" | "handoverFileId", ExtArgs["result"]["leaveRequest"]>
   export type LeaveRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     approvalSteps?: boolean | LeaveRequest$approvalStepsArgs<ExtArgs>
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    handoverFile?: boolean | LeaveRequest$handoverFileArgs<ExtArgs>
     _count?: boolean | LeaveRequestCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -11150,6 +11202,7 @@ export namespace Prisma {
     objects: {
       approvalSteps: Prisma.$LeaveApprovalStepPayload<ExtArgs>[]
       employee: Prisma.$EmployeePayload<ExtArgs>
+      handoverFile: Prisma.$FilePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -11164,6 +11217,7 @@ export namespace Prisma {
       approvedAt: Date | null
       createdAt: Date
       updatedAt: Date
+      handoverFileId: number | null
     }, ExtArgs["result"]["leaveRequest"]>
     composites: {}
   }
@@ -11506,6 +11560,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     approvalSteps<T extends LeaveRequest$approvalStepsArgs<ExtArgs> = {}>(args?: Subset<T, LeaveRequest$approvalStepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveApprovalStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    handoverFile<T extends LeaveRequest$handoverFileArgs<ExtArgs> = {}>(args?: Subset<T, LeaveRequest$handoverFileArgs<ExtArgs>>): Prisma__FileClient<$Result.GetResult<Prisma.$FilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11547,6 +11602,7 @@ export namespace Prisma {
     readonly approvedAt: FieldRef<"LeaveRequest", 'DateTime'>
     readonly createdAt: FieldRef<"LeaveRequest", 'DateTime'>
     readonly updatedAt: FieldRef<"LeaveRequest", 'DateTime'>
+    readonly handoverFileId: FieldRef<"LeaveRequest", 'Int'>
   }
     
 
@@ -11911,6 +11967,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: LeaveApprovalStepScalarFieldEnum | LeaveApprovalStepScalarFieldEnum[]
+  }
+
+  /**
+   * LeaveRequest.handoverFile
+   */
+  export type LeaveRequest$handoverFileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the File
+     */
+    select?: FileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the File
+     */
+    omit?: FileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FileInclude<ExtArgs> | null
+    where?: FileWhereInput
   }
 
   /**
@@ -21202,8 +21277,8 @@ export namespace Prisma {
     approverId: number | null
     reason: string | null
     status: $Enums.LeaveStatus | null
-    approvedAt: Date | null
     level: number | null
+    approvedAt: Date | null
   }
 
   export type ProposalApproverMaxAggregateOutputType = {
@@ -21212,8 +21287,8 @@ export namespace Prisma {
     approverId: number | null
     reason: string | null
     status: $Enums.LeaveStatus | null
-    approvedAt: Date | null
     level: number | null
+    approvedAt: Date | null
   }
 
   export type ProposalApproverCountAggregateOutputType = {
@@ -21222,8 +21297,8 @@ export namespace Prisma {
     approverId: number
     reason: number
     status: number
-    approvedAt: number
     level: number
+    approvedAt: number
     _all: number
   }
 
@@ -21248,8 +21323,8 @@ export namespace Prisma {
     approverId?: true
     reason?: true
     status?: true
-    approvedAt?: true
     level?: true
+    approvedAt?: true
   }
 
   export type ProposalApproverMaxAggregateInputType = {
@@ -21258,8 +21333,8 @@ export namespace Prisma {
     approverId?: true
     reason?: true
     status?: true
-    approvedAt?: true
     level?: true
+    approvedAt?: true
   }
 
   export type ProposalApproverCountAggregateInputType = {
@@ -21268,8 +21343,8 @@ export namespace Prisma {
     approverId?: true
     reason?: true
     status?: true
-    approvedAt?: true
     level?: true
+    approvedAt?: true
     _all?: true
   }
 
@@ -21365,8 +21440,8 @@ export namespace Prisma {
     approverId: number
     reason: string | null
     status: $Enums.LeaveStatus
+    level: number | null
     approvedAt: Date | null
-    level: number
     _count: ProposalApproverCountAggregateOutputType | null
     _avg: ProposalApproverAvgAggregateOutputType | null
     _sum: ProposalApproverSumAggregateOutputType | null
@@ -21394,8 +21469,8 @@ export namespace Prisma {
     approverId?: boolean
     reason?: boolean
     status?: boolean
-    approvedAt?: boolean
     level?: boolean
+    approvedAt?: boolean
     approver?: boolean | EmployeeDefaultArgs<ExtArgs>
     proposal?: boolean | ProposalDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["proposalApprover"]>
@@ -21408,11 +21483,11 @@ export namespace Prisma {
     approverId?: boolean
     reason?: boolean
     status?: boolean
-    approvedAt?: boolean
     level?: boolean
+    approvedAt?: boolean
   }
 
-  export type ProposalApproverOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "proposalId" | "approverId" | "reason" | "status" | "approvedAt" | "level", ExtArgs["result"]["proposalApprover"]>
+  export type ProposalApproverOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "proposalId" | "approverId" | "reason" | "status" | "level" | "approvedAt", ExtArgs["result"]["proposalApprover"]>
   export type ProposalApproverInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     approver?: boolean | EmployeeDefaultArgs<ExtArgs>
     proposal?: boolean | ProposalDefaultArgs<ExtArgs>
@@ -21430,8 +21505,8 @@ export namespace Prisma {
       approverId: number
       reason: string | null
       status: $Enums.LeaveStatus
+      level: number | null
       approvedAt: Date | null
-      level: number
     }, ExtArgs["result"]["proposalApprover"]>
     composites: {}
   }
@@ -21808,8 +21883,8 @@ export namespace Prisma {
     readonly approverId: FieldRef<"ProposalApprover", 'Int'>
     readonly reason: FieldRef<"ProposalApprover", 'String'>
     readonly status: FieldRef<"ProposalApprover", 'LeaveStatus'>
-    readonly approvedAt: FieldRef<"ProposalApprover", 'DateTime'>
     readonly level: FieldRef<"ProposalApprover", 'Int'>
+    readonly approvedAt: FieldRef<"ProposalApprover", 'DateTime'>
   }
     
 
@@ -25314,7 +25389,8 @@ export namespace Prisma {
     approvedBy: 'approvedBy',
     approvedAt: 'approvedAt',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    handoverFileId: 'handoverFileId'
   };
 
   export type LeaveRequestScalarFieldEnum = (typeof LeaveRequestScalarFieldEnum)[keyof typeof LeaveRequestScalarFieldEnum]
@@ -25444,8 +25520,8 @@ export namespace Prisma {
     approverId: 'approverId',
     reason: 'reason',
     status: 'status',
-    approvedAt: 'approvedAt',
-    level: 'level'
+    level: 'level',
+    approvedAt: 'approvedAt'
   };
 
   export type ProposalApproverScalarFieldEnum = (typeof ProposalApproverScalarFieldEnum)[keyof typeof ProposalApproverScalarFieldEnum]
@@ -25760,6 +25836,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"File"> | Date | string
     updatedAt?: DateTimeFilter<"File"> | Date | string
     proposals?: ProposalListRelationFilter
+    leaveRequests?: LeaveRequestListRelationFilter
   }
 
   export type FileOrderByWithRelationInput = {
@@ -25771,6 +25848,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     proposals?: ProposalOrderByRelationAggregateInput
+    leaveRequests?: LeaveRequestOrderByRelationAggregateInput
     _relevance?: FileOrderByRelevanceInput
   }
 
@@ -25786,6 +25864,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"File"> | Date | string
     updatedAt?: DateTimeFilter<"File"> | Date | string
     proposals?: ProposalListRelationFilter
+    leaveRequests?: LeaveRequestListRelationFilter
   }, "id">
 
   export type FileOrderByWithAggregationInput = {
@@ -26366,8 +26445,10 @@ export namespace Prisma {
     approvedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
     updatedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
+    handoverFileId?: IntNullableFilter<"LeaveRequest"> | number | null
     approvalSteps?: LeaveApprovalStepListRelationFilter
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    handoverFile?: XOR<FileNullableScalarRelationFilter, FileWhereInput> | null
   }
 
   export type LeaveRequestOrderByWithRelationInput = {
@@ -26383,8 +26464,10 @@ export namespace Prisma {
     approvedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    handoverFileId?: SortOrderInput | SortOrder
     approvalSteps?: LeaveApprovalStepOrderByRelationAggregateInput
     employee?: EmployeeOrderByWithRelationInput
+    handoverFile?: FileOrderByWithRelationInput
     _relevance?: LeaveRequestOrderByRelevanceInput
   }
 
@@ -26404,8 +26487,10 @@ export namespace Prisma {
     approvedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
     createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
     updatedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
+    handoverFileId?: IntNullableFilter<"LeaveRequest"> | number | null
     approvalSteps?: LeaveApprovalStepListRelationFilter
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    handoverFile?: XOR<FileNullableScalarRelationFilter, FileWhereInput> | null
   }, "id">
 
   export type LeaveRequestOrderByWithAggregationInput = {
@@ -26421,6 +26506,7 @@ export namespace Prisma {
     approvedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    handoverFileId?: SortOrderInput | SortOrder
     _count?: LeaveRequestCountOrderByAggregateInput
     _avg?: LeaveRequestAvgOrderByAggregateInput
     _max?: LeaveRequestMaxOrderByAggregateInput
@@ -26444,6 +26530,7 @@ export namespace Prisma {
     approvedAt?: DateTimeNullableWithAggregatesFilter<"LeaveRequest"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"LeaveRequest"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"LeaveRequest"> | Date | string
+    handoverFileId?: IntNullableWithAggregatesFilter<"LeaveRequest"> | number | null
   }
 
   export type LeaveApprovalStepWhereInput = {
@@ -27109,8 +27196,8 @@ export namespace Prisma {
     approverId?: IntFilter<"ProposalApprover"> | number
     reason?: StringNullableFilter<"ProposalApprover"> | string | null
     status?: EnumLeaveStatusFilter<"ProposalApprover"> | $Enums.LeaveStatus
+    level?: IntNullableFilter<"ProposalApprover"> | number | null
     approvedAt?: DateTimeNullableFilter<"ProposalApprover"> | Date | string | null
-    level?: IntFilter<"ProposalApprover"> | number
     approver?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     proposal?: XOR<ProposalScalarRelationFilter, ProposalWhereInput>
   }
@@ -27121,8 +27208,8 @@ export namespace Prisma {
     approverId?: SortOrder
     reason?: SortOrderInput | SortOrder
     status?: SortOrder
+    level?: SortOrderInput | SortOrder
     approvedAt?: SortOrderInput | SortOrder
-    level?: SortOrder
     approver?: EmployeeOrderByWithRelationInput
     proposal?: ProposalOrderByWithRelationInput
     _relevance?: ProposalApproverOrderByRelevanceInput
@@ -27138,8 +27225,8 @@ export namespace Prisma {
     approverId?: IntFilter<"ProposalApprover"> | number
     reason?: StringNullableFilter<"ProposalApprover"> | string | null
     status?: EnumLeaveStatusFilter<"ProposalApprover"> | $Enums.LeaveStatus
+    level?: IntNullableFilter<"ProposalApprover"> | number | null
     approvedAt?: DateTimeNullableFilter<"ProposalApprover"> | Date | string | null
-    level?: IntFilter<"ProposalApprover"> | number
     approver?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     proposal?: XOR<ProposalScalarRelationFilter, ProposalWhereInput>
   }, "id" | "proposalId_approverId">
@@ -27150,8 +27237,8 @@ export namespace Prisma {
     approverId?: SortOrder
     reason?: SortOrderInput | SortOrder
     status?: SortOrder
+    level?: SortOrderInput | SortOrder
     approvedAt?: SortOrderInput | SortOrder
-    level?: SortOrder
     _count?: ProposalApproverCountOrderByAggregateInput
     _avg?: ProposalApproverAvgOrderByAggregateInput
     _max?: ProposalApproverMaxOrderByAggregateInput
@@ -27168,8 +27255,8 @@ export namespace Prisma {
     approverId?: IntWithAggregatesFilter<"ProposalApprover"> | number
     reason?: StringNullableWithAggregatesFilter<"ProposalApprover"> | string | null
     status?: EnumLeaveStatusWithAggregatesFilter<"ProposalApprover"> | $Enums.LeaveStatus
+    level?: IntNullableWithAggregatesFilter<"ProposalApprover"> | number | null
     approvedAt?: DateTimeNullableWithAggregatesFilter<"ProposalApprover"> | Date | string | null
-    level?: IntWithAggregatesFilter<"ProposalApprover"> | number
   }
 
   export type EmailActionTokenWhereInput = {
@@ -27402,6 +27489,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposals?: ProposalCreateNestedManyWithoutFileInput
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutHandoverFileInput
   }
 
   export type FileUncheckedCreateInput = {
@@ -27413,6 +27501,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposals?: ProposalUncheckedCreateNestedManyWithoutFileInput
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutHandoverFileInput
   }
 
   export type FileUpdateInput = {
@@ -27423,6 +27512,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposals?: ProposalUpdateManyWithoutFileNestedInput
+    leaveRequests?: LeaveRequestUpdateManyWithoutHandoverFileNestedInput
   }
 
   export type FileUncheckedUpdateInput = {
@@ -27434,6 +27524,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposals?: ProposalUncheckedUpdateManyWithoutFileNestedInput
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutHandoverFileNestedInput
   }
 
   export type FileCreateManyInput = {
@@ -28036,6 +28127,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     approvalSteps?: LeaveApprovalStepCreateNestedManyWithoutLeaveRequestInput
     employee: EmployeeCreateNestedOneWithoutLeaveRequestInput
+    handoverFile?: FileCreateNestedOneWithoutLeaveRequestsInput
   }
 
   export type LeaveRequestUncheckedCreateInput = {
@@ -28051,6 +28143,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    handoverFileId?: number | null
     approvalSteps?: LeaveApprovalStepUncheckedCreateNestedManyWithoutLeaveRequestInput
   }
 
@@ -28067,6 +28160,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approvalSteps?: LeaveApprovalStepUpdateManyWithoutLeaveRequestNestedInput
     employee?: EmployeeUpdateOneRequiredWithoutLeaveRequestNestedInput
+    handoverFile?: FileUpdateOneWithoutLeaveRequestsNestedInput
   }
 
   export type LeaveRequestUncheckedUpdateInput = {
@@ -28082,6 +28176,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    handoverFileId?: NullableIntFieldUpdateOperationsInput | number | null
     approvalSteps?: LeaveApprovalStepUncheckedUpdateManyWithoutLeaveRequestNestedInput
   }
 
@@ -28098,6 +28193,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    handoverFileId?: number | null
   }
 
   export type LeaveRequestUpdateManyMutationInput = {
@@ -28126,6 +28222,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    handoverFileId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type LeaveApprovalStepCreateInput = {
@@ -28750,8 +28847,8 @@ export namespace Prisma {
   export type ProposalApproverCreateInput = {
     reason?: string | null
     status?: $Enums.LeaveStatus
+    level?: number | null
     approvedAt?: Date | string | null
-    level: number
     approver: EmployeeCreateNestedOneWithoutProposalApprovalsInput
     proposal: ProposalCreateNestedOneWithoutApproversInput
   }
@@ -28762,15 +28859,15 @@ export namespace Prisma {
     approverId: number
     reason?: string | null
     status?: $Enums.LeaveStatus
+    level?: number | null
     approvedAt?: Date | string | null
-    level: number
   }
 
   export type ProposalApproverUpdateInput = {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    level?: IntFieldUpdateOperationsInput | number
     approver?: EmployeeUpdateOneRequiredWithoutProposalApprovalsNestedInput
     proposal?: ProposalUpdateOneRequiredWithoutApproversNestedInput
   }
@@ -28781,8 +28878,8 @@ export namespace Prisma {
     approverId?: IntFieldUpdateOperationsInput | number
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    level?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProposalApproverCreateManyInput = {
@@ -28791,15 +28888,15 @@ export namespace Prisma {
     approverId: number
     reason?: string | null
     status?: $Enums.LeaveStatus
+    level?: number | null
     approvedAt?: Date | string | null
-    level: number
   }
 
   export type ProposalApproverUpdateManyMutationInput = {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    level?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProposalApproverUncheckedUpdateManyInput = {
@@ -28808,8 +28905,8 @@ export namespace Prisma {
     approverId?: IntFieldUpdateOperationsInput | number
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    level?: IntFieldUpdateOperationsInput | number
   }
 
   export type EmailActionTokenCreateInput = {
@@ -29085,7 +29182,17 @@ export namespace Prisma {
     none?: ProposalWhereInput
   }
 
+  export type LeaveRequestListRelationFilter = {
+    every?: LeaveRequestWhereInput
+    some?: LeaveRequestWhereInput
+    none?: LeaveRequestWhereInput
+  }
+
   export type ProposalOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LeaveRequestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -29363,12 +29470,6 @@ export namespace Prisma {
     none?: LeaveApprovalStepApproverWhereInput
   }
 
-  export type LeaveRequestListRelationFilter = {
-    every?: LeaveRequestWhereInput
-    some?: LeaveRequestWhereInput
-    none?: LeaveRequestWhereInput
-  }
-
   export type ProposalApproverListRelationFilter = {
     every?: ProposalApproverWhereInput
     some?: ProposalApproverWhereInput
@@ -29411,10 +29512,6 @@ export namespace Prisma {
   }
 
   export type LeaveApprovalStepApproverOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type LeaveRequestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -29824,6 +29921,11 @@ export namespace Prisma {
     none?: LeaveApprovalStepWhereInput
   }
 
+  export type FileNullableScalarRelationFilter = {
+    is?: FileWhereInput | null
+    isNot?: FileWhereInput | null
+  }
+
   export type LeaveApprovalStepOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -29847,12 +29949,14 @@ export namespace Prisma {
     approvedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    handoverFileId?: SortOrder
   }
 
   export type LeaveRequestAvgOrderByAggregateInput = {
     id?: SortOrder
     employeeId?: SortOrder
     totalHours?: SortOrder
+    handoverFileId?: SortOrder
   }
 
   export type LeaveRequestMaxOrderByAggregateInput = {
@@ -29868,6 +29972,7 @@ export namespace Prisma {
     approvedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    handoverFileId?: SortOrder
   }
 
   export type LeaveRequestMinOrderByAggregateInput = {
@@ -29883,12 +29988,14 @@ export namespace Prisma {
     approvedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    handoverFileId?: SortOrder
   }
 
   export type LeaveRequestSumOrderByAggregateInput = {
     id?: SortOrder
     employeeId?: SortOrder
     totalHours?: SortOrder
+    handoverFileId?: SortOrder
   }
 
   export type EnumLeaveTypeEnumWithAggregatesFilter<$PrismaModel = never> = {
@@ -30319,11 +30426,6 @@ export namespace Prisma {
     isNot?: VehicleWhereInput | null
   }
 
-  export type FileNullableScalarRelationFilter = {
-    is?: FileWhereInput | null
-    isNot?: FileWhereInput | null
-  }
-
   export type ProposalOrderByRelevanceInput = {
     fields: ProposalOrderByRelevanceFieldEnum | ProposalOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -30497,8 +30599,8 @@ export namespace Prisma {
     approverId?: SortOrder
     reason?: SortOrder
     status?: SortOrder
-    approvedAt?: SortOrder
     level?: SortOrder
+    approvedAt?: SortOrder
   }
 
   export type ProposalApproverAvgOrderByAggregateInput = {
@@ -30514,8 +30616,8 @@ export namespace Prisma {
     approverId?: SortOrder
     reason?: SortOrder
     status?: SortOrder
-    approvedAt?: SortOrder
     level?: SortOrder
+    approvedAt?: SortOrder
   }
 
   export type ProposalApproverMinOrderByAggregateInput = {
@@ -30524,8 +30626,8 @@ export namespace Prisma {
     approverId?: SortOrder
     reason?: SortOrder
     status?: SortOrder
-    approvedAt?: SortOrder
     level?: SortOrder
+    approvedAt?: SortOrder
   }
 
   export type ProposalApproverSumOrderByAggregateInput = {
@@ -30698,11 +30800,25 @@ export namespace Prisma {
     connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
   }
 
+  export type LeaveRequestCreateNestedManyWithoutHandoverFileInput = {
+    create?: XOR<LeaveRequestCreateWithoutHandoverFileInput, LeaveRequestUncheckedCreateWithoutHandoverFileInput> | LeaveRequestCreateWithoutHandoverFileInput[] | LeaveRequestUncheckedCreateWithoutHandoverFileInput[]
+    connectOrCreate?: LeaveRequestCreateOrConnectWithoutHandoverFileInput | LeaveRequestCreateOrConnectWithoutHandoverFileInput[]
+    createMany?: LeaveRequestCreateManyHandoverFileInputEnvelope
+    connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+  }
+
   export type ProposalUncheckedCreateNestedManyWithoutFileInput = {
     create?: XOR<ProposalCreateWithoutFileInput, ProposalUncheckedCreateWithoutFileInput> | ProposalCreateWithoutFileInput[] | ProposalUncheckedCreateWithoutFileInput[]
     connectOrCreate?: ProposalCreateOrConnectWithoutFileInput | ProposalCreateOrConnectWithoutFileInput[]
     createMany?: ProposalCreateManyFileInputEnvelope
     connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+  }
+
+  export type LeaveRequestUncheckedCreateNestedManyWithoutHandoverFileInput = {
+    create?: XOR<LeaveRequestCreateWithoutHandoverFileInput, LeaveRequestUncheckedCreateWithoutHandoverFileInput> | LeaveRequestCreateWithoutHandoverFileInput[] | LeaveRequestUncheckedCreateWithoutHandoverFileInput[]
+    connectOrCreate?: LeaveRequestCreateOrConnectWithoutHandoverFileInput | LeaveRequestCreateOrConnectWithoutHandoverFileInput[]
+    createMany?: LeaveRequestCreateManyHandoverFileInputEnvelope
+    connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -30739,6 +30855,20 @@ export namespace Prisma {
     deleteMany?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
   }
 
+  export type LeaveRequestUpdateManyWithoutHandoverFileNestedInput = {
+    create?: XOR<LeaveRequestCreateWithoutHandoverFileInput, LeaveRequestUncheckedCreateWithoutHandoverFileInput> | LeaveRequestCreateWithoutHandoverFileInput[] | LeaveRequestUncheckedCreateWithoutHandoverFileInput[]
+    connectOrCreate?: LeaveRequestCreateOrConnectWithoutHandoverFileInput | LeaveRequestCreateOrConnectWithoutHandoverFileInput[]
+    upsert?: LeaveRequestUpsertWithWhereUniqueWithoutHandoverFileInput | LeaveRequestUpsertWithWhereUniqueWithoutHandoverFileInput[]
+    createMany?: LeaveRequestCreateManyHandoverFileInputEnvelope
+    set?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+    disconnect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+    delete?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+    connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+    update?: LeaveRequestUpdateWithWhereUniqueWithoutHandoverFileInput | LeaveRequestUpdateWithWhereUniqueWithoutHandoverFileInput[]
+    updateMany?: LeaveRequestUpdateManyWithWhereWithoutHandoverFileInput | LeaveRequestUpdateManyWithWhereWithoutHandoverFileInput[]
+    deleteMany?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
+  }
+
   export type ProposalUncheckedUpdateManyWithoutFileNestedInput = {
     create?: XOR<ProposalCreateWithoutFileInput, ProposalUncheckedCreateWithoutFileInput> | ProposalCreateWithoutFileInput[] | ProposalUncheckedCreateWithoutFileInput[]
     connectOrCreate?: ProposalCreateOrConnectWithoutFileInput | ProposalCreateOrConnectWithoutFileInput[]
@@ -30751,6 +30881,20 @@ export namespace Prisma {
     update?: ProposalUpdateWithWhereUniqueWithoutFileInput | ProposalUpdateWithWhereUniqueWithoutFileInput[]
     updateMany?: ProposalUpdateManyWithWhereWithoutFileInput | ProposalUpdateManyWithWhereWithoutFileInput[]
     deleteMany?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
+  }
+
+  export type LeaveRequestUncheckedUpdateManyWithoutHandoverFileNestedInput = {
+    create?: XOR<LeaveRequestCreateWithoutHandoverFileInput, LeaveRequestUncheckedCreateWithoutHandoverFileInput> | LeaveRequestCreateWithoutHandoverFileInput[] | LeaveRequestUncheckedCreateWithoutHandoverFileInput[]
+    connectOrCreate?: LeaveRequestCreateOrConnectWithoutHandoverFileInput | LeaveRequestCreateOrConnectWithoutHandoverFileInput[]
+    upsert?: LeaveRequestUpsertWithWhereUniqueWithoutHandoverFileInput | LeaveRequestUpsertWithWhereUniqueWithoutHandoverFileInput[]
+    createMany?: LeaveRequestCreateManyHandoverFileInputEnvelope
+    set?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+    disconnect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+    delete?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+    connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
+    update?: LeaveRequestUpdateWithWhereUniqueWithoutHandoverFileInput | LeaveRequestUpdateWithWhereUniqueWithoutHandoverFileInput[]
+    updateMany?: LeaveRequestUpdateManyWithWhereWithoutHandoverFileInput | LeaveRequestUpdateManyWithWhereWithoutHandoverFileInput[]
+    deleteMany?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
   }
 
   export type ProposalCreateNestedManyWithoutVehicleInput = {
@@ -31716,6 +31860,12 @@ export namespace Prisma {
     connect?: EmployeeWhereUniqueInput
   }
 
+  export type FileCreateNestedOneWithoutLeaveRequestsInput = {
+    create?: XOR<FileCreateWithoutLeaveRequestsInput, FileUncheckedCreateWithoutLeaveRequestsInput>
+    connectOrCreate?: FileCreateOrConnectWithoutLeaveRequestsInput
+    connect?: FileWhereUniqueInput
+  }
+
   export type LeaveApprovalStepUncheckedCreateNestedManyWithoutLeaveRequestInput = {
     create?: XOR<LeaveApprovalStepCreateWithoutLeaveRequestInput, LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput> | LeaveApprovalStepCreateWithoutLeaveRequestInput[] | LeaveApprovalStepUncheckedCreateWithoutLeaveRequestInput[]
     connectOrCreate?: LeaveApprovalStepCreateOrConnectWithoutLeaveRequestInput | LeaveApprovalStepCreateOrConnectWithoutLeaveRequestInput[]
@@ -31759,6 +31909,16 @@ export namespace Prisma {
     upsert?: EmployeeUpsertWithoutLeaveRequestInput
     connect?: EmployeeWhereUniqueInput
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutLeaveRequestInput, EmployeeUpdateWithoutLeaveRequestInput>, EmployeeUncheckedUpdateWithoutLeaveRequestInput>
+  }
+
+  export type FileUpdateOneWithoutLeaveRequestsNestedInput = {
+    create?: XOR<FileCreateWithoutLeaveRequestsInput, FileUncheckedCreateWithoutLeaveRequestsInput>
+    connectOrCreate?: FileCreateOrConnectWithoutLeaveRequestsInput
+    upsert?: FileUpsertWithoutLeaveRequestsInput
+    disconnect?: FileWhereInput | boolean
+    delete?: FileWhereInput | boolean
+    connect?: FileWhereUniqueInput
+    update?: XOR<XOR<FileUpdateToOneWithWhereWithoutLeaveRequestsInput, FileUpdateWithoutLeaveRequestsInput>, FileUncheckedUpdateWithoutLeaveRequestsInput>
   }
 
   export type LeaveApprovalStepUncheckedUpdateManyWithoutLeaveRequestNestedInput = {
@@ -32778,6 +32938,47 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type LeaveRequestCreateWithoutHandoverFileInput = {
+    leaveType: $Enums.LeaveTypeEnum
+    startDate: Date | string
+    endDate: Date | string
+    totalHours?: number | null
+    reason?: string | null
+    status?: $Enums.LeaveStatus
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    approvalSteps?: LeaveApprovalStepCreateNestedManyWithoutLeaveRequestInput
+    employee: EmployeeCreateNestedOneWithoutLeaveRequestInput
+  }
+
+  export type LeaveRequestUncheckedCreateWithoutHandoverFileInput = {
+    id?: number
+    employeeId: number
+    leaveType: $Enums.LeaveTypeEnum
+    startDate: Date | string
+    endDate: Date | string
+    totalHours?: number | null
+    reason?: string | null
+    status?: $Enums.LeaveStatus
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    approvalSteps?: LeaveApprovalStepUncheckedCreateNestedManyWithoutLeaveRequestInput
+  }
+
+  export type LeaveRequestCreateOrConnectWithoutHandoverFileInput = {
+    where: LeaveRequestWhereUniqueInput
+    create: XOR<LeaveRequestCreateWithoutHandoverFileInput, LeaveRequestUncheckedCreateWithoutHandoverFileInput>
+  }
+
+  export type LeaveRequestCreateManyHandoverFileInputEnvelope = {
+    data: LeaveRequestCreateManyHandoverFileInput | LeaveRequestCreateManyHandoverFileInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProposalUpsertWithWhereUniqueWithoutFileInput = {
     where: ProposalWhereUniqueInput
     update: XOR<ProposalUpdateWithoutFileInput, ProposalUncheckedUpdateWithoutFileInput>
@@ -32813,6 +33014,41 @@ export namespace Prisma {
     startAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
     endAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
     dropoffPlace?: StringNullableFilter<"Proposal"> | string | null
+  }
+
+  export type LeaveRequestUpsertWithWhereUniqueWithoutHandoverFileInput = {
+    where: LeaveRequestWhereUniqueInput
+    update: XOR<LeaveRequestUpdateWithoutHandoverFileInput, LeaveRequestUncheckedUpdateWithoutHandoverFileInput>
+    create: XOR<LeaveRequestCreateWithoutHandoverFileInput, LeaveRequestUncheckedCreateWithoutHandoverFileInput>
+  }
+
+  export type LeaveRequestUpdateWithWhereUniqueWithoutHandoverFileInput = {
+    where: LeaveRequestWhereUniqueInput
+    data: XOR<LeaveRequestUpdateWithoutHandoverFileInput, LeaveRequestUncheckedUpdateWithoutHandoverFileInput>
+  }
+
+  export type LeaveRequestUpdateManyWithWhereWithoutHandoverFileInput = {
+    where: LeaveRequestScalarWhereInput
+    data: XOR<LeaveRequestUpdateManyMutationInput, LeaveRequestUncheckedUpdateManyWithoutHandoverFileInput>
+  }
+
+  export type LeaveRequestScalarWhereInput = {
+    AND?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
+    OR?: LeaveRequestScalarWhereInput[]
+    NOT?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
+    id?: IntFilter<"LeaveRequest"> | number
+    employeeId?: IntFilter<"LeaveRequest"> | number
+    leaveType?: EnumLeaveTypeEnumFilter<"LeaveRequest"> | $Enums.LeaveTypeEnum
+    startDate?: DateTimeFilter<"LeaveRequest"> | Date | string
+    endDate?: DateTimeFilter<"LeaveRequest"> | Date | string
+    totalHours?: FloatNullableFilter<"LeaveRequest"> | number | null
+    reason?: StringNullableFilter<"LeaveRequest"> | string | null
+    status?: EnumLeaveStatusFilter<"LeaveRequest"> | $Enums.LeaveStatus
+    approvedBy?: StringNullableFilter<"LeaveRequest"> | string | null
+    approvedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
+    createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
+    handoverFileId?: IntNullableFilter<"LeaveRequest"> | number | null
   }
 
   export type ProposalCreateWithoutVehicleInput = {
@@ -33172,6 +33408,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     approvalSteps?: LeaveApprovalStepCreateNestedManyWithoutLeaveRequestInput
+    handoverFile?: FileCreateNestedOneWithoutLeaveRequestsInput
   }
 
   export type LeaveRequestUncheckedCreateWithoutEmployeeInput = {
@@ -33186,6 +33423,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    handoverFileId?: number | null
     approvalSteps?: LeaveApprovalStepUncheckedCreateNestedManyWithoutLeaveRequestInput
   }
 
@@ -33296,8 +33534,8 @@ export namespace Prisma {
   export type ProposalApproverCreateWithoutApproverInput = {
     reason?: string | null
     status?: $Enums.LeaveStatus
+    level?: number | null
     approvedAt?: Date | string | null
-    level: number
     proposal: ProposalCreateNestedOneWithoutApproversInput
   }
 
@@ -33306,8 +33544,8 @@ export namespace Prisma {
     proposalId: number
     reason?: string | null
     status?: $Enums.LeaveStatus
+    level?: number | null
     approvedAt?: Date | string | null
-    level: number
   }
 
   export type ProposalApproverCreateOrConnectWithoutApproverInput = {
@@ -33758,24 +33996,6 @@ export namespace Prisma {
     data: XOR<LeaveRequestUpdateManyMutationInput, LeaveRequestUncheckedUpdateManyWithoutEmployeeInput>
   }
 
-  export type LeaveRequestScalarWhereInput = {
-    AND?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
-    OR?: LeaveRequestScalarWhereInput[]
-    NOT?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
-    id?: IntFilter<"LeaveRequest"> | number
-    employeeId?: IntFilter<"LeaveRequest"> | number
-    leaveType?: EnumLeaveTypeEnumFilter<"LeaveRequest"> | $Enums.LeaveTypeEnum
-    startDate?: DateTimeFilter<"LeaveRequest"> | Date | string
-    endDate?: DateTimeFilter<"LeaveRequest"> | Date | string
-    totalHours?: FloatNullableFilter<"LeaveRequest"> | number | null
-    reason?: StringNullableFilter<"LeaveRequest"> | string | null
-    status?: EnumLeaveStatusFilter<"LeaveRequest"> | $Enums.LeaveStatus
-    approvedBy?: StringNullableFilter<"LeaveRequest"> | string | null
-    approvedAt?: DateTimeNullableFilter<"LeaveRequest"> | Date | string | null
-    createdAt?: DateTimeFilter<"LeaveRequest"> | Date | string
-    updatedAt?: DateTimeFilter<"LeaveRequest"> | Date | string
-  }
-
   export type ProposalUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: ProposalWhereUniqueInput
     update: XOR<ProposalUpdateWithoutCreatedByInput, ProposalUncheckedUpdateWithoutCreatedByInput>
@@ -33833,8 +34053,8 @@ export namespace Prisma {
     approverId?: IntFilter<"ProposalApprover"> | number
     reason?: StringNullableFilter<"ProposalApprover"> | string | null
     status?: EnumLeaveStatusFilter<"ProposalApprover"> | $Enums.LeaveStatus
+    level?: IntNullableFilter<"ProposalApprover"> | number | null
     approvedAt?: DateTimeNullableFilter<"ProposalApprover"> | Date | string | null
-    level?: IntFilter<"ProposalApprover"> | number
   }
 
   export type ProposalSignerUpsertWithWhereUniqueWithoutSignerInput = {
@@ -34970,6 +35190,32 @@ export namespace Prisma {
     create: XOR<EmployeeCreateWithoutLeaveRequestInput, EmployeeUncheckedCreateWithoutLeaveRequestInput>
   }
 
+  export type FileCreateWithoutLeaveRequestsInput = {
+    filename: string
+    mimeType: string
+    fileSize: number
+    data: Uint8Array
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    proposals?: ProposalCreateNestedManyWithoutFileInput
+  }
+
+  export type FileUncheckedCreateWithoutLeaveRequestsInput = {
+    id?: number
+    filename: string
+    mimeType: string
+    fileSize: number
+    data: Uint8Array
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    proposals?: ProposalUncheckedCreateNestedManyWithoutFileInput
+  }
+
+  export type FileCreateOrConnectWithoutLeaveRequestsInput = {
+    where: FileWhereUniqueInput
+    create: XOR<FileCreateWithoutLeaveRequestsInput, FileUncheckedCreateWithoutLeaveRequestsInput>
+  }
+
   export type LeaveApprovalStepUpsertWithWhereUniqueWithoutLeaveRequestInput = {
     where: LeaveApprovalStepWhereUniqueInput
     update: XOR<LeaveApprovalStepUpdateWithoutLeaveRequestInput, LeaveApprovalStepUncheckedUpdateWithoutLeaveRequestInput>
@@ -35067,6 +35313,38 @@ export namespace Prisma {
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
+  export type FileUpsertWithoutLeaveRequestsInput = {
+    update: XOR<FileUpdateWithoutLeaveRequestsInput, FileUncheckedUpdateWithoutLeaveRequestsInput>
+    create: XOR<FileCreateWithoutLeaveRequestsInput, FileUncheckedCreateWithoutLeaveRequestsInput>
+    where?: FileWhereInput
+  }
+
+  export type FileUpdateToOneWithWhereWithoutLeaveRequestsInput = {
+    where?: FileWhereInput
+    data: XOR<FileUpdateWithoutLeaveRequestsInput, FileUncheckedUpdateWithoutLeaveRequestsInput>
+  }
+
+  export type FileUpdateWithoutLeaveRequestsInput = {
+    filename?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    data?: BytesFieldUpdateOperationsInput | Uint8Array
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposals?: ProposalUpdateManyWithoutFileNestedInput
+  }
+
+  export type FileUncheckedUpdateWithoutLeaveRequestsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    filename?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    data?: BytesFieldUpdateOperationsInput | Uint8Array
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposals?: ProposalUncheckedUpdateManyWithoutFileNestedInput
+  }
+
   export type LeaveRequestCreateWithoutApprovalStepsInput = {
     leaveType: $Enums.LeaveTypeEnum
     startDate: Date | string
@@ -35079,6 +35357,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     employee: EmployeeCreateNestedOneWithoutLeaveRequestInput
+    handoverFile?: FileCreateNestedOneWithoutLeaveRequestsInput
   }
 
   export type LeaveRequestUncheckedCreateWithoutApprovalStepsInput = {
@@ -35094,6 +35373,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    handoverFileId?: number | null
   }
 
   export type LeaveRequestCreateOrConnectWithoutApprovalStepsInput = {
@@ -35147,6 +35427,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     employee?: EmployeeUpdateOneRequiredWithoutLeaveRequestNestedInput
+    handoverFile?: FileUpdateOneWithoutLeaveRequestsNestedInput
   }
 
   export type LeaveRequestUncheckedUpdateWithoutApprovalStepsInput = {
@@ -35162,6 +35443,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    handoverFileId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type LeaveApprovalStepApproverUpsertWithWhereUniqueWithoutLeaveApprovalStepInput = {
@@ -36145,6 +36427,7 @@ export namespace Prisma {
     data: Uint8Array
     createdAt?: Date | string
     updatedAt?: Date | string
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutHandoverFileInput
   }
 
   export type FileUncheckedCreateWithoutProposalsInput = {
@@ -36155,6 +36438,7 @@ export namespace Prisma {
     data: Uint8Array
     createdAt?: Date | string
     updatedAt?: Date | string
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutHandoverFileInput
   }
 
   export type FileCreateOrConnectWithoutProposalsInput = {
@@ -36229,8 +36513,8 @@ export namespace Prisma {
   export type ProposalApproverCreateWithoutProposalInput = {
     reason?: string | null
     status?: $Enums.LeaveStatus
+    level?: number | null
     approvedAt?: Date | string | null
-    level: number
     approver: EmployeeCreateNestedOneWithoutProposalApprovalsInput
   }
 
@@ -36239,8 +36523,8 @@ export namespace Prisma {
     approverId: number
     reason?: string | null
     status?: $Enums.LeaveStatus
+    level?: number | null
     approvedAt?: Date | string | null
-    level: number
   }
 
   export type ProposalApproverCreateOrConnectWithoutProposalInput = {
@@ -36398,6 +36682,7 @@ export namespace Prisma {
     data?: BytesFieldUpdateOperationsInput | Uint8Array
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leaveRequests?: LeaveRequestUpdateManyWithoutHandoverFileNestedInput
   }
 
   export type FileUncheckedUpdateWithoutProposalsInput = {
@@ -36408,6 +36693,7 @@ export namespace Prisma {
     data?: BytesFieldUpdateOperationsInput | Uint8Array
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutHandoverFileNestedInput
   }
 
   export type EmployeeUpsertWithoutProposalsProposedInput = {
@@ -37338,6 +37624,21 @@ export namespace Prisma {
     dropoffPlace?: string | null
   }
 
+  export type LeaveRequestCreateManyHandoverFileInput = {
+    id?: number
+    employeeId: number
+    leaveType: $Enums.LeaveTypeEnum
+    startDate: Date | string
+    endDate: Date | string
+    totalHours?: number | null
+    reason?: string | null
+    status?: $Enums.LeaveStatus
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ProposalUpdateWithoutFileInput = {
     name?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -37390,6 +37691,52 @@ export namespace Prisma {
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type LeaveRequestUpdateWithoutHandoverFileInput = {
+    leaveType?: EnumLeaveTypeEnumFieldUpdateOperationsInput | $Enums.LeaveTypeEnum
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvalSteps?: LeaveApprovalStepUpdateManyWithoutLeaveRequestNestedInput
+    employee?: EmployeeUpdateOneRequiredWithoutLeaveRequestNestedInput
+  }
+
+  export type LeaveRequestUncheckedUpdateWithoutHandoverFileInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    leaveType?: EnumLeaveTypeEnumFieldUpdateOperationsInput | $Enums.LeaveTypeEnum
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvalSteps?: LeaveApprovalStepUncheckedUpdateManyWithoutLeaveRequestNestedInput
+  }
+
+  export type LeaveRequestUncheckedUpdateManyWithoutHandoverFileInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    leaveType?: EnumLeaveTypeEnumFieldUpdateOperationsInput | $Enums.LeaveTypeEnum
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalHours?: NullableFloatFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProposalCreateManyVehicleInput = {
@@ -37509,6 +37856,7 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    handoverFileId?: number | null
   }
 
   export type ProposalCreateManyCreatedByInput = {
@@ -37550,8 +37898,8 @@ export namespace Prisma {
     proposalId: number
     reason?: string | null
     status?: $Enums.LeaveStatus
+    level?: number | null
     approvedAt?: Date | string | null
-    level: number
   }
 
   export type ProposalSignerCreateManySignerInput = {
@@ -37736,6 +38084,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approvalSteps?: LeaveApprovalStepUpdateManyWithoutLeaveRequestNestedInput
+    handoverFile?: FileUpdateOneWithoutLeaveRequestsNestedInput
   }
 
   export type LeaveRequestUncheckedUpdateWithoutEmployeeInput = {
@@ -37750,6 +38099,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    handoverFileId?: NullableIntFieldUpdateOperationsInput | number | null
     approvalSteps?: LeaveApprovalStepUncheckedUpdateManyWithoutLeaveRequestNestedInput
   }
 
@@ -37765,6 +38115,7 @@ export namespace Prisma {
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    handoverFileId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ProposalUpdateWithoutCreatedByInput = {
@@ -37878,8 +38229,8 @@ export namespace Prisma {
   export type ProposalApproverUpdateWithoutApproverInput = {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    level?: IntFieldUpdateOperationsInput | number
     proposal?: ProposalUpdateOneRequiredWithoutApproversNestedInput
   }
 
@@ -37888,8 +38239,8 @@ export namespace Prisma {
     proposalId?: IntFieldUpdateOperationsInput | number
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    level?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProposalApproverUncheckedUpdateManyWithoutApproverInput = {
@@ -37897,8 +38248,8 @@ export namespace Prisma {
     proposalId?: IntFieldUpdateOperationsInput | number
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    level?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProposalSignerUpdateWithoutSignerInput = {
@@ -38328,8 +38679,8 @@ export namespace Prisma {
     approverId: number
     reason?: string | null
     status?: $Enums.LeaveStatus
+    level?: number | null
     approvedAt?: Date | string | null
-    level: number
   }
 
   export type ProposalSignerCreateManyProposalInput = {
@@ -38344,8 +38695,8 @@ export namespace Prisma {
   export type ProposalApproverUpdateWithoutProposalInput = {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    level?: IntFieldUpdateOperationsInput | number
     approver?: EmployeeUpdateOneRequiredWithoutProposalApprovalsNestedInput
   }
 
@@ -38354,8 +38705,8 @@ export namespace Prisma {
     approverId?: IntFieldUpdateOperationsInput | number
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    level?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProposalApproverUncheckedUpdateManyWithoutProposalInput = {
@@ -38363,8 +38714,8 @@ export namespace Prisma {
     approverId?: IntFieldUpdateOperationsInput | number
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    level?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProposalSignerUpdateWithoutProposalInput = {

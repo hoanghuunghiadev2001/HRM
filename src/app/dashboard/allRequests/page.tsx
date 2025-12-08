@@ -156,6 +156,7 @@ export interface PendingApprovalItem {
   department: string | null; // Tên phòng ban
   position: string | null; // Tên chức vụ
   currentStepLevel: number; // Level step hiện tại
+  handoverFileId: string | null;
   approversWhoApproved?: ApproverInfo[]; // Danh sách những người đã duyệt trước đó
 }
 

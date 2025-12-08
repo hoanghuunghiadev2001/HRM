@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -342,6 +343,98 @@ const ModalDetailLeave = ({
               </p>
               <div>{original?.trim()}</div>
             </div>
+            <div className="mt-4">
+              {infoRequetLeave?.handoverFile ||
+              infoRequetLeave?.handoverFileId ? (
+                (() => {
+                  const file = infoRequetLeave?.handoverFile ?? null;
+                  const fileId =
+                    infoRequetLeave?.handoverFileId ?? file?.id ?? null;
+                  const filename =
+                    file?.filename ?? file?.name ?? `File-${fileId}`;
+                  const mime = file?.mimeType ?? file?.mime ?? "";
+
+                  // URL để tải / xem — endpoint bạn đã có: /api/files/:id
+                  const fileUrl =
+                    file?.url ?? (fileId ? `/api/files/${fileId}` : null);
+
+                  // helper: là ảnh?
+                  const isImage =
+                    mime?.startsWith?.("image/") ||
+                    /\.(jpe?g|png|gif|webp)$/i.test(filename);
+                  const isPdf =
+                    mime === "application/pdf" || /\.pdf$/i.test(filename);
+
+                  return (
+                    <div className="mt-2">
+                      <div className="flex justify-between items-center">
+                        <p className="font-bold">Biên bản bàn giao:</p>
+
+                        <a
+                          href={fileUrl}
+                          download={filename}
+                          className="text-sm ml-2 px-2 py-1 bg-gray-100 rounded"
+                        >
+                          Tải xuống
+                        </a>
+                      </div>
+                      <div className="">
+                        {fileUrl ? (
+                          <>
+                            <div style={{ marginTop: 12 }}>
+                              <iframe
+                                src={`/api/files/view/${fileId}`}
+                                style={{
+                                  width: "100%",
+                                  height: "50vh",
+                                  border: "none",
+                                }}
+                              />
+                            </div>
+                          </>
+                        ) : (
+                          <span className="text-xs text-gray-500">
+                            Không có link file
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Preview: ảnh hoặc PDF */}
+                      {isImage && fileUrl && (
+                        <div className="mt-2">
+                          {/* Dùng <img> thay vì next/image để dễ hiển thị URL blob */}
+                          <img
+                            src={fileUrl}
+                            alt={filename}
+                            className="max-h-64 rounded border"
+                            style={{ maxWidth: "100%", objectFit: "contain" }}
+                          />
+                        </div>
+                      )}
+
+                      {isPdf && fileUrl && (
+                        <div className="mt-2 border rounded overflow-hidden">
+                          {/* nhỏ gọn — nếu muốn xem lớn hơn thì mở tab bằng link 'Mở' */}
+                          <iframe
+                            src={fileUrl}
+                            title={filename}
+                            style={{
+                              width: "100%",
+                              height: 400,
+                              border: "none",
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()
+              ) : (
+                <div className="text-sm text-gray-500 mt-2">
+                  Không có biên bản bàn giao đính kèm.
+                </div>
+              )}
+            </div>
             {rejectPart && (
               <p className="text-red-600 mt-2">
                 <b>Lý do từ chối:</b>{" "}
@@ -366,6 +459,7 @@ const ModalDetailLeave = ({
               value={infoRequetLeave?.approvedBy}
             />
           )}
+          {/* ===== Biên bản bàn giao (nếu có) ===== */}
 
           {/* --- Lịch sử phê duyệt --- */}
           {infoRequetLeave?.approvalHistory?.length > 0 && (

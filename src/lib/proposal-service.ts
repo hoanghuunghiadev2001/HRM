@@ -48,6 +48,7 @@ export class ProposalService {
         companyPhone: true,
         relativePhone: true,
         zalo_user_id: true,
+        email: true,
       },
     },
     // workInfo relation (position, department)

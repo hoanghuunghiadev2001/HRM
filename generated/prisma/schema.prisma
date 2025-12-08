@@ -15,27 +15,27 @@ enum ProposalType {
 }
 
 model File {
-  id        Int        @id @default(autoincrement())
-  filename  String
-  mimeType  String
-  fileSize  Int
-  data      Bytes
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  proposals Proposal[]
+  id            Int            @id @default(autoincrement())
+  filename      String
+  mimeType      String
+  fileSize      Int
+  data          Bytes
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  proposals     Proposal[]
+  leaveRequests LeaveRequest[] @relation("LeaveRequestHandoverFile")
 
   @@index([createdAt])
 }
 
 model Vehicle {
   id          Int      @id @default(autoincrement())
-  code        String   @unique // mã loại/xe, ví dụ: "CAR-7"
-  name        String // tên loại/xe, ví dụ: "Xe 7 chỗ"
-  plateNumber String?  @unique // biển số nếu là xe cụ thể (nullable nếu là loại chung)
+  code        String   @unique
+  name        String
+  plateNumber String?  @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  isBusy      Boolean  @default(false) // 👈 trạng thái xe
-  // quan hệ ngược (nếu cần)
+  isBusy      Boolean  @default(false)
 
   proposals Proposal[]
 }
@@ -154,6 +154,10 @@ model LeaveRequest {
   approvalSteps LeaveApprovalStep[]
   employee      Employee            @relation(fields: [employeeId], references: [id])
 
+  // ⭐ New: chỉ một file biên bản bàn giao
+  handoverFileId Int?
+  handoverFile   File? @relation("LeaveRequestHandoverFile", fields: [handoverFileId], references: [id])
+
   @@index([employeeId])
   @@index([status])
   @@index([startDate, endDate])
@@ -204,7 +208,7 @@ model Attendance {
   workingHours Float?
   importId     Int?
   importLog    AttendanceImportLog? @relation(fields: [importId], references: [id])
-  employee     Employee             @relation(fields: [employeeId], references: [id]) // 👈 thêm dòng này
+  employee     Employee             @relation(fields: [employeeId], references: [id])
 
   @@index([date])
   @@index([importId], map: "Attendance_importId_fkey")
@@ -262,14 +266,12 @@ model Proposal {
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 
-  // NEW fields for vehicle proposals
-  proposalType ProposalType @default(REGULAR) // phân biệt loại đề xuất
-  vehicleId    Int? // FK tới Vehicle (nullable)
-  startAt      DateTime? // giờ bắt đầu sử dụng xe
-  endAt        DateTime? // giờ kết thúc sử dụng xe
+  proposalType ProposalType @default(REGULAR)
+  vehicleId    Int?
+  startAt      DateTime?
+  endAt        DateTime?
   dropoffPlace String?
 
-  // relations
   vehicle   Vehicle?           @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
   createdBy Employee           @relation("ProposalCreatedBy", fields: [createdById], references: [id])
   file      File?              @relation(fields: [fileId], references: [id])
@@ -306,8 +308,8 @@ model ProposalApprover {
   approverId Int
   reason     String?     @db.Text
   status     LeaveStatus @default(pending)
+  level      Int?
   approvedAt DateTime?
-  level      Int
   approver   Employee    @relation(fields: [approverId], references: [id])
   proposal   Proposal    @relation(fields: [proposalId], references: [id], onDelete: Cascade)
 
@@ -320,8 +322,8 @@ model EmailActionToken {
   token      String    @unique
   proposalId Int
   actorId    String
-  role       String // "signer" | "approver"
-  action     String // "approve" | "reject"
+  role       String
+  action     String
   usedAt     DateTime?
   createdAt  DateTime  @default(now())
   expiresAt  DateTime
@@ -344,15 +346,13 @@ model AssetAssignment {
   id         Int      @id @default(autoincrement())
   assetId    Int
   employeeId Int
-  issuedById Int? // nullable → quan hệ phải nullable theo
+  issuedById Int?
   issuedAt   DateTime @default(now())
   quantity   Int      @default(1)
   note       String?
 
-  asset    Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
-  employee Employee @relation("EmployeeAsset", fields: [employeeId], references: [id], onDelete: Cascade)
-
-  // 👇 PHẢI OPTIONAL vì issuedById optional
+  asset    Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  employee Employee  @relation("EmployeeAsset", fields: [employeeId], references: [id], onDelete: Cascade)
   issuedBy Employee? @relation("IssuedAssets", fields: [issuedById], references: [id], onDelete: SetNull)
 
   @@index([employeeId])

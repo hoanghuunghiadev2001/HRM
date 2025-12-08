@@ -125,6 +125,7 @@ export async function GET(req: NextRequest) {
           reason: leaveReq.reason,
           currentStepLevel: step.level,
           status: leaveReq.status,
+          handoverFileId: leaveReq.handoverFileId,
           approversWhoApproved,
         };
       });

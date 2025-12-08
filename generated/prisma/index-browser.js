@@ -214,7 +214,8 @@ exports.Prisma.LeaveRequestScalarFieldEnum = {
   approvedBy: 'approvedBy',
   approvedAt: 'approvedAt',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  handoverFileId: 'handoverFileId'
 };
 
 exports.Prisma.LeaveApprovalStepScalarFieldEnum = {
@@ -314,8 +315,8 @@ exports.Prisma.ProposalApproverScalarFieldEnum = {
   approverId: 'approverId',
   reason: 'reason',
   status: 'status',
-  approvedAt: 'approvedAt',
-  level: 'level'
+  level: 'level',
+  approvedAt: 'approvedAt'
 };
 
 exports.Prisma.EmailActionTokenScalarFieldEnum = {

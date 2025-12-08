@@ -213,15 +213,21 @@ export default function ProposalCreatorPolished() {
       return;
     }
 
-    const signers = values.signers || [];
-    const approvers = values.approvers || [];
-
+    let signers = values.signers || [];
+    let approvers = values.approvers || [];
+    if (proposalType !== "REGULAR") {
+      approvers = Array.from(new Set([6, 132]));
+      signers = managerId ? [managerId] : [];
+    }
     if (signers.length === 0) {
+      console.log(1);
+
       message.error("Vui lòng chọn ít nhất một người ký");
       return;
     }
 
     if (approvers.length === 0) {
+      console.log(2);
       message.error("Vui lòng chọn ít nhất một người duyệt");
       return;
     }
@@ -418,7 +424,7 @@ export default function ProposalCreatorPolished() {
                   />
                   <Form.Item
                     name="dropoffPlace"
-                    label={<Text strong>Địa điểm trả</Text>}
+                    label={<Text strong>Địa điểm</Text>}
                   >
                     <Input placeholder="Nhập địa điểm trả xe" />
                   </Form.Item>

@@ -8,6 +8,13 @@ const withAnalyzer = withBundleAnalyzer({
 });
 
 const nextConfig = {
+  // tăng giới hạn kích thước body cho Server Actions — dùng số bytes (ví dụ 10 MB)
+  experimental: {
+    serverActions: {
+      bodySizeLimit: 10 * 1024 * 1024, // 10 MB in bytes
+    },
+  },
+
   reactStrictMode: false,
   transpilePackages: [
     "antd",
@@ -23,7 +30,7 @@ const nextConfig = {
   images: {
     domains: ["res.cloudinary.com"],
   },
-  webpack(config: { module: { rules: any[]; }; }) {
+  webpack(config: { module: { rules: any[] } }) {
     // Ant Design Less variables
     const lessRule = config.module.rules.find(
       (rule: any) => rule.test && rule.test.toString().includes("less")

@@ -127,7 +127,7 @@ const ModalNeedApproved = ({
       width: "100px",
       render: (_, record) => (
         <Space size="middle" onClick={() => handleOpenRequest(record.MSNV)}>
-          <a>Phê duyệt</a>
+          <a>Chi tiết</a>
         </Space>
       ),
     },

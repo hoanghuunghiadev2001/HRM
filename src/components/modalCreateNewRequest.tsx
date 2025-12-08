@@ -1,17 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import React, { useEffect, useState } from "react";
-import { DatePicker, Form, Modal, Select, Input, Spin } from "antd";
+import {
+  DatePicker,
+  Form,
+  Modal,
+  Select,
+  Input,
+  Spin,
+  Upload,
+  Button,
+  message,
+} from "antd";
+import type { RcFile, UploadFile } from "antd/es/upload/interface";
 import dayjs, { Dayjs } from "dayjs";
 import { NumericInput } from "./function";
 import { useAppSelector } from "@/store/hook";
 import { CreateLeavePayload } from "@/app/dashboard/request/page";
+import { UploadOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 interface EmployeeOption {
   label: string;
-  value: string; // employeeId
+  value: string | number; // employeeId
 }
 
 interface ModalCreateNewRequestProps {
@@ -49,6 +62,10 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
   const [approversList, setApproversList] = useState<EmployeeOption[]>([]);
   const [loadingApprovers, setLoadingApprovers] = useState<boolean>(false);
 
+  // File upload state (chỉ 1 file)
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
   // Load danh sách người duyệt từ backend
   const fetchApprovers = async () => {
     try {
@@ -79,18 +96,46 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
       setTimeRange(null);
       setSelectedApprovers([]);
       setErrorMsg("");
+      setFileList([]);
+      setSelectedFile(null);
       fetchApprovers();
     }
   }, [open]);
 
-  // const disabledDate = (current: Dayjs) => current && current.isBefore(dayjs().startOf("day"));
+  // Validate và chặn trước upload
+  const beforeUpload = (file: RcFile) => {
+    const isLt10M = file.size / 1024 / 1024 < 10;
+    if (!isLt10M) {
+      message.error("File phải nhỏ hơn 10MB!");
+      return Upload.LIST_IGNORE;
+    }
+    // Có thể thêm validate loại file nếu cần (pdf/doc/png...)
+    return true;
+  };
+
+  const handleUploadChange = ({
+    fileList: newList,
+  }: {
+    fileList: UploadFile[];
+  }) => {
+    // giữ 1 file cuối cùng
+    const last = newList.slice(-1);
+    setFileList(last);
+    const origin = last[0]?.originFileObj as File | undefined;
+    setSelectedFile(origin ?? null);
+  };
+
+  const handleRemove = () => {
+    setFileList([]);
+    setSelectedFile(null);
+  };
 
   const handleOk = () => {
+    setErrorMsg("");
     if (
       !id ||
       !leaveType ||
       !totalHours ||
-      !reason ||
       !timeRange ||
       selectedApprovers.length === 0
     ) {
@@ -98,7 +143,7 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
       return;
     }
 
-    createRequestLeave({
+    const payload: CreateLeavePayload = {
       employeeId: Number(id),
       leaveType,
       startDateTime: timeRange[0].toISOString(),
@@ -106,7 +151,10 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
       reason,
       totalHours,
       approverIds: selectedApprovers,
-    });
+      handoverFile: selectedFile ?? undefined,
+    };
+
+    createRequestLeave(payload);
   };
 
   return (
@@ -139,7 +187,6 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
           <span className="font-medium text-[#3a3a3a]">{position}</span>
         </div>
       </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <Form.Item label="Loại phép" required>
           <Select
@@ -158,14 +205,13 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
           />
         </div>
       </div>
-
       <div className="mb-4">
         <span className="font-bold text-[#242424]">Thời gian:</span>
         <RangePicker
           value={timeRange || undefined}
           showTime={{
             format: "HH:mm",
-            defaultValue: [dayjs("08:00", "HH:mm"), dayjs("17:00", "HH:mm")], // 👈 giờ mặc định hiển thị
+            defaultValue: [dayjs("08:00", "HH:mm"), dayjs("17:00", "HH:mm")],
           }}
           onChange={(dates) => {
             if (dates && dates[0] && dates[1])
@@ -176,7 +222,6 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
           style={{ width: "100%" }}
         />
       </div>
-
       <div className="mb-4">
         <span className="font-bold text-[#242424]">Người duyệt:</span>
         {loadingApprovers ? (
@@ -185,16 +230,17 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
           <Select
             mode="multiple"
             showSearch
-            optionFilterProp="label" // search dựa vào label
+            optionFilterProp="label"
             value={selectedApprovers}
-            onChange={setSelectedApprovers}
+            onChange={(vals) =>
+              setSelectedApprovers(vals.map((v: any) => Number(v)))
+            }
             options={approversList}
             placeholder="Chọn người duyệt theo thứ tự"
             style={{ width: "100%" }}
           />
         )}
       </div>
-
       <div className="mb-2">
         <span className="font-bold text-[#242424]">Lý do:</span>
         <TextArea
@@ -204,7 +250,28 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
           placeholder="Nhập lý do"
         />
       </div>
-
+      <div className="mb-4">
+        <span className="font-bold text-[#242424]">
+          Biên bản bàn giao (tùy chọn):
+        </span>
+        <Upload
+          beforeUpload={beforeUpload}
+          onChange={handleUploadChange}
+          fileList={fileList}
+          onRemove={handleRemove}
+          maxCount={1}
+          accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+          multiple={false}
+          showUploadList={{ showRemoveIcon: true }}
+          // không dùng action để tránh upload tự động
+          action={undefined}
+        >
+          <Button icon={<UploadOutlined />}>Chọn file</Button>
+        </Upload>
+        <p className="text-sm text-gray-500 mt-2">
+          File tối đa 10MB. Định dạng: pdf, doc, docx, jpg, png.
+        </p>
+      </div>
       {errorMsg && (
         <p className="text-center text-sm text-red-600 italic">{errorMsg}</p>
       )}

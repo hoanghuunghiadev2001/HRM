@@ -214,6 +214,75 @@ const ModalApproveRequest = ({
             disabled
           />
         </div>
+
+        <div className="mt-4">
+          {requestApprove?.handoverFileId ? (
+            (() => {
+              const fileId = requestApprove?.handoverFileId ?? null;
+              const filename = `File-${fileId}`;
+
+              // URL để tải / xem — endpoint bạn đã có: /api/files/:id
+              const fileUrl = fileId ? `/api/files/${fileId}` : null;
+
+              // helper: là ảnh?
+
+              return (
+                <div className="mt-2">
+                  <div className="flex justify-between items-center">
+                    <p className="font-bold">Biên bản bàn giao:</p>
+
+                    <a
+                      href={fileUrl ?? ""}
+                      download={filename}
+                      className="text-sm ml-2 px-2 py-1 bg-gray-100 rounded"
+                    >
+                      Tải xuống
+                    </a>
+                  </div>
+                  <div className="">
+                    {fileUrl ? (
+                      <>
+                        <div style={{ marginTop: 12 }}>
+                          <iframe
+                            src={`/api/files/view/${fileId}`}
+                            style={{
+                              width: "100%",
+                              height: "50vh",
+                              border: "none",
+                            }}
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <span className="text-xs text-gray-500">
+                        Không có link file
+                      </span>
+                    )}
+                  </div>
+
+                  {fileUrl && (
+                    <div className="mt-2 border rounded overflow-hidden">
+                      {/* nhỏ gọn — nếu muốn xem lớn hơn thì mở tab bằng link 'Mở' */}
+                      <iframe
+                        src={fileUrl}
+                        title={filename}
+                        style={{
+                          width: "100%",
+                          height: 400,
+                          border: "none",
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              );
+            })()
+          ) : (
+            <div className="text-sm text-gray-500 mt-2">
+              Không có biên bản bàn giao đính kèm.
+            </div>
+          )}
+        </div>
         <div>
           <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
             Lý do:
