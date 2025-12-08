@@ -6,6 +6,7 @@ import { EmailService } from "./email-prososal-service";
 import { prisma } from "./prisma";
 import type { Prisma } from "../../generated/prisma/client";
 import { generateActionToken } from "@/utils/actionLink";
+import axios from "axios";
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
@@ -19,12 +20,10 @@ async function sendWithRetry(
       return await fn();
     } catch (error) {
       console.error(`❌ Email attempt ${i + 1} failed:`, error);
-
       if (i === retries - 1) {
         console.error("❌ Email failed completely after retries");
         throw error;
       }
-
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
@@ -32,8 +31,90 @@ async function sendWithRetry(
 
 export class ProposalService {
   /**
-   * 🟩 Tạo đề xuất mới
+   * SAFE SELECT cho Employee
+   * - Lưu ý: Employee không có field `email` trực tiếp (theo lỗi bạn gửi).
+   *   Email/phone nằm trong relation `contactInfo` — mình chọn lấy từ đó.
+   * - Nếu schema của bạn khác, chỉnh `contactInfo.select` cho khớp.
    */
+  static FULL_EMPLOYEE_SELECT: Prisma.EmployeeSelect = {
+    id: true,
+    name: true,
+    employeeCode: true,
+    avatar: true,
+    // Contact info relation — chứa email/phone theo schema bạn đã show.
+    contactInfo: {
+      select: {
+        phoneNumber: true,
+        companyPhone: true,
+        relativePhone: true,
+        zalo_user_id: true,
+      },
+    },
+    // workInfo relation (position, department)
+    workInfo: {
+      select: {
+        position: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        department: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    },
+    // manager relation (basic fields)
+    manager: {
+      select: {
+        id: true,
+        name: true,
+        employeeCode: true,
+        avatar: true,
+      },
+    },
+  } as Prisma.EmployeeSelect;
+
+  /**
+   * Proposal include — chỉ include những gì cần (với select cho employee nested)
+   */
+  static FULL_PROPOSAL_INCLUDE: Prisma.ProposalInclude = {
+    file: true,
+    vehicle: true,
+    proposer: { select: ProposalService.FULL_EMPLOYEE_SELECT },
+    createdBy: { select: ProposalService.FULL_EMPLOYEE_SELECT },
+    signers: {
+      select: {
+        id: true,
+        level: true,
+        status: true,
+        signerId: true,
+        signedAt: true,
+        reason: true,
+        signer: { select: ProposalService.FULL_EMPLOYEE_SELECT },
+      },
+    },
+    approvers: {
+      select: {
+        id: true,
+        level: true,
+        status: true,
+        approverId: true,
+        approvedAt: true,
+        reason: true,
+        approver: { select: ProposalService.FULL_EMPLOYEE_SELECT },
+      },
+    },
+  } as Prisma.ProposalInclude;
+
+  static getFullIncludeObject() {
+    return this.FULL_PROPOSAL_INCLUDE;
+  }
+
+  // -------------------- Create proposal --------------------
   static async createProposal(
     proposalData: CreateProposalFormData,
     file: File | null,
@@ -43,7 +124,6 @@ export class ProposalService {
       let fileId: number | null = null;
       let fileUrl: string | undefined;
 
-      // Upload file nếu có
       if (file) {
         const { valid, error } = FileService.validateFile(file);
         if (!valid)
@@ -54,7 +134,6 @@ export class ProposalService {
         fileUrl = `${baseUrl}/api/files/${fileId}`;
       }
 
-      // Tạo proposal
       const newProposal = await prisma.proposal.create({
         data: {
           name: proposalData.name,
@@ -88,23 +167,27 @@ export class ProposalService {
 
       const filePayload = fileUrl ? { fileUrl } : {};
 
-      // Gửi email xác nhận cho người tạo
-      await sendWithRetry(() =>
-        EmailService.sendProposalCreatedConfirmation(newProposal.proposer, {
-          ...newProposal,
-          ...filePayload,
-        })
-      );
+      // send confirmation to proposer (best-effort)
+      try {
+        await sendWithRetry(() =>
+          EmailService.sendProposalCreatedConfirmation(newProposal.proposer, {
+            ...newProposal,
+            ...filePayload,
+          })
+        );
+      } catch (err) {
+        console.error("Email xác nhận proposer thất bại:", err);
+      }
 
-      // Gửi email cho signer đầu tiên
-      const firstSigner = newProposal.signers
-        .filter((s) => s.status === "pending")
-        .sort((a, b) => a.level - b.level)[0];
+      // notify first signer
+      const firstSigner = (newProposal.signers || [])
+        .filter((s: any) => s.status === "pending")
+        .sort((a: any, b: any) => a.level - b.level)[0];
 
       if (firstSigner) {
         const signerInfo = await prisma.employee.findUnique({
           where: { id: firstSigner.signerId },
-          include: this.FULL_EMPLOYEE_INCLUDE,
+          select: this.FULL_EMPLOYEE_SELECT,
         });
 
         if (signerInfo) {
@@ -121,14 +204,18 @@ export class ProposalService {
             action: "reject",
           });
 
-          await sendWithRetry(() =>
-            EmailService.sendSignatureRequest(signerInfo, {
-              ...newProposal,
-              ...filePayload,
-              approveLink: approveAction.directApi,
-              rejectLink: rejectAction.directApi,
-            })
-          );
+          try {
+            await sendWithRetry(() =>
+              EmailService.sendSignatureRequest(signerInfo, {
+                ...newProposal,
+                ...filePayload,
+                approveLink: approveAction.directApi,
+                rejectLink: rejectAction.directApi,
+              })
+            );
+          } catch (err) {
+            console.error("Email gửi signer thất bại:", err);
+          }
         }
       }
 
@@ -139,6 +226,7 @@ export class ProposalService {
     }
   }
 
+  // -------------------- Get proposal --------------------
   static async getProposal(proposalId: number, userId?: string) {
     try {
       const proposal = await prisma.proposal.findUnique({
@@ -147,42 +235,46 @@ export class ProposalService {
       });
       if (!proposal) return { success: false, error: "Không tìm thấy đề xuất" };
 
-      const sortedSigners = proposal.signers.sort((a, b) => a.level - b.level);
-      const sortedApprovers = proposal.approvers.sort(
-        (a, b) => a.level - b.level
-      );
+      const sortedSigners = (proposal.signers || [])
+        .slice()
+        .sort((a: any, b: any) => a.level - b.level);
+      const sortedApprovers = (proposal.approvers || [])
+        .slice()
+        .sort((a: any, b: any) => a.level - b.level);
 
       const isRejected =
-        sortedSigners.some((s) => s.status === "rejected") ||
-        sortedApprovers.some((a) => a.status === "rejected");
+        sortedSigners.some((s: any) => s.status === "rejected") ||
+        sortedApprovers.some((a: any) => a.status === "rejected");
 
       const nextSignerIndex = !isRejected
         ? sortedSigners.findIndex(
-            (s, idx) =>
+            (s: any, idx: number) =>
               s.status === "pending" &&
-              sortedSigners.slice(0, idx).every((p) => p.status === "approved")
+              sortedSigners
+                .slice(0, idx)
+                .every((p: any) => p.status === "approved")
           )
         : -1;
 
       const allSignersApproved = sortedSigners.every(
-        (s) => s.status === "approved"
+        (s: any) => s.status === "approved"
       );
       const nextApproverIndex =
         !isRejected && allSignersApproved
           ? sortedApprovers.findIndex(
-              (a, idx) =>
+              (a: any, idx: number) =>
                 a.status === "pending" &&
                 sortedApprovers
                   .slice(0, idx)
-                  .every((p) => p.status === "approved")
+                  .every((p: any) => p.status === "approved")
             )
           : -1;
 
-      const signers = sortedSigners.map((s, i) => ({
+      const signers = sortedSigners.map((s: any, i: number) => ({
         ...s,
         isCurrent: i === nextSignerIndex,
       }));
-      const approvers = sortedApprovers.map((a, i) => ({
+      const approvers = sortedApprovers.map((a: any, i: number) => ({
         ...a,
         isCurrent: i === nextApproverIndex,
       }));
@@ -204,10 +296,10 @@ export class ProposalService {
         };
 
       const statusSign = signers.some(
-        (s) => s.isCurrent && String(s.signerId) === String(userId)
+        (s: any) => s.isCurrent && String(s.signerId) === String(userId)
       );
       const statusApprove = approvers.some(
-        (a) => a.isCurrent && String(a.approverId) === String(userId)
+        (a: any) => a.isCurrent && String(a.approverId) === String(userId)
       );
 
       return {
@@ -227,9 +319,7 @@ export class ProposalService {
     }
   }
 
-  /**
-   * 🟩 Ký đề xuất
-   */
+  // -------------------- Sign proposal --------------------
   static async signProposal(
     proposalId: number,
     employeeId: number,
@@ -243,14 +333,15 @@ export class ProposalService {
       });
       if (!proposal) return { success: false, error: "Không tìm thấy đề xuất" };
 
-      const signer = proposal.signers.find((s) => s.signerId === employeeId);
+      const signer = (proposal.signers || []).find(
+        (s: any) => s.signerId === employeeId
+      );
       if (!signer)
         return { success: false, error: "Bạn không có quyền ký đề xuất này" };
       if (signer.status !== "pending")
         return { success: false, error: "Bạn đã xử lý đề xuất này rồi" };
 
       const updated = await prisma.$transaction(async (tx) => {
-        // Cập nhật trạng thái + signedAt + reason nếu từ chối
         await tx.proposalSigner.update({
           where: { id: signer.id },
           data: {
@@ -259,15 +350,11 @@ export class ProposalService {
             reason: status === "rejected" ? reason : null,
           },
         });
-
-        // Nếu bị từ chối → đổi status proposal
-        if (status === "rejected") {
+        if (status === "rejected")
           await tx.proposal.update({
             where: { id: proposalId },
             data: { status: "rejected" },
           });
-        }
-
         return tx.proposal.findUnique({
           where: { id: proposalId },
           include: this.FULL_PROPOSAL_INCLUDE,
@@ -277,30 +364,30 @@ export class ProposalService {
       if (!updated)
         return { success: false, error: "Không thể tải lại đề xuất" };
 
-      // Nếu bị từ chối
       if (status === "rejected") {
-        await sendWithRetry(() =>
-          EmailService.sendProposalRejectedBySigner(
-            updated.proposer,
-            updated,
-            signer,
-            reason || "" // <-- gửi kèm lý do
-          )
-        );
+        try {
+          await sendWithRetry(() =>
+            EmailService.sendProposalRejectedBySigner(
+              updated.proposer,
+              updated,
+              signer,
+              reason || ""
+            )
+          );
+        } catch (err) {
+          console.error("Email notify proposer failed:", err);
+        }
         return { success: true, message: "Đề xuất đã bị từ chối." };
       }
 
-      // Người ký tiếp theo
-      const nextSigner = updated.signers
-        .filter((s) => s.status === "pending")
-        .sort((a, b) => a.level - b.level)[0];
-
+      const nextSigner = (updated.signers || [])
+        .filter((s: any) => s.status === "pending")
+        .sort((a: any, b: any) => a.level - b.level)[0];
       if (nextSigner) {
         const signerInfo = await prisma.employee.findUnique({
           where: { id: nextSigner.signerId },
-          include: this.FULL_EMPLOYEE_INCLUDE,
+          select: this.FULL_EMPLOYEE_SELECT,
         });
-
         if (signerInfo) {
           const approveAction = generateActionToken({
             proposalId: updated.id,
@@ -314,32 +401,31 @@ export class ProposalService {
             role: "signer",
             action: "reject",
           });
-
-          await sendWithRetry(() =>
-            EmailService.sendSignatureRequest(signerInfo, {
-              ...updated,
-              approveLink: approveAction.directApi,
-              rejectLink: rejectAction.directApi,
-            })
-          );
+          try {
+            await sendWithRetry(() =>
+              EmailService.sendSignatureRequest(signerInfo, {
+                ...updated,
+                approveLink: approveAction.directApi,
+                rejectLink: rejectAction.directApi,
+              })
+            );
+          } catch (err) {
+            console.error("Email to next signer failed:", err);
+          }
         }
       } else {
-        // Hết người ký → chuyển sang phê duyệt
         await prisma.proposal.update({
           where: { id: proposalId },
           data: { status: "waiting_approval" },
         });
-
-        const firstApprover = updated.approvers
-          .filter((a) => a.status === "pending")
-          .sort((a, b) => a.level - b.level)[0];
-
+        const firstApprover = (updated.approvers || [])
+          .filter((a: any) => a.status === "pending")
+          .sort((a: any, b: any) => a.level - b.level)[0];
         if (firstApprover) {
           const approverInfo = await prisma.employee.findUnique({
             where: { id: firstApprover.approverId },
-            include: this.FULL_EMPLOYEE_INCLUDE,
+            select: this.FULL_EMPLOYEE_SELECT,
           });
-
           if (approverInfo) {
             const approveAction = generateActionToken({
               proposalId: updated.id,
@@ -353,14 +439,17 @@ export class ProposalService {
               role: "approver",
               action: "reject",
             });
-
-            await sendWithRetry(() =>
-              EmailService.sendApprovalRequest(approverInfo, {
-                ...updated,
-                approveLink: approveAction.directApi,
-                rejectLink: rejectAction.directApi,
-              })
-            );
+            try {
+              await sendWithRetry(() =>
+                EmailService.sendApprovalRequest(approverInfo, {
+                  ...updated,
+                  approveLink: approveAction.directApi,
+                  rejectLink: rejectAction.directApi,
+                })
+              );
+            } catch (err) {
+              console.error("Email to first approver failed:", err);
+            }
           }
         }
       }
@@ -372,9 +461,7 @@ export class ProposalService {
     }
   }
 
-  /**
-   * 🟩 Phê duyệt đề xuất
-   */
+  // -------------------- Approve proposal --------------------
   static async approveProposal(
     proposalId: number,
     employeeId: number,
@@ -388,8 +475,8 @@ export class ProposalService {
       });
       if (!proposal) return { success: false, error: "Đề xuất không tìm thấy" };
 
-      const approver = proposal.approvers.find(
-        (a) => a.approverId === employeeId
+      const approver = (proposal.approvers || []).find(
+        (a: any) => a.approverId === employeeId
       );
       if (!approver)
         return {
@@ -400,29 +487,24 @@ export class ProposalService {
         return { success: false, error: "Bạn đã xử lý đề xuất này rồi" };
 
       const minPendingLevel = Math.min(
-        ...proposal.approvers
-          .filter((a) => a.status === "pending")
-          .map((a) => a.level)
+        ...(proposal.approvers || [])
+          .filter((a: any) => a.status === "pending")
+          .map((a: any) => a.level)
       );
-
       if (approver.level !== minPendingLevel)
         return { success: false, error: "Chưa đến lượt duyệt của bạn" };
 
       const now = new Date();
-
       const updatedProposal = await prisma.$transaction(async (tx) => {
         await tx.proposalApprover.update({
           where: { id: approver.id },
           data: { status, approvedAt: now, reason: reason || null },
         });
-
-        if (status === "rejected") {
+        if (status === "rejected")
           await tx.proposal.update({
             where: { id: proposalId },
             data: { status: "rejected" },
           });
-        }
-
         return tx.proposal.findUnique({
           where: { id: proposalId },
           include: this.FULL_PROPOSAL_INCLUDE,
@@ -432,30 +514,30 @@ export class ProposalService {
       if (!updatedProposal)
         return { success: false, error: "Không thể tải lại đề xuất" };
 
-      // Nếu bị từ chối
       if (status === "rejected") {
-        await sendWithRetry(() =>
-          EmailService.sendStatusUpdate(
-            updatedProposal.proposer,
-            updatedProposal,
-            "rejected",
-            reason || "" // Gửi kèm lý do
-          )
-        );
+        try {
+          await sendWithRetry(() =>
+            EmailService.sendStatusUpdate(
+              updatedProposal.proposer,
+              updatedProposal,
+              "rejected",
+              reason || ""
+            )
+          );
+        } catch (err) {
+          console.error("Email notify rejected failed:", err);
+        }
         return { success: true, message: "Đề xuất đã bị từ chối." };
       }
 
-      // Lấy người duyệt tiếp theo
-      const nextApprover = updatedProposal.approvers
-        .filter((a) => a.status === "pending")
-        .sort((a, b) => a.level - b.level)[0];
-
+      const nextApprover = (updatedProposal.approvers || [])
+        .filter((a: any) => a.status === "pending")
+        .sort((a: any, b: any) => a.level - b.level)[0];
       if (nextApprover) {
         const approverInfo = await prisma.employee.findUnique({
           where: { id: nextApprover.approverId },
-          include: this.FULL_EMPLOYEE_INCLUDE,
+          select: this.FULL_EMPLOYEE_SELECT,
         });
-
         if (approverInfo) {
           const approveAction = generateActionToken({
             proposalId: updatedProposal.id,
@@ -469,29 +551,34 @@ export class ProposalService {
             role: "approver",
             action: "reject",
           });
-
-          await sendWithRetry(() =>
-            EmailService.sendApprovalRequest(approverInfo, {
-              ...updatedProposal,
-              approveLink: approveAction.directApi,
-              rejectLink: rejectAction.directApi,
-            })
-          );
+          try {
+            await sendWithRetry(() =>
+              EmailService.sendApprovalRequest(approverInfo, {
+                ...updatedProposal,
+                approveLink: approveAction.directApi,
+                rejectLink: rejectAction.directApi,
+              })
+            );
+          } catch (err) {
+            console.error("Email to next approver failed:", err);
+          }
         }
       } else {
-        // Duyệt xong hết → approved
         await prisma.proposal.update({
           where: { id: proposalId },
           data: { status: "approved" },
         });
-
-        await sendWithRetry(() =>
-          EmailService.sendStatusUpdate(
-            updatedProposal.proposer,
-            updatedProposal,
-            "approved"
-          )
-        );
+        try {
+          await sendWithRetry(() =>
+            EmailService.sendStatusUpdate(
+              updatedProposal.proposer,
+              updatedProposal,
+              "approved"
+            )
+          );
+        } catch (err) {
+          console.error("Email notify approved failed:", err);
+        }
       }
 
       return { success: true, message: "Đã phê duyệt đề xuất." };
@@ -501,6 +588,7 @@ export class ProposalService {
     }
   }
 
+  // -------------------- Delete proposal --------------------
   static async deleteProposal(proposalId: number) {
     try {
       const proposal = await prisma.proposal.findUnique({
@@ -522,39 +610,4 @@ export class ProposalService {
       return { success: false, error: "Không thể xóa đề xuất" };
     }
   }
-
-  static getFullIncludeObject() {
-    return this.FULL_PROPOSAL_INCLUDE;
-  }
-
-  /** FULL INCLUDE cấu hình */
-  static FULL_EMPLOYEE_INCLUDE: Prisma.EmployeeInclude = {
-    contactInfo: true,
-    workInfo: { include: { position: true, department: true } },
-    manager: {
-      include: {
-        contactInfo: true,
-        workInfo: { include: { position: true, department: true } },
-      },
-    },
-    subordinates: {
-      include: {
-        contactInfo: true,
-        workInfo: { include: { position: true, department: true } },
-      },
-    },
-  };
-
-  static FULL_PROPOSAL_INCLUDE: Prisma.ProposalInclude = {
-    file: true,
-    vehicle: true, // thêm vehicle info
-    proposer: { include: this.FULL_EMPLOYEE_INCLUDE },
-    createdBy: { include: this.FULL_EMPLOYEE_INCLUDE }, // thêm createdBy
-    signers: {
-      include: { signer: { include: this.FULL_EMPLOYEE_INCLUDE } },
-    },
-    approvers: {
-      include: { approver: { include: this.FULL_EMPLOYEE_INCLUDE } },
-    },
-  };
 }

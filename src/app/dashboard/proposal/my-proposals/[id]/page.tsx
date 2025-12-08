@@ -1,15 +1,11 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
-import { useEffect, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   Card,
   Typography,
-  Space,
   Avatar,
   Tag,
   Button,
@@ -19,12 +15,14 @@ import {
   Col,
   Descriptions,
   Progress,
-  Badge,
   Modal,
   Input,
   Form,
   Select,
   DatePicker,
+  Divider,
+  Timeline,
+  Space,
 } from "antd";
 import {
   FileTextOutlined,
@@ -36,9 +34,8 @@ import {
   ClockCircleOutlined,
   ExclamationCircleOutlined,
   CalendarOutlined,
-  TeamOutlined,
-  InfoCircleOutlined,
   DownloadOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
 import dayjs, { Dayjs } from "dayjs";
@@ -47,72 +44,32 @@ import { useAppSelector } from "@/store/hook";
 const { Title, Text, Paragraph } = Typography;
 const { RangePicker } = DatePicker;
 
-interface ProposalDetail {
-  id: number;
-  name: string;
-  description?: string;
-  proposalType?: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-  file?: {
-    filename: string;
-    mimeType: string;
-    data?: any;
-    id?: number;
-  };
-  proposer: any;
-  signers: Array<{
-    signer: any;
-    status: string;
-    signedAt?: string;
-    reason?: string;
-  }>;
-  approvers: Array<{
-    approver: any;
-    status: string;
-    approvedAt?: string;
-    reason?: string;
-  }>;
-  statusApprove: boolean;
-  statusSign: boolean;
-  currentStep: currentStep;
-  vehicle?: any | null;
-  startAt?: string | null;
-  endAt?: string | null;
-  dropoffPlace?: string | null;
-}
+/**
+ * Proposal detail — Tailwind + Antd
+ * - Toàn bộ giao diện, spacing, typography dùng Tailwind
+ * - Toàn tiếng Việt
+ * - Responsive: mobile / tablet / desktop
+ * - Giữ nguyên logic hiện tại (API calls)
+ */
 
-export interface currentStep {
-  step: string;
-  userId: string;
-}
-
-export default function ProposalDetailPage() {
+export default function ProposalDetailTailwind() {
   const params = useParams();
   const router = useRouter();
   const proposalId = Number(params.id);
   const { id, role } = useAppSelector((state) => state.user);
   const isAdmin = role === "ADMIN";
 
-  const [proposal, setProposal] = useState<ProposalDetail | null>(null);
+  const [proposal, setProposal] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
-  const [currentPreviewUrl, setCurrentPreviewUrl] = useState<string | null>(
-    null
-  );
-  const [vehicles, setVehicles] = useState<
-    Array<{ id: number; name: string; plateNumber?: string }>
-  >([]);
+  const [vehicles, setVehicles] = useState<any[]>([]);
 
-  // Modal từ chối
+  // modal
   const [rejectModalVisible, setRejectModalVisible] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
   const [currentAction, setCurrentAction] = useState<"sign" | "approve" | null>(
     null
   );
-
-  // Modal chỉnh sửa (Admin Only)
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editVehicleId, setEditVehicleId] = useState<number | null>(null);
   const [editTimeRange, setEditTimeRange] = useState<[Dayjs, Dayjs] | null>(
@@ -120,42 +77,33 @@ export default function ProposalDetailPage() {
   );
 
   useEffect(() => {
-    fetchVehicles();
-    fetchProposal();
-    return () => {
-      if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl);
-    };
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposalId]);
 
-  const fetchVehicles = async () => {
-    try {
-      const res = await fetch("/api/vehicles");
-      const result = await res.json();
-      if (res.ok) setVehicles(result.vehicles);
-    } catch (error) {
-      console.error(error);
-      message.error("Có lỗi khi tải danh sách xe");
-    }
-  };
-
-  const fetchProposal = async () => {
+  const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/proposals?id=${proposalId}`);
-      const result = await res.json();
-      if (res.ok) {
-        setProposal(result);
-        setEditVehicleId(result.vehicle?.id ?? null);
-        if (result.startAt && result.endAt) {
-          setEditTimeRange([dayjs(result.startAt), dayjs(result.endAt)]);
-        }
-        if (result.file?.id) {
-          setCurrentPreviewUrl(`/api/files/view/${result.file.id}`);
-        }
+      const [pRes, vRes] = await Promise.all([
+        fetch(`/api/proposals?id=${proposalId}`),
+        fetch(`/api/vehicles`),
+      ]);
+      const pJson = await pRes.json();
+      const vJson = await vRes.json();
+      if (pRes.ok) {
+        setProposal(pJson);
+        console.log(pJson);
+
+        if (pJson.vehicle) setEditVehicleId(pJson.vehicle.id);
+        if (pJson.startAt && pJson.endAt)
+          setEditTimeRange([dayjs(pJson.startAt), dayjs(pJson.endAt)]);
+      } else {
+        message.error(pJson.error || "Không thể tải đề xuất");
       }
-    } catch (error) {
-      console.error(error);
-      message.error("Không thể tải thông tin đề xuất");
+      if (vRes.ok) setVehicles(vJson.vehicles || []);
+    } catch (e) {
+      console.error(e);
+      message.error("Không thể tải dữ liệu");
     } finally {
       setLoading(false);
     }
@@ -163,112 +111,7 @@ export default function ProposalDetailPage() {
 
   const toVietnamTime = (isoString?: string) => {
     if (!isoString) return "";
-    return new Intl.DateTimeFormat("vi-VN", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
-      timeZone: "Asia/Ho_Chi_Minh",
-    }).format(new Date(isoString));
-  };
-
-  const handleApprove = async (action: "sign" | "approve") => {
-    setActionLoading(true);
-    try {
-      await axios.post(`/api/proposals/${proposalId}/${action}`, {
-        status: "approved",
-      });
-      message.success("Đã đồng ý!");
-      await fetchProposal();
-    } catch (error) {
-      console.error(error);
-      message.error("Có lỗi khi xử lý đồng ý");
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  const handleRejectClick = (action: "sign" | "approve") => {
-    setCurrentAction(action);
-    setRejectModalVisible(true);
-  };
-
-  const confirmReject = async () => {
-    if (!currentAction) return;
-    setActionLoading(true);
-    try {
-      await axios.post(`/api/proposals/${proposalId}/${currentAction}`, {
-        status: "rejected",
-        reason: rejectReason,
-      });
-      message.success("Đã từ chối!");
-      setRejectReason("");
-      setRejectModalVisible(false);
-      await fetchProposal();
-    } catch (error) {
-      console.error(error);
-      message.error("Có lỗi khi gửi từ chối");
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  const handleUpdateProposal = async () => {
-    if (!editVehicleId || !editTimeRange) {
-      message.error("Vui lòng điền đầy đủ thông tin");
-      return;
-    }
-    setActionLoading(true);
-    try {
-      await axios.patch(`/api/proposals/${proposal?.id}/update`, {
-        vehicleId: editVehicleId,
-        startAt: editTimeRange[0].toISOString(),
-        endAt: editTimeRange[1].toISOString(),
-      });
-      message.success("Cập nhật đề xuất thành công");
-      setEditModalVisible(false);
-      await fetchProposal();
-    } catch (error) {
-      console.error(error);
-      message.error("Cập nhật thất bại");
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  const getProgress = () => {
-    if (!proposal) return { percent: 0, status: "normal" as const };
-    const totalSigners = proposal.signers.length;
-    const totalApprovers = proposal.approvers.length;
-    const approvedSigners = proposal.signers.filter(
-      (s) => s.status === "approved"
-    ).length;
-    const approvedApprovers = proposal.approvers.filter(
-      (a) => a.status === "approved"
-    ).length;
-
-    if (proposal.status === "rejected")
-      return { percent: 100, status: "exception" as const };
-    if (proposal.status === "approved")
-      return { percent: 100, status: "success" as const };
-    if (proposal.status === "pending_signatures")
-      return {
-        percent: totalSigners > 0 ? (approvedSigners / totalSigners) * 50 : 0,
-        status: "active" as const,
-      };
-    if (proposal.status === "waiting_approval") {
-      const signaturePercent = 50;
-      const approvalPercent =
-        totalApprovers > 0 ? (approvedApprovers / totalApprovers) * 50 : 0;
-      return {
-        percent: signaturePercent + approvalPercent,
-        status: "active" as const,
-      };
-    }
-    return { percent: 0, status: "normal" as const };
+    return dayjs(isoString).format("HH:mm DD/MM/YYYY");
   };
 
   const getStatusConfig = (status: string) => {
@@ -302,349 +145,516 @@ export default function ProposalDetailPage() {
     }
   };
 
-  const renderPersonCard = (
-    person: any,
-    role: "proposer" | "signer" | "approver",
-    currentIdStep: string,
-    totalStatus: string,
-    status?: string,
-    actionDate?: string,
-    reason?: string
-  ) => {
-    console.log(person.id);
-    console.log(currentIdStep);
+  const getProgress = () => {
+    if (!proposal) return { percent: 0, status: "normal" as const };
+    const totalSigners = proposal.signers?.length || 0;
+    const totalApprovers = proposal.approvers?.length || 0;
+    const approvedSigners =
+      proposal.signers?.filter((s: any) => s.status === "approved").length || 0;
+    const approvedApprovers =
+      proposal.approvers?.filter((a: any) => a.status === "approved").length ||
+      0;
 
-    const roleConfig = {
-      proposer: "#1890ff",
-      signer: "#722ed1",
-      approver: "#52c41a",
-    };
-    const statusConfig = {
-      pending: {
-        color: "orange",
-        text: "Chờ xử lý",
-        icon: <ClockCircleOutlined />,
-      },
-      approved: {
-        color: "green",
-        text: role === "signer" ? "Đã ký" : "Đã duyệt",
-        icon: <CheckOutlined />,
-      },
-      rejected: { color: "red", text: "Đã từ chối", icon: <CloseOutlined /> },
-    };
+    if (proposal.status === "rejected")
+      return { percent: 100, status: "exception" as const };
+    if (proposal.status === "approved")
+      return { percent: 100, status: "success" as const };
+    if (proposal.status === "pending_signatures")
+      return {
+        percent:
+          totalSigners > 0
+            ? Math.round((approvedSigners / totalSigners) * 50)
+            : 0,
+        status: "active" as const,
+      };
+    if (proposal.status === "waiting_approval")
+      return {
+        percent:
+          50 +
+          Math.round(
+            totalApprovers > 0 ? (approvedApprovers / totalApprovers) * 50 : 0
+          ),
+        status: "active" as const,
+      };
+    return { percent: 0, status: "normal" as const };
+  };
+
+  const handleApprove = async (action: "sign" | "approve") => {
+    setActionLoading(true);
+    try {
+      await axios.post(`/api/proposals/${proposalId}/${action}`, {
+        status: "approved",
+      });
+      message.success("Đồng ý thành công");
+      await fetchData();
+    } catch (e) {
+      console.error(e);
+      message.error("Có lỗi khi xử lý");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleRejectClick = (action: "sign" | "approve") => {
+    setCurrentAction(action);
+    setRejectModalVisible(true);
+  };
+
+  const confirmReject = async () => {
+    if (!currentAction) return;
+    setActionLoading(true);
+    try {
+      await axios.post(`/api/proposals/${proposalId}/${currentAction}`, {
+        status: "rejected",
+        reason: rejectReason,
+      });
+      message.success("Từ chối thành công");
+      setRejectReason("");
+      setRejectModalVisible(false);
+      await fetchData();
+    } catch (e) {
+      console.error(e);
+      message.error("Không thể gửi từ chối");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleUpdateProposal = async () => {
+    if (!editVehicleId || !editTimeRange) {
+      message.error("Vui lòng điền đầy đủ thông tin cập nhật");
+      return;
+    }
+    setActionLoading(true);
+    try {
+      await axios.patch(`/api/proposals/${proposal?.id}/update`, {
+        vehicleId: editVehicleId,
+        startAt: editTimeRange[0].toISOString(),
+        endAt: editTimeRange[1].toISOString(),
+      });
+      message.success("Cập nhật đề xuất thành công");
+      setEditModalVisible(false);
+      await fetchData();
+    } catch (e) {
+      console.error(e);
+      message.error("Cập nhật thất bại");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // Small person card using Tailwind
+  const PersonCard: React.FC<{
+    person: any;
+    reason: string;
+    roleLabel?: string;
+    status?: string;
+    date?: string;
+    isCurrent?: boolean;
+  }> = ({ person, reason, roleLabel, status, date, isCurrent }) => {
     return (
-      <Card
-        size="small"
-        className={`!relative ${
-          Number(person.id) === Number(currentIdStep) ? "!bg-[#FFA50020]" : ""
+      <div
+        className={`flex gap-3 items-center p-3 rounded-lg ${
+          isCurrent
+            ? "border-2 border-orange-400 bg-orange-50"
+            : "border border-gray-100 bg-white"
         }`}
-        style={{
-          marginBottom: 12,
-          border:
-            Number(person.id) === Number(currentIdStep)
-              ? `2px solid #FFA500`
-              : person.id === id
-              ? "2px solid #42A5F5"
-              : "",
-          boxShadow:
-            Number(person.id) === Number(currentIdStep)
-              ? `0 0 10px #FFA50020`
-              : undefined,
-        }}
       >
-        <Row gutter={16} align="middle">
-          <Col flex="none">
-            <Badge dot={person.id === id} color={roleConfig[role]}>
-              <Avatar size={48} icon={<UserOutlined />} src={person.avatar} />
-            </Badge>
-          </Col>
-          <Col flex="auto">
-            <div className=" items-center gap-2 justify-between ">
-              <Text strong style={{ fontSize: 16 }}>
-                {person.name}
-              </Text>
-              <Text type="secondary">• {person.employeeCode}</Text>
+        <Avatar size={48} src={person?.avatar} icon={<UserOutlined />} />
+        <div className="flex-1">
+          <div className="flex justify-between items-start">
+            <div>
+              <div className="font-medium text-sm">{person?.name || "—"}</div>
+              <div className="text-xs text-gray-500">
+                {person?.employeeCode || ""}
+              </div>
+              {reason && reason !== "" && (
+                <div className="text-xs text-red-500">Lý do: {reason}</div>
+              )}
             </div>
-            {role === "proposer" && (
-              <Tag color={"#1890ff"}>
-                <span style={{ marginLeft: 4 }}>Người tạo đề xuất</span>
-              </Tag>
-            )}
-            {role !== "proposer" &&
-              (totalStatus !== "rejected" || status !== "pending") && (
+            <div className="text-right">
+              {status && (
                 <Tag
-                  className="mt-1"
                   color={
-                    statusConfig[status as keyof typeof statusConfig]?.color
+                    status === "approved"
+                      ? "green"
+                      : status === "pending"
+                      ? "orange"
+                      : "red"
                   }
                 >
-                  {statusConfig[status as keyof typeof statusConfig]?.icon}{" "}
-                  <span style={{ marginLeft: 4 }}>
-                    {statusConfig[status as keyof typeof statusConfig]?.text}
-                  </span>
+                  {status === "approved"
+                    ? "Đã ký"
+                    : status === "pending"
+                    ? "Đang chờ"
+                    : "Đã từ chối"}
                 </Tag>
               )}
-            {reason && <Text type="secondary">Lý do: {reason}</Text>}
-            {actionDate && (
-              <div className="mt-1 flex w-full justify-end italic text-xs">
-                <Text type="secondary" className="text-[6px]">
-                  •{toVietnamTime(actionDate)}
-                </Text>
-              </div>
-            )}
-          </Col>
-        </Row>
-        {person.id === id && (
-          <Tag color={"#42A5F5"} className="!absolute top-[-10px] right-0">
-            <span>Bạn</span>
-          </Tag>
-        )}
-      </Card>
+              {date && (
+                <div className="text-xs text-gray-400 mt-1">
+                  {toVietnamTime(date)}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
     );
   };
 
   if (loading)
     return (
-      <div className="flex justify-center items-center min-h-[400px]">
+      <div className="flex justify-center items-center min-h-[420px]">
         <Spin size="large" tip="Đang tải..." />
       </div>
     );
+
   if (!proposal)
     return (
-      <div className="text-center p-12">
-        <ExclamationCircleOutlined style={{ fontSize: 64, color: "#faad14" }} />
+      <div className="text-center p-6">
+        <ExclamationCircleOutlined className="text-5xl text-yellow-500" />
         <Title level={3}>Không tìm thấy đề xuất</Title>
         <Button onClick={() => router.back()}>Quay lại</Button>
       </div>
     );
 
+  const statusCfg = getStatusConfig(proposal.status);
   const progress = getProgress();
-  const statusConfigFinal = getStatusConfig(proposal.status);
 
   return (
-    <div
-      style={{
-        padding: 24,
-        maxWidth: 1400,
-        margin: "0 auto",
-        backgroundColor: "#f5f5f5",
-        minHeight: "100vh",
-      }}
-    >
+    <div className="p-4 max-w-[1200px] mx-auto">
       <Button
         icon={<ArrowLeftOutlined />}
         onClick={() => router.back()}
-        style={{ marginBottom: 24 }}
+        className="flex items-center"
       >
-        Quay lại danh sách
+        Quay lại
       </Button>
-
-      <Card style={{ marginBottom: 24 }}>
-        <Row gutter={24} align="middle">
-          <Col className="w-full">
-            <Space className="w-full flex justify-between flex-wrap">
-              <div className="flex-shrink-0">
-                <Title level={2}>
-                  <FileTextOutlined /> {proposal.name}
-                </Title>
-                <Space>
-                  <Tag color={statusConfigFinal.color}>
-                    {statusConfigFinal.icon} {statusConfigFinal.text}
-                  </Tag>
-                  <Text type="secondary">
-                    <CalendarOutlined /> Tạo lúc:{" "}
-                    {toVietnamTime(proposal.createdAt)}
-                  </Text>
-                </Space>
+      {/* Header */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 ">
+        <div className="flex-1 flex-shrink-0">
+          <h2 className="text-2xl font-semibold leading-tight">
+            {proposal.name}
+          </h2>
+          <div className="flex flex-wrap items-center gap-3 mt-2">
+            <Tag color={statusCfg.color} className="flex items-center">
+              {statusCfg.icon} <span className="ml-2">{statusCfg.text}</span>
+            </Tag>
+            <div className="flex gap-2 items-center">
+              <div className="text-sm text-gray-500 flex items-center gap-2  flex-shrink-0">
+                <CalendarOutlined />
+                <span>{toVietnamTime(proposal.createdAt)}</span>
               </div>
-
-              <div style={{ marginTop: 12 }} className="w-full min-w-[300px]">
-                <div className="flex justify-end">
-                  <a
-                    href={`/api/files/${proposalId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Button type="primary" icon={<DownloadOutlined />}>
-                      Tải xuống
-                    </Button>
-                  </a>
-                </div>
-                {proposal.statusSign && (
-                  <Space className="flex justify-end">
-                    <Button
-                      type="primary"
-                      loading={actionLoading}
-                      onClick={() => handleApprove("sign")}
-                    >
-                      Đồng ý
-                    </Button>
-                    <Button
-                      danger
-                      loading={actionLoading}
-                      onClick={() => handleRejectClick("sign")}
-                    >
-                      Từ chối
-                    </Button>
-                  </Space>
-                )}
-                {proposal.statusApprove && (
-                  <Space className="flex justify-end">
-                    <Button
-                      type="primary"
-                      loading={actionLoading}
-                      onClick={() => handleApprove("approve")}
-                    >
-                      Đồng ý
-                    </Button>
-                    <Button
-                      danger
-                      loading={actionLoading}
-                      onClick={() => handleRejectClick("approve")}
-                    >
-                      Từ chối
-                    </Button>
-                  </Space>
-                )}
-                <div style={{ marginTop: 12 }}>
-                  <Text strong>Tiến độ xử lý</Text>
-                  <Progress
-                    percent={progress.percent}
-                    status={progress.status}
-                    strokeColor={{ "0%": "#108ee9", "100%": "#87d068" }}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-white border border-gray-200 shadow-sm  flex-shrink-0">
+                <svg
+                  className="w-4 h-4 text-green-500"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden
+                >
+                  <path
+                    d="M5 12h14"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
                   />
-                </div>
+                </svg>
+                <span className="text-sm font-medium">
+                  {proposal.proposalType === "REGULAR"
+                    ? "Đề xuất chung"
+                    : "Đề xuất xe"}
+                </span>
               </div>
-            </Space>
-          </Col>
-        </Row>
-      </Card>
+            </div>
+          </div>
+        </div>
 
-      {/* Chi tiết */}
-      <Card
-        title={
-          <>
-            <InfoCircleOutlined /> Thông tin chi tiết
+        <div className=" flex flex-col items-end gap-3 ">
+          <div className="flex items-center gap-2">
+            <a
+              href={`/api/files/${proposal.id}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Button icon={<DownloadOutlined />}>Tải xuống</Button>
+            </a>
             {isAdmin && proposal.proposalType !== "REGULAR" && (
               <Button
-                type="primary"
-                style={{ float: "right" }}
+                icon={<EditOutlined />}
                 onClick={() => setEditModalVisible(true)}
               >
                 Chỉnh sửa
               </Button>
             )}
-          </>
-        }
-      >
-        <Descriptions column={1} bordered>
-          <Descriptions.Item label="Tên đề xuất">
-            {proposal.name}
-          </Descriptions.Item>
-          {proposal.description && (
-            <Descriptions.Item label="Mô tả">
-              <Paragraph style={{ whiteSpace: "pre-wrap" }}>
-                {proposal.description}
-              </Paragraph>
-            </Descriptions.Item>
-          )}
-          <Descriptions.Item label="Trạng thái">
-            <Tag color={statusConfigFinal.color}>
-              {statusConfigFinal.icon} {statusConfigFinal.text}
-            </Tag>
-          </Descriptions.Item>
-          <Descriptions.Item label="Ngày tạo">
-            {toVietnamTime(proposal.createdAt)}
-          </Descriptions.Item>
-          <Descriptions.Item label="Cập nhật lần cuối">
-            {toVietnamTime(proposal.updatedAt)}
-          </Descriptions.Item>
-          {proposal.vehicle && (
-            <Descriptions.Item label="Xe sử dụng">
-              {proposal.vehicle.name}{" "}
-              {proposal.vehicle.plateNumber
-                ? `(${proposal.vehicle.plateNumber})`
-                : ""}
-            </Descriptions.Item>
-          )}
-          {proposal.startAt && proposal.endAt && (
-            <Descriptions.Item label="Thời gian sử dụng">
-              {toVietnamTime(proposal.startAt)} →{" "}
-              {toVietnamTime(proposal.endAt)}
-            </Descriptions.Item>
-          )}
-        </Descriptions>
-      </Card>
+          </div>
 
-      {/* Xem file */}
-      {currentPreviewUrl && (
-        <Card title="Xem trước file">
-          {proposal.file?.mimeType === "application/pdf" ? (
-            <iframe
-              src={currentPreviewUrl}
-              style={{ width: "100%", height: "80vh", border: "none" }}
-            />
-          ) : (
-            <Text>Không thể xem trực tiếp file</Text>
-          )}
-        </Card>
-      )}
+          <div className="w-full flex items-center justify-end gap-3">
+            <div className="text-sm font-medium">Tiến độ</div>
+            <div className="flex items-center gap-3">
+              <div className="w-36">
+                <Progress percent={progress.percent} status={progress.status} />
+              </div>
+            </div>
+          </div>
 
-      {/* Người ký / phê duyệt */}
-      <Row gutter={24} style={{ marginTop: 24 }}>
-        <Col xs={24} md={12}>
-          <Card
-            title={
-              <>
-                <TeamOutlined /> Người đề xuất / ký
-              </>
-            }
-          >
-            {renderPersonCard(
-              proposal.proposer,
-              "proposer",
-              proposal.currentStep.userId,
-              proposal.status,
-              proposal.status,
-              proposal.createdAt
-            )}
-            {proposal.signers.map((s) =>
-              renderPersonCard(
-                s.signer,
-                "signer",
-                proposal.currentStep.userId,
-                proposal.status,
-                s.status,
-                s.signedAt,
-                s.reason
-              )
-            )}
+          {proposal.statusSign && (
+            <div className="mt-4 flex justify-end gap-2">
+              <Button
+                type="primary"
+                loading={actionLoading}
+                onClick={() => handleApprove("sign")}
+              >
+                Đồng ý
+              </Button>
+              <Button
+                danger
+                loading={actionLoading}
+                onClick={() => handleRejectClick("sign")}
+              >
+                Từ chối
+              </Button>
+            </div>
+          )}
+
+          {proposal.statusApprove && (
+            <div className="mt-4 flex justify-end gap-2">
+              <Button
+                type="primary"
+                loading={actionLoading}
+                onClick={() => handleApprove("approve")}
+              >
+                Đồng ý
+              </Button>
+              <Button
+                danger
+                loading={actionLoading}
+                onClick={() => handleRejectClick("approve")}
+              >
+                Từ chối
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Layout: left info, right preview + people */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        {/* Left column (info + timeline) */}
+        <div className="lg:col-span-5 space-y-4">
+          <Card className="rounded-xl shadow-sm p-4">
+            <div className="flex justify-between items-start">
+              <div>
+                <div className="text-sm font-semibold mb-2">
+                  Thông tin đề xuất
+                </div>
+              </div>
+            </div>
+
+            <Descriptions column={1} size="small" bordered className="mt-3">
+              <Descriptions.Item label="Tên đề xuất">
+                {proposal.name}
+              </Descriptions.Item>
+              <Descriptions.Item label="Mô tả">
+                <Paragraph className="whitespace-pre-wrap mb-0">
+                  {proposal.description || (
+                    <span className="text-gray-500">Không có mô tả</span>
+                  )}
+                </Paragraph>
+              </Descriptions.Item>
+              <Descriptions.Item label="Loại">
+                {proposal.proposalType === "REGULAR"
+                  ? "Đề xuất chung"
+                  : "Đề xuất xe"}
+              </Descriptions.Item>
+              <Descriptions.Item label="Trạng thái">
+                <Tag color={statusCfg.color}>{statusCfg.text}</Tag>
+              </Descriptions.Item>
+              {proposal.vehicle && (
+                <Descriptions.Item label="Xe">
+                  {proposal.vehicle.name}{" "}
+                  {proposal.vehicle.plateNumber
+                    ? `(${proposal.vehicle.plateNumber})`
+                    : ""}
+                </Descriptions.Item>
+              )}
+              {proposal.startAt && proposal.endAt && (
+                <Descriptions.Item label="Thời gian">
+                  {toVietnamTime(proposal.startAt)} →{" "}
+                  {toVietnamTime(proposal.endAt)}
+                </Descriptions.Item>
+              )}
+            </Descriptions>
           </Card>
-        </Col>
-        <Col xs={24} md={12}>
-          <Card
-            title={
-              <>
-                <CheckOutlined /> Người phê duyệt
-              </>
-            }
-          >
-            {proposal.approvers.map((a) =>
-              renderPersonCard(
-                a.approver,
-                "approver",
-                proposal.currentStep.userId,
-                proposal.status,
-                a.status,
-                a.approvedAt,
-                a.reason
-              )
-            )}
-          </Card>
-        </Col>
-      </Row>
 
-      {/* Modal nhập lý do từ chối */}
+          <Card className="rounded-xl shadow-sm p-4">
+            <div className="text-sm font-semibold mb-3">Quá trình xử lý</div>
+            <Timeline>
+              {proposal.signers?.map((s: any, idx: number) => (
+                <Timeline.Item
+                  key={`s-${idx}`}
+                  color={
+                    s.status === "approved"
+                      ? "green"
+                      : s.status === "rejected"
+                      ? "red"
+                      : "orange"
+                  }
+                >
+                  <div className="font-medium">{s.signer?.name}</div>
+                  <div className="text-xs text-gray-500">
+                    {s.status === "approved"
+                      ? "Đã ký"
+                      : s.status === "rejected"
+                      ? "Đã từ chối"
+                      : "đang xử lý"}{" "}
+                    {s.signedAt ? `• ${toVietnamTime(s.signedAt)}` : ""}
+                  </div>
+                  {s.reason && (
+                    <div className="text-xs text-red-500">
+                      Lý do: {s.reason}
+                    </div>
+                  )}
+                </Timeline.Item>
+              ))}
+              {proposal.approvers?.map((a: any, idx: number) => (
+                <Timeline.Item
+                  key={`a-${idx}`}
+                  color={
+                    a.status === "approved"
+                      ? "green"
+                      : a.status === "rejected"
+                      ? "red"
+                      : "orange"
+                  }
+                >
+                  <div className="font-medium">{a.approver?.name}</div>
+                  <div className="text-xs text-gray-500">
+                    {a.status === "approved"
+                      ? "Đã duyệt"
+                      : a.status === "rejected"
+                      ? "Đã từ chối"
+                      : "đang xử lý"}{" "}
+                    {a.approvedAt ? `• ${toVietnamTime(a.approvedAt)}` : ""}
+                  </div>
+                  {a.reason && (
+                    <div className="text-xs text-red-500">
+                      Lý do: {a.reason}
+                    </div>
+                  )}
+                </Timeline.Item>
+              ))}
+            </Timeline>
+          </Card>
+        </div>
+
+        {/* Right column (preview + people) */}
+        <div className="lg:col-span-7 space-y-4">
+          <Card className="rounded-xl shadow-sm p-4">
+            <div className="flex justify-between items-center">
+              <div className="text-sm font-semibold">
+                <FileTextOutlined /> Xem file
+              </div>
+              <Space>
+                <a
+                  href={`/api/files/${proposal.id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Button icon={<DownloadOutlined />}>Tải xuống</Button>
+                </a>
+                {isAdmin && proposal.proposalType !== "REGULAR" && (
+                  <Button
+                    icon={<EditOutlined />}
+                    onClick={() => setEditModalVisible(true)}
+                  >
+                    Chỉnh sửa
+                  </Button>
+                )}
+              </Space>
+            </div>
+
+            <div style={{ marginTop: 12 }}>
+              {proposal.file?.mimeType === "application/pdf" ? (
+                <iframe
+                  src={`/api/files/view/${proposal.file.id}`}
+                  style={{ width: "100%", height: "72vh", border: "none" }}
+                />
+              ) : (
+                <div
+                  style={{
+                    padding: 40,
+                    textAlign: "center",
+                    background: "#fafafa",
+                    borderRadius: 8,
+                  }}
+                >
+                  {" "}
+                  <Text type="secondary">
+                    Không thể xem trực tiếp file
+                  </Text>{" "}
+                </div>
+              )}{" "}
+            </div>
+          </Card>
+
+          <Card className="rounded-xl shadow-sm p-4">
+            <div className="text-sm font-semibold mb-3">
+              Người đề xuất / Người ký / Người duyệt
+            </div>
+            <Divider className="my-2" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <div className="text-sm font-medium mb-2">Người đề xuất</div>
+                <PersonCard
+                  person={proposal.proposer}
+                  reason={""}
+                  date={proposal.createdAt}
+                  isCurrent={false}
+                />
+              </div>
+
+              <div>
+                <div className="text-sm font-medium mb-2">Người ký</div>
+                <div className="space-y-2">
+                  {proposal.signers?.map((s: any) => (
+                    <PersonCard
+                      key={s.signer?.id}
+                      person={s.signer}
+                      reason={s.reason}
+                      status={s.status}
+                      date={s.signedAt}
+                      isCurrent={
+                        String(proposal.currentStep?.userId) ===
+                        String(s.signer?.id)
+                      }
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div>
+              <div className="text-sm font-medium mb-2">Người duyệt</div>
+              <div className="space-y-2">
+                {proposal.approvers?.map((a: any) => (
+                  <PersonCard
+                    key={a.approver?.id}
+                    person={a.approver}
+                    reason={a.reason}
+                    status={a.status}
+                    date={a.approvedAt}
+                    isCurrent={
+                      String(proposal.currentStep?.userId) ===
+                      String(a.approver?.id)
+                    }
+                  />
+                ))}
+              </div>
+            </div>
+          </Card>
+        </div>
+      </div>
+
+      {/* Reject modal */}
       <Modal
         title="Nhập lý do từ chối"
         open={rejectModalVisible}
@@ -662,7 +672,7 @@ export default function ProposalDetailPage() {
         />
       </Modal>
 
-      {/* Modal chỉnh sửa (Admin Only) */}
+      {/* Edit modal (Admin) */}
       {isAdmin && (
         <Modal
           title="Chỉnh sửa đề xuất"
@@ -674,10 +684,10 @@ export default function ProposalDetailPage() {
           confirmLoading={actionLoading}
         >
           <Form layout="vertical">
-            <Form.Item label="Loại xe" required>
+            <Form.Item label="Chọn xe" required>
               <Select
                 value={editVehicleId ?? undefined}
-                onChange={(value) => setEditVehicleId(value)}
+                onChange={(v) => setEditVehicleId(v)}
                 placeholder="Chọn xe"
               >
                 {vehicles.map((v) => (
@@ -687,13 +697,12 @@ export default function ProposalDetailPage() {
                 ))}
               </Select>
             </Form.Item>
-
-            <Form.Item label="Thời gian sử dụng" required>
+            <Form.Item label="Thời gian" required>
               <RangePicker
                 showTime
                 value={editTimeRange ?? undefined}
-                onChange={(dates) => setEditTimeRange(dates as [Dayjs, Dayjs])}
-                style={{ width: "100%" }}
+                onChange={(d) => setEditTimeRange(d as [Dayjs, Dayjs])}
+                className="w-full"
               />
             </Form.Item>
           </Form>
