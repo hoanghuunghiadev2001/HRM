@@ -6,13 +6,6 @@ export async function GET() {
     const employees = await prisma.employee.findMany({
       where: {
         isActive: true,
-        workInfo: {
-          position: {
-            level: {
-              gte: 2, // từ Tổ trưởng trở lên
-            },
-          },
-        },
       },
       select: {
         id: true,

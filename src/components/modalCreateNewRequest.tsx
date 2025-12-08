@@ -260,7 +260,7 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
           fileList={fileList}
           onRemove={handleRemove}
           maxCount={1}
-          accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+          accept=".pdf,.jpg,.jpeg,.png"
           multiple={false}
           showUploadList={{ showRemoveIcon: true }}
           // không dùng action để tránh upload tự động

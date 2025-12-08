@@ -259,21 +259,6 @@ const ModalApproveRequest = ({
                       </span>
                     )}
                   </div>
-
-                  {fileUrl && (
-                    <div className="mt-2 border rounded overflow-hidden">
-                      {/* nhỏ gọn — nếu muốn xem lớn hơn thì mở tab bằng link 'Mở' */}
-                      <iframe
-                        src={fileUrl}
-                        title={filename}
-                        style={{
-                          width: "100%",
-                          height: 400,
-                          border: "none",
-                        }}
-                      />
-                    </div>
-                  )}
                 </div>
               );
             })()
