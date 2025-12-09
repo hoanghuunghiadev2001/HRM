@@ -371,13 +371,15 @@ export default function ProposalDetailTailwind() {
 
         <div className=" flex flex-col items-end gap-3 ">
           <div className="flex items-center gap-2">
-            <a
-              href={`/api/files/${proposal.id}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Button icon={<DownloadOutlined />}>Tải xuống</Button>
-            </a>
+            {proposal.proposalType === "REGULAR" && (
+              <a
+                href={`/api/files/${proposal.id}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Button icon={<DownloadOutlined />}>Tải xuống</Button>
+              </a>
+            )}
             {isAdmin && proposal.proposalType !== "REGULAR" && (
               <Button
                 icon={<EditOutlined />}
@@ -549,53 +551,38 @@ export default function ProposalDetailTailwind() {
 
         {/* Right column (preview + people) */}
         <div className="lg:col-span-7 space-y-4">
-          <Card className="rounded-xl shadow-sm p-4">
-            <div className="flex justify-between items-center">
-              <div className="text-sm font-semibold">
-                <FileTextOutlined /> Xem file
-              </div>
-              <Space>
-                <a
-                  href={`/api/files/${proposal.id}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <Button icon={<DownloadOutlined />}>Tải xuống</Button>
-                </a>
-                {isAdmin && proposal.proposalType !== "REGULAR" && (
-                  <Button
-                    icon={<EditOutlined />}
-                    onClick={() => setEditModalVisible(true)}
-                  >
-                    Chỉnh sửa
-                  </Button>
-                )}
-              </Space>
-            </div>
-
-            <div style={{ marginTop: 12 }}>
-              {proposal.file?.mimeType === "application/pdf" ? (
-                <iframe
-                  src={`/api/files/view/${proposal.file.id}`}
-                  style={{ width: "100%", height: "72vh", border: "none" }}
-                />
-              ) : (
-                <div
-                  style={{
-                    padding: 40,
-                    textAlign: "center",
-                    background: "#fafafa",
-                    borderRadius: 8,
-                  }}
-                >
-                  {" "}
-                  <Text type="secondary">
-                    Không thể xem trực tiếp file
-                  </Text>{" "}
+          {proposal.proposalType === "REGULAR" && (
+            <Card className="rounded-xl shadow-sm p-4">
+              <div className="flex justify-between items-center">
+                <div className="text-sm font-semibold">
+                  <FileTextOutlined /> Xem file
                 </div>
-              )}{" "}
-            </div>
-          </Card>
+              </div>
+
+              <div style={{ marginTop: 12 }}>
+                {proposal.file?.mimeType === "application/pdf" ? (
+                  <iframe
+                    src={`/api/files/view/${proposal.file.id}`}
+                    style={{ width: "100%", height: "72vh", border: "none" }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      padding: 40,
+                      textAlign: "center",
+                      background: "#fafafa",
+                      borderRadius: 8,
+                    }}
+                  >
+                    {" "}
+                    <Text type="secondary">
+                      Không thể xem trực tiếp file
+                    </Text>{" "}
+                  </div>
+                )}{" "}
+              </div>
+            </Card>
+          )}
 
           <Card className="rounded-xl shadow-sm p-4">
             <div className="text-sm font-semibold mb-3">
