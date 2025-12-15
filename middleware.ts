@@ -10,9 +10,9 @@ export function middleware(request: NextRequest) {
     "/manifest.json",
     "/favicon.ico",
     "/icons/",
-    "/_next/"
+    "/_next/",
   ];
-  const isPublic = publicPaths.some(path => pathname.startsWith(path));
+  const isPublic = publicPaths.some((path) => pathname.startsWith(path));
 
   const jwt = request.cookies.get("jwt")?.value;
 

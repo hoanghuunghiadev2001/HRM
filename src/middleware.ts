@@ -3,6 +3,15 @@ import { NextRequest, NextResponse } from "next/server";
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  // 👉 Cho phép static files & maintenance page
+  if (pathname.startsWith("/_next") || pathname.startsWith("/images")) {
+    return NextResponse.next();
+  }
+
+  if (process.env.MAINTENANCE_MODE === "true") {
+    return NextResponse.rewrite(new URL("/maintenance", req.url));
+  }
+
   // ✅ Bỏ qua middleware cho file tĩnh hoặc public routes
   if (
     pathname.startsWith("/login") ||
@@ -13,6 +22,7 @@ export function middleware(req: NextRequest) {
     pathname.startsWith("/favicon") ||
     pathname.startsWith("/icons") ||
     pathname.startsWith("/storage") ||
+    pathname.startsWith("/images") ||
     pathname.startsWith("/api") ||
     pathname.startsWith("/manifest") || // 👈 THÊM DÒNG NÀY
     pathname.startsWith("/robots") // 👈 và thêm robots.txt nếu có

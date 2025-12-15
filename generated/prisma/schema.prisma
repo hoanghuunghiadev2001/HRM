@@ -400,3 +400,13 @@ enum ProposalStatus {
   approved
   rejected
 }
+
+model MaintenanceNotice {
+  id        Int      @id @default(autoincrement())
+  title     String?
+  message   String   @db.Text
+  startTime DateTime
+  endTime   DateTime
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}

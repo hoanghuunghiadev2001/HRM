@@ -118,6 +118,11 @@ export type Asset = $Result.DefaultSelection<Prisma.$AssetPayload>
  * 
  */
 export type AssetAssignment = $Result.DefaultSelection<Prisma.$AssetAssignmentPayload>
+/**
+ * Model MaintenanceNotice
+ * 
+ */
+export type MaintenanceNotice = $Result.DefaultSelection<Prisma.$MaintenanceNoticePayload>
 
 /**
  * Enums
@@ -554,6 +559,16 @@ export class PrismaClient<
     * ```
     */
   get assetAssignment(): Prisma.AssetAssignmentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.maintenanceNotice`: Exposes CRUD operations for the **MaintenanceNotice** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MaintenanceNotices
+    * const maintenanceNotices = await prisma.maintenanceNotice.findMany()
+    * ```
+    */
+  get maintenanceNotice(): Prisma.MaintenanceNoticeDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1014,7 +1029,8 @@ export namespace Prisma {
     ProposalApprover: 'ProposalApprover',
     EmailActionToken: 'EmailActionToken',
     Asset: 'Asset',
-    AssetAssignment: 'AssetAssignment'
+    AssetAssignment: 'AssetAssignment',
+    MaintenanceNotice: 'MaintenanceNotice'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1033,7 +1049,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "file" | "vehicle" | "employee" | "department" | "position" | "workInfo" | "contactInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover" | "emailActionToken" | "asset" | "assetAssignment"
+      modelProps: "file" | "vehicle" | "employee" | "department" | "position" | "workInfo" | "contactInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover" | "emailActionToken" | "asset" | "assetAssignment" | "maintenanceNotice"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2423,6 +2439,72 @@ export namespace Prisma {
           }
         }
       }
+      MaintenanceNotice: {
+        payload: Prisma.$MaintenanceNoticePayload<ExtArgs>
+        fields: Prisma.MaintenanceNoticeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MaintenanceNoticeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MaintenanceNoticeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload>
+          }
+          findFirst: {
+            args: Prisma.MaintenanceNoticeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MaintenanceNoticeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload>
+          }
+          findMany: {
+            args: Prisma.MaintenanceNoticeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload>[]
+          }
+          create: {
+            args: Prisma.MaintenanceNoticeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload>
+          }
+          createMany: {
+            args: Prisma.MaintenanceNoticeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.MaintenanceNoticeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload>
+          }
+          update: {
+            args: Prisma.MaintenanceNoticeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload>
+          }
+          deleteMany: {
+            args: Prisma.MaintenanceNoticeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MaintenanceNoticeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.MaintenanceNoticeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload>
+          }
+          aggregate: {
+            args: Prisma.MaintenanceNoticeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMaintenanceNotice>
+          }
+          groupBy: {
+            args: Prisma.MaintenanceNoticeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MaintenanceNoticeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MaintenanceNoticeCountArgs<ExtArgs>
+            result: $Utils.Optional<MaintenanceNoticeCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2528,6 +2610,7 @@ export namespace Prisma {
     emailActionToken?: EmailActionTokenOmit
     asset?: AssetOmit
     assetAssignment?: AssetAssignmentOmit
+    maintenanceNotice?: MaintenanceNoticeOmit
   }
 
   /* Types for Logging */
@@ -25261,6 +25344,944 @@ export namespace Prisma {
 
 
   /**
+   * Model MaintenanceNotice
+   */
+
+  export type AggregateMaintenanceNotice = {
+    _count: MaintenanceNoticeCountAggregateOutputType | null
+    _avg: MaintenanceNoticeAvgAggregateOutputType | null
+    _sum: MaintenanceNoticeSumAggregateOutputType | null
+    _min: MaintenanceNoticeMinAggregateOutputType | null
+    _max: MaintenanceNoticeMaxAggregateOutputType | null
+  }
+
+  export type MaintenanceNoticeAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type MaintenanceNoticeSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type MaintenanceNoticeMinAggregateOutputType = {
+    id: number | null
+    title: string | null
+    message: string | null
+    startTime: Date | null
+    endTime: Date | null
+    isActive: boolean | null
+    createdAt: Date | null
+  }
+
+  export type MaintenanceNoticeMaxAggregateOutputType = {
+    id: number | null
+    title: string | null
+    message: string | null
+    startTime: Date | null
+    endTime: Date | null
+    isActive: boolean | null
+    createdAt: Date | null
+  }
+
+  export type MaintenanceNoticeCountAggregateOutputType = {
+    id: number
+    title: number
+    message: number
+    startTime: number
+    endTime: number
+    isActive: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type MaintenanceNoticeAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type MaintenanceNoticeSumAggregateInputType = {
+    id?: true
+  }
+
+  export type MaintenanceNoticeMinAggregateInputType = {
+    id?: true
+    title?: true
+    message?: true
+    startTime?: true
+    endTime?: true
+    isActive?: true
+    createdAt?: true
+  }
+
+  export type MaintenanceNoticeMaxAggregateInputType = {
+    id?: true
+    title?: true
+    message?: true
+    startTime?: true
+    endTime?: true
+    isActive?: true
+    createdAt?: true
+  }
+
+  export type MaintenanceNoticeCountAggregateInputType = {
+    id?: true
+    title?: true
+    message?: true
+    startTime?: true
+    endTime?: true
+    isActive?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type MaintenanceNoticeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MaintenanceNotice to aggregate.
+     */
+    where?: MaintenanceNoticeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaintenanceNotices to fetch.
+     */
+    orderBy?: MaintenanceNoticeOrderByWithRelationInput | MaintenanceNoticeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MaintenanceNoticeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaintenanceNotices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaintenanceNotices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MaintenanceNotices
+    **/
+    _count?: true | MaintenanceNoticeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MaintenanceNoticeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MaintenanceNoticeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MaintenanceNoticeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MaintenanceNoticeMaxAggregateInputType
+  }
+
+  export type GetMaintenanceNoticeAggregateType<T extends MaintenanceNoticeAggregateArgs> = {
+        [P in keyof T & keyof AggregateMaintenanceNotice]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMaintenanceNotice[P]>
+      : GetScalarType<T[P], AggregateMaintenanceNotice[P]>
+  }
+
+
+
+
+  export type MaintenanceNoticeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MaintenanceNoticeWhereInput
+    orderBy?: MaintenanceNoticeOrderByWithAggregationInput | MaintenanceNoticeOrderByWithAggregationInput[]
+    by: MaintenanceNoticeScalarFieldEnum[] | MaintenanceNoticeScalarFieldEnum
+    having?: MaintenanceNoticeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MaintenanceNoticeCountAggregateInputType | true
+    _avg?: MaintenanceNoticeAvgAggregateInputType
+    _sum?: MaintenanceNoticeSumAggregateInputType
+    _min?: MaintenanceNoticeMinAggregateInputType
+    _max?: MaintenanceNoticeMaxAggregateInputType
+  }
+
+  export type MaintenanceNoticeGroupByOutputType = {
+    id: number
+    title: string | null
+    message: string
+    startTime: Date
+    endTime: Date
+    isActive: boolean
+    createdAt: Date
+    _count: MaintenanceNoticeCountAggregateOutputType | null
+    _avg: MaintenanceNoticeAvgAggregateOutputType | null
+    _sum: MaintenanceNoticeSumAggregateOutputType | null
+    _min: MaintenanceNoticeMinAggregateOutputType | null
+    _max: MaintenanceNoticeMaxAggregateOutputType | null
+  }
+
+  type GetMaintenanceNoticeGroupByPayload<T extends MaintenanceNoticeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MaintenanceNoticeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MaintenanceNoticeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MaintenanceNoticeGroupByOutputType[P]>
+            : GetScalarType<T[P], MaintenanceNoticeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MaintenanceNoticeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    message?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["maintenanceNotice"]>
+
+
+
+  export type MaintenanceNoticeSelectScalar = {
+    id?: boolean
+    title?: boolean
+    message?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+  }
+
+  export type MaintenanceNoticeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "message" | "startTime" | "endTime" | "isActive" | "createdAt", ExtArgs["result"]["maintenanceNotice"]>
+
+  export type $MaintenanceNoticePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MaintenanceNotice"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      title: string | null
+      message: string
+      startTime: Date
+      endTime: Date
+      isActive: boolean
+      createdAt: Date
+    }, ExtArgs["result"]["maintenanceNotice"]>
+    composites: {}
+  }
+
+  type MaintenanceNoticeGetPayload<S extends boolean | null | undefined | MaintenanceNoticeDefaultArgs> = $Result.GetResult<Prisma.$MaintenanceNoticePayload, S>
+
+  type MaintenanceNoticeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MaintenanceNoticeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MaintenanceNoticeCountAggregateInputType | true
+    }
+
+  export interface MaintenanceNoticeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MaintenanceNotice'], meta: { name: 'MaintenanceNotice' } }
+    /**
+     * Find zero or one MaintenanceNotice that matches the filter.
+     * @param {MaintenanceNoticeFindUniqueArgs} args - Arguments to find a MaintenanceNotice
+     * @example
+     * // Get one MaintenanceNotice
+     * const maintenanceNotice = await prisma.maintenanceNotice.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MaintenanceNoticeFindUniqueArgs>(args: SelectSubset<T, MaintenanceNoticeFindUniqueArgs<ExtArgs>>): Prisma__MaintenanceNoticeClient<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MaintenanceNotice that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MaintenanceNoticeFindUniqueOrThrowArgs} args - Arguments to find a MaintenanceNotice
+     * @example
+     * // Get one MaintenanceNotice
+     * const maintenanceNotice = await prisma.maintenanceNotice.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MaintenanceNoticeFindUniqueOrThrowArgs>(args: SelectSubset<T, MaintenanceNoticeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MaintenanceNoticeClient<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MaintenanceNotice that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaintenanceNoticeFindFirstArgs} args - Arguments to find a MaintenanceNotice
+     * @example
+     * // Get one MaintenanceNotice
+     * const maintenanceNotice = await prisma.maintenanceNotice.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MaintenanceNoticeFindFirstArgs>(args?: SelectSubset<T, MaintenanceNoticeFindFirstArgs<ExtArgs>>): Prisma__MaintenanceNoticeClient<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MaintenanceNotice that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaintenanceNoticeFindFirstOrThrowArgs} args - Arguments to find a MaintenanceNotice
+     * @example
+     * // Get one MaintenanceNotice
+     * const maintenanceNotice = await prisma.maintenanceNotice.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MaintenanceNoticeFindFirstOrThrowArgs>(args?: SelectSubset<T, MaintenanceNoticeFindFirstOrThrowArgs<ExtArgs>>): Prisma__MaintenanceNoticeClient<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MaintenanceNotices that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaintenanceNoticeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MaintenanceNotices
+     * const maintenanceNotices = await prisma.maintenanceNotice.findMany()
+     * 
+     * // Get first 10 MaintenanceNotices
+     * const maintenanceNotices = await prisma.maintenanceNotice.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const maintenanceNoticeWithIdOnly = await prisma.maintenanceNotice.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MaintenanceNoticeFindManyArgs>(args?: SelectSubset<T, MaintenanceNoticeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MaintenanceNotice.
+     * @param {MaintenanceNoticeCreateArgs} args - Arguments to create a MaintenanceNotice.
+     * @example
+     * // Create one MaintenanceNotice
+     * const MaintenanceNotice = await prisma.maintenanceNotice.create({
+     *   data: {
+     *     // ... data to create a MaintenanceNotice
+     *   }
+     * })
+     * 
+     */
+    create<T extends MaintenanceNoticeCreateArgs>(args: SelectSubset<T, MaintenanceNoticeCreateArgs<ExtArgs>>): Prisma__MaintenanceNoticeClient<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MaintenanceNotices.
+     * @param {MaintenanceNoticeCreateManyArgs} args - Arguments to create many MaintenanceNotices.
+     * @example
+     * // Create many MaintenanceNotices
+     * const maintenanceNotice = await prisma.maintenanceNotice.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MaintenanceNoticeCreateManyArgs>(args?: SelectSubset<T, MaintenanceNoticeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a MaintenanceNotice.
+     * @param {MaintenanceNoticeDeleteArgs} args - Arguments to delete one MaintenanceNotice.
+     * @example
+     * // Delete one MaintenanceNotice
+     * const MaintenanceNotice = await prisma.maintenanceNotice.delete({
+     *   where: {
+     *     // ... filter to delete one MaintenanceNotice
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MaintenanceNoticeDeleteArgs>(args: SelectSubset<T, MaintenanceNoticeDeleteArgs<ExtArgs>>): Prisma__MaintenanceNoticeClient<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MaintenanceNotice.
+     * @param {MaintenanceNoticeUpdateArgs} args - Arguments to update one MaintenanceNotice.
+     * @example
+     * // Update one MaintenanceNotice
+     * const maintenanceNotice = await prisma.maintenanceNotice.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MaintenanceNoticeUpdateArgs>(args: SelectSubset<T, MaintenanceNoticeUpdateArgs<ExtArgs>>): Prisma__MaintenanceNoticeClient<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MaintenanceNotices.
+     * @param {MaintenanceNoticeDeleteManyArgs} args - Arguments to filter MaintenanceNotices to delete.
+     * @example
+     * // Delete a few MaintenanceNotices
+     * const { count } = await prisma.maintenanceNotice.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MaintenanceNoticeDeleteManyArgs>(args?: SelectSubset<T, MaintenanceNoticeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MaintenanceNotices.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaintenanceNoticeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MaintenanceNotices
+     * const maintenanceNotice = await prisma.maintenanceNotice.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MaintenanceNoticeUpdateManyArgs>(args: SelectSubset<T, MaintenanceNoticeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one MaintenanceNotice.
+     * @param {MaintenanceNoticeUpsertArgs} args - Arguments to update or create a MaintenanceNotice.
+     * @example
+     * // Update or create a MaintenanceNotice
+     * const maintenanceNotice = await prisma.maintenanceNotice.upsert({
+     *   create: {
+     *     // ... data to create a MaintenanceNotice
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MaintenanceNotice we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MaintenanceNoticeUpsertArgs>(args: SelectSubset<T, MaintenanceNoticeUpsertArgs<ExtArgs>>): Prisma__MaintenanceNoticeClient<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MaintenanceNotices.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaintenanceNoticeCountArgs} args - Arguments to filter MaintenanceNotices to count.
+     * @example
+     * // Count the number of MaintenanceNotices
+     * const count = await prisma.maintenanceNotice.count({
+     *   where: {
+     *     // ... the filter for the MaintenanceNotices we want to count
+     *   }
+     * })
+    **/
+    count<T extends MaintenanceNoticeCountArgs>(
+      args?: Subset<T, MaintenanceNoticeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MaintenanceNoticeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MaintenanceNotice.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaintenanceNoticeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MaintenanceNoticeAggregateArgs>(args: Subset<T, MaintenanceNoticeAggregateArgs>): Prisma.PrismaPromise<GetMaintenanceNoticeAggregateType<T>>
+
+    /**
+     * Group by MaintenanceNotice.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaintenanceNoticeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MaintenanceNoticeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MaintenanceNoticeGroupByArgs['orderBy'] }
+        : { orderBy?: MaintenanceNoticeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MaintenanceNoticeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMaintenanceNoticeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MaintenanceNotice model
+   */
+  readonly fields: MaintenanceNoticeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MaintenanceNotice.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MaintenanceNoticeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MaintenanceNotice model
+   */
+  interface MaintenanceNoticeFieldRefs {
+    readonly id: FieldRef<"MaintenanceNotice", 'Int'>
+    readonly title: FieldRef<"MaintenanceNotice", 'String'>
+    readonly message: FieldRef<"MaintenanceNotice", 'String'>
+    readonly startTime: FieldRef<"MaintenanceNotice", 'DateTime'>
+    readonly endTime: FieldRef<"MaintenanceNotice", 'DateTime'>
+    readonly isActive: FieldRef<"MaintenanceNotice", 'Boolean'>
+    readonly createdAt: FieldRef<"MaintenanceNotice", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MaintenanceNotice findUnique
+   */
+  export type MaintenanceNoticeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceNotice
+     */
+    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceNotice
+     */
+    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    /**
+     * Filter, which MaintenanceNotice to fetch.
+     */
+    where: MaintenanceNoticeWhereUniqueInput
+  }
+
+  /**
+   * MaintenanceNotice findUniqueOrThrow
+   */
+  export type MaintenanceNoticeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceNotice
+     */
+    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceNotice
+     */
+    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    /**
+     * Filter, which MaintenanceNotice to fetch.
+     */
+    where: MaintenanceNoticeWhereUniqueInput
+  }
+
+  /**
+   * MaintenanceNotice findFirst
+   */
+  export type MaintenanceNoticeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceNotice
+     */
+    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceNotice
+     */
+    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    /**
+     * Filter, which MaintenanceNotice to fetch.
+     */
+    where?: MaintenanceNoticeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaintenanceNotices to fetch.
+     */
+    orderBy?: MaintenanceNoticeOrderByWithRelationInput | MaintenanceNoticeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MaintenanceNotices.
+     */
+    cursor?: MaintenanceNoticeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaintenanceNotices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaintenanceNotices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MaintenanceNotices.
+     */
+    distinct?: MaintenanceNoticeScalarFieldEnum | MaintenanceNoticeScalarFieldEnum[]
+  }
+
+  /**
+   * MaintenanceNotice findFirstOrThrow
+   */
+  export type MaintenanceNoticeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceNotice
+     */
+    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceNotice
+     */
+    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    /**
+     * Filter, which MaintenanceNotice to fetch.
+     */
+    where?: MaintenanceNoticeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaintenanceNotices to fetch.
+     */
+    orderBy?: MaintenanceNoticeOrderByWithRelationInput | MaintenanceNoticeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MaintenanceNotices.
+     */
+    cursor?: MaintenanceNoticeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaintenanceNotices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaintenanceNotices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MaintenanceNotices.
+     */
+    distinct?: MaintenanceNoticeScalarFieldEnum | MaintenanceNoticeScalarFieldEnum[]
+  }
+
+  /**
+   * MaintenanceNotice findMany
+   */
+  export type MaintenanceNoticeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceNotice
+     */
+    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceNotice
+     */
+    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    /**
+     * Filter, which MaintenanceNotices to fetch.
+     */
+    where?: MaintenanceNoticeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaintenanceNotices to fetch.
+     */
+    orderBy?: MaintenanceNoticeOrderByWithRelationInput | MaintenanceNoticeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MaintenanceNotices.
+     */
+    cursor?: MaintenanceNoticeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaintenanceNotices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaintenanceNotices.
+     */
+    skip?: number
+    distinct?: MaintenanceNoticeScalarFieldEnum | MaintenanceNoticeScalarFieldEnum[]
+  }
+
+  /**
+   * MaintenanceNotice create
+   */
+  export type MaintenanceNoticeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceNotice
+     */
+    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceNotice
+     */
+    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    /**
+     * The data needed to create a MaintenanceNotice.
+     */
+    data: XOR<MaintenanceNoticeCreateInput, MaintenanceNoticeUncheckedCreateInput>
+  }
+
+  /**
+   * MaintenanceNotice createMany
+   */
+  export type MaintenanceNoticeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MaintenanceNotices.
+     */
+    data: MaintenanceNoticeCreateManyInput | MaintenanceNoticeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MaintenanceNotice update
+   */
+  export type MaintenanceNoticeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceNotice
+     */
+    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceNotice
+     */
+    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    /**
+     * The data needed to update a MaintenanceNotice.
+     */
+    data: XOR<MaintenanceNoticeUpdateInput, MaintenanceNoticeUncheckedUpdateInput>
+    /**
+     * Choose, which MaintenanceNotice to update.
+     */
+    where: MaintenanceNoticeWhereUniqueInput
+  }
+
+  /**
+   * MaintenanceNotice updateMany
+   */
+  export type MaintenanceNoticeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MaintenanceNotices.
+     */
+    data: XOR<MaintenanceNoticeUpdateManyMutationInput, MaintenanceNoticeUncheckedUpdateManyInput>
+    /**
+     * Filter which MaintenanceNotices to update
+     */
+    where?: MaintenanceNoticeWhereInput
+    /**
+     * Limit how many MaintenanceNotices to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaintenanceNotice upsert
+   */
+  export type MaintenanceNoticeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceNotice
+     */
+    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceNotice
+     */
+    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    /**
+     * The filter to search for the MaintenanceNotice to update in case it exists.
+     */
+    where: MaintenanceNoticeWhereUniqueInput
+    /**
+     * In case the MaintenanceNotice found by the `where` argument doesn't exist, create a new MaintenanceNotice with this data.
+     */
+    create: XOR<MaintenanceNoticeCreateInput, MaintenanceNoticeUncheckedCreateInput>
+    /**
+     * In case the MaintenanceNotice was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MaintenanceNoticeUpdateInput, MaintenanceNoticeUncheckedUpdateInput>
+  }
+
+  /**
+   * MaintenanceNotice delete
+   */
+  export type MaintenanceNoticeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceNotice
+     */
+    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceNotice
+     */
+    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    /**
+     * Filter which MaintenanceNotice to delete.
+     */
+    where: MaintenanceNoticeWhereUniqueInput
+  }
+
+  /**
+   * MaintenanceNotice deleteMany
+   */
+  export type MaintenanceNoticeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MaintenanceNotices to delete
+     */
+    where?: MaintenanceNoticeWhereInput
+    /**
+     * Limit how many MaintenanceNotices to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaintenanceNotice without action
+   */
+  export type MaintenanceNoticeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceNotice
+     */
+    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceNotice
+     */
+    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -25569,6 +26590,19 @@ export namespace Prisma {
   export type AssetAssignmentScalarFieldEnum = (typeof AssetAssignmentScalarFieldEnum)[keyof typeof AssetAssignmentScalarFieldEnum]
 
 
+  export const MaintenanceNoticeScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    message: 'message',
+    startTime: 'startTime',
+    endTime: 'endTime',
+    isActive: 'isActive',
+    createdAt: 'createdAt'
+  };
+
+  export type MaintenanceNoticeScalarFieldEnum = (typeof MaintenanceNoticeScalarFieldEnum)[keyof typeof MaintenanceNoticeScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -25730,6 +26764,14 @@ export namespace Prisma {
   };
 
   export type AssetAssignmentOrderByRelevanceFieldEnum = (typeof AssetAssignmentOrderByRelevanceFieldEnum)[keyof typeof AssetAssignmentOrderByRelevanceFieldEnum]
+
+
+  export const MaintenanceNoticeOrderByRelevanceFieldEnum: {
+    title: 'title',
+    message: 'message'
+  };
+
+  export type MaintenanceNoticeOrderByRelevanceFieldEnum = (typeof MaintenanceNoticeOrderByRelevanceFieldEnum)[keyof typeof MaintenanceNoticeOrderByRelevanceFieldEnum]
 
 
   /**
@@ -27481,6 +28523,71 @@ export namespace Prisma {
     note?: StringNullableWithAggregatesFilter<"AssetAssignment"> | string | null
   }
 
+  export type MaintenanceNoticeWhereInput = {
+    AND?: MaintenanceNoticeWhereInput | MaintenanceNoticeWhereInput[]
+    OR?: MaintenanceNoticeWhereInput[]
+    NOT?: MaintenanceNoticeWhereInput | MaintenanceNoticeWhereInput[]
+    id?: IntFilter<"MaintenanceNotice"> | number
+    title?: StringNullableFilter<"MaintenanceNotice"> | string | null
+    message?: StringFilter<"MaintenanceNotice"> | string
+    startTime?: DateTimeFilter<"MaintenanceNotice"> | Date | string
+    endTime?: DateTimeFilter<"MaintenanceNotice"> | Date | string
+    isActive?: BoolFilter<"MaintenanceNotice"> | boolean
+    createdAt?: DateTimeFilter<"MaintenanceNotice"> | Date | string
+  }
+
+  export type MaintenanceNoticeOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrderInput | SortOrder
+    message?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    _relevance?: MaintenanceNoticeOrderByRelevanceInput
+  }
+
+  export type MaintenanceNoticeWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: MaintenanceNoticeWhereInput | MaintenanceNoticeWhereInput[]
+    OR?: MaintenanceNoticeWhereInput[]
+    NOT?: MaintenanceNoticeWhereInput | MaintenanceNoticeWhereInput[]
+    title?: StringNullableFilter<"MaintenanceNotice"> | string | null
+    message?: StringFilter<"MaintenanceNotice"> | string
+    startTime?: DateTimeFilter<"MaintenanceNotice"> | Date | string
+    endTime?: DateTimeFilter<"MaintenanceNotice"> | Date | string
+    isActive?: BoolFilter<"MaintenanceNotice"> | boolean
+    createdAt?: DateTimeFilter<"MaintenanceNotice"> | Date | string
+  }, "id">
+
+  export type MaintenanceNoticeOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrderInput | SortOrder
+    message?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    _count?: MaintenanceNoticeCountOrderByAggregateInput
+    _avg?: MaintenanceNoticeAvgOrderByAggregateInput
+    _max?: MaintenanceNoticeMaxOrderByAggregateInput
+    _min?: MaintenanceNoticeMinOrderByAggregateInput
+    _sum?: MaintenanceNoticeSumOrderByAggregateInput
+  }
+
+  export type MaintenanceNoticeScalarWhereWithAggregatesInput = {
+    AND?: MaintenanceNoticeScalarWhereWithAggregatesInput | MaintenanceNoticeScalarWhereWithAggregatesInput[]
+    OR?: MaintenanceNoticeScalarWhereWithAggregatesInput[]
+    NOT?: MaintenanceNoticeScalarWhereWithAggregatesInput | MaintenanceNoticeScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"MaintenanceNotice"> | number
+    title?: StringNullableWithAggregatesFilter<"MaintenanceNotice"> | string | null
+    message?: StringWithAggregatesFilter<"MaintenanceNotice"> | string
+    startTime?: DateTimeWithAggregatesFilter<"MaintenanceNotice"> | Date | string
+    endTime?: DateTimeWithAggregatesFilter<"MaintenanceNotice"> | Date | string
+    isActive?: BoolWithAggregatesFilter<"MaintenanceNotice"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"MaintenanceNotice"> | Date | string
+  }
+
   export type FileCreateInput = {
     filename: string
     mimeType: string
@@ -29130,6 +30237,73 @@ export namespace Prisma {
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     quantity?: IntFieldUpdateOperationsInput | number
     note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type MaintenanceNoticeCreateInput = {
+    title?: string | null
+    message: string
+    startTime: Date | string
+    endTime: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type MaintenanceNoticeUncheckedCreateInput = {
+    id?: number
+    title?: string | null
+    message: string
+    startTime: Date | string
+    endTime: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type MaintenanceNoticeUpdateInput = {
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    message?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaintenanceNoticeUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    message?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaintenanceNoticeCreateManyInput = {
+    id?: number
+    title?: string | null
+    message: string
+    startTime: Date | string
+    endTime: Date | string
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type MaintenanceNoticeUpdateManyMutationInput = {
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    message?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaintenanceNoticeUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    message?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -30791,6 +31965,50 @@ export namespace Prisma {
     employeeId?: SortOrder
     issuedById?: SortOrder
     quantity?: SortOrder
+  }
+
+  export type MaintenanceNoticeOrderByRelevanceInput = {
+    fields: MaintenanceNoticeOrderByRelevanceFieldEnum | MaintenanceNoticeOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type MaintenanceNoticeCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MaintenanceNoticeAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type MaintenanceNoticeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MaintenanceNoticeMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MaintenanceNoticeSumOrderByAggregateInput = {
+    id?: SortOrder
   }
 
   export type ProposalCreateNestedManyWithoutFileInput = {

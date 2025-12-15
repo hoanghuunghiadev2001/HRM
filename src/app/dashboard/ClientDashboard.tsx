@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
@@ -60,7 +61,7 @@ export default function ClientDashboard({
   const [modal, contextHolder] = Modal.useModal();
   const isMobile = useSelector((state: RootState) => state.responsive.isMobile);
   const [avt, setAvt] = useState("/storage/avt-default.webp");
-  const { name, avatar } = useAppSelector((state) => state.user);
+  const { name, employeeCode, avatar } = useAppSelector((state) => state.user);
 
   useEffect(() => {
     setAvt(avatar ? avatar : "/storage/logo-toyota.webp");
@@ -172,6 +173,16 @@ export default function ClientDashboard({
               },
             ],
           },
+          ...(employeeCode === "01375"
+            ? [
+                {
+                  key: "/dashboard/maintenance",
+                  icon: <Network />,
+                  label: "Bảo trì hệ thống",
+                },
+              ]
+            : []),
+
           {
             key: "/dashboard/report",
             icon: <ClipboardPlus />,

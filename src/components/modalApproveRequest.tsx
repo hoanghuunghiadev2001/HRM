@@ -220,7 +220,6 @@ const ModalApproveRequest = ({
           {requestApprove?.handoverFileId ? (
             (() => {
               const fileId = requestApprove?.handoverFileId ?? null;
-              const filename = `File-${fileId}`;
 
               // URL để tải / xem — endpoint bạn đã có: /api/files/:id
               const fileUrl = fileId ? `/api/files/${fileId}` : null;
@@ -231,12 +230,7 @@ const ModalApproveRequest = ({
                 <div className="mt-2">
                   <div className="flex justify-between items-center">
                     <p className="font-bold">Biên bản bàn giao:</p>
-                    <a
-                      href={fileUrl ?? ""}
-                      download={filename}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
+                    <a href={fileUrl ?? ""} target="_blank" rel="noreferrer">
                       <Button icon={<DownloadOutlined />}>Tải xuống</Button>
                     </a>
                   </div>

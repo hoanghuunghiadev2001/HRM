@@ -574,10 +574,7 @@ export default function ProposalDetailTailwind() {
                       borderRadius: 8,
                     }}
                   >
-                    {" "}
-                    <Text type="secondary">
-                      Không thể xem trực tiếp file
-                    </Text>{" "}
+                    <Text type="secondary">Không thể xem trực tiếp file</Text>{" "}
                   </div>
                 )}{" "}
               </div>

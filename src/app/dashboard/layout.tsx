@@ -5,6 +5,7 @@ import ClientDashboard from "./ClientDashboard";
 import { redirect } from "next/navigation";
 import { App as AntdApp, ConfigProvider } from "antd";
 import viVN from "antd/locale/vi_VN";
+import MaintenanceBanner from "./MaintenanceBanner";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 export const experimental_ppr = true;
@@ -34,7 +35,11 @@ export default async function DashboardLayout({
       warning={{ strict: false }}
     >
       <AntdApp>
-        <ClientDashboard isAdmin={isAdmin}>{children}</ClientDashboard>
+        <ClientDashboard isAdmin={isAdmin}>
+          {" "}
+          <MaintenanceBanner />
+          {children}
+        </ClientDashboard>
       </AntdApp>
     </ConfigProvider>
   );

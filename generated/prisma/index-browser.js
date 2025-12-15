@@ -352,6 +352,16 @@ exports.Prisma.AssetAssignmentScalarFieldEnum = {
   note: 'note'
 };
 
+exports.Prisma.MaintenanceNoticeScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  message: 'message',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -457,6 +467,11 @@ exports.Prisma.AssetOrderByRelevanceFieldEnum = {
 exports.Prisma.AssetAssignmentOrderByRelevanceFieldEnum = {
   note: 'note'
 };
+
+exports.Prisma.MaintenanceNoticeOrderByRelevanceFieldEnum = {
+  title: 'title',
+  message: 'message'
+};
 exports.Sex = exports.$Enums.Sex = {
   MALE: 'MALE',
   FEMALE: 'FEMALE'
@@ -519,7 +534,8 @@ exports.Prisma.ModelName = {
   ProposalApprover: 'ProposalApprover',
   EmailActionToken: 'EmailActionToken',
   Asset: 'Asset',
-  AssetAssignment: 'AssetAssignment'
+  AssetAssignment: 'AssetAssignment',
+  MaintenanceNotice: 'MaintenanceNotice'
 };
 
 /**
