@@ -2,6 +2,14 @@
 import { sendEmail } from "@/lib/mail";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+const formatVN = (date: Date) =>
+  dayjs(date).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm");
 
 export async function PATCH(
   req: Request,
@@ -93,8 +101,7 @@ export async function PATCH(
 
               <p>
                 <strong>⏰ Thời gian bảo trì:</strong><br/>
-                ${updated.startTime.toLocaleString("vi-VN")} &nbsp;→&nbsp;
-                ${updated.endTime.toLocaleString("vi-VN")}
+${formatVN(updated.startTime)} → ${formatVN(updated.endTime)}
               </p>
 
               <p>
