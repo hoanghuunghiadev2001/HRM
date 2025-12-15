@@ -38,7 +38,7 @@ export default function MaintenanceBanner() {
 
   if (!notice) return null;
 
-  const end = dayjs(notice.endTime);
+  const end = dayjs(notice.startTime);
   const remaining = dayjs.duration(end.diff(now));
 
   const remainingText =
