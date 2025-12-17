@@ -179,7 +179,7 @@ export default function ClientDashboard({
                 {
                   key: "/dashboard/maintenance",
                   icon: <Network />,
-                  label: "Bảo trì hệ thống",
+                  label: "Thông Báo hệ thống",
                 },
               ]
             : []),
