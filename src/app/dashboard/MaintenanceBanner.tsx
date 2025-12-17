@@ -16,7 +16,7 @@ export default function MaintenanceBanner() {
   useEffect(() => {
     load();
     const poll = setInterval(load, 300000); // refresh data 30s
-    const tick = setInterval(() => setNow(dayjs()), 1000); // countdown
+    const tick = setInterval(() => setNow(dayjs()), 100000); // countdown
 
     return () => {
       clearInterval(poll);
