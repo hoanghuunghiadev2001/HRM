@@ -3,47 +3,35 @@ import { NextRequest, NextResponse } from "next/server";
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // 👉 Cho phép static files & maintenance page
-  if (pathname.startsWith("/_next") || pathname.startsWith("/images")) {
-    return NextResponse.next();
-  }
-
-  if (process.env.MAINTENANCE_MODE === "true") {
-    return NextResponse.rewrite(new URL("/maintenance", req.url));
-  }
-
-  // ✅ Bỏ qua middleware cho file tĩnh hoặc public routes
+  // Cho phép static + API
   if (
-    pathname.startsWith("/login") ||
-    pathname.startsWith("/api/auth") ||
-    pathname.startsWith("/api/auth") ||
-    pathname.startsWith("/app/lib") ||
     pathname.startsWith("/_next") ||
+    pathname.startsWith("/api") ||
+    pathname.startsWith("/images") ||
     pathname.startsWith("/favicon") ||
     pathname.startsWith("/icons") ||
-    pathname.startsWith("/storage") ||
-    pathname.startsWith("/images") ||
-    pathname.startsWith("/api") ||
-    pathname.startsWith("/manifest") || // 👈 THÊM DÒNG NÀY
-    pathname.startsWith("/robots") // 👈 và thêm robots.txt nếu có
+    pathname.startsWith("/manifest") ||
+    pathname.startsWith("/robots")
   ) {
     return NextResponse.next();
   }
 
-  // Kiểm tra token
+  // Maintenance mode
+  if (process.env.MAINTENANCE_MODE === "true") {
+    return NextResponse.rewrite(new URL("/maintenance", req.url));
+  }
+
+  // Auth check (CHỈ CHO PAGE)
   const token = req.cookies.get("token")?.value;
   if (!token) {
-    const response = NextResponse.redirect(new URL("/login", req.url));
-    response.cookies.set("token", "", { maxAge: 0, path: "/" });
-    return response;
+    const res = NextResponse.redirect(new URL("/login", req.url));
+    res.cookies.set("token", "", { maxAge: 0, path: "/" });
+    return res;
   }
 
   return NextResponse.next();
 }
 
-// ✅ Matcher — thêm loại trừ manifest luôn cho chắc
 export const config = {
-  matcher: [
-    "/((?!_next|api|api/auth|login|favicon|icons|storage|manifest|robots).*)",
-  ],
+  matcher: ["/((?!api|_next|favicon|icons|images|manifest|robots).*)"],
 };
