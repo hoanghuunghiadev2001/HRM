@@ -2,12 +2,15 @@
 "use client";
 
 import {
+  App,
   Button,
   Card,
   DatePicker,
   Form,
   Input,
   message,
+  Modal,
+  Select,
   Switch,
   Table,
   Tag,
@@ -15,43 +18,56 @@ import {
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 
-export default function MaintenanceAdminPage() {
+const { RangePicker } = DatePicker;
+
+export default function NotificationAdminPage() {
   const [form] = Form.useForm();
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-
+  const [open, setOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const { modal } = App.useApp();
   useEffect(() => {
     load();
   }, []);
 
   async function load() {
-    const res = await fetch("/api/maintenance");
+    const res = await fetch("/api/notifications");
     setData(await res.json());
   }
 
   async function submit(values: any) {
-    const [start, end] = values.time;
-
     setLoading(true);
-    await fetch("/api/maintenance", {
+
+    const payload: any = {
+      title: values.title,
+      message: values.message,
+      type: values.type,
+      sendMail: values.sendMail ?? false,
+      sendApp: true,
+    };
+
+    if (values.type === "MAINTENANCE") {
+      const [start, end] = values.time;
+      payload.startTime = start.toISOString();
+      payload.endTime = end.toISOString();
+    }
+
+    await fetch("/api/notifications", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: values.title,
-        message: values.message,
-        startTime: start.toISOString(),
-        endTime: end.toISOString(),
-      }),
+      body: JSON.stringify(payload),
     });
 
-    message.success("Đã thêm lịch bảo trì");
+    message.success("Đã tạo thông báo");
+    setOpen(false);
     form.resetFields();
     setLoading(false);
     load();
   }
 
   async function toggle(id: number, value: boolean) {
-    await fetch(`/api/maintenance/${id}/toggle`, {
+    await fetch(`/api/notifications/${id}/toggle`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ isActive: value }),
@@ -59,68 +75,84 @@ export default function MaintenanceAdminPage() {
     load();
   }
 
+  function confirmDelete(record: any) {
+    modal.confirm({
+      title: "Xác nhận xóa thông báo",
+      content: (
+        <>
+          <p>Bạn có chắc chắn muốn xóa thông báo này?</p>
+          <p>
+            <strong>{record.title || "Không có tiêu đề"}</strong>
+          </p>
+        </>
+      ),
+      okText: "Xóa",
+      okType: "danger",
+      cancelText: "Hủy",
+      onOk: () => deleteItem(record.id),
+    });
+  }
+
+  async function deleteItem(id: number) {
+    try {
+      setDeletingId(id);
+      await fetch(`/api/notifications/${id}/toggle`, {
+        method: "DELETE",
+      });
+      message.success("Đã xóa thông báo");
+      load();
+    } catch {
+      message.error("Xóa thất bại");
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
   return (
     <div className="space-y-6">
-      {/* FORM THÊM MỚI */}
-      <Card title="Thêm lịch bảo trì">
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={submit}
-          style={{ maxWidth: 600 }}
-        >
-          <Form.Item name="title" label="Tiêu đề">
-            <Input placeholder="Bảo trì hệ thống HRM" />
-          </Form.Item>
+      {/* HEADER */}
+      <div className="flex justify-between items-center">
+        <h2 className="text-lg font-semibold">Quản lý thông báo</h2>
+        <Button type="primary" onClick={() => setOpen(true)}>
+          ➕ Thêm thông báo
+        </Button>
+      </div>
 
-          <Form.Item
-            name="message"
-            label="Nội dung thông báo"
-            rules={[{ required: true }]}
-          >
-            <Input.TextArea rows={3} />
-          </Form.Item>
-
-          <Form.Item
-            name="time"
-            label="Thời gian bảo trì"
-            rules={[{ required: true }]}
-          >
-            <DatePicker.RangePicker showTime format="DD/MM/YYYY HH:mm" />
-          </Form.Item>
-
-          <Button type="primary" htmlType="submit" loading={loading}>
-            Thêm mới
-          </Button>
-        </Form>
-      </Card>
-
-      {/* DANH SÁCH */}
-      <Card title="Danh sách lịch bảo trì">
+      {/* LIST */}
+      <Card>
         <Table
           rowKey="id"
           dataSource={data}
           pagination={{ pageSize: 5 }}
           columns={[
             {
+              title: "Loại",
+              dataIndex: "type",
+              render: (v) => <Tag>{v}</Tag>,
+            },
+            {
               title: "Nội dung",
               dataIndex: "message",
+              ellipsis: true,
             },
             {
               title: "Thời gian",
               render: (_, r) =>
-                `${dayjs(r.startTime).format("DD/MM HH:mm")} → ${dayjs(
-                  r.endTime
-                ).format("DD/MM HH:mm")}`,
+                r.startTime && r.endTime
+                  ? `${dayjs(r.startTime).format("DD/MM HH:mm")} → ${dayjs(
+                      r.endTime
+                    ).format("DD/MM HH:mm")}`
+                  : "-",
             },
             {
               title: "Trạng thái",
               render: (_, r) => {
                 const now = dayjs();
-                if (!r.isActive) return <Tag color="default">Tắt</Tag>;
-                if (now.isBefore(r.startTime))
+
+                if (!r.isActive) return <Tag>Tắt</Tag>;
+                if (r.startTime && now.isBefore(r.startTime))
                   return <Tag color="blue">Sắp tới</Tag>;
-                if (now.isAfter(r.endTime))
+                if (r.endTime && now.isAfter(r.endTime))
                   return <Tag color="red">Hết hạn</Tag>;
                 return <Tag color="green">Đang hiển thị</Tag>;
               },
@@ -134,9 +166,96 @@ export default function MaintenanceAdminPage() {
                 />
               ),
             },
+            {
+              title: "Hành động",
+              width: 120,
+              render: (_, r) => (
+                <Button
+                  danger
+                  size="small"
+                  loading={deletingId === r.id}
+                  onClick={() => confirmDelete(r)}
+                >
+                  🗑️ Xóa
+                </Button>
+              ),
+            },
           ]}
         />
       </Card>
+
+      {/* MODAL CREATE */}
+      <Modal
+        title="Tạo thông báo mới"
+        open={open}
+        onCancel={() => setOpen(false)}
+        onOk={() => form.submit()}
+        okText="Tạo"
+        cancelText="Hủy"
+        confirmLoading={loading}
+        destroyOnClose
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={submit}
+          initialValues={{
+            type: "SYSTEM",
+            sendMail: false,
+          }}
+        >
+          <Form.Item
+            name="type"
+            label="Loại thông báo"
+            rules={[{ required: true }]}
+          >
+            <Select
+              options={[
+                { value: "MAINTENANCE", label: "Bảo trì hệ thống" },
+                { value: "SYSTEM", label: "Thông báo hệ thống" },
+                { value: "HR", label: "Thông báo nhân sự" },
+                { value: "SECURITY", label: "Bảo mật" },
+                { value: "FEATURE", label: "Tính năng mới" },
+              ]}
+            />
+          </Form.Item>
+
+          <Form.Item name="title" label="Tiêu đề">
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="message"
+            label="Nội dung"
+            rules={[{ required: true }]}
+          >
+            <Input.TextArea rows={3} />
+          </Form.Item>
+
+          {/* Thời gian chỉ cho Maintenance */}
+          <Form.Item shouldUpdate={(p, c) => p.type !== c.type}>
+            {({ getFieldValue }) =>
+              getFieldValue("type") === "MAINTENANCE" ? (
+                <Form.Item
+                  name="time"
+                  label="Thời gian bảo trì"
+                  rules={[{ required: true }]}
+                >
+                  <RangePicker showTime format="DD/MM/YYYY HH:mm" />
+                </Form.Item>
+              ) : null
+            }
+          </Form.Item>
+
+          <Form.Item
+            name="sendMail"
+            label="Gửi email thông báo"
+            valuePropName="checked"
+          >
+            <Switch />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }

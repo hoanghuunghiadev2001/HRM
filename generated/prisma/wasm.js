@@ -352,14 +352,18 @@ exports.Prisma.AssetAssignmentScalarFieldEnum = {
   note: 'note'
 };
 
-exports.Prisma.MaintenanceNoticeScalarFieldEnum = {
+exports.Prisma.NotificationScalarFieldEnum = {
   id: 'id',
   title: 'title',
   message: 'message',
+  type: 'type',
   startTime: 'startTime',
   endTime: 'endTime',
   isActive: 'isActive',
-  createdAt: 'createdAt'
+  sendMail: 'sendMail',
+  sendApp: 'sendApp',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -468,7 +472,7 @@ exports.Prisma.AssetAssignmentOrderByRelevanceFieldEnum = {
   note: 'note'
 };
 
-exports.Prisma.MaintenanceNoticeOrderByRelevanceFieldEnum = {
+exports.Prisma.NotificationOrderByRelevanceFieldEnum = {
   title: 'title',
   message: 'message'
 };
@@ -513,6 +517,15 @@ exports.ProposalType = exports.$Enums.ProposalType = {
   VEHICLE: 'VEHICLE'
 };
 
+exports.NotificationType = exports.$Enums.NotificationType = {
+  MAINTENANCE: 'MAINTENANCE',
+  SYSTEM: 'SYSTEM',
+  HR: 'HR',
+  SECURITY: 'SECURITY',
+  FEATURE: 'FEATURE',
+  CUSTOM: 'CUSTOM'
+};
+
 exports.Prisma.ModelName = {
   File: 'File',
   Vehicle: 'Vehicle',
@@ -535,7 +548,7 @@ exports.Prisma.ModelName = {
   EmailActionToken: 'EmailActionToken',
   Asset: 'Asset',
   AssetAssignment: 'AssetAssignment',
-  MaintenanceNotice: 'MaintenanceNotice'
+  Notification: 'Notification'
 };
 
 /**

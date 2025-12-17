@@ -401,12 +401,32 @@ enum ProposalStatus {
   rejected
 }
 
-model MaintenanceNotice {
-  id        Int      @id @default(autoincrement())
-  title     String?
-  message   String   @db.Text
-  startTime DateTime
-  endTime   DateTime
-  isActive  Boolean  @default(true)
+enum NotificationType {
+  MAINTENANCE
+  SYSTEM
+  HR
+  SECURITY
+  FEATURE
+  CUSTOM
+}
+
+model Notification {
+  id      Int              @id @default(autoincrement())
+  title   String?
+  message String           @db.LongText
+  type    NotificationType
+
+  startTime DateTime? // nullable
+  endTime   DateTime? // nullable
+
+  isActive Boolean @default(true)
+  sendMail Boolean @default(false)
+  sendApp  Boolean @default(true)
+
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([type])
+  @@index([isActive])
+  @@index([startTime, endTime])
 }

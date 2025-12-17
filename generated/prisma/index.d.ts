@@ -119,10 +119,10 @@ export type Asset = $Result.DefaultSelection<Prisma.$AssetPayload>
  */
 export type AssetAssignment = $Result.DefaultSelection<Prisma.$AssetAssignmentPayload>
 /**
- * Model MaintenanceNotice
+ * Model Notification
  * 
  */
-export type MaintenanceNotice = $Result.DefaultSelection<Prisma.$MaintenanceNoticePayload>
+export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
 
 /**
  * Enums
@@ -195,6 +195,18 @@ export const ProposalStatus: {
 
 export type ProposalStatus = (typeof ProposalStatus)[keyof typeof ProposalStatus]
 
+
+export const NotificationType: {
+  MAINTENANCE: 'MAINTENANCE',
+  SYSTEM: 'SYSTEM',
+  HR: 'HR',
+  SECURITY: 'SECURITY',
+  FEATURE: 'FEATURE',
+  CUSTOM: 'CUSTOM'
+};
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
 }
 
 export type ProposalType = $Enums.ProposalType
@@ -224,6 +236,10 @@ export const LeaveStatus: typeof $Enums.LeaveStatus
 export type ProposalStatus = $Enums.ProposalStatus
 
 export const ProposalStatus: typeof $Enums.ProposalStatus
+
+export type NotificationType = $Enums.NotificationType
+
+export const NotificationType: typeof $Enums.NotificationType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -561,14 +577,14 @@ export class PrismaClient<
   get assetAssignment(): Prisma.AssetAssignmentDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.maintenanceNotice`: Exposes CRUD operations for the **MaintenanceNotice** model.
+   * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more MaintenanceNotices
-    * const maintenanceNotices = await prisma.maintenanceNotice.findMany()
+    * // Fetch zero or more Notifications
+    * const notifications = await prisma.notification.findMany()
     * ```
     */
-  get maintenanceNotice(): Prisma.MaintenanceNoticeDelegate<ExtArgs, ClientOptions>;
+  get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1030,7 +1046,7 @@ export namespace Prisma {
     EmailActionToken: 'EmailActionToken',
     Asset: 'Asset',
     AssetAssignment: 'AssetAssignment',
-    MaintenanceNotice: 'MaintenanceNotice'
+    Notification: 'Notification'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1049,7 +1065,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "file" | "vehicle" | "employee" | "department" | "position" | "workInfo" | "contactInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover" | "emailActionToken" | "asset" | "assetAssignment" | "maintenanceNotice"
+      modelProps: "file" | "vehicle" | "employee" | "department" | "position" | "workInfo" | "contactInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover" | "emailActionToken" | "asset" | "assetAssignment" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2439,69 +2455,69 @@ export namespace Prisma {
           }
         }
       }
-      MaintenanceNotice: {
-        payload: Prisma.$MaintenanceNoticePayload<ExtArgs>
-        fields: Prisma.MaintenanceNoticeFieldRefs
+      Notification: {
+        payload: Prisma.$NotificationPayload<ExtArgs>
+        fields: Prisma.NotificationFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.MaintenanceNoticeFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload> | null
+            args: Prisma.NotificationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.MaintenanceNoticeFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload>
+            args: Prisma.NotificationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
           }
           findFirst: {
-            args: Prisma.MaintenanceNoticeFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload> | null
+            args: Prisma.NotificationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.MaintenanceNoticeFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload>
+            args: Prisma.NotificationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
           }
           findMany: {
-            args: Prisma.MaintenanceNoticeFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload>[]
+            args: Prisma.NotificationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
           }
           create: {
-            args: Prisma.MaintenanceNoticeCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload>
+            args: Prisma.NotificationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
           }
           createMany: {
-            args: Prisma.MaintenanceNoticeCreateManyArgs<ExtArgs>
+            args: Prisma.NotificationCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           delete: {
-            args: Prisma.MaintenanceNoticeDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload>
+            args: Prisma.NotificationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
           }
           update: {
-            args: Prisma.MaintenanceNoticeUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload>
+            args: Prisma.NotificationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
           }
           deleteMany: {
-            args: Prisma.MaintenanceNoticeDeleteManyArgs<ExtArgs>
+            args: Prisma.NotificationDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.MaintenanceNoticeUpdateManyArgs<ExtArgs>
+            args: Prisma.NotificationUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           upsert: {
-            args: Prisma.MaintenanceNoticeUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MaintenanceNoticePayload>
+            args: Prisma.NotificationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
           }
           aggregate: {
-            args: Prisma.MaintenanceNoticeAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateMaintenanceNotice>
+            args: Prisma.NotificationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNotification>
           }
           groupBy: {
-            args: Prisma.MaintenanceNoticeGroupByArgs<ExtArgs>
-            result: $Utils.Optional<MaintenanceNoticeGroupByOutputType>[]
+            args: Prisma.NotificationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NotificationGroupByOutputType>[]
           }
           count: {
-            args: Prisma.MaintenanceNoticeCountArgs<ExtArgs>
-            result: $Utils.Optional<MaintenanceNoticeCountAggregateOutputType> | number
+            args: Prisma.NotificationCountArgs<ExtArgs>
+            result: $Utils.Optional<NotificationCountAggregateOutputType> | number
           }
         }
       }
@@ -2610,7 +2626,7 @@ export namespace Prisma {
     emailActionToken?: EmailActionTokenOmit
     asset?: AssetOmit
     assetAssignment?: AssetAssignmentOmit
-    maintenanceNotice?: MaintenanceNoticeOmit
+    notification?: NotificationOmit
   }
 
   /* Types for Logging */
@@ -25344,383 +25360,423 @@ export namespace Prisma {
 
 
   /**
-   * Model MaintenanceNotice
+   * Model Notification
    */
 
-  export type AggregateMaintenanceNotice = {
-    _count: MaintenanceNoticeCountAggregateOutputType | null
-    _avg: MaintenanceNoticeAvgAggregateOutputType | null
-    _sum: MaintenanceNoticeSumAggregateOutputType | null
-    _min: MaintenanceNoticeMinAggregateOutputType | null
-    _max: MaintenanceNoticeMaxAggregateOutputType | null
+  export type AggregateNotification = {
+    _count: NotificationCountAggregateOutputType | null
+    _avg: NotificationAvgAggregateOutputType | null
+    _sum: NotificationSumAggregateOutputType | null
+    _min: NotificationMinAggregateOutputType | null
+    _max: NotificationMaxAggregateOutputType | null
   }
 
-  export type MaintenanceNoticeAvgAggregateOutputType = {
+  export type NotificationAvgAggregateOutputType = {
     id: number | null
   }
 
-  export type MaintenanceNoticeSumAggregateOutputType = {
+  export type NotificationSumAggregateOutputType = {
     id: number | null
   }
 
-  export type MaintenanceNoticeMinAggregateOutputType = {
-    id: number | null
-    title: string | null
-    message: string | null
-    startTime: Date | null
-    endTime: Date | null
-    isActive: boolean | null
-    createdAt: Date | null
-  }
-
-  export type MaintenanceNoticeMaxAggregateOutputType = {
+  export type NotificationMinAggregateOutputType = {
     id: number | null
     title: string | null
     message: string | null
+    type: $Enums.NotificationType | null
     startTime: Date | null
     endTime: Date | null
     isActive: boolean | null
+    sendMail: boolean | null
+    sendApp: boolean | null
     createdAt: Date | null
+    updatedAt: Date | null
   }
 
-  export type MaintenanceNoticeCountAggregateOutputType = {
+  export type NotificationMaxAggregateOutputType = {
+    id: number | null
+    title: string | null
+    message: string | null
+    type: $Enums.NotificationType | null
+    startTime: Date | null
+    endTime: Date | null
+    isActive: boolean | null
+    sendMail: boolean | null
+    sendApp: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NotificationCountAggregateOutputType = {
     id: number
     title: number
     message: number
+    type: number
     startTime: number
     endTime: number
     isActive: number
+    sendMail: number
+    sendApp: number
     createdAt: number
+    updatedAt: number
     _all: number
   }
 
 
-  export type MaintenanceNoticeAvgAggregateInputType = {
+  export type NotificationAvgAggregateInputType = {
     id?: true
   }
 
-  export type MaintenanceNoticeSumAggregateInputType = {
+  export type NotificationSumAggregateInputType = {
     id?: true
   }
 
-  export type MaintenanceNoticeMinAggregateInputType = {
+  export type NotificationMinAggregateInputType = {
     id?: true
     title?: true
     message?: true
+    type?: true
     startTime?: true
     endTime?: true
     isActive?: true
+    sendMail?: true
+    sendApp?: true
     createdAt?: true
+    updatedAt?: true
   }
 
-  export type MaintenanceNoticeMaxAggregateInputType = {
+  export type NotificationMaxAggregateInputType = {
     id?: true
     title?: true
     message?: true
+    type?: true
     startTime?: true
     endTime?: true
     isActive?: true
+    sendMail?: true
+    sendApp?: true
     createdAt?: true
+    updatedAt?: true
   }
 
-  export type MaintenanceNoticeCountAggregateInputType = {
+  export type NotificationCountAggregateInputType = {
     id?: true
     title?: true
     message?: true
+    type?: true
     startTime?: true
     endTime?: true
     isActive?: true
+    sendMail?: true
+    sendApp?: true
     createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
-  export type MaintenanceNoticeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type NotificationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which MaintenanceNotice to aggregate.
+     * Filter which Notification to aggregate.
      */
-    where?: MaintenanceNoticeWhereInput
+    where?: NotificationWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of MaintenanceNotices to fetch.
+     * Determine the order of Notifications to fetch.
      */
-    orderBy?: MaintenanceNoticeOrderByWithRelationInput | MaintenanceNoticeOrderByWithRelationInput[]
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: MaintenanceNoticeWhereUniqueInput
+    cursor?: NotificationWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` MaintenanceNotices from the position of the cursor.
+     * Take `±n` Notifications from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` MaintenanceNotices.
+     * Skip the first `n` Notifications.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned MaintenanceNotices
+     * Count returned Notifications
     **/
-    _count?: true | MaintenanceNoticeCountAggregateInputType
+    _count?: true | NotificationCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: MaintenanceNoticeAvgAggregateInputType
+    _avg?: NotificationAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: MaintenanceNoticeSumAggregateInputType
+    _sum?: NotificationSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: MaintenanceNoticeMinAggregateInputType
+    _min?: NotificationMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: MaintenanceNoticeMaxAggregateInputType
+    _max?: NotificationMaxAggregateInputType
   }
 
-  export type GetMaintenanceNoticeAggregateType<T extends MaintenanceNoticeAggregateArgs> = {
-        [P in keyof T & keyof AggregateMaintenanceNotice]: P extends '_count' | 'count'
+  export type GetNotificationAggregateType<T extends NotificationAggregateArgs> = {
+        [P in keyof T & keyof AggregateNotification]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateMaintenanceNotice[P]>
-      : GetScalarType<T[P], AggregateMaintenanceNotice[P]>
+        : GetScalarType<T[P], AggregateNotification[P]>
+      : GetScalarType<T[P], AggregateNotification[P]>
   }
 
 
 
 
-  export type MaintenanceNoticeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MaintenanceNoticeWhereInput
-    orderBy?: MaintenanceNoticeOrderByWithAggregationInput | MaintenanceNoticeOrderByWithAggregationInput[]
-    by: MaintenanceNoticeScalarFieldEnum[] | MaintenanceNoticeScalarFieldEnum
-    having?: MaintenanceNoticeScalarWhereWithAggregatesInput
+  export type NotificationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithAggregationInput | NotificationOrderByWithAggregationInput[]
+    by: NotificationScalarFieldEnum[] | NotificationScalarFieldEnum
+    having?: NotificationScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: MaintenanceNoticeCountAggregateInputType | true
-    _avg?: MaintenanceNoticeAvgAggregateInputType
-    _sum?: MaintenanceNoticeSumAggregateInputType
-    _min?: MaintenanceNoticeMinAggregateInputType
-    _max?: MaintenanceNoticeMaxAggregateInputType
+    _count?: NotificationCountAggregateInputType | true
+    _avg?: NotificationAvgAggregateInputType
+    _sum?: NotificationSumAggregateInputType
+    _min?: NotificationMinAggregateInputType
+    _max?: NotificationMaxAggregateInputType
   }
 
-  export type MaintenanceNoticeGroupByOutputType = {
+  export type NotificationGroupByOutputType = {
     id: number
     title: string | null
     message: string
-    startTime: Date
-    endTime: Date
+    type: $Enums.NotificationType
+    startTime: Date | null
+    endTime: Date | null
     isActive: boolean
+    sendMail: boolean
+    sendApp: boolean
     createdAt: Date
-    _count: MaintenanceNoticeCountAggregateOutputType | null
-    _avg: MaintenanceNoticeAvgAggregateOutputType | null
-    _sum: MaintenanceNoticeSumAggregateOutputType | null
-    _min: MaintenanceNoticeMinAggregateOutputType | null
-    _max: MaintenanceNoticeMaxAggregateOutputType | null
+    updatedAt: Date
+    _count: NotificationCountAggregateOutputType | null
+    _avg: NotificationAvgAggregateOutputType | null
+    _sum: NotificationSumAggregateOutputType | null
+    _min: NotificationMinAggregateOutputType | null
+    _max: NotificationMaxAggregateOutputType | null
   }
 
-  type GetMaintenanceNoticeGroupByPayload<T extends MaintenanceNoticeGroupByArgs> = Prisma.PrismaPromise<
+  type GetNotificationGroupByPayload<T extends NotificationGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<MaintenanceNoticeGroupByOutputType, T['by']> &
+      PickEnumerable<NotificationGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof MaintenanceNoticeGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof NotificationGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], MaintenanceNoticeGroupByOutputType[P]>
-            : GetScalarType<T[P], MaintenanceNoticeGroupByOutputType[P]>
+              : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+            : GetScalarType<T[P], NotificationGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type MaintenanceNoticeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type NotificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
     message?: boolean
+    type?: boolean
     startTime?: boolean
     endTime?: boolean
     isActive?: boolean
+    sendMail?: boolean
+    sendApp?: boolean
     createdAt?: boolean
-  }, ExtArgs["result"]["maintenanceNotice"]>
+    updatedAt?: boolean
+  }, ExtArgs["result"]["notification"]>
 
 
 
-  export type MaintenanceNoticeSelectScalar = {
+  export type NotificationSelectScalar = {
     id?: boolean
     title?: boolean
     message?: boolean
+    type?: boolean
     startTime?: boolean
     endTime?: boolean
     isActive?: boolean
+    sendMail?: boolean
+    sendApp?: boolean
     createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type MaintenanceNoticeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "message" | "startTime" | "endTime" | "isActive" | "createdAt", ExtArgs["result"]["maintenanceNotice"]>
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "message" | "type" | "startTime" | "endTime" | "isActive" | "sendMail" | "sendApp" | "createdAt" | "updatedAt", ExtArgs["result"]["notification"]>
 
-  export type $MaintenanceNoticePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "MaintenanceNotice"
+  export type $NotificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Notification"
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: number
       title: string | null
       message: string
-      startTime: Date
-      endTime: Date
+      type: $Enums.NotificationType
+      startTime: Date | null
+      endTime: Date | null
       isActive: boolean
+      sendMail: boolean
+      sendApp: boolean
       createdAt: Date
-    }, ExtArgs["result"]["maintenanceNotice"]>
+      updatedAt: Date
+    }, ExtArgs["result"]["notification"]>
     composites: {}
   }
 
-  type MaintenanceNoticeGetPayload<S extends boolean | null | undefined | MaintenanceNoticeDefaultArgs> = $Result.GetResult<Prisma.$MaintenanceNoticePayload, S>
+  type NotificationGetPayload<S extends boolean | null | undefined | NotificationDefaultArgs> = $Result.GetResult<Prisma.$NotificationPayload, S>
 
-  type MaintenanceNoticeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<MaintenanceNoticeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: MaintenanceNoticeCountAggregateInputType | true
+  type NotificationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NotificationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NotificationCountAggregateInputType | true
     }
 
-  export interface MaintenanceNoticeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MaintenanceNotice'], meta: { name: 'MaintenanceNotice' } }
+  export interface NotificationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Notification'], meta: { name: 'Notification' } }
     /**
-     * Find zero or one MaintenanceNotice that matches the filter.
-     * @param {MaintenanceNoticeFindUniqueArgs} args - Arguments to find a MaintenanceNotice
+     * Find zero or one Notification that matches the filter.
+     * @param {NotificationFindUniqueArgs} args - Arguments to find a Notification
      * @example
-     * // Get one MaintenanceNotice
-     * const maintenanceNotice = await prisma.maintenanceNotice.findUnique({
+     * // Get one Notification
+     * const notification = await prisma.notification.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends MaintenanceNoticeFindUniqueArgs>(args: SelectSubset<T, MaintenanceNoticeFindUniqueArgs<ExtArgs>>): Prisma__MaintenanceNoticeClient<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends NotificationFindUniqueArgs>(args: SelectSubset<T, NotificationFindUniqueArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one MaintenanceNotice that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Notification that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {MaintenanceNoticeFindUniqueOrThrowArgs} args - Arguments to find a MaintenanceNotice
+     * @param {NotificationFindUniqueOrThrowArgs} args - Arguments to find a Notification
      * @example
-     * // Get one MaintenanceNotice
-     * const maintenanceNotice = await prisma.maintenanceNotice.findUniqueOrThrow({
+     * // Get one Notification
+     * const notification = await prisma.notification.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends MaintenanceNoticeFindUniqueOrThrowArgs>(args: SelectSubset<T, MaintenanceNoticeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MaintenanceNoticeClient<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends NotificationFindUniqueOrThrowArgs>(args: SelectSubset<T, NotificationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first MaintenanceNotice that matches the filter.
+     * Find the first Notification that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MaintenanceNoticeFindFirstArgs} args - Arguments to find a MaintenanceNotice
+     * @param {NotificationFindFirstArgs} args - Arguments to find a Notification
      * @example
-     * // Get one MaintenanceNotice
-     * const maintenanceNotice = await prisma.maintenanceNotice.findFirst({
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends MaintenanceNoticeFindFirstArgs>(args?: SelectSubset<T, MaintenanceNoticeFindFirstArgs<ExtArgs>>): Prisma__MaintenanceNoticeClient<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends NotificationFindFirstArgs>(args?: SelectSubset<T, NotificationFindFirstArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first MaintenanceNotice that matches the filter or
+     * Find the first Notification that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MaintenanceNoticeFindFirstOrThrowArgs} args - Arguments to find a MaintenanceNotice
+     * @param {NotificationFindFirstOrThrowArgs} args - Arguments to find a Notification
      * @example
-     * // Get one MaintenanceNotice
-     * const maintenanceNotice = await prisma.maintenanceNotice.findFirstOrThrow({
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends MaintenanceNoticeFindFirstOrThrowArgs>(args?: SelectSubset<T, MaintenanceNoticeFindFirstOrThrowArgs<ExtArgs>>): Prisma__MaintenanceNoticeClient<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends NotificationFindFirstOrThrowArgs>(args?: SelectSubset<T, NotificationFindFirstOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more MaintenanceNotices that matches the filter.
+     * Find zero or more Notifications that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MaintenanceNoticeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {NotificationFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all MaintenanceNotices
-     * const maintenanceNotices = await prisma.maintenanceNotice.findMany()
+     * // Get all Notifications
+     * const notifications = await prisma.notification.findMany()
      * 
-     * // Get first 10 MaintenanceNotices
-     * const maintenanceNotices = await prisma.maintenanceNotice.findMany({ take: 10 })
+     * // Get first 10 Notifications
+     * const notifications = await prisma.notification.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const maintenanceNoticeWithIdOnly = await prisma.maintenanceNotice.findMany({ select: { id: true } })
+     * const notificationWithIdOnly = await prisma.notification.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends MaintenanceNoticeFindManyArgs>(args?: SelectSubset<T, MaintenanceNoticeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends NotificationFindManyArgs>(args?: SelectSubset<T, NotificationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a MaintenanceNotice.
-     * @param {MaintenanceNoticeCreateArgs} args - Arguments to create a MaintenanceNotice.
+     * Create a Notification.
+     * @param {NotificationCreateArgs} args - Arguments to create a Notification.
      * @example
-     * // Create one MaintenanceNotice
-     * const MaintenanceNotice = await prisma.maintenanceNotice.create({
+     * // Create one Notification
+     * const Notification = await prisma.notification.create({
      *   data: {
-     *     // ... data to create a MaintenanceNotice
+     *     // ... data to create a Notification
      *   }
      * })
      * 
      */
-    create<T extends MaintenanceNoticeCreateArgs>(args: SelectSubset<T, MaintenanceNoticeCreateArgs<ExtArgs>>): Prisma__MaintenanceNoticeClient<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends NotificationCreateArgs>(args: SelectSubset<T, NotificationCreateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many MaintenanceNotices.
-     * @param {MaintenanceNoticeCreateManyArgs} args - Arguments to create many MaintenanceNotices.
+     * Create many Notifications.
+     * @param {NotificationCreateManyArgs} args - Arguments to create many Notifications.
      * @example
-     * // Create many MaintenanceNotices
-     * const maintenanceNotice = await prisma.maintenanceNotice.createMany({
+     * // Create many Notifications
+     * const notification = await prisma.notification.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends MaintenanceNoticeCreateManyArgs>(args?: SelectSubset<T, MaintenanceNoticeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends NotificationCreateManyArgs>(args?: SelectSubset<T, NotificationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Delete a MaintenanceNotice.
-     * @param {MaintenanceNoticeDeleteArgs} args - Arguments to delete one MaintenanceNotice.
+     * Delete a Notification.
+     * @param {NotificationDeleteArgs} args - Arguments to delete one Notification.
      * @example
-     * // Delete one MaintenanceNotice
-     * const MaintenanceNotice = await prisma.maintenanceNotice.delete({
+     * // Delete one Notification
+     * const Notification = await prisma.notification.delete({
      *   where: {
-     *     // ... filter to delete one MaintenanceNotice
+     *     // ... filter to delete one Notification
      *   }
      * })
      * 
      */
-    delete<T extends MaintenanceNoticeDeleteArgs>(args: SelectSubset<T, MaintenanceNoticeDeleteArgs<ExtArgs>>): Prisma__MaintenanceNoticeClient<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends NotificationDeleteArgs>(args: SelectSubset<T, NotificationDeleteArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one MaintenanceNotice.
-     * @param {MaintenanceNoticeUpdateArgs} args - Arguments to update one MaintenanceNotice.
+     * Update one Notification.
+     * @param {NotificationUpdateArgs} args - Arguments to update one Notification.
      * @example
-     * // Update one MaintenanceNotice
-     * const maintenanceNotice = await prisma.maintenanceNotice.update({
+     * // Update one Notification
+     * const notification = await prisma.notification.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -25730,30 +25786,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends MaintenanceNoticeUpdateArgs>(args: SelectSubset<T, MaintenanceNoticeUpdateArgs<ExtArgs>>): Prisma__MaintenanceNoticeClient<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends NotificationUpdateArgs>(args: SelectSubset<T, NotificationUpdateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more MaintenanceNotices.
-     * @param {MaintenanceNoticeDeleteManyArgs} args - Arguments to filter MaintenanceNotices to delete.
+     * Delete zero or more Notifications.
+     * @param {NotificationDeleteManyArgs} args - Arguments to filter Notifications to delete.
      * @example
-     * // Delete a few MaintenanceNotices
-     * const { count } = await prisma.maintenanceNotice.deleteMany({
+     * // Delete a few Notifications
+     * const { count } = await prisma.notification.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends MaintenanceNoticeDeleteManyArgs>(args?: SelectSubset<T, MaintenanceNoticeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends NotificationDeleteManyArgs>(args?: SelectSubset<T, NotificationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more MaintenanceNotices.
+     * Update zero or more Notifications.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MaintenanceNoticeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {NotificationUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many MaintenanceNotices
-     * const maintenanceNotice = await prisma.maintenanceNotice.updateMany({
+     * // Update many Notifications
+     * const notification = await prisma.notification.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -25763,56 +25819,56 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends MaintenanceNoticeUpdateManyArgs>(args: SelectSubset<T, MaintenanceNoticeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends NotificationUpdateManyArgs>(args: SelectSubset<T, NotificationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one MaintenanceNotice.
-     * @param {MaintenanceNoticeUpsertArgs} args - Arguments to update or create a MaintenanceNotice.
+     * Create or update one Notification.
+     * @param {NotificationUpsertArgs} args - Arguments to update or create a Notification.
      * @example
-     * // Update or create a MaintenanceNotice
-     * const maintenanceNotice = await prisma.maintenanceNotice.upsert({
+     * // Update or create a Notification
+     * const notification = await prisma.notification.upsert({
      *   create: {
-     *     // ... data to create a MaintenanceNotice
+     *     // ... data to create a Notification
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the MaintenanceNotice we want to update
+     *     // ... the filter for the Notification we want to update
      *   }
      * })
      */
-    upsert<T extends MaintenanceNoticeUpsertArgs>(args: SelectSubset<T, MaintenanceNoticeUpsertArgs<ExtArgs>>): Prisma__MaintenanceNoticeClient<$Result.GetResult<Prisma.$MaintenanceNoticePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends NotificationUpsertArgs>(args: SelectSubset<T, NotificationUpsertArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of MaintenanceNotices.
+     * Count the number of Notifications.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MaintenanceNoticeCountArgs} args - Arguments to filter MaintenanceNotices to count.
+     * @param {NotificationCountArgs} args - Arguments to filter Notifications to count.
      * @example
-     * // Count the number of MaintenanceNotices
-     * const count = await prisma.maintenanceNotice.count({
+     * // Count the number of Notifications
+     * const count = await prisma.notification.count({
      *   where: {
-     *     // ... the filter for the MaintenanceNotices we want to count
+     *     // ... the filter for the Notifications we want to count
      *   }
      * })
     **/
-    count<T extends MaintenanceNoticeCountArgs>(
-      args?: Subset<T, MaintenanceNoticeCountArgs>,
+    count<T extends NotificationCountArgs>(
+      args?: Subset<T, NotificationCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], MaintenanceNoticeCountAggregateOutputType>
+          : GetScalarType<T['select'], NotificationCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a MaintenanceNotice.
+     * Allows you to perform aggregations operations on a Notification.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MaintenanceNoticeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {NotificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -25832,13 +25888,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends MaintenanceNoticeAggregateArgs>(args: Subset<T, MaintenanceNoticeAggregateArgs>): Prisma.PrismaPromise<GetMaintenanceNoticeAggregateType<T>>
+    aggregate<T extends NotificationAggregateArgs>(args: Subset<T, NotificationAggregateArgs>): Prisma.PrismaPromise<GetNotificationAggregateType<T>>
 
     /**
-     * Group by MaintenanceNotice.
+     * Group by Notification.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MaintenanceNoticeGroupByArgs} args - Group by arguments.
+     * @param {NotificationGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -25853,14 +25909,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends MaintenanceNoticeGroupByArgs,
+      T extends NotificationGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: MaintenanceNoticeGroupByArgs['orderBy'] }
-        : { orderBy?: MaintenanceNoticeGroupByArgs['orderBy'] },
+        ? { orderBy: NotificationGroupByArgs['orderBy'] }
+        : { orderBy?: NotificationGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -25909,20 +25965,20 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, MaintenanceNoticeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMaintenanceNoticeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, NotificationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the MaintenanceNotice model
+   * Fields of the Notification model
    */
-  readonly fields: MaintenanceNoticeFieldRefs;
+  readonly fields: NotificationFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for MaintenanceNotice.
+   * The delegate class that acts as a "Promise-like" for Notification.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__MaintenanceNoticeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__NotificationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -25950,334 +26006,338 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the MaintenanceNotice model
+   * Fields of the Notification model
    */
-  interface MaintenanceNoticeFieldRefs {
-    readonly id: FieldRef<"MaintenanceNotice", 'Int'>
-    readonly title: FieldRef<"MaintenanceNotice", 'String'>
-    readonly message: FieldRef<"MaintenanceNotice", 'String'>
-    readonly startTime: FieldRef<"MaintenanceNotice", 'DateTime'>
-    readonly endTime: FieldRef<"MaintenanceNotice", 'DateTime'>
-    readonly isActive: FieldRef<"MaintenanceNotice", 'Boolean'>
-    readonly createdAt: FieldRef<"MaintenanceNotice", 'DateTime'>
+  interface NotificationFieldRefs {
+    readonly id: FieldRef<"Notification", 'Int'>
+    readonly title: FieldRef<"Notification", 'String'>
+    readonly message: FieldRef<"Notification", 'String'>
+    readonly type: FieldRef<"Notification", 'NotificationType'>
+    readonly startTime: FieldRef<"Notification", 'DateTime'>
+    readonly endTime: FieldRef<"Notification", 'DateTime'>
+    readonly isActive: FieldRef<"Notification", 'Boolean'>
+    readonly sendMail: FieldRef<"Notification", 'Boolean'>
+    readonly sendApp: FieldRef<"Notification", 'Boolean'>
+    readonly createdAt: FieldRef<"Notification", 'DateTime'>
+    readonly updatedAt: FieldRef<"Notification", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * MaintenanceNotice findUnique
+   * Notification findUnique
    */
-  export type MaintenanceNoticeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type NotificationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the MaintenanceNotice
+     * Select specific fields to fetch from the Notification
      */
-    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    select?: NotificationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the MaintenanceNotice
+     * Omit specific fields from the Notification
      */
-    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    omit?: NotificationOmit<ExtArgs> | null
     /**
-     * Filter, which MaintenanceNotice to fetch.
+     * Filter, which Notification to fetch.
      */
-    where: MaintenanceNoticeWhereUniqueInput
+    where: NotificationWhereUniqueInput
   }
 
   /**
-   * MaintenanceNotice findUniqueOrThrow
+   * Notification findUniqueOrThrow
    */
-  export type MaintenanceNoticeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type NotificationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the MaintenanceNotice
+     * Select specific fields to fetch from the Notification
      */
-    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    select?: NotificationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the MaintenanceNotice
+     * Omit specific fields from the Notification
      */
-    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    omit?: NotificationOmit<ExtArgs> | null
     /**
-     * Filter, which MaintenanceNotice to fetch.
+     * Filter, which Notification to fetch.
      */
-    where: MaintenanceNoticeWhereUniqueInput
+    where: NotificationWhereUniqueInput
   }
 
   /**
-   * MaintenanceNotice findFirst
+   * Notification findFirst
    */
-  export type MaintenanceNoticeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type NotificationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the MaintenanceNotice
+     * Select specific fields to fetch from the Notification
      */
-    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    select?: NotificationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the MaintenanceNotice
+     * Omit specific fields from the Notification
      */
-    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    omit?: NotificationOmit<ExtArgs> | null
     /**
-     * Filter, which MaintenanceNotice to fetch.
+     * Filter, which Notification to fetch.
      */
-    where?: MaintenanceNoticeWhereInput
+    where?: NotificationWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of MaintenanceNotices to fetch.
+     * Determine the order of Notifications to fetch.
      */
-    orderBy?: MaintenanceNoticeOrderByWithRelationInput | MaintenanceNoticeOrderByWithRelationInput[]
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for MaintenanceNotices.
+     * Sets the position for searching for Notifications.
      */
-    cursor?: MaintenanceNoticeWhereUniqueInput
+    cursor?: NotificationWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` MaintenanceNotices from the position of the cursor.
+     * Take `±n` Notifications from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` MaintenanceNotices.
+     * Skip the first `n` Notifications.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of MaintenanceNotices.
+     * Filter by unique combinations of Notifications.
      */
-    distinct?: MaintenanceNoticeScalarFieldEnum | MaintenanceNoticeScalarFieldEnum[]
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
   }
 
   /**
-   * MaintenanceNotice findFirstOrThrow
+   * Notification findFirstOrThrow
    */
-  export type MaintenanceNoticeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type NotificationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the MaintenanceNotice
+     * Select specific fields to fetch from the Notification
      */
-    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    select?: NotificationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the MaintenanceNotice
+     * Omit specific fields from the Notification
      */
-    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    omit?: NotificationOmit<ExtArgs> | null
     /**
-     * Filter, which MaintenanceNotice to fetch.
+     * Filter, which Notification to fetch.
      */
-    where?: MaintenanceNoticeWhereInput
+    where?: NotificationWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of MaintenanceNotices to fetch.
+     * Determine the order of Notifications to fetch.
      */
-    orderBy?: MaintenanceNoticeOrderByWithRelationInput | MaintenanceNoticeOrderByWithRelationInput[]
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for MaintenanceNotices.
+     * Sets the position for searching for Notifications.
      */
-    cursor?: MaintenanceNoticeWhereUniqueInput
+    cursor?: NotificationWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` MaintenanceNotices from the position of the cursor.
+     * Take `±n` Notifications from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` MaintenanceNotices.
+     * Skip the first `n` Notifications.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of MaintenanceNotices.
+     * Filter by unique combinations of Notifications.
      */
-    distinct?: MaintenanceNoticeScalarFieldEnum | MaintenanceNoticeScalarFieldEnum[]
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
   }
 
   /**
-   * MaintenanceNotice findMany
+   * Notification findMany
    */
-  export type MaintenanceNoticeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type NotificationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the MaintenanceNotice
+     * Select specific fields to fetch from the Notification
      */
-    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    select?: NotificationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the MaintenanceNotice
+     * Omit specific fields from the Notification
      */
-    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    omit?: NotificationOmit<ExtArgs> | null
     /**
-     * Filter, which MaintenanceNotices to fetch.
+     * Filter, which Notifications to fetch.
      */
-    where?: MaintenanceNoticeWhereInput
+    where?: NotificationWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of MaintenanceNotices to fetch.
+     * Determine the order of Notifications to fetch.
      */
-    orderBy?: MaintenanceNoticeOrderByWithRelationInput | MaintenanceNoticeOrderByWithRelationInput[]
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing MaintenanceNotices.
+     * Sets the position for listing Notifications.
      */
-    cursor?: MaintenanceNoticeWhereUniqueInput
+    cursor?: NotificationWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` MaintenanceNotices from the position of the cursor.
+     * Take `±n` Notifications from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` MaintenanceNotices.
+     * Skip the first `n` Notifications.
      */
     skip?: number
-    distinct?: MaintenanceNoticeScalarFieldEnum | MaintenanceNoticeScalarFieldEnum[]
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
   }
 
   /**
-   * MaintenanceNotice create
+   * Notification create
    */
-  export type MaintenanceNoticeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type NotificationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the MaintenanceNotice
+     * Select specific fields to fetch from the Notification
      */
-    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    select?: NotificationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the MaintenanceNotice
+     * Omit specific fields from the Notification
      */
-    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    omit?: NotificationOmit<ExtArgs> | null
     /**
-     * The data needed to create a MaintenanceNotice.
+     * The data needed to create a Notification.
      */
-    data: XOR<MaintenanceNoticeCreateInput, MaintenanceNoticeUncheckedCreateInput>
+    data: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
   }
 
   /**
-   * MaintenanceNotice createMany
+   * Notification createMany
    */
-  export type MaintenanceNoticeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type NotificationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many MaintenanceNotices.
+     * The data used to create many Notifications.
      */
-    data: MaintenanceNoticeCreateManyInput | MaintenanceNoticeCreateManyInput[]
+    data: NotificationCreateManyInput | NotificationCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * MaintenanceNotice update
+   * Notification update
    */
-  export type MaintenanceNoticeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type NotificationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the MaintenanceNotice
+     * Select specific fields to fetch from the Notification
      */
-    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    select?: NotificationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the MaintenanceNotice
+     * Omit specific fields from the Notification
      */
-    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    omit?: NotificationOmit<ExtArgs> | null
     /**
-     * The data needed to update a MaintenanceNotice.
+     * The data needed to update a Notification.
      */
-    data: XOR<MaintenanceNoticeUpdateInput, MaintenanceNoticeUncheckedUpdateInput>
+    data: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
     /**
-     * Choose, which MaintenanceNotice to update.
+     * Choose, which Notification to update.
      */
-    where: MaintenanceNoticeWhereUniqueInput
+    where: NotificationWhereUniqueInput
   }
 
   /**
-   * MaintenanceNotice updateMany
+   * Notification updateMany
    */
-  export type MaintenanceNoticeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type NotificationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update MaintenanceNotices.
+     * The data used to update Notifications.
      */
-    data: XOR<MaintenanceNoticeUpdateManyMutationInput, MaintenanceNoticeUncheckedUpdateManyInput>
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>
     /**
-     * Filter which MaintenanceNotices to update
+     * Filter which Notifications to update
      */
-    where?: MaintenanceNoticeWhereInput
+    where?: NotificationWhereInput
     /**
-     * Limit how many MaintenanceNotices to update.
+     * Limit how many Notifications to update.
      */
     limit?: number
   }
 
   /**
-   * MaintenanceNotice upsert
+   * Notification upsert
    */
-  export type MaintenanceNoticeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type NotificationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the MaintenanceNotice
+     * Select specific fields to fetch from the Notification
      */
-    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    select?: NotificationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the MaintenanceNotice
+     * Omit specific fields from the Notification
      */
-    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    omit?: NotificationOmit<ExtArgs> | null
     /**
-     * The filter to search for the MaintenanceNotice to update in case it exists.
+     * The filter to search for the Notification to update in case it exists.
      */
-    where: MaintenanceNoticeWhereUniqueInput
+    where: NotificationWhereUniqueInput
     /**
-     * In case the MaintenanceNotice found by the `where` argument doesn't exist, create a new MaintenanceNotice with this data.
+     * In case the Notification found by the `where` argument doesn't exist, create a new Notification with this data.
      */
-    create: XOR<MaintenanceNoticeCreateInput, MaintenanceNoticeUncheckedCreateInput>
+    create: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
     /**
-     * In case the MaintenanceNotice was found with the provided `where` argument, update it with this data.
+     * In case the Notification was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<MaintenanceNoticeUpdateInput, MaintenanceNoticeUncheckedUpdateInput>
+    update: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
   }
 
   /**
-   * MaintenanceNotice delete
+   * Notification delete
    */
-  export type MaintenanceNoticeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type NotificationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the MaintenanceNotice
+     * Select specific fields to fetch from the Notification
      */
-    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    select?: NotificationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the MaintenanceNotice
+     * Omit specific fields from the Notification
      */
-    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    omit?: NotificationOmit<ExtArgs> | null
     /**
-     * Filter which MaintenanceNotice to delete.
+     * Filter which Notification to delete.
      */
-    where: MaintenanceNoticeWhereUniqueInput
+    where: NotificationWhereUniqueInput
   }
 
   /**
-   * MaintenanceNotice deleteMany
+   * Notification deleteMany
    */
-  export type MaintenanceNoticeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type NotificationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which MaintenanceNotices to delete
+     * Filter which Notifications to delete
      */
-    where?: MaintenanceNoticeWhereInput
+    where?: NotificationWhereInput
     /**
-     * Limit how many MaintenanceNotices to delete.
+     * Limit how many Notifications to delete.
      */
     limit?: number
   }
 
   /**
-   * MaintenanceNotice without action
+   * Notification without action
    */
-  export type MaintenanceNoticeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type NotificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the MaintenanceNotice
+     * Select specific fields to fetch from the Notification
      */
-    select?: MaintenanceNoticeSelect<ExtArgs> | null
+    select?: NotificationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the MaintenanceNotice
+     * Omit specific fields from the Notification
      */
-    omit?: MaintenanceNoticeOmit<ExtArgs> | null
+    omit?: NotificationOmit<ExtArgs> | null
   }
 
 
@@ -26590,17 +26650,21 @@ export namespace Prisma {
   export type AssetAssignmentScalarFieldEnum = (typeof AssetAssignmentScalarFieldEnum)[keyof typeof AssetAssignmentScalarFieldEnum]
 
 
-  export const MaintenanceNoticeScalarFieldEnum: {
+  export const NotificationScalarFieldEnum: {
     id: 'id',
     title: 'title',
     message: 'message',
+    type: 'type',
     startTime: 'startTime',
     endTime: 'endTime',
     isActive: 'isActive',
-    createdAt: 'createdAt'
+    sendMail: 'sendMail',
+    sendApp: 'sendApp',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
-  export type MaintenanceNoticeScalarFieldEnum = (typeof MaintenanceNoticeScalarFieldEnum)[keyof typeof MaintenanceNoticeScalarFieldEnum]
+  export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -26766,12 +26830,12 @@ export namespace Prisma {
   export type AssetAssignmentOrderByRelevanceFieldEnum = (typeof AssetAssignmentOrderByRelevanceFieldEnum)[keyof typeof AssetAssignmentOrderByRelevanceFieldEnum]
 
 
-  export const MaintenanceNoticeOrderByRelevanceFieldEnum: {
+  export const NotificationOrderByRelevanceFieldEnum: {
     title: 'title',
     message: 'message'
   };
 
-  export type MaintenanceNoticeOrderByRelevanceFieldEnum = (typeof MaintenanceNoticeOrderByRelevanceFieldEnum)[keyof typeof MaintenanceNoticeOrderByRelevanceFieldEnum]
+  export type NotificationOrderByRelevanceFieldEnum = (typeof NotificationOrderByRelevanceFieldEnum)[keyof typeof NotificationOrderByRelevanceFieldEnum]
 
 
   /**
@@ -26860,6 +26924,13 @@ export namespace Prisma {
    * Reference to a field of type 'ProposalType'
    */
   export type EnumProposalTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProposalType'>
+    
+
+
+  /**
+   * Reference to a field of type 'NotificationType'
+   */
+  export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType'>
     
   /**
    * Deep Input Types
@@ -28523,69 +28594,89 @@ export namespace Prisma {
     note?: StringNullableWithAggregatesFilter<"AssetAssignment"> | string | null
   }
 
-  export type MaintenanceNoticeWhereInput = {
-    AND?: MaintenanceNoticeWhereInput | MaintenanceNoticeWhereInput[]
-    OR?: MaintenanceNoticeWhereInput[]
-    NOT?: MaintenanceNoticeWhereInput | MaintenanceNoticeWhereInput[]
-    id?: IntFilter<"MaintenanceNotice"> | number
-    title?: StringNullableFilter<"MaintenanceNotice"> | string | null
-    message?: StringFilter<"MaintenanceNotice"> | string
-    startTime?: DateTimeFilter<"MaintenanceNotice"> | Date | string
-    endTime?: DateTimeFilter<"MaintenanceNotice"> | Date | string
-    isActive?: BoolFilter<"MaintenanceNotice"> | boolean
-    createdAt?: DateTimeFilter<"MaintenanceNotice"> | Date | string
+  export type NotificationWhereInput = {
+    AND?: NotificationWhereInput | NotificationWhereInput[]
+    OR?: NotificationWhereInput[]
+    NOT?: NotificationWhereInput | NotificationWhereInput[]
+    id?: IntFilter<"Notification"> | number
+    title?: StringNullableFilter<"Notification"> | string | null
+    message?: StringFilter<"Notification"> | string
+    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
+    startTime?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    endTime?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    isActive?: BoolFilter<"Notification"> | boolean
+    sendMail?: BoolFilter<"Notification"> | boolean
+    sendApp?: BoolFilter<"Notification"> | boolean
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeFilter<"Notification"> | Date | string
   }
 
-  export type MaintenanceNoticeOrderByWithRelationInput = {
+  export type NotificationOrderByWithRelationInput = {
     id?: SortOrder
     title?: SortOrderInput | SortOrder
     message?: SortOrder
-    startTime?: SortOrder
-    endTime?: SortOrder
+    type?: SortOrder
+    startTime?: SortOrderInput | SortOrder
+    endTime?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    sendMail?: SortOrder
+    sendApp?: SortOrder
     createdAt?: SortOrder
-    _relevance?: MaintenanceNoticeOrderByRelevanceInput
+    updatedAt?: SortOrder
+    _relevance?: NotificationOrderByRelevanceInput
   }
 
-  export type MaintenanceNoticeWhereUniqueInput = Prisma.AtLeast<{
+  export type NotificationWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    AND?: MaintenanceNoticeWhereInput | MaintenanceNoticeWhereInput[]
-    OR?: MaintenanceNoticeWhereInput[]
-    NOT?: MaintenanceNoticeWhereInput | MaintenanceNoticeWhereInput[]
-    title?: StringNullableFilter<"MaintenanceNotice"> | string | null
-    message?: StringFilter<"MaintenanceNotice"> | string
-    startTime?: DateTimeFilter<"MaintenanceNotice"> | Date | string
-    endTime?: DateTimeFilter<"MaintenanceNotice"> | Date | string
-    isActive?: BoolFilter<"MaintenanceNotice"> | boolean
-    createdAt?: DateTimeFilter<"MaintenanceNotice"> | Date | string
+    AND?: NotificationWhereInput | NotificationWhereInput[]
+    OR?: NotificationWhereInput[]
+    NOT?: NotificationWhereInput | NotificationWhereInput[]
+    title?: StringNullableFilter<"Notification"> | string | null
+    message?: StringFilter<"Notification"> | string
+    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
+    startTime?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    endTime?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    isActive?: BoolFilter<"Notification"> | boolean
+    sendMail?: BoolFilter<"Notification"> | boolean
+    sendApp?: BoolFilter<"Notification"> | boolean
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeFilter<"Notification"> | Date | string
   }, "id">
 
-  export type MaintenanceNoticeOrderByWithAggregationInput = {
+  export type NotificationOrderByWithAggregationInput = {
     id?: SortOrder
     title?: SortOrderInput | SortOrder
     message?: SortOrder
-    startTime?: SortOrder
-    endTime?: SortOrder
+    type?: SortOrder
+    startTime?: SortOrderInput | SortOrder
+    endTime?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    sendMail?: SortOrder
+    sendApp?: SortOrder
     createdAt?: SortOrder
-    _count?: MaintenanceNoticeCountOrderByAggregateInput
-    _avg?: MaintenanceNoticeAvgOrderByAggregateInput
-    _max?: MaintenanceNoticeMaxOrderByAggregateInput
-    _min?: MaintenanceNoticeMinOrderByAggregateInput
-    _sum?: MaintenanceNoticeSumOrderByAggregateInput
+    updatedAt?: SortOrder
+    _count?: NotificationCountOrderByAggregateInput
+    _avg?: NotificationAvgOrderByAggregateInput
+    _max?: NotificationMaxOrderByAggregateInput
+    _min?: NotificationMinOrderByAggregateInput
+    _sum?: NotificationSumOrderByAggregateInput
   }
 
-  export type MaintenanceNoticeScalarWhereWithAggregatesInput = {
-    AND?: MaintenanceNoticeScalarWhereWithAggregatesInput | MaintenanceNoticeScalarWhereWithAggregatesInput[]
-    OR?: MaintenanceNoticeScalarWhereWithAggregatesInput[]
-    NOT?: MaintenanceNoticeScalarWhereWithAggregatesInput | MaintenanceNoticeScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"MaintenanceNotice"> | number
-    title?: StringNullableWithAggregatesFilter<"MaintenanceNotice"> | string | null
-    message?: StringWithAggregatesFilter<"MaintenanceNotice"> | string
-    startTime?: DateTimeWithAggregatesFilter<"MaintenanceNotice"> | Date | string
-    endTime?: DateTimeWithAggregatesFilter<"MaintenanceNotice"> | Date | string
-    isActive?: BoolWithAggregatesFilter<"MaintenanceNotice"> | boolean
-    createdAt?: DateTimeWithAggregatesFilter<"MaintenanceNotice"> | Date | string
+  export type NotificationScalarWhereWithAggregatesInput = {
+    AND?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
+    OR?: NotificationScalarWhereWithAggregatesInput[]
+    NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Notification"> | number
+    title?: StringNullableWithAggregatesFilter<"Notification"> | string | null
+    message?: StringWithAggregatesFilter<"Notification"> | string
+    type?: EnumNotificationTypeWithAggregatesFilter<"Notification"> | $Enums.NotificationType
+    startTime?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
+    endTime?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
+    isActive?: BoolWithAggregatesFilter<"Notification"> | boolean
+    sendMail?: BoolWithAggregatesFilter<"Notification"> | boolean
+    sendApp?: BoolWithAggregatesFilter<"Notification"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
   }
 
   export type FileCreateInput = {
@@ -30239,71 +30330,99 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type MaintenanceNoticeCreateInput = {
+  export type NotificationCreateInput = {
     title?: string | null
     message: string
-    startTime: Date | string
-    endTime: Date | string
+    type: $Enums.NotificationType
+    startTime?: Date | string | null
+    endTime?: Date | string | null
     isActive?: boolean
+    sendMail?: boolean
+    sendApp?: boolean
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type MaintenanceNoticeUncheckedCreateInput = {
+  export type NotificationUncheckedCreateInput = {
     id?: number
     title?: string | null
     message: string
-    startTime: Date | string
-    endTime: Date | string
+    type: $Enums.NotificationType
+    startTime?: Date | string | null
+    endTime?: Date | string | null
     isActive?: boolean
+    sendMail?: boolean
+    sendApp?: boolean
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type MaintenanceNoticeUpdateInput = {
+  export type NotificationUpdateInput = {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
-    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    sendMail?: BoolFieldUpdateOperationsInput | boolean
+    sendApp?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MaintenanceNoticeUncheckedUpdateInput = {
+  export type NotificationUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
-    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    sendMail?: BoolFieldUpdateOperationsInput | boolean
+    sendApp?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MaintenanceNoticeCreateManyInput = {
+  export type NotificationCreateManyInput = {
     id?: number
     title?: string | null
     message: string
-    startTime: Date | string
-    endTime: Date | string
+    type: $Enums.NotificationType
+    startTime?: Date | string | null
+    endTime?: Date | string | null
     isActive?: boolean
+    sendMail?: boolean
+    sendApp?: boolean
     createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type MaintenanceNoticeUpdateManyMutationInput = {
+  export type NotificationUpdateManyMutationInput = {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
-    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    sendMail?: BoolFieldUpdateOperationsInput | boolean
+    sendApp?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MaintenanceNoticeUncheckedUpdateManyInput = {
+  export type NotificationUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
-    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    sendMail?: BoolFieldUpdateOperationsInput | boolean
+    sendApp?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -31967,48 +32086,77 @@ export namespace Prisma {
     quantity?: SortOrder
   }
 
-  export type MaintenanceNoticeOrderByRelevanceInput = {
-    fields: MaintenanceNoticeOrderByRelevanceFieldEnum | MaintenanceNoticeOrderByRelevanceFieldEnum[]
+  export type EnumNotificationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NotificationType[]
+    notIn?: $Enums.NotificationType[]
+    not?: NestedEnumNotificationTypeFilter<$PrismaModel> | $Enums.NotificationType
+  }
+
+  export type NotificationOrderByRelevanceInput = {
+    fields: NotificationOrderByRelevanceFieldEnum | NotificationOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
   }
 
-  export type MaintenanceNoticeCountOrderByAggregateInput = {
+  export type NotificationCountOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
     message?: SortOrder
+    type?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
     isActive?: SortOrder
+    sendMail?: SortOrder
+    sendApp?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type MaintenanceNoticeAvgOrderByAggregateInput = {
+  export type NotificationAvgOrderByAggregateInput = {
     id?: SortOrder
   }
 
-  export type MaintenanceNoticeMaxOrderByAggregateInput = {
+  export type NotificationMaxOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
     message?: SortOrder
+    type?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
     isActive?: SortOrder
+    sendMail?: SortOrder
+    sendApp?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type MaintenanceNoticeMinOrderByAggregateInput = {
+  export type NotificationMinOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
     message?: SortOrder
+    type?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
     isActive?: SortOrder
+    sendMail?: SortOrder
+    sendApp?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type MaintenanceNoticeSumOrderByAggregateInput = {
+  export type NotificationSumOrderByAggregateInput = {
     id?: SortOrder
+  }
+
+  export type EnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NotificationType[]
+    notIn?: $Enums.NotificationType[]
+    not?: NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel> | $Enums.NotificationType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumNotificationTypeFilter<$PrismaModel>
+    _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
   }
 
   export type ProposalCreateNestedManyWithoutFileInput = {
@@ -33753,6 +33901,10 @@ export namespace Prisma {
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutAssetsIssuedInput, EmployeeUpdateWithoutAssetsIssuedInput>, EmployeeUncheckedUpdateWithoutAssetsIssuedInput>
   }
 
+  export type EnumNotificationTypeFieldUpdateOperationsInput = {
+    set?: $Enums.NotificationType
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -34107,6 +34259,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumProposalTypeFilter<$PrismaModel>
     _max?: NestedEnumProposalTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumNotificationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NotificationType[]
+    notIn?: $Enums.NotificationType[]
+    not?: NestedEnumNotificationTypeFilter<$PrismaModel> | $Enums.NotificationType
+  }
+
+  export type NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NotificationType[]
+    notIn?: $Enums.NotificationType[]
+    not?: NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel> | $Enums.NotificationType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumNotificationTypeFilter<$PrismaModel>
+    _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
   }
 
   export type ProposalCreateWithoutFileInput = {
