@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export const runtime = "nodejs";
-
+export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { FileService } from "@/lib/file-service";
