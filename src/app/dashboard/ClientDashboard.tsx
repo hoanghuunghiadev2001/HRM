@@ -145,11 +145,17 @@ export default function ClientDashboard({
       icon: <FileStack />,
       label: "DS yêu cầu",
     },
-    {
-      key: "/dashboard/compensatory-leave",
-      icon: <FileStack />,
-      label: "DS Nghỉ bù",
-    },
+
+    ...(isAdmin !== "USER"
+      ? [
+          {
+            key: "/dashboard/compensatory-leave",
+            icon: <FileStack />,
+            label: "DS Nghỉ bù",
+          },
+        ]
+      : []),
+
     ...(isAdmin === "ADMIN"
       ? [
           {
