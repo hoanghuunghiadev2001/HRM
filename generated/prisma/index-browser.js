@@ -366,6 +366,16 @@ exports.Prisma.NotificationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.CompensatoryLeaveScalarFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  workDate: 'workDate',
+  grantedAt: 'grantedAt',
+  used: 'used',
+  usedAt: 'usedAt',
+  note: 'note'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -476,6 +486,10 @@ exports.Prisma.NotificationOrderByRelevanceFieldEnum = {
   title: 'title',
   message: 'message'
 };
+
+exports.Prisma.CompensatoryLeaveOrderByRelevanceFieldEnum = {
+  note: 'note'
+};
 exports.Sex = exports.$Enums.Sex = {
   MALE: 'MALE',
   FEMALE: 'FEMALE'
@@ -548,7 +562,8 @@ exports.Prisma.ModelName = {
   EmailActionToken: 'EmailActionToken',
   Asset: 'Asset',
   AssetAssignment: 'AssetAssignment',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  CompensatoryLeave: 'CompensatoryLeave'
 };
 
 /**

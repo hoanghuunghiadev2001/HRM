@@ -123,6 +123,11 @@ export type AssetAssignment = $Result.DefaultSelection<Prisma.$AssetAssignmentPa
  * 
  */
 export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
+/**
+ * Model CompensatoryLeave
+ * 
+ */
+export type CompensatoryLeave = $Result.DefaultSelection<Prisma.$CompensatoryLeavePayload>
 
 /**
  * Enums
@@ -585,6 +590,16 @@ export class PrismaClient<
     * ```
     */
   get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.compensatoryLeave`: Exposes CRUD operations for the **CompensatoryLeave** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CompensatoryLeaves
+    * const compensatoryLeaves = await prisma.compensatoryLeave.findMany()
+    * ```
+    */
+  get compensatoryLeave(): Prisma.CompensatoryLeaveDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1046,7 +1061,8 @@ export namespace Prisma {
     EmailActionToken: 'EmailActionToken',
     Asset: 'Asset',
     AssetAssignment: 'AssetAssignment',
-    Notification: 'Notification'
+    Notification: 'Notification',
+    CompensatoryLeave: 'CompensatoryLeave'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1065,7 +1081,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "file" | "vehicle" | "employee" | "department" | "position" | "workInfo" | "contactInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover" | "emailActionToken" | "asset" | "assetAssignment" | "notification"
+      modelProps: "file" | "vehicle" | "employee" | "department" | "position" | "workInfo" | "contactInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover" | "emailActionToken" | "asset" | "assetAssignment" | "notification" | "compensatoryLeave"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2521,6 +2537,72 @@ export namespace Prisma {
           }
         }
       }
+      CompensatoryLeave: {
+        payload: Prisma.$CompensatoryLeavePayload<ExtArgs>
+        fields: Prisma.CompensatoryLeaveFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CompensatoryLeaveFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompensatoryLeavePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CompensatoryLeaveFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompensatoryLeavePayload>
+          }
+          findFirst: {
+            args: Prisma.CompensatoryLeaveFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompensatoryLeavePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CompensatoryLeaveFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompensatoryLeavePayload>
+          }
+          findMany: {
+            args: Prisma.CompensatoryLeaveFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompensatoryLeavePayload>[]
+          }
+          create: {
+            args: Prisma.CompensatoryLeaveCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompensatoryLeavePayload>
+          }
+          createMany: {
+            args: Prisma.CompensatoryLeaveCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.CompensatoryLeaveDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompensatoryLeavePayload>
+          }
+          update: {
+            args: Prisma.CompensatoryLeaveUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompensatoryLeavePayload>
+          }
+          deleteMany: {
+            args: Prisma.CompensatoryLeaveDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CompensatoryLeaveUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CompensatoryLeaveUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompensatoryLeavePayload>
+          }
+          aggregate: {
+            args: Prisma.CompensatoryLeaveAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCompensatoryLeave>
+          }
+          groupBy: {
+            args: Prisma.CompensatoryLeaveGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CompensatoryLeaveGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CompensatoryLeaveCountArgs<ExtArgs>
+            result: $Utils.Optional<CompensatoryLeaveCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2627,6 +2709,7 @@ export namespace Prisma {
     asset?: AssetOmit
     assetAssignment?: AssetAssignmentOmit
     notification?: NotificationOmit
+    compensatoryLeave?: CompensatoryLeaveOmit
   }
 
   /* Types for Logging */
@@ -2804,6 +2887,7 @@ export namespace Prisma {
     Attendance: number
     assetsReceived: number
     assetsIssued: number
+    compensatoryLeaves: number
   }
 
   export type EmployeeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2819,6 +2903,7 @@ export namespace Prisma {
     Attendance?: boolean | EmployeeCountOutputTypeCountAttendanceArgs
     assetsReceived?: boolean | EmployeeCountOutputTypeCountAssetsReceivedArgs
     assetsIssued?: boolean | EmployeeCountOutputTypeCountAssetsIssuedArgs
+    compensatoryLeaves?: boolean | EmployeeCountOutputTypeCountCompensatoryLeavesArgs
   }
 
   // Custom InputTypes
@@ -2914,6 +2999,13 @@ export namespace Prisma {
    */
   export type EmployeeCountOutputTypeCountAssetsIssuedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AssetAssignmentWhereInput
+  }
+
+  /**
+   * EmployeeCountOutputType without action
+   */
+  export type EmployeeCountOutputTypeCountCompensatoryLeavesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CompensatoryLeaveWhereInput
   }
 
 
@@ -5547,6 +5639,7 @@ export namespace Prisma {
     Attendance?: boolean | Employee$AttendanceArgs<ExtArgs>
     assetsReceived?: boolean | Employee$assetsReceivedArgs<ExtArgs>
     assetsIssued?: boolean | Employee$assetsIssuedArgs<ExtArgs>
+    compensatoryLeaves?: boolean | Employee$compensatoryLeavesArgs<ExtArgs>
     _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["employee"]>
 
@@ -5586,6 +5679,7 @@ export namespace Prisma {
     Attendance?: boolean | Employee$AttendanceArgs<ExtArgs>
     assetsReceived?: boolean | Employee$assetsReceivedArgs<ExtArgs>
     assetsIssued?: boolean | Employee$assetsIssuedArgs<ExtArgs>
+    compensatoryLeaves?: boolean | Employee$compensatoryLeavesArgs<ExtArgs>
     _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -5609,6 +5703,7 @@ export namespace Prisma {
       Attendance: Prisma.$AttendancePayload<ExtArgs>[]
       assetsReceived: Prisma.$AssetAssignmentPayload<ExtArgs>[]
       assetsIssued: Prisma.$AssetAssignmentPayload<ExtArgs>[]
+      compensatoryLeaves: Prisma.$CompensatoryLeavePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -5980,6 +6075,7 @@ export namespace Prisma {
     Attendance<T extends Employee$AttendanceArgs<ExtArgs> = {}>(args?: Subset<T, Employee$AttendanceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assetsReceived<T extends Employee$assetsReceivedArgs<ExtArgs> = {}>(args?: Subset<T, Employee$assetsReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assetsIssued<T extends Employee$assetsIssuedArgs<ExtArgs> = {}>(args?: Subset<T, Employee$assetsIssuedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    compensatoryLeaves<T extends Employee$compensatoryLeavesArgs<ExtArgs> = {}>(args?: Subset<T, Employee$compensatoryLeavesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CompensatoryLeavePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6744,6 +6840,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AssetAssignmentScalarFieldEnum | AssetAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * Employee.compensatoryLeaves
+   */
+  export type Employee$compensatoryLeavesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CompensatoryLeave
+     */
+    select?: CompensatoryLeaveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CompensatoryLeave
+     */
+    omit?: CompensatoryLeaveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompensatoryLeaveInclude<ExtArgs> | null
+    where?: CompensatoryLeaveWhereInput
+    orderBy?: CompensatoryLeaveOrderByWithRelationInput | CompensatoryLeaveOrderByWithRelationInput[]
+    cursor?: CompensatoryLeaveWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CompensatoryLeaveScalarFieldEnum | CompensatoryLeaveScalarFieldEnum[]
   }
 
   /**
@@ -26342,6 +26462,995 @@ export namespace Prisma {
 
 
   /**
+   * Model CompensatoryLeave
+   */
+
+  export type AggregateCompensatoryLeave = {
+    _count: CompensatoryLeaveCountAggregateOutputType | null
+    _avg: CompensatoryLeaveAvgAggregateOutputType | null
+    _sum: CompensatoryLeaveSumAggregateOutputType | null
+    _min: CompensatoryLeaveMinAggregateOutputType | null
+    _max: CompensatoryLeaveMaxAggregateOutputType | null
+  }
+
+  export type CompensatoryLeaveAvgAggregateOutputType = {
+    id: number | null
+    employeeId: number | null
+  }
+
+  export type CompensatoryLeaveSumAggregateOutputType = {
+    id: number | null
+    employeeId: number | null
+  }
+
+  export type CompensatoryLeaveMinAggregateOutputType = {
+    id: number | null
+    employeeId: number | null
+    workDate: Date | null
+    grantedAt: Date | null
+    used: boolean | null
+    usedAt: Date | null
+    note: string | null
+  }
+
+  export type CompensatoryLeaveMaxAggregateOutputType = {
+    id: number | null
+    employeeId: number | null
+    workDate: Date | null
+    grantedAt: Date | null
+    used: boolean | null
+    usedAt: Date | null
+    note: string | null
+  }
+
+  export type CompensatoryLeaveCountAggregateOutputType = {
+    id: number
+    employeeId: number
+    workDate: number
+    grantedAt: number
+    used: number
+    usedAt: number
+    note: number
+    _all: number
+  }
+
+
+  export type CompensatoryLeaveAvgAggregateInputType = {
+    id?: true
+    employeeId?: true
+  }
+
+  export type CompensatoryLeaveSumAggregateInputType = {
+    id?: true
+    employeeId?: true
+  }
+
+  export type CompensatoryLeaveMinAggregateInputType = {
+    id?: true
+    employeeId?: true
+    workDate?: true
+    grantedAt?: true
+    used?: true
+    usedAt?: true
+    note?: true
+  }
+
+  export type CompensatoryLeaveMaxAggregateInputType = {
+    id?: true
+    employeeId?: true
+    workDate?: true
+    grantedAt?: true
+    used?: true
+    usedAt?: true
+    note?: true
+  }
+
+  export type CompensatoryLeaveCountAggregateInputType = {
+    id?: true
+    employeeId?: true
+    workDate?: true
+    grantedAt?: true
+    used?: true
+    usedAt?: true
+    note?: true
+    _all?: true
+  }
+
+  export type CompensatoryLeaveAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CompensatoryLeave to aggregate.
+     */
+    where?: CompensatoryLeaveWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CompensatoryLeaves to fetch.
+     */
+    orderBy?: CompensatoryLeaveOrderByWithRelationInput | CompensatoryLeaveOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CompensatoryLeaveWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CompensatoryLeaves from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CompensatoryLeaves.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CompensatoryLeaves
+    **/
+    _count?: true | CompensatoryLeaveCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CompensatoryLeaveAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CompensatoryLeaveSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CompensatoryLeaveMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CompensatoryLeaveMaxAggregateInputType
+  }
+
+  export type GetCompensatoryLeaveAggregateType<T extends CompensatoryLeaveAggregateArgs> = {
+        [P in keyof T & keyof AggregateCompensatoryLeave]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCompensatoryLeave[P]>
+      : GetScalarType<T[P], AggregateCompensatoryLeave[P]>
+  }
+
+
+
+
+  export type CompensatoryLeaveGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CompensatoryLeaveWhereInput
+    orderBy?: CompensatoryLeaveOrderByWithAggregationInput | CompensatoryLeaveOrderByWithAggregationInput[]
+    by: CompensatoryLeaveScalarFieldEnum[] | CompensatoryLeaveScalarFieldEnum
+    having?: CompensatoryLeaveScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CompensatoryLeaveCountAggregateInputType | true
+    _avg?: CompensatoryLeaveAvgAggregateInputType
+    _sum?: CompensatoryLeaveSumAggregateInputType
+    _min?: CompensatoryLeaveMinAggregateInputType
+    _max?: CompensatoryLeaveMaxAggregateInputType
+  }
+
+  export type CompensatoryLeaveGroupByOutputType = {
+    id: number
+    employeeId: number
+    workDate: Date
+    grantedAt: Date
+    used: boolean
+    usedAt: Date | null
+    note: string | null
+    _count: CompensatoryLeaveCountAggregateOutputType | null
+    _avg: CompensatoryLeaveAvgAggregateOutputType | null
+    _sum: CompensatoryLeaveSumAggregateOutputType | null
+    _min: CompensatoryLeaveMinAggregateOutputType | null
+    _max: CompensatoryLeaveMaxAggregateOutputType | null
+  }
+
+  type GetCompensatoryLeaveGroupByPayload<T extends CompensatoryLeaveGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CompensatoryLeaveGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CompensatoryLeaveGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CompensatoryLeaveGroupByOutputType[P]>
+            : GetScalarType<T[P], CompensatoryLeaveGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CompensatoryLeaveSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    employeeId?: boolean
+    workDate?: boolean
+    grantedAt?: boolean
+    used?: boolean
+    usedAt?: boolean
+    note?: boolean
+    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["compensatoryLeave"]>
+
+
+
+  export type CompensatoryLeaveSelectScalar = {
+    id?: boolean
+    employeeId?: boolean
+    workDate?: boolean
+    grantedAt?: boolean
+    used?: boolean
+    usedAt?: boolean
+    note?: boolean
+  }
+
+  export type CompensatoryLeaveOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "workDate" | "grantedAt" | "used" | "usedAt" | "note", ExtArgs["result"]["compensatoryLeave"]>
+  export type CompensatoryLeaveInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+  }
+
+  export type $CompensatoryLeavePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CompensatoryLeave"
+    objects: {
+      employee: Prisma.$EmployeePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      employeeId: number
+      workDate: Date
+      grantedAt: Date
+      used: boolean
+      usedAt: Date | null
+      note: string | null
+    }, ExtArgs["result"]["compensatoryLeave"]>
+    composites: {}
+  }
+
+  type CompensatoryLeaveGetPayload<S extends boolean | null | undefined | CompensatoryLeaveDefaultArgs> = $Result.GetResult<Prisma.$CompensatoryLeavePayload, S>
+
+  type CompensatoryLeaveCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CompensatoryLeaveFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CompensatoryLeaveCountAggregateInputType | true
+    }
+
+  export interface CompensatoryLeaveDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CompensatoryLeave'], meta: { name: 'CompensatoryLeave' } }
+    /**
+     * Find zero or one CompensatoryLeave that matches the filter.
+     * @param {CompensatoryLeaveFindUniqueArgs} args - Arguments to find a CompensatoryLeave
+     * @example
+     * // Get one CompensatoryLeave
+     * const compensatoryLeave = await prisma.compensatoryLeave.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CompensatoryLeaveFindUniqueArgs>(args: SelectSubset<T, CompensatoryLeaveFindUniqueArgs<ExtArgs>>): Prisma__CompensatoryLeaveClient<$Result.GetResult<Prisma.$CompensatoryLeavePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CompensatoryLeave that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CompensatoryLeaveFindUniqueOrThrowArgs} args - Arguments to find a CompensatoryLeave
+     * @example
+     * // Get one CompensatoryLeave
+     * const compensatoryLeave = await prisma.compensatoryLeave.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CompensatoryLeaveFindUniqueOrThrowArgs>(args: SelectSubset<T, CompensatoryLeaveFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CompensatoryLeaveClient<$Result.GetResult<Prisma.$CompensatoryLeavePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CompensatoryLeave that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CompensatoryLeaveFindFirstArgs} args - Arguments to find a CompensatoryLeave
+     * @example
+     * // Get one CompensatoryLeave
+     * const compensatoryLeave = await prisma.compensatoryLeave.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CompensatoryLeaveFindFirstArgs>(args?: SelectSubset<T, CompensatoryLeaveFindFirstArgs<ExtArgs>>): Prisma__CompensatoryLeaveClient<$Result.GetResult<Prisma.$CompensatoryLeavePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CompensatoryLeave that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CompensatoryLeaveFindFirstOrThrowArgs} args - Arguments to find a CompensatoryLeave
+     * @example
+     * // Get one CompensatoryLeave
+     * const compensatoryLeave = await prisma.compensatoryLeave.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CompensatoryLeaveFindFirstOrThrowArgs>(args?: SelectSubset<T, CompensatoryLeaveFindFirstOrThrowArgs<ExtArgs>>): Prisma__CompensatoryLeaveClient<$Result.GetResult<Prisma.$CompensatoryLeavePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CompensatoryLeaves that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CompensatoryLeaveFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CompensatoryLeaves
+     * const compensatoryLeaves = await prisma.compensatoryLeave.findMany()
+     * 
+     * // Get first 10 CompensatoryLeaves
+     * const compensatoryLeaves = await prisma.compensatoryLeave.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const compensatoryLeaveWithIdOnly = await prisma.compensatoryLeave.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CompensatoryLeaveFindManyArgs>(args?: SelectSubset<T, CompensatoryLeaveFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CompensatoryLeavePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CompensatoryLeave.
+     * @param {CompensatoryLeaveCreateArgs} args - Arguments to create a CompensatoryLeave.
+     * @example
+     * // Create one CompensatoryLeave
+     * const CompensatoryLeave = await prisma.compensatoryLeave.create({
+     *   data: {
+     *     // ... data to create a CompensatoryLeave
+     *   }
+     * })
+     * 
+     */
+    create<T extends CompensatoryLeaveCreateArgs>(args: SelectSubset<T, CompensatoryLeaveCreateArgs<ExtArgs>>): Prisma__CompensatoryLeaveClient<$Result.GetResult<Prisma.$CompensatoryLeavePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CompensatoryLeaves.
+     * @param {CompensatoryLeaveCreateManyArgs} args - Arguments to create many CompensatoryLeaves.
+     * @example
+     * // Create many CompensatoryLeaves
+     * const compensatoryLeave = await prisma.compensatoryLeave.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CompensatoryLeaveCreateManyArgs>(args?: SelectSubset<T, CompensatoryLeaveCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a CompensatoryLeave.
+     * @param {CompensatoryLeaveDeleteArgs} args - Arguments to delete one CompensatoryLeave.
+     * @example
+     * // Delete one CompensatoryLeave
+     * const CompensatoryLeave = await prisma.compensatoryLeave.delete({
+     *   where: {
+     *     // ... filter to delete one CompensatoryLeave
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CompensatoryLeaveDeleteArgs>(args: SelectSubset<T, CompensatoryLeaveDeleteArgs<ExtArgs>>): Prisma__CompensatoryLeaveClient<$Result.GetResult<Prisma.$CompensatoryLeavePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CompensatoryLeave.
+     * @param {CompensatoryLeaveUpdateArgs} args - Arguments to update one CompensatoryLeave.
+     * @example
+     * // Update one CompensatoryLeave
+     * const compensatoryLeave = await prisma.compensatoryLeave.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CompensatoryLeaveUpdateArgs>(args: SelectSubset<T, CompensatoryLeaveUpdateArgs<ExtArgs>>): Prisma__CompensatoryLeaveClient<$Result.GetResult<Prisma.$CompensatoryLeavePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CompensatoryLeaves.
+     * @param {CompensatoryLeaveDeleteManyArgs} args - Arguments to filter CompensatoryLeaves to delete.
+     * @example
+     * // Delete a few CompensatoryLeaves
+     * const { count } = await prisma.compensatoryLeave.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CompensatoryLeaveDeleteManyArgs>(args?: SelectSubset<T, CompensatoryLeaveDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CompensatoryLeaves.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CompensatoryLeaveUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CompensatoryLeaves
+     * const compensatoryLeave = await prisma.compensatoryLeave.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CompensatoryLeaveUpdateManyArgs>(args: SelectSubset<T, CompensatoryLeaveUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CompensatoryLeave.
+     * @param {CompensatoryLeaveUpsertArgs} args - Arguments to update or create a CompensatoryLeave.
+     * @example
+     * // Update or create a CompensatoryLeave
+     * const compensatoryLeave = await prisma.compensatoryLeave.upsert({
+     *   create: {
+     *     // ... data to create a CompensatoryLeave
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CompensatoryLeave we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CompensatoryLeaveUpsertArgs>(args: SelectSubset<T, CompensatoryLeaveUpsertArgs<ExtArgs>>): Prisma__CompensatoryLeaveClient<$Result.GetResult<Prisma.$CompensatoryLeavePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CompensatoryLeaves.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CompensatoryLeaveCountArgs} args - Arguments to filter CompensatoryLeaves to count.
+     * @example
+     * // Count the number of CompensatoryLeaves
+     * const count = await prisma.compensatoryLeave.count({
+     *   where: {
+     *     // ... the filter for the CompensatoryLeaves we want to count
+     *   }
+     * })
+    **/
+    count<T extends CompensatoryLeaveCountArgs>(
+      args?: Subset<T, CompensatoryLeaveCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CompensatoryLeaveCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CompensatoryLeave.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CompensatoryLeaveAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CompensatoryLeaveAggregateArgs>(args: Subset<T, CompensatoryLeaveAggregateArgs>): Prisma.PrismaPromise<GetCompensatoryLeaveAggregateType<T>>
+
+    /**
+     * Group by CompensatoryLeave.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CompensatoryLeaveGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CompensatoryLeaveGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CompensatoryLeaveGroupByArgs['orderBy'] }
+        : { orderBy?: CompensatoryLeaveGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CompensatoryLeaveGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCompensatoryLeaveGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CompensatoryLeave model
+   */
+  readonly fields: CompensatoryLeaveFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CompensatoryLeave.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CompensatoryLeaveClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CompensatoryLeave model
+   */
+  interface CompensatoryLeaveFieldRefs {
+    readonly id: FieldRef<"CompensatoryLeave", 'Int'>
+    readonly employeeId: FieldRef<"CompensatoryLeave", 'Int'>
+    readonly workDate: FieldRef<"CompensatoryLeave", 'DateTime'>
+    readonly grantedAt: FieldRef<"CompensatoryLeave", 'DateTime'>
+    readonly used: FieldRef<"CompensatoryLeave", 'Boolean'>
+    readonly usedAt: FieldRef<"CompensatoryLeave", 'DateTime'>
+    readonly note: FieldRef<"CompensatoryLeave", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CompensatoryLeave findUnique
+   */
+  export type CompensatoryLeaveFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CompensatoryLeave
+     */
+    select?: CompensatoryLeaveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CompensatoryLeave
+     */
+    omit?: CompensatoryLeaveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompensatoryLeaveInclude<ExtArgs> | null
+    /**
+     * Filter, which CompensatoryLeave to fetch.
+     */
+    where: CompensatoryLeaveWhereUniqueInput
+  }
+
+  /**
+   * CompensatoryLeave findUniqueOrThrow
+   */
+  export type CompensatoryLeaveFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CompensatoryLeave
+     */
+    select?: CompensatoryLeaveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CompensatoryLeave
+     */
+    omit?: CompensatoryLeaveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompensatoryLeaveInclude<ExtArgs> | null
+    /**
+     * Filter, which CompensatoryLeave to fetch.
+     */
+    where: CompensatoryLeaveWhereUniqueInput
+  }
+
+  /**
+   * CompensatoryLeave findFirst
+   */
+  export type CompensatoryLeaveFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CompensatoryLeave
+     */
+    select?: CompensatoryLeaveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CompensatoryLeave
+     */
+    omit?: CompensatoryLeaveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompensatoryLeaveInclude<ExtArgs> | null
+    /**
+     * Filter, which CompensatoryLeave to fetch.
+     */
+    where?: CompensatoryLeaveWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CompensatoryLeaves to fetch.
+     */
+    orderBy?: CompensatoryLeaveOrderByWithRelationInput | CompensatoryLeaveOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CompensatoryLeaves.
+     */
+    cursor?: CompensatoryLeaveWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CompensatoryLeaves from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CompensatoryLeaves.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CompensatoryLeaves.
+     */
+    distinct?: CompensatoryLeaveScalarFieldEnum | CompensatoryLeaveScalarFieldEnum[]
+  }
+
+  /**
+   * CompensatoryLeave findFirstOrThrow
+   */
+  export type CompensatoryLeaveFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CompensatoryLeave
+     */
+    select?: CompensatoryLeaveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CompensatoryLeave
+     */
+    omit?: CompensatoryLeaveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompensatoryLeaveInclude<ExtArgs> | null
+    /**
+     * Filter, which CompensatoryLeave to fetch.
+     */
+    where?: CompensatoryLeaveWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CompensatoryLeaves to fetch.
+     */
+    orderBy?: CompensatoryLeaveOrderByWithRelationInput | CompensatoryLeaveOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CompensatoryLeaves.
+     */
+    cursor?: CompensatoryLeaveWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CompensatoryLeaves from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CompensatoryLeaves.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CompensatoryLeaves.
+     */
+    distinct?: CompensatoryLeaveScalarFieldEnum | CompensatoryLeaveScalarFieldEnum[]
+  }
+
+  /**
+   * CompensatoryLeave findMany
+   */
+  export type CompensatoryLeaveFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CompensatoryLeave
+     */
+    select?: CompensatoryLeaveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CompensatoryLeave
+     */
+    omit?: CompensatoryLeaveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompensatoryLeaveInclude<ExtArgs> | null
+    /**
+     * Filter, which CompensatoryLeaves to fetch.
+     */
+    where?: CompensatoryLeaveWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CompensatoryLeaves to fetch.
+     */
+    orderBy?: CompensatoryLeaveOrderByWithRelationInput | CompensatoryLeaveOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CompensatoryLeaves.
+     */
+    cursor?: CompensatoryLeaveWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CompensatoryLeaves from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CompensatoryLeaves.
+     */
+    skip?: number
+    distinct?: CompensatoryLeaveScalarFieldEnum | CompensatoryLeaveScalarFieldEnum[]
+  }
+
+  /**
+   * CompensatoryLeave create
+   */
+  export type CompensatoryLeaveCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CompensatoryLeave
+     */
+    select?: CompensatoryLeaveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CompensatoryLeave
+     */
+    omit?: CompensatoryLeaveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompensatoryLeaveInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CompensatoryLeave.
+     */
+    data: XOR<CompensatoryLeaveCreateInput, CompensatoryLeaveUncheckedCreateInput>
+  }
+
+  /**
+   * CompensatoryLeave createMany
+   */
+  export type CompensatoryLeaveCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CompensatoryLeaves.
+     */
+    data: CompensatoryLeaveCreateManyInput | CompensatoryLeaveCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CompensatoryLeave update
+   */
+  export type CompensatoryLeaveUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CompensatoryLeave
+     */
+    select?: CompensatoryLeaveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CompensatoryLeave
+     */
+    omit?: CompensatoryLeaveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompensatoryLeaveInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CompensatoryLeave.
+     */
+    data: XOR<CompensatoryLeaveUpdateInput, CompensatoryLeaveUncheckedUpdateInput>
+    /**
+     * Choose, which CompensatoryLeave to update.
+     */
+    where: CompensatoryLeaveWhereUniqueInput
+  }
+
+  /**
+   * CompensatoryLeave updateMany
+   */
+  export type CompensatoryLeaveUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CompensatoryLeaves.
+     */
+    data: XOR<CompensatoryLeaveUpdateManyMutationInput, CompensatoryLeaveUncheckedUpdateManyInput>
+    /**
+     * Filter which CompensatoryLeaves to update
+     */
+    where?: CompensatoryLeaveWhereInput
+    /**
+     * Limit how many CompensatoryLeaves to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CompensatoryLeave upsert
+   */
+  export type CompensatoryLeaveUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CompensatoryLeave
+     */
+    select?: CompensatoryLeaveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CompensatoryLeave
+     */
+    omit?: CompensatoryLeaveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompensatoryLeaveInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CompensatoryLeave to update in case it exists.
+     */
+    where: CompensatoryLeaveWhereUniqueInput
+    /**
+     * In case the CompensatoryLeave found by the `where` argument doesn't exist, create a new CompensatoryLeave with this data.
+     */
+    create: XOR<CompensatoryLeaveCreateInput, CompensatoryLeaveUncheckedCreateInput>
+    /**
+     * In case the CompensatoryLeave was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CompensatoryLeaveUpdateInput, CompensatoryLeaveUncheckedUpdateInput>
+  }
+
+  /**
+   * CompensatoryLeave delete
+   */
+  export type CompensatoryLeaveDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CompensatoryLeave
+     */
+    select?: CompensatoryLeaveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CompensatoryLeave
+     */
+    omit?: CompensatoryLeaveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompensatoryLeaveInclude<ExtArgs> | null
+    /**
+     * Filter which CompensatoryLeave to delete.
+     */
+    where: CompensatoryLeaveWhereUniqueInput
+  }
+
+  /**
+   * CompensatoryLeave deleteMany
+   */
+  export type CompensatoryLeaveDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CompensatoryLeaves to delete
+     */
+    where?: CompensatoryLeaveWhereInput
+    /**
+     * Limit how many CompensatoryLeaves to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CompensatoryLeave without action
+   */
+  export type CompensatoryLeaveDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CompensatoryLeave
+     */
+    select?: CompensatoryLeaveSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CompensatoryLeave
+     */
+    omit?: CompensatoryLeaveOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompensatoryLeaveInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -26667,6 +27776,19 @@ export namespace Prisma {
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
+  export const CompensatoryLeaveScalarFieldEnum: {
+    id: 'id',
+    employeeId: 'employeeId',
+    workDate: 'workDate',
+    grantedAt: 'grantedAt',
+    used: 'used',
+    usedAt: 'usedAt',
+    note: 'note'
+  };
+
+  export type CompensatoryLeaveScalarFieldEnum = (typeof CompensatoryLeaveScalarFieldEnum)[keyof typeof CompensatoryLeaveScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -26836,6 +27958,13 @@ export namespace Prisma {
   };
 
   export type NotificationOrderByRelevanceFieldEnum = (typeof NotificationOrderByRelevanceFieldEnum)[keyof typeof NotificationOrderByRelevanceFieldEnum]
+
+
+  export const CompensatoryLeaveOrderByRelevanceFieldEnum: {
+    note: 'note'
+  };
+
+  export type CompensatoryLeaveOrderByRelevanceFieldEnum = (typeof CompensatoryLeaveOrderByRelevanceFieldEnum)[keyof typeof CompensatoryLeaveOrderByRelevanceFieldEnum]
 
 
   /**
@@ -27109,6 +28238,7 @@ export namespace Prisma {
     Attendance?: AttendanceListRelationFilter
     assetsReceived?: AssetAssignmentListRelationFilter
     assetsIssued?: AssetAssignmentListRelationFilter
+    compensatoryLeaves?: CompensatoryLeaveListRelationFilter
   }
 
   export type EmployeeOrderByWithRelationInput = {
@@ -27141,6 +28271,7 @@ export namespace Prisma {
     Attendance?: AttendanceOrderByRelationAggregateInput
     assetsReceived?: AssetAssignmentOrderByRelationAggregateInput
     assetsIssued?: AssetAssignmentOrderByRelationAggregateInput
+    compensatoryLeaves?: CompensatoryLeaveOrderByRelationAggregateInput
     _relevance?: EmployeeOrderByRelevanceInput
   }
 
@@ -27177,6 +28308,7 @@ export namespace Prisma {
     Attendance?: AttendanceListRelationFilter
     assetsReceived?: AssetAssignmentListRelationFilter
     assetsIssued?: AssetAssignmentListRelationFilter
+    compensatoryLeaves?: CompensatoryLeaveListRelationFilter
   }, "id" | "employeeCode">
 
   export type EmployeeOrderByWithAggregationInput = {
@@ -28679,6 +29811,75 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
   }
 
+  export type CompensatoryLeaveWhereInput = {
+    AND?: CompensatoryLeaveWhereInput | CompensatoryLeaveWhereInput[]
+    OR?: CompensatoryLeaveWhereInput[]
+    NOT?: CompensatoryLeaveWhereInput | CompensatoryLeaveWhereInput[]
+    id?: IntFilter<"CompensatoryLeave"> | number
+    employeeId?: IntFilter<"CompensatoryLeave"> | number
+    workDate?: DateTimeFilter<"CompensatoryLeave"> | Date | string
+    grantedAt?: DateTimeFilter<"CompensatoryLeave"> | Date | string
+    used?: BoolFilter<"CompensatoryLeave"> | boolean
+    usedAt?: DateTimeNullableFilter<"CompensatoryLeave"> | Date | string | null
+    note?: StringNullableFilter<"CompensatoryLeave"> | string | null
+    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+  }
+
+  export type CompensatoryLeaveOrderByWithRelationInput = {
+    id?: SortOrder
+    employeeId?: SortOrder
+    workDate?: SortOrder
+    grantedAt?: SortOrder
+    used?: SortOrder
+    usedAt?: SortOrderInput | SortOrder
+    note?: SortOrderInput | SortOrder
+    employee?: EmployeeOrderByWithRelationInput
+    _relevance?: CompensatoryLeaveOrderByRelevanceInput
+  }
+
+  export type CompensatoryLeaveWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    employeeId_workDate?: CompensatoryLeaveEmployeeIdWorkDateCompoundUniqueInput
+    AND?: CompensatoryLeaveWhereInput | CompensatoryLeaveWhereInput[]
+    OR?: CompensatoryLeaveWhereInput[]
+    NOT?: CompensatoryLeaveWhereInput | CompensatoryLeaveWhereInput[]
+    employeeId?: IntFilter<"CompensatoryLeave"> | number
+    workDate?: DateTimeFilter<"CompensatoryLeave"> | Date | string
+    grantedAt?: DateTimeFilter<"CompensatoryLeave"> | Date | string
+    used?: BoolFilter<"CompensatoryLeave"> | boolean
+    usedAt?: DateTimeNullableFilter<"CompensatoryLeave"> | Date | string | null
+    note?: StringNullableFilter<"CompensatoryLeave"> | string | null
+    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+  }, "id" | "employeeId_workDate">
+
+  export type CompensatoryLeaveOrderByWithAggregationInput = {
+    id?: SortOrder
+    employeeId?: SortOrder
+    workDate?: SortOrder
+    grantedAt?: SortOrder
+    used?: SortOrder
+    usedAt?: SortOrderInput | SortOrder
+    note?: SortOrderInput | SortOrder
+    _count?: CompensatoryLeaveCountOrderByAggregateInput
+    _avg?: CompensatoryLeaveAvgOrderByAggregateInput
+    _max?: CompensatoryLeaveMaxOrderByAggregateInput
+    _min?: CompensatoryLeaveMinOrderByAggregateInput
+    _sum?: CompensatoryLeaveSumOrderByAggregateInput
+  }
+
+  export type CompensatoryLeaveScalarWhereWithAggregatesInput = {
+    AND?: CompensatoryLeaveScalarWhereWithAggregatesInput | CompensatoryLeaveScalarWhereWithAggregatesInput[]
+    OR?: CompensatoryLeaveScalarWhereWithAggregatesInput[]
+    NOT?: CompensatoryLeaveScalarWhereWithAggregatesInput | CompensatoryLeaveScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"CompensatoryLeave"> | number
+    employeeId?: IntWithAggregatesFilter<"CompensatoryLeave"> | number
+    workDate?: DateTimeWithAggregatesFilter<"CompensatoryLeave"> | Date | string
+    grantedAt?: DateTimeWithAggregatesFilter<"CompensatoryLeave"> | Date | string
+    used?: BoolWithAggregatesFilter<"CompensatoryLeave"> | boolean
+    usedAt?: DateTimeNullableWithAggregatesFilter<"CompensatoryLeave"> | Date | string | null
+    note?: StringNullableWithAggregatesFilter<"CompensatoryLeave"> | string | null
+  }
+
   export type FileCreateInput = {
     filename: string
     mimeType: string
@@ -28853,6 +30054,7 @@ export namespace Prisma {
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateInput = {
@@ -28884,6 +30086,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUpdateInput = {
@@ -28914,6 +30117,7 @@ export namespace Prisma {
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateInput = {
@@ -28945,6 +30149,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeCreateManyInput = {
@@ -30425,6 +31630,72 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CompensatoryLeaveCreateInput = {
+    workDate: Date | string
+    grantedAt?: Date | string
+    used?: boolean
+    usedAt?: Date | string | null
+    note?: string | null
+    employee: EmployeeCreateNestedOneWithoutCompensatoryLeavesInput
+  }
+
+  export type CompensatoryLeaveUncheckedCreateInput = {
+    id?: number
+    employeeId: number
+    workDate: Date | string
+    grantedAt?: Date | string
+    used?: boolean
+    usedAt?: Date | string | null
+    note?: string | null
+  }
+
+  export type CompensatoryLeaveUpdateInput = {
+    workDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    employee?: EmployeeUpdateOneRequiredWithoutCompensatoryLeavesNestedInput
+  }
+
+  export type CompensatoryLeaveUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    workDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CompensatoryLeaveCreateManyInput = {
+    id?: number
+    employeeId: number
+    workDate: Date | string
+    grantedAt?: Date | string
+    used?: boolean
+    usedAt?: Date | string | null
+    note?: string | null
+  }
+
+  export type CompensatoryLeaveUpdateManyMutationInput = {
+    workDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CompensatoryLeaveUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeId?: IntFieldUpdateOperationsInput | number
+    workDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -30792,6 +32063,12 @@ export namespace Prisma {
     none?: AssetAssignmentWhereInput
   }
 
+  export type CompensatoryLeaveListRelationFilter = {
+    every?: CompensatoryLeaveWhereInput
+    some?: CompensatoryLeaveWhereInput
+    none?: CompensatoryLeaveWhereInput
+  }
+
   export type AttendanceImportLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -30821,6 +32098,10 @@ export namespace Prisma {
   }
 
   export type AssetAssignmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CompensatoryLeaveOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -32159,6 +33440,57 @@ export namespace Prisma {
     _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
   }
 
+  export type CompensatoryLeaveOrderByRelevanceInput = {
+    fields: CompensatoryLeaveOrderByRelevanceFieldEnum | CompensatoryLeaveOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type CompensatoryLeaveEmployeeIdWorkDateCompoundUniqueInput = {
+    employeeId: number
+    workDate: Date | string
+  }
+
+  export type CompensatoryLeaveCountOrderByAggregateInput = {
+    id?: SortOrder
+    employeeId?: SortOrder
+    workDate?: SortOrder
+    grantedAt?: SortOrder
+    used?: SortOrder
+    usedAt?: SortOrder
+    note?: SortOrder
+  }
+
+  export type CompensatoryLeaveAvgOrderByAggregateInput = {
+    id?: SortOrder
+    employeeId?: SortOrder
+  }
+
+  export type CompensatoryLeaveMaxOrderByAggregateInput = {
+    id?: SortOrder
+    employeeId?: SortOrder
+    workDate?: SortOrder
+    grantedAt?: SortOrder
+    used?: SortOrder
+    usedAt?: SortOrder
+    note?: SortOrder
+  }
+
+  export type CompensatoryLeaveMinOrderByAggregateInput = {
+    id?: SortOrder
+    employeeId?: SortOrder
+    workDate?: SortOrder
+    grantedAt?: SortOrder
+    used?: SortOrder
+    usedAt?: SortOrder
+    note?: SortOrder
+  }
+
+  export type CompensatoryLeaveSumOrderByAggregateInput = {
+    id?: SortOrder
+    employeeId?: SortOrder
+  }
+
   export type ProposalCreateNestedManyWithoutFileInput = {
     create?: XOR<ProposalCreateWithoutFileInput, ProposalUncheckedCreateWithoutFileInput> | ProposalCreateWithoutFileInput[] | ProposalUncheckedCreateWithoutFileInput[]
     connectOrCreate?: ProposalCreateOrConnectWithoutFileInput | ProposalCreateOrConnectWithoutFileInput[]
@@ -32427,6 +33759,13 @@ export namespace Prisma {
     connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
   }
 
+  export type CompensatoryLeaveCreateNestedManyWithoutEmployeeInput = {
+    create?: XOR<CompensatoryLeaveCreateWithoutEmployeeInput, CompensatoryLeaveUncheckedCreateWithoutEmployeeInput> | CompensatoryLeaveCreateWithoutEmployeeInput[] | CompensatoryLeaveUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: CompensatoryLeaveCreateOrConnectWithoutEmployeeInput | CompensatoryLeaveCreateOrConnectWithoutEmployeeInput[]
+    createMany?: CompensatoryLeaveCreateManyEmployeeInputEnvelope
+    connect?: CompensatoryLeaveWhereUniqueInput | CompensatoryLeaveWhereUniqueInput[]
+  }
+
   export type AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput = {
     create?: XOR<AttendanceImportLogCreateWithoutImportedByInput, AttendanceImportLogUncheckedCreateWithoutImportedByInput> | AttendanceImportLogCreateWithoutImportedByInput[] | AttendanceImportLogUncheckedCreateWithoutImportedByInput[]
     connectOrCreate?: AttendanceImportLogCreateOrConnectWithoutImportedByInput | AttendanceImportLogCreateOrConnectWithoutImportedByInput[]
@@ -32533,6 +33872,13 @@ export namespace Prisma {
     connectOrCreate?: AssetAssignmentCreateOrConnectWithoutIssuedByInput | AssetAssignmentCreateOrConnectWithoutIssuedByInput[]
     createMany?: AssetAssignmentCreateManyIssuedByInputEnvelope
     connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+  }
+
+  export type CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput = {
+    create?: XOR<CompensatoryLeaveCreateWithoutEmployeeInput, CompensatoryLeaveUncheckedCreateWithoutEmployeeInput> | CompensatoryLeaveCreateWithoutEmployeeInput[] | CompensatoryLeaveUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: CompensatoryLeaveCreateOrConnectWithoutEmployeeInput | CompensatoryLeaveCreateOrConnectWithoutEmployeeInput[]
+    createMany?: CompensatoryLeaveCreateManyEmployeeInputEnvelope
+    connect?: CompensatoryLeaveWhereUniqueInput | CompensatoryLeaveWhereUniqueInput[]
   }
 
   export type EnumSexFieldUpdateOperationsInput = {
@@ -32765,6 +34111,20 @@ export namespace Prisma {
     deleteMany?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
   }
 
+  export type CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput = {
+    create?: XOR<CompensatoryLeaveCreateWithoutEmployeeInput, CompensatoryLeaveUncheckedCreateWithoutEmployeeInput> | CompensatoryLeaveCreateWithoutEmployeeInput[] | CompensatoryLeaveUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: CompensatoryLeaveCreateOrConnectWithoutEmployeeInput | CompensatoryLeaveCreateOrConnectWithoutEmployeeInput[]
+    upsert?: CompensatoryLeaveUpsertWithWhereUniqueWithoutEmployeeInput | CompensatoryLeaveUpsertWithWhereUniqueWithoutEmployeeInput[]
+    createMany?: CompensatoryLeaveCreateManyEmployeeInputEnvelope
+    set?: CompensatoryLeaveWhereUniqueInput | CompensatoryLeaveWhereUniqueInput[]
+    disconnect?: CompensatoryLeaveWhereUniqueInput | CompensatoryLeaveWhereUniqueInput[]
+    delete?: CompensatoryLeaveWhereUniqueInput | CompensatoryLeaveWhereUniqueInput[]
+    connect?: CompensatoryLeaveWhereUniqueInput | CompensatoryLeaveWhereUniqueInput[]
+    update?: CompensatoryLeaveUpdateWithWhereUniqueWithoutEmployeeInput | CompensatoryLeaveUpdateWithWhereUniqueWithoutEmployeeInput[]
+    updateMany?: CompensatoryLeaveUpdateManyWithWhereWithoutEmployeeInput | CompensatoryLeaveUpdateManyWithWhereWithoutEmployeeInput[]
+    deleteMany?: CompensatoryLeaveScalarWhereInput | CompensatoryLeaveScalarWhereInput[]
+  }
+
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -32979,6 +34339,20 @@ export namespace Prisma {
     update?: AssetAssignmentUpdateWithWhereUniqueWithoutIssuedByInput | AssetAssignmentUpdateWithWhereUniqueWithoutIssuedByInput[]
     updateMany?: AssetAssignmentUpdateManyWithWhereWithoutIssuedByInput | AssetAssignmentUpdateManyWithWhereWithoutIssuedByInput[]
     deleteMany?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
+  }
+
+  export type CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput = {
+    create?: XOR<CompensatoryLeaveCreateWithoutEmployeeInput, CompensatoryLeaveUncheckedCreateWithoutEmployeeInput> | CompensatoryLeaveCreateWithoutEmployeeInput[] | CompensatoryLeaveUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: CompensatoryLeaveCreateOrConnectWithoutEmployeeInput | CompensatoryLeaveCreateOrConnectWithoutEmployeeInput[]
+    upsert?: CompensatoryLeaveUpsertWithWhereUniqueWithoutEmployeeInput | CompensatoryLeaveUpsertWithWhereUniqueWithoutEmployeeInput[]
+    createMany?: CompensatoryLeaveCreateManyEmployeeInputEnvelope
+    set?: CompensatoryLeaveWhereUniqueInput | CompensatoryLeaveWhereUniqueInput[]
+    disconnect?: CompensatoryLeaveWhereUniqueInput | CompensatoryLeaveWhereUniqueInput[]
+    delete?: CompensatoryLeaveWhereUniqueInput | CompensatoryLeaveWhereUniqueInput[]
+    connect?: CompensatoryLeaveWhereUniqueInput | CompensatoryLeaveWhereUniqueInput[]
+    update?: CompensatoryLeaveUpdateWithWhereUniqueWithoutEmployeeInput | CompensatoryLeaveUpdateWithWhereUniqueWithoutEmployeeInput[]
+    updateMany?: CompensatoryLeaveUpdateManyWithWhereWithoutEmployeeInput | CompensatoryLeaveUpdateManyWithWhereWithoutEmployeeInput[]
+    deleteMany?: CompensatoryLeaveScalarWhereInput | CompensatoryLeaveScalarWhereInput[]
   }
 
   export type EmployeeCreateNestedOneWithoutDepartmentDirectorOfInput = {
@@ -33905,6 +35279,20 @@ export namespace Prisma {
     set?: $Enums.NotificationType
   }
 
+  export type EmployeeCreateNestedOneWithoutCompensatoryLeavesInput = {
+    create?: XOR<EmployeeCreateWithoutCompensatoryLeavesInput, EmployeeUncheckedCreateWithoutCompensatoryLeavesInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutCompensatoryLeavesInput
+    connect?: EmployeeWhereUniqueInput
+  }
+
+  export type EmployeeUpdateOneRequiredWithoutCompensatoryLeavesNestedInput = {
+    create?: XOR<EmployeeCreateWithoutCompensatoryLeavesInput, EmployeeUncheckedCreateWithoutCompensatoryLeavesInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutCompensatoryLeavesInput
+    upsert?: EmployeeUpsertWithoutCompensatoryLeavesInput
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutCompensatoryLeavesInput, EmployeeUpdateWithoutCompensatoryLeavesInput>, EmployeeUncheckedUpdateWithoutCompensatoryLeavesInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -34629,6 +36017,7 @@ export namespace Prisma {
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutSubordinatesInput = {
@@ -34659,6 +36048,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutSubordinatesInput = {
@@ -34693,6 +36083,7 @@ export namespace Prisma {
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutManagerInput = {
@@ -34723,6 +36114,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutManagerInput = {
@@ -35087,6 +36479,33 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CompensatoryLeaveCreateWithoutEmployeeInput = {
+    workDate: Date | string
+    grantedAt?: Date | string
+    used?: boolean
+    usedAt?: Date | string | null
+    note?: string | null
+  }
+
+  export type CompensatoryLeaveUncheckedCreateWithoutEmployeeInput = {
+    id?: number
+    workDate: Date | string
+    grantedAt?: Date | string
+    used?: boolean
+    usedAt?: Date | string | null
+    note?: string | null
+  }
+
+  export type CompensatoryLeaveCreateOrConnectWithoutEmployeeInput = {
+    where: CompensatoryLeaveWhereUniqueInput
+    create: XOR<CompensatoryLeaveCreateWithoutEmployeeInput, CompensatoryLeaveUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type CompensatoryLeaveCreateManyEmployeeInputEnvelope = {
+    data: CompensatoryLeaveCreateManyEmployeeInput | CompensatoryLeaveCreateManyEmployeeInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AttendanceImportLogUpsertWithWhereUniqueWithoutImportedByInput = {
     where: AttendanceImportLogWhereUniqueInput
     update: XOR<AttendanceImportLogUpdateWithoutImportedByInput, AttendanceImportLogUncheckedUpdateWithoutImportedByInput>
@@ -35247,6 +36666,7 @@ export namespace Prisma {
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutSubordinatesInput = {
@@ -35277,6 +36697,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUpsertWithWhereUniqueWithoutManagerInput = {
@@ -35587,6 +37008,35 @@ export namespace Prisma {
     data: XOR<AssetAssignmentUpdateManyMutationInput, AssetAssignmentUncheckedUpdateManyWithoutIssuedByInput>
   }
 
+  export type CompensatoryLeaveUpsertWithWhereUniqueWithoutEmployeeInput = {
+    where: CompensatoryLeaveWhereUniqueInput
+    update: XOR<CompensatoryLeaveUpdateWithoutEmployeeInput, CompensatoryLeaveUncheckedUpdateWithoutEmployeeInput>
+    create: XOR<CompensatoryLeaveCreateWithoutEmployeeInput, CompensatoryLeaveUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type CompensatoryLeaveUpdateWithWhereUniqueWithoutEmployeeInput = {
+    where: CompensatoryLeaveWhereUniqueInput
+    data: XOR<CompensatoryLeaveUpdateWithoutEmployeeInput, CompensatoryLeaveUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type CompensatoryLeaveUpdateManyWithWhereWithoutEmployeeInput = {
+    where: CompensatoryLeaveScalarWhereInput
+    data: XOR<CompensatoryLeaveUpdateManyMutationInput, CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeInput>
+  }
+
+  export type CompensatoryLeaveScalarWhereInput = {
+    AND?: CompensatoryLeaveScalarWhereInput | CompensatoryLeaveScalarWhereInput[]
+    OR?: CompensatoryLeaveScalarWhereInput[]
+    NOT?: CompensatoryLeaveScalarWhereInput | CompensatoryLeaveScalarWhereInput[]
+    id?: IntFilter<"CompensatoryLeave"> | number
+    employeeId?: IntFilter<"CompensatoryLeave"> | number
+    workDate?: DateTimeFilter<"CompensatoryLeave"> | Date | string
+    grantedAt?: DateTimeFilter<"CompensatoryLeave"> | Date | string
+    used?: BoolFilter<"CompensatoryLeave"> | boolean
+    usedAt?: DateTimeNullableFilter<"CompensatoryLeave"> | Date | string | null
+    note?: StringNullableFilter<"CompensatoryLeave"> | string | null
+  }
+
   export type EmployeeCreateWithoutDepartmentDirectorOfInput = {
     employeeCode: string
     name: string
@@ -35614,6 +37064,7 @@ export namespace Prisma {
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutDepartmentDirectorOfInput = {
@@ -35644,6 +37095,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutDepartmentDirectorOfInput = {
@@ -35678,6 +37130,7 @@ export namespace Prisma {
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutDepartmentHeadOfInput = {
@@ -35708,6 +37161,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutDepartmentHeadOfInput = {
@@ -35821,6 +37275,7 @@ export namespace Prisma {
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutDepartmentDirectorOfInput = {
@@ -35851,6 +37306,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUpsertWithoutDepartmentHeadOfInput = {
@@ -35891,6 +37347,7 @@ export namespace Prisma {
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutDepartmentHeadOfInput = {
@@ -35921,6 +37378,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type PositionUpsertWithWhereUniqueWithoutDepartmentInput = {
@@ -36159,6 +37617,7 @@ export namespace Prisma {
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutWorkInfoInput = {
@@ -36189,6 +37648,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutWorkInfoInput = {
@@ -36292,6 +37752,7 @@ export namespace Prisma {
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutWorkInfoInput = {
@@ -36322,6 +37783,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type PositionUpsertWithoutEmployeesInput = {
@@ -36381,6 +37843,7 @@ export namespace Prisma {
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutContactInfoInput = {
@@ -36411,6 +37874,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutContactInfoInput = {
@@ -36456,6 +37920,7 @@ export namespace Prisma {
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutContactInfoInput = {
@@ -36486,6 +37951,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type LeaveApprovalStepCreateWithoutLeaveRequestInput = {
@@ -36540,6 +38006,7 @@ export namespace Prisma {
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutLeaveRequestInput = {
@@ -36570,6 +38037,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutLeaveRequestInput = {
@@ -36668,6 +38136,7 @@ export namespace Prisma {
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutLeaveRequestInput = {
@@ -36698,6 +38167,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type FileUpsertWithoutLeaveRequestsInput = {
@@ -36876,6 +38346,7 @@ export namespace Prisma {
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutLeaveApprovalStepsInput = {
@@ -36906,6 +38377,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutLeaveApprovalStepsInput = {
@@ -36971,6 +38443,7 @@ export namespace Prisma {
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutLeaveApprovalStepsInput = {
@@ -37001,6 +38474,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type LeaveApprovalStepUpsertWithoutApproversInput = {
@@ -37083,6 +38557,7 @@ export namespace Prisma {
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutAttendanceImportLogInput = {
@@ -37113,6 +38588,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutAttendanceImportLogInput = {
@@ -37174,6 +38650,7 @@ export namespace Prisma {
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutAttendanceImportLogInput = {
@@ -37204,6 +38681,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type AttendanceImportLogCreateWithoutAttendancesInput = {
@@ -37251,6 +38729,7 @@ export namespace Prisma {
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutAttendanceInput = {
@@ -37281,6 +38760,7 @@ export namespace Prisma {
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutAttendanceInput = {
@@ -37350,6 +38830,7 @@ export namespace Prisma {
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutAttendanceInput = {
@@ -37380,6 +38861,7 @@ export namespace Prisma {
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type KPIEmployeeCreateWithoutKpiInput = {
@@ -37450,6 +38932,7 @@ export namespace Prisma {
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutKPIEmployeeInput = {
@@ -37480,6 +38963,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutKPIEmployeeInput = {
@@ -37580,6 +39064,7 @@ export namespace Prisma {
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutKPIEmployeeInput = {
@@ -37610,6 +39095,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type KPIUpsertWithoutKpiEmployeesInput = {
@@ -37770,6 +39256,7 @@ export namespace Prisma {
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalsCreatedInput = {
@@ -37800,6 +39287,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalsCreatedInput = {
@@ -37860,6 +39348,7 @@ export namespace Prisma {
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalsProposedInput = {
@@ -37890,6 +39379,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalsProposedInput = {
@@ -38019,6 +39509,7 @@ export namespace Prisma {
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalsCreatedInput = {
@@ -38049,6 +39540,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type FileUpsertWithoutProposalsInput = {
@@ -38121,6 +39613,7 @@ export namespace Prisma {
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalsProposedInput = {
@@ -38151,6 +39644,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type ProposalApproverUpsertWithWhereUniqueWithoutProposalInput = {
@@ -38254,6 +39748,7 @@ export namespace Prisma {
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalSignaturesInput = {
@@ -38284,6 +39779,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalSignaturesInput = {
@@ -38377,6 +39873,7 @@ export namespace Prisma {
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalSignaturesInput = {
@@ -38407,6 +39904,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeCreateWithoutProposalApprovalsInput = {
@@ -38436,6 +39934,7 @@ export namespace Prisma {
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalApprovalsInput = {
@@ -38466,6 +39965,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalApprovalsInput = {
@@ -38553,6 +40053,7 @@ export namespace Prisma {
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalApprovalsInput = {
@@ -38583,6 +40084,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type ProposalUpsertWithoutApproversInput = {
@@ -38725,6 +40227,7 @@ export namespace Prisma {
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutAssetsReceivedInput = {
@@ -38755,6 +40258,7 @@ export namespace Prisma {
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutAssetsReceivedInput = {
@@ -38789,6 +40293,7 @@ export namespace Prisma {
     workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeUncheckedCreateWithoutAssetsIssuedInput = {
@@ -38819,6 +40324,7 @@ export namespace Prisma {
     workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
     Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
     assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
   }
 
   export type EmployeeCreateOrConnectWithoutAssetsIssuedInput = {
@@ -38892,6 +40398,7 @@ export namespace Prisma {
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutAssetsReceivedInput = {
@@ -38922,6 +40429,7 @@ export namespace Prisma {
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUpsertWithoutAssetsIssuedInput = {
@@ -38962,6 +40470,7 @@ export namespace Prisma {
     workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutAssetsIssuedInput = {
@@ -38992,6 +40501,145 @@ export namespace Prisma {
     workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeCreateWithoutCompensatoryLeavesInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
+    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
+    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutCompensatoryLeavesInput = {
+    id?: number
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutCompensatoryLeavesInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutCompensatoryLeavesInput, EmployeeUncheckedCreateWithoutCompensatoryLeavesInput>
+  }
+
+  export type EmployeeUpsertWithoutCompensatoryLeavesInput = {
+    update: XOR<EmployeeUpdateWithoutCompensatoryLeavesInput, EmployeeUncheckedUpdateWithoutCompensatoryLeavesInput>
+    create: XOR<EmployeeCreateWithoutCompensatoryLeavesInput, EmployeeUncheckedCreateWithoutCompensatoryLeavesInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutCompensatoryLeavesInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutCompensatoryLeavesInput, EmployeeUncheckedUpdateWithoutCompensatoryLeavesInput>
+  }
+
+  export type EmployeeUpdateWithoutCompensatoryLeavesInput = {
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
+    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutCompensatoryLeavesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
   }
 
   export type ProposalCreateManyFileInput = {
@@ -39325,6 +40973,15 @@ export namespace Prisma {
     note?: string | null
   }
 
+  export type CompensatoryLeaveCreateManyEmployeeInput = {
+    id?: number
+    workDate: Date | string
+    grantedAt?: Date | string
+    used?: boolean
+    usedAt?: Date | string | null
+    note?: string | null
+  }
+
   export type AttendanceImportLogUpdateWithoutImportedByInput = {
     filename?: StringFieldUpdateOperationsInput | string
     importedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39371,6 +41028,7 @@ export namespace Prisma {
     Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutManagerInput = {
@@ -39401,6 +41059,7 @@ export namespace Prisma {
     Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type EmployeeUncheckedUpdateManyWithoutManagerInput = {
@@ -39740,6 +41399,32 @@ export namespace Prisma {
     employeeId?: IntFieldUpdateOperationsInput | number
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     quantity?: IntFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CompensatoryLeaveUpdateWithoutEmployeeInput = {
+    workDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CompensatoryLeaveUncheckedUpdateWithoutEmployeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    workDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    workDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
   }
 

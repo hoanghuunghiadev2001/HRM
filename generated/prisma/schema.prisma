@@ -69,8 +69,9 @@ model Employee {
   workInfo             WorkInfo?
   Attendance           Attendance[]
 
-  assetsReceived AssetAssignment[] @relation("EmployeeAsset")
-  assetsIssued   AssetAssignment[] @relation("IssuedAssets")
+  assetsReceived     AssetAssignment[]   @relation("EmployeeAsset")
+  assetsIssued       AssetAssignment[]   @relation("IssuedAssets")
+  compensatoryLeaves CompensatoryLeave[]
 
   @@index([employeeCode])
   @@index([managerId])
@@ -429,4 +430,20 @@ model Notification {
   @@index([type])
   @@index([isActive])
   @@index([startTime, endTime])
+}
+
+model CompensatoryLeave {
+  id         Int       @id @default(autoincrement())
+  employeeId Int
+  workDate   DateTime  @db.Date // Chủ nhật đã đi làm
+  grantedAt  DateTime  @default(now()) // Ngày cấp nghỉ bù
+  used       Boolean   @default(false) // Đã dùng hay chưa
+  usedAt     DateTime?
+  note       String?
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@unique([employeeId, workDate]) // ❗ tránh cấp trùng
+  @@index([employeeId])
+  @@index([used])
 }
