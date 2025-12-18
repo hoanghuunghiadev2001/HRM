@@ -15,7 +15,11 @@ import {
   Tag,
   Space,
   Spin,
+  Form,
+  TreeSelect,
 } from "antd";
+import { TreeSelectProps } from "antd/lib";
+import { Department } from "@/lib/interface";
 
 const { Search } = Input;
 
@@ -37,6 +41,16 @@ export default function AssetAssignPage() {
   const [assignData, setAssignData] = useState<Record<number, number>>({});
   const [assignLoading, setAssignLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [filterDepartment, setDepartment] = useState<string>();
+  const [departments, setDepartments] = useState<Department[]>([]);
+
+  // lấy danh sách bộ phận
+  const listDepartment = async () => {
+    const res = await fetch("/api/departments");
+    if (!res.ok) throw new Error("Lấy dữ liệu thất bại");
+    const departmentsData = await res.json(); //
+    setDepartments(departmentsData);
+  };
 
   // ==========================
   // 🔹 Lấy danh sách nhân viên
@@ -51,6 +65,9 @@ export default function AssetAssignPage() {
         page: page.toString(),
         pageSize: pageSize.toString(),
       });
+      if (filterDepartment) {
+        params.append("department", filterDepartment);
+      }
       const res = await fetch(`/api/employees/summary?${params.toString()}`, {
         credentials: "include",
       });
@@ -64,6 +81,30 @@ export default function AssetAssignPage() {
     }
   };
 
+  const treeData = departments.map((dept) => ({
+    value: dept.id.toString(),
+    title: dept.name.toString(),
+    key: dept.id,
+    children: dept.positions.map((pos: any) => ({
+      value: `${dept.id}-${pos.id}`,
+      title: ` ${pos.name}`,
+      key: `${dept.id}-${pos.id}`,
+    })),
+  }));
+
+  // const [value, setValue] = useState<string>();
+
+  const onChangeSelectDepartment = (newValue: string) => {
+    setDepartment(newValue);
+  };
+
+  const onPopupScroll: TreeSelectProps["onPopupScroll"] = (e) => {
+    console.log("onPopupScroll", e);
+  };
+
+  useEffect(() => {
+    listDepartment();
+  }, []);
   useEffect(() => {
     fetchEmployees(page, pageSize);
   }, [page, pageSize]);
@@ -228,6 +269,34 @@ export default function AssetAssignPage() {
             style={{ width: 150 }}
             allowClear
           />
+
+          <div className="!flex gap-2 items-center ">
+            <Form.Item
+              className=""
+              layout="horizontal"
+              label={
+                <p className="font-bold text-[#242424] hidden sm:block">
+                  Bộ phận
+                </p>
+              }
+            >
+              <TreeSelect
+                showSearch
+                style={{ minWidth: "250px", maxWidth: "200px" }}
+                value={filterDepartment}
+                styles={{
+                  popup: { root: { maxHeight: 400, overflow: "auto" } },
+                }}
+                placeholder="Phòng ban"
+                allowClear
+                listItemScrollOffset={200}
+                onChange={onChangeSelectDepartment}
+                showCheckedStrategy="SHOW_ALL"
+                treeData={treeData}
+                onPopupScroll={onPopupScroll}
+              />
+            </Form.Item>
+          </div>
           <Button
             type="primary"
             onClick={() => {
