@@ -472,12 +472,21 @@ export default function ProposalDetailTailwind() {
                 <Tag color={statusCfg.color}>{statusCfg.text}</Tag>
               </Descriptions.Item>
               {proposal.vehicle && (
-                <Descriptions.Item label="Xe">
-                  {proposal.vehicle.name}{" "}
-                  {proposal.vehicle.plateNumber
-                    ? `(${proposal.vehicle.plateNumber})`
-                    : ""}
-                </Descriptions.Item>
+                <>
+                  <Descriptions.Item label="Xe">
+                    {proposal.vehicle.name}{" "}
+                    {proposal.vehicle.plateNumber
+                      ? `(${proposal.vehicle.plateNumber})`
+                      : ""}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Địa điểm">
+                    <Paragraph className="whitespace-pre-wrap mb-0">
+                      {proposal.dropoffPlace || (
+                        <span className="text-gray-500">Không có Địa điểm</span>
+                      )}
+                    </Paragraph>
+                  </Descriptions.Item>
+                </>
               )}
               {proposal.startAt && proposal.endAt && (
                 <Descriptions.Item label="Thời gian">
