@@ -323,6 +323,14 @@ export async function PUT(req: Request) {
 
     const leaveRequest = step.leaveRequest;
 
+    const employee = await prisma.employee.findUnique({
+      where: { id: leaveRequest.employeeId },
+      include: {
+        contactInfo: true,
+        workInfo: { include: { department: true, position: true } },
+      },
+    });
+
     // =====================================================
     // 🔴 CASE 1: Nếu bị TỪ CHỐI
     // =====================================================
@@ -350,13 +358,6 @@ export async function PUT(req: Request) {
       });
 
       // Gửi email thông báo từ chối
-      const employee = await prisma.employee.findUnique({
-        where: { id: leaveRequest.employeeId },
-        include: {
-          contactInfo: true,
-          workInfo: { include: { department: true, position: true } },
-        },
-      });
 
       if (employee?.contactInfo?.email) {
         await sendLeaveRequestEmail({
@@ -415,10 +416,10 @@ export async function PUT(req: Request) {
         await sendLeaveRequestEmail({
           to: [nextApprover.contactInfo.email],
           subject: "Đơn nghỉ phép cần phê duyệt",
-          employeeName: leaveRequest.employeeId.toString(),
-          employeeCode: leaveRequest.employeeId.toString(),
-          department: "",
-          position: "",
+          employeeName: employee?.name.toString() ?? "",
+          employeeCode: employee?.employeeCode ?? "",
+          department: employee?.workInfo?.department?.name || "",
+          position: employee?.workInfo?.position?.name || "",
           leaveType: leaveRequest.leaveType,
           startDate: dayjs(leaveRequest.startDate)
             .tz("Asia/Ho_Chi_Minh")
@@ -441,14 +442,6 @@ export async function PUT(req: Request) {
       await prisma.leaveRequest.update({
         where: { id: leaveRequest.id },
         data: { status: LeaveStatus.approved, approvedAt: new Date() },
-      });
-
-      const employee = await prisma.employee.findUnique({
-        where: { id: leaveRequest.employeeId },
-        include: {
-          contactInfo: true,
-          workInfo: { include: { department: true, position: true } },
-        },
       });
 
       if (employee?.contactInfo?.email) {
