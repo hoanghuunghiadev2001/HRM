@@ -16,16 +16,9 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 // GET: Lấy danh sách đơn nghỉ phép của chính user
 // GET: Lấy danh sách đơn nghỉ phép của chính user
-export async function GET(request: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
-    const cookieHeader = request.headers.get("cookie") || "";
-    const cookies = Object.fromEntries(
-      cookieHeader
-        .split(";")
-        .map((c) => c.trim().split("="))
-        .map(([k, v]) => [k, decodeURIComponent(v)])
-    );
-    const token = cookies.token;
+    const token = req.cookies.get("token-hrm")?.value;
 
     if (!token) {
       return NextResponse.json({ message: "Không có token" }, { status: 401 });
