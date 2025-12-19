@@ -119,20 +119,16 @@ export async function GET(request: NextRequest) {
 // PUT: Thu hồi đơn nghỉ phép
 export async function PUT(req: NextRequest) {
   try {
-    const cookieHeader = req.headers.get("cookie") || "";
-    const cookies = Object.fromEntries(
-      cookieHeader
-        .split(";")
-        .map((c) => c.trim().split("="))
-        .map(([k, v]) => [k, decodeURIComponent(v)])
-    );
-    const token = cookies.token;
+    const token = req.cookies.get("token-hrm")?.value;
 
     if (!token) {
       return NextResponse.json({ message: "Không có token" }, { status: 401 });
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
+    const decoded = jwt.verify(token, JWT_SECRET) as {
+      id: number;
+      role: string;
+    };
     const userId = decoded.id;
 
     const body = await req.json();
@@ -170,9 +166,12 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    // if (leave.employeeId !== userId) {
-    //   return NextResponse.json({ message: "Bạn không có quyền thu hồi đơn này" }, { status: 403 });
-    // }
+    if (leave.employeeId !== userId || decoded.role !== "ADMIN") {
+      return NextResponse.json(
+        { message: "Bạn không có quyền thu hồi đơn này" },
+        { status: 403 }
+      );
+    }
 
     const now = dayjs().tz("Asia/Ho_Chi_Minh");
     const startDate = dayjs.utc(leave.startDate).tz("Asia/Ho_Chi_Minh");
