@@ -60,7 +60,7 @@ export default function ProposalCreatorPolished() {
   );
   const [selectedVehicle, setSelectedVehicle] = useState<number | null>(null);
   const [rangeTime, setRangeTime] = useState<any>(null);
-  const [managerId, setManagerId] = useState<number | null>(null);
+  const [managerIds, setManagerIds] = useState<number[] | null>(null);
 
   const conflictRef = useRef<string | null>(null);
   const user = useAppSelector((s: any) => s.user);
@@ -97,7 +97,7 @@ export default function ProposalCreatorPolished() {
 
         if (mgrResp.ok) {
           const mgrJson = await mgrResp.json();
-          setManagerId(mgrJson.managerId ?? null);
+          setManagerIds(mgrJson.managerIds || []);
         }
       } catch (e) {
         console.error(e);
@@ -113,9 +113,8 @@ export default function ProposalCreatorPolished() {
     if (proposalType === "VEHICLE") {
       // set defaults for vehicle proposals
       const defaultApprovers = Array.from(new Set([6, 132]));
-      const defaultSigners = managerId ? [managerId] : [];
       form.setFieldsValue({
-        signers: defaultSigners,
+        signers: managerIds,
         approvers: defaultApprovers,
       });
     } else {
@@ -123,7 +122,7 @@ export default function ProposalCreatorPolished() {
       form.setFieldsValue({ signers: [], approvers: [] });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [proposalType, managerId]);
+  }, [proposalType, managerIds]);
 
   // Watches so counts update reactively
   const signersWatch = Form.useWatch("signers", form) || [];
@@ -217,7 +216,7 @@ export default function ProposalCreatorPolished() {
     let approvers = values.approvers || [];
     if (proposalType !== "REGULAR") {
       approvers = Array.from(new Set([6, 132]));
-      signers = managerId ? [managerId] : [];
+      signers = managerIds; // ✅ KHÔNG bọc []
     }
     if (signers.length === 0) {
       console.log(1);

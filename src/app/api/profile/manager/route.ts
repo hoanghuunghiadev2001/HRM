@@ -1,23 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 // /app/api/leave/my-requests/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { prisma } from "@/lib/prisma";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-import { sendEmail } from "@/lib/mail";
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
-// GET: Lấy danh sách đơn nghỉ phép của chính user
-// GET: Lấy danh sách đơn nghỉ phép của chính user
 export async function GET(req: NextRequest) {
   try {
+    // =====================
+    // 1️⃣ Auth
+    // =====================
     const token = req.cookies.get("token-hrm")?.value;
 
     if (!token) {
@@ -26,21 +18,57 @@ export async function GET(req: NextRequest) {
 
     const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
 
+    const managerIds = new Set<number>();
+
+    // =====================
+    // 2️⃣ Lấy manager trực tiếp
+    // =====================
     const employee = await prisma.employee.findUnique({
-      where: { id: Number(decoded.id) },
+      where: { id: decoded.id },
       select: { managerId: true },
     });
 
-    if (!employee) {
-      return NextResponse.json(
-        { error: "Employee not found" },
-        { status: 404 }
-      );
+    if (!employee?.managerId) {
+      return NextResponse.json({ managerIds: [] });
     }
 
-    return NextResponse.json({ managerId: employee.managerId });
+    const directManagerId = employee.managerId;
+
+    // =====================
+    // 3️⃣ Case đặc biệt: tự chọn chính mình
+    // =====================
+    if (directManagerId === decoded.id) {
+      return NextResponse.json({
+        managerIds: [decoded.id],
+      });
+    }
+
+    // Thêm manager trực tiếp
+    managerIds.add(directManagerId);
+
+    // =====================
+    // 4️⃣ Lấy manager cấp trên
+    // =====================
+    const manager = await prisma.employee.findUnique({
+      where: { id: directManagerId },
+      select: { managerId: true },
+    });
+
+    const upperManagerId = manager?.managerId;
+
+    if (
+      upperManagerId &&
+      upperManagerId !== decoded.id &&
+      upperManagerId !== directManagerId
+    ) {
+      managerIds.add(upperManagerId);
+    }
+
+    return NextResponse.json({
+      managerIds: Array.from(managerIds),
+    });
   } catch (error) {
-    console.error("❌ Error fetching managerId:", error);
+    console.error("❌ Error fetching managers:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
