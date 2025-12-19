@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import {
   Button,
@@ -8,6 +9,7 @@ import {
   Input,
   message,
   Select,
+  Table,
   Upload,
   UploadProps,
 } from "antd";
@@ -39,6 +41,28 @@ interface Position {
   name: string;
 }
 
+interface EmployeeAsset {
+  id: number;
+  assetId: number;
+  quantity: number;
+  note: string | null;
+  issuedAt: string | null;
+  asset: {
+    id: number;
+    name: string;
+    description: string | null;
+    unit: string;
+  } | null;
+  issuedBy: {
+    id: number;
+    employeeCode: string;
+    name: string;
+    role: string;
+    avatar: string | null;
+    isActive: boolean;
+  } | null;
+}
+
 const ModalEditEmployee = ({
   onClose,
   open,
@@ -52,7 +76,33 @@ const ModalEditEmployee = ({
   const [departments, setDepartments] = useState<Department[]>([]);
   const [selectedDepartmentId, setSelectedDepartmentId] = useState(0);
   const [positions, setPositions] = useState<Position[]>([]);
+  const [assets, setAssets] = useState<EmployeeAsset[]>([]);
+  const [assetLoading, setAssetLoading] = useState(false);
   type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+
+  const fetchEmployeeAssets = async (employeeId: number) => {
+    try {
+      setAssetLoading(true);
+      const res = await fetch(
+        `/api/assets/by-employee?employeeId=${employeeId}`,
+        { credentials: "include" }
+      );
+      if (!res.ok) throw new Error("Không lấy được tài sản");
+      const data = await res.json();
+      setAssets(data.assets || []);
+    } catch (error) {
+      console.error(error);
+      message.error("Lỗi khi lấy danh sách tài sản");
+    } finally {
+      setAssetLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (open && employeeInfo?.id) {
+      fetchEmployeeAssets(employeeInfo.id);
+    }
+  }, [open, employeeInfo]);
 
   const { role } = useAppSelector((state) => state.user);
 
@@ -244,6 +294,42 @@ const ModalEditEmployee = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [employeeInfo, isMounted]);
 
+  const assetColumns = [
+    {
+      title: "Tên tài sản",
+      dataIndex: ["asset", "name"],
+      key: "name",
+      render: (_: any, record: EmployeeAsset) => record.asset?.name || "—",
+    },
+    {
+      title: "Số lượng",
+      dataIndex: "quantity",
+      key: "quantity",
+    },
+    {
+      title: "Đơn vị",
+      render: (_: any, record: EmployeeAsset) => record.asset?.unit || "—",
+    },
+    {
+      title: "Ngày cấp",
+      dataIndex: "issuedAt",
+      key: "issuedAt",
+      render: (v: string) => (v ? dayjs(v).format("DD/MM/YYYY") : "—"),
+    },
+    {
+      title: "Người cấp",
+      key: "issuedBy",
+      render: (_: any, record: EmployeeAsset) =>
+        record.issuedBy ? record.issuedBy.name : "—",
+    },
+    {
+      title: "Ghi chú",
+      dataIndex: "note",
+      key: "note",
+      render: (v: string) => v || "—",
+    },
+  ];
+
   return (
     <>
       <Drawer
@@ -433,7 +519,19 @@ const ModalEditEmployee = ({
                   ></Select>
                 </Form.Item>
               </div>
+              <div className="mb-2 mt-8">
+                <p className="text-xl">4. Tài sản đang sử dụng:</p>
+              </div>
 
+              <Table
+                rowKey="id"
+                loading={assetLoading}
+                columns={assetColumns}
+                dataSource={assets}
+                pagination={false}
+                bordered
+                locale={{ emptyText: "Nhân viên chưa được cấp tài sản" }}
+              />
               {/* <Form.Item {...tailLayout}>
                 <Space>
                   <Button type="primary" htmlType="submit">
