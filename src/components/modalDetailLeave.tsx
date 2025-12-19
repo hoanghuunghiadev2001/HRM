@@ -191,8 +191,10 @@ const ModalDetailLeave = ({
   const start = infoRequetLeave
     ? dayjs.utc(infoRequetLeave.startDate).tz("Asia/Ho_Chi_Minh")
     : null;
+  console.log(infoRequetLeave);
+
   const canRevoke =
-    (((employeeCode === infoRequetLeave.employee.employeeCode ||
+    (((employeeCode === infoRequetLeave?.employee?.employeeCode ||
       employeeCode === "01375") &&
       infoRequetLeave?.status === "approved") ||
       infoRequetLeave?.status === "pending") &&
