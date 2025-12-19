@@ -90,6 +90,8 @@ const ModalDetailLeave = ({
     infoRequetLeave?.totalHours || 0
   );
 
+  // const { employeeCode } = useAppSelector((state) => state.user);
+
   const [original, rejectPart] = (infoRequetLeave?.reason || "").split("---");
 
   useEffect(() => {
@@ -190,7 +192,9 @@ const ModalDetailLeave = ({
     ? dayjs.utc(infoRequetLeave.startDate).tz("Asia/Ho_Chi_Minh")
     : null;
   const canRevoke =
-    (infoRequetLeave?.status === "approved" ||
+    (((employeeCode === infoRequetLeave.employee.employeeCode ||
+      employeeCode === "01375") &&
+      infoRequetLeave?.status === "approved") ||
       infoRequetLeave?.status === "pending") &&
     start &&
     start.isAfter(now);
