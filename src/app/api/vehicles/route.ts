@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
   try {
-    const token = request.cookies.get("token")?.value;
+    const token = request.cookies.get("token-hrm")?.value;
     if (!token) {
       return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
     }
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const token = request.cookies.get("token")?.value;
+    const token = request.cookies.get("token-hrm")?.value;
     if (!token) {
       return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
     }
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const token = request.cookies.get("token")?.value;
+    const token = request.cookies.get("token-hrm")?.value;
     if (!token) {
       return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
     }
@@ -124,7 +124,7 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const token = request.cookies.get("token")?.value;
+    const token = request.cookies.get("token-hrm")?.value;
     if (!token) {
       return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
     }

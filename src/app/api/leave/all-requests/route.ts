@@ -16,7 +16,7 @@ interface JWTPayload {
 
 export async function GET(req: NextRequest) {
   try {
-    const token = req.cookies.get("token")?.value;
+    const token = req.cookies.get("token-hrm")?.value;
     if (!token) {
       return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
     }
@@ -183,7 +183,7 @@ export async function GET(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    const token = req.cookies.get("token")?.value;
+    const token = req.cookies.get("token-hrm")?.value;
     if (!token) {
       return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
     }
@@ -259,7 +259,7 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
-    const token = req.cookies.get("token")?.value;
+    const token = req.cookies.get("token-hrm")?.value;
     if (!token)
       return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
 

@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     let employeeId = Number(searchParams.get("employeeId"));
 
-    const token = req.cookies.get("token")?.value;
+    const token = req.cookies.get("token-hrm")?.value;
     if (!token) {
       return NextResponse.json(
         { success: false, message: "Không có token" },

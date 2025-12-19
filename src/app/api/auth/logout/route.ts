@@ -8,7 +8,7 @@ export async function POST() {
   });
 
   response.cookies.set({
-    name: "token",
+    name: "token-hrm",
     value: "",
     maxAge: 0,
     path: "/",

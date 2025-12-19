@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
 
-    const token = req.cookies.get("token")?.value;
+    const token = req.cookies.get("token-hrm")?.value;
 
     if (!token) {
       return NextResponse.json({ message: "Không có token" }, { status: 401 });

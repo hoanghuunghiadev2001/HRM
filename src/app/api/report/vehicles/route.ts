@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     const dateParam = searchParams.get("date"); // YYYY-MM-DD
 
     // Lấy token từ cookies (đúng chuẩn App Router)
-    const token = (await cookies()).get("token")?.value;
+    const token = (await cookies()).get("token-hrm")?.value;
 
     if (!token) {
       return NextResponse.json({ message: "Không có token" }, { status: 401 });

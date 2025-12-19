@@ -6,7 +6,7 @@ import { verifyToken } from "@/lib/auth";
 import bcrypt from "bcrypt";
 
 export async function PATCH(request: NextRequest) {
-  const token = request.cookies.get("token")?.value;
+  const token = request.cookies.get("token-hrm")?.value;
   if (!token) {
     return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
   }

@@ -25,7 +25,7 @@ export async function POST(
 
     // Nếu trạng thái là rejected mà không có reason
 
-    const token = request.cookies.get("token")?.value;
+    const token = request.cookies.get("token-hrm")?.value;
 
     if (!token) {
       return NextResponse.json(

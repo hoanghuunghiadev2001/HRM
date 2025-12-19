@@ -82,7 +82,7 @@ export async function GET(
     const id = Number((await params).id);
     if (!id) return new NextResponse("id không hợp lệ", { status: 400 });
 
-    const token = req.cookies.get("token")?.value;
+    const token = req.cookies.get("token-hrm")?.value;
     if (!token) return new NextResponse("Không có token", { status: 401 });
 
     try {

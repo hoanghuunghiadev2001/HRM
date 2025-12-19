@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 export async function POST(req: NextRequest) {
   try {
-    const token = req.cookies.get("token")?.value;
+    const token = req.cookies.get("token-hrm")?.value;
 
     if (!token) {
       return NextResponse.json({ message: "Không có token" }, { status: 401 });

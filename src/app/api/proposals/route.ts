@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
 
     const file = formData.get("file") as File | null;
 
-    const token = request.cookies.get("token")?.value;
+    const token = request.cookies.get("token-hrm")?.value;
 
     if (!token) {
       return NextResponse.json(
@@ -133,7 +133,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 
-    const token = request.cookies.get("token")?.value;
+    const token = request.cookies.get("token-hrm")?.value;
     if (!token) {
       return NextResponse.json(
         { error: "Thiếu token xác thực" },

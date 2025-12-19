@@ -37,7 +37,7 @@ function formatDate(date: Date | null | undefined): string | null {
 export async function GET(req: NextRequest) {
   try {
     // Lấy token từ cookie (App Router lấy cookie thế này)
-    const token = req.cookies.get("token")?.value;
+    const token = req.cookies.get("token-hrm")?.value;
 
     if (!token) {
       return NextResponse.json({ message: "Không có token" }, { status: 401 });

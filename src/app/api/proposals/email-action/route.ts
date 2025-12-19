@@ -5,7 +5,7 @@ import { ProposalService } from "@/lib/proposal-service";
 
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
-  const token = url.searchParams.get("token");
+  const token = url.searchParams.get("token-hrm");
   const direct = url.searchParams.get("direct") === "1";
 
   if (!token)

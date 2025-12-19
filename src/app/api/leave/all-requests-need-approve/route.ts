@@ -14,7 +14,7 @@ interface JWTPayload {
 
 export async function GET(req: NextRequest) {
   try {
-    const token = req.cookies.get("token")?.value;
+    const token = req.cookies.get("token-hrm")?.value;
     if (!token) {
       return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
     }

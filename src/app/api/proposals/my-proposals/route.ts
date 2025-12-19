@@ -20,7 +20,7 @@ function parseYMDToEnd(ymd?: string) {
 export async function GET(request: NextRequest) {
   try {
     // ===== Xác thực token =====
-    const token = request.cookies.get("token")?.value;
+    const token = request.cookies.get("token-hrm")?.value;
     if (!token) {
       return NextResponse.json(
         { error: "Thiếu token xác thực" },

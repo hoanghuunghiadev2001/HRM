@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
 
-    const token = request.cookies.get("token")?.value;
+    const token = request.cookies.get("token-hrm")?.value;
 
     if (!token) {
       return NextResponse.json(
@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 
-    const token = request.cookies.get("token")?.value;
+    const token = request.cookies.get("token-hrm")?.value;
 
     if (!token) {
       return NextResponse.json(
@@ -150,7 +150,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const token = req.cookies.get("token")?.value;
+    const token = req.cookies.get("token-hrm")?.value;
     if (!token)
       return NextResponse.json(
         { error: "Thiếu token xác thực" },

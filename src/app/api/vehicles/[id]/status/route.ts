@@ -16,7 +16,7 @@ export async function PATCH(
 
   // Lấy token từ cookie
   const cookieStore = cookies();
-  const token = (await cookieStore).get("token")?.value;
+  const token = (await cookieStore).get("token-hrm")?.value;
 
   if (!token) {
     return NextResponse.json({ message: "Thiếu token" }, { status: 401 });

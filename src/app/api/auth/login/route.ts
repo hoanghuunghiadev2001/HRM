@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
     (
       await // ✅ Ghi token vào cookie
       cookies()
-    ).set("token", token, {
+    ).set("token-hrm", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",

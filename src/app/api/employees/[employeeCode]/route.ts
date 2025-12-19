@@ -45,7 +45,7 @@ function isBase64Image(str: string): boolean {
 
 export async function GET(req: NextRequest) {
   const employeeCode = getEmployeeCodeFromUrl(req.url);
-  const token = req.cookies.get("token")?.value;
+  const token = req.cookies.get("token-hrm")?.value;
   if (!token)
     return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
 
@@ -102,7 +102,7 @@ export async function GET(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   const employeeCode = getEmployeeCodeFromUrl(req.url);
-  const token = req.cookies.get("token")?.value;
+  const token = req.cookies.get("token-hrm")?.value;
   if (!token)
     return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
 

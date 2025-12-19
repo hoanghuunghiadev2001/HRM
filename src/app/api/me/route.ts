@@ -8,7 +8,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 export async function GET(req: NextRequest) {
   try {
     // Lấy cookie token
-    const token = req.cookies.get("token")?.value;
+    const token = req.cookies.get("token-hrm")?.value;
     if (!token) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }

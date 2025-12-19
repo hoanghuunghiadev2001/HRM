@@ -20,7 +20,7 @@ function isBase64Image(str: string): boolean {
 
 export async function PUT(req: NextRequest) {
   try {
-    const token = req.cookies.get("token")?.value;
+    const token = req.cookies.get("token-hrm")?.value;
 
     if (!token) {
       return NextResponse.json({ message: "Chưa đăng nhập" }, { status: 401 });

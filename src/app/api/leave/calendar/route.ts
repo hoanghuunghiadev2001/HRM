@@ -9,7 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 
 export async function GET(request: NextRequest) {
   try {
-    const token = request.cookies.get("token")?.value;
+    const token = request.cookies.get("token-hrm")?.value;
     if (!token) {
       return NextResponse.json(
         { error: "Thiếu token xác thực" },

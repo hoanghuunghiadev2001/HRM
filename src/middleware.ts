@@ -31,10 +31,10 @@ export function middleware(req: NextRequest) {
   }
 
   // Kiểm tra token
-  const token = req.cookies.get("token")?.value;
+  const token = req.cookies.get("token-hrm")?.value;
   if (!token) {
     const response = NextResponse.redirect(new URL("/login", req.url));
-    response.cookies.set("token", "", { maxAge: 0, path: "/" });
+    response.cookies.set("token-hrm", "", { maxAge: 0, path: "/" });
     return response;
   }
 

@@ -119,7 +119,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const id = Number((await params).id);
-  const token = req.cookies.get("token")?.value;
+  const token = req.cookies.get("token-hrm")?.value;
 
   if (!token)
     return NextResponse.json({ message: "Không có token" }, { status: 401 });
