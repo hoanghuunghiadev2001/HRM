@@ -420,12 +420,12 @@ model Notification {
   startTime DateTime? // nullable
   endTime   DateTime? // nullable
 
-  isActive Boolean @default(true)
-  sendMail Boolean @default(false)
-  sendApp  Boolean @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  isActive    Boolean  @default(true)
+  sendMail    Boolean  @default(false)
+  sendApp     Boolean  @default(true)
+  mailContent String?  @db.Text // nội dung email (HTML / text) 
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([type])
   @@index([isActive])

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import MailEditor from "@/components/MailEditor";
 import {
   App,
   Button,
@@ -51,6 +52,9 @@ export default function NotificationAdminPage() {
       const [start, end] = values.time;
       payload.startTime = start.toISOString();
       payload.endTime = end.toISOString();
+    }
+    if (values.sendMail) {
+      payload.mailContent = values.mailContent;
     }
 
     await fetch("/api/notifications", {
@@ -253,6 +257,22 @@ export default function NotificationAdminPage() {
             valuePropName="checked"
           >
             <Switch />
+          </Form.Item>
+          <Form.Item dependencies={["sendMail"]}>
+            {({ getFieldValue }) =>
+              getFieldValue("sendMail") ? (
+                <Form.Item
+                  name="mailContent"
+                  label="Nội dung email"
+                  rules={[
+                    { required: true, message: "Vui lòng nhập nội dung email" },
+                  ]}
+                  getValueFromEvent={(content) => content}
+                >
+                  <MailEditor />
+                </Form.Item>
+              ) : null
+            }
           </Form.Item>
         </Form>
       </Modal>

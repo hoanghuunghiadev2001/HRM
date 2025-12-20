@@ -15,6 +15,7 @@ export async function POST(req: Request) {
     const {
       title,
       message,
+      mailContent, // HTML email
       type = "SYSTEM",
       startTime,
       endTime,
@@ -25,6 +26,12 @@ export async function POST(req: Request) {
     if (!message || !type) {
       return NextResponse.json(
         { message: "Thiếu nội dung hoặc loại thông báo" },
+        { status: 400 }
+      );
+    }
+    if (sendMail && !mailContent) {
+      return NextResponse.json(
+        { message: "Bật gửi mail nhưng thiếu nội dung email" },
         { status: 400 }
       );
     }
@@ -47,6 +54,7 @@ export async function POST(req: Request) {
       data: {
         title,
         message,
+        mailContent: sendMail ? mailContent : null,
         type,
         startTime: startTime ? new Date(startTime) : null,
         endTime: endTime ? new Date(endTime) : null,
@@ -86,16 +94,23 @@ export async function POST(req: Request) {
         .filter(Boolean) as string[];
 
       // Gửi mail batch – không block API
-      sendNotificationMail({
-        emails,
-        type,
-        title,
-        message,
-        startTime: startTime ? new Date(startTime) : null,
-        endTime: endTime ? new Date(endTime) : null,
-      }).catch((err) => {
-        console.error("Send mail failed:", err);
-      });
+      if (sendMail) {
+        const subjectMap: Record<string, string> = {
+          HR: "[HRM] Thông báo nhân sự",
+          SYSTEM: "[HRM] Thông báo hệ thống",
+          MAINTENANCE: "[HRM] Thông báo bảo trì",
+          SECURITY: "[HRM] Thông báo bảo mật",
+          FEATURE: "[HRM] Thông báo tính năng mới",
+        };
+
+        sendNotificationMail({
+          emails,
+          subject: title || subjectMap[type] || "[HRM] Thông báo",
+          html: mailContent,
+        }).catch((err) => {
+          console.error("Send mail failed:", err);
+        });
+      }
     }
 
     return NextResponse.json(notification);

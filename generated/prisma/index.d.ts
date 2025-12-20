@@ -25509,6 +25509,7 @@ export namespace Prisma {
     isActive: boolean | null
     sendMail: boolean | null
     sendApp: boolean | null
+    mailContent: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -25523,6 +25524,7 @@ export namespace Prisma {
     isActive: boolean | null
     sendMail: boolean | null
     sendApp: boolean | null
+    mailContent: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -25537,6 +25539,7 @@ export namespace Prisma {
     isActive: number
     sendMail: number
     sendApp: number
+    mailContent: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -25561,6 +25564,7 @@ export namespace Prisma {
     isActive?: true
     sendMail?: true
     sendApp?: true
+    mailContent?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -25575,6 +25579,7 @@ export namespace Prisma {
     isActive?: true
     sendMail?: true
     sendApp?: true
+    mailContent?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -25589,6 +25594,7 @@ export namespace Prisma {
     isActive?: true
     sendMail?: true
     sendApp?: true
+    mailContent?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -25690,6 +25696,7 @@ export namespace Prisma {
     isActive: boolean
     sendMail: boolean
     sendApp: boolean
+    mailContent: string | null
     createdAt: Date
     updatedAt: Date
     _count: NotificationCountAggregateOutputType | null
@@ -25723,6 +25730,7 @@ export namespace Prisma {
     isActive?: boolean
     sendMail?: boolean
     sendApp?: boolean
+    mailContent?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["notification"]>
@@ -25739,11 +25747,12 @@ export namespace Prisma {
     isActive?: boolean
     sendMail?: boolean
     sendApp?: boolean
+    mailContent?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "message" | "type" | "startTime" | "endTime" | "isActive" | "sendMail" | "sendApp" | "createdAt" | "updatedAt", ExtArgs["result"]["notification"]>
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "message" | "type" | "startTime" | "endTime" | "isActive" | "sendMail" | "sendApp" | "mailContent" | "createdAt" | "updatedAt", ExtArgs["result"]["notification"]>
 
   export type $NotificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Notification"
@@ -25758,6 +25767,7 @@ export namespace Prisma {
       isActive: boolean
       sendMail: boolean
       sendApp: boolean
+      mailContent: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["notification"]>
@@ -26138,6 +26148,7 @@ export namespace Prisma {
     readonly isActive: FieldRef<"Notification", 'Boolean'>
     readonly sendMail: FieldRef<"Notification", 'Boolean'>
     readonly sendApp: FieldRef<"Notification", 'Boolean'>
+    readonly mailContent: FieldRef<"Notification", 'String'>
     readonly createdAt: FieldRef<"Notification", 'DateTime'>
     readonly updatedAt: FieldRef<"Notification", 'DateTime'>
   }
@@ -27769,6 +27780,7 @@ export namespace Prisma {
     isActive: 'isActive',
     sendMail: 'sendMail',
     sendApp: 'sendApp',
+    mailContent: 'mailContent',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -27954,7 +27966,8 @@ export namespace Prisma {
 
   export const NotificationOrderByRelevanceFieldEnum: {
     title: 'title',
-    message: 'message'
+    message: 'message',
+    mailContent: 'mailContent'
   };
 
   export type NotificationOrderByRelevanceFieldEnum = (typeof NotificationOrderByRelevanceFieldEnum)[keyof typeof NotificationOrderByRelevanceFieldEnum]
@@ -29739,6 +29752,7 @@ export namespace Prisma {
     isActive?: BoolFilter<"Notification"> | boolean
     sendMail?: BoolFilter<"Notification"> | boolean
     sendApp?: BoolFilter<"Notification"> | boolean
+    mailContent?: StringNullableFilter<"Notification"> | string | null
     createdAt?: DateTimeFilter<"Notification"> | Date | string
     updatedAt?: DateTimeFilter<"Notification"> | Date | string
   }
@@ -29753,6 +29767,7 @@ export namespace Prisma {
     isActive?: SortOrder
     sendMail?: SortOrder
     sendApp?: SortOrder
+    mailContent?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _relevance?: NotificationOrderByRelevanceInput
@@ -29771,6 +29786,7 @@ export namespace Prisma {
     isActive?: BoolFilter<"Notification"> | boolean
     sendMail?: BoolFilter<"Notification"> | boolean
     sendApp?: BoolFilter<"Notification"> | boolean
+    mailContent?: StringNullableFilter<"Notification"> | string | null
     createdAt?: DateTimeFilter<"Notification"> | Date | string
     updatedAt?: DateTimeFilter<"Notification"> | Date | string
   }, "id">
@@ -29785,6 +29801,7 @@ export namespace Prisma {
     isActive?: SortOrder
     sendMail?: SortOrder
     sendApp?: SortOrder
+    mailContent?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: NotificationCountOrderByAggregateInput
@@ -29807,6 +29824,7 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"Notification"> | boolean
     sendMail?: BoolWithAggregatesFilter<"Notification"> | boolean
     sendApp?: BoolWithAggregatesFilter<"Notification"> | boolean
+    mailContent?: StringNullableWithAggregatesFilter<"Notification"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
   }
@@ -31544,6 +31562,7 @@ export namespace Prisma {
     isActive?: boolean
     sendMail?: boolean
     sendApp?: boolean
+    mailContent?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -31558,6 +31577,7 @@ export namespace Prisma {
     isActive?: boolean
     sendMail?: boolean
     sendApp?: boolean
+    mailContent?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -31571,6 +31591,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     sendMail?: BoolFieldUpdateOperationsInput | boolean
     sendApp?: BoolFieldUpdateOperationsInput | boolean
+    mailContent?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -31585,6 +31606,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     sendMail?: BoolFieldUpdateOperationsInput | boolean
     sendApp?: BoolFieldUpdateOperationsInput | boolean
+    mailContent?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -31599,6 +31621,7 @@ export namespace Prisma {
     isActive?: boolean
     sendMail?: boolean
     sendApp?: boolean
+    mailContent?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -31612,6 +31635,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     sendMail?: BoolFieldUpdateOperationsInput | boolean
     sendApp?: BoolFieldUpdateOperationsInput | boolean
+    mailContent?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -31626,6 +31650,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     sendMail?: BoolFieldUpdateOperationsInput | boolean
     sendApp?: BoolFieldUpdateOperationsInput | boolean
+    mailContent?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -33390,6 +33415,7 @@ export namespace Prisma {
     isActive?: SortOrder
     sendMail?: SortOrder
     sendApp?: SortOrder
+    mailContent?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -33408,6 +33434,7 @@ export namespace Prisma {
     isActive?: SortOrder
     sendMail?: SortOrder
     sendApp?: SortOrder
+    mailContent?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -33422,6 +33449,7 @@ export namespace Prisma {
     isActive?: SortOrder
     sendMail?: SortOrder
     sendApp?: SortOrder
+    mailContent?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }

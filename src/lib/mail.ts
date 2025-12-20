@@ -14,11 +14,15 @@ export const transporter = nodemailer.createTransport({
  */
 export async function sendEmail({
   to,
+  bcc,
+  cc,
   subject,
   html,
   retry = 3,
 }: {
   to: string[];
+  bcc?: string | string[];
+  cc?: string | string[];
   subject: string;
   html: string;
   retry?: number;
@@ -44,7 +48,7 @@ export async function sendEmail({
     if (retry > 0) {
       console.log(`🔁 Retry sending email... (${retry} left)`);
       await new Promise((r) => setTimeout(r, 1500)); // đợi 1.5s rồi gửi lại
-      return sendEmail({ to, subject, html, retry: retry - 1 });
+      return sendEmail({ to, bcc, cc, subject, html, retry: retry - 1 });
     }
 
     // Nếu retry hết mà vẫn lỗi

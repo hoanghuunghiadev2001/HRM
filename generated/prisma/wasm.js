@@ -362,6 +362,7 @@ exports.Prisma.NotificationScalarFieldEnum = {
   isActive: 'isActive',
   sendMail: 'sendMail',
   sendApp: 'sendApp',
+  mailContent: 'mailContent',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -484,7 +485,8 @@ exports.Prisma.AssetAssignmentOrderByRelevanceFieldEnum = {
 
 exports.Prisma.NotificationOrderByRelevanceFieldEnum = {
   title: 'title',
-  message: 'message'
+  message: 'message',
+  mailContent: 'mailContent'
 };
 
 exports.Prisma.CompensatoryLeaveOrderByRelevanceFieldEnum = {
