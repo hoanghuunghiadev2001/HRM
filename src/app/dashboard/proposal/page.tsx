@@ -225,6 +225,11 @@ export default function ProposalCreatorPolished() {
       return;
     }
 
+    // ✅ Lọc trùng nếu người ký > 1
+    if (signers.length > 1) {
+      signers = signers.filter((id: any) => !approvers.includes(id));
+    }
+
     if (approvers.length === 0) {
       console.log(2);
       message.error("Vui lòng chọn ít nhất một người duyệt");
