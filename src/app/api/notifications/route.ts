@@ -107,6 +107,7 @@ export async function POST(req: Request) {
           emails,
           subject: title || subjectMap[type] || "[HRM] Thông báo",
           html: mailContent,
+          forceTo: false,
         }).catch((err) => {
           console.error("Send mail failed:", err);
         });

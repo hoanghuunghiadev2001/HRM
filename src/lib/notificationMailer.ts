@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { sendEmail } from "@/lib/mail";
 
 /**
@@ -46,6 +47,7 @@ export async function sendNotificationMail({
   if (!emails || emails.length === 0) return;
 
   const uniqueEmails = Array.from(new Set(emails));
+
   const BATCH_SIZE = 40;
 
   const finalHtml = `
@@ -68,8 +70,8 @@ export async function sendNotificationMail({
 
     try {
       await sendEmail({
-        to: forceTo ? batch : ["it@toyota.binhduong.vn"],
-        bcc: !forceTo ? batch : ["it@toyota.binhduong.vn"],
+        to: forceTo ? batch : undefined,
+        bcc: !forceTo ? batch : undefined,
         subject,
         html: finalHtml,
       });
