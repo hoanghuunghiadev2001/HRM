@@ -34,10 +34,10 @@ export function generateActionToken({
     .digest("base64url");
   const token = Buffer.from(`${payload}|${sig}`).toString("base64url");
 
-  const confirmUrl = `${BASE}/api/proposals/email-action?token=${encodeURIComponent(
+  const confirmUrl = `${BASE}/api/proposals/email-action?token-hrm=${encodeURIComponent(
     token
   )}`;
-  const directApi = `${BASE}/api/proposals/email-action?token=${encodeURIComponent(
+  const directApi = `${BASE}/api/proposals/email-action?token-hrm=${encodeURIComponent(
     token
   )}&direct=1`; // optional one-click
   return { token, confirmUrl, directApi, expiresAt: new Date(expiry * 1000) };
