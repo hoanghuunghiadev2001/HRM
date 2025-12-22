@@ -193,11 +193,14 @@ const ModalDetailLeave = ({
     : null;
   console.log(infoRequetLeave);
 
+  const isOwner = employeeCode === infoRequetLeave?.employee?.employeeCode;
+
+  const isSpecialUser = employeeCode === "01375";
+
   const canRevoke =
-    (((employeeCode === infoRequetLeave?.employee?.employeeCode ||
-      employeeCode === "01375") &&
-      infoRequetLeave?.status === "approved") ||
-      infoRequetLeave?.status === "pending") &&
+    (isOwner || isSpecialUser) &&
+    (infoRequetLeave?.status === "pending" ||
+      infoRequetLeave?.status === "approved") &&
     start &&
     start.isAfter(now);
 
