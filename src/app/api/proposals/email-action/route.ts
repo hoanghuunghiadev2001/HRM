@@ -1,32 +1,174 @@
 import { NextRequest } from "next/server";
 import { verifyActionToken } from "@/utils/actionLink";
-import { prisma } from "@/lib/prisma"; // điều chỉnh path nếu cần
+import { prisma } from "@/lib/prisma";
 import { ProposalService } from "@/lib/proposal-service";
+
+/* =========================
+   Helpers
+========================= */
+
+function html(content: string, status = 200) {
+  return new Response(content, {
+    status,
+    headers: { "Content-Type": "text/html; charset=UTF-8" },
+  });
+}
+
+type ActionPageProps = {
+  title: string;
+  message: string;
+  icon: string;
+  color: string;
+  buttonText?: string;
+  buttonUrl?: string;
+};
+
+function renderActionPage({
+  title,
+  message,
+  icon,
+  color,
+  buttonText,
+  buttonUrl,
+}: ActionPageProps) {
+  return `
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>${title}</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 480px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.1);
+      text-align: center;
+    }
+    .icon {
+      font-size: 56px;
+      margin-bottom: 16px;
+    }
+    h1 {
+      margin-bottom: 12px;
+    }
+    p {
+      color: #555;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+    a.btn {
+      display: inline-block;
+      padding: 14px 28px;
+      background: ${color};
+      color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    a.btn:hover {
+      opacity: .9;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">${icon}</div>
+    <h1>${title}</h1>
+    <p>${message}</p>
+    ${
+      buttonText && buttonUrl
+        ? `<a href="${buttonUrl}" class="btn">${buttonText}</a>`
+        : ""
+    }
+  </div>
+</body>
+</html>
+`;
+}
+
+/* =========================
+   Pages
+========================= */
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "/";
+
+const pageSuccess = () =>
+  renderActionPage({
+    title: "Thành công",
+    message: "Bạn đã thực hiện hành động thành công.",
+    icon: "✅",
+    color: "#28a745",
+    buttonText: "Về hệ thống",
+    buttonUrl: APP_URL,
+  });
+
+const pageAlreadyUsed = () =>
+  renderActionPage({
+    title: "Đã xử lý",
+    message: "Liên kết này đã được sử dụng trước đó.",
+    icon: "⚠️",
+    color: "#ffc107",
+    buttonText: "Về hệ thống",
+    buttonUrl: APP_URL,
+  });
+
+const pageInvalidToken = () =>
+  renderActionPage({
+    title: "Liên kết không hợp lệ",
+    message: "Liên kết đã hết hạn hoặc không tồn tại.",
+    icon: "❌",
+    color: "#dc3545",
+  });
+
+const pageFailed = (msg?: string) =>
+  renderActionPage({
+    title: "Thất bại",
+    message: msg || "Không thể thực hiện hành động.",
+    icon: "❌",
+    color: "#dc3545",
+  });
+
+const pageServerError = () =>
+  renderActionPage({
+    title: "Lỗi hệ thống",
+    message: "Đã có lỗi xảy ra, vui lòng thử lại sau.",
+    icon: "💥",
+    color: "#dc3545",
+  });
+
+/* =========================
+   GET – từ email click
+========================= */
 
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   const token = url.searchParams.get("token-hrm");
   const direct = url.searchParams.get("direct") === "1";
 
-  if (!token)
-    return new Response(JSON.stringify({ error: "Missing token" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
+  if (!token) return html(pageInvalidToken(), 400);
 
   const data = verifyActionToken(token);
-  if (!data)
-    return new Response(JSON.stringify({ error: "Invalid or expired token" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
+  if (!data) return html(pageInvalidToken(), 400);
 
-  // Find or create token record
-  let tokenRecord = await prisma.emailActionToken.findUnique({
+  let record = await prisma.emailActionToken.findUnique({
     where: { token },
   });
-  if (!tokenRecord) {
-    tokenRecord = await prisma.emailActionToken.create({
+
+  if (!record) {
+    record = await prisma.emailActionToken.create({
       data: {
         token,
         proposalId: data.proposalId,
@@ -38,194 +180,75 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  if (tokenRecord.usedAt) {
-    return new Response(JSON.stringify({ error: "Token đã được sử dụng" }), {
-      status: 410,
-      headers: { "Content-Type": "application/json" },
-    });
+  if (record.usedAt) {
+    return html(pageAlreadyUsed(), 410);
   }
 
-  // Direct 1-click
+  // 1-click action
   if (direct) {
-    return await handleAction(token, data, req);
+    return handleAction(token, data, req);
   }
 
-  // Otherwise, show confirmation HTML
-  return new Response(
-    `
-    <html>
-      <head><meta name="viewport" content="width=device-width,initial-scale=1" /></head>
-      <body style="font-family:Arial, sans-serif; padding:24px; max-width:720px; margin:0 auto; text-align:center;">
-        <h2>${data.action === "approve" ? "Duyệt" : "Từ chối"} đề xuất</h2>
-        <p>Đề xuất ID: <strong>${data.proposalId}</strong></p>
-        <p>Vai trò: <strong>${data.role}</strong></p>
-        <form method="POST">
-          <input type="hidden" name="token" value="${token}" />
-          <button type="submit" style="padding:12px 24px; border-radius:6px; border:none; background:${
-            data.action === "approve" ? "#28a745" : "#dc3545"
-          }; color:white; font-weight:bold;">
-            Xác nhận ${data.action === "approve" ? "Duyệt" : "Từ chối"}
-          </button>
-        </form>
-      </body>
-    </html>
-    `,
-    {
-      status: 200,
-      headers: { "Content-Type": "text/html" },
-    }
+  // Confirm page
+  return html(
+    renderActionPage({
+      title: data.action === "approve" ? "Xác nhận duyệt" : "Xác nhận từ chối",
+      message: `Bạn sắp ${
+        data.action === "approve" ? "duyệt" : "từ chối"
+      } đề xuất #${data.proposalId}`,
+      icon: "📝",
+      color: data.action === "approve" ? "#28a745" : "#dc3545",
+      buttonText: "Xác nhận",
+      buttonUrl: `${APP_URL}/api/email-action?token-hrm=${token}&direct=1`,
+    }),
+    200
   );
 }
+
+/* =========================
+   POST – fallback
+========================= */
 
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
   const token = body.token;
 
-  if (!token)
-    return new Response(JSON.stringify({ error: "Missing token" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
+  if (!token) return html(pageInvalidToken(), 400);
 
   const data = verifyActionToken(token);
-  if (!data)
-    return new Response(JSON.stringify({ error: "Invalid or expired token" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
+  if (!data) return html(pageInvalidToken(), 400);
 
-  return await handleAction(token, data, req);
+  return handleAction(token, data, req);
 }
 
-function renderEmailActionPage({
-  title,
-  message,
-  buttonText,
-  buttonUrl,
-  success = true,
-}: {
-  title: string;
-  message: string;
-  buttonText: string;
-  buttonUrl: string;
-  success?: boolean;
-}) {
-  const color = success ? "#28a745" : "#dc3545";
-  const icon = success ? "✅" : "❌";
+/* =========================
+   Core action handler
+========================= */
 
-  return `
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${title}</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f4f4f7;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .container {
-      background: #fff;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      max-width: 500px;
-      width: 90%;
-      text-align: center;
-    }
-    h1 {
-      font-size: 28px;
-      margin-bottom: 16px;
-    }
-    p {
-      font-size: 16px;
-      margin-bottom: 24px;
-      color: #555;
-    }
-    a.button {
-      display: inline-block;
-      padding: 14px 28px;
-      font-size: 16px;
-      font-weight: bold;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 8px;
-      background-color: ${color};
-      transition: background 0.3s;
-    }
-    a.button:hover {
-      background-color: ${success ? "#218838" : "#c82333"};
-    }
-    .icon {
-      font-size: 48px;
-      margin-bottom: 16px;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="icon">${icon}</div>
-    <h1>${title}</h1>
-    <p>${message}</p>
-    <a href="${buttonUrl}" class="button">${buttonText}</a>
-  </div>
-</body>
-</html>
-`;
-}
-
-// --- helper ---
 async function handleAction(
   token: string,
   data: ReturnType<typeof verifyActionToken>,
   req: NextRequest
 ) {
   try {
-    const fresh = await prisma.emailActionToken.findUnique({
+    const record = await prisma.emailActionToken.findUnique({
       where: { token },
     });
-    if (!fresh)
-      return new Response(JSON.stringify({ error: "Token not found" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    if (fresh.usedAt)
-      return new Response(JSON.stringify({ error: "Token đã được sử dụng" }), {
-        status: 410,
-        headers: { "Content-Type": "application/json" },
-      });
 
-    let result;
+    if (!record) return html(pageInvalidToken(), 400);
+    if (record.usedAt) return html(pageAlreadyUsed(), 410);
 
-    if (!data) {
-      return new Response(
-        JSON.stringify({ error: "Invalid or expired token" }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
+    const result =
+      data?.role === "signer"
+        ? await ProposalService.signProposal(
+            data.proposalId,
+            data.actorId,
+            data.action === "approve" ? "approved" : "rejected"
+          )
+        : null;
 
-    if (data.role === "signer") {
-      result = await ProposalService.signProposal(
-        data.proposalId,
-        data.actorId,
-        data.action === "approve" ? "approved" : "rejected"
-      );
-    } else {
-      result = await ProposalService.approveProposal(
-        data.proposalId,
-        data.actorId,
-        data.action === "approve" ? "approved" : "rejected"
-      );
+    if (!result?.success) {
+      return html(pageFailed(result?.message), 400);
     }
 
     await prisma.emailActionToken.update({
@@ -237,27 +260,9 @@ async function handleAction(
       },
     });
 
-    const ok = result?.success ?? true;
-    return new Response(
-      renderEmailActionPage({
-        title: ok ? "Thành công" : "Thất bại",
-        message: ok
-          ? "Thực hiện thành công."
-          : result?.message || "Không thể thực hiện action.",
-        buttonText: "Trở về hệ thống",
-        buttonUrl: process.env.NEXT_PUBLIC_APP_URL || "/",
-        success: ok,
-      }),
-      {
-        status: 200,
-        headers: { "Content-Type": "text/html; charset=UTF-8" },
-      }
-    );
+    return html(pageSuccess(), 200);
   } catch (err) {
-    console.error("[email-action] error", err);
-    return new Response(JSON.stringify({ error: "Server error" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    console.error("[email-action]", err);
+    return html(pageServerError(), 500);
   }
 }
