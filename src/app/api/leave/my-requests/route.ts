@@ -158,8 +158,11 @@ export async function PUT(req: NextRequest) {
         { status: 404 }
       );
     }
+    console.log(leave.employeeId);
+    console.log(userId);
+    console.log(decoded.role);
 
-    if (leave.employeeId !== userId || decoded.role !== "ADMIN") {
+    if (leave.employeeId !== userId && decoded.role !== "ADMIN") {
       return NextResponse.json(
         { message: "Bạn không có quyền thu hồi đơn này" },
         { status: 403 }

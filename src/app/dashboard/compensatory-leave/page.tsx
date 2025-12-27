@@ -93,13 +93,13 @@ export default function CompensatoryLeavePage() {
       key: "attendanceDate",
       render: (v) => dayjs(v).format("DD/MM/YYYY"),
     },
-    {
-      title: "Số giờ",
-      dataIndex: "workingHours",
-      key: "workingHours",
-      align: "center", // ✅ giờ TS OK
-      render: (v) => <Tag color={v >= 8 ? "green" : "orange"}>{v}h</Tag>,
-    },
+    // {
+    //   title: "Số giờ",
+    //   dataIndex: "workingHours",
+    //   key: "workingHours",
+    //   align: "center", // ✅ giờ TS OK
+    //   render: (v) => <Tag color={v >= 8 ? "green" : "orange"}>{v}h</Tag>,
+    // },
     {
       title: "Trạng thái",
       key: "status",
