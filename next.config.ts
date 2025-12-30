@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// next.config.ts
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import withPWA from "next-pwa";
 
@@ -8,13 +7,34 @@ const withAnalyzer = withBundleAnalyzer({
 });
 
 const nextConfig = {
-  // tăng giới hạn kích thước body cho Server Actions — dùng số bytes (ví dụ 10 MB)
+  // --- PHẦN THÊM MỚI ĐỂ TRỊ CORS ---
+  async headers() {
+    return [
+      {
+        source: "/api/:path*", // Áp dụng cho mọi API trong folder app/api
+        headers: [
+          { key: "Access-Control-Allow-Credentials", value: "true" },
+          { key: "Access-Control-Allow-Origin", value: "*" }, // Cho phép máy ảo gọi vào
+          {
+            key: "Access-Control-Allow-Methods",
+            value: "GET,DELETE,PATCH,POST,PUT,OPTIONS",
+          },
+          {
+            key: "Access-Control-Allow-Headers",
+            value:
+              "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization",
+          },
+        ],
+      },
+    ];
+  },
+  // --------------------------------
+
   experimental: {
     serverActions: {
-      bodySizeLimit: 10 * 1024 * 1024, // 10 MB in bytes
+      bodySizeLimit: 10 * 1024 * 1024,
     },
   },
-
   reactStrictMode: false,
   transpilePackages: [
     "antd",
@@ -31,7 +51,6 @@ const nextConfig = {
     domains: ["res.cloudinary.com"],
   },
   webpack(config: { module: { rules: any[] } }) {
-    // Ant Design Less variables
     const lessRule = config.module.rules.find(
       (rule: any) => rule.test && rule.test.toString().includes("less")
     );
@@ -58,7 +77,6 @@ const nextConfig = {
   },
 };
 
-// Kết hợp PWA + Bundle Analyzer
 export default withAnalyzer(
   withPWA({
     dest: "public",
