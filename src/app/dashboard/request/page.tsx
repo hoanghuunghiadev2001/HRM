@@ -155,6 +155,7 @@ export default function RequestPage() {
 
       const res = await fetch("/api/leave/create-requests", {
         method: "POST",
+
         body: formData,
         // NOTE: không set Content-Type — browser tự đặt multipart boundary
       });

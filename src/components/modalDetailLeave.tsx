@@ -372,7 +372,9 @@ const ModalDetailLeave = ({
                     file?.filename ?? file?.name ?? `File-${fileId}`;
 
                   // URL để tải / xem — endpoint bạn đã có: /api/files/:id
-                  const fileUrl = fileId ? `/api/files/${fileId}` : null;
+                  const fileUrl = fileId
+                    ? `/api/files/handoverFile/${fileId}`
+                    : null;
                   return (
                     <div className="mt-2">
                       <div className="flex justify-between items-center">
