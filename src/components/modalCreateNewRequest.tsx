@@ -110,7 +110,7 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
       return Upload.LIST_IGNORE;
     }
     // Có thể thêm validate loại file nếu cần (pdf/doc/png...)
-    return true;
+    return false;
   };
 
   const handleUploadChange = ({
