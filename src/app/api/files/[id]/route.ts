@@ -119,8 +119,13 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const id = Number((await params).id);
-  const token = req.cookies.get("token-hrm")?.value;
-
+  let token = req.cookies.get("token-hrm")?.value;
+  if (!token) {
+    const authHeader = req.headers.get("authorization");
+    if (authHeader?.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1]; // Lấy phần chuỗi sau chữ "Bearer "
+    }
+  }
   if (!token)
     return NextResponse.json({ message: "Không có token" }, { status: 401 });
 
