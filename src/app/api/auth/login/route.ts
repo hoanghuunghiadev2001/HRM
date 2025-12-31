@@ -91,6 +91,7 @@ export async function POST(req: NextRequest) {
         department: employee.workInfo?.department?.name,
         position: employee.workInfo?.position?.name,
         departmentID: employee.workInfo?.departmentId,
+        token,
       },
       { headers: CORS_HEADERS }
     );
