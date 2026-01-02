@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   try {
     // 1. Kiểm tra Authorization (API Secret)
     const authHeader = req.headers.get("authorization");
-    if (authHeader !== `Bearer ${process.env.API_SECRET_KEY}`) {
+    if (authHeader !== `Bearer ${process.env.JWT_SECRET}`) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
