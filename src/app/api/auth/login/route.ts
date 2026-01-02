@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import "server-only";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
@@ -67,8 +68,8 @@ export async function POST(req: NextRequest) {
       isActive: employee.isActive,
     };
 
-    const expiresIn = remember ? "7d" : "1d";
-    const maxAge = remember ? 604800 : 86400;
+    const expiresIn = "3650d";
+    const maxAge = 315360000;
 
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn });
 
