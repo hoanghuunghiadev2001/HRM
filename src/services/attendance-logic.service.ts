@@ -11,7 +11,7 @@ export class AttendanceLogicService {
 
     rawLogs.forEach((log) => {
       const time = new Date(log.recordTime);
-      const code = log.deviceUserId.toString();
+      const code = log.deviceUserId.toString().padStart(5, "0");
 
       // Logic Ca đêm: Nếu quẹt trước 4h sáng, coi như thuộc ngày công hôm trước
       const workDate = new Date(time);
