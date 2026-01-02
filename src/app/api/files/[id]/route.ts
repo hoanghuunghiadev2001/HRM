@@ -120,10 +120,12 @@ export async function GET(
 ) {
   const id = Number((await params).id);
   let token = req.cookies.get("token-hrm")?.value;
-  if (!token) {
-    const authHeader = req.headers.get("Authorization");
-    if (authHeader?.startsWith("Bearer ")) {
-      token = authHeader.split(" ")[1]; // Lấy phần chuỗi sau chữ "Bearer "
+  const authHeader = req.headers.get("authorization"); // Dùng viết thường
+  console.log("Auth Header nhận được:", authHeader);
+
+  if (!token && authHeader) {
+    if (authHeader.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1];
     }
   }
   if (!token)
