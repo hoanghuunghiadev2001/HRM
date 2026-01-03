@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// src/app/api/lunch-menu/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import dayjs from "dayjs";
@@ -11,7 +10,7 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
 
-    // Nếu không có param trên URL, tự động lấy tuần/năm hiện tại
+    // Mặc định lấy tuần hiện tại
     const week = searchParams.get("week")
       ? Number(searchParams.get("week"))
       : dayjs().week();
@@ -20,11 +19,7 @@ export async function GET(request: Request) {
       : dayjs().year();
 
     const menu = await prisma.lunchMenu.findMany({
-      where: {
-        weekNumber: week,
-        year: year,
-      },
-      // Sắp xếp theo ID hoặc bạn có thể thêm trường order để Thứ 2 luôn trên cùng
+      where: { weekNumber: week, year: year },
       orderBy: { id: "asc" },
     });
 
@@ -34,10 +29,17 @@ export async function GET(request: Request) {
   }
 }
 
-// POST: Thêm một ngày vào thực đơn
+// POST: Tạo thực đơn cho TUẦN SAU
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+
+    // --- LOGIC TÍNH TUẦN SAU ---
+    // Lấy thời điểm hiện tại + 1 tuần
+    const nextWeekDate = dayjs().add(1, "week");
+    const nextWeekNumber = nextWeekDate.week();
+    const nextWeekYear = nextWeekDate.year();
+
     const newItem = await prisma.lunchMenu.create({
       data: {
         dayOfWeek: body.dayOfWeek,
@@ -46,12 +48,15 @@ export async function POST(request: Request) {
         stir: body.stir,
         soup: body.soup,
         dessert: body.dessert,
-        weekNumber: body.weekNumber,
-        year: body.year,
+        // Ưu tiên weekNumber từ body nếu có, nếu không thì dùng tuần sau
+        weekNumber: body.weekNumber ?? nextWeekNumber,
+        year: body.year ?? nextWeekYear,
       },
     });
+
     return NextResponse.json(newItem, { status: 201 });
   } catch (error) {
+    console.error("Lỗi POST:", error);
     return NextResponse.json({ error: "Lỗi tạo thực đơn" }, { status: 400 });
   }
 }
