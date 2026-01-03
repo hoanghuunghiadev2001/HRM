@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/lib/prisma";
 
-const OVERNIGHT_THRESHOLD = 4; // Trước 4h sáng tính cho ngày hôm trước
-const LUNCH_START = 12.0; // 12:00
-const LUNCH_END = 13.5; // 13:30 (1.5 giờ nghỉ)
-
 export class AttendanceLogicService {
   static async processMachineLogs(rawLogs: any[]) {
     const groups: Record<string, Date[]> = {};
@@ -13,12 +9,9 @@ export class AttendanceLogicService {
       const time = new Date(log.recordTime);
       const code = log.deviceUserId.toString().padStart(5, "0");
 
-      // Logic Ca đêm: Nếu quẹt trước 4h sáng, coi như thuộc ngày công hôm trước
-      const workDate = new Date(time);
-      if (time.getHours() < OVERNIGHT_THRESHOLD) {
-        workDate.setDate(workDate.getDate() - 1);
-      }
-      const dateKey = `${code}_${workDate.toISOString().split("T")[0]}`;
+      // GROUP THEO NGÀY LỊCH (Calendar Day)
+      // Quẹt ngày nào, ghi nhận cho đúng ngày đó, không nhảy ca.
+      const dateKey = `${code}_${time.toISOString().split("T")[0]}`;
 
       if (!groups[dateKey]) groups[dateKey] = [];
       groups[dateKey].push(time);
@@ -28,7 +21,6 @@ export class AttendanceLogicService {
       const [employeeCode, dateStr] = key.split("_");
       const sorted = times.sort((a, b) => a.getTime() - b.getTime());
 
-      // Lấy sớm nhất và muộn nhất trong lô log gửi lên lần này
       const inTime = sorted[0];
       const outTime = sorted[sorted.length - 1];
       const workDate = new Date(dateStr);
@@ -43,50 +35,36 @@ export class AttendanceLogicService {
     inTime: Date,
     outTime: Date
   ) {
-    // 1. Tìm nhân viên
     const emp = await prisma.employee.findUnique({
       where: { employeeCode: code },
     });
     if (!emp) return;
 
-    // 2. Kiểm tra bản ghi cũ trong DB
-    const existing = await prisma.attendance.findFirst({
-      where: { employeeId: emp.id, date: date },
+    const existing = await prisma.attendance.findUnique({
+      where: { employeeId_date: { employeeId: emp.id, date } },
     });
 
-    // 3. LOGIC SO SÁNH AN TOÀN:
-    // Nếu đã có giờ trong DB (và không null), so sánh để lấy giờ sớm nhất/muộn nhất.
-    // Nếu chưa có hoặc null, lấy giờ mới từ máy chấm công gửi lên.
-
+    // LẤY GIỜ TỐT NHẤT TRONG NGÀY
     const finalIn =
       existing?.checkInTime && existing.checkInTime < inTime
         ? existing.checkInTime
         : inTime;
-
     const finalOut =
       existing?.checkOutTime && existing.checkOutTime > outTime
         ? existing.checkOutTime
         : outTime;
-    // 4. Tính toán Working Hours dựa trên In/Out cuối cùng
-    let hours = (finalOut.getTime() - finalIn.getTime()) / (1000 * 60 * 60);
 
-    // Tính decimal hours cho in/out để so sánh nghỉ trưa
-    const inHourDec = finalIn.getHours() + finalIn.getMinutes() / 60;
-    const outHourDec = finalOut.getHours() + finalOut.getMinutes() / 60;
-
-    // Tự động trừ nghỉ trưa nếu làm việc bao trùm khoảng nghỉ
-    if (inHourDec < LUNCH_START && outHourDec > LUNCH_END) {
-      hours -= LUNCH_END - LUNCH_START;
+    let hours = 0;
+    // NẾU QUÊN CHẤM (CHỈ CÓ 1 LẦN QUẸT): In và Out trùng nhau -> hours = 0
+    if (finalIn.getTime() !== finalOut.getTime()) {
+      hours = (finalOut.getTime() - finalIn.getTime()) / (1000 * 60 * 60);
     }
 
-    // Làm tròn 2 chữ số thập phân
-    const finalHours = Math.max(0, parseFloat(hours.toFixed(2)));
+    // Làm tròn 2 chữ số, tối đa 14h (Tránh dữ liệu rác)
+    const finalHours = Math.min(14, Math.max(0, parseFloat(hours.toFixed(2))));
 
-    // 5. UPSERT
     await prisma.attendance.upsert({
-      where: {
-        employeeId_date: { employeeId: emp.id, date }, // employee + date
-      },
+      where: { employeeId_date: { employeeId: emp.id, date } },
       update: {
         checkInTime: finalIn,
         checkOutTime: finalOut,
