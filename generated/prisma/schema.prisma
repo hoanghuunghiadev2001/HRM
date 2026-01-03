@@ -211,6 +211,7 @@ model Attendance {
   importLog    AttendanceImportLog? @relation(fields: [importId], references: [id])
   employee     Employee             @relation(fields: [employeeId], references: [id])
 
+  @@unique([employeeId, date])
   @@index([date])
   @@index([importId], map: "Attendance_importId_fkey")
 }

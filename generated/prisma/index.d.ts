@@ -28998,6 +28998,7 @@ export namespace Prisma {
 
   export type AttendanceWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    employeeId_date?: AttendanceEmployeeIdDateCompoundUniqueInput
     AND?: AttendanceWhereInput | AttendanceWhereInput[]
     OR?: AttendanceWhereInput[]
     NOT?: AttendanceWhereInput | AttendanceWhereInput[]
@@ -29009,7 +29010,7 @@ export namespace Prisma {
     importId?: IntNullableFilter<"Attendance"> | number | null
     importLog?: XOR<AttendanceImportLogNullableScalarRelationFilter, AttendanceImportLogWhereInput> | null
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
-  }, "id">
+  }, "id" | "employeeId_date">
 
   export type AttendanceOrderByWithAggregationInput = {
     id?: SortOrder
@@ -32765,6 +32766,11 @@ export namespace Prisma {
   export type AttendanceImportLogNullableScalarRelationFilter = {
     is?: AttendanceImportLogWhereInput | null
     isNot?: AttendanceImportLogWhereInput | null
+  }
+
+  export type AttendanceEmployeeIdDateCompoundUniqueInput = {
+    employeeId: number
+    date: Date | string
   }
 
   export type AttendanceCountOrderByAggregateInput = {

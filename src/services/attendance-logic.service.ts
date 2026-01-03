@@ -85,7 +85,7 @@ export class AttendanceLogicService {
     // 5. UPSERT
     await prisma.attendance.upsert({
       where: {
-        id: existing?.id || -1,
+        employeeId_date: { employeeId: emp.id, date }, // employee + date
       },
       update: {
         checkInTime: finalIn,
