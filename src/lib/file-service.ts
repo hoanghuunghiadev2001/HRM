@@ -49,7 +49,7 @@ export class FileService {
           filename,
           mimeType,
           fileSize: buffer.length,
-          data: buffer,
+          data: new Uint8Array(buffer), // 👈 sửa dòng này
         },
       });
 
@@ -112,7 +112,7 @@ export class FileService {
       await prisma.file.update({
         where: { id: fileId },
         data: {
-          data: newData,
+          data: new Uint8Array(newData), // 👈 sửa dòng này
           mimeType: newMimeType || "application/pdf",
           fileSize: newFileSize || newData.length,
           updatedAt: new Date(),
