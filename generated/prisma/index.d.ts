@@ -128,6 +128,11 @@ export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
  * 
  */
 export type CompensatoryLeave = $Result.DefaultSelection<Prisma.$CompensatoryLeavePayload>
+/**
+ * Model LunchMenu
+ * 
+ */
+export type LunchMenu = $Result.DefaultSelection<Prisma.$LunchMenuPayload>
 
 /**
  * Enums
@@ -600,6 +605,16 @@ export class PrismaClient<
     * ```
     */
   get compensatoryLeave(): Prisma.CompensatoryLeaveDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.lunchMenu`: Exposes CRUD operations for the **LunchMenu** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LunchMenus
+    * const lunchMenus = await prisma.lunchMenu.findMany()
+    * ```
+    */
+  get lunchMenu(): Prisma.LunchMenuDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1062,7 +1077,8 @@ export namespace Prisma {
     Asset: 'Asset',
     AssetAssignment: 'AssetAssignment',
     Notification: 'Notification',
-    CompensatoryLeave: 'CompensatoryLeave'
+    CompensatoryLeave: 'CompensatoryLeave',
+    LunchMenu: 'LunchMenu'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1081,7 +1097,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "file" | "vehicle" | "employee" | "department" | "position" | "workInfo" | "contactInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover" | "emailActionToken" | "asset" | "assetAssignment" | "notification" | "compensatoryLeave"
+      modelProps: "file" | "vehicle" | "employee" | "department" | "position" | "workInfo" | "contactInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover" | "emailActionToken" | "asset" | "assetAssignment" | "notification" | "compensatoryLeave" | "lunchMenu"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2603,6 +2619,72 @@ export namespace Prisma {
           }
         }
       }
+      LunchMenu: {
+        payload: Prisma.$LunchMenuPayload<ExtArgs>
+        fields: Prisma.LunchMenuFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LunchMenuFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LunchMenuPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LunchMenuFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LunchMenuPayload>
+          }
+          findFirst: {
+            args: Prisma.LunchMenuFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LunchMenuPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LunchMenuFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LunchMenuPayload>
+          }
+          findMany: {
+            args: Prisma.LunchMenuFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LunchMenuPayload>[]
+          }
+          create: {
+            args: Prisma.LunchMenuCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LunchMenuPayload>
+          }
+          createMany: {
+            args: Prisma.LunchMenuCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.LunchMenuDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LunchMenuPayload>
+          }
+          update: {
+            args: Prisma.LunchMenuUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LunchMenuPayload>
+          }
+          deleteMany: {
+            args: Prisma.LunchMenuDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LunchMenuUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.LunchMenuUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LunchMenuPayload>
+          }
+          aggregate: {
+            args: Prisma.LunchMenuAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLunchMenu>
+          }
+          groupBy: {
+            args: Prisma.LunchMenuGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LunchMenuGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LunchMenuCountArgs<ExtArgs>
+            result: $Utils.Optional<LunchMenuCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2710,6 +2792,7 @@ export namespace Prisma {
     assetAssignment?: AssetAssignmentOmit
     notification?: NotificationOmit
     compensatoryLeave?: CompensatoryLeaveOmit
+    lunchMenu?: LunchMenuOmit
   }
 
   /* Types for Logging */
@@ -27462,6 +27545,1007 @@ export namespace Prisma {
 
 
   /**
+   * Model LunchMenu
+   */
+
+  export type AggregateLunchMenu = {
+    _count: LunchMenuCountAggregateOutputType | null
+    _avg: LunchMenuAvgAggregateOutputType | null
+    _sum: LunchMenuSumAggregateOutputType | null
+    _min: LunchMenuMinAggregateOutputType | null
+    _max: LunchMenuMaxAggregateOutputType | null
+  }
+
+  export type LunchMenuAvgAggregateOutputType = {
+    id: number | null
+    weekNumber: number | null
+    year: number | null
+  }
+
+  export type LunchMenuSumAggregateOutputType = {
+    id: number | null
+    weekNumber: number | null
+    year: number | null
+  }
+
+  export type LunchMenuMinAggregateOutputType = {
+    id: number | null
+    dayOfWeek: string | null
+    salty: string | null
+    vegetarian: string | null
+    stir: string | null
+    soup: string | null
+    dessert: string | null
+    weekNumber: number | null
+    year: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LunchMenuMaxAggregateOutputType = {
+    id: number | null
+    dayOfWeek: string | null
+    salty: string | null
+    vegetarian: string | null
+    stir: string | null
+    soup: string | null
+    dessert: string | null
+    weekNumber: number | null
+    year: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LunchMenuCountAggregateOutputType = {
+    id: number
+    dayOfWeek: number
+    salty: number
+    vegetarian: number
+    stir: number
+    soup: number
+    dessert: number
+    weekNumber: number
+    year: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LunchMenuAvgAggregateInputType = {
+    id?: true
+    weekNumber?: true
+    year?: true
+  }
+
+  export type LunchMenuSumAggregateInputType = {
+    id?: true
+    weekNumber?: true
+    year?: true
+  }
+
+  export type LunchMenuMinAggregateInputType = {
+    id?: true
+    dayOfWeek?: true
+    salty?: true
+    vegetarian?: true
+    stir?: true
+    soup?: true
+    dessert?: true
+    weekNumber?: true
+    year?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LunchMenuMaxAggregateInputType = {
+    id?: true
+    dayOfWeek?: true
+    salty?: true
+    vegetarian?: true
+    stir?: true
+    soup?: true
+    dessert?: true
+    weekNumber?: true
+    year?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LunchMenuCountAggregateInputType = {
+    id?: true
+    dayOfWeek?: true
+    salty?: true
+    vegetarian?: true
+    stir?: true
+    soup?: true
+    dessert?: true
+    weekNumber?: true
+    year?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LunchMenuAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LunchMenu to aggregate.
+     */
+    where?: LunchMenuWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LunchMenus to fetch.
+     */
+    orderBy?: LunchMenuOrderByWithRelationInput | LunchMenuOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LunchMenuWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LunchMenus from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LunchMenus.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LunchMenus
+    **/
+    _count?: true | LunchMenuCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LunchMenuAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LunchMenuSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LunchMenuMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LunchMenuMaxAggregateInputType
+  }
+
+  export type GetLunchMenuAggregateType<T extends LunchMenuAggregateArgs> = {
+        [P in keyof T & keyof AggregateLunchMenu]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLunchMenu[P]>
+      : GetScalarType<T[P], AggregateLunchMenu[P]>
+  }
+
+
+
+
+  export type LunchMenuGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LunchMenuWhereInput
+    orderBy?: LunchMenuOrderByWithAggregationInput | LunchMenuOrderByWithAggregationInput[]
+    by: LunchMenuScalarFieldEnum[] | LunchMenuScalarFieldEnum
+    having?: LunchMenuScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LunchMenuCountAggregateInputType | true
+    _avg?: LunchMenuAvgAggregateInputType
+    _sum?: LunchMenuSumAggregateInputType
+    _min?: LunchMenuMinAggregateInputType
+    _max?: LunchMenuMaxAggregateInputType
+  }
+
+  export type LunchMenuGroupByOutputType = {
+    id: number
+    dayOfWeek: string
+    salty: string
+    vegetarian: string
+    stir: string
+    soup: string
+    dessert: string
+    weekNumber: number | null
+    year: number | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: LunchMenuCountAggregateOutputType | null
+    _avg: LunchMenuAvgAggregateOutputType | null
+    _sum: LunchMenuSumAggregateOutputType | null
+    _min: LunchMenuMinAggregateOutputType | null
+    _max: LunchMenuMaxAggregateOutputType | null
+  }
+
+  type GetLunchMenuGroupByPayload<T extends LunchMenuGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LunchMenuGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LunchMenuGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LunchMenuGroupByOutputType[P]>
+            : GetScalarType<T[P], LunchMenuGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LunchMenuSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    dayOfWeek?: boolean
+    salty?: boolean
+    vegetarian?: boolean
+    stir?: boolean
+    soup?: boolean
+    dessert?: boolean
+    weekNumber?: boolean
+    year?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["lunchMenu"]>
+
+
+
+  export type LunchMenuSelectScalar = {
+    id?: boolean
+    dayOfWeek?: boolean
+    salty?: boolean
+    vegetarian?: boolean
+    stir?: boolean
+    soup?: boolean
+    dessert?: boolean
+    weekNumber?: boolean
+    year?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type LunchMenuOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dayOfWeek" | "salty" | "vegetarian" | "stir" | "soup" | "dessert" | "weekNumber" | "year" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["lunchMenu"]>
+
+  export type $LunchMenuPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LunchMenu"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      dayOfWeek: string
+      salty: string
+      vegetarian: string
+      stir: string
+      soup: string
+      dessert: string
+      weekNumber: number | null
+      year: number | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["lunchMenu"]>
+    composites: {}
+  }
+
+  type LunchMenuGetPayload<S extends boolean | null | undefined | LunchMenuDefaultArgs> = $Result.GetResult<Prisma.$LunchMenuPayload, S>
+
+  type LunchMenuCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LunchMenuFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LunchMenuCountAggregateInputType | true
+    }
+
+  export interface LunchMenuDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LunchMenu'], meta: { name: 'LunchMenu' } }
+    /**
+     * Find zero or one LunchMenu that matches the filter.
+     * @param {LunchMenuFindUniqueArgs} args - Arguments to find a LunchMenu
+     * @example
+     * // Get one LunchMenu
+     * const lunchMenu = await prisma.lunchMenu.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LunchMenuFindUniqueArgs>(args: SelectSubset<T, LunchMenuFindUniqueArgs<ExtArgs>>): Prisma__LunchMenuClient<$Result.GetResult<Prisma.$LunchMenuPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LunchMenu that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LunchMenuFindUniqueOrThrowArgs} args - Arguments to find a LunchMenu
+     * @example
+     * // Get one LunchMenu
+     * const lunchMenu = await prisma.lunchMenu.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LunchMenuFindUniqueOrThrowArgs>(args: SelectSubset<T, LunchMenuFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LunchMenuClient<$Result.GetResult<Prisma.$LunchMenuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LunchMenu that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LunchMenuFindFirstArgs} args - Arguments to find a LunchMenu
+     * @example
+     * // Get one LunchMenu
+     * const lunchMenu = await prisma.lunchMenu.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LunchMenuFindFirstArgs>(args?: SelectSubset<T, LunchMenuFindFirstArgs<ExtArgs>>): Prisma__LunchMenuClient<$Result.GetResult<Prisma.$LunchMenuPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LunchMenu that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LunchMenuFindFirstOrThrowArgs} args - Arguments to find a LunchMenu
+     * @example
+     * // Get one LunchMenu
+     * const lunchMenu = await prisma.lunchMenu.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LunchMenuFindFirstOrThrowArgs>(args?: SelectSubset<T, LunchMenuFindFirstOrThrowArgs<ExtArgs>>): Prisma__LunchMenuClient<$Result.GetResult<Prisma.$LunchMenuPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LunchMenus that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LunchMenuFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LunchMenus
+     * const lunchMenus = await prisma.lunchMenu.findMany()
+     * 
+     * // Get first 10 LunchMenus
+     * const lunchMenus = await prisma.lunchMenu.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const lunchMenuWithIdOnly = await prisma.lunchMenu.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LunchMenuFindManyArgs>(args?: SelectSubset<T, LunchMenuFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LunchMenuPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LunchMenu.
+     * @param {LunchMenuCreateArgs} args - Arguments to create a LunchMenu.
+     * @example
+     * // Create one LunchMenu
+     * const LunchMenu = await prisma.lunchMenu.create({
+     *   data: {
+     *     // ... data to create a LunchMenu
+     *   }
+     * })
+     * 
+     */
+    create<T extends LunchMenuCreateArgs>(args: SelectSubset<T, LunchMenuCreateArgs<ExtArgs>>): Prisma__LunchMenuClient<$Result.GetResult<Prisma.$LunchMenuPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LunchMenus.
+     * @param {LunchMenuCreateManyArgs} args - Arguments to create many LunchMenus.
+     * @example
+     * // Create many LunchMenus
+     * const lunchMenu = await prisma.lunchMenu.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LunchMenuCreateManyArgs>(args?: SelectSubset<T, LunchMenuCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a LunchMenu.
+     * @param {LunchMenuDeleteArgs} args - Arguments to delete one LunchMenu.
+     * @example
+     * // Delete one LunchMenu
+     * const LunchMenu = await prisma.lunchMenu.delete({
+     *   where: {
+     *     // ... filter to delete one LunchMenu
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LunchMenuDeleteArgs>(args: SelectSubset<T, LunchMenuDeleteArgs<ExtArgs>>): Prisma__LunchMenuClient<$Result.GetResult<Prisma.$LunchMenuPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LunchMenu.
+     * @param {LunchMenuUpdateArgs} args - Arguments to update one LunchMenu.
+     * @example
+     * // Update one LunchMenu
+     * const lunchMenu = await prisma.lunchMenu.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LunchMenuUpdateArgs>(args: SelectSubset<T, LunchMenuUpdateArgs<ExtArgs>>): Prisma__LunchMenuClient<$Result.GetResult<Prisma.$LunchMenuPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LunchMenus.
+     * @param {LunchMenuDeleteManyArgs} args - Arguments to filter LunchMenus to delete.
+     * @example
+     * // Delete a few LunchMenus
+     * const { count } = await prisma.lunchMenu.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LunchMenuDeleteManyArgs>(args?: SelectSubset<T, LunchMenuDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LunchMenus.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LunchMenuUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LunchMenus
+     * const lunchMenu = await prisma.lunchMenu.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LunchMenuUpdateManyArgs>(args: SelectSubset<T, LunchMenuUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one LunchMenu.
+     * @param {LunchMenuUpsertArgs} args - Arguments to update or create a LunchMenu.
+     * @example
+     * // Update or create a LunchMenu
+     * const lunchMenu = await prisma.lunchMenu.upsert({
+     *   create: {
+     *     // ... data to create a LunchMenu
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LunchMenu we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LunchMenuUpsertArgs>(args: SelectSubset<T, LunchMenuUpsertArgs<ExtArgs>>): Prisma__LunchMenuClient<$Result.GetResult<Prisma.$LunchMenuPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LunchMenus.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LunchMenuCountArgs} args - Arguments to filter LunchMenus to count.
+     * @example
+     * // Count the number of LunchMenus
+     * const count = await prisma.lunchMenu.count({
+     *   where: {
+     *     // ... the filter for the LunchMenus we want to count
+     *   }
+     * })
+    **/
+    count<T extends LunchMenuCountArgs>(
+      args?: Subset<T, LunchMenuCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LunchMenuCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LunchMenu.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LunchMenuAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LunchMenuAggregateArgs>(args: Subset<T, LunchMenuAggregateArgs>): Prisma.PrismaPromise<GetLunchMenuAggregateType<T>>
+
+    /**
+     * Group by LunchMenu.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LunchMenuGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LunchMenuGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LunchMenuGroupByArgs['orderBy'] }
+        : { orderBy?: LunchMenuGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LunchMenuGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLunchMenuGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LunchMenu model
+   */
+  readonly fields: LunchMenuFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LunchMenu.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LunchMenuClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LunchMenu model
+   */
+  interface LunchMenuFieldRefs {
+    readonly id: FieldRef<"LunchMenu", 'Int'>
+    readonly dayOfWeek: FieldRef<"LunchMenu", 'String'>
+    readonly salty: FieldRef<"LunchMenu", 'String'>
+    readonly vegetarian: FieldRef<"LunchMenu", 'String'>
+    readonly stir: FieldRef<"LunchMenu", 'String'>
+    readonly soup: FieldRef<"LunchMenu", 'String'>
+    readonly dessert: FieldRef<"LunchMenu", 'String'>
+    readonly weekNumber: FieldRef<"LunchMenu", 'Int'>
+    readonly year: FieldRef<"LunchMenu", 'Int'>
+    readonly isActive: FieldRef<"LunchMenu", 'Boolean'>
+    readonly createdAt: FieldRef<"LunchMenu", 'DateTime'>
+    readonly updatedAt: FieldRef<"LunchMenu", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LunchMenu findUnique
+   */
+  export type LunchMenuFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LunchMenu
+     */
+    select?: LunchMenuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LunchMenu
+     */
+    omit?: LunchMenuOmit<ExtArgs> | null
+    /**
+     * Filter, which LunchMenu to fetch.
+     */
+    where: LunchMenuWhereUniqueInput
+  }
+
+  /**
+   * LunchMenu findUniqueOrThrow
+   */
+  export type LunchMenuFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LunchMenu
+     */
+    select?: LunchMenuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LunchMenu
+     */
+    omit?: LunchMenuOmit<ExtArgs> | null
+    /**
+     * Filter, which LunchMenu to fetch.
+     */
+    where: LunchMenuWhereUniqueInput
+  }
+
+  /**
+   * LunchMenu findFirst
+   */
+  export type LunchMenuFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LunchMenu
+     */
+    select?: LunchMenuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LunchMenu
+     */
+    omit?: LunchMenuOmit<ExtArgs> | null
+    /**
+     * Filter, which LunchMenu to fetch.
+     */
+    where?: LunchMenuWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LunchMenus to fetch.
+     */
+    orderBy?: LunchMenuOrderByWithRelationInput | LunchMenuOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LunchMenus.
+     */
+    cursor?: LunchMenuWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LunchMenus from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LunchMenus.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LunchMenus.
+     */
+    distinct?: LunchMenuScalarFieldEnum | LunchMenuScalarFieldEnum[]
+  }
+
+  /**
+   * LunchMenu findFirstOrThrow
+   */
+  export type LunchMenuFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LunchMenu
+     */
+    select?: LunchMenuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LunchMenu
+     */
+    omit?: LunchMenuOmit<ExtArgs> | null
+    /**
+     * Filter, which LunchMenu to fetch.
+     */
+    where?: LunchMenuWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LunchMenus to fetch.
+     */
+    orderBy?: LunchMenuOrderByWithRelationInput | LunchMenuOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LunchMenus.
+     */
+    cursor?: LunchMenuWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LunchMenus from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LunchMenus.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LunchMenus.
+     */
+    distinct?: LunchMenuScalarFieldEnum | LunchMenuScalarFieldEnum[]
+  }
+
+  /**
+   * LunchMenu findMany
+   */
+  export type LunchMenuFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LunchMenu
+     */
+    select?: LunchMenuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LunchMenu
+     */
+    omit?: LunchMenuOmit<ExtArgs> | null
+    /**
+     * Filter, which LunchMenus to fetch.
+     */
+    where?: LunchMenuWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LunchMenus to fetch.
+     */
+    orderBy?: LunchMenuOrderByWithRelationInput | LunchMenuOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LunchMenus.
+     */
+    cursor?: LunchMenuWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LunchMenus from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LunchMenus.
+     */
+    skip?: number
+    distinct?: LunchMenuScalarFieldEnum | LunchMenuScalarFieldEnum[]
+  }
+
+  /**
+   * LunchMenu create
+   */
+  export type LunchMenuCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LunchMenu
+     */
+    select?: LunchMenuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LunchMenu
+     */
+    omit?: LunchMenuOmit<ExtArgs> | null
+    /**
+     * The data needed to create a LunchMenu.
+     */
+    data: XOR<LunchMenuCreateInput, LunchMenuUncheckedCreateInput>
+  }
+
+  /**
+   * LunchMenu createMany
+   */
+  export type LunchMenuCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LunchMenus.
+     */
+    data: LunchMenuCreateManyInput | LunchMenuCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LunchMenu update
+   */
+  export type LunchMenuUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LunchMenu
+     */
+    select?: LunchMenuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LunchMenu
+     */
+    omit?: LunchMenuOmit<ExtArgs> | null
+    /**
+     * The data needed to update a LunchMenu.
+     */
+    data: XOR<LunchMenuUpdateInput, LunchMenuUncheckedUpdateInput>
+    /**
+     * Choose, which LunchMenu to update.
+     */
+    where: LunchMenuWhereUniqueInput
+  }
+
+  /**
+   * LunchMenu updateMany
+   */
+  export type LunchMenuUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LunchMenus.
+     */
+    data: XOR<LunchMenuUpdateManyMutationInput, LunchMenuUncheckedUpdateManyInput>
+    /**
+     * Filter which LunchMenus to update
+     */
+    where?: LunchMenuWhereInput
+    /**
+     * Limit how many LunchMenus to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LunchMenu upsert
+   */
+  export type LunchMenuUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LunchMenu
+     */
+    select?: LunchMenuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LunchMenu
+     */
+    omit?: LunchMenuOmit<ExtArgs> | null
+    /**
+     * The filter to search for the LunchMenu to update in case it exists.
+     */
+    where: LunchMenuWhereUniqueInput
+    /**
+     * In case the LunchMenu found by the `where` argument doesn't exist, create a new LunchMenu with this data.
+     */
+    create: XOR<LunchMenuCreateInput, LunchMenuUncheckedCreateInput>
+    /**
+     * In case the LunchMenu was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LunchMenuUpdateInput, LunchMenuUncheckedUpdateInput>
+  }
+
+  /**
+   * LunchMenu delete
+   */
+  export type LunchMenuDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LunchMenu
+     */
+    select?: LunchMenuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LunchMenu
+     */
+    omit?: LunchMenuOmit<ExtArgs> | null
+    /**
+     * Filter which LunchMenu to delete.
+     */
+    where: LunchMenuWhereUniqueInput
+  }
+
+  /**
+   * LunchMenu deleteMany
+   */
+  export type LunchMenuDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LunchMenus to delete
+     */
+    where?: LunchMenuWhereInput
+    /**
+     * Limit how many LunchMenus to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LunchMenu without action
+   */
+  export type LunchMenuDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LunchMenu
+     */
+    select?: LunchMenuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LunchMenu
+     */
+    omit?: LunchMenuOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -27801,6 +28885,24 @@ export namespace Prisma {
   export type CompensatoryLeaveScalarFieldEnum = (typeof CompensatoryLeaveScalarFieldEnum)[keyof typeof CompensatoryLeaveScalarFieldEnum]
 
 
+  export const LunchMenuScalarFieldEnum: {
+    id: 'id',
+    dayOfWeek: 'dayOfWeek',
+    salty: 'salty',
+    vegetarian: 'vegetarian',
+    stir: 'stir',
+    soup: 'soup',
+    dessert: 'dessert',
+    weekNumber: 'weekNumber',
+    year: 'year',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LunchMenuScalarFieldEnum = (typeof LunchMenuScalarFieldEnum)[keyof typeof LunchMenuScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -27978,6 +29080,18 @@ export namespace Prisma {
   };
 
   export type CompensatoryLeaveOrderByRelevanceFieldEnum = (typeof CompensatoryLeaveOrderByRelevanceFieldEnum)[keyof typeof CompensatoryLeaveOrderByRelevanceFieldEnum]
+
+
+  export const LunchMenuOrderByRelevanceFieldEnum: {
+    dayOfWeek: 'dayOfWeek',
+    salty: 'salty',
+    vegetarian: 'vegetarian',
+    stir: 'stir',
+    soup: 'soup',
+    dessert: 'dessert'
+  };
+
+  export type LunchMenuOrderByRelevanceFieldEnum = (typeof LunchMenuOrderByRelevanceFieldEnum)[keyof typeof LunchMenuOrderByRelevanceFieldEnum]
 
 
   /**
@@ -29899,6 +31013,96 @@ export namespace Prisma {
     note?: StringNullableWithAggregatesFilter<"CompensatoryLeave"> | string | null
   }
 
+  export type LunchMenuWhereInput = {
+    AND?: LunchMenuWhereInput | LunchMenuWhereInput[]
+    OR?: LunchMenuWhereInput[]
+    NOT?: LunchMenuWhereInput | LunchMenuWhereInput[]
+    id?: IntFilter<"LunchMenu"> | number
+    dayOfWeek?: StringFilter<"LunchMenu"> | string
+    salty?: StringFilter<"LunchMenu"> | string
+    vegetarian?: StringFilter<"LunchMenu"> | string
+    stir?: StringFilter<"LunchMenu"> | string
+    soup?: StringFilter<"LunchMenu"> | string
+    dessert?: StringFilter<"LunchMenu"> | string
+    weekNumber?: IntNullableFilter<"LunchMenu"> | number | null
+    year?: IntNullableFilter<"LunchMenu"> | number | null
+    isActive?: BoolFilter<"LunchMenu"> | boolean
+    createdAt?: DateTimeFilter<"LunchMenu"> | Date | string
+    updatedAt?: DateTimeFilter<"LunchMenu"> | Date | string
+  }
+
+  export type LunchMenuOrderByWithRelationInput = {
+    id?: SortOrder
+    dayOfWeek?: SortOrder
+    salty?: SortOrder
+    vegetarian?: SortOrder
+    stir?: SortOrder
+    soup?: SortOrder
+    dessert?: SortOrder
+    weekNumber?: SortOrderInput | SortOrder
+    year?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _relevance?: LunchMenuOrderByRelevanceInput
+  }
+
+  export type LunchMenuWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: LunchMenuWhereInput | LunchMenuWhereInput[]
+    OR?: LunchMenuWhereInput[]
+    NOT?: LunchMenuWhereInput | LunchMenuWhereInput[]
+    dayOfWeek?: StringFilter<"LunchMenu"> | string
+    salty?: StringFilter<"LunchMenu"> | string
+    vegetarian?: StringFilter<"LunchMenu"> | string
+    stir?: StringFilter<"LunchMenu"> | string
+    soup?: StringFilter<"LunchMenu"> | string
+    dessert?: StringFilter<"LunchMenu"> | string
+    weekNumber?: IntNullableFilter<"LunchMenu"> | number | null
+    year?: IntNullableFilter<"LunchMenu"> | number | null
+    isActive?: BoolFilter<"LunchMenu"> | boolean
+    createdAt?: DateTimeFilter<"LunchMenu"> | Date | string
+    updatedAt?: DateTimeFilter<"LunchMenu"> | Date | string
+  }, "id">
+
+  export type LunchMenuOrderByWithAggregationInput = {
+    id?: SortOrder
+    dayOfWeek?: SortOrder
+    salty?: SortOrder
+    vegetarian?: SortOrder
+    stir?: SortOrder
+    soup?: SortOrder
+    dessert?: SortOrder
+    weekNumber?: SortOrderInput | SortOrder
+    year?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LunchMenuCountOrderByAggregateInput
+    _avg?: LunchMenuAvgOrderByAggregateInput
+    _max?: LunchMenuMaxOrderByAggregateInput
+    _min?: LunchMenuMinOrderByAggregateInput
+    _sum?: LunchMenuSumOrderByAggregateInput
+  }
+
+  export type LunchMenuScalarWhereWithAggregatesInput = {
+    AND?: LunchMenuScalarWhereWithAggregatesInput | LunchMenuScalarWhereWithAggregatesInput[]
+    OR?: LunchMenuScalarWhereWithAggregatesInput[]
+    NOT?: LunchMenuScalarWhereWithAggregatesInput | LunchMenuScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"LunchMenu"> | number
+    dayOfWeek?: StringWithAggregatesFilter<"LunchMenu"> | string
+    salty?: StringWithAggregatesFilter<"LunchMenu"> | string
+    vegetarian?: StringWithAggregatesFilter<"LunchMenu"> | string
+    stir?: StringWithAggregatesFilter<"LunchMenu"> | string
+    soup?: StringWithAggregatesFilter<"LunchMenu"> | string
+    dessert?: StringWithAggregatesFilter<"LunchMenu"> | string
+    weekNumber?: IntNullableWithAggregatesFilter<"LunchMenu"> | number | null
+    year?: IntNullableWithAggregatesFilter<"LunchMenu"> | number | null
+    isActive?: BoolWithAggregatesFilter<"LunchMenu"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"LunchMenu"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LunchMenu"> | Date | string
+  }
+
   export type FileCreateInput = {
     filename: string
     mimeType: string
@@ -31722,6 +32926,108 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type LunchMenuCreateInput = {
+    dayOfWeek: string
+    salty: string
+    vegetarian: string
+    stir: string
+    soup: string
+    dessert: string
+    weekNumber?: number | null
+    year?: number | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LunchMenuUncheckedCreateInput = {
+    id?: number
+    dayOfWeek: string
+    salty: string
+    vegetarian: string
+    stir: string
+    soup: string
+    dessert: string
+    weekNumber?: number | null
+    year?: number | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LunchMenuUpdateInput = {
+    dayOfWeek?: StringFieldUpdateOperationsInput | string
+    salty?: StringFieldUpdateOperationsInput | string
+    vegetarian?: StringFieldUpdateOperationsInput | string
+    stir?: StringFieldUpdateOperationsInput | string
+    soup?: StringFieldUpdateOperationsInput | string
+    dessert?: StringFieldUpdateOperationsInput | string
+    weekNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    year?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LunchMenuUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    dayOfWeek?: StringFieldUpdateOperationsInput | string
+    salty?: StringFieldUpdateOperationsInput | string
+    vegetarian?: StringFieldUpdateOperationsInput | string
+    stir?: StringFieldUpdateOperationsInput | string
+    soup?: StringFieldUpdateOperationsInput | string
+    dessert?: StringFieldUpdateOperationsInput | string
+    weekNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    year?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LunchMenuCreateManyInput = {
+    id?: number
+    dayOfWeek: string
+    salty: string
+    vegetarian: string
+    stir: string
+    soup: string
+    dessert: string
+    weekNumber?: number | null
+    year?: number | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LunchMenuUpdateManyMutationInput = {
+    dayOfWeek?: StringFieldUpdateOperationsInput | string
+    salty?: StringFieldUpdateOperationsInput | string
+    vegetarian?: StringFieldUpdateOperationsInput | string
+    stir?: StringFieldUpdateOperationsInput | string
+    soup?: StringFieldUpdateOperationsInput | string
+    dessert?: StringFieldUpdateOperationsInput | string
+    weekNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    year?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LunchMenuUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    dayOfWeek?: StringFieldUpdateOperationsInput | string
+    salty?: StringFieldUpdateOperationsInput | string
+    vegetarian?: StringFieldUpdateOperationsInput | string
+    stir?: StringFieldUpdateOperationsInput | string
+    soup?: StringFieldUpdateOperationsInput | string
+    dessert?: StringFieldUpdateOperationsInput | string
+    weekNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    year?: NullableIntFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -33523,6 +34829,69 @@ export namespace Prisma {
   export type CompensatoryLeaveSumOrderByAggregateInput = {
     id?: SortOrder
     employeeId?: SortOrder
+  }
+
+  export type LunchMenuOrderByRelevanceInput = {
+    fields: LunchMenuOrderByRelevanceFieldEnum | LunchMenuOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type LunchMenuCountOrderByAggregateInput = {
+    id?: SortOrder
+    dayOfWeek?: SortOrder
+    salty?: SortOrder
+    vegetarian?: SortOrder
+    stir?: SortOrder
+    soup?: SortOrder
+    dessert?: SortOrder
+    weekNumber?: SortOrder
+    year?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LunchMenuAvgOrderByAggregateInput = {
+    id?: SortOrder
+    weekNumber?: SortOrder
+    year?: SortOrder
+  }
+
+  export type LunchMenuMaxOrderByAggregateInput = {
+    id?: SortOrder
+    dayOfWeek?: SortOrder
+    salty?: SortOrder
+    vegetarian?: SortOrder
+    stir?: SortOrder
+    soup?: SortOrder
+    dessert?: SortOrder
+    weekNumber?: SortOrder
+    year?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LunchMenuMinOrderByAggregateInput = {
+    id?: SortOrder
+    dayOfWeek?: SortOrder
+    salty?: SortOrder
+    vegetarian?: SortOrder
+    stir?: SortOrder
+    soup?: SortOrder
+    dessert?: SortOrder
+    weekNumber?: SortOrder
+    year?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LunchMenuSumOrderByAggregateInput = {
+    id?: SortOrder
+    weekNumber?: SortOrder
+    year?: SortOrder
   }
 
   export type ProposalCreateNestedManyWithoutFileInput = {

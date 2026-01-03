@@ -377,6 +377,21 @@ exports.Prisma.CompensatoryLeaveScalarFieldEnum = {
   note: 'note'
 };
 
+exports.Prisma.LunchMenuScalarFieldEnum = {
+  id: 'id',
+  dayOfWeek: 'dayOfWeek',
+  salty: 'salty',
+  vegetarian: 'vegetarian',
+  stir: 'stir',
+  soup: 'soup',
+  dessert: 'dessert',
+  weekNumber: 'weekNumber',
+  year: 'year',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -492,6 +507,15 @@ exports.Prisma.NotificationOrderByRelevanceFieldEnum = {
 exports.Prisma.CompensatoryLeaveOrderByRelevanceFieldEnum = {
   note: 'note'
 };
+
+exports.Prisma.LunchMenuOrderByRelevanceFieldEnum = {
+  dayOfWeek: 'dayOfWeek',
+  salty: 'salty',
+  vegetarian: 'vegetarian',
+  stir: 'stir',
+  soup: 'soup',
+  dessert: 'dessert'
+};
 exports.Sex = exports.$Enums.Sex = {
   MALE: 'MALE',
   FEMALE: 'FEMALE'
@@ -565,7 +589,8 @@ exports.Prisma.ModelName = {
   Asset: 'Asset',
   AssetAssignment: 'AssetAssignment',
   Notification: 'Notification',
-  CompensatoryLeave: 'CompensatoryLeave'
+  CompensatoryLeave: 'CompensatoryLeave',
+  LunchMenu: 'LunchMenu'
 };
 
 /**

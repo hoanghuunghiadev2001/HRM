@@ -448,3 +448,20 @@ model CompensatoryLeave {
   @@index([employeeId])
   @@index([used])
 }
+
+model LunchMenu {
+  id         Int      @id @default(autoincrement())
+  dayOfWeek  String // "Thứ 2", "Thứ 3", ... hoặc dùng Enum DayOfWeek
+  salty      String // Món mặn
+  vegetarian String // Món chay
+  stir       String // Món xào
+  soup       String // Món canh
+  dessert    String // Tráng miệng
+  weekNumber Int? // Tuần thứ mấy trong năm (để quản lý theo tuần)
+  year       Int? // Năm
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([weekNumber, year])
+}

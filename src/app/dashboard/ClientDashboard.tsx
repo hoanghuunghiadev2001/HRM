@@ -139,7 +139,11 @@ export default function ClientDashboard({
       icon: <Fingerprint />,
       label: "Chấm công",
     },
-
+    {
+      key: "/dashboard/LunchMenuModule",
+      icon: <Fingerprint />,
+      label: "Thực đơn",
+    },
     {
       key: "/dashboard/allRequests",
       icon: <FileStack />,
@@ -191,6 +195,11 @@ export default function ClientDashboard({
                   key: "/dashboard/maintenance",
                   icon: <Network />,
                   label: "Thông Báo hệ thống",
+                },
+                {
+                  key: "/dashboard/LunchMenuModuleAD",
+                  icon: <Fingerprint />,
+                  label: "QL Thực đơn",
                 },
               ]
             : []),
