@@ -9,7 +9,13 @@ export async function POST(req: Request) {
     if (authHeader !== `Bearer ${process.env.JWT_SECRET}`) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
+    const contentType = req.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      return NextResponse.json(
+        { error: "Thanh toán phải là JSON" },
+        { status: 400 }
+      );
+    }
     const { logs } = await req.json();
 
     if (!logs || !Array.isArray(logs)) {

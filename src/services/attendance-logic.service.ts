@@ -1,123 +1,130 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/lib/prisma";
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-
-// Cấu hình dayjs sử dụng múi giờ Việt Nam
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault("Asia/Ho_Chi_Minh");
 
 export class AttendanceLogicService {
   /**
-   * Xử lý dữ liệu thô từ máy chấm công gửi lên
+   * Xử lý mảng logs gửi từ máy chấm công (zk-poller)
    */
   static async processMachineLogs(rawLogs: any[]) {
-    const groups: Record<string, Date[]> = {};
+    // Map để gom nhóm logs theo: employeeCode_YYYY-MM-DD
+    const masterMap = new Map<string, Date[]>();
 
-    // 1. Phân loại logs theo nhân viên và ngày (sử dụng giờ địa phương VN)
-    rawLogs.forEach((log) => {
-      // Ép thời gian về đúng múi giờ Việt Nam
-      const recordTime = dayjs(log.recordTime).tz("Asia/Ho_Chi_Minh");
+    for (const log of rawLogs) {
+      if (!log.recordTime || !log.deviceUserId) continue;
+
+      // Lưu ý: Luôn dùng dayjs để parse thời gian từ máy chấm công
+      const recordTime = dayjs(log.recordTime).toDate();
+
+      // Chuẩn hóa mã nhân viên thành 5 số (ví dụ: "525" -> "00525")
       const code = log.deviceUserId.toString().padStart(5, "0");
 
-      // Lấy ngày chuẩn YYYY-MM-DD theo giờ VN (không bị nhảy về hôm trước như ISO)
-      const dateKeyStr = recordTime.format("YYYY-MM-DD");
-      const dateKey = `${code}_${dateKeyStr}`;
+      // Lấy chuỗi ngày YYYY-MM-DD để làm Key gom nhóm
+      const dateKey = dayjs(log.recordTime).format("YYYY-MM-DD");
+      const key = `${code}_${dateKey}`;
 
-      if (!groups[dateKey]) groups[dateKey] = [];
-      groups[dateKey].push(recordTime.toDate());
-    });
+      if (!masterMap.has(key)) masterMap.set(key, []);
+      masterMap.get(key)!.push(recordTime);
+    }
 
-    // 2. Xử lý TUẦN TỰ (Sequential) từng nhóm
-    // Sử dụng for...of thay cho Promise.all để tránh làm nghẽn Database gây lỗi Timeout 60s
-    for (const [key, times] of Object.entries(groups)) {
-      const [employeeCode, dateStr] = key.split("_");
+    // Xử lý từng nhóm dữ liệu (Mỗi nhóm là 1 nhân viên / 1 ngày)
+    for (const [key, times] of masterMap.entries()) {
+      try {
+        const [employeeCode, dateStr] = key.split("_");
 
-      // Sắp xếp các mốc thời gian trong ngày từ sớm đến muộn
-      const sorted = times.sort((a, b) => a.getTime() - b.getTime());
+        // Sắp xếp thời gian trong batch này để lấy sớm nhất/muộn nhất sơ bộ
+        const sorted = times.sort((a, b) => a.getTime() - b.getTime());
+        const inTime = sorted[0];
+        const outTime = sorted[sorted.length - 1];
 
-      // Lấy giờ quẹt đầu tiên và cuối cùng trong ngày
-      const inTime = sorted[0];
-      const outTime = sorted[sorted.length - 1];
-
-      // Tạo ngày chuẩn cho DB (đưa về 00:00:00 theo giờ VN)
-      const workDate = dayjs
-        .tz(dateStr, "Asia/Ho_Chi_Minh")
-        .startOf("day")
-        .toDate();
-
-      await this.saveAttendance(employeeCode, workDate, inTime, outTime);
+        // dateStr ở đây là chuỗi "YYYY-MM-DD"
+        await this.persistAttendance(employeeCode, dateStr, inTime, outTime);
+      } catch (error: any) {
+        console.error(`❌ Lỗi xử lý nhóm ${key}:`, error?.message);
+      }
     }
   }
 
   /**
-   * Lưu hoặc cập nhật dữ liệu vào Database
+   * Lưu hoặc Cập nhật vào MySQL
+   * @param dateStr Chuỗi ngày định dạng YYYY-MM-DD để tránh lệch múi giờ
    */
-  private static async saveAttendance(
+  private static async persistAttendance(
     code: string,
-    date: Date,
+    dateStr: string,
     inTime: Date,
     outTime: Date
   ) {
-    // 1. Tìm ID nhân viên
+    // 1. Tìm ID nhân viên dựa trên mã nhân viên
     const emp = await prisma.employee.findUnique({
       where: { employeeCode: code },
       select: { id: true },
     });
-
     if (!emp) return;
 
-    // 2. Kiểm tra bản ghi đã tồn tại trong ngày hôm đó chưa
+    // 2. Lấy dữ liệu hiện tại trong Database (nếu có)
+    // Đối với cột @db.Date, Prisma vẫn cho phép query bằng đối tượng Date hoặc chuỗi ngày
     const existing = await prisma.attendance.findUnique({
       where: {
-        employeeId_date: { employeeId: emp.id, date },
+        employeeId_date: {
+          employeeId: emp.id,
+          date: new Date(dateStr),
+        },
       },
-      select: { checkInTime: true, checkOutTime: true },
     });
 
-    // 3. LOGIC SO SÁNH GIỜ TỐT NHẤT:
-    // Check-In: Lấy mốc sớm nhất | Check-Out: Lấy mốc muộn nhất
-    const finalIn =
-      existing?.checkInTime && existing.checkInTime < inTime
-        ? existing.checkInTime
-        : inTime;
+    // 3. TỔNG HỢP TẤT CẢ CÁC MỐC GIỜ (Từ máy gửi lên + Từ database cũ)
+    const timePool: number[] = [];
+    timePool.push(inTime.getTime());
+    timePool.push(outTime.getTime());
 
-    const finalOut =
-      existing?.checkOutTime && existing.checkOutTime > outTime
-        ? existing.checkOutTime
-        : outTime;
+    if (existing?.checkInTime) timePool.push(existing.checkInTime.getTime());
+    if (existing?.checkOutTime) timePool.push(existing.checkOutTime.getTime());
 
-    // 4. TÍNH GIỜ LÀM VIỆC (KHÔNG TRỪ NGHỈ TRƯA)
-    let hours = 0;
+    // Loại bỏ trùng và sắp xếp tăng dần tuyệt đối
+    const sortedPool = Array.from(new Set(timePool)).sort((a, b) => a - b);
 
-    // Nếu chỉ quẹt 1 lần (In trùng Out), giờ làm việc mặc định là 0
-    if (finalIn.getTime() !== finalOut.getTime()) {
-      const diffMs = finalOut.getTime() - finalIn.getTime();
-      hours = diffMs / (1000 * 60 * 60);
+    // 4. XÁC ĐỊNH GIỜ VÀO (SỚM NHẤT) VÀ GIỜ RA (MUỘN NHẤT)
+    const minTimestamp = sortedPool[0];
+    const maxTimestamp = sortedPool[sortedPool.length - 1];
+
+    const finalIn = new Date(minTimestamp);
+    let finalOut: Date | null = null;
+
+    // Chỉ tính Giờ Ra nếu cách Giờ Vào ít nhất 10 phút
+    const diffMinutes = (maxTimestamp - minTimestamp) / (1000 * 60);
+    if (diffMinutes >= 10) {
+      finalOut = new Date(maxTimestamp);
     }
 
-    // Làm tròn 2 chữ số thập phân và giới hạn tối đa 14 tiếng/ngày
-    const finalHours = Math.min(14, Math.max(0, parseFloat(hours.toFixed(2))));
+    // 5. Kiểm tra nếu không có thay đổi so với DB thì dừng (Tiết kiệm hiệu năng)
+    const isNoChange =
+      existing &&
+      existing.checkInTime?.getTime() === finalIn.getTime() &&
+      existing.checkOutTime?.getTime() === (finalOut?.getTime() || null);
 
-    // 5. Ghi dữ liệu vào Database (Upsert)
-    await prisma.attendance.upsert({
-      where: {
-        employeeId_date: { employeeId: emp.id, date },
-      },
-      update: {
-        checkInTime: finalIn,
-        checkOutTime: finalOut,
-        workingHours: finalHours,
-      },
-      create: {
-        employeeId: emp.id,
-        date: date,
-        checkInTime: finalIn,
-        checkOutTime: finalOut,
-        workingHours: finalHours,
-      },
-    });
+    if (isNoChange) return;
+
+    // 6. Tính toán số giờ làm việc (Max 14 tiếng để tránh rác dữ liệu)
+    let workingHours = 0;
+    if (finalIn && finalOut) {
+      const diffMs = finalOut.getTime() - finalIn.getTime();
+      workingHours = Math.min(
+        14,
+        parseFloat((diffMs / (1000 * 60 * 60)).toFixed(2))
+      );
+    }
+
+    // 7. Thực hiện cập nhật Database
+    // Dùng dateStr (YYYY-MM-DD) trực tiếp trong câu lệnh SQL để MySQL lưu chính xác ngày
+    await prisma.$executeRaw`
+      INSERT INTO Attendance (employeeId, date, checkInTime, checkOutTime, workingHours)
+      VALUES (${emp.id}, ${dateStr}, ${finalIn}, ${finalOut}, ${workingHours})
+      ON DUPLICATE KEY UPDATE
+        checkInTime = VALUES(checkInTime),
+        checkOutTime = VALUES(checkOutTime),
+        workingHours = VALUES(workingHours);
+    `;
   }
 }
