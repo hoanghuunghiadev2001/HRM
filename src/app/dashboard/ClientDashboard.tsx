@@ -163,19 +163,9 @@ export default function ClientDashboard({
     ...(isAdmin === "ADMIN"
       ? [
           {
-            key: "/dashboard/employees",
-            icon: <UsersRound />,
-            label: "Nhân sự",
-          },
-          {
-            key: "/dashboard/department",
-            icon: <Network />,
-            label: "Phòng ban",
-          },
-          {
             key: "/dashboard/all-assets",
             icon: <ClipboardPlus />,
-            label: "QL Tài sản",
+            label: "Quản trị",
             children: [
               {
                 key: "/dashboard/assets",
@@ -187,28 +177,34 @@ export default function ClientDashboard({
                 icon: <FileStack className="ml-4" />,
                 label: "Cấp tài sản",
               },
+              {
+                key: "/dashboard/employees",
+                icon: <UsersRound />,
+                label: "Nhân sự",
+              },
+              {
+                key: "/dashboard/department",
+                icon: <Network />,
+                label: "Phòng ban",
+              },
+              {
+                key: "/dashboard/maintenance",
+                icon: <Network />,
+                label: "Thông Báo hệ thống",
+              },
+              {
+                key: "/dashboard/LunchMenuModuleAD",
+                icon: <Fingerprint />,
+                label: "QL Thực đơn",
+              },
+              {
+                key: "/dashboard/report",
+                icon: <ClipboardPlus />,
+                label: "Báo cáo",
+              },
             ],
           },
-          ...(isAdmin === "ADMIN"
-            ? [
-                {
-                  key: "/dashboard/maintenance",
-                  icon: <Network />,
-                  label: "Thông Báo hệ thống",
-                },
-                {
-                  key: "/dashboard/LunchMenuModuleAD",
-                  icon: <Fingerprint />,
-                  label: "QL Thực đơn",
-                },
-              ]
-            : []),
 
-          {
-            key: "/dashboard/report",
-            icon: <ClipboardPlus />,
-            label: "Báo cáo",
-          },
           {
             key: "/dashboard/users",
             icon: <UserCog />,

@@ -6,7 +6,6 @@ import {
   CalendarOutlined,
   ClockCircleOutlined,
   EnvironmentOutlined,
-  HeartFilled,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
 import weekOfYear from "dayjs/plugin/weekOfYear";
@@ -252,14 +251,6 @@ export const LunchMenuUserView = () => {
               </div>
             );
           })}
-        </div>
-
-        {/* Footer info */}
-        <div style={{ textAlign: "center", marginTop: 48, opacity: 0.6 }}>
-          <Text style={{ fontSize: 12 }}>
-            <HeartFilled style={{ color: "#ff4d4f", marginRight: 4 }} />
-            Chúc bạn một bữa trưa ngon miệng và đầy năng lượng!
-          </Text>
         </div>
       </div>
     </ConfigProvider>
