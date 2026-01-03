@@ -5,8 +5,8 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  CarFrontIcon,
-  ClipboardPlus,
+  CarFront,
+  ClipboardList,
   FileStack,
   FileText,
   Fingerprint,
@@ -14,6 +14,15 @@ import {
   UserCog,
   UserRoundPen,
   UsersRound,
+  LayoutDashboard,
+  Utensils,
+  History,
+  FileBadge,
+  ShieldCheck,
+  BellRing,
+  PieChart,
+  PackagePlus,
+  Box,
 } from "lucide-react";
 import {
   EllipsisOutlined,
@@ -35,12 +44,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setIsMobile } from "@/store/slices/responsiveSlice";
 import { RootState } from "@/store";
 import { useAppSelector } from "@/store/hook";
-
-// interface User {
-//   name: string;
-//   avatar?: string;
-//   employeeCode: string;
-// }
+import Link from "next/link";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -54,8 +58,7 @@ export default function ClientDashboard({
   const router = useRouter();
   const pathname = usePathname();
 
-  // const [user, setUser] = useState<User | null>(null);
-  const [collapsed, setCollapsed] = useState(false); // Trạng thái thu gọn menu
+  const [collapsed, setCollapsed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [modalChangePass, setModalChangePass] = useState(false);
   const [form] = Form.useForm();
@@ -68,27 +71,13 @@ export default function ClientDashboard({
     setAvt(avatar ? avatar : "/storage/logo-toyota.webp");
   }, [avatar]);
 
-  // Hàm toggle menu thu gọn
   const toggleCollapsed = () => setCollapsed(!collapsed);
-
-  // Hiện modal đổi mật khẩu thành công
-  const countDown = () => {
-    let secondsToGo = 3;
-    const instance = modal.success({ title: "Đổi mật khẩu thành công" });
-    const timer = setInterval(() => {
-      secondsToGo -= 1;
-    }, 1000);
-    setTimeout(() => {
-      clearInterval(timer);
-      instance.destroy();
-    }, secondsToGo * 1000);
-  };
 
   const handleChangPass = async (change: interfaceChangePassword) => {
     setLoading(true);
     const res = await postchangePassword(change);
     if (res.status === 1) {
-      countDown();
+      modal.success({ title: "Đổi mật khẩu thành công" });
       setModalChangePass(false);
       setLoading(false);
     } else {
@@ -98,64 +87,81 @@ export default function ClientDashboard({
       setLoading(false);
     }
   };
-  useEffect(() => {});
-  // Khai báo menu
+
   const Menus: MenuItem[] = [
-    { key: "/dashboard", icon: <UserRoundPen />, label: "Hồ sơ" },
-    { key: "/dashboard/request", icon: <FileText />, label: "Phiếu yêu cầu" },
+    {
+      key: "/dashboard",
+      icon: <UserRoundPen size={20} />,
+      label: <Link href="/dashboard">Hồ sơ</Link>,
+    },
+
+    {
+      key: "/dashboard/request",
+      icon: <FileText size={20} />,
+      label: <Link href="/dashboard/request">Phiếu yêu cầu</Link>,
+    },
+
     {
       key: "/dashboard/proposal1",
-      icon: <FileStack />,
+      icon: <FileStack size={20} />,
       label: "Đề xuất",
       children: [
         ...(isAdmin === "ADMIN"
           ? [
               {
                 key: "/dashboard/vehicles",
-                icon: <CarFrontIcon className="ml-4" />,
-                label: "Quản lý xe",
+                icon: <CarFront size={18} />,
+                label: <Link href="/dashboard/vehicles">Quản lý xe</Link>,
               },
             ]
           : []),
+
         {
           key: "/dashboard/vehicles-reports",
-          icon: <FileStack className="ml-4" />,
-          label: "Lịch xe",
+          icon: <History size={18} />,
+          label: <Link href="/dashboard/vehicles-reports">Lịch xe</Link>,
         },
+
         {
           key: "/dashboard/proposal",
-          icon: <FileStack className="ml-4" />,
-          label: "Tạo đề xuất",
+          icon: <ClipboardList size={18} />,
+          label: <Link href="/dashboard/proposal">Tạo đề xuất</Link>,
         },
+
         {
           key: "/dashboard/proposal/my-proposals",
-          icon: <FileStack className="ml-4" />,
-          label: "Quản lý đề xuất",
+          icon: <FileBadge size={18} />,
+          label: (
+            <Link href="/dashboard/proposal/my-proposals">Quản lý đề xuất</Link>
+          ),
         },
       ],
     },
+
     {
       key: "/dashboard/attendance",
-      icon: <Fingerprint />,
-      label: "Chấm công",
+      icon: <Fingerprint size={20} />,
+      label: <Link href="/dashboard/attendance">Chấm công</Link>,
     },
+
     {
       key: "/dashboard/LunchMenuModule",
-      icon: <Fingerprint />,
-      label: "Thực đơn",
+      icon: <Utensils size={20} />,
+      label: <Link href="/dashboard/LunchMenuModule">Thực đơn</Link>,
     },
+
     {
       key: "/dashboard/allRequests",
-      icon: <FileStack />,
-      label: "DS yêu cầu",
+      icon: <ShieldCheck size={20} />,
+      label: <Link href="/dashboard/allRequests">DS yêu cầu</Link>,
     },
 
     ...(isAdmin !== "USER"
       ? [
           {
             key: "/dashboard/compensatory-leave",
-            icon: <FileStack />,
-            label: "DS Nghỉ bù",
+            icon: <History size={20} />,
+            label: <Link href="/dashboard/compensatory-leave">DS Nghỉ bù</Link>,
           },
         ]
       : []),
@@ -164,78 +170,75 @@ export default function ClientDashboard({
       ? [
           {
             key: "/dashboard/all-assets",
-            icon: <ClipboardPlus />,
+            icon: <LayoutDashboard size={20} />,
             label: "Quản trị",
             children: [
               {
                 key: "/dashboard/assets",
-                icon: <FileStack className="ml-4" />,
-                label: "Tài sản",
+                icon: <Box size={18} />,
+                label: <Link href="/dashboard/assets">Tài sản</Link>,
               },
               {
                 key: "/dashboard/assets/assign",
-                icon: <FileStack className="ml-4" />,
-                label: "Cấp tài sản",
+                icon: <PackagePlus size={18} />,
+                label: <Link href="/dashboard/assets/assign">Cấp tài sản</Link>,
               },
               {
                 key: "/dashboard/employees",
-                icon: <UsersRound />,
-                label: "Nhân sự",
+                icon: <UsersRound size={18} />,
+                label: <Link href="/dashboard/employees">Nhân sự</Link>,
               },
               {
                 key: "/dashboard/department",
-                icon: <Network />,
-                label: "Phòng ban",
+                icon: <Network size={18} />,
+                label: <Link href="/dashboard/department">Phòng ban</Link>,
               },
               {
                 key: "/dashboard/maintenance",
-                icon: <Network />,
-                label: "Thông Báo hệ thống",
+                icon: <BellRing size={18} />,
+                label: (
+                  <Link href="/dashboard/maintenance">Thông Báo hệ thống</Link>
+                ),
               },
               {
                 key: "/dashboard/LunchMenuModuleAD",
-                icon: <Fingerprint />,
-                label: "QL Thực đơn",
-              },
-              {
-                key: "/dashboard/report",
-                icon: <ClipboardPlus />,
-                label: "Báo cáo",
+                icon: <Utensils size={18} />,
+                label: (
+                  <Link href="/dashboard/LunchMenuModuleAD">QL Thực đơn</Link>
+                ),
               },
             ],
           },
 
           {
+            key: "/dashboard/report",
+            icon: <PieChart size={20} />,
+            label: <Link href="/dashboard/report">Báo cáo</Link>,
+          },
+
+          {
             key: "/dashboard/users",
-            icon: <UserCog />,
-            label: "Người dùng",
+            icon: <UserCog size={20} />,
+            label: <Link href="/dashboard/users">Người dùng</Link>,
           },
         ]
       : []),
   ];
 
-  // Xử lý click menu: Chuyển trang + tự đóng nếu mobile
   const handleClick: MenuProps["onClick"] = (e) => {
     if (pathname === e.key) return;
     setLoading(true);
     router.push(e.key);
-    // Nếu là mobile, tự đóng menu sau khi click
-    if (isMobile) {
-      setCollapsed(false);
-    }
+    if (isMobile) setCollapsed(false);
   };
 
-  // API logout
   const mutation = useMutation({
     mutationFn: logoutApi,
     onSuccess: () => {
       router.push("/login");
       setLoading(false);
     },
-    onError: (error) => {
-      alert("Lỗi đăng xuất: " + (error?.message || ""));
-      setLoading(false);
-    },
+    onError: () => setLoading(false),
   });
 
   const handleLogout = () => {
@@ -243,47 +246,22 @@ export default function ClientDashboard({
     mutation.mutate();
   };
 
-  // Fetch user info
-  // const fetchUser = async () => {
-  //   const controller = new AbortController();
-  //   try {
-  //     const res = await fetch("/api/me", { signal: controller.signal });
-  //     if (res.ok) {
-  //       const data = await res.json();
-  //       localStorage.setItem("user", JSON.stringify(data));
-  //       setUser(data);
-  //     } else {
-  //       console.error("Không lấy được dữ liệu user");
-  //       window.location.href = "/login";
-  //     }
-  //   } catch (error) {
-  //     console.error("Lỗi khi gọi API /api/me:", error);
-  //     window.location.href = "/login";
-  //   }
-  //   return () => controller.abort();
-  // };
-
-  // Xử lý resize màn hình để nhận biết mobile
   const dispatch = useDispatch();
-
   useEffect(() => {
     const checkMobile = () => {
-      dispatch(setIsMobile(window.innerWidth < 640));
-      if (window.innerWidth < 640) setCollapsed(false);
+      const mobile = window.innerWidth < 640;
+      dispatch(setIsMobile(mobile));
+      if (mobile) setCollapsed(false);
     };
-
-    checkMobile(); // Kiểm tra lần đầu
-
+    checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, [dispatch]);
 
   useEffect(() => {
     setLoading(false);
-    // fetchUser();
   }, [pathname]);
 
-  // Menu user (đổi mật khẩu / đăng xuất)
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -309,10 +287,8 @@ export default function ClientDashboard({
       />
       {contextHolder}
 
-      <title>TOYOTA</title>
-
-      <div className="w-[100vw] h-full overflow-hidden ">
-        {/* Header */}
+      <div className="w-[100vw] h-full overflow-hidden bg-[#f0f2f5]">
+        {/* Header Mobile */}
         <div
           className={`${
             isMobile ? "" : "hidden"
@@ -334,150 +310,144 @@ export default function ClientDashboard({
               {name}
             </p>
             <Image
-              loading="lazy"
               src="/storage/logo-toyota.webp"
               alt="logo"
-              className="w-14 h-auto"
               width={56}
               height={50}
-              quality={70} // giảm chất lượng xuống chút để nhẹ hơn
-              priority={false}
+              className="w-14 h-auto"
             />
           </div>
         </div>
 
-        {/* Overlay mờ khi mở menu ở mobile */}
-        {/* {isMobile && !collapsed && (
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40 sm:hidden"
-            onClick={() => setCollapsed(true)}
-          />
-        )} */}
-
         {/* Layout chính */}
         <div
-          className={`w-full  flex relative ${
-            isMobile ? "h-[calc(100vh-60px)]" : "h-[100vh]"
-          } ${isMobile && !collapsed ? "overflow-hidden" : ""}`}
+          className={`w-full flex relative ${
+            isMobile ? "h-[calc(100vh-56px)]" : "h-[100vh]"
+          }`}
         >
-          {/* Sidebar menu */}
-
-          <div className="py-5 pl-4">
+          {/* Sidebar */}
+          <div className="py-5 pl-4 flex shrink-0 h-full">
             <div
               className={`
-                ${isMobile ? "flex-col-reverse" : ""}
-              ${
-                !isMobile && collapsed
-                  ? "sm:!w-[70px] justify-between"
-                  : "sm:w-[250px] justify-end"
-              }
-              ${isMobile && !collapsed ? "hidden " : " "}
-              ${
-                collapsed && isMobile
-                  ? "!w-full fixed !h-[calc(100vh-56px)] top-14 !rounded-none right-0 z-10"
-                  : ""
-              }
-               shrink-0  h-full flex flex-col 
-              transition-all duration-300 ease-in-out shadow-2xl rounded-4xl py-6 px-4 border bg-[#9ecff7] border-[#cecece]
-            `}
+                ${isMobile ? "flex-col-reverse" : "flex-col"}
+                ${!isMobile && collapsed ? "sm:!w-[75px]" : "sm:w-[260px]"}
+                ${isMobile && !collapsed ? "hidden " : " "}
+                ${
+                  collapsed && isMobile
+                    ? "!w-full fixed !h-[calc(100vh-56px)] top-14 !rounded-none right-0 z-10"
+                    : ""
+                }
+                transition-all duration-300 ease-in-out shadow-2xl rounded-[32px] py-6 px-4 border bg-[#9ecff7] border-[#cecece] flex
+              `}
             >
-              <div className="relative w-full ">
-                <Button
-                  type="primary"
-                  onClick={toggleCollapsed}
-                  className={`!border-none !shadow-none !absolute top-[55px] right-[-28px] sm:hidden !p-0 !bg-transparent hover:!bg-transparent !text-[#ff511a] hover:!text-[#ff511a] z-50 ${
-                    isMobile ? "!hidden" : ""
-                  }`}
-                >
-                  {collapsed ? (
-                    <RightCircleFilled className="text-2xl !text-[#ff511a]" />
-                  ) : (
-                    <LeftCircleFilled className="text-2xl !text-[#ff511a]" />
-                  )}
-                </Button>
+              <div className="relative w-full flex-1 flex flex-col n">
+                {/* Desktop Toggle Button */}
+                {!isMobile && (
+                  <Button
+                    type="primary"
+                    onClick={toggleCollapsed}
+                    className="!border-none !shadow-none !absolute top-0 right-[-25px] !p-0 !bg-transparent hover:!bg-transparent !text-[#ff511a] z-50"
+                  >
+                    {collapsed ? (
+                      <RightCircleFilled className="text-2xl" />
+                    ) : (
+                      <LeftCircleFilled className="text-2xl" />
+                    )}
+                  </Button>
+                )}
+
+                {/* Logo Section */}
                 <div
                   className={`${
-                    isMobile ? "hidden" : ""
-                  } flex flex-col items-center justify-center w-full  py-2`}
+                    isMobile ? "hidden" : "flex"
+                  } flex-col items-center justify-center w-full mb-6`}
                 >
                   <Image
-                    loading="lazy"
                     src="/storage/logo-toyota.webp"
                     alt="logo"
-                    className="w-14 h-auto"
                     width={56}
                     height={50}
-                    quality={100} // giảm chất lượng xuống chút để nhẹ hơn
-                    priority={false}
+                    className="w-14 h-auto"
                   />
-                  <p
-                    className={`font-medium text-[#001231] mt-2 text-nowrap transition-opacity ${
-                      collapsed ? "hidden" : ""
-                    }`}
-                  >
-                    TOYOTA BÌNH DƯƠNG
-                  </p>
+                  {!collapsed && (
+                    <p className="font-bold text-[#001231] mt-2 text-center text-sm">
+                      TOYOTA BÌNH DƯƠNG
+                    </p>
+                  )}
                 </div>
-                <div className="bg-transparent overflow-y-auto overflow-x-hidden h-[calc(100vh-255px)]">
+
+                {/* Menu Navigation */}
+                <div className="flex-1 overflow-y-auto overflow-x-hidden custom-sidebar">
                   <Menu
-                    selectedKeys={[pathname ?? ""]}
+                    selectedKeys={pathname ? [pathname] : []}
                     mode="inline"
-                    inlineCollapsed={isMobile ? !collapsed : collapsed}
+                    inlineCollapsed={isMobile ? false : collapsed}
                     items={Menus}
-                    className={`bg-transparent !text-[#4a4a6a] ${
-                      collapsed ? "reponsive-menu" : ""
-                    }`}
+                    className="bg-transparent !border-none h-[calc(100vh-280px)] overflow-y-scroll"
                     onClick={handleClick}
                   />
                 </div>
               </div>
 
+              {/* User Profile Section */}
               <div
-                className={`h-14 flex gap-2 items-center ${
-                  collapsed ? "" : "p-4 border-[1px] border-[#2a2b70]"
-                }  rounded-2xl cursor-pointer ${
-                  collapsed && !isMobile ? "justify-center" : "justify-between"
-                } transition-all duration-300 ease-in-out`}
+                className={`mt-4 h-14 flex items-center bg-white/40 rounded-2xl cursor-pointer p-2 transition-all ${
+                  collapsed && !isMobile
+                    ? "justify-center"
+                    : "justify-between px-4"
+                }`}
               >
                 <Dropdown menu={{ items }}>
-                  <div className="flex items-center gap-3 justify-between w-full">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={avt}
-                        alt="avatar"
-                        className="h-9 w-9 border-2 border-[#999999] bg-white rounded-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src =
-                            "/storage/avt-default.webp";
-                        }}
-                      />
-
-                      <p
-                        className={`text-xs font-normal italic text-[#001231]  ${
-                          collapsed && !isMobile ? "hidden" : ""
-                        } `}
-                      >
-                        {name}
-                      </p>
-                    </div>
-                    <EllipsisOutlined
-                      className={`${
-                        collapsed && !isMobile ? "!hidden" : ""
-                      } text-3xl`}
-                      onClick={(e) => e.preventDefault()}
+                  <div className="flex items-center gap-3 w-full">
+                    <img
+                      src={avt}
+                      alt="avatar"
+                      className="h-9 w-9 border-2 border-white rounded-full object-cover shrink-0 shadow-sm"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src =
+                          "/storage/avt-default.webp";
+                      }}
                     />
+                    {(!collapsed || isMobile) && (
+                      <div className="flex-1 overflow-hidden">
+                        <p className="text-xs font-bold text-[#001231] truncate leading-none">
+                          {name}
+                        </p>
+                        <p className="text-[10px] text-[#001231]/60 truncate mt-1">
+                          {employeeCode}
+                        </p>
+                      </div>
+                    )}
+                    {(!collapsed || isMobile) && (
+                      <EllipsisOutlined className="text-xl" />
+                    )}
                   </div>
                 </Dropdown>
               </div>
             </div>
           </div>
 
-          {/* Nội dung chính */}
-          <div className="w-full h-[calc(100vh-50px)] overflow-y-auto  lg:h-full">
-            <main className="flex-1 p-4">{children}</main>
+          {/* Main Content Area */}
+          <div className="flex-1 h-full overflow-y-auto overflow-x-hidden">
+            <main className="p-4 min-h-full">{children}</main>
           </div>
         </div>
       </div>
+
+      <style jsx global>{`
+        .custom-sidebar::-webkit-scrollbar {
+          width: 0px;
+        }
+        .ant-menu-inline,
+        .ant-menu-vertical,
+        .ant-menu-vertical-left {
+          border-right: none !important;
+        }
+        .ant-menu-item-selected {
+          background-color: rgba(255, 255, 255, 0.3) !important;
+          color: #ff511a !important;
+        }
+      `}</style>
     </>
   );
 }
