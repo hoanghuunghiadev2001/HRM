@@ -144,11 +144,11 @@ export default function ClientDashboard({
       label: <Link href="/dashboard/attendance">Chấm công</Link>,
     },
 
-    {
-      key: "/dashboard/LunchMenuModule",
-      icon: <Utensils size={20} />,
-      label: <Link href="/dashboard/LunchMenuModule">Thực đơn</Link>,
-    },
+    // {
+    //   key: "/dashboard/LunchMenuModule",
+    //   icon: <Utensils size={20} />,
+    //   label: <Link href="/dashboard/LunchMenuModule">Thực đơn</Link>,
+    // },
 
     {
       key: "/dashboard/allRequests",
