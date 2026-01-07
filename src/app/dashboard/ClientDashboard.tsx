@@ -200,13 +200,13 @@ export default function ClientDashboard({
                   <Link href="/dashboard/maintenance">Thông Báo hệ thống</Link>
                 ),
               },
-              {
-                key: "/dashboard/LunchMenuModuleAD",
-                icon: <Utensils size={18} />,
-                label: (
-                  <Link href="/dashboard/LunchMenuModuleAD">QL Thực đơn</Link>
-                ),
-              },
+              // {
+              //   key: "/dashboard/LunchMenuModuleAD",
+              //   icon: <Utensils size={18} />,
+              //   label: (
+              //     <Link href="/dashboard/LunchMenuModuleAD">QL Thực đơn</Link>
+              //   ),
+              // },
             ],
           },
 
