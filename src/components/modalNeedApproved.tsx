@@ -39,6 +39,7 @@ interface DataType {
   totalHours: string;
   leaveType: string;
   status: string;
+  leaveRequestId: number;
 }
 
 const useStyle = createStyles((utils) => {
@@ -91,6 +92,7 @@ const ModalNeedApproved = ({
       totalHours: item.totalHours.toString(),
       leaveType: item.leaveType,
       status: item.status,
+      leaveRequestId: item.leaveRequestId,
     })) || [];
 
   const columns: TableProps<DataType>["columns"] = [
@@ -126,16 +128,21 @@ const ModalNeedApproved = ({
       key: "action",
       width: "100px",
       render: (_, record) => (
-        <Space size="middle" onClick={() => handleOpenRequest(record.MSNV)}>
+        <Space
+          size="middle"
+          onClick={() => handleOpenRequest(record.leaveRequestId)}
+        >
           <a>Chi tiết</a>
         </Space>
       ),
     },
   ];
 
-  const handleOpenRequest = (msnv: string) => {
+  const handleOpenRequest = (id: number) => {
+    console.log(allRequestsApproved);
+
     const requests = allRequestsApproved.find(
-      (emp) => emp.employeeCode === msnv
+      (emp) => emp.leaveRequestId === id
     );
     setRequestApprove(requests);
     setApproveRequest(true);
