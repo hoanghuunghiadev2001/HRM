@@ -15,13 +15,16 @@ export class AttendanceLogicService {
       if (!log.recordTime || !log.deviceUserId) continue;
 
       // Lưu ý: Luôn dùng dayjs để parse thời gian từ máy chấm công
-      const recordTime = dayjs(log.recordTime).toDate();
+      const recordTime = dayjs.tz(log.recordTime, "Asia/Ho_Chi_Minh").toDate();
 
       // Chuẩn hóa mã nhân viên thành 5 số (ví dụ: "525" -> "00525")
       const code = log.deviceUserId.toString().padStart(5, "0");
 
       // Lấy chuỗi ngày YYYY-MM-DD để làm Key gom nhóm
-      const dateKey = dayjs(log.recordTime).format("YYYY-MM-DD");
+      const dateKey = dayjs(log.recordTime)
+        .tz("Asia/Ho_Chi_Minh")
+        .format("YYYY-MM-DD");
+
       const key = `${code}_${dateKey}`;
 
       if (!masterMap.has(key)) masterMap.set(key, []);
@@ -54,7 +57,7 @@ export class AttendanceLogicService {
     code: string,
     dateStr: string,
     inTime: Date,
-    outTime: Date
+    outTime: Date,
   ) {
     // 1. Tìm ID nhân viên dựa trên mã nhân viên
     const emp = await prisma.employee.findUnique({
@@ -112,7 +115,7 @@ export class AttendanceLogicService {
       const diffMs = finalOut.getTime() - finalIn.getTime();
       workingHours = Math.min(
         14,
-        parseFloat((diffMs / (1000 * 60 * 60)).toFixed(2))
+        parseFloat((diffMs / (1000 * 60 * 60)).toFixed(2)),
       );
     }
 
