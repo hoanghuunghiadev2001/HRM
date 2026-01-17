@@ -15,7 +15,7 @@ export class AttendanceLogicService {
       if (!log.recordTime || !log.deviceUserId) continue;
 
       // Lưu ý: Luôn dùng dayjs để parse thời gian từ máy chấm công
-      const recordTime = dayjs.tz(log.recordTime, "Asia/Ho_Chi_Minh").toDate();
+      const recordTime = dayjs.tz(log.recordTime).toDate();
 
       // Chuẩn hóa mã nhân viên thành 5 số (ví dụ: "525" -> "00525")
       const code = log.deviceUserId.toString().padStart(5, "0");
