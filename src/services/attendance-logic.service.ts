@@ -2,6 +2,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/lib/prisma";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export class AttendanceLogicService {
   /**
@@ -15,7 +20,7 @@ export class AttendanceLogicService {
       if (!log.recordTime || !log.deviceUserId) continue;
 
       // Lưu ý: Luôn dùng dayjs để parse thời gian từ máy chấm công
-      const recordTime = dayjs.tz(log.recordTime).toDate();
+      const recordTime = dayjs(log.recordTime).toDate();
 
       // Chuẩn hóa mã nhân viên thành 5 số (ví dụ: "525" -> "00525")
       const code = log.deviceUserId.toString().padStart(5, "0");
