@@ -70,14 +70,14 @@ export class AttendanceLogicService {
       select: { id: true },
     });
     if (!emp) return;
-
+    const vnDateForQuery = new Date(`${dateStr}T00:00:00+07:00`);
     // 2. Lấy dữ liệu hiện tại trong Database (nếu có)
     // Đối với cột @db.Date, Prisma vẫn cho phép query bằng đối tượng Date hoặc chuỗi ngày
     const existing = await prisma.attendance.findUnique({
       where: {
         employeeId_date: {
           employeeId: emp.id,
-          date: dayjs(dateStr).format("YYYY-MM-DD"),
+          date: vnDateForQuery,
         },
       },
     });
