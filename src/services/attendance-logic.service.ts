@@ -72,7 +72,7 @@ export class AttendanceLogicService {
       where: {
         employeeId_date: {
           employeeId: emp.id,
-          date: new Date(dateStr),
+          date: dayjs(dateStr).format("YYYY-MM-DD"),
         },
       },
     });
