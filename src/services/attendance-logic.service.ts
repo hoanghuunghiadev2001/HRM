@@ -13,61 +13,49 @@ export class AttendanceLogicService {
   static async processMachineLogs(rawLogs: any[]) {
     if (!Array.isArray(rawLogs) || rawLogs.length === 0) return;
 
-    /**
-     * Map<employeeCode_YYYY-MM-DD, Set<ISO_String_With_TZ>>
-     */
-    const masterMap = new Map<string, Set<string>>();
+    const masterMap = new Map<string, Set<number>>();
 
     for (const log of rawLogs) {
       if (!log.recordTime || !log.deviceUserId) continue;
 
-      /**
-       * 1️⃣ PARSE GIỜ THEO MÚI GIỜ VIỆT NAM NGAY TỪ ĐẦU
-       * Quan trọng: Dùng dayjs.tz(time, timezone) để "ép" giá trị đầu vào
-       * luôn được hiểu là giờ VN, bất kể server đang ở UTC hay Local.
-       */
-      const timeVN = dayjs.tz(log.recordTime, VN_TZ);
+      // BƯỚC 1: Đọc giờ từ máy chấm công (Coi như giờ VN gốc, không cho phép tự convert)
+      // Dùng format để parse trực tiếp, tránh bị Dayjs tự ý cộng trừ 7 tiếng
+      const timeVN = dayjs.tz(
+        dayjs(log.recordTime).format("YYYY-MM-DD HH:mm:ss"),
+        VN_TZ,
+      );
 
       const code = log.deviceUserId.toString().padStart(5, "0");
+      let dateKey = timeVN.format("YYYY-MM-DD");
 
-      /**
-       * 2️⃣ XÁC ĐỊNH NGÀY LÀM VIỆC
-       * Logic ca đêm: Trước 5h sáng tính cho ngày hôm trước
-       */
-      let workDate = timeVN.format("YYYY-MM-DD");
+      // BƯỚC 2: Xử lý ca đêm (Nếu chấm trước 5h sáng thì tính cho ngày hôm trước)
       if (timeVN.hour() < 5) {
-        workDate = timeVN.subtract(1, "day").format("YYYY-MM-DD");
+        dateKey = timeVN.subtract(1, "day").format("YYYY-MM-DD");
       }
 
-      const key = `${code}_${workDate}`;
-      if (!masterMap.has(key)) {
-        masterMap.set(key, new Set<string>());
-      }
-
-      // Lưu ISO string bao gồm cả offset (+07:00) để không bị lạc trôi múi giờ
-      masterMap.get(key)!.add(timeVN.toISOString());
+      const key = `${code}_${dateKey}`;
+      if (!masterMap.has(key)) masterMap.set(key, new Set<number>());
+      masterMap.get(key)!.add(timeVN.valueOf());
     }
 
-    console.log(`🚀 [Attendance] Đã gom nhóm ${masterMap.size} ca làm việc.`);
-
-    for (const [key, timeStrings] of masterMap.entries()) {
+    for (const [key, timestampSet] of masterMap.entries()) {
       try {
         const [employeeCode, dateStr] = key.split("_");
         await this.persistAttendance(
           employeeCode,
           dateStr,
-          Array.from(timeStrings),
+          Array.from(timestampSet),
         );
       } catch (error: any) {
-        console.error(`❌ Lỗi xử lý ca ${key}:`, error?.message);
+        console.error(`❌ Lỗi nhóm ${key}:`, error?.message);
       }
     }
   }
 
   private static async persistAttendance(
     code: string,
-    dateStr: string, // YYYY-MM-DD
-    timeStrings: string[],
+    dateStr: string,
+    timestamps: number[],
   ) {
     const emp = await prisma.employee.findUnique({
       where: { employeeCode: code },
@@ -75,81 +63,47 @@ export class AttendanceLogicService {
     });
     if (!emp) return;
 
-    /**
-     * 3️⃣ LẤY DỮ LIỆU HIỆN TẠI
-     * Prisma sẽ tự động convert DateTime từ DB sang JS Date Object (UTC)
-     */
-    const existing = await prisma.attendance.findUnique({
-      where: {
-        employeeId_date: {
-          employeeId: emp.id,
-          date: dateStr,
-        },
-      },
-    });
+    // BƯỚC 3: Lấy dữ liệu cũ (Dùng Raw SQL để tránh Prisma tự convert lệch ngày)
+    const existing: any = await prisma.$queryRaw`
+      SELECT checkInTime, checkOutTime FROM Attendance 
+      WHERE employeeId = ${emp.id} AND date = ${dateStr}
+    `;
 
-    /**
-     * 4️⃣ TỔNG HỢP CÁC MỐC GIỜ (TIMESTAMP)
-     */
-    const timePool = new Set<number>();
+    const timePool = new Set<number>(timestamps);
+    if (existing && existing[0]) {
+      if (existing[0].checkInTime)
+        timePool.add(dayjs(existing[0].checkInTime).valueOf());
+      if (existing[0].checkOutTime)
+        timePool.add(dayjs(existing[0].checkOutTime).valueOf());
+    }
 
-    // Thêm log mới
-    timeStrings.forEach((s) => timePool.add(dayjs(s).valueOf()));
+    const sorted = Array.from(timePool).sort((a, b) => a - b);
+    const minTs = sorted[0];
+    const maxTs = sorted[sorted.length - 1];
 
-    // Thêm log cũ đã có trong DB (nếu có)
-    if (existing?.checkInTime)
-      timePool.add(dayjs(existing.checkInTime).valueOf());
-    if (existing?.checkOutTime)
-      timePool.add(dayjs(existing.checkOutTime).valueOf());
-
-    const sortedTs = Array.from(timePool).sort((a, b) => a - b);
-    const firstTs = sortedTs[0];
-    const lastTs = sortedTs[sortedTs.length - 1];
-
-    /**
-     * 5️⃣ TÍNH TOÁN GIỜ LÀM
-     */
-    const checkInDate = new Date(firstTs);
-    let checkOutDate: Date | null = null;
+    const finalInStr = dayjs(minTs).format("YYYY-MM-DD HH:mm:ss");
+    let finalOutStr: string | null = null;
     let workingHours = 0;
 
-    // Chỉ tính Check-out nếu khoảng cách > 10 phút
-    if (sortedTs.length > 1 && lastTs - firstTs >= 10 * 60000) {
-      checkOutDate = new Date(lastTs);
-      const hours = (lastTs - firstTs) / 3600000;
+    if (sorted.length > 1 && maxTs - minTs >= 10 * 60000) {
+      finalOutStr = dayjs(maxTs).format("YYYY-MM-DD HH:mm:ss");
+      let hours = (maxTs - minTs) / 3600000;
+      if (hours > 5) hours -= 1; // Trừ nghỉ trưa
       workingHours = Math.min(14, Math.max(0, parseFloat(hours.toFixed(2))));
     }
 
-    /**
-     * 6️⃣ LƯU VÀO DATABASE
-     * Sử dụng upsert của Prisma thay vì raw SQL để an toàn hơn về kiểu dữ liệu.
-     * Lưu ý: Prisma truyền Date object vào DB sẽ tự động chuẩn hóa UTC.
-     */
-    await prisma.attendance.upsert({
-      where: {
-        employeeId_date: {
-          employeeId: emp.id,
-          date: dateStr,
-        },
-      },
-      create: {
-        employeeId: emp.id,
-        date: dateStr,
-        checkInTime: checkInDate,
-        checkOutTime: checkOutDate,
-        workingHours: workingHours,
-      },
-      update: {
-        checkInTime: checkInDate,
-        checkOutTime: checkOutDate,
-        workingHours: workingHours,
-      },
-    });
+    // BƯỚC 4: Lưu vào DB (Ép chuỗi String để MySQL nhận đúng ngày 17)
+    await prisma.$executeRaw`
+      INSERT INTO Attendance (employeeId, date, checkInTime, checkOutTime, workingHours)
+      VALUES (${emp.id}, ${dateStr}, ${finalInStr}, ${finalOutStr}, ${workingHours})
+      ON DUPLICATE KEY UPDATE
+        checkInTime = VALUES(checkInTime),
+        checkOutTime = VALUES(checkOutTime),
+        workingHours = VALUES(workingHours);
+    `;
 
     console.log(
-      `✅ [${dateStr}] ${emp.name}: ` +
-        `${dayjs(checkInDate).tz(VN_TZ).format("HH:mm")} -> ` +
-        `${checkOutDate ? dayjs(checkOutDate).tz(VN_TZ).format("HH:mm") : "--:--"}`,
+      `✅ [${dateStr}] ${emp.name}: ${dayjs(minTs).format("HH:mm")} -> ${finalOutStr ? dayjs(maxTs).format("HH:mm") : "--:--"}`,
     );
   }
 }
