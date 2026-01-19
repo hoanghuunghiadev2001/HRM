@@ -13,33 +13,24 @@ const VN_TZ = "Asia/Ho_Chi_Minh";
 export class AttendanceLogicService {
   /**
    * Xử lý dữ liệu thô từ máy chấm công gửi về.
-   * @param rawLogs: Mảng các bản ghi (recordTime, deviceUserId, ...)
    */
   static async processMachineLogs(rawLogs: any[]) {
     if (!Array.isArray(rawLogs) || rawLogs.length === 0) return;
 
-    // 1. GOM NHÓM THEO NHÂN VIÊN VÀ NGÀY CÔNG (DÙNG GIỜ VIỆT NAM GỐC)
+    // 1. GOM NHÓM THEO NHÂN VIÊN VÀ NGÀY CÔNG (DÙNG GIỜ VN GỐC)
     const masterMap = new Map<string, Set<number>>();
 
     for (const log of rawLogs) {
       if (!log.recordTime || !log.deviceUserId) continue;
 
-      /**
-       * CHIẾN THUẬT FIX LỖI NHẢY NGÀY:
-       * Chúng ta trích xuất chuỗi thời gian thô (ví dụ: 07:52:00)
-       * và ép nó trực tiếp vào múi giờ Việt Nam, KHÔNG để Dayjs tự tính toán lúc parse.
-       */
+      // Trích xuất chuỗi thô để Dayjs không tự ý cộng trừ giờ lúc parse ban đầu
       const rawString = dayjs(log.recordTime).format("YYYY-MM-DD HH:mm:ss");
       const timeVN = dayjs.tz(rawString, VN_TZ);
 
       const code = log.deviceUserId.toString().padStart(5, "0");
       let workDate = timeVN.format("YYYY-MM-DD");
 
-      /**
-       * XỬ LÝ CA ĐÊM:
-       * Nếu nhân viên chấm công trước 3h sáng Việt Nam,
-       * chúng ta tính mốc này vào ngày làm việc của hôm trước.
-       */
+      // LOGIC CA ĐÊM: Trước 3h sáng VN tính cho ngày hôm trước
       if (timeVN.hour() < 3) {
         workDate = timeVN.subtract(1, "day").format("YYYY-MM-DD");
       }
@@ -49,7 +40,6 @@ export class AttendanceLogicService {
         masterMap.set(key, new Set<number>());
       }
 
-      // Lưu dưới dạng timestamp (ms) để dễ dàng tìm Min (In) và Max (Out)
       masterMap.get(key)!.add(timeVN.valueOf());
     }
 
@@ -57,7 +47,7 @@ export class AttendanceLogicService {
       `🚀 [Attendance] Đã gom nhóm xong ${masterMap.size} ca làm việc.`,
     );
 
-    // 2. DUYỆT QUA TỪNG NHÓM ĐỂ LƯU VÀO CƠ SỞ DỮ LIỆU
+    // 2. DUYỆT TỪNG NHÓM ĐỂ LƯU VÀO DATABASE
     for (const [key, timestampSet] of masterMap.entries()) {
       try {
         const [employeeCode, dateStr] = key.split("_");
@@ -73,23 +63,20 @@ export class AttendanceLogicService {
   }
 
   /**
-   * Hàm lưu dữ liệu vào bảng Attendance.
-   * Đảm bảo tính nhất quán giữa ngày công địa phương và giờ quốc tế (UTC).
+   * Lưu hoặc cập nhật dữ liệu vào bảng Attendance.
    */
   private static async persistAttendance(
     code: string,
     dateStr: string,
     timestamps: number[],
   ) {
-    // Tìm ID nhân viên dựa trên mã code
     const emp = await prisma.employee.findUnique({
       where: { employeeCode: code },
       select: { id: true, name: true },
     });
     if (!emp) return;
 
-    // 3. LẤY DỮ LIỆU ĐÃ CÓ TRONG DATABASE ĐỂ TRÁNH GHI ĐÈ MẤT GIỜ
-    // Sử dụng $queryRaw với dateStr để đảm bảo tính chính xác tuyệt đối của ngày công
+    // 3. LẤY DỮ LIỆU CŨ TRONG DB
     const existing: any = await prisma.$queryRaw`
       SELECT checkInTime, checkOutTime FROM Attendance 
       WHERE employeeId = ${emp.id} AND date = ${dateStr} 
@@ -98,7 +85,7 @@ export class AttendanceLogicService {
 
     const timePool = new Set<number>(timestamps);
     if (existing && existing[0]) {
-      // Dữ liệu DB lấy lên là UTC, chuyển về timestamp để so sánh
+      // Ép về UTC để lấy timestamp chuẩn không bị lệch
       if (existing[0].checkInTime)
         timePool.add(dayjs.utc(existing[0].checkInTime).valueOf());
       if (existing[0].checkOutTime)
@@ -109,44 +96,39 @@ export class AttendanceLogicService {
     const minTs = sorted[0];
     const maxTs = sorted[sorted.length - 1];
 
-    // 4. CHUẨN BỊ DỮ LIỆU ĐỂ LƯU (SỬ DỤNG ISO STRING KÈM 'Z' ĐỂ MySQL KHÔNG TỰ TRỪ GIỜ)
-    // Ví dụ: 07:52 (VN) -> 00:52:00.000Z (UTC)
-    const finalInISO = dayjs(minTs).toISOString();
-    let finalOutISO: string | null = null;
+    /**
+     * FIX LỖI 1292:
+     * Chuyển sang UTC rồi format theo định dạng MySQL: YYYY-MM-DD HH:mm:ss
+     * Việc dùng .utc().format(...) sẽ tạo ra chuỗi sạch mà MySQL DATETIME chấp nhận.
+     */
+    const finalInSQL = dayjs(minTs).utc().format("YYYY-MM-DD HH:mm:ss");
+    let finalOutSQL: string | null = null;
     let workingHours = 0;
 
-    // Nếu có ít nhất 2 lần chấm và cách nhau trên 10 phút thì mới tính giờ ra
     if (sorted.length > 1 && maxTs - minTs >= 10 * 60000) {
-      finalOutISO = dayjs(maxTs).toISOString();
+      finalOutSQL = dayjs(maxTs).utc().format("YYYY-MM-DD HH:mm:ss");
 
-      // Logic tính tổng giờ công (Tự động trừ 1 giờ nghỉ trưa nếu làm trên 5 tiếng)
       let diffHours = (maxTs - minTs) / 3600000;
-      if (diffHours > 5) diffHours -= 1;
+      if (diffHours > 5) diffHours -= 1; // Nghỉ trưa
       workingHours = Math.min(
         14,
         Math.max(0, parseFloat(diffHours.toFixed(2))),
       );
     }
 
-    // 5. THỰC THI LƯU TRỮ VỚI RAW SQL
-    // dateStr: YYYY-MM-DD (Ngày Việt Nam)
-    // finalInISO: ISO String (Giờ UTC)
+    // 5. THỰC THI LƯU TRỮ
+    // Truyền tham số riêng biệt vào mảng để Prisma xử lý an toàn
     await prisma.$executeRaw`
       INSERT INTO Attendance (employeeId, date, checkInTime, checkOutTime, workingHours)
-      VALUES (${emp.id}, ${dateStr}, ${finalInISO}, ${finalOutISO}, ${workingHours})
+      VALUES (${emp.id}, ${dateStr}, ${finalInSQL}, ${finalOutSQL}, ${workingHours})
       ON DUPLICATE KEY UPDATE
         checkInTime = VALUES(checkInTime),
         checkOutTime = VALUES(checkOutTime),
         workingHours = VALUES(workingHours);
     `;
 
-    // In log để kiểm tra thực tế
-    const vnInLog = dayjs(minTs).tz(VN_TZ).format("HH:mm:ss");
-    const vnOutLog = finalOutISO
-      ? dayjs(maxTs).tz(VN_TZ).format("HH:mm:ss")
-      : "--:--";
     console.log(
-      `✅ [${dateStr}] Nhân viên: ${emp.name} | VN: ${vnInLog} -> ${vnOutLog} | DB: ${finalInISO}`,
+      `✅ [${dateStr}] ${emp.name}: VN ${dayjs(minTs).tz(VN_TZ).format("HH:mm")} -> SQL UTC ${finalInSQL}`,
     );
   }
 }
