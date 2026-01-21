@@ -115,7 +115,7 @@ export default function MyProposalsPolished() {
       }
 
       const response = await fetch(
-        `/api/proposals/my-proposals?${params.toString()}`
+        `/api/proposals/my-proposals?${params.toString()}`,
       );
       const data = await response.json();
 
@@ -141,7 +141,7 @@ export default function MyProposalsPolished() {
     }, 400);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchText, statusFilter, proposalTypeFilter, selectedDate, pageSize]);
+  }, [statusFilter, proposalTypeFilter, selectedDate, pageSize]);
 
   useEffect(() => {
     fetchProposals(); /* eslint-disable-next-line react-hooks/exhaustive-deps */
@@ -150,7 +150,7 @@ export default function MyProposalsPolished() {
   const showConfirm = async (
     proposalId: number,
     action: "sign" | "approve",
-    status: "approved" | "rejected"
+    status: "approved" | "rejected",
   ) => {
     setActionLoading(proposalId);
     try {
@@ -259,7 +259,7 @@ export default function MyProposalsPolished() {
         width: 120,
       },
     ],
-    []
+    [],
   );
 
   const createdColumns: ColumnsType<Proposal> = useMemo(() => {
@@ -297,11 +297,11 @@ export default function MyProposalsPolished() {
 
   const pendingColumns: ColumnsType<Proposal> = useMemo(
     () => [...columnsCommon],
-    [columnsCommon]
+    [columnsCommon],
   );
 
   const actionColumn = (
-    actionType: "sign" | "approve"
+    actionType: "sign" | "approve",
   ): ColumnType<Proposal> => ({
     title: "Hành động",
     key: "action",
@@ -390,6 +390,7 @@ export default function MyProposalsPolished() {
               size="middle"
               onChange={(e) => setSearchText(e.target.value)}
               value={searchText}
+              onPressEnter={() => fetchProposals(1, pageSize)}
             />
           </Col>
 
