@@ -391,6 +391,7 @@ export default function MyProposalsPolished() {
               onChange={(e) => setSearchText(e.target.value)}
               value={searchText}
               onPressEnter={() => fetchProposals(1, pageSize)}
+              onSearch={() => fetchProposals(1, pageSize)}
             />
           </Col>
 
