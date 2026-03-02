@@ -112,6 +112,37 @@ export default function AdminSalaryPage() {
   const [isViewLoading, setIsViewLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const handleUpload = async () => {
+    if (!file) return;
+
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("month", month.toString());
+    formData.append("year", year.toString());
+
+    try {
+      const res = await fetch("/api/salary/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (res.ok) {
+        alert("✅ Tải lên bảng lương thành công!");
+        setFile(null); // Reset file sau khi upload
+        fetchBatches(); // Load lại danh sách nhật ký
+      } else {
+        const errorData = await res.json();
+        alert(`❌ Lỗi: ${errorData.error || "Không thể tải lên"}`);
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("❌ Lỗi kết nối máy chủ");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchBatches = async () => {
     try {
       const res = await fetch("/api/salary/batch");
@@ -300,6 +331,8 @@ export default function AdminSalaryPage() {
 
                 <button
                   disabled={loading || !file}
+                  type="button"
+                  onClick={handleUpload}
                   className="w-full bg-slate-900 hover:bg-blue-600 disabled:bg-slate-200 text-white font-black py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-3 active:scale-95"
                 >
                   {loading ? (
