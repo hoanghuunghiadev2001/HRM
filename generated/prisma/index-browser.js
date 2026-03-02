@@ -393,6 +393,75 @@ exports.Prisma.LunchMenuScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SalaryScalarFieldEnum = {
+  id: 'id',
+  batchId: 'batchId',
+  employeeId: 'employeeId',
+  month: 'month',
+  year: 'year',
+  type: 'type',
+  employeeCode: 'employeeCode',
+  fullName: 'fullName',
+  position: 'position',
+  grade: 'grade',
+  insuranceLevel: 'insuranceLevel',
+  contractDate: 'contractDate',
+  workingDays: 'workingDays',
+  notOfficial: 'notOfficial',
+  baseSalary: 'baseSalary',
+  efficiencySalary: 'efficiencySalary',
+  salary70: 'salary70',
+  phoneAllowance: 'phoneAllowance',
+  seniorityAllowance: 'seniorityAllowance',
+  mealAllowance: 'mealAllowance',
+  maternityAllowance: 'maternityAllowance',
+  houseAllowance: 'houseAllowance',
+  productivitySalary: 'productivitySalary',
+  productivityOther: 'productivityOther',
+  productivitySCC: 'productivitySCC',
+  productivityPaint: 'productivityPaint',
+  productivityAccessory: 'productivityAccessory',
+  productivityParts: 'productivityParts',
+  bonusDay10: 'bonusDay10',
+  salaryAdjust: 'salaryAdjust',
+  bonusDay25: 'bonusDay25',
+  otherWork: 'otherWork',
+  bonus: 'bonus',
+  overtime: 'overtime',
+  otherIncome: 'otherIncome',
+  salaryDeduction: 'salaryDeduction',
+  insuranceDeduction: 'insuranceDeduction',
+  unemploymentInsu: 'unemploymentInsu',
+  unionFee: 'unionFee',
+  advancePayment: 'advancePayment',
+  socialWorkDeduction: 'socialWorkDeduction',
+  healthCardDeduction: 'healthCardDeduction',
+  insuranceArrears: 'insuranceArrears',
+  taxCompensation: 'taxCompensation',
+  taxTNCN: 'taxTNCN',
+  phoneDeduction: 'phoneDeduction',
+  taxRefund: 'taxRefund',
+  salaryDeductionFinal: 'salaryDeductionFinal',
+  totalGross: 'totalGross',
+  totalNet: 'totalNet',
+  firstReceived: 'firstReceived',
+  bonusReceived: 'bonusReceived',
+  actualReceived: 'actualReceived',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SalaryBatchScalarFieldEnum = {
+  id: 'id',
+  filename: 'filename',
+  month: 'month',
+  year: 'year',
+  totalRows: 'totalRows',
+  status: 'status',
+  createdById: 'createdById',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -517,6 +586,20 @@ exports.Prisma.LunchMenuOrderByRelevanceFieldEnum = {
   soup: 'soup',
   dessert: 'dessert'
 };
+
+exports.Prisma.SalaryOrderByRelevanceFieldEnum = {
+  type: 'type',
+  employeeCode: 'employeeCode',
+  fullName: 'fullName',
+  position: 'position',
+  grade: 'grade',
+  insuranceLevel: 'insuranceLevel'
+};
+
+exports.Prisma.SalaryBatchOrderByRelevanceFieldEnum = {
+  filename: 'filename',
+  status: 'status'
+};
 exports.Sex = exports.$Enums.Sex = {
   MALE: 'MALE',
   FEMALE: 'FEMALE'
@@ -591,7 +674,9 @@ exports.Prisma.ModelName = {
   AssetAssignment: 'AssetAssignment',
   Notification: 'Notification',
   CompensatoryLeave: 'CompensatoryLeave',
-  LunchMenu: 'LunchMenu'
+  LunchMenu: 'LunchMenu',
+  Salary: 'Salary',
+  SalaryBatch: 'SalaryBatch'
 };
 
 /**

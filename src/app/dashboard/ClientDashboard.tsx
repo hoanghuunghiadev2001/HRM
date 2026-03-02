@@ -23,6 +23,7 @@ import {
   PieChart,
   PackagePlus,
   Box,
+  Wallet,
 } from "lucide-react";
 import {
   EllipsisOutlined,
@@ -137,7 +138,29 @@ export default function ClientDashboard({
         },
       ],
     },
-
+    {
+      key: "/dashboard/salary",
+      icon: <FileStack size={20} />,
+      label: "Quản lý lương",
+      children: [
+        ...(employeeCode === "01375" || employeeCode === "00939"
+          ? [
+              {
+                key: "/dashboard/salary",
+                icon: <ShieldCheck size={18} />, // Icon bảo mật/quản trị cho Admin
+                label: (
+                  <Link href="/dashboard/salary">Bảng lương hệ thống</Link>
+                ),
+              },
+            ]
+          : []),
+        {
+          key: "/dashboard/my-salary",
+          icon: <Wallet size={18} />, // Icon ví tiền cá nhân
+          label: <Link href="/dashboard/my-salary">Xem lương của tôi</Link>,
+        },
+      ],
+    },
     {
       key: "/dashboard/attendance",
       icon: <Fingerprint size={20} />,

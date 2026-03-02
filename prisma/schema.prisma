@@ -72,6 +72,8 @@ model Employee {
   assetsReceived     AssetAssignment[]   @relation("EmployeeAsset")
   assetsIssued       AssetAssignment[]   @relation("IssuedAssets")
   compensatoryLeaves CompensatoryLeave[]
+  salaries           Salary[]
+  salaryBatches      SalaryBatch[]
 
   @@index([employeeCode])
   @@index([managerId])
@@ -354,8 +356,10 @@ model AssetAssignment {
   note       String?
 
   asset    Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
-  employee Employee  @relation("EmployeeAsset", fields: [employeeId], references: [id], onDelete: Cascade)
-  issuedBy Employee? @relation("IssuedAssets", fields: [issuedById], references: [id], onDelete: SetNull)
+  // Thêm map: "FK_EmployeeAsset" để định danh riêng biệt
+  employee Employee  @relation("EmployeeAsset", fields: [employeeId], references: [id], onDelete: Cascade, map: "FK_AssetAssignment_Employee")
+  // Thêm map: "FK_IssuedAssets"
+  issuedBy Employee? @relation("IssuedAssets", fields: [issuedById], references: [id], onDelete: SetNull, map: "FK_AssetAssignment_Issuer")
 
   @@index([employeeId])
   @@index([issuedById])
@@ -464,4 +468,104 @@ model LunchMenu {
   updatedAt  DateTime @updatedAt
 
   @@index([weekNumber, year])
+}
+
+model Salary {
+  id Int @id @default(autoincrement())
+
+  // ===== QUẢN LÝ =====
+  batchId    Int?
+  employeeId Int
+  month      Int
+  year       Int
+  type       String // STAFF / MANAGER
+
+  // ===== THÔNG TIN NHÂN VIÊN =====
+  employeeCode   String
+  fullName       String
+  position       String?
+  grade          String? // Ngạch nhân viên
+  insuranceLevel String? // Bậc đóng BHXH
+  contractDate   DateTime? // Ngày ký HĐLĐ
+  workingDays    Float     @default(0)
+  notOfficial    Float     @default(0) // Chưa ký chính thức
+
+  // ===== LƯƠNG CỐ ĐỊNH =====
+  baseSalary       Float @default(0) // Lương BHXH + PC
+  efficiencySalary Float @default(0)
+  salary70         Float @default(0)
+
+  // ===== PHỤ CẤP =====
+  phoneAllowance     Float @default(0)
+  seniorityAllowance Float @default(0)
+  mealAllowance      Float @default(0)
+  maternityAllowance Float @default(0)
+  houseAllowance     Float @default(0) // Phụ cấp thuê nhà
+
+  // ===== NĂNG SUẤT =====
+  productivitySalary    Float @default(0)
+  productivityOther     Float @default(0)
+  productivitySCC       Float @default(0)
+  productivityPaint     Float @default(0)
+  productivityAccessory Float @default(0)
+  productivityParts     Float @default(0)
+
+  // ===== THƯỞNG & CỘNG THÊM =====
+  bonusDay10   Float @default(0)
+  salaryAdjust Float @default(0) // Bù lương
+  bonusDay25   Float @default(0)
+  otherWork    Float @default(0)
+  bonus        Float @default(0)
+  overtime     Float @default(0)
+  otherIncome  Float @default(0)
+
+  // ===== KHẤU TRỪ =====
+  salaryDeduction      Float @default(0) // Trừ lương (đầu sheet)
+  insuranceDeduction   Float @default(0) // BHXH-YT 9.5%
+  unemploymentInsu     Float @default(0) // BHTN 1%
+  unionFee             Float @default(0) // Công đoàn
+  advancePayment       Float @default(0)
+  socialWorkDeduction  Float @default(0)
+  healthCardDeduction  Float @default(0)
+  insuranceArrears     Float @default(0)
+  taxCompensation      Float @default(0) // Nộp bù thuế
+  taxTNCN              Float @default(0)
+  phoneDeduction       Float @default(0)
+  taxRefund            Float @default(0) // Hoàn thuế
+  salaryDeductionFinal Float @default(0) // Trừ lương cuối sheet
+
+  // ===== TỔNG =====
+  totalGross Float @default(0) // TỔNG LƯƠNG (1)
+  totalNet   Float @default(0) // TỔNG LƯƠNG (2)
+
+  // ===== THỰC NHẬN =====
+  firstReceived  Float @default(0)
+  bonusReceived  Float @default(0) // ĐÃ NHẬN THƯỞNG
+  actualReceived Float @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  employee Employee     @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  batch    SalaryBatch? @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@unique([employeeId, month, year, type])
+  @@index([employeeCode])
+}
+
+model SalaryBatch {
+  id          Int      @id @default(autoincrement())
+  filename    String
+  month       Int
+  year        Int
+  totalRows   Int      @default(0)
+  status      String   @default("success") // success, failed
+  createdById Int
+  createdAt   DateTime @default(now())
+
+  // Quan hệ: 1 Batch có nhiều dòng lương
+  salaries  Salary[]
+  createdBy Employee @relation(fields: [createdById], references: [id])
+
+  @@index([month, year])
 }

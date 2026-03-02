@@ -73,7 +73,7 @@ export async function GET(req: NextRequest) {
             employeeCode: a.approver?.employeeCode,
             approverStatus: a.status,
             approverApprovedAt: a.approvedAt,
-          }))
+          })),
         )
         .sort((a, b) => a.level - b.level);
 
@@ -84,11 +84,11 @@ export async function GET(req: NextRequest) {
               h.approverStatus === "approved"
                 ? "Đã duyệt"
                 : h.approverStatus === "rejected"
-                ? "Từ chối"
-                : h.approverStatus === "revoked"
-                ? "Thu hồi"
-                : "Đang chờ"
-            }`
+                  ? "Từ chối"
+                  : h.approverStatus === "revoked"
+                    ? "Thu hồi"
+                    : "Đang chờ"
+            }`,
         )
         .join("; ");
 
@@ -104,7 +104,7 @@ export async function GET(req: NextRequest) {
     console.error("Lỗi token hoặc truy vấn:", error);
     return NextResponse.json(
       { message: "Token không hợp lệ" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 }
@@ -130,7 +130,7 @@ export async function PUT(req: NextRequest) {
     if (!leaveRequestId) {
       return NextResponse.json(
         { message: "Thiếu leaveRequestId" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -155,17 +155,14 @@ export async function PUT(req: NextRequest) {
     if (!leave) {
       return NextResponse.json(
         { message: "Không tìm thấy đơn nghỉ phép" },
-        { status: 404 }
+        { status: 404 },
       );
     }
-    console.log(leave.employeeId);
-    console.log(userId);
-    console.log(decoded.role);
 
     if (leave.employeeId !== userId && decoded.role !== "ADMIN") {
       return NextResponse.json(
         { message: "Bạn không có quyền thu hồi đơn này" },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -175,7 +172,7 @@ export async function PUT(req: NextRequest) {
     if (now.isAfter(startDate)) {
       return NextResponse.json(
         { message: "Không thể thu hồi đơn vì đã tới ngày nghỉ" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
