@@ -4,20 +4,43 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> }, // Sửa: Khai báo params là một Promise
 ) {
   try {
-    const batchId = parseInt(params.id);
+    // Sửa: Phải await params trước khi bóc tách id
+    const { id } = await params;
+
+    const batchId = parseInt(id);
+
+    // Kiểm tra ID hợp lệ để tránh lỗi ép kiểu
+    if (isNaN(batchId)) {
+      return NextResponse.json(
+        { error: "ID đợt lương không hợp lệ" },
+        { status: 400 },
+      );
+    }
+
     const salaries = await prisma.salary.findMany({
       where: { batchId: batchId },
       include: {
-        employee: { select: { name: true, employeeCode: true } },
+        employee: {
+          select: {
+            name: true,
+            employeeCode: true,
+          },
+        },
       },
-      orderBy: { fullName: "asc" },
+      orderBy: {
+        fullName: "asc",
+      },
     });
 
     return NextResponse.json(salaries);
   } catch (error) {
-    return NextResponse.json({ error: "Lỗi tải chi tiết" }, { status: 500 });
+    console.error("Fetch Details Error:", error);
+    return NextResponse.json(
+      { error: "Lỗi tải chi tiết bảng lương" },
+      { status: 500 },
+    );
   }
 }
