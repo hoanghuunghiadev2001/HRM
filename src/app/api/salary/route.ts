@@ -74,14 +74,14 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { employeeId, month, year, ...data } = body;
+    const { employeeId, month, year, type, ...data } = body;
 
     const newSalary = await prisma.salary.upsert({
       where: {
-        employeeId_month_year: { employeeId, month, year },
+        employeeId_month_year_type: { employeeId, month, year, type },
       },
       update: data,
-      create: { employeeId, month, year, ...data },
+      create: { employeeId, month, year, type, ...data },
     });
 
     return NextResponse.json(newSalary);
