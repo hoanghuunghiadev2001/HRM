@@ -62,13 +62,13 @@ export default function SalaryDashboard() {
 
   const stats = useMemo(() => {
     if (data.length === 0) return { total: 0, avg: 0, tax: 0, maxMonth: "N/A" };
-    const total = data.reduce((acc, curr) => acc + curr.actualReceived, 0);
+    const total = data.reduce((acc, curr) => acc + curr.totalMonthlyNet, 0);
     const tax = data.reduce(
       (acc, curr) => acc + (curr.totalDeductions || 0),
       0,
     );
-    const maxVal = Math.max(...data.map((d) => d.actualReceived));
-    const maxMonthObj = data.find((d) => d.actualReceived === maxVal);
+    const maxVal = Math.max(...data.map((d) => d.totalMonthlyNet));
+    const maxMonthObj = data.find((d) => d.totalMonthlyNet === maxVal);
     return {
       total,
       avg: total / data.length,
@@ -186,7 +186,7 @@ export default function SalaryDashboard() {
               />
               <Area
                 type="monotone"
-                dataKey="actualReceived"
+                dataKey="totalMonthlyNet"
                 stroke="#2563eb"
                 strokeWidth={3}
                 fill="url(#colorNet)"
@@ -232,7 +232,7 @@ export default function SalaryDashboard() {
                     {formatVND(item.totalGross)}
                   </td>
                   <td className="px-6 py-5 border-y border-slate-50 text-right font-black text-blue-600">
-                    {formatVND(item.actualReceived)}
+                    {formatVND(item.totalMonthlyNet)}
                   </td>
                   <td className="px-6 py-5 border-y border-r border-slate-50 rounded-r-2xl text-center">
                     <div className="inline-flex p-2 bg-slate-50 rounded-lg group-hover:bg-slate-900 group-hover:text-white transition-all">
@@ -268,7 +268,7 @@ export default function SalaryDashboard() {
               </div>
               <div className="text-right flex items-center gap-3">
                 <p className="text-sm font-black text-blue-600">
-                  {formatVND(item.actualReceived)}
+                  {formatVND(item.totalMonthlyNet)}
                 </p>
                 <ChevronRight size={16} className="text-slate-300" />
               </div>
@@ -358,7 +358,7 @@ const SalaryDetailModal = ({ salary, onClose, formatVND }: any) => {
           year: salary.year,
           reason: reason,
           totalGross: salary.totalGross,
-          actualReceived: salary.actualReceived,
+          totalMonthlyNet: salary.totalMonthlyNet,
         }),
       });
       if (response.ok) alert("✅ Đã gửi yêu cầu thành công!");
@@ -426,6 +426,14 @@ const SalaryDetailModal = ({ salary, onClose, formatVND }: any) => {
                     value={formatVND(salary.mealAllowance)}
                   />
                   <DetailRow
+                    label="Lương hiệu quả"
+                    value={formatVND(salary.efficiencySalary || 0)}
+                  />
+                  <DetailRow
+                    label="Tổng lương"
+                    value={formatVND(salary.totalGross || 0)}
+                  />
+                  <DetailRow
                     label="Khác"
                     value={formatVND(salary.otherAllowances || 0)}
                   />
@@ -456,7 +464,7 @@ const SalaryDetailModal = ({ salary, onClose, formatVND }: any) => {
                     Thực nhận (Net)
                   </p>
                   <p className="text-2xl md:text-4xl font-black">
-                    {formatVND(salary.actualReceived)}
+                    {formatVND(salary.totalMonthlyNet)}
                   </p>
                 </div>
                 <div className="w-12 h-12 md:w-16 md:h-16 bg-white/10 rounded-full flex items-center justify-center">

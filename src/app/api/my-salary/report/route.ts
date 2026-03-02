@@ -16,7 +16,6 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const year = Number(searchParams.get("year")) || dayjs().year();
 
-    // Lấy toàn bộ các trường lương của nhân viên trong năm được chọn
     const salaries = await prisma.salary.findMany({
       where: {
         employeeId: decoded.id,
@@ -25,24 +24,29 @@ export async function GET(req: NextRequest) {
       orderBy: { month: "asc" },
     });
 
-    // Format dữ liệu kết hợp cho cả biểu đồ và bảng
     const reportData = salaries.map((s) => {
-      // Tính tổng các khoản giảm trừ để hiển thị nhanh trên bảng
+      // 1. Tính tổng các khoản giảm trừ
       const totalDeductions =
-        s.insuranceDeduction +
-        s.unemploymentInsu +
-        s.unionFee +
-        s.taxTNCN +
-        s.advancePayment +
-        s.phoneDeduction +
-        s.salaryDeductionFinal;
+        (s.insuranceDeduction || 0) +
+        (s.unemploymentInsu || 0) +
+        (s.unionFee || 0) +
+        (s.taxTNCN || 0) +
+        (s.advancePayment || 0) +
+        (s.phoneDeduction || 0) +
+        (s.salaryDeductionFinal || 0);
+
+      // 2. Tính TỔNG THỰC NHẬN CẢ THÁNG (Lần 1 + Thực nhận còn lại)
+      // Đây là số tiền thực tế chảy vào túi nhân viên
+      const totalMonthlyNet = (s.firstReceived || 0) + (s.actualReceived || 0);
 
       return {
         ...s,
         displayMonth: `Tháng ${s.month}`,
         totalDeductions: totalDeductions,
-        // Các key gọn cho biểu đồ
-        chartNet: s.actualReceived,
+        totalMonthlyNet: totalMonthlyNet, // Trường mới để hiển thị trên bảng/biểu đồ
+
+        // Cập nhật lại key cho biểu đồ để phản ánh đúng tổng thu nhập
+        chartNet: totalMonthlyNet,
         chartGross: s.totalGross,
       };
     });
