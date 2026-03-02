@@ -126,6 +126,34 @@ export default function AdminSalaryPage() {
     fetchBatches();
   }, []);
 
+  const handleDeleteBatch = async (batchId: number) => {
+    // Hiển thị confirm để tránh xóa nhầm
+    if (
+      !confirm(
+        "⚠️ Bạn có chắc chắn muốn xóa toàn bộ đợt lương này? Hành động này không thể hoàn tác!",
+      )
+    )
+      return;
+
+    try {
+      const res = await fetch(`/api/salary/batch/${batchId}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        alert("✅ Đã xóa đợt lương thành công!");
+        // Cập nhật lại danh sách ngay lập tức để UI biến mất item đó
+        setBatches((prev) => prev.filter((b: any) => b.id !== batchId));
+      } else {
+        const errorData = await res.json();
+        alert(`❌ Lỗi: ${errorData.error || "Không thể xóa"}`);
+      }
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert("❌ Lỗi kết nối máy chủ");
+    }
+  };
+
   const handleViewDetails = async (batch: any) => {
     setSelectedBatch(batch);
     setIsViewModalOpen(true);
@@ -329,7 +357,10 @@ export default function AdminSalaryPage() {
                     >
                       <ChevronRight size={20} />
                     </button>
-                    <button className="h-10 w-10 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shadow-sm">
+                    <button
+                      onClick={() => handleDeleteBatch(b.id)} // <--- Thêm dòng này
+                      className="h-10 w-10 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shadow-sm active:scale-90"
+                    >
                       <Trash2 size={18} />
                     </button>
                   </div>
