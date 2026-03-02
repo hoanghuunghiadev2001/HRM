@@ -178,7 +178,7 @@ export default function SalaryDashboard() {
                         Tháng {payload[0]?.payload?.month}
                       </p>
                       <p className="text-sm font-black">
-                        {formatVND(payload[0].value as number)}
+                        {formatVND(payload[0]?.value as number)}
                       </p>
                     </div>
                   )
