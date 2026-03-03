@@ -66,14 +66,18 @@ export default function ProposalDetailTailwind() {
 
   // modal
   const [rejectModalVisible, setRejectModalVisible] = useState(false);
+  const [approveModalVisible, setApproveModalVisible] = useState(false);
+
   const [rejectReason, setRejectReason] = useState("");
+  const [approveReason, setApproveReason] = useState("");
+
   const [currentAction, setCurrentAction] = useState<"sign" | "approve" | null>(
-    null
+    null,
   );
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editVehicleId, setEditVehicleId] = useState<number | null>(null);
   const [editTimeRange, setEditTimeRange] = useState<[Dayjs, Dayjs] | null>(
-    null
+    null,
   );
 
   useEffect(() => {
@@ -172,27 +176,34 @@ export default function ProposalDetailTailwind() {
         percent:
           50 +
           Math.round(
-            totalApprovers > 0 ? (approvedApprovers / totalApprovers) * 50 : 0
+            totalApprovers > 0 ? (approvedApprovers / totalApprovers) * 50 : 0,
           ),
         status: "active" as const,
       };
     return { percent: 0, status: "normal" as const };
   };
 
-  const handleApprove = async (action: "sign" | "approve") => {
+  const handleApprove = async () => {
     setActionLoading(true);
     try {
-      await axios.post(`/api/proposals/${proposalId}/${action}`, {
+      await axios.post(`/api/proposals/${proposalId}/${currentAction}`, {
         status: "approved",
+        reason: approveReason,
       });
       message.success("Đồng ý thành công");
       await fetchData();
+      setApproveModalVisible(false);
     } catch (e) {
       console.error(e);
       message.error("Có lỗi khi xử lý");
     } finally {
       setActionLoading(false);
     }
+  };
+
+  const handleApproveClick = (action: "sign" | "approve") => {
+    setCurrentAction(action);
+    setApproveModalVisible(true);
   };
 
   const handleRejectClick = (action: "sign" | "approve") => {
@@ -269,7 +280,11 @@ export default function ProposalDetailTailwind() {
                 {person?.employeeCode || ""}
               </div>
               {reason && reason !== "" && (
-                <div className="text-xs text-red-500">Lý do: {reason}</div>
+                <div
+                  className={`text-xs ${status === "approved" ? "text-green-700" : "text-red-500"} `}
+                >
+                  Lý do: {reason}
+                </div>
               )}
             </div>
             <div className="text-right">
@@ -279,15 +294,15 @@ export default function ProposalDetailTailwind() {
                     status === "approved"
                       ? "green"
                       : status === "pending"
-                      ? "orange"
-                      : "red"
+                        ? "orange"
+                        : "red"
                   }
                 >
                   {status === "approved"
                     ? "Đã ký"
                     : status === "pending"
-                    ? "Đang chờ"
-                    : "Đã từ chối"}
+                      ? "Đang chờ"
+                      : "Đã từ chối"}
                 </Tag>
               )}
               {date && (
@@ -404,7 +419,7 @@ export default function ProposalDetailTailwind() {
               <Button
                 type="primary"
                 loading={actionLoading}
-                onClick={() => handleApprove("sign")}
+                onClick={() => handleApproveClick("sign")}
               >
                 Đồng ý
               </Button>
@@ -423,7 +438,7 @@ export default function ProposalDetailTailwind() {
               <Button
                 type="primary"
                 loading={actionLoading}
-                onClick={() => handleApprove("approve")}
+                onClick={() => handleApproveClick("approve")}
               >
                 Đồng ý
               </Button>
@@ -507,8 +522,8 @@ export default function ProposalDetailTailwind() {
                     s.status === "approved"
                       ? "green"
                       : s.status === "rejected"
-                      ? "red"
-                      : "orange"
+                        ? "red"
+                        : "orange"
                   }
                 >
                   <div className="font-medium">{s.signer?.name}</div>
@@ -516,12 +531,14 @@ export default function ProposalDetailTailwind() {
                     {s.status === "approved"
                       ? "Đã ký"
                       : s.status === "rejected"
-                      ? "Đã từ chối"
-                      : "đang xử lý"}{" "}
+                        ? "Đã từ chối"
+                        : "đang xử lý"}{" "}
                     {s.signedAt ? `• ${toVietnamTime(s.signedAt)}` : ""}
                   </div>
                   {s.reason && (
-                    <div className="text-xs text-red-500">
+                    <div
+                      className={`text-xs ${s.status === "approved" ? "text-green-700" : "text-red-500"}`}
+                    >
                       Lý do: {s.reason}
                     </div>
                   )}
@@ -534,8 +551,8 @@ export default function ProposalDetailTailwind() {
                     a.status === "approved"
                       ? "green"
                       : a.status === "rejected"
-                      ? "red"
-                      : "orange"
+                        ? "red"
+                        : "orange"
                   }
                 >
                   <div className="font-medium">{a.approver?.name}</div>
@@ -543,12 +560,14 @@ export default function ProposalDetailTailwind() {
                     {a.status === "approved"
                       ? "Đã duyệt"
                       : a.status === "rejected"
-                      ? "Đã từ chối"
-                      : "đang xử lý"}{" "}
+                        ? "Đã từ chối"
+                        : "đang xử lý"}{" "}
                     {a.approvedAt ? `• ${toVietnamTime(a.approvedAt)}` : ""}
                   </div>
                   {a.reason && (
-                    <div className="text-xs text-red-500">
+                    <div
+                      className={`text-xs ${a.status === "approved" ? "text-green-700" : "text-red-500"}`}
+                    >
                       Lý do: {a.reason}
                     </div>
                   )}
@@ -583,7 +602,9 @@ export default function ProposalDetailTailwind() {
                       borderRadius: 8,
                     }}
                   >
-                    <Text type="secondary">Không thể xem trực tiếp file</Text>{" "}
+                    <Text type="secondary">
+                      Không thể xem trực tiếp file
+                    </Text>{" "}
                   </div>
                 )}{" "}
               </div>
@@ -662,6 +683,23 @@ export default function ProposalDetailTailwind() {
           value={rejectReason}
           onChange={(e) => setRejectReason(e.target.value)}
           placeholder="Nhập lý do từ chối..."
+        />
+      </Modal>
+
+      <Modal
+        title="Nhập lý do đồng ý (Nếu có)"
+        open={approveModalVisible}
+        onOk={handleApprove}
+        onCancel={() => setApproveModalVisible(false)}
+        okText="Xác nhận"
+        cancelText="Hủy"
+        confirmLoading={actionLoading}
+      >
+        <Input.TextArea
+          rows={4}
+          value={approveReason}
+          onChange={(e) => setApproveReason(e.target.value)}
+          placeholder="Nhập lý do Đồng ý..."
         />
       </Modal>
 

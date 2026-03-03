@@ -369,7 +369,7 @@ export default function MyProposalsPolished() {
             </Button>
             <Button
               type="primary"
-              onClick={() => router.push("/dashboard/proposal/new")}
+              onClick={() => router.push("/dashboard/proposal")}
             >
               Tạo đề xuất mới
             </Button>

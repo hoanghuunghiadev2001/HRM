@@ -13,7 +13,7 @@ const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 async function sendWithRetry(
   fn: () => Promise<any>,
   retries = 3,
-  delay = 1000
+  delay = 1000,
 ) {
   for (let i = 0; i < retries; i++) {
     try {
@@ -119,7 +119,7 @@ export class ProposalService {
   static async createProposal(
     proposalData: CreateProposalFormData,
     file: File | null,
-    createdById: number
+    createdById: number,
   ) {
     try {
       let fileId: number | null = null;
@@ -174,7 +174,7 @@ export class ProposalService {
           EmailService.sendProposalCreatedConfirmation(newProposal.proposer, {
             ...newProposal,
             ...filePayload,
-          })
+          }),
         );
       } catch (err) {
         console.error("Email xác nhận proposer thất bại:", err);
@@ -212,7 +212,7 @@ export class ProposalService {
                 ...filePayload,
                 approveLink: approveAction.directApi,
                 rejectLink: rejectAction.directApi,
-              })
+              }),
             );
           } catch (err) {
             console.error("Email gửi signer thất bại:", err);
@@ -253,12 +253,12 @@ export class ProposalService {
               s.status === "pending" &&
               sortedSigners
                 .slice(0, idx)
-                .every((p: any) => p.status === "approved")
+                .every((p: any) => p.status === "approved"),
           )
         : -1;
 
       const allSignersApproved = sortedSigners.every(
-        (s: any) => s.status === "approved"
+        (s: any) => s.status === "approved",
       );
       const nextApproverIndex =
         !isRejected && allSignersApproved
@@ -267,7 +267,7 @@ export class ProposalService {
                 a.status === "pending" &&
                 sortedApprovers
                   .slice(0, idx)
-                  .every((p: any) => p.status === "approved")
+                  .every((p: any) => p.status === "approved"),
             )
           : -1;
 
@@ -297,10 +297,10 @@ export class ProposalService {
         };
 
       const statusSign = signers.some(
-        (s: any) => s.isCurrent && String(s.signerId) === String(userId)
+        (s: any) => s.isCurrent && String(s.signerId) === String(userId),
       );
       const statusApprove = approvers.some(
-        (a: any) => a.isCurrent && String(a.approverId) === String(userId)
+        (a: any) => a.isCurrent && String(a.approverId) === String(userId),
       );
 
       return {
@@ -325,7 +325,7 @@ export class ProposalService {
     proposalId: number,
     employeeId: number,
     status: "approved" | "rejected",
-    reason?: string
+    reason?: string,
   ) {
     try {
       const proposal = await prisma.proposal.findUnique({
@@ -335,7 +335,7 @@ export class ProposalService {
       if (!proposal) return { success: false, error: "Không tìm thấy đề xuất" };
 
       const signer = (proposal.signers || []).find(
-        (s: any) => s.signerId === employeeId
+        (s: any) => s.signerId === employeeId,
       );
       if (!signer)
         return { success: false, error: "Bạn không có quyền ký đề xuất này" };
@@ -348,7 +348,7 @@ export class ProposalService {
           data: {
             status,
             signedAt: new Date(),
-            reason: status === "rejected" ? reason : null,
+            reason: reason,
           },
         });
         if (status === "rejected")
@@ -372,8 +372,8 @@ export class ProposalService {
               updated.proposer,
               updated,
               signer,
-              reason || ""
-            )
+              reason || "",
+            ),
           );
         } catch (err) {
           console.error("Email notify proposer failed:", err);
@@ -408,7 +408,7 @@ export class ProposalService {
                 ...updated,
                 approveLink: approveAction.directApi,
                 rejectLink: rejectAction.directApi,
-              })
+              }),
             );
           } catch (err) {
             console.error("Email to next signer failed:", err);
@@ -446,7 +446,7 @@ export class ProposalService {
                   ...updated,
                   approveLink: approveAction.directApi,
                   rejectLink: rejectAction.directApi,
-                })
+                }),
               );
             } catch (err) {
               console.error("Email to first approver failed:", err);
@@ -467,7 +467,7 @@ export class ProposalService {
     proposalId: number,
     employeeId: number,
     status: "approved" | "rejected",
-    reason?: string
+    reason?: string,
   ) {
     try {
       const proposal = await prisma.proposal.findUnique({
@@ -477,7 +477,7 @@ export class ProposalService {
       if (!proposal) return { success: false, error: "Đề xuất không tìm thấy" };
 
       const approver = (proposal.approvers || []).find(
-        (a: any) => a.approverId === employeeId
+        (a: any) => a.approverId === employeeId,
       );
       if (!approver)
         return {
@@ -490,7 +490,7 @@ export class ProposalService {
       const minPendingLevel = Math.min(
         ...(proposal.approvers || [])
           .filter((a: any) => a.status === "pending")
-          .map((a: any) => a.level)
+          .map((a: any) => a.level),
       );
       if (approver.level !== minPendingLevel)
         return { success: false, error: "Chưa đến lượt duyệt của bạn" };
@@ -522,8 +522,8 @@ export class ProposalService {
               updatedProposal.proposer,
               updatedProposal,
               "rejected",
-              reason || ""
-            )
+              reason || "",
+            ),
           );
         } catch (err) {
           console.error("Email notify rejected failed:", err);
@@ -558,7 +558,7 @@ export class ProposalService {
                 ...updatedProposal,
                 approveLink: approveAction.directApi,
                 rejectLink: rejectAction.directApi,
-              })
+              }),
             );
           } catch (err) {
             console.error("Email to next approver failed:", err);
@@ -574,8 +574,8 @@ export class ProposalService {
             EmailService.sendStatusUpdate(
               updatedProposal.proposer,
               updatedProposal,
-              "approved"
-            )
+              "approved",
+            ),
           );
         } catch (err) {
           console.error("Email notify approved failed:", err);
