@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     if (!token) {
       return NextResponse.json(
         { error: "Thiếu token xác thực" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
       console.error("Token verification error:", err);
       return NextResponse.json(
         { error: "Token không hợp lệ hoặc đã hết hạn" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -38,27 +38,27 @@ export async function POST(request: NextRequest) {
     const proposerId = Number.parseInt(formData.get("proposerId") as string);
     const signerIds = JSON.parse(formData.get("signerIds") as string);
     const approverIds = JSON.parse(formData.get("approverIds") as string);
-    const file = formData.get("file") as File | null;
+    const files = formData.getAll("file") as File[]; // Lấy toàn bộ danh sách file
 
     // Validate required fields
     if (!name || !title || !proposerId || !signerIds || !approverIds) {
       return NextResponse.json(
         { error: "Thiếu thông tin bắt buộc" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (signerIds.length === 0) {
       return NextResponse.json(
         { error: "Phải có ít nhất một người đồng ý" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (approverIds.length === 0) {
       return NextResponse.json(
         { error: "Phải có ít nhất một người phê duyệt" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -76,8 +76,8 @@ export async function POST(request: NextRequest) {
 
     const result = await ProposalService.createProposal(
       proposalData,
-      file,
-      createdById
+      files,
+      createdById,
     );
 
     if (result.success) {
@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
     if (!token) {
       return NextResponse.json(
         { error: "Thiếu token xác thực" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -113,7 +113,7 @@ export async function GET(request: NextRequest) {
       console.error("Token verification error:", err);
       return NextResponse.json(
         { error: "Token không hợp lệ hoặc đã hết hạn" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -126,13 +126,13 @@ export async function GET(request: NextRequest) {
     if (isNaN(proposalId)) {
       return NextResponse.json(
         { error: "ID đề xuất không hợp lệ" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const result = await ProposalService.getProposal(
       proposalId,
-      String(employeeId)
+      String(employeeId),
     );
 
     if (result.success) {
@@ -147,14 +147,14 @@ export async function GET(request: NextRequest) {
 }
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const token = req.cookies.get("token-hrm")?.value;
     if (!token)
       return NextResponse.json(
         { error: "Thiếu token xác thực" },
-        { status: 401 }
+        { status: 401 },
       );
 
     let employeeId: number;
@@ -164,7 +164,7 @@ export async function DELETE(
     } catch (err) {
       return NextResponse.json(
         { error: "Token không hợp lệ hoặc đã hết hạn" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -174,7 +174,7 @@ export async function DELETE(
     if (!employee)
       return NextResponse.json(
         { error: "Không tìm thấy nhân viên" },
-        { status: 404 }
+        { status: 404 },
       );
     if (employee.role !== "ADMIN")
       return NextResponse.json({
@@ -186,7 +186,7 @@ export async function DELETE(
     if (isNaN(proposalId))
       return NextResponse.json(
         { error: "ID đề xuất không hợp lệ" },
-        { status: 400 }
+        { status: 400 },
       );
 
     const result = await ProposalService.deleteProposal(proposalId);
