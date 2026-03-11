@@ -83,7 +83,7 @@ export class ProposalService {
    * Proposal include — chỉ include những gì cần (với select cho employee nested)
    */
   static FULL_PROPOSAL_INCLUDE: Prisma.ProposalInclude = {
-    file: true,
+    files: true,
     vehicle: true,
     proposer: { select: ProposalService.FULL_EMPLOYEE_SELECT },
     createdBy: { select: ProposalService.FULL_EMPLOYEE_SELECT },
@@ -118,23 +118,32 @@ export class ProposalService {
   // -------------------- Create proposal --------------------
   static async createProposal(
     proposalData: CreateProposalFormData,
-    file: File | null,
+    files: File[] | null,
     createdById: number,
   ) {
     try {
-      let fileId: number | null = null;
-      let fileUrl: string | undefined;
+      const uploadedFileIds: number[] = [];
+      const fileUrls: string[] = [];
 
-      if (file) {
-        const { valid, error } = FileService.validateFile(file);
-        if (!valid)
-          return { success: false, error: error || "File không hợp lệ" };
+      // 1. Duyệt và upload danh sách file đính kèm
+      if (files && files.length > 0) {
+        for (const file of files) {
+          const { valid, error } = FileService.validateFile(file);
+          if (!valid) {
+            return {
+              success: false,
+              error: `File ${file.name} không hợp lệ: ${error}`,
+            };
+          }
 
-        const { fileId: uploadedId } = await FileService.uploadFile(file);
-        fileId = uploadedId;
-        fileUrl = `${baseUrl}/api/files/${fileId}`;
+          // Upload file vào bảng File (lưu dạng Bytes như Schema của bạn)
+          const { fileId } = await FileService.uploadFile(file);
+          uploadedFileIds.push(fileId);
+          fileUrls.push(`${baseUrl}/api/files/${fileId}`);
+        }
       }
 
+      // 2. Tạo bản ghi Proposal và các quan hệ Signer/Approver/File
       const newProposal = await prisma.proposal.create({
         data: {
           name: proposalData.name,
@@ -142,12 +151,18 @@ export class ProposalService {
           description: proposalData.description,
           proposerId: proposalData.proposerId,
           createdById,
-          fileId,
           proposalType: proposalData.proposalType || "REGULAR",
           vehicleId: proposalData.vehicleId || null,
           startAt: proposalData.startAt || null,
           endAt: proposalData.endAt || null,
           dropoffPlace: proposalData.dropoffPlace || null,
+
+          // Kết nối mảng file vừa upload
+          files: {
+            connect: uploadedFileIds.map((id) => ({ id })),
+          },
+
+          // Tạo danh sách người ký (theo thứ tự level)
           signers: {
             create: proposalData.signerIds.map((id, idx) => ({
               level: idx + 1,
@@ -155,6 +170,8 @@ export class ProposalService {
               signer: { connect: { id } },
             })),
           },
+
+          // Tạo danh sách người phê duyệt
           approvers: {
             create: proposalData.approverIds.map((id, idx) => ({
               level: idx + 1,
@@ -163,12 +180,20 @@ export class ProposalService {
             })),
           },
         },
-        include: this.FULL_PROPOSAL_INCLUDE,
+        include: {
+          ...this.FULL_PROPOSAL_INCLUDE,
+          files: true, // Lấy thông tin file để gửi email
+          proposer: true,
+        },
       });
 
-      const filePayload = fileUrl ? { fileUrl } : {};
+      // 3. Chuẩn bị thông tin file gửi kèm Email
+      const filePayload = {
+        fileUrl: fileUrls.length > 0 ? fileUrls[0] : null, // File đầu tiên làm đại diện
+        allFiles: fileUrls, // Danh sách tất cả link file để loop trong template email
+      };
 
-      // send confirmation to proposer (best-effort)
+      // 4. Gửi email xác nhận cho người tạo (Proposer)
       try {
         await sendWithRetry(() =>
           EmailService.sendProposalCreatedConfirmation(newProposal.proposer, {
@@ -177,21 +202,22 @@ export class ProposalService {
           }),
         );
       } catch (err) {
-        console.error("Email xác nhận proposer thất bại:", err);
+        console.error("❌ Email xác nhận proposer thất bại:", err);
       }
 
-      // notify first signer
-      const firstSigner = (newProposal.signers || [])
+      // 5. Thông báo cho người ký đầu tiên (Level 1)
+      const firstSignerRecord = (newProposal.signers || [])
         .filter((s: any) => s.status === "pending")
         .sort((a: any, b: any) => a.level - b.level)[0];
 
-      if (firstSigner) {
+      if (firstSignerRecord) {
         const signerInfo = await prisma.employee.findUnique({
-          where: { id: firstSigner.signerId },
+          where: { id: firstSignerRecord.signerId },
           select: this.FULL_EMPLOYEE_SELECT,
         });
 
         if (signerInfo) {
+          // Tạo token để ký nhanh qua Email (không cần login lại)
           const approveAction = generateActionToken({
             proposalId: newProposal.id,
             actorId: signerInfo.id,
@@ -215,7 +241,7 @@ export class ProposalService {
               }),
             );
           } catch (err) {
-            console.error("Email gửi signer thất bại:", err);
+            console.error("❌ Email gửi signer level 1 thất bại:", err);
           }
         }
       }
@@ -223,7 +249,10 @@ export class ProposalService {
       return { success: true, data: newProposal };
     } catch (error) {
       console.error("[ProposalService] ❌ createProposal error:", error);
-      return { success: false, error: "Không thể tạo đề xuất" };
+      return {
+        success: false,
+        error: "Không thể tạo đề xuất, vui lòng kiểm tra lại dữ liệu.",
+      };
     }
   }
 
@@ -592,23 +621,45 @@ export class ProposalService {
   // -------------------- Delete proposal --------------------
   static async deleteProposal(proposalId: number) {
     try {
+      // 1. Kiểm tra sự tồn tại của đề xuất và lấy danh sách file kèm theo
       const proposal = await prisma.proposal.findUnique({
         where: { id: proposalId },
-        include: { file: true, proposer: true },
+        include: {
+          files: true,
+          signers: true,
+          approvers: true,
+        },
       });
-      if (!proposal) return { success: false, error: "Đề xuất không tìm thấy" };
 
-      await Promise.all([
-        proposal.fileId ? FileService.deleteFile(proposal.fileId) : null,
-        prisma.proposalSigner.deleteMany({ where: { proposalId } }),
-        prisma.proposalApprover.deleteMany({ where: { proposalId } }),
-      ]);
+      if (!proposal) {
+        return {
+          success: false,
+          error: "Đề xuất không tìm thấy hoặc đã bị xóa trước đó.",
+        };
+      }
 
-      await prisma.proposal.delete({ where: { id: proposalId } });
-      return { success: true, message: "Đề xuất đã được xóa." };
+      // 2. Dọn dẹp dữ liệu file đính kèm
+      // Vì Schema của bạn dùng onDelete: Cascade, các bản ghi trong bảng File sẽ tự mất khi Proposal mất.
+      // Tuy nhiên, nếu FileService của bạn xử lý xóa file vật lý trên Disk, ta cần gọi nó.
+      if (proposal.files && proposal.files.length > 0) {
+        await Promise.all(
+          proposal.files.map((file) => FileService.deleteFile(file.id)),
+        );
+      }
+
+      // 3. Xóa Proposal
+      // Do quan hệ Cascade trong Prisma: Signer, Approver và File record sẽ tự động bị xóa.
+      await prisma.proposal.delete({
+        where: { id: proposalId },
+      });
+
+      return {
+        success: true,
+        message: "Đề xuất đã được xóa thành công cùng các tài liệu đính kèm.",
+      };
     } catch (error) {
       console.error("[ProposalService] ❌ deleteProposal error:", error);
-      return { success: false, error: "Không thể xóa đề xuất" };
+      return { success: false, error: "Lỗi hệ thống khi xóa đề xuất." };
     }
   }
 }

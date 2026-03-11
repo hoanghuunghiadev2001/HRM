@@ -128,7 +128,8 @@ exports.Prisma.FileScalarFieldEnum = {
   fileSize: 'fileSize',
   data: 'data',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  proposalId: 'proposalId'
 };
 
 exports.Prisma.VehicleScalarFieldEnum = {
@@ -467,14 +468,14 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.FileOrderByRelevanceFieldEnum = {
-  filename: 'filename',
-  mimeType: 'mimeType'
-};
-
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.FileOrderByRelevanceFieldEnum = {
+  filename: 'filename',
+  mimeType: 'mimeType'
 };
 
 exports.Prisma.VehicleOrderByRelevanceFieldEnum = {

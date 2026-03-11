@@ -3045,12 +3045,10 @@ export namespace Prisma {
    */
 
   export type FileCountOutputType = {
-    proposals: number
     leaveRequests: number
   }
 
   export type FileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    proposals?: boolean | FileCountOutputTypeCountProposalsArgs
     leaveRequests?: boolean | FileCountOutputTypeCountLeaveRequestsArgs
   }
 
@@ -3063,13 +3061,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the FileCountOutputType
      */
     select?: FileCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * FileCountOutputType without action
-   */
-  export type FileCountOutputTypeCountProposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProposalWhereInput
   }
 
   /**
@@ -3501,11 +3492,13 @@ export namespace Prisma {
   export type ProposalCountOutputType = {
     approvers: number
     signers: number
+    files: number
   }
 
   export type ProposalCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     approvers?: boolean | ProposalCountOutputTypeCountApproversArgs
     signers?: boolean | ProposalCountOutputTypeCountSignersArgs
+    files?: boolean | ProposalCountOutputTypeCountFilesArgs
   }
 
   // Custom InputTypes
@@ -3531,6 +3524,13 @@ export namespace Prisma {
    */
   export type ProposalCountOutputTypeCountSignersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProposalSignerWhereInput
+  }
+
+  /**
+   * ProposalCountOutputType without action
+   */
+  export type ProposalCountOutputTypeCountFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FileWhereInput
   }
 
 
@@ -3615,11 +3615,13 @@ export namespace Prisma {
   export type FileAvgAggregateOutputType = {
     id: number | null
     fileSize: number | null
+    proposalId: number | null
   }
 
   export type FileSumAggregateOutputType = {
     id: number | null
     fileSize: number | null
+    proposalId: number | null
   }
 
   export type FileMinAggregateOutputType = {
@@ -3630,6 +3632,7 @@ export namespace Prisma {
     data: Bytes | null
     createdAt: Date | null
     updatedAt: Date | null
+    proposalId: number | null
   }
 
   export type FileMaxAggregateOutputType = {
@@ -3640,6 +3643,7 @@ export namespace Prisma {
     data: Bytes | null
     createdAt: Date | null
     updatedAt: Date | null
+    proposalId: number | null
   }
 
   export type FileCountAggregateOutputType = {
@@ -3650,6 +3654,7 @@ export namespace Prisma {
     data: number
     createdAt: number
     updatedAt: number
+    proposalId: number
     _all: number
   }
 
@@ -3657,11 +3662,13 @@ export namespace Prisma {
   export type FileAvgAggregateInputType = {
     id?: true
     fileSize?: true
+    proposalId?: true
   }
 
   export type FileSumAggregateInputType = {
     id?: true
     fileSize?: true
+    proposalId?: true
   }
 
   export type FileMinAggregateInputType = {
@@ -3672,6 +3679,7 @@ export namespace Prisma {
     data?: true
     createdAt?: true
     updatedAt?: true
+    proposalId?: true
   }
 
   export type FileMaxAggregateInputType = {
@@ -3682,6 +3690,7 @@ export namespace Prisma {
     data?: true
     createdAt?: true
     updatedAt?: true
+    proposalId?: true
   }
 
   export type FileCountAggregateInputType = {
@@ -3692,6 +3701,7 @@ export namespace Prisma {
     data?: true
     createdAt?: true
     updatedAt?: true
+    proposalId?: true
     _all?: true
   }
 
@@ -3789,6 +3799,7 @@ export namespace Prisma {
     data: Bytes
     createdAt: Date
     updatedAt: Date
+    proposalId: number | null
     _count: FileCountAggregateOutputType | null
     _avg: FileAvgAggregateOutputType | null
     _sum: FileSumAggregateOutputType | null
@@ -3818,7 +3829,8 @@ export namespace Prisma {
     data?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    proposals?: boolean | File$proposalsArgs<ExtArgs>
+    proposalId?: boolean
+    proposal?: boolean | File$proposalArgs<ExtArgs>
     leaveRequests?: boolean | File$leaveRequestsArgs<ExtArgs>
     _count?: boolean | FileCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["file"]>
@@ -3833,11 +3845,12 @@ export namespace Prisma {
     data?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    proposalId?: boolean
   }
 
-  export type FileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filename" | "mimeType" | "fileSize" | "data" | "createdAt" | "updatedAt", ExtArgs["result"]["file"]>
+  export type FileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "filename" | "mimeType" | "fileSize" | "data" | "createdAt" | "updatedAt" | "proposalId", ExtArgs["result"]["file"]>
   export type FileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    proposals?: boolean | File$proposalsArgs<ExtArgs>
+    proposal?: boolean | File$proposalArgs<ExtArgs>
     leaveRequests?: boolean | File$leaveRequestsArgs<ExtArgs>
     _count?: boolean | FileCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -3845,7 +3858,7 @@ export namespace Prisma {
   export type $FilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "File"
     objects: {
-      proposals: Prisma.$ProposalPayload<ExtArgs>[]
+      proposal: Prisma.$ProposalPayload<ExtArgs> | null
       leaveRequests: Prisma.$LeaveRequestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -3856,6 +3869,7 @@ export namespace Prisma {
       data: Prisma.Bytes
       createdAt: Date
       updatedAt: Date
+      proposalId: number | null
     }, ExtArgs["result"]["file"]>
     composites: {}
   }
@@ -4196,7 +4210,7 @@ export namespace Prisma {
    */
   export interface Prisma__FileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    proposals<T extends File$proposalsArgs<ExtArgs> = {}>(args?: Subset<T, File$proposalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    proposal<T extends File$proposalArgs<ExtArgs> = {}>(args?: Subset<T, File$proposalArgs<ExtArgs>>): Prisma__ProposalClient<$Result.GetResult<Prisma.$ProposalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     leaveRequests<T extends File$leaveRequestsArgs<ExtArgs> = {}>(args?: Subset<T, File$leaveRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeaveRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4234,6 +4248,7 @@ export namespace Prisma {
     readonly data: FieldRef<"File", 'Bytes'>
     readonly createdAt: FieldRef<"File", 'DateTime'>
     readonly updatedAt: FieldRef<"File", 'DateTime'>
+    readonly proposalId: FieldRef<"File", 'Int'>
   }
     
 
@@ -4577,9 +4592,9 @@ export namespace Prisma {
   }
 
   /**
-   * File.proposals
+   * File.proposal
    */
-  export type File$proposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type File$proposalArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Proposal
      */
@@ -4593,11 +4608,6 @@ export namespace Prisma {
      */
     include?: ProposalInclude<ExtArgs> | null
     where?: ProposalWhereInput
-    orderBy?: ProposalOrderByWithRelationInput | ProposalOrderByWithRelationInput[]
-    cursor?: ProposalWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProposalScalarFieldEnum | ProposalScalarFieldEnum[]
   }
 
   /**
@@ -19908,10 +19918,10 @@ export namespace Prisma {
     dropoffPlace?: boolean
     vehicle?: boolean | Proposal$vehicleArgs<ExtArgs>
     createdBy?: boolean | EmployeeDefaultArgs<ExtArgs>
-    file?: boolean | Proposal$fileArgs<ExtArgs>
     proposer?: boolean | EmployeeDefaultArgs<ExtArgs>
     approvers?: boolean | Proposal$approversArgs<ExtArgs>
     signers?: boolean | Proposal$signersArgs<ExtArgs>
+    files?: boolean | Proposal$filesArgs<ExtArgs>
     _count?: boolean | ProposalCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["proposal"]>
 
@@ -19939,10 +19949,10 @@ export namespace Prisma {
   export type ProposalInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     vehicle?: boolean | Proposal$vehicleArgs<ExtArgs>
     createdBy?: boolean | EmployeeDefaultArgs<ExtArgs>
-    file?: boolean | Proposal$fileArgs<ExtArgs>
     proposer?: boolean | EmployeeDefaultArgs<ExtArgs>
     approvers?: boolean | Proposal$approversArgs<ExtArgs>
     signers?: boolean | Proposal$signersArgs<ExtArgs>
+    files?: boolean | Proposal$filesArgs<ExtArgs>
     _count?: boolean | ProposalCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -19951,10 +19961,10 @@ export namespace Prisma {
     objects: {
       vehicle: Prisma.$VehiclePayload<ExtArgs> | null
       createdBy: Prisma.$EmployeePayload<ExtArgs>
-      file: Prisma.$FilePayload<ExtArgs> | null
       proposer: Prisma.$EmployeePayload<ExtArgs>
       approvers: Prisma.$ProposalApproverPayload<ExtArgs>[]
       signers: Prisma.$ProposalSignerPayload<ExtArgs>[]
+      files: Prisma.$FilePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -20314,10 +20324,10 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     vehicle<T extends Proposal$vehicleArgs<ExtArgs> = {}>(args?: Subset<T, Proposal$vehicleArgs<ExtArgs>>): Prisma__VehicleClient<$Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     createdBy<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    file<T extends Proposal$fileArgs<ExtArgs> = {}>(args?: Subset<T, Proposal$fileArgs<ExtArgs>>): Prisma__FileClient<$Result.GetResult<Prisma.$FilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     proposer<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     approvers<T extends Proposal$approversArgs<ExtArgs> = {}>(args?: Subset<T, Proposal$approversArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalApproverPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     signers<T extends Proposal$signersArgs<ExtArgs> = {}>(args?: Subset<T, Proposal$signersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProposalSignerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    files<T extends Proposal$filesArgs<ExtArgs> = {}>(args?: Subset<T, Proposal$filesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -20724,25 +20734,6 @@ export namespace Prisma {
   }
 
   /**
-   * Proposal.file
-   */
-  export type Proposal$fileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the File
-     */
-    select?: FileSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the File
-     */
-    omit?: FileOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FileInclude<ExtArgs> | null
-    where?: FileWhereInput
-  }
-
-  /**
    * Proposal.approvers
    */
   export type Proposal$approversArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -20788,6 +20779,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProposalSignerScalarFieldEnum | ProposalSignerScalarFieldEnum[]
+  }
+
+  /**
+   * Proposal.files
+   */
+  export type Proposal$filesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the File
+     */
+    select?: FileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the File
+     */
+    omit?: FileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FileInclude<ExtArgs> | null
+    where?: FileWhereInput
+    orderBy?: FileOrderByWithRelationInput | FileOrderByWithRelationInput[]
+    cursor?: FileWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FileScalarFieldEnum | FileScalarFieldEnum[]
   }
 
   /**
@@ -31587,7 +31602,8 @@ export namespace Prisma {
     fileSize: 'fileSize',
     data: 'data',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    proposalId: 'proposalId'
   };
 
   export type FileScalarFieldEnum = (typeof FileScalarFieldEnum)[keyof typeof FileScalarFieldEnum]
@@ -32007,20 +32023,20 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-  export const FileOrderByRelevanceFieldEnum: {
-    filename: 'filename',
-    mimeType: 'mimeType'
-  };
-
-  export type FileOrderByRelevanceFieldEnum = (typeof FileOrderByRelevanceFieldEnum)[keyof typeof FileOrderByRelevanceFieldEnum]
-
-
   export const NullsOrder: {
     first: 'first',
     last: 'last'
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const FileOrderByRelevanceFieldEnum: {
+    filename: 'filename',
+    mimeType: 'mimeType'
+  };
+
+  export type FileOrderByRelevanceFieldEnum = (typeof FileOrderByRelevanceFieldEnum)[keyof typeof FileOrderByRelevanceFieldEnum]
 
 
   export const VehicleOrderByRelevanceFieldEnum: {
@@ -32320,7 +32336,8 @@ export namespace Prisma {
     data?: BytesFilter<"File"> | Bytes
     createdAt?: DateTimeFilter<"File"> | Date | string
     updatedAt?: DateTimeFilter<"File"> | Date | string
-    proposals?: ProposalListRelationFilter
+    proposalId?: IntNullableFilter<"File"> | number | null
+    proposal?: XOR<ProposalNullableScalarRelationFilter, ProposalWhereInput> | null
     leaveRequests?: LeaveRequestListRelationFilter
   }
 
@@ -32332,7 +32349,8 @@ export namespace Prisma {
     data?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    proposals?: ProposalOrderByRelationAggregateInput
+    proposalId?: SortOrderInput | SortOrder
+    proposal?: ProposalOrderByWithRelationInput
     leaveRequests?: LeaveRequestOrderByRelationAggregateInput
     _relevance?: FileOrderByRelevanceInput
   }
@@ -32348,7 +32366,8 @@ export namespace Prisma {
     data?: BytesFilter<"File"> | Bytes
     createdAt?: DateTimeFilter<"File"> | Date | string
     updatedAt?: DateTimeFilter<"File"> | Date | string
-    proposals?: ProposalListRelationFilter
+    proposalId?: IntNullableFilter<"File"> | number | null
+    proposal?: XOR<ProposalNullableScalarRelationFilter, ProposalWhereInput> | null
     leaveRequests?: LeaveRequestListRelationFilter
   }, "id">
 
@@ -32360,6 +32379,7 @@ export namespace Prisma {
     data?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    proposalId?: SortOrderInput | SortOrder
     _count?: FileCountOrderByAggregateInput
     _avg?: FileAvgOrderByAggregateInput
     _max?: FileMaxOrderByAggregateInput
@@ -32378,6 +32398,7 @@ export namespace Prisma {
     data?: BytesWithAggregatesFilter<"File"> | Bytes
     createdAt?: DateTimeWithAggregatesFilter<"File"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"File"> | Date | string
+    proposalId?: IntNullableWithAggregatesFilter<"File"> | number | null
   }
 
   export type VehicleWhereInput = {
@@ -33508,10 +33529,10 @@ export namespace Prisma {
     dropoffPlace?: StringNullableFilter<"Proposal"> | string | null
     vehicle?: XOR<VehicleNullableScalarRelationFilter, VehicleWhereInput> | null
     createdBy?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
-    file?: XOR<FileNullableScalarRelationFilter, FileWhereInput> | null
     proposer?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     approvers?: ProposalApproverListRelationFilter
     signers?: ProposalSignerListRelationFilter
+    files?: FileListRelationFilter
   }
 
   export type ProposalOrderByWithRelationInput = {
@@ -33532,10 +33553,10 @@ export namespace Prisma {
     dropoffPlace?: SortOrderInput | SortOrder
     vehicle?: VehicleOrderByWithRelationInput
     createdBy?: EmployeeOrderByWithRelationInput
-    file?: FileOrderByWithRelationInput
     proposer?: EmployeeOrderByWithRelationInput
     approvers?: ProposalApproverOrderByRelationAggregateInput
     signers?: ProposalSignerOrderByRelationAggregateInput
+    files?: FileOrderByRelationAggregateInput
     _relevance?: ProposalOrderByRelevanceInput
   }
 
@@ -33560,10 +33581,10 @@ export namespace Prisma {
     dropoffPlace?: StringNullableFilter<"Proposal"> | string | null
     vehicle?: XOR<VehicleNullableScalarRelationFilter, VehicleWhereInput> | null
     createdBy?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
-    file?: XOR<FileNullableScalarRelationFilter, FileWhereInput> | null
     proposer?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     approvers?: ProposalApproverListRelationFilter
     signers?: ProposalSignerListRelationFilter
+    files?: FileListRelationFilter
   }, "id">
 
   export type ProposalOrderByWithAggregationInput = {
@@ -34620,7 +34641,7 @@ export namespace Prisma {
     data: Bytes
     createdAt?: Date | string
     updatedAt?: Date | string
-    proposals?: ProposalCreateNestedManyWithoutFileInput
+    proposal?: ProposalCreateNestedOneWithoutFilesInput
     leaveRequests?: LeaveRequestCreateNestedManyWithoutHandoverFileInput
   }
 
@@ -34632,7 +34653,7 @@ export namespace Prisma {
     data: Bytes
     createdAt?: Date | string
     updatedAt?: Date | string
-    proposals?: ProposalUncheckedCreateNestedManyWithoutFileInput
+    proposalId?: number | null
     leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutHandoverFileInput
   }
 
@@ -34643,7 +34664,7 @@ export namespace Prisma {
     data?: BytesFieldUpdateOperationsInput | Bytes
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    proposals?: ProposalUpdateManyWithoutFileNestedInput
+    proposal?: ProposalUpdateOneWithoutFilesNestedInput
     leaveRequests?: LeaveRequestUpdateManyWithoutHandoverFileNestedInput
   }
 
@@ -34655,7 +34676,7 @@ export namespace Prisma {
     data?: BytesFieldUpdateOperationsInput | Bytes
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    proposals?: ProposalUncheckedUpdateManyWithoutFileNestedInput
+    proposalId?: NullableIntFieldUpdateOperationsInput | number | null
     leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutHandoverFileNestedInput
   }
 
@@ -34667,6 +34688,7 @@ export namespace Prisma {
     data: Bytes
     createdAt?: Date | string
     updatedAt?: Date | string
+    proposalId?: number | null
   }
 
   export type FileUpdateManyMutationInput = {
@@ -34686,6 +34708,7 @@ export namespace Prisma {
     data?: BytesFieldUpdateOperationsInput | Bytes
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type VehicleCreateInput = {
@@ -35800,6 +35823,7 @@ export namespace Prisma {
     name: string
     title: string
     description?: string | null
+    fileId?: number | null
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -35809,10 +35833,10 @@ export namespace Prisma {
     dropoffPlace?: string | null
     vehicle?: VehicleCreateNestedOneWithoutProposalsInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
-    file?: FileCreateNestedOneWithoutProposalsInput
     proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     approvers?: ProposalApproverCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerCreateNestedManyWithoutProposalInput
+    files?: FileCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalUncheckedCreateInput = {
@@ -35833,12 +35857,14 @@ export namespace Prisma {
     dropoffPlace?: string | null
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
+    files?: FileUncheckedCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35848,10 +35874,10 @@ export namespace Prisma {
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
-    file?: FileUpdateOneWithoutProposalsNestedInput
     proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
     approvers?: ProposalApproverUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
+    files?: FileUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalUncheckedUpdateInput = {
@@ -35872,6 +35898,7 @@ export namespace Prisma {
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
+    files?: FileUncheckedUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalCreateManyInput = {
@@ -35896,6 +35923,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37068,10 +37096,20 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type ProposalListRelationFilter = {
-    every?: ProposalWhereInput
-    some?: ProposalWhereInput
-    none?: ProposalWhereInput
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type ProposalNullableScalarRelationFilter = {
+    is?: ProposalWhereInput | null
+    isNot?: ProposalWhereInput | null
   }
 
   export type LeaveRequestListRelationFilter = {
@@ -37080,8 +37118,9 @@ export namespace Prisma {
     none?: LeaveRequestWhereInput
   }
 
-  export type ProposalOrderByRelationAggregateInput = {
-    _count?: SortOrder
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
   export type LeaveRequestOrderByRelationAggregateInput = {
@@ -37102,11 +37141,13 @@ export namespace Prisma {
     data?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    proposalId?: SortOrder
   }
 
   export type FileAvgOrderByAggregateInput = {
     id?: SortOrder
     fileSize?: SortOrder
+    proposalId?: SortOrder
   }
 
   export type FileMaxOrderByAggregateInput = {
@@ -37117,6 +37158,7 @@ export namespace Prisma {
     data?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    proposalId?: SortOrder
   }
 
   export type FileMinOrderByAggregateInput = {
@@ -37127,11 +37169,13 @@ export namespace Prisma {
     data?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    proposalId?: SortOrder
   }
 
   export type FileSumOrderByAggregateInput = {
     id?: SortOrder
     fileSize?: SortOrder
+    proposalId?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -37192,6 +37236,22 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | null
@@ -37212,9 +37272,14 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
+  export type ProposalListRelationFilter = {
+    every?: ProposalWhereInput
+    some?: ProposalWhereInput
+    none?: ProposalWhereInput
+  }
+
+  export type ProposalOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type VehicleOrderByRelevanceInput = {
@@ -37310,17 +37375,6 @@ export namespace Prisma {
     in?: $Enums.Role[]
     notIn?: $Enums.Role[]
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type AttendanceImportLogListRelationFilter = {
@@ -37546,22 +37600,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type PositionListRelationFilter = {
@@ -38351,6 +38389,16 @@ export namespace Prisma {
   export type VehicleNullableScalarRelationFilter = {
     is?: VehicleWhereInput | null
     isNot?: VehicleWhereInput | null
+  }
+
+  export type FileListRelationFilter = {
+    every?: FileWhereInput
+    some?: FileWhereInput
+    none?: FileWhereInput
+  }
+
+  export type FileOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type ProposalOrderByRelevanceInput = {
@@ -39255,11 +39303,10 @@ export namespace Prisma {
     createdById?: SortOrder
   }
 
-  export type ProposalCreateNestedManyWithoutFileInput = {
-    create?: XOR<ProposalCreateWithoutFileInput, ProposalUncheckedCreateWithoutFileInput> | ProposalCreateWithoutFileInput[] | ProposalUncheckedCreateWithoutFileInput[]
-    connectOrCreate?: ProposalCreateOrConnectWithoutFileInput | ProposalCreateOrConnectWithoutFileInput[]
-    createMany?: ProposalCreateManyFileInputEnvelope
-    connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
+  export type ProposalCreateNestedOneWithoutFilesInput = {
+    create?: XOR<ProposalCreateWithoutFilesInput, ProposalUncheckedCreateWithoutFilesInput>
+    connectOrCreate?: ProposalCreateOrConnectWithoutFilesInput
+    connect?: ProposalWhereUniqueInput
   }
 
   export type LeaveRequestCreateNestedManyWithoutHandoverFileInput = {
@@ -39267,13 +39314,6 @@ export namespace Prisma {
     connectOrCreate?: LeaveRequestCreateOrConnectWithoutHandoverFileInput | LeaveRequestCreateOrConnectWithoutHandoverFileInput[]
     createMany?: LeaveRequestCreateManyHandoverFileInputEnvelope
     connect?: LeaveRequestWhereUniqueInput | LeaveRequestWhereUniqueInput[]
-  }
-
-  export type ProposalUncheckedCreateNestedManyWithoutFileInput = {
-    create?: XOR<ProposalCreateWithoutFileInput, ProposalUncheckedCreateWithoutFileInput> | ProposalCreateWithoutFileInput[] | ProposalUncheckedCreateWithoutFileInput[]
-    connectOrCreate?: ProposalCreateOrConnectWithoutFileInput | ProposalCreateOrConnectWithoutFileInput[]
-    createMany?: ProposalCreateManyFileInputEnvelope
-    connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
   }
 
   export type LeaveRequestUncheckedCreateNestedManyWithoutHandoverFileInput = {
@@ -39303,18 +39343,14 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type ProposalUpdateManyWithoutFileNestedInput = {
-    create?: XOR<ProposalCreateWithoutFileInput, ProposalUncheckedCreateWithoutFileInput> | ProposalCreateWithoutFileInput[] | ProposalUncheckedCreateWithoutFileInput[]
-    connectOrCreate?: ProposalCreateOrConnectWithoutFileInput | ProposalCreateOrConnectWithoutFileInput[]
-    upsert?: ProposalUpsertWithWhereUniqueWithoutFileInput | ProposalUpsertWithWhereUniqueWithoutFileInput[]
-    createMany?: ProposalCreateManyFileInputEnvelope
-    set?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
-    disconnect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
-    delete?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
-    connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
-    update?: ProposalUpdateWithWhereUniqueWithoutFileInput | ProposalUpdateWithWhereUniqueWithoutFileInput[]
-    updateMany?: ProposalUpdateManyWithWhereWithoutFileInput | ProposalUpdateManyWithWhereWithoutFileInput[]
-    deleteMany?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
+  export type ProposalUpdateOneWithoutFilesNestedInput = {
+    create?: XOR<ProposalCreateWithoutFilesInput, ProposalUncheckedCreateWithoutFilesInput>
+    connectOrCreate?: ProposalCreateOrConnectWithoutFilesInput
+    upsert?: ProposalUpsertWithoutFilesInput
+    disconnect?: ProposalWhereInput | boolean
+    delete?: ProposalWhereInput | boolean
+    connect?: ProposalWhereUniqueInput
+    update?: XOR<XOR<ProposalUpdateToOneWithWhereWithoutFilesInput, ProposalUpdateWithoutFilesInput>, ProposalUncheckedUpdateWithoutFilesInput>
   }
 
   export type LeaveRequestUpdateManyWithoutHandoverFileNestedInput = {
@@ -39331,18 +39367,12 @@ export namespace Prisma {
     deleteMany?: LeaveRequestScalarWhereInput | LeaveRequestScalarWhereInput[]
   }
 
-  export type ProposalUncheckedUpdateManyWithoutFileNestedInput = {
-    create?: XOR<ProposalCreateWithoutFileInput, ProposalUncheckedCreateWithoutFileInput> | ProposalCreateWithoutFileInput[] | ProposalUncheckedCreateWithoutFileInput[]
-    connectOrCreate?: ProposalCreateOrConnectWithoutFileInput | ProposalCreateOrConnectWithoutFileInput[]
-    upsert?: ProposalUpsertWithWhereUniqueWithoutFileInput | ProposalUpsertWithWhereUniqueWithoutFileInput[]
-    createMany?: ProposalCreateManyFileInputEnvelope
-    set?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
-    disconnect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
-    delete?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
-    connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
-    update?: ProposalUpdateWithWhereUniqueWithoutFileInput | ProposalUpdateWithWhereUniqueWithoutFileInput[]
-    updateMany?: ProposalUpdateManyWithWhereWithoutFileInput | ProposalUpdateManyWithWhereWithoutFileInput[]
-    deleteMany?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type LeaveRequestUncheckedUpdateManyWithoutHandoverFileNestedInput = {
@@ -39943,14 +39973,6 @@ export namespace Prisma {
     update?: SalaryBatchUpdateWithWhereUniqueWithoutCreatedByInput | SalaryBatchUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: SalaryBatchUpdateManyWithWhereWithoutCreatedByInput | SalaryBatchUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: SalaryBatchScalarWhereInput | SalaryBatchScalarWhereInput[]
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput = {
@@ -40841,12 +40863,6 @@ export namespace Prisma {
     connect?: EmployeeWhereUniqueInput
   }
 
-  export type FileCreateNestedOneWithoutProposalsInput = {
-    create?: XOR<FileCreateWithoutProposalsInput, FileUncheckedCreateWithoutProposalsInput>
-    connectOrCreate?: FileCreateOrConnectWithoutProposalsInput
-    connect?: FileWhereUniqueInput
-  }
-
   export type EmployeeCreateNestedOneWithoutProposalsProposedInput = {
     create?: XOR<EmployeeCreateWithoutProposalsProposedInput, EmployeeUncheckedCreateWithoutProposalsProposedInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutProposalsProposedInput
@@ -40867,6 +40883,13 @@ export namespace Prisma {
     connect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
   }
 
+  export type FileCreateNestedManyWithoutProposalInput = {
+    create?: XOR<FileCreateWithoutProposalInput, FileUncheckedCreateWithoutProposalInput> | FileCreateWithoutProposalInput[] | FileUncheckedCreateWithoutProposalInput[]
+    connectOrCreate?: FileCreateOrConnectWithoutProposalInput | FileCreateOrConnectWithoutProposalInput[]
+    createMany?: FileCreateManyProposalInputEnvelope
+    connect?: FileWhereUniqueInput | FileWhereUniqueInput[]
+  }
+
   export type ProposalApproverUncheckedCreateNestedManyWithoutProposalInput = {
     create?: XOR<ProposalApproverCreateWithoutProposalInput, ProposalApproverUncheckedCreateWithoutProposalInput> | ProposalApproverCreateWithoutProposalInput[] | ProposalApproverUncheckedCreateWithoutProposalInput[]
     connectOrCreate?: ProposalApproverCreateOrConnectWithoutProposalInput | ProposalApproverCreateOrConnectWithoutProposalInput[]
@@ -40879,6 +40902,13 @@ export namespace Prisma {
     connectOrCreate?: ProposalSignerCreateOrConnectWithoutProposalInput | ProposalSignerCreateOrConnectWithoutProposalInput[]
     createMany?: ProposalSignerCreateManyProposalInputEnvelope
     connect?: ProposalSignerWhereUniqueInput | ProposalSignerWhereUniqueInput[]
+  }
+
+  export type FileUncheckedCreateNestedManyWithoutProposalInput = {
+    create?: XOR<FileCreateWithoutProposalInput, FileUncheckedCreateWithoutProposalInput> | FileCreateWithoutProposalInput[] | FileUncheckedCreateWithoutProposalInput[]
+    connectOrCreate?: FileCreateOrConnectWithoutProposalInput | FileCreateOrConnectWithoutProposalInput[]
+    createMany?: FileCreateManyProposalInputEnvelope
+    connect?: FileWhereUniqueInput | FileWhereUniqueInput[]
   }
 
   export type EnumProposalStatusFieldUpdateOperationsInput = {
@@ -40905,16 +40935,6 @@ export namespace Prisma {
     upsert?: EmployeeUpsertWithoutProposalsCreatedInput
     connect?: EmployeeWhereUniqueInput
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutProposalsCreatedInput, EmployeeUpdateWithoutProposalsCreatedInput>, EmployeeUncheckedUpdateWithoutProposalsCreatedInput>
-  }
-
-  export type FileUpdateOneWithoutProposalsNestedInput = {
-    create?: XOR<FileCreateWithoutProposalsInput, FileUncheckedCreateWithoutProposalsInput>
-    connectOrCreate?: FileCreateOrConnectWithoutProposalsInput
-    upsert?: FileUpsertWithoutProposalsInput
-    disconnect?: FileWhereInput | boolean
-    delete?: FileWhereInput | boolean
-    connect?: FileWhereUniqueInput
-    update?: XOR<XOR<FileUpdateToOneWithWhereWithoutProposalsInput, FileUpdateWithoutProposalsInput>, FileUncheckedUpdateWithoutProposalsInput>
   }
 
   export type EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput = {
@@ -40953,6 +40973,20 @@ export namespace Prisma {
     deleteMany?: ProposalSignerScalarWhereInput | ProposalSignerScalarWhereInput[]
   }
 
+  export type FileUpdateManyWithoutProposalNestedInput = {
+    create?: XOR<FileCreateWithoutProposalInput, FileUncheckedCreateWithoutProposalInput> | FileCreateWithoutProposalInput[] | FileUncheckedCreateWithoutProposalInput[]
+    connectOrCreate?: FileCreateOrConnectWithoutProposalInput | FileCreateOrConnectWithoutProposalInput[]
+    upsert?: FileUpsertWithWhereUniqueWithoutProposalInput | FileUpsertWithWhereUniqueWithoutProposalInput[]
+    createMany?: FileCreateManyProposalInputEnvelope
+    set?: FileWhereUniqueInput | FileWhereUniqueInput[]
+    disconnect?: FileWhereUniqueInput | FileWhereUniqueInput[]
+    delete?: FileWhereUniqueInput | FileWhereUniqueInput[]
+    connect?: FileWhereUniqueInput | FileWhereUniqueInput[]
+    update?: FileUpdateWithWhereUniqueWithoutProposalInput | FileUpdateWithWhereUniqueWithoutProposalInput[]
+    updateMany?: FileUpdateManyWithWhereWithoutProposalInput | FileUpdateManyWithWhereWithoutProposalInput[]
+    deleteMany?: FileScalarWhereInput | FileScalarWhereInput[]
+  }
+
   export type ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput = {
     create?: XOR<ProposalApproverCreateWithoutProposalInput, ProposalApproverUncheckedCreateWithoutProposalInput> | ProposalApproverCreateWithoutProposalInput[] | ProposalApproverUncheckedCreateWithoutProposalInput[]
     connectOrCreate?: ProposalApproverCreateOrConnectWithoutProposalInput | ProposalApproverCreateOrConnectWithoutProposalInput[]
@@ -40979,6 +41013,20 @@ export namespace Prisma {
     update?: ProposalSignerUpdateWithWhereUniqueWithoutProposalInput | ProposalSignerUpdateWithWhereUniqueWithoutProposalInput[]
     updateMany?: ProposalSignerUpdateManyWithWhereWithoutProposalInput | ProposalSignerUpdateManyWithWhereWithoutProposalInput[]
     deleteMany?: ProposalSignerScalarWhereInput | ProposalSignerScalarWhereInput[]
+  }
+
+  export type FileUncheckedUpdateManyWithoutProposalNestedInput = {
+    create?: XOR<FileCreateWithoutProposalInput, FileUncheckedCreateWithoutProposalInput> | FileCreateWithoutProposalInput[] | FileUncheckedCreateWithoutProposalInput[]
+    connectOrCreate?: FileCreateOrConnectWithoutProposalInput | FileCreateOrConnectWithoutProposalInput[]
+    upsert?: FileUpsertWithWhereUniqueWithoutProposalInput | FileUpsertWithWhereUniqueWithoutProposalInput[]
+    createMany?: FileCreateManyProposalInputEnvelope
+    set?: FileWhereUniqueInput | FileWhereUniqueInput[]
+    disconnect?: FileWhereUniqueInput | FileWhereUniqueInput[]
+    delete?: FileWhereUniqueInput | FileWhereUniqueInput[]
+    connect?: FileWhereUniqueInput | FileWhereUniqueInput[]
+    update?: FileUpdateWithWhereUniqueWithoutProposalInput | FileUpdateWithWhereUniqueWithoutProposalInput[]
+    updateMany?: FileUpdateManyWithWhereWithoutProposalInput | FileUpdateManyWithWhereWithoutProposalInput[]
+    deleteMany?: FileScalarWhereInput | FileScalarWhereInput[]
   }
 
   export type ProposalCreateNestedOneWithoutSignersInput = {
@@ -41271,6 +41319,17 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -41340,6 +41399,33 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | null
@@ -41376,17 +41462,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -41454,33 +41529,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumLeaveTypeEnumFilter<$PrismaModel = never> = {
@@ -41600,10 +41648,11 @@ export namespace Prisma {
     _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
   }
 
-  export type ProposalCreateWithoutFileInput = {
+  export type ProposalCreateWithoutFilesInput = {
     name: string
     title: string
     description?: string | null
+    fileId?: number | null
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -41618,11 +41667,12 @@ export namespace Prisma {
     signers?: ProposalSignerCreateNestedManyWithoutProposalInput
   }
 
-  export type ProposalUncheckedCreateWithoutFileInput = {
+  export type ProposalUncheckedCreateWithoutFilesInput = {
     id?: number
     name: string
     title: string
     description?: string | null
+    fileId?: number | null
     status?: $Enums.ProposalStatus
     proposerId: number
     createdById: number
@@ -41637,14 +41687,9 @@ export namespace Prisma {
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
   }
 
-  export type ProposalCreateOrConnectWithoutFileInput = {
+  export type ProposalCreateOrConnectWithoutFilesInput = {
     where: ProposalWhereUniqueInput
-    create: XOR<ProposalCreateWithoutFileInput, ProposalUncheckedCreateWithoutFileInput>
-  }
-
-  export type ProposalCreateManyFileInputEnvelope = {
-    data: ProposalCreateManyFileInput | ProposalCreateManyFileInput[]
-    skipDuplicates?: boolean
+    create: XOR<ProposalCreateWithoutFilesInput, ProposalUncheckedCreateWithoutFilesInput>
   }
 
   export type LeaveRequestCreateWithoutHandoverFileInput = {
@@ -41688,41 +41733,54 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ProposalUpsertWithWhereUniqueWithoutFileInput = {
-    where: ProposalWhereUniqueInput
-    update: XOR<ProposalUpdateWithoutFileInput, ProposalUncheckedUpdateWithoutFileInput>
-    create: XOR<ProposalCreateWithoutFileInput, ProposalUncheckedCreateWithoutFileInput>
+  export type ProposalUpsertWithoutFilesInput = {
+    update: XOR<ProposalUpdateWithoutFilesInput, ProposalUncheckedUpdateWithoutFilesInput>
+    create: XOR<ProposalCreateWithoutFilesInput, ProposalUncheckedCreateWithoutFilesInput>
+    where?: ProposalWhereInput
   }
 
-  export type ProposalUpdateWithWhereUniqueWithoutFileInput = {
-    where: ProposalWhereUniqueInput
-    data: XOR<ProposalUpdateWithoutFileInput, ProposalUncheckedUpdateWithoutFileInput>
+  export type ProposalUpdateToOneWithWhereWithoutFilesInput = {
+    where?: ProposalWhereInput
+    data: XOR<ProposalUpdateWithoutFilesInput, ProposalUncheckedUpdateWithoutFilesInput>
   }
 
-  export type ProposalUpdateManyWithWhereWithoutFileInput = {
-    where: ProposalScalarWhereInput
-    data: XOR<ProposalUpdateManyMutationInput, ProposalUncheckedUpdateManyWithoutFileInput>
+  export type ProposalUpdateWithoutFilesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileId?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
+    createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
+    proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
+    approvers?: ProposalApproverUpdateManyWithoutProposalNestedInput
+    signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
   }
 
-  export type ProposalScalarWhereInput = {
-    AND?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
-    OR?: ProposalScalarWhereInput[]
-    NOT?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
-    id?: IntFilter<"Proposal"> | number
-    name?: StringFilter<"Proposal"> | string
-    title?: StringFilter<"Proposal"> | string
-    description?: StringNullableFilter<"Proposal"> | string | null
-    fileId?: IntNullableFilter<"Proposal"> | number | null
-    status?: EnumProposalStatusFilter<"Proposal"> | $Enums.ProposalStatus
-    proposerId?: IntFilter<"Proposal"> | number
-    createdById?: IntFilter<"Proposal"> | number
-    createdAt?: DateTimeFilter<"Proposal"> | Date | string
-    updatedAt?: DateTimeFilter<"Proposal"> | Date | string
-    proposalType?: EnumProposalTypeFilter<"Proposal"> | $Enums.ProposalType
-    vehicleId?: IntNullableFilter<"Proposal"> | number | null
-    startAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
-    endAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
-    dropoffPlace?: StringNullableFilter<"Proposal"> | string | null
+  export type ProposalUncheckedUpdateWithoutFilesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileId?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
+    proposerId?: IntFieldUpdateOperationsInput | number
+    createdById?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
+    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
+    signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
   }
 
   export type LeaveRequestUpsertWithWhereUniqueWithoutHandoverFileInput = {
@@ -41764,6 +41822,7 @@ export namespace Prisma {
     name: string
     title: string
     description?: string | null
+    fileId?: number | null
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -41772,10 +41831,10 @@ export namespace Prisma {
     endAt?: Date | string | null
     dropoffPlace?: string | null
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
-    file?: FileCreateNestedOneWithoutProposalsInput
     proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     approvers?: ProposalApproverCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerCreateNestedManyWithoutProposalInput
+    files?: FileCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalUncheckedCreateWithoutVehicleInput = {
@@ -41795,6 +41854,7 @@ export namespace Prisma {
     dropoffPlace?: string | null
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
+    files?: FileUncheckedCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalCreateOrConnectWithoutVehicleInput = {
@@ -41821,6 +41881,27 @@ export namespace Prisma {
   export type ProposalUpdateManyWithWhereWithoutVehicleInput = {
     where: ProposalScalarWhereInput
     data: XOR<ProposalUpdateManyMutationInput, ProposalUncheckedUpdateManyWithoutVehicleInput>
+  }
+
+  export type ProposalScalarWhereInput = {
+    AND?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
+    OR?: ProposalScalarWhereInput[]
+    NOT?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
+    id?: IntFilter<"Proposal"> | number
+    name?: StringFilter<"Proposal"> | string
+    title?: StringFilter<"Proposal"> | string
+    description?: StringNullableFilter<"Proposal"> | string | null
+    fileId?: IntNullableFilter<"Proposal"> | number | null
+    status?: EnumProposalStatusFilter<"Proposal"> | $Enums.ProposalStatus
+    proposerId?: IntFilter<"Proposal"> | number
+    createdById?: IntFilter<"Proposal"> | number
+    createdAt?: DateTimeFilter<"Proposal"> | Date | string
+    updatedAt?: DateTimeFilter<"Proposal"> | Date | string
+    proposalType?: EnumProposalTypeFilter<"Proposal"> | $Enums.ProposalType
+    vehicleId?: IntNullableFilter<"Proposal"> | number | null
+    startAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
+    endAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
+    dropoffPlace?: StringNullableFilter<"Proposal"> | string | null
   }
 
   export type AttendanceImportLogCreateWithoutImportedByInput = {
@@ -42162,6 +42243,7 @@ export namespace Prisma {
     name: string
     title: string
     description?: string | null
+    fileId?: number | null
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -42170,10 +42252,10 @@ export namespace Prisma {
     endAt?: Date | string | null
     dropoffPlace?: string | null
     vehicle?: VehicleCreateNestedOneWithoutProposalsInput
-    file?: FileCreateNestedOneWithoutProposalsInput
     proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     approvers?: ProposalApproverCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerCreateNestedManyWithoutProposalInput
+    files?: FileCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalUncheckedCreateWithoutCreatedByInput = {
@@ -42193,6 +42275,7 @@ export namespace Prisma {
     dropoffPlace?: string | null
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
+    files?: FileUncheckedCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalCreateOrConnectWithoutCreatedByInput = {
@@ -42209,6 +42292,7 @@ export namespace Prisma {
     name: string
     title: string
     description?: string | null
+    fileId?: number | null
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -42218,9 +42302,9 @@ export namespace Prisma {
     dropoffPlace?: string | null
     vehicle?: VehicleCreateNestedOneWithoutProposalsInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
-    file?: FileCreateNestedOneWithoutProposalsInput
     approvers?: ProposalApproverCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerCreateNestedManyWithoutProposalInput
+    files?: FileCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalUncheckedCreateWithoutProposerInput = {
@@ -42240,6 +42324,7 @@ export namespace Prisma {
     dropoffPlace?: string | null
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
+    files?: FileUncheckedCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalCreateOrConnectWithoutProposerInput = {
@@ -44295,7 +44380,7 @@ export namespace Prisma {
     data: Bytes
     createdAt?: Date | string
     updatedAt?: Date | string
-    proposals?: ProposalCreateNestedManyWithoutFileInput
+    proposal?: ProposalCreateNestedOneWithoutFilesInput
   }
 
   export type FileUncheckedCreateWithoutLeaveRequestsInput = {
@@ -44306,7 +44391,7 @@ export namespace Prisma {
     data: Bytes
     createdAt?: Date | string
     updatedAt?: Date | string
-    proposals?: ProposalUncheckedCreateNestedManyWithoutFileInput
+    proposalId?: number | null
   }
 
   export type FileCreateOrConnectWithoutLeaveRequestsInput = {
@@ -44435,7 +44520,7 @@ export namespace Prisma {
     data?: BytesFieldUpdateOperationsInput | Bytes
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    proposals?: ProposalUpdateManyWithoutFileNestedInput
+    proposal?: ProposalUpdateOneWithoutFilesNestedInput
   }
 
   export type FileUncheckedUpdateWithoutLeaveRequestsInput = {
@@ -44446,7 +44531,7 @@ export namespace Prisma {
     data?: BytesFieldUpdateOperationsInput | Bytes
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    proposals?: ProposalUncheckedUpdateManyWithoutFileNestedInput
+    proposalId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type LeaveRequestCreateWithoutApprovalStepsInput = {
@@ -45578,32 +45663,6 @@ export namespace Prisma {
     create: XOR<EmployeeCreateWithoutProposalsCreatedInput, EmployeeUncheckedCreateWithoutProposalsCreatedInput>
   }
 
-  export type FileCreateWithoutProposalsInput = {
-    filename: string
-    mimeType: string
-    fileSize: number
-    data: Bytes
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    leaveRequests?: LeaveRequestCreateNestedManyWithoutHandoverFileInput
-  }
-
-  export type FileUncheckedCreateWithoutProposalsInput = {
-    id?: number
-    filename: string
-    mimeType: string
-    fileSize: number
-    data: Bytes
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutHandoverFileInput
-  }
-
-  export type FileCreateOrConnectWithoutProposalsInput = {
-    where: FileWhereUniqueInput
-    create: XOR<FileCreateWithoutProposalsInput, FileUncheckedCreateWithoutProposalsInput>
-  }
-
   export type EmployeeCreateWithoutProposalsProposedInput = {
     employeeCode: string
     name: string
@@ -45728,6 +45787,37 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FileCreateWithoutProposalInput = {
+    filename: string
+    mimeType: string
+    fileSize: number
+    data: Bytes
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leaveRequests?: LeaveRequestCreateNestedManyWithoutHandoverFileInput
+  }
+
+  export type FileUncheckedCreateWithoutProposalInput = {
+    id?: number
+    filename: string
+    mimeType: string
+    fileSize: number
+    data: Bytes
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    leaveRequests?: LeaveRequestUncheckedCreateNestedManyWithoutHandoverFileInput
+  }
+
+  export type FileCreateOrConnectWithoutProposalInput = {
+    where: FileWhereUniqueInput
+    create: XOR<FileCreateWithoutProposalInput, FileUncheckedCreateWithoutProposalInput>
+  }
+
+  export type FileCreateManyProposalInputEnvelope = {
+    data: FileCreateManyProposalInput | FileCreateManyProposalInput[]
+    skipDuplicates?: boolean
+  }
+
   export type VehicleUpsertWithoutProposalsInput = {
     update: XOR<VehicleUpdateWithoutProposalsInput, VehicleUncheckedUpdateWithoutProposalsInput>
     create: XOR<VehicleCreateWithoutProposalsInput, VehicleUncheckedCreateWithoutProposalsInput>
@@ -45832,38 +45922,6 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
-  }
-
-  export type FileUpsertWithoutProposalsInput = {
-    update: XOR<FileUpdateWithoutProposalsInput, FileUncheckedUpdateWithoutProposalsInput>
-    create: XOR<FileCreateWithoutProposalsInput, FileUncheckedCreateWithoutProposalsInput>
-    where?: FileWhereInput
-  }
-
-  export type FileUpdateToOneWithWhereWithoutProposalsInput = {
-    where?: FileWhereInput
-    data: XOR<FileUpdateWithoutProposalsInput, FileUncheckedUpdateWithoutProposalsInput>
-  }
-
-  export type FileUpdateWithoutProposalsInput = {
-    filename?: StringFieldUpdateOperationsInput | string
-    mimeType?: StringFieldUpdateOperationsInput | string
-    fileSize?: IntFieldUpdateOperationsInput | number
-    data?: BytesFieldUpdateOperationsInput | Bytes
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    leaveRequests?: LeaveRequestUpdateManyWithoutHandoverFileNestedInput
-  }
-
-  export type FileUncheckedUpdateWithoutProposalsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    filename?: StringFieldUpdateOperationsInput | string
-    mimeType?: StringFieldUpdateOperationsInput | string
-    fileSize?: IntFieldUpdateOperationsInput | number
-    data?: BytesFieldUpdateOperationsInput | Bytes
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutHandoverFileNestedInput
   }
 
   export type EmployeeUpsertWithoutProposalsProposedInput = {
@@ -45974,10 +46032,41 @@ export namespace Prisma {
     data: XOR<ProposalSignerUpdateManyMutationInput, ProposalSignerUncheckedUpdateManyWithoutProposalInput>
   }
 
+  export type FileUpsertWithWhereUniqueWithoutProposalInput = {
+    where: FileWhereUniqueInput
+    update: XOR<FileUpdateWithoutProposalInput, FileUncheckedUpdateWithoutProposalInput>
+    create: XOR<FileCreateWithoutProposalInput, FileUncheckedCreateWithoutProposalInput>
+  }
+
+  export type FileUpdateWithWhereUniqueWithoutProposalInput = {
+    where: FileWhereUniqueInput
+    data: XOR<FileUpdateWithoutProposalInput, FileUncheckedUpdateWithoutProposalInput>
+  }
+
+  export type FileUpdateManyWithWhereWithoutProposalInput = {
+    where: FileScalarWhereInput
+    data: XOR<FileUpdateManyMutationInput, FileUncheckedUpdateManyWithoutProposalInput>
+  }
+
+  export type FileScalarWhereInput = {
+    AND?: FileScalarWhereInput | FileScalarWhereInput[]
+    OR?: FileScalarWhereInput[]
+    NOT?: FileScalarWhereInput | FileScalarWhereInput[]
+    id?: IntFilter<"File"> | number
+    filename?: StringFilter<"File"> | string
+    mimeType?: StringFilter<"File"> | string
+    fileSize?: IntFilter<"File"> | number
+    data?: BytesFilter<"File"> | Bytes
+    createdAt?: DateTimeFilter<"File"> | Date | string
+    updatedAt?: DateTimeFilter<"File"> | Date | string
+    proposalId?: IntNullableFilter<"File"> | number | null
+  }
+
   export type ProposalCreateWithoutSignersInput = {
     name: string
     title: string
     description?: string | null
+    fileId?: number | null
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -45987,9 +46076,9 @@ export namespace Prisma {
     dropoffPlace?: string | null
     vehicle?: VehicleCreateNestedOneWithoutProposalsInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
-    file?: FileCreateNestedOneWithoutProposalsInput
     proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     approvers?: ProposalApproverCreateNestedManyWithoutProposalInput
+    files?: FileCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalUncheckedCreateWithoutSignersInput = {
@@ -46009,6 +46098,7 @@ export namespace Prisma {
     endAt?: Date | string | null
     dropoffPlace?: string | null
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
+    files?: FileUncheckedCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalCreateOrConnectWithoutSignersInput = {
@@ -46101,6 +46191,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46110,9 +46201,9 @@ export namespace Prisma {
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
-    file?: FileUpdateOneWithoutProposalsNestedInput
     proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
     approvers?: ProposalApproverUpdateManyWithoutProposalNestedInput
+    files?: FileUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalUncheckedUpdateWithoutSignersInput = {
@@ -46132,6 +46223,7 @@ export namespace Prisma {
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
+    files?: FileUncheckedUpdateManyWithoutProposalNestedInput
   }
 
   export type EmployeeUpsertWithoutProposalSignaturesInput = {
@@ -46284,6 +46376,7 @@ export namespace Prisma {
     name: string
     title: string
     description?: string | null
+    fileId?: number | null
     status?: $Enums.ProposalStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -46293,9 +46386,9 @@ export namespace Prisma {
     dropoffPlace?: string | null
     vehicle?: VehicleCreateNestedOneWithoutProposalsInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
-    file?: FileCreateNestedOneWithoutProposalsInput
     proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
     signers?: ProposalSignerCreateNestedManyWithoutProposalInput
+    files?: FileCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalUncheckedCreateWithoutApproversInput = {
@@ -46315,6 +46408,7 @@ export namespace Prisma {
     endAt?: Date | string | null
     dropoffPlace?: string | null
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
+    files?: FileUncheckedCreateNestedManyWithoutProposalInput
   }
 
   export type ProposalCreateOrConnectWithoutApproversInput = {
@@ -46413,6 +46507,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46422,9 +46517,9 @@ export namespace Prisma {
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
-    file?: FileUpdateOneWithoutProposalsNestedInput
     proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
     signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
+    files?: FileUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalUncheckedUpdateWithoutApproversInput = {
@@ -46444,6 +46539,7 @@ export namespace Prisma {
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
+    files?: FileUncheckedUpdateManyWithoutProposalNestedInput
   }
 
   export type AssetAssignmentCreateWithoutAssetInput = {
@@ -47466,23 +47562,6 @@ export namespace Prisma {
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
-  export type ProposalCreateManyFileInput = {
-    id?: number
-    name: string
-    title: string
-    description?: string | null
-    status?: $Enums.ProposalStatus
-    proposerId: number
-    createdById: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    proposalType?: $Enums.ProposalType
-    vehicleId?: number | null
-    startAt?: Date | string | null
-    endAt?: Date | string | null
-    dropoffPlace?: string | null
-  }
-
   export type LeaveRequestCreateManyHandoverFileInput = {
     id?: number
     employeeId: number
@@ -47496,60 +47575,6 @@ export namespace Prisma {
     approvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-  }
-
-  export type ProposalUpdateWithoutFileInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
-    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
-    createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
-    proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
-    approvers?: ProposalApproverUpdateManyWithoutProposalNestedInput
-    signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
-  }
-
-  export type ProposalUncheckedUpdateWithoutFileInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
-    proposerId?: IntFieldUpdateOperationsInput | number
-    createdById?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
-    vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
-    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
-    approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
-    signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
-  }
-
-  export type ProposalUncheckedUpdateManyWithoutFileInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
-    proposerId?: IntFieldUpdateOperationsInput | number
-    createdById?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
-    vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
-    startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type LeaveRequestUpdateWithoutHandoverFileInput = {
@@ -47619,6 +47644,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47627,10 +47653,10 @@ export namespace Prisma {
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
-    file?: FileUpdateOneWithoutProposalsNestedInput
     proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
     approvers?: ProposalApproverUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
+    files?: FileUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalUncheckedUpdateWithoutVehicleInput = {
@@ -47650,6 +47676,7 @@ export namespace Prisma {
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
+    files?: FileUncheckedUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalUncheckedUpdateManyWithoutVehicleInput = {
@@ -48063,6 +48090,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48071,10 +48099,10 @@ export namespace Prisma {
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
-    file?: FileUpdateOneWithoutProposalsNestedInput
     proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
     approvers?: ProposalApproverUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
+    files?: FileUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalUncheckedUpdateWithoutCreatedByInput = {
@@ -48094,6 +48122,7 @@ export namespace Prisma {
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
+    files?: FileUncheckedUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalUncheckedUpdateManyWithoutCreatedByInput = {
@@ -48117,6 +48146,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    fileId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProposalStatusFieldUpdateOperationsInput | $Enums.ProposalStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48126,9 +48156,9 @@ export namespace Prisma {
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
-    file?: FileUpdateOneWithoutProposalsNestedInput
     approvers?: ProposalApproverUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUpdateManyWithoutProposalNestedInput
+    files?: FileUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalUncheckedUpdateWithoutProposerInput = {
@@ -48148,6 +48178,7 @@ export namespace Prisma {
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
+    files?: FileUncheckedUpdateManyWithoutProposalNestedInput
   }
 
   export type ProposalUncheckedUpdateManyWithoutProposerInput = {
@@ -48860,6 +48891,16 @@ export namespace Prisma {
     level: number
   }
 
+  export type FileCreateManyProposalInput = {
+    id?: number
+    filename: string
+    mimeType: string
+    fileSize: number
+    data: Bytes
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ProposalApproverUpdateWithoutProposalInput = {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
@@ -48910,6 +48951,37 @@ export namespace Prisma {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     level?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type FileUpdateWithoutProposalInput = {
+    filename?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    data?: BytesFieldUpdateOperationsInput | Bytes
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leaveRequests?: LeaveRequestUpdateManyWithoutHandoverFileNestedInput
+  }
+
+  export type FileUncheckedUpdateWithoutProposalInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    filename?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    data?: BytesFieldUpdateOperationsInput | Bytes
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leaveRequests?: LeaveRequestUncheckedUpdateManyWithoutHandoverFileNestedInput
+  }
+
+  export type FileUncheckedUpdateManyWithoutProposalInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    filename?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    data?: BytesFieldUpdateOperationsInput | Bytes
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AssetAssignmentCreateManyAssetInput = {

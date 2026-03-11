@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     if (!token) {
       return NextResponse.json(
         { error: "Thiếu token xác thực" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -128,7 +128,7 @@ export async function GET(request: NextRequest) {
       if (pending.length === 0) return false;
       const minLevel = Math.min(...pending.map((s) => s.level));
       return pending.some(
-        (s) => s.level === minLevel && s.signerId === employeeId
+        (s) => s.level === minLevel && s.signerId === employeeId,
       );
     });
 
@@ -150,14 +150,14 @@ export async function GET(request: NextRequest) {
       if (pending.length === 0) return false;
       const minLevel = Math.min(...pending.map((a) => Number(a.level)));
       return pending.some(
-        (a) => a.level === minLevel && a.approverId === employeeId
+        (a) => a.level === minLevel && a.approverId === employeeId,
       );
     });
 
     const needToApproveTotal = need_to_approve_filtered.length;
     const need_to_approve = need_to_approve_filtered.slice(
       skip,
-      skip + pageSize
+      skip + pageSize,
     );
 
     // ===== Response =====
@@ -175,7 +175,7 @@ export async function GET(request: NextRequest) {
     console.error("❌ Lỗi khi lấy proposal:", error);
     return NextResponse.json(
       { message: "Lỗi máy chủ nội bộ" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -183,7 +183,7 @@ export async function GET(request: NextRequest) {
 // ===== INCLUDE MẶC ĐỊNH =====
 function defaultInclude() {
   return {
-    file: {
+    files: {
       select: { id: true, filename: true, mimeType: true, fileSize: true },
     },
     proposer: { select: { id: true, name: true, employeeCode: true } },

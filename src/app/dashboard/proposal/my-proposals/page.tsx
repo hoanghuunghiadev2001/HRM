@@ -118,6 +118,7 @@ export default function MyProposalsPolished() {
         `/api/proposals/my-proposals?${params.toString()}`,
       );
       const data = await response.json();
+      console.log(data);
 
       if (response.ok) {
         setCreatedProposals(data.created || { data: [], total: 0 });
@@ -369,7 +370,7 @@ export default function MyProposalsPolished() {
             </Button>
             <Button
               type="primary"
-              onClick={() => router.push("/dashboard/proposal")}
+              onClick={() => router.push("/dashboard/proposalcd ")}
             >
               Tạo đề xuất mới
             </Button>

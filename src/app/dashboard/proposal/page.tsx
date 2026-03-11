@@ -1,6 +1,8 @@
-"use client";
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useRef, useState } from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import {
   DatePicker,
   Space,
@@ -13,25 +15,27 @@ import {
   Row,
   Col,
   Typography,
-  Avatar,
   Tag,
   Divider,
   message,
   Form,
   Modal,
   Statistic,
+  Empty,
+  Tooltip,
 } from "antd";
 import {
-  UploadOutlined,
   FileTextOutlined,
-  UserOutlined,
-  EditOutlined,
-  EyeOutlined,
-  DownloadOutlined,
-  CarOutlined,
-  CheckCircleTwoTone,
-  ClockCircleTwoTone,
   RedoOutlined,
+  SendOutlined,
+  CarOutlined,
+  ClockCircleTwoTone,
+  EnvironmentOutlined,
+  FilePdfOutlined,
+  FileImageOutlined,
+  DeleteOutlined,
+  PaperClipOutlined,
+  EyeOutlined,
 } from "@ant-design/icons";
 import type { UploadFile, RcFile } from "antd/es/upload/interface";
 import dayjs from "dayjs";
@@ -45,30 +49,37 @@ const { TextArea } = Input;
 
 dayjs.extend(isBetween);
 
-export default function ProposalCreatorPolished() {
+export default function ProposalCreatorProfessional() {
   const [form] = Form.useForm();
+
+  // State Quản lý file
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [pdfPreviewUrl, setPdfPreviewUrl] = useState<string | null>(null);
-  const [currentFile, setCurrentFile] = useState<File | null>(null);
+  const [previewFiles, setPreviewFiles] = useState<
+    { url: string; name: string; type: string }[]
+  >([]);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  // State Dữ liệu hệ thống
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [employees, setEmployees] = useState<any[]>([]);
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [vehicleBookings, setVehicleBookings] = useState<any>({});
   const [proposalType, setProposalType] = useState<"REGULAR" | "VEHICLE">(
-    "REGULAR"
+    "REGULAR",
   );
   const [selectedVehicle, setSelectedVehicle] = useState<number | null>(null);
   const [rangeTime, setRangeTime] = useState<any>(null);
-  const [managerIds, setManagerIds] = useState<number[] | null>(null);
+  const [managerIds, setManagerIds] = useState<number[]>([]);
 
-  const conflictRef = useRef<string | null>(null);
   const user = useAppSelector((s: any) => s.user);
   const [modal, contextHolder] = Modal.useModal();
 
-  // Fetch initial data
+  // ==========================================
+  // 1. FETCH DỮ LIỆU TỪ HỆ THỐNG
+  // ==========================================
   useEffect(() => {
-    (async () => {
+    const fetchInitialData = async () => {
       setLoading(true);
       try {
         const [empResp, vehResp, schedResp, mgrResp] = await Promise.all([
@@ -80,6 +91,7 @@ export default function ProposalCreatorPolished() {
 
         const empJson = empResp.ok ? await empResp.json() : [];
         setEmployees(empJson || []);
+        console.log(empJson);
 
         const vehJson = vehResp.ok ? await vehResp.json() : { vehicles: [] };
         setVehicles((vehJson.vehicles || []).filter((v: any) => !v.isBusy));
@@ -100,668 +112,531 @@ export default function ProposalCreatorPolished() {
           setManagerIds(mgrJson.managerIds || []);
         }
       } catch (e) {
-        console.error(e);
-        message.error("Không thể tải dữ liệu");
+        message.error("Lỗi kết nối server khi tải dữ liệu");
       } finally {
         setLoading(false);
       }
-    })();
+    };
+    fetchInitialData();
   }, []);
 
-  // Keep form signers/approvers in sync for display counts and defaults
-  useEffect(() => {
-    if (proposalType === "VEHICLE") {
-      // set defaults for vehicle proposals
-      const defaultApprovers = Array.from(new Set([6, 132]));
-      form.setFieldsValue({
-        signers: managerIds,
-        approvers: defaultApprovers,
-      });
-    } else {
-      // for regular proposals, clear defaults (allow selection)
-      form.setFieldsValue({ signers: [], approvers: [] });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [proposalType, managerIds]);
-
-  // Watches so counts update reactively
-  const signersWatch = Form.useWatch("signers", form) || [];
-  const approversWatch = Form.useWatch("approvers", form) || [];
-
-  const handleBeforeUpload = (file: RcFile) => {
-    const isValid =
-      file.type === "application/pdf" || file.type.startsWith("image/");
-    if (!isValid) {
-      message.error("Chỉ chấp nhận file PDF hoặc ảnh!");
-      return Upload.LIST_IGNORE;
-    }
-    if (file.size > 10 * 1024 * 1024) {
-      message.error("File không được vượt quá 10MB!");
-      return Upload.LIST_IGNORE;
-    }
-
-    const url = URL.createObjectURL(file as File);
-    setPdfPreviewUrl(url);
-    setCurrentFile(file as File);
-    setFileList([
-      {
-        uid: Date.now().toString(),
-        name: file.name,
-        status: "done",
-        size: file.size,
-        type: file.type,
-      },
-    ]);
-    message.success(`${file.name} đã được tải lên`);
-    return false; // prevent auto upload
-  };
-
-  const handleRemove = () => {
-    setPdfPreviewUrl(null);
-    setCurrentFile(null);
-    setFileList([]);
-    message.info("Đã xóa file");
-  };
-
+  // ==========================================
+  // 2. LOGIC KIỂM TRA TRÙNG LỊCH XE
+  // ==========================================
   const isRangeOverlap = (
     start: dayjs.Dayjs,
     end: dayjs.Dayjs,
-    bookings: any[]
+    bookings: any[],
   ) => {
-    if (!start || !end) return false;
-    return bookings.some((b) => {
-      const bStart = dayjs(b.startAt);
-      const bEnd = dayjs(b.endAt);
-      return start.isBefore(bEnd) && end.isAfter(bStart);
-    });
+    return bookings.some(
+      (b) => start.isBefore(dayjs(b.endAt)) && end.isAfter(dayjs(b.startAt)),
+    );
   };
 
-  const onRangeChange = (dates: any) => {
+  const onVehicleTimeChange = (dates: any) => {
     if (!dates || !dates[0] || !dates[1]) {
       setRangeTime(null);
       return;
     }
     const [start, end] = dates;
-    const rawBookings = vehicleBookings[selectedVehicle!] || [];
-    if (isRangeOverlap(start, end, rawBookings)) {
-      const key = `${start.valueOf()}_${end.valueOf()}`;
-      if (conflictRef.current === key) {
-        setRangeTime(null);
-        return;
-      }
-      conflictRef.current = key;
+    const currentBookings = vehicleBookings[selectedVehicle!] || [];
+
+    if (isRangeOverlap(start, end, currentBookings)) {
       modal.error({
-        title: "Khoảng thời gian này đã có xe bận!",
-        onOk: () => (conflictRef.current = null),
+        title: "Trùng lịch xe!",
+        content:
+          "Xe đã có người đăng ký trong thời gian này. Vui lòng chọn khung giờ khác.",
       });
       setRangeTime(null);
-      return;
+    } else {
+      setRangeTime(dates);
     }
-    conflictRef.current = null;
-    setRangeTime([start, end]);
+  };
+
+  // 3. Auto-fill người duyệt
+  useEffect(() => {
+    if (proposalType === "VEHICLE") {
+      form.setFieldsValue({ signers: managerIds, approvers: [6, 132] });
+    } else {
+      form.setFieldsValue({ signers: [], approvers: [] });
+    }
+  }, [proposalType, managerIds, form]);
+
+  const signersWatch = Form.useWatch("signers", form) || [];
+  const approversWatch = Form.useWatch("approvers", form) || [];
+
+  // 4. Xử lý Đa File & Preview
+  const handleBeforeUpload = (file: RcFile) => {
+    const isAllowed =
+      file.type === "application/pdf" || file.type.startsWith("image/");
+    if (!isAllowed) {
+      message.error(`${file.name} không đúng định dạng PDF/Ảnh!`);
+      return Upload.LIST_IGNORE;
+    }
+    const url = URL.createObjectURL(file as File);
+    const newFileItem = {
+      uid: Math.random().toString(36),
+      name: file.name,
+      status: "done" as const,
+      originFileObj: file,
+      url: url,
+    };
+    setFileList((prev) => [...prev, newFileItem]);
+    setPreviewFiles((prev) => [
+      ...prev,
+      { url, name: file.name, type: file.type },
+    ]);
+    setActiveIndex(previewFiles.length);
+    return false;
+  };
+
+  const removeFile = (index: number) => {
+    const updatedPreviews = [...previewFiles];
+    URL.revokeObjectURL(updatedPreviews[index].url);
+    setFileList((prev) => prev.filter((_, i) => i !== index));
+    setPreviewFiles((prev) => prev.filter((_, i) => i !== index));
+    if (activeIndex >= updatedPreviews.length - 1)
+      setActiveIndex(Math.max(0, updatedPreviews.length - 2));
   };
 
   const handleSubmit = async (values: any) => {
-    if (!values.name || !values.name.trim()) {
-      message.error("Vui lòng nhập tên đề xuất");
-      return;
-    }
-
-    if (proposalType === "REGULAR" && !currentFile) {
-      message.error("Vui lòng tải lên file PDF hoặc ảnh");
-      return;
-    }
-
-    let signers = values.signers || [];
-    let approvers = values.approvers || [];
-    if (proposalType !== "REGULAR") {
-      approvers = Array.from(new Set([6, 132]));
-      signers = managerIds; // ✅ KHÔNG bọc []
-    }
-    if (signers.length === 0) {
-      console.log(1);
-
-      message.error("Vui lòng chọn ít nhất một người ký");
-      return;
-    }
-
-    // ✅ Lọc trùng nếu người ký > 1
-    if (signers.length > 1) {
-      signers = signers.filter((id: any) => !approvers.includes(id));
-    }
-
-    if (approvers.length === 0) {
-      console.log(2);
-      message.error("Vui lòng chọn ít nhất một người duyệt");
-      return;
-    }
+    if (proposalType === "REGULAR" && fileList.length === 0)
+      return message.warning("Vui lòng đính kèm tài liệu!");
+    if (proposalType === "VEHICLE" && !rangeTime)
+      return message.warning("Vui lòng chọn thời gian sử dụng xe!");
 
     setSubmitting(true);
     try {
       const formData = new FormData();
       formData.append("name", values.name);
-      formData.append("title", values.name);
       formData.append("description", values.description || "");
       formData.append("proposerId", String(user.id || 0));
-      formData.append("signerIds", JSON.stringify(signers));
-      formData.append("approverIds", JSON.stringify(approvers));
+      formData.append("signerIds", JSON.stringify(values.signers));
+      formData.append("approverIds", JSON.stringify(values.approvers));
       formData.append("proposalType", proposalType);
 
       if (proposalType === "VEHICLE") {
-        formData.append("vehicleId", String(selectedVehicle || ""));
-        formData.append("startAt", rangeTime ? rangeTime[0].toISOString() : "");
-        formData.append("endAt", rangeTime ? rangeTime[1].toISOString() : "");
+        formData.append("vehicleId", String(selectedVehicle));
+        formData.append("startAt", rangeTime[0].toISOString());
+        formData.append("endAt", rangeTime[1].toISOString());
         formData.append("dropoffPlace", values.dropoffPlace || "");
-      } else if (currentFile) {
-        formData.append("file", currentFile);
+      } else {
+        fileList.forEach(
+          (file) =>
+            file.originFileObj && formData.append("files", file.originFileObj),
+        );
       }
 
       const res = await fetch("/api/proposals", {
         method: "POST",
         body: formData,
       });
-      const json = await res.json();
       if (res.ok) {
-        modal.success({ title: "Tạo đề xuất thành công" });
-        form.resetFields();
-        setPdfPreviewUrl(null);
-        setFileList([]);
-        setCurrentFile(null);
-        setRangeTime(null);
-        setSelectedVehicle(null);
+        modal.success({ title: "Gửi đề xuất thành công!" });
+        handleReset();
       } else {
-        modal.error({ title: json?.error || "Lỗi" });
+        const err = await res.json();
+        message.error(err.error || "Gửi thất bại");
       }
     } catch (e) {
-      console.error(e);
-      modal.error({ title: "Không thể kết nối server" });
+      message.error("Lỗi kết nối");
     } finally {
       setSubmitting(false);
     }
   };
 
-  // Build Select.Option elements with searchText prop so optionFilterProp works
-  const employeeOptions = employees.map((u: any) => (
-    <Select.Option
-      key={u.id}
-      value={u.id}
-      searchText={`${u.name} ${u.position || ""} ${u.email || ""}`}
-    >
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <Avatar
-          size={28}
-          src={u.avatar}
-          icon={<UserOutlined />}
-          className="flex-shrink-0"
-        />
-        <div>
-          <div style={{ fontWeight: 500 }}>{u.name}</div>
-          <div style={{ fontSize: 12, color: "rgba(0,0,0,0.45)" }}>
-            {` • ` + (u.position || "")}
-          </div>
-        </div>
-      </div>
-    </Select.Option>
-  ));
+  const handleReset = () => {
+    form.resetFields();
+    previewFiles.forEach((f) => URL.revokeObjectURL(f.url));
+    setFileList([]);
+    setPreviewFiles([]);
+    setRangeTime(null);
+    setSelectedVehicle(null);
+    setProposalType("REGULAR");
+  };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-[1600px] mx-auto p-6 bg-[#f0f2f5] min-h-screen font-sans">
       <ModalLoading isOpen={loading || submitting} />
       {contextHolder}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 18,
-        }}
-      >
-        <div>
-          <Title
-            level={3}
-            style={{ margin: 0, display: "flex", alignItems: "center", gap: 8 }}
-          >
-            <EditOutlined /> Tạo Đề Xuất Mới
-          </Title>
-          <div style={{ color: "rgba(0,0,0,0.45)" }}>
-            Tạo đề xuất chung — đề xuất xe.
+
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-xl shadow-sm">
+        <Space align="center" size="large">
+          <div className="bg-blue-600 p-3 rounded-lg shadow-blue-200 shadow-lg">
+            <FileTextOutlined className="text-white text-2xl" />
           </div>
-        </div>
+          <div>
+            <Title level={3} className="!mb-0">
+              Hệ Thống Trình Ký & Đề Xuất
+            </Title>
+            <Text type="secondary">
+              Tạo và quản lý phê duyệt đa phương thức
+            </Text>
+          </div>
+        </Space>
         <Space>
           <Button
+            icon={<RedoOutlined />}
+            onClick={handleReset}
+            size="large"
+            className="rounded-lg"
+          >
+            Làm mới
+          </Button>
+          <Button
             type="primary"
+            icon={<SendOutlined />}
             size="large"
             onClick={() => form.submit()}
             loading={submitting}
+            className="bg-blue-600 hover:bg-blue-700 h-11 px-8 rounded-lg shadow-md"
           >
-            Gửi đề xuất
+            Gửi Phê Duyệt
           </Button>
         </Space>
       </div>
 
       <Row gutter={[24, 24]}>
-        <Col xs={24} lg={14}>
-          <Card style={{ borderRadius: 8 }} bodyStyle={{ padding: 20 }}>
+        <Col xs={24} lg={14} xl={15}>
+          <Card className="rounded-xl border-none shadow-sm h-full">
             <Form
               form={form}
               layout="vertical"
               onFinish={handleSubmit}
-              initialValues={{ signers: [], approvers: [] }}
+              requiredMark={false}
             >
-              <Form.Item
-                name="name"
-                label={<Text strong>Tên đề xuất *</Text>}
-                rules={[{ required: true, message: "Nhập tên đề xuất" }]}
-              >
-                <Input placeholder="Ví dụ: Đề xuất dùng xe đi công tác" />
-              </Form.Item>
-
-              <Form.Item name="description" label={<Text strong>Mô tả</Text>}>
-                <TextArea
-                  rows={4}
-                  placeholder="Mô tả ngắn gọn mục đích đề xuất"
-                />
-              </Form.Item>
-
-              <div style={{ display: "flex", gap: 12, marginBottom: 12 }}>
-                <div style={{ flex: 1 }}>
-                  <Text strong>Loại đề xuất</Text>
+              <div className="grid grid-cols-12 gap-x-4">
+                <Form.Item
+                  className="col-span-8"
+                  name="name"
+                  label={
+                    <Text strong className="text-gray-600">
+                      Tiêu đề đề xuất
+                    </Text>
+                  }
+                  rules={[{ required: true, message: "Nhập tiêu đề" }]}
+                >
+                  <Input
+                    placeholder="Ví dụ: Đề xuất thanh toán..."
+                    size="large"
+                    className="rounded-md"
+                  />
+                </Form.Item>
+                <Form.Item
+                  className="col-span-4"
+                  label={
+                    <Text strong className="text-gray-600">
+                      Loại hình
+                    </Text>
+                  }
+                >
                   <Select
                     value={proposalType}
                     onChange={(v) => {
                       setProposalType(v);
-                      setPdfPreviewUrl(null);
-                      setFileList([]);
-                      setCurrentFile(null);
                     }}
-                    style={{ width: "100%", marginTop: 8 }}
+                    size="large"
                   >
-                    <Select.Option value="REGULAR">Đề xuất chung</Select.Option>
-                    <Select.Option value="VEHICLE">Đề xuất xe</Select.Option>
+                    <Select.Option value="REGULAR">
+                      Đề xuất văn bản (Đa file)
+                    </Select.Option>
+                    <Select.Option value="VEHICLE">
+                      Đề xuất sử dụng xe
+                    </Select.Option>
                   </Select>
-                </div>
-
-                {proposalType === "VEHICLE" && (
-                  <div style={{ flex: 1 }}>
-                    <Text strong>Chọn xe *</Text>
-                    <Select
-                      value={selectedVehicle}
-                      onChange={(v) => setSelectedVehicle(v)}
-                      style={{ width: "100%", marginTop: 8 }}
-                      placeholder="Chọn xe"
-                    >
-                      {vehicles.map((v: any) => (
-                        <Select.Option
-                          key={v.id}
-                          value={v.id}
-                        >{`${v.code} — ${v.name} — ${v.plateNumber}`}</Select.Option>
-                      ))}
-                    </Select>
-                  </div>
-                )}
-              </div>
-
-              {proposalType === "REGULAR" ? (
-                <Form.Item
-                  label={<Text strong>Tải lên file (PDF / Ảnh) *</Text>}
-                >
-                  <Upload
-                    beforeUpload={handleBeforeUpload}
-                    fileList={fileList}
-                    onRemove={handleRemove}
-                    accept=".pdf,image/*"
-                    maxCount={1}
-                    showUploadList={{ showPreviewIcon: false }}
-                  >
-                    <Button icon={<UploadOutlined />}>Chọn file</Button>
-                  </Upload>
                 </Form.Item>
-              ) : (
-                <div style={{ marginBottom: 12 }}>
-                  <Text strong>Khoảng thời gian</Text>
-                  <RangePicker
-                    showTime
-                    format="DD-MM-YYYY HH:mm"
-                    value={rangeTime}
-                    onChange={onRangeChange}
-                    style={{ width: "100%", marginTop: 8 }}
-                  />
-                  <Form.Item
-                    name="dropoffPlace"
-                    label={<Text strong>Địa điểm</Text>}
-                  >
-                    <Input placeholder="Nhập địa điểm trả xe" />
-                  </Form.Item>
-                </div>
-              )}
-
-              <Divider />
-
-              {proposalType === "REGULAR" ? (
-                <div style={{ display: "grid", gap: 12 }}>
-                  <div>
-                    <Text strong>Người ký *</Text>
-                    <Form.Item
-                      name="signers"
-                      rules={[
-                        { required: true, message: "Chọn ít nhất 1 người ký" },
-                      ]}
-                    >
-                      <Select
-                        mode="multiple"
-                        showSearch
-                        optionFilterProp="searchText"
-                        placeholder="Chọn người ký"
-                        maxTagCount={2}
-                        dropdownMatchSelectWidth={320}
-                      >
-                        {employeeOptions}
-                      </Select>
-                    </Form.Item>
-                    <div style={{ marginTop: 6 }}>
-                      {(signersWatch || []).slice(0, 5).map((id: any) => {
-                        const u = employees.find(
-                          (e: any) => Number(e.id) === Number(id)
-                        );
-                        if (!u) return null;
-                        return (
-                          <Tag key={id} style={{ marginBottom: 6 }}>
-                            <Avatar
-                              size={16}
-                              src={u.avatar}
-                              icon={<UserOutlined />}
-                              style={{ marginRight: 6 }}
-                            />
-                            {u.name}
-                          </Tag>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div>
-                    <Text strong>Người duyệt *</Text>
-                    <Form.Item
-                      name="approvers"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Chọn ít nhất 1 người duyệt",
-                        },
-                      ]}
-                    >
-                      <Select
-                        mode="multiple"
-                        showSearch
-                        optionFilterProp="searchText"
-                        placeholder="Chọn người duyệt"
-                        maxTagCount={2}
-                        dropdownMatchSelectWidth={320}
-                      >
-                        {employeeOptions}
-                      </Select>
-                    </Form.Item>
-                    <div style={{ marginTop: 6 }}>
-                      {(approversWatch || []).slice(0, 5).map((id: any) => {
-                        const u = employees.find(
-                          (e: any) => Number(e.id) === Number(id)
-                        );
-                        if (!u) return null;
-                        return (
-                          <Tag key={id} style={{ marginBottom: 6 }}>
-                            <Avatar
-                              size={16}
-                              src={u.avatar}
-                              icon={<UserOutlined />}
-                              style={{ marginRight: 6 }}
-                            />
-                            {u.name}
-                          </Tag>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                // VEHICLE: show defaults and hide selectors (read-only)
-                <div style={{ display: "grid", gap: 12 }}>
-                  <div>
-                    <Text strong>Người ký (mặc định)</Text>
-                    <div style={{ marginTop: 8 }}>
-                      {(form.getFieldValue("signers") || []).map((id: any) => {
-                        const u = employees.find(
-                          (e: any) => Number(e.id) === Number(id)
-                        );
-                        const label = u ? u.name : `ID:${id}`;
-                        return (
-                          <Tag key={id} style={{ marginBottom: 6 }}>
-                            <Avatar
-                              size={16}
-                              src={u?.avatar}
-                              icon={<UserOutlined />}
-                              style={{ marginRight: 6 }}
-                            />
-                            {label}
-                          </Tag>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div>
-                    <Text strong>Người duyệt (mặc định)</Text>
-                    <div style={{ marginTop: 8 }}>
-                      {(form.getFieldValue("approvers") || []).map(
-                        (id: any) => {
-                          const u = employees.find(
-                            (e: any) => Number(e.id) === Number(id)
-                          );
-                          const label = u ? u.name : `ID:${id}`;
-                          return (
-                            <Tag key={id} style={{ marginBottom: 6 }}>
-                              <Avatar
-                                size={16}
-                                src={u?.avatar}
-                                icon={<UserOutlined />}
-                                style={{ marginRight: 6 }}
-                              />
-                              {label}
-                            </Tag>
-                          );
-                        }
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </Form>
-          </Card>
-
-          <Card style={{ marginTop: 12 }} bodyStyle={{ padding: 12 }}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <div>
-                <Text strong>Thông tin nhanh</Text>
-                <div style={{ color: "rgba(0,0,0,0.45)", fontSize: 12 }}>
-                  Số lượng hiện tại
-                </div>
               </div>
-              <div style={{ display: "flex", gap: 12 }}>
-                <Statistic title="Tệp" value={fileList.length} />
-                <Statistic
-                  title="Người ký"
-                  value={(signersWatch || []).length}
-                />
-                <Statistic
-                  title="Người duyệt"
-                  value={(approversWatch || []).length}
-                />
-              </div>
-            </div>
 
-            <Divider />
-
-            <div style={{ display: "flex", gap: 8 }}>
-              <Button
-                icon={<DownloadOutlined />}
-                onClick={() => currentFile && window.open(pdfPreviewUrl || "")}
-                disabled={!currentFile}
-              >
-                Tải file
-              </Button>
-              <Button
-                icon={<EyeOutlined />}
-                onClick={() =>
-                  currentFile && window.open(pdfPreviewUrl || "_blank")
+              <Form.Item
+                name="description"
+                label={
+                  <Text strong className="text-gray-600">
+                    Nội dung tóm tắt
+                  </Text>
                 }
-                disabled={!currentFile}
               >
-                Xem
-              </Button>
-            </div>
+                <TextArea
+                  rows={4}
+                  placeholder="Mô tả mục đích đề xuất..."
+                  className="rounded-md"
+                />
+              </Form.Item>
+
+              {/* Upload Files */}
+              {proposalType === "REGULAR" && (
+                <div className="mb-6">
+                  <Text strong className="text-gray-600 block mb-2">
+                    Tài liệu đính kèm (PDF/Images)
+                  </Text>
+                  <Upload.Dragger
+                    multiple
+                    beforeUpload={handleBeforeUpload}
+                    fileList={[]}
+                    className="bg-gray-50 border-2 border-dashed border-blue-200 hover:border-blue-400 rounded-xl"
+                  >
+                    <div className="py-4">
+                      <PaperClipOutlined className="text-blue-500 text-4xl" />
+                      <p className="ant-upload-text font-medium mt-2">
+                        Kéo thả nhiều tệp hoặc nhấp để chọn
+                      </p>
+                    </div>
+                  </Upload.Dragger>
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {previewFiles.map((file, idx) => (
+                      <div
+                        key={idx}
+                        onClick={() => setActiveIndex(idx)}
+                        className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer transition-all ${activeIndex === idx ? "border-blue-500 bg-blue-50" : "bg-white"}`}
+                      >
+                        <Space className="overflow-hidden">
+                          {file.type === "application/pdf" ? (
+                            <FilePdfOutlined className="text-red-500 text-xl" />
+                          ) : (
+                            <FileImageOutlined className="text-green-500 text-xl" />
+                          )}
+                          <Text ellipsis className="max-w-[150px]">
+                            {file.name}
+                          </Text>
+                        </Space>
+                        <Tooltip title="Xóa file">
+                          <Button
+                            type="text"
+                            danger
+                            icon={<DeleteOutlined />}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeFile(idx);
+                            }}
+                          />
+                        </Tooltip>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Giao diện Xe */}
+              {proposalType === "VEHICLE" && (
+                <div className="bg-blue-50/50 p-6 rounded-xl border border-blue-100 mb-6">
+                  <Row gutter={16}>
+                    <Col span={12}>
+                      <Form.Item
+                        label={<Text strong>Chọn xe công tác</Text>}
+                        required
+                      >
+                        <Select
+                          placeholder="Chọn xe..."
+                          value={selectedVehicle}
+                          onChange={(v) => {
+                            setSelectedVehicle(v);
+                            setRangeTime(null);
+                          }}
+                          size="large"
+                        >
+                          {vehicles.map((v) => (
+                            <Select.Option key={v.id} value={v.id}>
+                              <CarOutlined className="mr-2 text-blue-500" />{" "}
+                              {v.plateNumber} - {v.name}
+                            </Select.Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item
+                        label={<Text strong>Thời gian sử dụng</Text>}
+                        required
+                      >
+                        <RangePicker
+                          showTime
+                          format="DD/MM HH:mm"
+                          value={rangeTime}
+                          onChange={onVehicleTimeChange}
+                          size="large"
+                          className="w-full"
+                          disabled={!selectedVehicle}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={24}>
+                      <Form.Item
+                        name="dropoffPlace"
+                        label={<Text strong>Điểm đến / Lộ trình</Text>}
+                      >
+                        <Input
+                          prefix={
+                            <EnvironmentOutlined className="text-red-500" />
+                          }
+                          placeholder="Địa chỉ chi tiết..."
+                          size="large"
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </div>
+              )}
+
+              <Divider orientation="left">
+                <Tag color="blue">Quy trình phê duyệt</Tag>
+              </Divider>
+              <Row gutter={20}>
+                <Col span={12}>
+                  <Form.Item
+                    name="signers"
+                    label={<Text strong>Người Kiểm Duyệt</Text>}
+                    required
+                  >
+                    <Select
+                      mode="multiple"
+                      showSearch // Kích hoạt tính năng tìm kiếm
+                      placeholder="Tìm theo tên hoặc chức vụ..."
+                      size="large"
+                      optionFilterProp="children"
+                      // Hàm lọc tùy chỉnh: tìm kiếm không phân biệt hoa thường
+                      filterOption={(input, option) =>
+                        (option?.label ?? "")
+                          .toLowerCase()
+                          .includes(input.toLowerCase())
+                      }
+                      // Dùng options thay vì map trực tiếp giúp Ant Design xử lý search mượt hơn
+                      options={employees.map((e) => ({
+                        value: e.id,
+                        label: `${e.name} ${e.workInfo?.position?.name ? `(${e.workInfo.position.name})` : ""}`,
+                      }))}
+                    />
+                  </Form.Item>
+                </Col>
+
+                <Col span={12}>
+                  <Form.Item
+                    name="approvers"
+                    label={<Text strong>Người Phê Duyệt Cuối</Text>}
+                    required
+                  >
+                    <Select
+                      mode="multiple"
+                      showSearch
+                      placeholder="Tìm theo tên hoặc chức vụ..."
+                      size="large"
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        (option?.label ?? "")
+                          .toLowerCase()
+                          .includes(input.toLowerCase())
+                      }
+                      options={employees.map((e) => ({
+                        value: e.id,
+                        label: `${e.name} ${e.position ? `(${e.position})` : ""}`,
+                      }))}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Form>
           </Card>
         </Col>
 
-        <Col xs={24} lg={10}>
-          <Card style={{ borderRadius: 8 }} bodyStyle={{ padding: 20 }}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
+        {/* CỘT PHẢI: PREVIEW */}
+        <Col xs={24} lg={10} xl={9}>
+          <Space direction="vertical" className="w-full" size="large">
+            <Card
+              title={
+                <Space>
+                  <EyeOutlined className="text-blue-500" />{" "}
+                  <Text strong>Bản xem trước</Text>
+                </Space>
+              }
+              className="rounded-xl shadow-sm overflow-hidden"
+              bodyStyle={{ padding: 0 }}
             >
-              <Text strong>
-                <FileTextOutlined /> Xem trước
-              </Text>
-              <div>
-                <Tag
-                  icon={<CarOutlined />}
-                  color={proposalType === "VEHICLE" ? "geekblue" : "default"}
-                >
-                  {proposalType === "VEHICLE" ? "Đề xuất xe" : "Đề xuất chung"}
-                </Tag>
-              </div>
-            </div>
-
-            <div style={{ marginTop: 12 }}>
               {proposalType === "REGULAR" ? (
-                pdfPreviewUrl && currentFile ? (
-                  <div style={{ height: 540 }}>
-                    <iframe
-                      src={`${pdfPreviewUrl}#toolbar=1&navpanes=0`}
-                      style={{ width: "100%", height: "100%", border: "none" }}
-                      title="PDF Preview"
-                    />
+                previewFiles.length > 0 ? (
+                  <div className="bg-gray-100">
+                    <div className="bg-white p-2 border-b flex justify-between px-4">
+                      <Text italic className="text-xs text-gray-500 truncate">
+                        {previewFiles[activeIndex].name}
+                      </Text>
+                    </div>
+                    {previewFiles[activeIndex].type === "application/pdf" ? (
+                      <iframe
+                        src={previewFiles[activeIndex].url}
+                        className="w-full h-[600px] border-none"
+                        title="Preview"
+                      />
+                    ) : (
+                      <div className="w-full h-[600px] flex items-center justify-center p-4">
+                        <img
+                          src={previewFiles[activeIndex].url}
+                          alt="preview"
+                          className="max-w-full max-h-full object-contain shadow-lg"
+                        />
+                      </div>
+                    )}
                   </div>
                 ) : (
-                  <div
-                    style={{
-                      padding: 36,
-                      textAlign: "center",
-                      color: "rgba(0,0,0,0.35)",
-                      border: "2px dashed #f0f0f0",
-                      borderRadius: 8,
-                    }}
-                  >
-                    <FileTextOutlined style={{ fontSize: 48 }} />
-                    <div style={{ marginTop: 12 }}>
-                      Chưa có file để xem trước
-                    </div>
-                    <div style={{ marginTop: 8, fontSize: 12 }}>
-                      Tải lên file PDF để xem trực tiếp
-                    </div>
+                  <div className="py-32 text-center bg-gray-50">
+                    <Empty description="Chưa có tài liệu" />
                   </div>
                 )
               ) : (
-                <div>
-                  <Text strong>Lịch bận xe</Text>
-                  <Divider />
+                <div className="p-6 min-h-[400px]">
+                  <Text strong className="block mb-6 underline">
+                    Lịch bận hiện tại của xe:
+                  </Text>
                   {selectedVehicle &&
                   (vehicleBookings[selectedVehicle] || []).length > 0 ? (
-                    <Timeline>
+                    <Timeline mode="left">
                       {(vehicleBookings[selectedVehicle] || []).map(
-                        (b: any, idx: number) => (
-                          <Timeline.Item key={idx} color="red">
-                            <div
-                              style={{
-                                display: "flex",
-                                gap: 12,
-                                alignItems: "center",
-                              }}
-                            >
-                              <ClockCircleTwoTone twoToneColor="#fa8c16" />
-                              <div>
-                                <div style={{ fontWeight: 500 }}>
-                                  {b.startAt.format("DD/MM/YYYY HH:mm")} →{" "}
-                                  {b.endAt.format("DD/MM/YYYY HH:mm")}
-                                </div>
-                              </div>
+                        (b: any, i: number) => (
+                          <Timeline.Item
+                            key={i}
+                            color="red"
+                            dot={<ClockCircleTwoTone twoToneColor="#ff4d4f" />}
+                          >
+                            <div className="text-xs text-gray-400">
+                              {b.startAt.format("DD/MM HH:mm")} -{" "}
+                              {b.endAt.format("HH:mm")}
+                            </div>
+                            <div className="font-medium text-gray-700">
+                              Đã có lịch đăng ký
                             </div>
                           </Timeline.Item>
-                        )
+                        ),
                       )}
                     </Timeline>
                   ) : (
-                    <div style={{ color: "rgba(0,0,0,0.45)" }}>
-                      Không có lịch bận cho xe đang chọn
-                    </div>
+                    <Empty
+                      description="Xe đang trống lịch"
+                      image={Empty.PRESENTED_IMAGE_SIMPLE}
+                    />
                   )}
                 </div>
               )}
-            </div>
-          </Card>
+            </Card>
 
-          <Card style={{ marginTop: 12 }} bodyStyle={{ padding: 12 }}>
-            <Text strong>Gợi ý</Text>
-            <div
-              style={{ marginTop: 8, color: "rgba(0,0,0,0.65)", fontSize: 13 }}
-            >
-              <div>• Kiểm tra kỹ thời gian trước khi gửi đề xuất xe.</div>
-              <div>• Nếu file lớn, nén hoặc tách file để tải nhanh hơn.</div>
-            </div>
-          </Card>
+            <Card className="bg-slate-900 rounded-xl border-none">
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Statistic
+                    title={<span className="text-slate-400">Tệp đính kèm</span>}
+                    value={fileList.length}
+                    prefix={<PaperClipOutlined />}
+                    valueStyle={{ color: "#fff" }}
+                  />
+                </Col>
+                <Col span={12}>
+                  <Statistic
+                    title={<span className="text-slate-400">Người ký</span>}
+                    value={signersWatch.length + approversWatch.length}
+                    valueStyle={{ color: "#fff" }}
+                  />
+                </Col>
+              </Row>
+            </Card>
+          </Space>
         </Col>
       </Row>
-
-      <div
-        style={{
-          marginTop: 18,
-          display: "flex",
-          justifyContent: "flex-end",
-          gap: 12,
-        }}
-      >
-        <Button
-          icon={<RedoOutlined />}
-          onClick={() => {
-            form.resetFields();
-            setPdfPreviewUrl(null);
-            setFileList([]);
-            setCurrentFile(null);
-            setRangeTime(null);
-          }}
-          type="default"
-          size="large"
-          color="danger"
-        >
-          Reset
-        </Button>
-        <Button
-          icon={<CheckCircleTwoTone twoToneColor="#52c41a" />}
-          type="primary"
-          size="large"
-          onClick={() => form.submit()}
-          loading={submitting}
-        >
-          Gửi đề xuất
-        </Button>
-      </div>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -9,24 +10,28 @@ import { CreateProposalFormData } from "@/components/api";
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 export async function POST(request: NextRequest) {
+  console.log(11111111111111);
+
   try {
     const formData = await request.formData();
 
-    // Lấy thông tin cơ bản
+    // 1. Lấy thông tin cơ bản (Khớp với Frontend gửi lên)
     const name = formData.get("name") as string;
-    const title = formData.get("title") as string;
-    const description = formData.get("description") as string;
+    // Nếu frontend gửi 'name' mà logic cũ dùng 'title', ta lấy name làm title
+    const title = (formData.get("title") as string) || name;
+    const description = (formData.get("description") as string) || "";
 
-    // Signers & Approvers
-    const signerIds = JSON.parse(formData.get("signerIds") as string);
-    const approverIds = JSON.parse(formData.get("approverIds") as string);
+    // 2. Parse Signers & Approvers
+    const signerIds = JSON.parse((formData.get("signerIds") as string) || "[]");
+    const approverIds = JSON.parse(
+      (formData.get("approverIds") as string) || "[]",
+    );
 
-    // Loại proposal & vehicle
+    // 3. Xử lý loại Proposal & Thông tin xe
     const rawProposalType = formData.get("proposalType") as string | null;
-    const proposalType: "REGULAR" | "VEHICLE" | undefined =
-      rawProposalType === "REGULAR" || rawProposalType === "VEHICLE"
-        ? rawProposalType
-        : "REGULAR"; // "REGULAR" | "VEHICLE"
+    const proposalType: "REGULAR" | "VEHICLE" =
+      rawProposalType === "VEHICLE" ? "VEHICLE" : "REGULAR";
+
     const vehicleId = formData.get("vehicleId")
       ? Number(formData.get("vehicleId"))
       : undefined;
@@ -39,14 +44,16 @@ export async function POST(request: NextRequest) {
     const dropoffPlace =
       (formData.get("dropoffPlace") as string | null) ?? undefined;
 
-    const file = formData.get("file") as File | null;
+    // 4. XỬ LÝ ĐA FILE (Quan trọng)
+    // Frontend dùng formData.append("files", ...), nên ta dùng getAll
+    const files = formData.getAll("files") as File[];
 
+    // 5. Xác thực User từ Token
     const token = request.cookies.get("token-hrm")?.value;
-
     if (!token) {
       return NextResponse.json(
         { error: "Thiếu token xác thực" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -55,46 +62,37 @@ export async function POST(request: NextRequest) {
       const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
       employeeId = decoded.id;
     } catch (err) {
-      console.error("Token verification error:", err);
       return NextResponse.json(
-        { error: "Token không hợp lệ hoặc đã hết hạn" },
-        { status: 401 }
+        { error: "Token không hợp lệ" },
+        { status: 401 },
       );
     }
 
-    // Validate required fields
+    // 6. Validation
     if (!name || !title) {
       return NextResponse.json(
-        { error: "Thiếu thông tin bắt buộc" },
-        { status: 400 }
+        { error: "Thiếu tiêu đề đề xuất" },
+        { status: 400 },
       );
     }
 
-    if (!signerIds || signerIds.length === 0) {
+    if (signerIds.length === 0 || approverIds.length === 0) {
       return NextResponse.json(
-        { error: "Phải có ít nhất một người đồng ý" },
-        { status: 400 }
+        { error: "Thiếu người duyệt hoặc người phê duyệt" },
+        { status: 400 },
       );
     }
 
-    if (!approverIds || approverIds.length === 0) {
+    if (proposalType === "VEHICLE" && (!vehicleId || !startAt || !endAt)) {
       return NextResponse.json(
-        { error: "Phải có ít nhất một người phê duyệt" },
-        { status: 400 }
+        { error: "Thiếu thông tin lịch trình xe" },
+        { status: 400 },
       );
     }
 
-    // Nếu là proposal xe, cần vehicleId, startAt, endAt
-    if (proposalType === "VEHICLE") {
-      if (!vehicleId || !startAt || !endAt) {
-        return NextResponse.json(
-          { error: "Proposal xe phải có vehicleId, startAt và endAt" },
-          { status: 400 }
-        );
-      }
-    }
-
-    // Tạo proposal data
+    // 7. Gọi Service để lưu DB
+    // Lưu ý: Bạn cần cập nhật ProposalService.createProposal để nhận mảng files[]
+    // thay vì 1 file đơn lẻ nếu muốn lưu nhiều tài liệu.
     const proposalData: CreateProposalFormData = {
       name,
       title,
@@ -109,12 +107,11 @@ export async function POST(request: NextRequest) {
       dropoffPlace,
     };
 
-    const createdById = employeeId;
-
+    // Nếu Service của bạn chưa hỗ trợ mảng, hãy lấy file đầu tiên: files[0]
     const result = await ProposalService.createProposal(
       proposalData,
-      file,
-      createdById
+      files, // Truyền cả mảng file xuống service
+      employeeId,
     );
 
     if (result.success) {
@@ -124,10 +121,9 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
     console.error("API Error:", error);
-    return NextResponse.json({ error: "Lỗi server" }, { status: 500 });
+    return NextResponse.json({ error: "Lỗi server nội bộ" }, { status: 500 });
   }
 }
-
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -137,7 +133,7 @@ export async function GET(request: NextRequest) {
     if (!token) {
       return NextResponse.json(
         { error: "Thiếu token xác thực" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -149,7 +145,7 @@ export async function GET(request: NextRequest) {
       console.error("Token verification error:", err);
       return NextResponse.json(
         { error: "Token không hợp lệ hoặc đã hết hạn" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -161,13 +157,13 @@ export async function GET(request: NextRequest) {
     if (isNaN(proposalId)) {
       return NextResponse.json(
         { error: "ID đề xuất không hợp lệ" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const result = await ProposalService.getProposal(
       proposalId,
-      String(employeeId)
+      String(employeeId),
     );
 
     if (result.success) {
