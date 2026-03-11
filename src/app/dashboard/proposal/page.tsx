@@ -75,9 +75,7 @@ export default function ProposalCreatorProfessional() {
   const user = useAppSelector((s: any) => s.user);
   const [modal, contextHolder] = Modal.useModal();
 
-  // ==========================================
-  // 1. FETCH DỮ LIỆU TỪ HỆ THỐNG
-  // ==========================================
+  // 1. FETCH DỮ LIỆU
   useEffect(() => {
     const fetchInitialData = async () => {
       setLoading(true);
@@ -91,7 +89,6 @@ export default function ProposalCreatorProfessional() {
 
         const empJson = empResp.ok ? await empResp.json() : [];
         setEmployees(empJson || []);
-        console.log(empJson);
 
         const vehJson = vehResp.ok ? await vehResp.json() : { vehicles: [] };
         setVehicles((vehJson.vehicles || []).filter((v: any) => !v.isBusy));
@@ -112,7 +109,7 @@ export default function ProposalCreatorProfessional() {
           setManagerIds(mgrJson.managerIds || []);
         }
       } catch (e) {
-        message.error("Lỗi kết nối server khi tải dữ liệu");
+        message.error("Lỗi kết nối server");
       } finally {
         setLoading(false);
       }
@@ -120,9 +117,7 @@ export default function ProposalCreatorProfessional() {
     fetchInitialData();
   }, []);
 
-  // ==========================================
-  // 2. LOGIC KIỂM TRA TRÙNG LỊCH XE
-  // ==========================================
+  // 2. KIỂM TRA TRÙNG LỊCH
   const isRangeOverlap = (
     start: dayjs.Dayjs,
     end: dayjs.Dayjs,
@@ -144,8 +139,7 @@ export default function ProposalCreatorProfessional() {
     if (isRangeOverlap(start, end, currentBookings)) {
       modal.error({
         title: "Trùng lịch xe!",
-        content:
-          "Xe đã có người đăng ký trong thời gian này. Vui lòng chọn khung giờ khác.",
+        content: "Xe đã có người đăng ký. Vui lòng chọn khung giờ khác.",
       });
       setRangeTime(null);
     } else {
@@ -165,7 +159,7 @@ export default function ProposalCreatorProfessional() {
   const signersWatch = Form.useWatch("signers", form) || [];
   const approversWatch = Form.useWatch("approvers", form) || [];
 
-  // 4. Xử lý Đa File & Preview
+  // 4. Xử lý File
   const handleBeforeUpload = (file: RcFile) => {
     const isAllowed =
       file.type === "application/pdf" || file.type.startsWith("image/");
@@ -256,175 +250,155 @@ export default function ProposalCreatorProfessional() {
   };
 
   return (
-    <div className="max-w-[1600px] mx-auto p-6 bg-[#f0f2f5] min-h-screen font-sans">
+    <div className="max-w-[1600px] mx-auto p-3 sm:p-6 bg-[#f0f2f5] min-h-screen font-sans">
       <ModalLoading isOpen={loading || submitting} />
       {contextHolder}
 
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-xl shadow-sm">
-        <Space align="center" size="large">
-          <div className="bg-blue-600 p-3 rounded-lg shadow-blue-200 shadow-lg">
-            <FileTextOutlined className="text-white text-2xl" />
+      {/* Responsive Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 bg-white p-4 rounded-xl shadow-sm gap-4">
+        <Space align="center" size="middle">
+          <div className="bg-blue-600 p-2 sm:p-3 rounded-lg shadow-lg">
+            <FileTextOutlined className="text-white text-xl sm:text-2xl" />
           </div>
           <div>
-            <Title level={3} className="!mb-0">
-              Hệ Thống Trình Ký & Đề Xuất
+            <Title level={4} className="!mb-0 text-base sm:text-lg">
+              Trình Ký Đề Xuất
             </Title>
-            <Text type="secondary">
-              Tạo và quản lý phê duyệt đa phương thức
+            <Text type="secondary" className="text-xs hidden sm:block">
+              Toyota Binh Duong System
             </Text>
           </div>
         </Space>
-        <Space>
+        <Space className="w-full md:w-auto">
           <Button
             icon={<RedoOutlined />}
             onClick={handleReset}
-            size="large"
-            className="rounded-lg"
+            className="flex-1 md:flex-none h-10 rounded-lg"
           >
             Làm mới
           </Button>
           <Button
             type="primary"
             icon={<SendOutlined />}
-            size="large"
             onClick={() => form.submit()}
             loading={submitting}
-            className="bg-blue-600 hover:bg-blue-700 h-11 px-8 rounded-lg shadow-md"
+            className="flex-1 md:flex-none bg-blue-600 h-10 px-6 rounded-lg shadow-md"
           >
-            Gửi Phê Duyệt
+            Gửi
           </Button>
         </Space>
       </div>
 
-      <Row gutter={[24, 24]}>
+      <Row gutter={[20, 20]}>
+        {/* CỘT TRÁI: FORM */}
         <Col xs={24} lg={14} xl={15}>
-          <Card className="rounded-xl border-none shadow-sm h-full">
+          <Card className="rounded-xl border-none shadow-sm overflow-hidden">
             <Form
               form={form}
               layout="vertical"
               onFinish={handleSubmit}
               requiredMark={false}
             >
-              <div className="grid grid-cols-12 gap-x-4">
-                <Form.Item
-                  className="col-span-8"
-                  name="name"
-                  label={
-                    <Text strong className="text-gray-600">
-                      Tiêu đề đề xuất
-                    </Text>
-                  }
-                  rules={[{ required: true, message: "Nhập tiêu đề" }]}
-                >
-                  <Input
-                    placeholder="Ví dụ: Đề xuất thanh toán..."
-                    size="large"
-                    className="rounded-md"
-                  />
-                </Form.Item>
-                <Form.Item
-                  className="col-span-4"
-                  label={
-                    <Text strong className="text-gray-600">
-                      Loại hình
-                    </Text>
-                  }
-                >
-                  <Select
-                    value={proposalType}
-                    onChange={(v) => {
-                      setProposalType(v);
-                    }}
-                    size="large"
+              <Row gutter={16}>
+                <Col xs={24} md={16}>
+                  <Form.Item
+                    name="name"
+                    label={<Text strong>Tiêu đề đề xuất</Text>}
+                    rules={[{ required: true, message: "Nhập tiêu đề" }]}
                   >
-                    <Select.Option value="REGULAR">
-                      Đề xuất văn bản (Đa file)
-                    </Select.Option>
-                    <Select.Option value="VEHICLE">
-                      Đề xuất sử dụng xe
-                    </Select.Option>
-                  </Select>
-                </Form.Item>
-              </div>
+                    <Input
+                      placeholder="Ví dụ: Đề xuất thanh toán..."
+                      size="large"
+                      className="rounded-md"
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} md={8}>
+                  <Form.Item label={<Text strong>Loại hình</Text>}>
+                    <Select
+                      value={proposalType}
+                      onChange={setProposalType}
+                      size="large"
+                      className="w-full"
+                    >
+                      <Select.Option value="REGULAR">
+                        Văn bản (Đa file)
+                      </Select.Option>
+                      <Select.Option value="VEHICLE">Sử dụng xe</Select.Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+              </Row>
 
               <Form.Item
                 name="description"
-                label={
-                  <Text strong className="text-gray-600">
-                    Nội dung tóm tắt
-                  </Text>
-                }
+                label={<Text strong>Nội dung tóm tắt</Text>}
               >
                 <TextArea
-                  rows={4}
-                  placeholder="Mô tả mục đích đề xuất..."
+                  rows={3}
+                  placeholder="Mô tả mục đích..."
                   className="rounded-md"
                 />
               </Form.Item>
 
-              {/* Upload Files */}
+              {/* Upload Files Section */}
               {proposalType === "REGULAR" && (
                 <div className="mb-6">
-                  <Text strong className="text-gray-600 block mb-2">
-                    Tài liệu đính kèm (PDF/Images)
+                  <Text strong className="block mb-2">
+                    Tài liệu đính kèm
                   </Text>
                   <Upload.Dragger
                     multiple
                     beforeUpload={handleBeforeUpload}
                     fileList={[]}
-                    className="bg-gray-50 border-2 border-dashed border-blue-200 hover:border-blue-400 rounded-xl"
+                    className="bg-gray-50 border-2 border-dashed border-blue-200 rounded-xl"
                   >
-                    <div className="py-4">
-                      <PaperClipOutlined className="text-blue-500 text-4xl" />
-                      <p className="ant-upload-text font-medium mt-2">
-                        Kéo thả nhiều tệp hoặc nhấp để chọn
+                    <div className="py-2">
+                      <PaperClipOutlined className="text-blue-500 text-2xl" />
+                      <p className="text-xs mt-1">
+                        Kéo thả hoặc nhấn để chọn tập tin (PDF/Ảnh)
                       </p>
                     </div>
                   </Upload.Dragger>
-                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {previewFiles.map((file, idx) => (
                       <div
                         key={idx}
                         onClick={() => setActiveIndex(idx)}
-                        className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer transition-all ${activeIndex === idx ? "border-blue-500 bg-blue-50" : "bg-white"}`}
+                        className={`flex items-center justify-between p-2 border rounded-lg cursor-pointer transition-all ${activeIndex === idx ? "border-blue-500 bg-blue-50" : "bg-white"}`}
                       >
                         <Space className="overflow-hidden">
                           {file.type === "application/pdf" ? (
-                            <FilePdfOutlined className="text-red-500 text-xl" />
+                            <FilePdfOutlined className="text-red-500" />
                           ) : (
-                            <FileImageOutlined className="text-green-500 text-xl" />
+                            <FileImageOutlined className="text-green-500" />
                           )}
-                          <Text ellipsis className="max-w-[150px]">
+                          <Text ellipsis className="max-w-[120px] text-xs">
                             {file.name}
                           </Text>
                         </Space>
-                        <Tooltip title="Xóa file">
-                          <Button
-                            type="text"
-                            danger
-                            icon={<DeleteOutlined />}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              removeFile(idx);
-                            }}
-                          />
-                        </Tooltip>
+                        <Button
+                          type="text"
+                          danger
+                          icon={<DeleteOutlined />}
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeFile(idx);
+                          }}
+                        />
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Giao diện Xe */}
+              {/* Vehicle Section */}
               {proposalType === "VEHICLE" && (
-                <div className="bg-blue-50/50 p-6 rounded-xl border border-blue-100 mb-6">
+                <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 mb-6">
                   <Row gutter={16}>
-                    <Col span={12}>
-                      <Form.Item
-                        label={<Text strong>Chọn xe công tác</Text>}
-                        required
-                      >
+                    <Col xs={24} md={12}>
+                      <Form.Item label={<Text strong>Chọn xe</Text>} required>
                         <Select
                           placeholder="Chọn xe..."
                           value={selectedVehicle}
@@ -443,11 +417,8 @@ export default function ProposalCreatorProfessional() {
                         </Select>
                       </Form.Item>
                     </Col>
-                    <Col span={12}>
-                      <Form.Item
-                        label={<Text strong>Thời gian sử dụng</Text>}
-                        required
-                      >
+                    <Col xs={24} md={12}>
+                      <Form.Item label={<Text strong>Thời gian</Text>} required>
                         <RangePicker
                           showTime
                           format="DD/MM HH:mm"
@@ -462,7 +433,7 @@ export default function ProposalCreatorProfessional() {
                     <Col span={24}>
                       <Form.Item
                         name="dropoffPlace"
-                        label={<Text strong>Điểm đến / Lộ trình</Text>}
+                        label={<Text strong>Điểm đến</Text>}
                       >
                         <Input
                           prefix={
@@ -478,28 +449,27 @@ export default function ProposalCreatorProfessional() {
               )}
 
               <Divider orientation="left">
-                <Tag color="blue">Quy trình phê duyệt</Tag>
+                <Tag color="blue" className="rounded-full px-4">
+                  Luồng phê duyệt
+                </Tag>
               </Divider>
-              <Row gutter={20}>
-                <Col span={12}>
+              <Row gutter={16}>
+                <Col xs={24} md={12}>
                   <Form.Item
                     name="signers"
-                    label={<Text strong>Người Kiểm Duyệt</Text>}
+                    label={<Text strong>Kiểm duyệt</Text>}
                     required
                   >
                     <Select
                       mode="multiple"
-                      showSearch // Kích hoạt tính năng tìm kiếm
-                      placeholder="Tìm theo tên hoặc chức vụ..."
+                      showSearch
+                      placeholder="Chọn người kiểm..."
                       size="large"
-                      optionFilterProp="children"
-                      // Hàm lọc tùy chỉnh: tìm kiếm không phân biệt hoa thường
                       filterOption={(input, option) =>
                         (option?.label ?? "")
                           .toLowerCase()
                           .includes(input.toLowerCase())
                       }
-                      // Dùng options thay vì map trực tiếp giúp Ant Design xử lý search mượt hơn
                       options={employees.map((e) => ({
                         value: e.id,
                         label: `${e.name} ${e.workInfo?.position?.name ? `(${e.workInfo.position.name})` : ""}`,
@@ -507,19 +477,17 @@ export default function ProposalCreatorProfessional() {
                     />
                   </Form.Item>
                 </Col>
-
-                <Col span={12}>
+                <Col xs={24} md={12}>
                   <Form.Item
                     name="approvers"
-                    label={<Text strong>Người Phê Duyệt Cuối</Text>}
+                    label={<Text strong>Phê duyệt cuối</Text>}
                     required
                   >
                     <Select
                       mode="multiple"
                       showSearch
-                      placeholder="Tìm theo tên hoặc chức vụ..."
+                      placeholder="Chọn người duyệt..."
                       size="large"
-                      optionFilterProp="children"
                       filterOption={(input, option) =>
                         (option?.label ?? "")
                           .toLowerCase()
@@ -537,14 +505,14 @@ export default function ProposalCreatorProfessional() {
           </Card>
         </Col>
 
-        {/* CỘT PHẢI: PREVIEW */}
+        {/* CỘT PHẢI: PREVIEW (Tự động xuống dưới trên Mobile) */}
         <Col xs={24} lg={10} xl={9}>
           <Space direction="vertical" className="w-full" size="large">
             <Card
               title={
                 <Space>
-                  <EyeOutlined className="text-blue-500" />{" "}
-                  <Text strong>Bản xem trước</Text>
+                  <EyeOutlined className="text-blue-500" />
+                  <Text strong>Xem trước tài liệu</Text>
                 </Space>
               }
               className="rounded-xl shadow-sm overflow-hidden"
@@ -553,36 +521,39 @@ export default function ProposalCreatorProfessional() {
               {proposalType === "REGULAR" ? (
                 previewFiles.length > 0 ? (
                   <div className="bg-gray-100">
-                    <div className="bg-white p-2 border-b flex justify-between px-4">
-                      <Text italic className="text-xs text-gray-500 truncate">
+                    <div className="bg-white p-2 border-b px-4">
+                      <Text
+                        italic
+                        className="text-[10px] text-gray-500 truncate"
+                      >
                         {previewFiles[activeIndex].name}
                       </Text>
                     </div>
                     {previewFiles[activeIndex].type === "application/pdf" ? (
                       <iframe
                         src={previewFiles[activeIndex].url}
-                        className="w-full h-[600px] border-none"
+                        className="w-full h-[450px] md:h-[600px] border-none"
                         title="Preview"
                       />
                     ) : (
-                      <div className="w-full h-[600px] flex items-center justify-center p-4">
+                      <div className="w-full h-[450px] md:h-[600px] flex items-center justify-center p-4">
                         <img
                           src={previewFiles[activeIndex].url}
                           alt="preview"
-                          className="max-w-full max-h-full object-contain shadow-lg"
+                          className="max-w-full max-h-full object-contain"
                         />
                       </div>
                     )}
                   </div>
                 ) : (
-                  <div className="py-32 text-center bg-gray-50">
-                    <Empty description="Chưa có tài liệu" />
+                  <div className="py-20 text-center bg-gray-50">
+                    <Empty description="Chưa có tệp đính kèm" />
                   </div>
                 )
               ) : (
-                <div className="p-6 min-h-[400px]">
-                  <Text strong className="block mb-6 underline">
-                    Lịch bận hiện tại của xe:
+                <div className="p-6">
+                  <Text strong className="block mb-4">
+                    Lịch xe hiện tại:
                   </Text>
                   {selectedVehicle &&
                   (vehicleBookings[selectedVehicle] || []).length > 0 ? (
@@ -594,20 +565,18 @@ export default function ProposalCreatorProfessional() {
                             color="red"
                             dot={<ClockCircleTwoTone twoToneColor="#ff4d4f" />}
                           >
-                            <div className="text-xs text-gray-400">
+                            <div className="text-[10px] text-gray-400">
                               {b.startAt.format("DD/MM HH:mm")} -{" "}
                               {b.endAt.format("HH:mm")}
                             </div>
-                            <div className="font-medium text-gray-700">
-                              Đã có lịch đăng ký
-                            </div>
+                            <div className="font-medium text-xs">Đã bận</div>
                           </Timeline.Item>
                         ),
                       )}
                     </Timeline>
                   ) : (
                     <Empty
-                      description="Xe đang trống lịch"
+                      description="Xe trống lịch"
                       image={Empty.PRESENTED_IMAGE_SIMPLE}
                     />
                   )}
@@ -615,21 +584,23 @@ export default function ProposalCreatorProfessional() {
               )}
             </Card>
 
-            <Card className="bg-slate-900 rounded-xl border-none">
+            <Card className="bg-slate-900 rounded-xl border-none p-2">
               <Row gutter={16}>
                 <Col span={12}>
                   <Statistic
-                    title={<span className="text-slate-400">Tệp đính kèm</span>}
+                    title={<span className="text-slate-400 text-xs">Tệp</span>}
                     value={fileList.length}
                     prefix={<PaperClipOutlined />}
-                    valueStyle={{ color: "#fff" }}
+                    valueStyle={{ color: "#fff", fontSize: "1.2rem" }}
                   />
                 </Col>
                 <Col span={12}>
                   <Statistic
-                    title={<span className="text-slate-400">Người ký</span>}
+                    title={
+                      <span className="text-slate-400 text-xs">Người ký</span>
+                    }
                     value={signersWatch.length + approversWatch.length}
-                    valueStyle={{ color: "#fff" }}
+                    valueStyle={{ color: "#fff", fontSize: "1.2rem" }}
                   />
                 </Col>
               </Row>
