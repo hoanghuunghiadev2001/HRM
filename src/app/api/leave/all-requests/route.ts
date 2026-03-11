@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
     if (!decoded.role) {
       return NextResponse.json(
         { message: "Không có quyền xem danh sách" },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -44,6 +44,17 @@ export async function GET(req: NextRequest) {
     // --------------------------
     const employeeFilter: Prisma.EmployeeWhereInput = {};
 
+    const currentUser = await prisma.employee.findUnique({
+      where: { id: decoded.id },
+      include: {
+        workInfo: {
+          include: { position: true },
+        },
+      },
+    });
+
+    const userLevel = currentUser?.workInfo?.position?.level || 0;
+
     if (decoded.role === "ADMIN") {
       if (name) employeeFilter.name = { contains: name };
       if (employeeCode)
@@ -55,7 +66,19 @@ export async function GET(req: NextRequest) {
         }
       }
     } else if (decoded.role === "MANAGER") {
-      employeeFilter.workInfo = { is: { departmentId: decoded.departmentId } };
+      if (userLevel === 8) {
+        // Nếu là Level 8, lấy dữ liệu của các phòng ban 1, 3, 5
+        employeeFilter.workInfo = {
+          is: {
+            departmentId: { in: [2, 10, 11, 14, 13, 15] },
+          },
+        };
+      } else {
+        // Các Manager khác chỉ thấy phòng ban của mình
+        employeeFilter.workInfo = {
+          is: { departmentId: decoded.departmentId },
+        };
+      }
       if (name) employeeFilter.name = { contains: name };
       if (employeeCode)
         employeeFilter.employeeCode = { contains: employeeCode };
@@ -154,7 +177,7 @@ export async function GET(req: NextRequest) {
           level: step.level,
           status: a.status,
           approvedAt: a.approvedAt,
-        }))
+        })),
       );
 
       return {
@@ -165,7 +188,7 @@ export async function GET(req: NextRequest) {
             (a) =>
               `${a.name || ""} (${a.employeeCode || ""}) - ${
                 statusMap[a.status] || a.status
-              }`
+              }`,
           )
           .join("; "),
       };
@@ -176,7 +199,7 @@ export async function GET(req: NextRequest) {
     console.error("❌ Lỗi API leave:", err);
     return NextResponse.json(
       { message: "Lấy danh sách thất bại" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -192,7 +215,7 @@ export async function PUT(req: NextRequest) {
     if (decoded.role !== "ADMIN") {
       return NextResponse.json(
         { message: "Bạn không có quyền" },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -202,7 +225,7 @@ export async function PUT(req: NextRequest) {
     if (!id) {
       return NextResponse.json(
         { message: "Thiếu ID đơn nghỉ phép" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -213,7 +236,7 @@ export async function PUT(req: NextRequest) {
     if (!leaveRequest) {
       return NextResponse.json(
         { message: "Không tìm thấy đơn nghỉ phép" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -227,7 +250,7 @@ export async function PUT(req: NextRequest) {
       if (dataToUpdate.startDate > dataToUpdate.endDate) {
         return NextResponse.json(
           { message: "Ngày bắt đầu không được lớn hơn ngày kết thúc" },
-          { status: 400 }
+          { status: 400 },
         );
       }
     }
@@ -255,7 +278,7 @@ export async function DELETE(req: NextRequest) {
     if (!id) {
       return NextResponse.json(
         { message: "Thiếu ID đơn nghỉ phép" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -267,7 +290,7 @@ export async function DELETE(req: NextRequest) {
     if (decoded.role !== "ADMIN") {
       return NextResponse.json(
         { message: "Bạn không có quyền" },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -278,7 +301,7 @@ export async function DELETE(req: NextRequest) {
     if (!leaveRequest) {
       return NextResponse.json(
         { message: "Không tìm thấy đơn nghỉ phép" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
