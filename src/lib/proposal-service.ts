@@ -261,9 +261,28 @@ export class ProposalService {
     try {
       const proposal = await prisma.proposal.findUnique({
         where: { id: proposalId },
-        include: this.getFullIncludeObject(),
+        include: {
+          ...this.getFullIncludeObject(),
+          // Đảm bảo include cả quan hệ files (1-N) và file (1-1 cũ nếu có)
+          files: true,
+        },
       });
+
       if (!proposal) return { success: false, error: "Không tìm thấy đề xuất" };
+
+      // --- LOGIC XỬ LÝ FILE DỰ PHÒNG ---
+      let finalFiles = proposal.files || [];
+
+      // Nếu mảng files trống nhưng có fileId (dữ liệu cũ), hãy đi tìm file đó
+      if (finalFiles.length === 0 && proposal.fileId) {
+        const legacyFile = await prisma.file.findUnique({
+          where: { id: proposal.fileId },
+        });
+        if (legacyFile) {
+          finalFiles = [legacyFile];
+        }
+      }
+      // --------------------------------
 
       const sortedSigners = (proposal.signers || [])
         .slice()
@@ -289,6 +308,7 @@ export class ProposalService {
       const allSignersApproved = sortedSigners.every(
         (s: any) => s.status === "approved",
       );
+
       const nextApproverIndex =
         !isRejected && allSignersApproved
           ? sortedApprovers.findIndex(
@@ -336,6 +356,7 @@ export class ProposalService {
         success: true,
         data: {
           ...proposal,
+          files: finalFiles, // Trả về danh sách file đã được xử lý dự phòng
           signers,
           approvers,
           currentStep,

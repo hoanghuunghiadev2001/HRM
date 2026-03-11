@@ -56,6 +56,7 @@ export default function ProposalDetailTailwind() {
   const isAdmin = role === "ADMIN";
 
   const [proposal, setProposal] = useState<any | null>(null);
+
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [vehicles, setVehicles] = useState<any[]>([]);
@@ -93,6 +94,8 @@ export default function ProposalDetailTailwind() {
       const vJson = await vRes.json();
       if (pRes.ok) {
         setProposal(pJson);
+        console.log(pJson);
+
         if (pJson.vehicle) setEditVehicleId(pJson.vehicle.id);
         if (pJson.startAt && pJson.endAt)
           setEditTimeRange([dayjs(pJson.startAt), dayjs(pJson.endAt)]);

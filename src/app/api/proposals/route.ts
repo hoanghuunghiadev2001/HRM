@@ -10,8 +10,6 @@ import { CreateProposalFormData } from "@/components/api";
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 export async function POST(request: NextRequest) {
-  console.log(11111111111111);
-
   try {
     const formData = await request.formData();
 

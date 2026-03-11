@@ -98,6 +98,22 @@ export async function GET(
         { status: 404 },
       );
 
+    let filesToProcess = proposal.files || [];
+    console.log(proposal.fileId);
+
+    // Nếu không có file trong mảng nhưng có fileId (dữ liệu cũ)
+    // Lưu ý: Đảm bảo field fileId có tồn tại trong model Proposal của Prisma
+    if (filesToProcess.length === 0 && (proposal as any).fileId) {
+      const legacyFile = await prisma.file.findUnique({
+        where: { id: (proposal as any).fileId },
+      });
+      if (legacyFile) {
+        console.log(legacyFile);
+
+        filesToProcess = [legacyFile];
+      }
+    }
+
     // Khởi tạo file PDF đích
     const mergedPdf = await PDFDocument.create();
     mergedPdf.registerFontkit(fontkit);
@@ -199,8 +215,8 @@ export async function GET(
     });
 
     // --- BƯỚC 2: GỘP CÁC FILE ĐÍNH KÈM ---
-    if (proposal.files && proposal.files.length > 0) {
-      for (const fileRecord of proposal.files) {
+    if (filesToProcess.length > 0) {
+      for (const fileRecord of filesToProcess) {
         try {
           const fileData = normalizeToUint8Array(fileRecord.data);
 
