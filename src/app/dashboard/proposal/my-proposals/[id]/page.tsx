@@ -44,6 +44,7 @@ import {
 import axios from "axios";
 import dayjs, { Dayjs } from "dayjs";
 import { useAppSelector } from "@/store/hook";
+import TextArea from "antd/es/input/TextArea";
 
 const { Title, Text, Paragraph } = Typography;
 const { RangePicker } = DatePicker;
@@ -372,9 +373,13 @@ export default function ProposalDetailTailwind() {
         <div className="lg:col-span-5 space-y-4">
           <Card className="rounded-xl shadow-sm" title="Thông tin đề xuất">
             <Descriptions column={1} size="small" bordered>
-              <Descriptions.Item label="Mô tả">
+              <Descriptions.Item
+                label="Mô tả"
+                contentStyle={{ whiteSpace: "pre-wrap" }}
+              >
                 {proposal.description || "Không có mô tả"}
               </Descriptions.Item>
+
               <Descriptions.Item label="Loại">
                 {proposal.proposalType === "REGULAR"
                   ? "Đề xuất chung"
@@ -412,7 +417,7 @@ export default function ProposalDetailTailwind() {
                       {item.signer?.name || item.approver?.name}
                     </div>
                     <div className="text-xs text-gray-500">
-                      {item.status === "pending "
+                      {item.status === "pending"
                         ? "đang chờ"
                         : item.status === "approved"
                           ? "Đã ký"
