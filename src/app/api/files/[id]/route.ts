@@ -206,7 +206,9 @@ export async function GET(
           : p.status === "rejected"
             ? "TỪ CHỐI"
             : "CHỜ DUYỆT";
-      const dateText = p.date ? dayjs(p.date).format("DD/MM/YYYY HH:mm") : "";
+      const dateText = p.date
+        ? dayjs(p.date).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm")
+        : "";
       currentPage.drawText(
         `- ${p.role}: ${p.name} [${statusText}] ${dateText}`,
         { x: margin + 10, y: currentY, size: 11, font: fontRegular },
