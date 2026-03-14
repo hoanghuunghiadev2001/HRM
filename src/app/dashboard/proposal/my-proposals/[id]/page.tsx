@@ -149,17 +149,38 @@ export default function ProposalDetailTailwind() {
 
   const getProgress = () => {
     if (!proposal) return { percent: 0, status: "normal" as const };
+
+    // 1. Đếm số lượng đã hoàn thành
     const approvedSigners =
       proposal.signers?.filter((s: any) => s.status === "approved").length || 0;
     const approvedApprovers =
       proposal.approvers?.filter((a: any) => a.status === "approved").length ||
       0;
+
+    // 2. Tính tổng số người cần tham gia
+    const totalPeople =
+      (proposal.signers?.length || 0) + (proposal.approvers?.length || 0);
+
+    // 3. Xử lý các trạng thái đặc biệt trước
     if (proposal.status === "rejected")
       return { percent: 100, status: "exception" as const };
     if (proposal.status === "approved")
       return { percent: 100, status: "success" as const };
-    // Logic tính % tương đối như cũ...
-    return { percent: 50, status: "active" as const };
+
+    // Nếu chưa có ai ký/duyệt và tổng bằng 0 để tránh lỗi chia cho 0
+    if (totalPeople === 0) return { percent: 0, status: "active" as const };
+
+    // 4. Tính toán % thực tế
+    const currentDone = approvedSigners + approvedApprovers;
+    const rawPercent = Math.round((currentDone / totalPeople) * 100);
+
+    // Đảm bảo nếu đang xử lý (active) thì ít nhất phải hiện 5-10% cho đẹp, không để 0%
+    const finalPercent = rawPercent === 0 ? 5 : rawPercent;
+
+    return {
+      percent: finalPercent,
+      status: "active" as const,
+    };
   };
 
   const handleApprove = async () => {
@@ -388,6 +409,11 @@ export default function ProposalDetailTailwind() {
               {proposal.vehicle && (
                 <Descriptions.Item label="Xe">
                   {proposal.vehicle.name} ({proposal.vehicle.plateNumber})
+                </Descriptions.Item>
+              )}
+              {proposal.vehicle && (
+                <Descriptions.Item label="Điểm đến">
+                  {proposal.dropoffPlace}
                 </Descriptions.Item>
               )}
               {proposal.startAt && (
