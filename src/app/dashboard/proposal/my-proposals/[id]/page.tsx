@@ -508,17 +508,6 @@ export default function ProposalDetailTailwind() {
                           }}
                         />
                       )}
-                      <a
-                        href={`/api/files/download/${file.id}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <Button
-                          type="text"
-                          size="small"
-                          icon={<DownloadOutlined className="text-green-600" />}
-                        />
-                      </a>
                     </Space>
                   </div>
                 ))}
