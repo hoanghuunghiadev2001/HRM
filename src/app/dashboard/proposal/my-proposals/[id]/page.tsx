@@ -406,6 +406,15 @@ export default function ProposalDetailTailwind() {
                   ? "Đề xuất chung"
                   : "Đề xuất xe"}
               </Descriptions.Item>
+              <Descriptions.Item label="Trạng thái">
+                <Tag color={statusCfg.color}>
+                  {statusCfg.icon}{" "}
+                  <span className="ml-2">{statusCfg.text}</span>
+                </Tag>
+              </Descriptions.Item>
+              <Descriptions.Item label="NV đề xuất">
+                {proposal.proposer.name} - {proposal.proposer.employeeCode}
+              </Descriptions.Item>
               {proposal.vehicle && (
                 <Descriptions.Item label="Xe">
                   {proposal.vehicle.name} ({proposal.vehicle.plateNumber})
@@ -425,7 +434,7 @@ export default function ProposalDetailTailwind() {
             </Descriptions>
           </Card>
 
-          <Card className="rounded-xl shadow-sm mt-2!" title="Quá trình xử lý">
+          {/* <Card className="rounded-xl shadow-sm mt-2!" title="Quá trình xử lý">
             <Timeline>
               {[...(proposal.signers || []), ...(proposal.approvers || [])].map(
                 (item: any, idx: number) => (
@@ -456,7 +465,7 @@ export default function ProposalDetailTailwind() {
                 ),
               )}
             </Timeline>
-          </Card>
+          </Card> */}
         </div>
 
         {/* Right Column - File List & Signers */}
