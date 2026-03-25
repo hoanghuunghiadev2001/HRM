@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import jwt from "jsonwebtoken";
-import { PDFDocument, rgb } from "pdf-lib";
+import { PDFDocument, rgb, degrees } from "pdf-lib";
 import fs from "fs";
 import path from "path";
 import fontkit from "@pdf-lib/fontkit";
@@ -28,7 +28,7 @@ function normalizeToUint8Array(input: unknown): Uint8Array {
   return new Uint8Array(Buffer.from(input as any));
 }
 
-// Helper: Vẽ văn bản tự xuống dòng
+// Helper: Vẽ văn bản tự xuống dòng (Cải tiến hỗ trợ trả về tọa độ Y mới)
 function drawWrappedText({
   page,
   text,
@@ -38,9 +38,13 @@ function drawWrappedText({
   font,
   size = 12,
   lineHeight,
+  color = rgb(0, 0, 0),
 }: any) {
+  if (!text) return y;
   if (!lineHeight) lineHeight = Math.round(size * 1.3);
   const paragraphs = text.split(/\r?\n/);
+  let currentY = y;
+
   for (const para of paragraphs) {
     const words = para.split(" ");
     let line = "";
@@ -48,19 +52,19 @@ function drawWrappedText({
       const testLine = line ? `${line} ${word}` : word;
       const width = font.widthOfTextAtSize(testLine, size);
       if (width > maxWidth) {
-        page.drawText(line, { x, y, size, font });
-        y -= lineHeight;
+        page.drawText(line, { x, y: currentY, size, font, color });
+        currentY -= lineHeight;
         line = word;
       } else {
         line = testLine;
       }
     }
     if (line) {
-      page.drawText(line, { x, y, size, font });
-      y -= lineHeight;
+      page.drawText(line, { x, y: currentY, size, font, color });
+      currentY -= lineHeight;
     }
   }
-  return y;
+  return currentY;
 }
 
 export async function GET(
@@ -87,7 +91,7 @@ export async function GET(
         proposer: true,
         signers: { include: { signer: true }, orderBy: { level: "asc" } },
         approvers: { include: { approver: true }, orderBy: { level: "asc" } },
-        files: true, // Lấy toàn bộ mảng file theo schema mới
+        files: true,
         vehicle: true,
       },
     });
@@ -99,24 +103,19 @@ export async function GET(
       );
 
     let filesToProcess = proposal.files || [];
-    console.log(proposal.fileId);
 
-    // Nếu không có file trong mảng nhưng có fileId (dữ liệu cũ)
-    // Lưu ý: Đảm bảo field fileId có tồn tại trong model Proposal của Prisma
     if (filesToProcess.length === 0 && (proposal as any).fileId) {
       const legacyFile = await prisma.file.findUnique({
         where: { id: (proposal as any).fileId },
       });
-      if (legacyFile) {
-        console.log(legacyFile);
-
-        filesToProcess = [legacyFile];
-      }
+      if (legacyFile) filesToProcess = [legacyFile];
     }
 
-    // Khởi tạo file PDF đích
+    // Khởi tạo PDF
     const mergedPdf = await PDFDocument.create();
     mergedPdf.registerFontkit(fontkit);
+
+    // Load Fonts (Đảm bảo đường dẫn chính xác)
     const fontRegular = await mergedPdf.embedFont(
       fs.readFileSync(path.resolve("./fonts/NotoSans-Regular.ttf")),
     );
@@ -127,62 +126,115 @@ export async function GET(
     const margin = 50;
     const pageWidth = 595.28; // A4
     const pageHeight = 841.89;
+    const mainBlue = rgb(0.05, 0.23, 0.45); // Màu xanh chuyên nghiệp
 
-    // --- BƯỚC 1: TẠO TRANG TÓM TẮT (SUMMARY PAGE) ---
+    // --- BƯỚC 1: TẠO TRANG TÓM TẮT ---
     const currentPage = mergedPdf.addPage([pageWidth, pageHeight]);
     let currentY = 780;
 
-    currentPage.drawText(`${proposal.title}`, {
+    // Vẽ Border trang
+    currentPage.drawRectangle({
+      x: 25,
+      y: 25,
+      width: pageWidth - 50,
+      height: pageHeight - 50,
+      borderColor: rgb(0.85, 0.85, 0.85),
+      borderWidth: 1,
+    });
+
+    // 1. Tiêu đề chính (Xử lý xuống dòng)
+    currentY = drawWrappedText({
+      page: currentPage,
+      text: proposal.title.toUpperCase(),
       x: margin,
       y: currentY,
-      size: 18,
+      maxWidth: pageWidth - margin * 2,
       font: fontBold,
+      size: 16,
+      color: mainBlue,
+      lineHeight: 22,
     });
-    currentY -= 40;
 
-    const summaryInfo = [
-      `Người đề xuất: ${proposal.proposer?.name}`,
-      `Ngày tạo: ${dayjs(proposal.createdAt).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm")}`,
-    ];
+    currentY -= 10;
+    currentPage.drawLine({
+      start: { x: margin, y: currentY },
+      end: { x: pageWidth - margin, y: currentY },
+      thickness: 2,
+      color: mainBlue,
+    });
+    currentY -= 30;
 
-    summaryInfo.forEach((text) => {
-      currentPage.drawText(text, {
+    // 2. Thông tin chung (Dạng Grid nhẹ)
+    const drawMeta = (label: string, value: string) => {
+      currentPage.drawText(label, {
         x: margin,
         y: currentY,
-        size: 12,
+        size: 10,
+        font: fontBold,
+        color: rgb(0.4, 0.4, 0.4),
+      });
+      currentPage.drawText(value || "---", {
+        x: margin + 110,
+        y: currentY,
+        size: 10,
         font: fontRegular,
       });
-      currentY -= 20;
-    });
-
-    if (proposal.description) {
-      currentY -= 10;
-      currentPage.drawText("Mô tả nội dung:", {
-        x: margin,
-        y: currentY,
-        size: 12,
-        font: fontBold,
-      });
       currentY -= 18;
+    };
+
+    drawMeta("Mã hồ sơ:", `REQ-${proposal.id.toString().padStart(5, "0")}`);
+    drawMeta("Người đề xuất:", proposal.proposer?.name || "N/A");
+    drawMeta(
+      "Ngày tạo:",
+      dayjs(proposal.createdAt)
+        .tz("Asia/Ho_Chi_Minh")
+        .format("DD/MM/YYYY HH:mm"),
+    );
+    if (proposal.vehicle) {
+      drawMeta("Phương tiện:", (proposal.vehicle as any).plateNumber);
+    }
+    currentY -= 10;
+
+    // 3. Nội dung mô tả
+    if (proposal.description) {
+      currentPage.drawRectangle({
+        x: margin,
+        y: currentY - 5,
+        width: 100,
+        height: 16,
+        color: rgb(0.9, 0.93, 0.95),
+      });
+      currentPage.drawText("MÔ TẢ CHI TIẾT", {
+        x: margin + 5,
+        y: currentY,
+        size: 9,
+        font: fontBold,
+        color: mainBlue,
+      });
+      currentY -= 20;
+
       currentY = drawWrappedText({
         page: currentPage,
         text: proposal.description,
-        x: margin + 10,
+        x: margin,
         y: currentY,
-        maxWidth: pageWidth - margin * 2 - 10,
+        maxWidth: pageWidth - margin * 2,
         font: fontRegular,
+        size: 11,
+        lineHeight: 16,
       });
     }
 
-    // Vẽ danh sách người ký/duyệt
-    currentY -= 20;
-    currentPage.drawText("DANH SÁCH PHÊ DUYỆT:", {
+    // 4. Danh sách phê duyệt (Dạng Timeline)
+    currentY -= 30;
+    currentPage.drawText("TIẾN TRÌNH PHÊ DUYỆT", {
       x: margin,
       y: currentY,
-      size: 13,
+      size: 12,
       font: fontBold,
+      color: mainBlue,
     });
-    currentY -= 20;
+    currentY -= 15;
 
     const participants = [
       ...proposal.signers.map((s) => ({
@@ -200,19 +252,33 @@ export async function GET(
     ];
 
     participants.forEach((p) => {
-      const statusText =
-        p.status === "approved"
-          ? "ĐÃ DUYỆT"
-          : p.status === "rejected"
-            ? "TỪ CHỐI"
-            : "CHỜ DUYỆT";
-      const dateText = p.date
+      let statusLabel = "ĐANG CHỜ";
+      if (p.status === "approved") {
+        statusLabel = "ĐÃ DUYỆT";
+      }
+      if (p.status === "rejected") {
+        statusLabel = "TỪ CHỐI";
+      }
+
+      currentPage.drawText(`${p.role}: ${p.name}`, {
+        x: margin + 15,
+        y: currentY,
+        size: 10,
+        font: fontRegular,
+      });
+
+      const timeStr = p.date
         ? dayjs(p.date).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY HH:mm")
-        : "";
-      currentPage.drawText(
-        `- ${p.role}: ${p.name} [${statusText}] ${dateText}`,
-        { x: margin + 10, y: currentY, size: 11, font: fontRegular },
-      );
+        : "---";
+      const rightText = `${statusLabel} | ${timeStr}`;
+      const rightTextWidth = fontRegular.widthOfTextAtSize(rightText, 9);
+
+      currentPage.drawText(rightText, {
+        x: pageWidth - margin - rightTextWidth,
+        y: currentY,
+        size: 9,
+        font: fontRegular,
+      });
       currentY -= 18;
     });
 
@@ -221,7 +287,6 @@ export async function GET(
       for (const fileRecord of filesToProcess) {
         try {
           const fileData = normalizeToUint8Array(fileRecord.data);
-
           if (fileRecord.mimeType === "application/pdf") {
             const sourcePdf = await PDFDocument.load(fileData);
             const copiedPages = await mergedPdf.copyPages(
@@ -234,7 +299,6 @@ export async function GET(
               fileRecord.mimeType === "image/png"
                 ? await mergedPdf.embedPng(fileData)
                 : await mergedPdf.embedJpg(fileData);
-
             const imgPage = mergedPdf.addPage([pageWidth, pageHeight]);
             const dims = img.scaleToFit(
               pageWidth - margin * 2,
@@ -248,43 +312,55 @@ export async function GET(
             });
           }
         } catch (err) {
-          console.error(`Lỗi xử lý file ${fileRecord.filename}:`, err);
+          console.error(`Error processing file ${fileRecord.filename}:`, err);
         }
       }
     }
 
-    // --- BƯỚC 3: ĐÓNG DẤU CHÂN TRANG (FOOTER) TOÀN BỘ FILE ---
+    // --- BƯỚC 3: FOOTER & MÃ XÁC THỰC ---
     const totalPages = mergedPdf.getPageCount();
     const shaCode = `TBD${dayjs(proposal.createdAt).format("YYYYMM")}${proposal.id}`;
 
     mergedPdf.getPages().forEach((page, index) => {
-      page.drawText(`Mã xác thực: ${shaCode}`, {
-        x: margin,
-        y: 20,
-        size: 8,
-        font: fontRegular,
-        color: rgb(0.5, 0.5, 0.5),
+      // Watermark chìm (Tùy chọn)
+      page.drawText("HỆ THỐNG QUẢN TRỊ TOYOTA", {
+        x: pageWidth / 2 - 100,
+        y: pageHeight / 2,
+        size: 30,
+        rotate: degrees(45), // Sử dụng hàm chuẩn của thư viện
+        opacity: 0.3,
+        font: fontBold,
+        color: rgb(0.95, 0.95, 0.95),
       });
+
+      page.drawText(
+        `Mã xác thực: ${shaCode} | Hệ thống HRM Toyota Binh Duong`,
+        {
+          x: margin,
+          y: 20,
+          size: 7,
+          font: fontRegular,
+          color: rgb(0.6, 0.6, 0.6),
+        },
+      );
+
       const pageText = `Trang ${index + 1} / ${totalPages}`;
-      const textWidth = fontRegular.widthOfTextAtSize(pageText, 8);
+      const textWidth = fontRegular.widthOfTextAtSize(pageText, 7);
       page.drawText(pageText, {
         x: pageWidth - margin - textWidth,
         y: 20,
-        size: 8,
+        size: 7,
         font: fontRegular,
-        color: rgb(0.5, 0.5, 0.5),
+        color: rgb(0.6, 0.6, 0.6),
       });
     });
 
     const pdfBytes = await mergedPdf.save();
-    const pdfBuffer = Buffer.from(pdfBytes); // Chuyển từ Uint8Array sang Buffer
-
-    return new Response(pdfBuffer, {
-      // TypeScript sẽ không còn báo lỗi
+    return new Response(Buffer.from(pdfBytes), {
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="Ho_So_TBD_${proposal.id}.pdf"`,
+        "Content-Disposition": `attachment; filename="HS-${proposal.id}-${dayjs().format("DDMMYY")}.pdf"`,
       },
     });
   } catch (err) {
