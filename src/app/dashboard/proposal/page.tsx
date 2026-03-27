@@ -150,7 +150,7 @@ export default function ProposalCreatorProfessional() {
   // 3. Auto-fill người duyệt
   useEffect(() => {
     if (proposalType === "VEHICLE") {
-      form.setFieldsValue({ signers: managerIds, approvers: [6, 132] });
+      form.setFieldsValue({ signers: managerIds, approvers: [6] });
     } else {
       form.setFieldsValue({ signers: [], approvers: [] });
     }
