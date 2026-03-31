@@ -50,7 +50,7 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
   createRequestLeave,
 }) => {
   const { name, id, employeeCode, department, position } = useAppSelector(
-    (state) => state.user
+    (state) => state.user,
   );
 
   const [leaveType, setLeaveType] = useState<string>("PN");
@@ -133,7 +133,6 @@ const ModalCreateNewRequest: React.FC<ModalCreateNewRequestProps> = ({
   const handleOk = () => {
     setErrorMsg("");
     if (
-      !id ||
       !leaveType ||
       !totalHours ||
       !timeRange ||

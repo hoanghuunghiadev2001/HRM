@@ -10,9 +10,108 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { FileService } from "@/lib/file-service";
+import { getAuthUser } from "@/lib/auth-server";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
+
+// async function sendLeaveRequestEmail({
+//   to,
+//   subject,
+//   employeeName,
+//   employeeCode,
+//   department,
+//   position,
+//   leaveType,
+//   startDate,
+//   endDate,
+//   totalHours,
+//   reason,
+//   action = "new",
+//   detailUrl = process.env.detailUrlRequest || "#",
+// }: {
+//   to: string[] | string;
+//   subject: string;
+//   employeeName: string;
+//   employeeCode: string;
+//   department: string;
+//   position: string;
+//   leaveType: string;
+//   startDate: string;
+//   endDate: string;
+//   totalHours: number;
+//   reason: string;
+//   action?: "new" | "approved" | "rejected";
+//   detailUrl?: string;
+// }) {
+//   const toArr = Array.isArray(to) ? to : [to];
+
+//   let title = "";
+//   let message = "";
+
+//   switch (action) {
+//     case "new":
+//       title = "📌 Đơn nghỉ phép mới";
+//       message = `Bạn có đơn nghỉ phép mới cần phê duyệt.`;
+//       break;
+//     case "approved":
+//       title = "✅ Đơn nghỉ phép đã được duyệt";
+//       message = `Đơn nghỉ phép của bạn đã được duyệt.`;
+//       break;
+//     case "rejected":
+//       title = "⛔ Đơn nghỉ phép bị từ chối";
+//       message = `Đơn nghỉ phép của bạn đã bị từ chối.`;
+//       break;
+//   }
+
+//   const html = `
+//   <div style="font-family: Arial, sans-serif; line-height:1.6; color:#333; max-width:600px; margin:0 auto; padding:20px; border:1px solid #e0e0e0; border-radius:10px; background:#f9f9f9;">
+//     <h2 style="color:#2a8af6; margin-bottom:10px;">${title}</h2>
+//     <p style="font-size:14px; margin-bottom:20px;">${message}</p>
+
+//     <table style="width:100%; border-collapse:collapse; margin-bottom:20px;">
+//       <tr>
+//         <td style="font-weight:bold; padding:6px 8px; border:1px solid #ddd;">Nhân viên</td>
+//         <td style="padding:6px 8px; border:1px solid #ddd;">${employeeName} (${employeeCode})</td>
+//       </tr>
+//       <tr>
+//         <td style="font-weight:bold; padding:6px 8px; border:1px solid #ddd;">Bộ phận</td>
+//         <td style="padding:6px 8px; border:1px solid #ddd;">${department}</td>
+//       </tr>
+//       <tr>
+//         <td style="font-weight:bold; padding:6px 8px; border:1px solid #ddd;">Chức vụ</td>
+//         <td style="padding:6px 8px; border:1px solid #ddd;">${position}</td>
+//       </tr>
+//       <tr>
+//         <td style="font-weight:bold; padding:6px 8px; border:1px solid #ddd;">Loại phép</td>
+//         <td style="padding:6px 8px; border:1px solid #ddd;">${leaveType}</td>
+//       </tr>
+//       <tr>
+//         <td style="font-weight:bold; padding:6px 8px; border:1px solid #ddd;">Thời gian</td>
+//         <td style="padding:6px 8px; border:1px solid #ddd;">${startDate} - ${endDate}</td>
+//       </tr>
+//       <tr>
+//         <td style="font-weight:bold; padding:6px 8px; border:1px solid #ddd;">Tổng giờ</td>
+//         <td style="padding:6px 8px; border:1px solid #ddd;">${totalHours} tiếng</td>
+//       </tr>
+//       <tr>
+//         <td style="font-weight:bold; padding:6px 8px; border:1px solid #ddd;">Lý do</td>
+//         <td style="padding:6px 8px; border:1px solid #ddd;">${
+//           reason || "Không có"
+//         }</td>
+//       </tr>
+//     </table>
+
+//     <div style="text-align:center; margin-top:20px;">
+//       <a href="${detailUrl}" style="background:#2a8af6; color:#fff; text-decoration:none; padding:12px 24px; border-radius:6px; font-weight:bold; display:inline-block;">Xem chi tiết</a>
+//     </div>
+
+//     <p style="font-size:12px; color:#999; margin-top:20px;">Đây là email tự động từ hệ thống HRM, vui lòng không trả lời trực tiếp.</p>
+//   </div>
+//   `;
+
+//   await sendEmail({ to: toArr, subject, html });
+// }
 
 async function sendLeaveRequestEmail({
   to,
@@ -45,67 +144,87 @@ async function sendLeaveRequestEmail({
 }) {
   const toArr = Array.isArray(to) ? to : [to];
 
-  let title = "";
-  let message = "";
-
-  switch (action) {
-    case "new":
-      title = "📌 Đơn nghỉ phép mới";
-      message = `Bạn có đơn nghỉ phép mới cần phê duyệt.`;
-      break;
-    case "approved":
-      title = "✅ Đơn nghỉ phép đã được duyệt";
-      message = `Đơn nghỉ phép của bạn đã được duyệt.`;
-      break;
-    case "rejected":
-      title = "⛔ Đơn nghỉ phép bị từ chối";
-      message = `Đơn nghỉ phép của bạn đã bị từ chối.`;
-      break;
-  }
+  // Cấu hình màu sắc và icon theo trạng thái
+  const config = {
+    new: {
+      title: "Đơn Nghỉ Phép Mới",
+      message: "Một yêu cầu nghỉ phép mới đang chờ bạn phê duyệt.",
+      color: "#2563eb", // Blue
+      icon: "📑",
+    },
+    approved: {
+      title: "Đơn Nghỉ Phép Đã Duyệt",
+      message: "Tin vui! Yêu cầu nghỉ phép của bạn đã được phê duyệt.",
+      color: "#059669", // Green
+      icon: "✅",
+    },
+    rejected: {
+      title: "Đơn Nghỉ Phép Bị Từ Chối",
+      message: "Rất tiếc, yêu cầu nghỉ phép của bạn không được chấp thuận.",
+      color: "#dc2626", // Red
+      icon: "❌",
+    },
+  }[action];
 
   const html = `
-  <div style="font-family: Arial, sans-serif; line-height:1.6; color:#333; max-width:600px; margin:0 auto; padding:20px; border:1px solid #e0e0e0; border-radius:10px; background:#f9f9f9;">
-    <h2 style="color:#2a8af6; margin-bottom:10px;">${title}</h2>
-    <p style="font-size:14px; margin-bottom:20px;">${message}</p>
+  <div style="background-color: #f3f4f6; padding: 40px 10px; font-family: 'Segoe UI', Helvetica, Arial, sans-serif;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+      
+      <div style="background-color: ${config.color}; padding: 30px; text-align: center;">
+        <div style="background: rgba(255,255,255,0.2); width: 60px; height: 60px; line-height: 60px; border-radius: 50%; margin: 0 auto 15px; font-size: 30px;">
+          ${config.icon}
+        </div>
+        <h2 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: 700; letter-spacing: 0.5px;">
+          ${config.title}
+        </h2>
+      </div>
 
-    <table style="width:100%; border-collapse:collapse; margin-bottom:20px;">
-      <tr>
-        <td style="font-weight:bold; padding:6px 8px; border:1px solid #ddd;">Nhân viên</td>
-        <td style="padding:6px 8px; border:1px solid #ddd;">${employeeName} (${employeeCode})</td>
-      </tr>
-      <tr>
-        <td style="font-weight:bold; padding:6px 8px; border:1px solid #ddd;">Bộ phận</td>
-        <td style="padding:6px 8px; border:1px solid #ddd;">${department}</td>
-      </tr>
-      <tr>
-        <td style="font-weight:bold; padding:6px 8px; border:1px solid #ddd;">Chức vụ</td>
-        <td style="padding:6px 8px; border:1px solid #ddd;">${position}</td>
-      </tr>
-      <tr>
-        <td style="font-weight:bold; padding:6px 8px; border:1px solid #ddd;">Loại phép</td>
-        <td style="padding:6px 8px; border:1px solid #ddd;">${leaveType}</td>
-      </tr>
-      <tr>
-        <td style="font-weight:bold; padding:6px 8px; border:1px solid #ddd;">Thời gian</td>
-        <td style="padding:6px 8px; border:1px solid #ddd;">${startDate} - ${endDate}</td>
-      </tr>
-      <tr>
-        <td style="font-weight:bold; padding:6px 8px; border:1px solid #ddd;">Tổng giờ</td>
-        <td style="padding:6px 8px; border:1px solid #ddd;">${totalHours} tiếng</td>
-      </tr>
-      <tr>
-        <td style="font-weight:bold; padding:6px 8px; border:1px solid #ddd;">Lý do</td>
-        <td style="padding:6px 8px; border:1px solid #ddd;">${
-          reason || "Không có"
-        }</td>
-      </tr>
-    </table>
+      <div style="padding: 30px;">
+        <p style="color: #4b5563; font-size: 16px; margin-bottom: 25px; text-align: center;">
+          ${config.message}
+        </p>
 
-    <div style="text-align:center; margin-top:20px;">
-      <a href="${detailUrl}" style="background:#2a8af6; color:#fff; text-decoration:none; padding:12px 24px; border-radius:6px; font-weight:bold; display:inline-block;">Xem chi tiết</a>
+        <div style="background-color: #f8fafc; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0;">
+          <div style="display: flex; margin-bottom: 12px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 12px;">
+            <div style="color: #64748b; width: 120px; font-size: 14px; font-weight: 600;">Nhân viên:</div>
+            <div style="color: #1e293b; font-size: 14px; font-weight: 700;">${employeeName} <span style="color: #94a3b8; font-weight: 400;">(#${employeeCode})</span></div>
+          </div>
+
+          <div style="display: flex; margin-bottom: 12px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 12px;">
+            <div style="color: #64748b; width: 120px; font-size: 14px; font-weight: 600;">Phòng ban:</div>
+            <div style="color: #1e293b; font-size: 14px;">${department} - ${position}</div>
+          </div>
+
+          <div style="display: flex; margin-bottom: 12px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 12px;">
+            <div style="color: #64748b; width: 120px; font-size: 14px; font-weight: 600;">Loại phép:</div>
+            <div style="color: #1e293b; font-size: 14px;"><span style="background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700;">${leaveType}</span></div>
+          </div>
+
+          <div style="display: flex; margin-bottom: 12px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 12px;">
+            <div style="color: #64748b; width: 120px; font-size: 14px; font-weight: 600;">Thời gian:</div>
+            <div style="color: #1e293b; font-size: 14px;">${startDate} → ${endDate} <br/> <strong style="color: ${config.color};">(${totalHours} giờ)</strong></div>
+          </div>
+
+          <div style="display: flex;">
+            <div style="color: #64748b; width: 120px; font-size: 14px; font-weight: 600;">Lý do:</div>
+            <div style="color: #1e293b; font-size: 14px; font-style: italic;">"${reason || "Không có nội dung đi kèm"}"</div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 35px;">
+          <a href="${detailUrl}" style="background-color: ${config.color}; color: #ffffff; padding: 14px 35px; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 15px; display: inline-block; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+            Xem chi tiết đơn này
+          </a>
+        </div>
+      </div>
+
+      <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #f1f5f9;">
+        <p style="margin: 0; color: #94a3b8; font-size: 12px;">
+          Đây là thông báo tự động từ hệ thống Quản trị Nhân sự.<br>
+          Vui lòng không phản hồi email này.
+        </p>
+      </div>
     </div>
-
-    <p style="font-size:12px; color:#999; margin-top:20px;">Đây là email tự động từ hệ thống HRM, vui lòng không trả lời trực tiếp.</p>
   </div>
   `;
 
@@ -117,6 +236,17 @@ async function sendLeaveRequestEmail({
  */
 export async function POST(req: Request) {
   try {
+    const user = await getAuthUser();
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Phiên đăng nhập hết hạn hoặc không hợp lệ" },
+        { status: 401 },
+      );
+    }
+
+    // 2. Lấy ID từ user đã được verify
+    const employeeId = user.id;
     // parse FormData
     const form = await req.formData();
 
@@ -125,7 +255,7 @@ export async function POST(req: Request) {
     if (!dataRaw) {
       return NextResponse.json(
         { error: "Missing data payload" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -140,7 +270,7 @@ export async function POST(req: Request) {
         console.error("Failed to parse data field:", String(dataRaw));
         return NextResponse.json(
           { error: "Invalid data payload" },
-          { status: 400 }
+          { status: 400 },
         );
       }
     }
@@ -151,7 +281,6 @@ export async function POST(req: Request) {
       endDateTime,
       leaveType,
       reason,
-      employeeId,
       totalHours,
       approverIds,
     } = payload;
@@ -160,7 +289,7 @@ export async function POST(req: Request) {
     if (!startDateTime || !endDateTime || !employeeId || !approverIds?.length) {
       return NextResponse.json(
         { error: "Missing required fields" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -170,7 +299,7 @@ export async function POST(req: Request) {
     if (totalDays <= 0) {
       return NextResponse.json(
         { error: "Thời gian nghỉ không hợp lệ." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -185,7 +314,7 @@ export async function POST(req: Request) {
         if (!valid) {
           return NextResponse.json(
             { error: error || "File không hợp lệ" },
-            { status: 400 }
+            { status: 400 },
           );
         }
       }
@@ -223,7 +352,7 @@ export async function POST(req: Request) {
     if (!workInfo) {
       return NextResponse.json(
         { error: "Không tìm thấy thông tin nhân viên." },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -318,7 +447,7 @@ export async function PUT(req: Request) {
     if (!step)
       return NextResponse.json(
         { error: "Không tìm thấy step." },
-        { status: 404 }
+        { status: 404 },
       );
 
     const leaveRequest = step.leaveRequest;
