@@ -44,25 +44,37 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || "";
     const status = searchParams.get("status");
     const proposalType = searchParams.get("proposalType");
+    const departmentId = searchParams.get("departmentId"); // THÊM DÒNG NÀY
     const createdFrom = searchParams.get("createdFrom") || undefined;
     const createdTo = searchParams.get("createdTo") || undefined;
     const skip = (page - 1) * pageSize;
 
     // ===== Build search filter =====
-    const searchFilter: any = {};
+    const searchFilter: any = {
+      AND: [],
+    };
 
     // Search text: title, name, createdBy.name
     if (search) {
       searchFilter.OR = [
         { title: { contains: search } },
         { name: { contains: search } },
-        { createdBy: { name: { contains: search } } },
+        { proposer: { name: { contains: search } } },
       ];
     }
 
     // Filter theo trạng thái
     if (status) {
       searchFilter.status = status;
+    }
+    if (departmentId) {
+      searchFilter.AND.push({
+        proposer: {
+          workInfo: {
+            departmentId: parseInt(departmentId, 10),
+          },
+        },
+      });
     }
 
     // Filter theo loại proposal

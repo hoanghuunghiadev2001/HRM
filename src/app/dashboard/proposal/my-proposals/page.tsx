@@ -18,6 +18,8 @@ import {
   Badge,
   Row,
   Col,
+  Form,
+  TreeSelect,
 } from "antd";
 import {
   FileTextOutlined,
@@ -34,6 +36,8 @@ import dayjs, { Dayjs } from "dayjs";
 
 import ModalLoading from "@/components/modalLoading";
 import { useAppSelector } from "@/store/hook";
+import { Department } from "@/lib/interface";
+import { TreeSelectProps } from "antd/lib";
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs as any;
@@ -73,6 +77,9 @@ export default function MyProposalsPolished() {
     data: [],
     total: 0,
   });
+  const [filterDepartment, setDepartment] = useState<string>();
+
+  const [departments, setDepartments] = useState<Department[]>([]);
   const [actionLoading, setActionLoading] = useState<number | null>(null);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -98,6 +105,17 @@ export default function MyProposalsPolished() {
     return () => window.removeEventListener("resize", update);
   }, []);
 
+  const listDepartment = async () => {
+    const res = await fetch("/api/departments");
+    if (!res.ok) throw new Error("Lấy dữ liệu thất bại");
+    const departmentsData = await res.json(); //
+    setDepartments(departmentsData);
+  };
+
+  const onPopupScroll: TreeSelectProps["onPopupScroll"] = (e) => {
+    console.log("onPopupScroll", e);
+  };
+
   const fetchProposals = async (p = page, ps = pageSize) => {
     setLoading(true);
     try {
@@ -108,6 +126,8 @@ export default function MyProposalsPolished() {
       });
       if (statusFilter) params.append("status", statusFilter);
       if (proposalTypeFilter) params.append("proposalType", proposalTypeFilter);
+
+      if (filterDepartment) params.append("departmentId", filterDepartment);
       if (selectedDate) {
         const d = selectedDate.format("YYYY-MM-DD");
         params.append("createdFrom", d);
@@ -146,7 +166,7 @@ export default function MyProposalsPolished() {
 
   useEffect(() => {
     fetchProposals(); /* eslint-disable-next-line react-hooks/exhaustive-deps */
-  }, [page]);
+  }, [page, filterDepartment]);
 
   const showConfirm = async (
     proposalId: number,
@@ -172,6 +192,19 @@ export default function MyProposalsPolished() {
   const handleViewDetail = (proposalId: number) => {
     router.push(`/dashboard/proposal/my-proposals/${proposalId}`);
   };
+  const onChangeSelectDepartment = (newValue: string) => {
+    setDepartment(newValue);
+  };
+  const treeData = departments.map((dept) => ({
+    value: dept.id.toString(),
+    title: dept.name.toString(),
+    key: dept.id,
+    children: dept.positions.map((pos: any) => ({
+      value: `${dept.id}-${pos.id}`,
+      title: ` ${pos.name}`,
+      key: `${dept.id}-${pos.id}`,
+    })),
+  }));
 
   const handleDeleteProposal = async (proposalId: number) => {
     if (!confirm("Bạn có chắc muốn xóa đề xuất này?")) return;
@@ -345,6 +378,9 @@ export default function MyProposalsPolished() {
     return "";
   };
 
+  useEffect(() => {
+    listDepartment();
+  }, []);
   return (
     <div style={{ padding: 16, maxWidth: 1400, margin: "0 auto" }}>
       {contextHolder}
@@ -395,8 +431,25 @@ export default function MyProposalsPolished() {
               onSearch={() => fetchProposals(1, pageSize)}
             />
           </Col>
-
           <Col xs={12} sm={8} md={6} lg={5}>
+            <TreeSelect
+              showSearch
+              style={{ width: "100%" }}
+              value={filterDepartment}
+              styles={{
+                popup: { root: { maxHeight: 400, overflow: "auto" } },
+              }}
+              placeholder="Phòng ban"
+              allowClear
+              listItemScrollOffset={200}
+              onChange={onChangeSelectDepartment}
+              showCheckedStrategy="SHOW_ALL"
+              treeData={treeData}
+              onPopupScroll={onPopupScroll}
+            />
+          </Col>
+
+          <Col xs={12} sm={8} md={6} lg={3}>
             <Select
               placeholder="Trạng thái"
               allowClear
@@ -415,7 +468,7 @@ export default function MyProposalsPolished() {
             </Select>
           </Col>
 
-          <Col xs={12} sm={8} md={6} lg={5}>
+          <Col xs={12} sm={8} md={6} lg={3}>
             <Select
               placeholder="Loại đề xuất"
               allowClear
