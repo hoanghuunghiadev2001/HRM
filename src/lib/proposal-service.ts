@@ -183,7 +183,15 @@ export class ProposalService {
         include: {
           ...this.FULL_PROPOSAL_INCLUDE,
           files: true, // Lấy thông tin file để gửi email
-          proposer: true,
+          proposer: {
+            include: {
+              contactInfo: {
+                select: {
+                  email: true, // Chỉ lấy email từ contactInfo
+                },
+              },
+            },
+          },
         },
       });
 
