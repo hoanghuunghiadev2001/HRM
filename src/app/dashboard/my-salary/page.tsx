@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// SalaryDashboard.tsx — Phiên bản đầy đủ tất cả trường DB
 "use client";
 
-import React, { useEffect, useState, useMemo, useRef } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   Area,
   AreaChart,
@@ -10,25 +11,113 @@ import {
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis,
 } from "recharts";
 import {
-  Eye,
   TrendingUp,
   Wallet,
   X,
-  Calculator,
   ShieldCheck,
   ArrowUpRight,
   AlertCircle,
   FileText,
   Printer,
   ChevronRight,
+  Eye,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { useRef } from "react";
+import { DatePicker } from "antd";
+import dayjs from "dayjs"; // Đảm bảo đã import dayjs
 
+const fmt = (v: number) =>
+  new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+    maximumFractionDigits: 0,
+  }).format(v ?? 0);
+
+// ─── Nhóm các trường hiển thị theo schema ───────────────────────────────────
+const SALARY_SECTIONS = [
+  {
+    key: "fixed",
+    label: "Lương cố định",
+    fields: [
+      { key: "baseSalary", label: "Lương cơ bản (BHXH + PC)" },
+      { key: "efficiencySalary", label: "Lương hiệu quả" },
+      { key: "salary70", label: "Lương 70%" },
+    ],
+  },
+  {
+    key: "allowance",
+    label: "Phụ cấp",
+    fields: [
+      { key: "phoneAllowance", label: "Phụ cấp điện thoại" },
+      { key: "seniorityAllowance", label: "Phụ cấp thâm niên" },
+      { key: "mealAllowance", label: "Phụ cấp ăn ca" },
+      { key: "maternityAllowance", label: "Phụ cấp thai sản" },
+      { key: "houseAllowance", label: "Phụ cấp thuê nhà" },
+    ],
+  },
+  {
+    key: "productivity",
+    label: "Năng suất",
+    fields: [
+      { key: "productivitySalary", label: "Lương năng suất" },
+      { key: "productivityOther", label: "Năng suất khác" },
+      { key: "productivitySCC", label: "Năng suất SCC" },
+      { key: "productivityPaint", label: "Năng suất sơn" },
+      { key: "productivityAccessory", label: "Năng suất phụ kiện" },
+      { key: "productivityParts", label: "Năng suất phụ tùng" },
+    ],
+  },
+  {
+    key: "bonus",
+    label: "Thưởng & cộng thêm",
+    fields: [
+      { key: "bonusDay10", label: "Thưởng ngày 10" },
+      { key: "bonusDay25", label: "Thưởng ngày 25" },
+      { key: "overtime", label: "Tăng ca (OT)" },
+      { key: "bonus", label: "Thưởng" },
+      { key: "salaryAdjust", label: "Điều chỉnh lương" },
+      { key: "otherWork", label: "Công việc khác" },
+      { key: "otherIncome", label: "Thu nhập khác" },
+    ],
+  },
+  {
+    key: "deduction",
+    label: "Khấu trừ",
+    negative: true,
+    fields: [
+      { key: "salaryDeduction", label: "Trừ lương đầu kỳ" },
+      { key: "insuranceDeduction", label: "BHXH-YT (9.5%)" },
+      { key: "unemploymentInsu", label: "BHTN (1%)" },
+      { key: "unionFee", label: "Công đoàn phí" },
+      { key: "advancePayment", label: "Tạm ứng" },
+      { key: "socialWorkDeduction", label: "KT bảo hiểm xã hội" },
+      { key: "healthCardDeduction", label: "Thẻ sức khỏe" },
+      { key: "insuranceArrears", label: "Nợ BHXH" },
+      { key: "taxCompensation", label: "Bù thuế" },
+      { key: "taxTNCN", label: "Thuế TNCN" },
+      { key: "phoneDeduction", label: "Khấu trừ điện thoại" },
+      { key: "taxRefund", label: "Hoàn thuế" },
+      { key: "salaryDeductionFinal", label: "Trừ lương cuối kỳ" },
+    ],
+  },
+  {
+    key: "payment",
+    label: "Thanh toán",
+    fields: [
+      { key: "totalGross", label: "Tổng lương Gross (1)" },
+      { key: "totalNet", label: "Tổng lương Net (2)" },
+      { key: "firstReceived", label: "Đã nhận lần 1" },
+      { key: "bonusReceived", label: "Đã nhận thưởng" },
+    ],
+  },
+];
+
+// ─── Component chính ─────────────────────────────────────────────────────────
 export default function SalaryDashboard() {
   const currentYear = new Date().getFullYear();
   const [data, setData] = useState<any[]>([]);
@@ -42,10 +131,9 @@ export default function SalaryDashboard() {
       try {
         const res = await fetch(`/api/my-salary/report?year=${selectedYear}`);
         const json = await res.json();
-        const sortedData = json.sort((a: any, b: any) => a.month - b.month);
-        setData(sortedData);
-      } catch (error) {
-        console.error("Lỗi:", error);
+        setData(json.sort((a: any, b: any) => a.month - b.month));
+      } catch (e) {
+        console.error(e);
       } finally {
         setLoading(false);
       }
@@ -53,36 +141,31 @@ export default function SalaryDashboard() {
     fetchData();
   }, [selectedYear]);
 
-  const formatVND = (value: number) =>
-    new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-      maximumFractionDigits: 0,
-    }).format(value);
-
   const stats = useMemo(() => {
-    if (data.length === 0) return { total: 0, avg: 0, tax: 0, maxMonth: "N/A" };
-    const total = data.reduce((acc, curr) => acc + curr.totalMonthlyNet, 0);
-    const tax = data.reduce(
-      (acc, curr) => acc + (curr.totalDeductions || 0),
-      0,
-    );
-    const maxVal = Math.max(...data.map((d) => d.totalMonthlyNet));
-    const maxMonthObj = data.find((d) => d.totalMonthlyNet === maxVal);
+    if (!data.length)
+      return { total: 0, avg: 0, deductions: 0, maxMonth: "N/A" };
+    const total = data.reduce((s, d) => s + (d.totalMonthlyNet ?? 0), 0);
+    const deductions = data.reduce((s, d) => s + (d.totalDeductions ?? 0), 0);
+    const maxVal = Math.max(...data.map((d) => d.totalMonthlyNet ?? 0));
+    const maxObj = data.find((d) => d.totalMonthlyNet === maxVal);
     return {
       total,
       avg: total / data.length,
-      tax,
-      maxMonth: maxMonthObj ? `Tháng ${maxMonthObj.month}` : "N/A",
+      deductions,
+      maxMonth: maxObj ? `Tháng ${maxObj.month}` : "N/A",
     };
   }, [data]);
 
+  const onChange = (date: any, dateString: any) => {
+    setSelectedYear(dateString);
+  };
+
   if (loading)
     return (
-      <div className="h-screen flex items-center justify-center bg-white p-6 text-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
-          <p className="text-slate-400 font-black text-[10px] tracking-widest uppercase">
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-slate-400">
             Đang tải dữ liệu {selectedYear}...
           </p>
         </div>
@@ -90,69 +173,91 @@ export default function SalaryDashboard() {
     );
 
   return (
-    <div className="max-w-7xl mx-auto p-4 md:p-8 space-y-6 md:space-y-10 bg-[#fdfdfd] min-h-screen">
-      {/* HEADER */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-100 pb-8">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-6 min-h-screen bg-slate-50">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter italic">
-            MY SALARY.
-          </h1>
-          <p className="text-slate-400 text-[10px] md:text-xs font-bold mt-1 uppercase tracking-widest">
+          <h1 className="text-2xl font-bold text-slate-900">Lương của tôi</h1>
+          <p className="text-sm text-slate-500 mt-0.5">
             Báo cáo thu nhập năm {selectedYear}
           </p>
         </div>
-        <div className="flex bg-slate-100 p-1 rounded-2xl w-full md:w-auto overflow-x-auto">
-          {[currentYear, currentYear - 1].map((y) => (
-            <button
-              key={y}
-              onClick={() => setSelectedYear(y)}
-              className={`flex-1 md:flex-none px-6 md:px-10 py-2.5 rounded-xl text-[10px] md:text-xs font-black transition-all whitespace-nowrap ${selectedYear === y ? "bg-white text-blue-600 shadow-sm" : "text-slate-400"}`}
-            >
-              NĂM {y}
-            </button>
-          ))}
+        <div className="flex gap-2 bg-white border border-slate-200 p-1 rounded-xl">
+          <DatePicker
+            picker="year"
+            placeholder="Chọn năm"
+            // Chuyển số 2026 thành object dayjs để hiển thị
+            value={selectedYear ? dayjs(`${selectedYear}-01-01`) : null}
+            allowClear={false}
+            onChange={(date) => {
+              if (date) {
+                // Chỉ lấy con số năm (vd: 2026) để lưu vào state
+                setSelectedYear(date.year());
+              }
+            }}
+            // Tailwind để đồng bộ giao diện cũ
+            className="rounded-xl border-none shadow-none hover:bg-slate-50 transition-all font-medium text-sm"
+            suffixIcon={null} // Ẩn icon lịch nếu muốn giống nút bấm cũ
+          />
         </div>
       </div>
 
-      {/* STATS - Mobile 2 cột */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
-        <StatCard
-          title="Tổng lĩnh"
-          value={formatVND(stats.total)}
-          icon={<Wallet size={18} />}
-          color="blue"
-        />
-        <StatCard
-          title="Trung bình"
-          value={formatVND(stats.avg)}
-          icon={<TrendingUp size={18} />}
-          color="indigo"
-        />
-        <StatCard
-          title="Khấu trừ"
-          value={formatVND(stats.tax)}
-          icon={<ShieldCheck size={18} />}
-          color="rose"
-        />
-        <StatCard
-          title="Cao nhất"
-          value={stats.maxMonth}
-          icon={<ArrowUpRight size={18} />}
-          color="emerald"
-        />
+      {/* Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          {
+            label: "Tổng thực nhận",
+            value: fmt(stats.total),
+            icon: <Wallet size={16} />,
+            color: "text-blue-600 bg-blue-50",
+          },
+          {
+            label: "Trung bình/tháng",
+            value: fmt(stats.avg),
+            icon: <TrendingUp size={16} />,
+            color: "text-indigo-600 bg-indigo-50",
+          },
+          {
+            label: "Tổng khấu trừ",
+            value: fmt(stats.deductions),
+            icon: <ShieldCheck size={16} />,
+            color: "text-rose-600 bg-rose-50",
+          },
+          {
+            label: "Tháng cao nhất",
+            value: stats.maxMonth,
+            icon: <ArrowUpRight size={16} />,
+            color: "text-emerald-600 bg-emerald-50",
+          },
+        ].map((s) => (
+          <div
+            key={s.label}
+            className="bg-white rounded-2xl border border-slate-100 p-4"
+          >
+            <div
+              className={`w-8 h-8 rounded-lg ${s.color} flex items-center justify-center mb-3`}
+            >
+              {s.icon}
+            </div>
+            <p className="text-xs text-slate-400 mb-1">{s.label}</p>
+            <p className="text-sm font-bold text-slate-900 truncate">
+              {s.value}
+            </p>
+          </div>
+        ))}
       </div>
 
-      {/* CHART - Ẩn trên mobile cực nhỏ nếu cần, hoặc scale lại */}
-      <div className="bg-white p-4 md:p-8 rounded-[32px] md:rounded-[40px] border border-slate-100 shadow-sm">
-        <h3 className="text-lg font-black text-slate-800 mb-6 tracking-tight">
+      {/* Chart */}
+      <div className="bg-white rounded-2xl border border-slate-100 p-6">
+        <p className="text-sm font-semibold text-slate-700 mb-4">
           Biến động thu nhập
-        </h3>
-        <div className="h-[250px] md:h-[350px] w-full">
+        </p>
+        <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data}>
               <defs>
-                <linearGradient id="colorNet" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#2563eb" stopOpacity={0.2} />
+                <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#2563eb" stopOpacity={0.15} />
                   <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
                 </linearGradient>
               </defs>
@@ -165,79 +270,95 @@ export default function SalaryDashboard() {
                 dataKey="month"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "#94a3b8", fontSize: 10, fontWeight: 800 }}
-                dy={10}
+                tick={{ fill: "#94a3b8", fontSize: 11 }}
+                dy={8}
               />
-              <YAxis hide />
               <Tooltip
                 content={({ active, payload }) =>
-                  active &&
-                  payload && (
-                    <div className="bg-slate-900 text-white p-3 rounded-xl shadow-2xl border-none">
-                      <p className="text-[9px] text-slate-400 font-black mb-1 uppercase tracking-widest">
+                  active && payload?.length ? (
+                    <div className="bg-slate-900 text-white px-3 py-2 rounded-xl text-sm">
+                      <p className="text-slate-400 text-xs mb-0.5">
                         Tháng {payload[0]?.payload?.month}
                       </p>
-                      <p className="text-sm font-black">
-                        {formatVND(payload[0]?.value as number)}
+                      <p className="font-bold">
+                        {fmt(payload[0]?.value as number)}
                       </p>
                     </div>
-                  )
+                  ) : null
                 }
               />
               <Area
                 type="monotone"
                 dataKey="totalMonthlyNet"
                 stroke="#2563eb"
-                strokeWidth={3}
-                fill="url(#colorNet)"
+                strokeWidth={2}
+                fill="url(#grad)"
               />
             </AreaChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      {/* TABLE/LIST - Chuyển sang Card trên Mobile */}
-      <div className="bg-white rounded-[32px] md:rounded-[40px] border border-slate-100 shadow-sm overflow-hidden">
-        <div className="p-6 md:p-8 border-b border-slate-50 flex justify-between items-center">
-          <h3 className="text-lg md:text-xl font-black text-slate-800">
-            Lịch sử kỳ lương
-          </h3>
-          <span className="text-[10px] font-black text-slate-400 uppercase bg-slate-50 px-3 py-1 rounded-full">
-            {data.length} Kỳ
+      {/* Table */}
+      <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden">
+        <div className="px-6 py-4 border-b border-slate-50 flex items-center justify-between">
+          <p className="font-semibold text-slate-800">Lịch sử kỳ lương</p>
+          <span className="text-xs text-slate-400 bg-slate-50 px-3 py-1 rounded-full">
+            {data.length} kỳ
           </span>
         </div>
 
-        {/* Desktop Table */}
-        <div className="hidden md:block overflow-x-auto px-8 pb-8">
-          <table className="w-full text-left border-separate border-spacing-y-4">
+        {/* Desktop */}
+        <div className="hidden md:block">
+          <table className="w-full text-sm">
             <thead>
-              <tr className="text-slate-400 text-[10px] uppercase font-black tracking-widest">
-                <th className="px-6">Kỳ lương</th>
-                <th className="px-6 text-right">Tổng Gross</th>
-                <th className="px-6 text-right">Thực nhận</th>
-                <th className="px-6 text-center">Hành động</th>
+              <tr className="text-xs text-slate-400 border-b border-slate-50">
+                <th className="px-6 py-3 text-left font-medium">Kỳ lương</th>
+                <th className="px-6 py-3 text-left font-medium">Loại</th>
+                <th className="px-6 py-3 text-right font-medium">Tổng gross</th>
+                <th className="px-6 py-3 text-right font-medium">Khấu trừ</th>
+                <th className="px-6 py-3 text-right font-medium">Lần 1</th>
+                <th className="px-6 py-3 text-right font-medium">Thực nhận</th>
+                <th className="px-6 py-3 text-center font-medium">Chi tiết</th>
               </tr>
             </thead>
             <tbody>
               {data.map((item) => (
                 <tr
-                  key={item.id}
+                  key={`${item.month}-${item.type}`}
                   onClick={() => setSelectedSalary(item)}
-                  className="group bg-white hover:bg-slate-50 transition-all cursor-pointer border-y border-slate-50"
+                  className="border-b border-slate-50 hover:bg-slate-50 cursor-pointer transition-colors"
                 >
-                  <td className="px-6 py-5 rounded-l-2xl border-y border-l border-slate-50 font-bold text-slate-700">
-                    Tháng {item.month}
+                  <td className="px-6 py-4 font-medium text-slate-700">
+                    Tháng {item.month}/{item.year}
                   </td>
-                  <td className="px-6 py-5 border-y border-slate-50 text-right font-bold text-slate-400">
-                    {formatVND(item.totalGross)}
+                  <td className="px-6 py-4">
+                    <span
+                      className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${
+                        item.type === "MANAGER"
+                          ? "bg-purple-50 text-purple-700"
+                          : "bg-slate-100 text-slate-600"
+                      }`}
+                    >
+                      {item.type}
+                    </span>
                   </td>
-                  <td className="px-6 py-5 border-y border-slate-50 text-right font-black text-blue-600">
-                    {formatVND(item.totalMonthlyNet)}
+                  <td className="px-6 py-4 text-right text-slate-500">
+                    {fmt(item.totalGross)}
                   </td>
-                  <td className="px-6 py-5 border-y border-r border-slate-50 rounded-r-2xl text-center">
-                    <div className="inline-flex p-2 bg-slate-50 rounded-lg group-hover:bg-slate-900 group-hover:text-white transition-all">
-                      <Eye size={16} />
-                    </div>
+                  <td className="px-6 py-4 text-right text-rose-500">
+                    -{fmt(item.totalDeductions)}
+                  </td>
+                  <td className="px-6 py-4 text-right text-slate-500">
+                    {fmt(item.firstReceived)}
+                  </td>
+                  <td className="px-6 py-4 text-right font-bold text-blue-600">
+                    {fmt(item.totalMonthlyNet)}
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <button className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-slate-700 transition-colors">
+                      <Eye size={14} /> Xem
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -245,32 +366,32 @@ export default function SalaryDashboard() {
           </table>
         </div>
 
-        {/* Mobile List View */}
+        {/* Mobile */}
         <div className="md:hidden divide-y divide-slate-50">
           {data.map((item) => (
             <div
-              key={item.id}
+              key={`${item.month}-${item.type}`}
               onClick={() => setSelectedSalary(item)}
-              className="p-5 flex justify-between items-center active:bg-slate-50"
+              className="p-4 flex items-center justify-between active:bg-slate-50"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-black text-xs">
-                  M{item.month}
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs">
+                  T{item.month}
                 </div>
                 <div>
-                  <p className="text-sm font-black text-slate-800 italic">
-                    Tháng {item.month} / {item.year}
+                  <p className="text-sm font-semibold text-slate-800">
+                    Tháng {item.month}/{item.year}
                   </p>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase">
-                    Gross: {formatVND(item.totalGross)}
+                  <p className="text-xs text-slate-400">
+                    Gross: {fmt(item.totalGross)}
                   </p>
                 </div>
               </div>
-              <div className="text-right flex items-center gap-3">
-                <p className="text-sm font-black text-blue-600">
-                  {formatVND(item.totalMonthlyNet)}
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-bold text-blue-600">
+                  {fmt(item.totalMonthlyNet)}
                 </p>
-                <ChevronRight size={16} className="text-slate-300" />
+                <ChevronRight size={14} className="text-slate-300" />
               </div>
             </div>
           ))}
@@ -279,10 +400,9 @@ export default function SalaryDashboard() {
 
       <AnimatePresence>
         {selectedSalary && (
-          <SalaryDetailModal
+          <SalaryDetailDrawer
             salary={selectedSalary}
             onClose={() => setSelectedSalary(null)}
-            formatVND={formatVND}
           />
         )}
       </AnimatePresence>
@@ -290,225 +410,239 @@ export default function SalaryDashboard() {
   );
 }
 
-const StatCard = ({ title, value, icon, color }: any) => {
-  const themes: any = {
-    blue: "bg-blue-50 text-blue-600",
-    indigo: "bg-indigo-50 text-indigo-600",
-    rose: "bg-rose-50 text-rose-600",
-    emerald: "bg-emerald-50 text-emerald-600",
-  };
-  return (
-    <div className="bg-white p-4 md:p-6 rounded-3xl border border-slate-100 shadow-sm">
-      <div
-        className={`w-10 h-10 md:w-12 md:h-12 ${themes[color]} rounded-xl md:rounded-2xl flex items-center justify-center mb-4`}
-      >
-        {icon}
-      </div>
-      <p className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
-        {title}
-      </p>
-      <p className="text-sm md:text-lg font-black text-slate-900 truncate">
-        {value}
-      </p>
-    </div>
-  );
-};
-
-const SalaryDetailModal = ({ salary, onClose, formatVND }: any) => {
+// ─── Drawer chi tiết ─────────────────────────────────────────────────────────
+function SalaryDetailDrawer({
+  salary,
+  onClose,
+}: {
+  salary: any;
+  onClose: () => void;
+}) {
   const pdfRef = useRef<HTMLDivElement>(null);
   const [isSending, setIsSending] = useState(false);
 
-  // FIX TẢI PDF TRÊN MOBILE
   const handleDownloadPDF = async () => {
     if (!pdfRef.current) return;
     try {
       const canvas = await html2canvas(pdfRef.current, {
         scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: "#ffffff", // Ép nền trắng rõ ràng
+        backgroundColor: "#fff",
       });
-
-      const imgData = canvas.toDataURL("image/png", 1.0);
       const pdf = new jsPDF("p", "mm", "a4");
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      const w = pdf.internal.pageSize.getWidth();
+      pdf.addImage(
+        canvas.toDataURL("image/png"),
+        "PNG",
+        0,
+        0,
+        w,
+        (canvas.height * w) / canvas.width,
+      );
       pdf.save(`Phieu-Luong-${salary.month}-${salary.year}.pdf`);
-    } catch (err) {
-      console.error("PDF Error:", err);
-      alert("Lỗi render PDF. Hãy thử lại!");
+    } catch (e) {
+      alert("Lỗi xuất PDF!");
     }
   };
 
-  const handleReviewRequest = async (salary: any) => {
-    const reason = window.prompt(
-      "Lý do rà soát (Ví dụ: Sai ngày công, thiếu tiền OT...):",
-    );
+  const handleReviewRequest = async () => {
+    const reason = window.prompt("Lý do rà soát:");
     if (!reason) return;
     setIsSending(true);
     try {
-      const response = await fetch("/api/my-salary/request-review", {
+      const res = await fetch("/api/my-salary/request-review", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          employeeName: salary.fullName || "Nhân viên hệ thống",
           month: salary.month,
           year: salary.year,
-          reason: reason,
-          totalGross: salary.totalGross,
-          totalMonthlyNet: salary.totalMonthlyNet,
+          reason,
         }),
       });
-      if (response.ok) alert("✅ Đã gửi yêu cầu thành công!");
-      else alert("❌ Lỗi gửi yêu cầu.");
-    } catch (error) {
+      alert(res.ok ? "✅ Gửi yêu cầu thành công!" : "❌ Gửi thất bại.");
+    } catch {
       alert("❌ Lỗi kết nối.");
     } finally {
       setIsSending(false);
     }
   };
 
+  const totalMonthlyNet =
+    (salary.firstReceived ?? 0) + (salary.actualReceived ?? 0);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-0 md:p-4 bg-slate-900/60 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/40 backdrop-blur-sm p-0 md:p-6"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <motion.div
         initial={{ y: "100%" }}
         animate={{ y: 0 }}
         exit={{ y: "100%" }}
-        transition={{ type: "spring", damping: 25 }}
-        className="bg-white w-full max-w-2xl h-[95vh] md:h-auto md:max-h-[90vh] rounded-t-[32px] md:rounded-[48px] shadow-2xl overflow-hidden flex flex-col"
+        transition={{ type: "spring", damping: 28 }}
+        className="bg-white w-full max-w-2xl h-[93vh] md:h-[88vh] rounded-t-3xl md:rounded-3xl flex flex-col overflow-hidden"
       >
-        <div className="overflow-y-auto flex-1 scrollbar-hide">
-          <div ref={pdfRef} className="bg-white">
-            {/* Header Modal */}
-            <div className="p-8 md:p-10 bg-slate-900 text-white">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h2 className="text-2xl md:text-3xl font-black italic tracking-tighter uppercase">
-                    Salary Slip.
-                  </h2>
-                  <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-1">
-                    Kỳ lương: {salary.month}/{salary.year}
+        {/* Drawer header */}
+        <div className="bg-slate-900 text-white px-6 py-5 flex items-start justify-between flex-shrink-0">
+          <div>
+            <h2 className="font-bold text-lg">
+              Phiếu lương tháng {salary.month}/{salary.year}
+            </h2>
+            <p className="text-slate-400 text-xs mt-0.5">
+              {salary.fullName} · {salary.position ?? "—"} · {salary.type}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        {/* Scrollable body */}
+        <div ref={pdfRef} className="flex-1 overflow-y-auto">
+          <div className="p-6 space-y-6">
+            {/* Thông tin nhân viên */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 bg-slate-50 rounded-2xl">
+              {[
+                { label: "Mã nhân viên", value: salary.employeeCode },
+                { label: "Họ tên", value: salary.fullName },
+                { label: "Chức vụ", value: salary.position ?? "—" },
+                { label: "Ngạch", value: salary.grade ?? "—" },
+                { label: "Bậc BHXH", value: salary.insuranceLevel ?? "—" },
+                { label: "Loại HĐ", value: salary.contractType ?? "—" },
+                {
+                  label: "Ngày ký HĐ",
+                  value: salary.contractDate
+                    ? new Date(salary.contractDate).toLocaleDateString("vi-VN")
+                    : "—",
+                },
+                {
+                  label: "Ngày công",
+                  value: `${salary.workingDays ?? 0} ngày`,
+                },
+                {
+                  label: "Chưa chính thức",
+                  value: `${salary.notOfficial ?? 0} ngày`,
+                },
+              ].map((f) => (
+                <div key={f.label}>
+                  <p className="text-xs text-slate-400">{f.label}</p>
+                  <p className="text-sm font-medium text-slate-700 mt-0.5">
+                    {f.value}
                   </p>
                 </div>
-                <button
-                  onClick={onClose}
-                  className="p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-all"
-                >
-                  <X size={20} />
-                </button>
-              </div>
+              ))}
             </div>
 
-            <div className="p-6 md:p-10 space-y-8">
-              <section>
-                <h4 className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 border-b pb-2 italic">
-                  <Calculator size={14} className="text-blue-600" /> Thu nhập
-                </h4>
-                <div className="grid grid-cols-2 gap-4">
-                  <DetailRow
-                    label="Cơ bản"
-                    value={formatVND(salary.baseSalary)}
-                  />
-                  <DetailRow
-                    label="Tăng ca"
-                    value={formatVND(salary.overtime)}
-                    highlight
-                  />
-                  <DetailRow
-                    label="Phụ cấp"
-                    value={formatVND(salary.mealAllowance)}
-                  />
-                  <DetailRow
-                    label="Lương hiệu quả"
-                    value={formatVND(salary.efficiencySalary || 0)}
-                  />
-                  <DetailRow
-                    label="Tổng lương"
-                    value={formatVND(salary.totalGross || 0)}
-                  />
-                  <DetailRow
-                    label="Khác"
-                    value={formatVND(salary.otherAllowances || 0)}
-                  />
-                </div>
-              </section>
-
-              <section className="bg-slate-50 p-6 rounded-3xl border border-slate-100">
-                <h4 className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 border-b border-slate-200 pb-2 italic">
-                  <ShieldCheck size={14} className="text-rose-600" /> Khấu trừ
-                </h4>
-                <div className="grid grid-cols-2 gap-4">
-                  <DetailRow
-                    label="BHXH/BHYT"
-                    value={`-${formatVND(salary.insuranceDeduction)}`}
-                    subColor="text-rose-500"
-                  />
-                  <DetailRow
-                    label="Thuế TNCN"
-                    value={`-${formatVND(salary.taxTNCN)}`}
-                    subColor="text-rose-500"
-                  />
-                </div>
-              </section>
-
-              <div className="bg-blue-600 p-6 md:p-8 rounded-[32px] text-white flex justify-between items-center">
-                <div>
-                  <p className="text-[10px] font-black uppercase opacity-60 mb-1">
-                    Thực nhận (Net)
+            {/* Các nhóm lương */}
+            {SALARY_SECTIONS.map((section) => {
+              const hasValue = section.fields.some(
+                (f) => (salary[f.key] ?? 0) !== 0,
+              );
+              return (
+                <div key={section.key}>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full inline-block ${
+                        section.key === "deduction"
+                          ? "bg-rose-400"
+                          : section.key === "payment"
+                            ? "bg-blue-500"
+                            : "bg-slate-300"
+                      }`}
+                    />
+                    {section.label}
                   </p>
-                  <p className="text-2xl md:text-4xl font-black">
-                    {formatVND(salary.totalMonthlyNet)}
+                  <div
+                    className={`grid grid-cols-2 gap-2 ${
+                      section.key === "deduction"
+                        ? "bg-rose-50/40"
+                        : section.key === "payment"
+                          ? "bg-blue-50/40"
+                          : ""
+                    } rounded-2xl ${section.key !== "fixed" && "p-0"}`}
+                  >
+                    {section.fields.map((f) => {
+                      const v: number = salary[f.key] ?? 0;
+                      const isNeg = section.negative && f.key !== "taxRefund";
+                      const isPos = f.key === "taxRefund";
+                      return (
+                        <div
+                          key={f.key}
+                          className="bg-white rounded-xl border border-slate-100 px-3.5 py-3"
+                        >
+                          <p className="text-xs text-slate-400 mb-1">
+                            {f.label}
+                          </p>
+                          <p
+                            className={`text-sm font-semibold truncate ${
+                              isNeg && v > 0
+                                ? "text-rose-600"
+                                : isPos && v > 0
+                                  ? "text-emerald-600"
+                                  : v > 0
+                                    ? "text-slate-800"
+                                    : "text-slate-300"
+                            }`}
+                          >
+                            {isNeg && v > 0 ? "-" : ""}
+                            {fmt(Math.abs(v))}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Net banner */}
+            <div className="bg-slate-900 text-white rounded-2xl p-5 flex items-center justify-between">
+              <div>
+                <p className="text-xs text-slate-400 mb-1">
+                  Thực nhận cả tháng (lần 1 + còn lại)
+                </p>
+                <p className="text-2xl font-bold">{fmt(totalMonthlyNet)}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-slate-400 text-xs">
+                  Lần 1: {fmt(salary.firstReceived ?? 0)}
+                </p>
+                <p className="text-slate-400 text-xs mt-1">
+                  Còn lại: {fmt(salary.actualReceived ?? 0)}
+                </p>
+                {(salary.bonusReceived ?? 0) > 0 && (
+                  <p className="text-emerald-400 text-xs mt-1">
+                    Thưởng: +{fmt(salary.bonusReceived)}
                   </p>
-                </div>
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-white/10 rounded-full flex items-center justify-center">
-                  <FileText size={28} />
-                </div>
+                )}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="p-6 border-t bg-white flex flex-col md:flex-row gap-3">
+        {/* Footer actions */}
+        <div className="px-6 py-4 border-t border-slate-100 flex gap-3 flex-shrink-0">
           <button
             onClick={handleDownloadPDF}
-            className="flex-1 py-4 bg-slate-900 text-white font-black rounded-2xl flex items-center justify-center gap-2 text-[11px] uppercase tracking-widest"
+            className="flex-1 flex items-center justify-center gap-2 bg-slate-900 text-white py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition-colors"
           >
-            <Printer size={16} /> Tải PDF
+            <Printer size={15} /> Tải PDF
           </button>
           <button
-            onClick={() => handleReviewRequest(salary)}
+            onClick={handleReviewRequest}
             disabled={isSending}
-            className="flex-1 py-4 bg-slate-100 text-slate-700 font-black rounded-2xl flex items-center justify-center gap-2 text-[11px] uppercase tracking-widest active:bg-rose-50 active:text-rose-600 transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 bg-slate-100 text-slate-700 py-3 rounded-xl text-sm font-medium hover:bg-rose-50 hover:text-rose-600 transition-colors"
           >
-            <AlertCircle size={16} /> Rà soát
+            <AlertCircle size={15} />{" "}
+            {isSending ? "Đang gửi..." : "Yêu cầu rà soát"}
           </button>
         </div>
       </motion.div>
     </motion.div>
   );
-};
-
-const DetailRow = ({
-  label,
-  value,
-  highlight = false,
-  subColor = "text-slate-800",
-}: any) => (
-  <div className="flex flex-col">
-    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">
-      {label}
-    </span>
-    <span
-      className={`text-[13px] md:text-[14px] truncate ${highlight ? "font-black text-blue-600" : "font-bold"} ${subColor}`}
-    >
-      {value}
-    </span>
-  </div>
-);
+}

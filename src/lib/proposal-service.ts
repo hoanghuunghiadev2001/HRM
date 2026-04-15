@@ -403,35 +403,40 @@ export class ProposalService {
       }
 
       // 2. Thực hiện cập nhật Database trong Transaction (Càng nhanh càng tốt)
-      const updatedProposal = await prisma.$transaction(async (tx) => {
-        // Cập nhật trạng thái người ký
-        await tx.proposalSigner.update({
-          where: { id: currentSigner.id },
-          data: {
-            status,
-            signedAt: new Date(),
-            reason: reason || null,
-          },
-        });
-
-        // Nếu bị từ chối, cập nhật luôn trạng thái Proposal
-        if (status === "rejected") {
-          await tx.proposal.update({
-            where: { id: proposalId },
-            data: { status: "rejected" },
+      const updatedProposal = await prisma.$transaction(
+        async (tx) => {
+          // Cập nhật trạng thái người ký
+          await tx.proposalSigner.update({
+            where: { id: currentSigner.id },
+            data: {
+              status,
+              signedAt: new Date(),
+              reason: reason || null,
+            },
           });
-        }
 
-        // Lấy lại data tối thiểu để phục vụ logic gửi email tiếp theo
-        return tx.proposal.findUnique({
-          where: { id: proposalId },
-          include: {
-            proposer: { include: { contactInfo: true } },
-            signers: { orderBy: { level: "asc" } },
-            approvers: { orderBy: { level: "asc" } },
-          },
-        });
-      });
+          // Nếu bị từ chối, cập nhật luôn trạng thái Proposal
+          if (status === "rejected") {
+            await tx.proposal.update({
+              where: { id: proposalId },
+              data: { status: "rejected" },
+            });
+          }
+
+          // Lấy lại data tối thiểu để phục vụ logic gửi email tiếp theo
+          return tx.proposal.findUnique({
+            where: { id: proposalId },
+            include: {
+              proposer: { include: { contactInfo: true } },
+              signers: { orderBy: { level: "asc" } },
+              approvers: { orderBy: { level: "asc" } },
+            },
+          });
+        },
+        {
+          timeout: 10000,
+        },
+      );
 
       if (!updatedProposal) {
         return { success: false, error: "Lỗi khi cập nhật dữ liệu." };
@@ -593,28 +598,33 @@ export class ProposalService {
       }
 
       // 3. Thực hiện cập nhật Database nhanh trong Transaction
-      const updated = await prisma.$transaction(async (tx) => {
-        await tx.proposalApprover.update({
-          where: { id: currentApprover.id },
-          data: { status, approvedAt: new Date(), reason: reason || null },
-        });
-
-        if (status === "rejected") {
-          await tx.proposal.update({
-            where: { id: proposalId },
-            data: { status: "rejected" },
+      const updated = await prisma.$transaction(
+        async (tx) => {
+          await tx.proposalApprover.update({
+            where: { id: currentApprover.id },
+            data: { status, approvedAt: new Date(), reason: reason || null },
           });
-        }
 
-        // Lấy data gọn nhẹ để xử lý email tiếp theo
-        return tx.proposal.findUnique({
-          where: { id: proposalId },
-          include: {
-            proposer: { include: { contactInfo: true } },
-            approvers: { orderBy: { level: "asc" } },
-          },
-        });
-      });
+          if (status === "rejected") {
+            await tx.proposal.update({
+              where: { id: proposalId },
+              data: { status: "rejected" },
+            });
+          }
+
+          // Lấy data gọn nhẹ để xử lý email tiếp theo
+          return tx.proposal.findUnique({
+            where: { id: proposalId },
+            include: {
+              proposer: { include: { contactInfo: true } },
+              approvers: { orderBy: { level: "asc" } },
+            },
+          });
+        },
+        {
+          timeout: 10000,
+        },
+      );
 
       if (!updated) return { success: false, error: "Lỗi đồng bộ dữ liệu." };
 
