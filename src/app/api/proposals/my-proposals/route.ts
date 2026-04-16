@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
 
     // ===== 1. CREATED PROPOSALS =====
     const createdWhere =
-      role === "ADMIN" || employeeCode === "00016"
+      role === "ADMIN" || employeeCode === "00016" || employeeCode === "00019"
         ? { ...searchFilter }
         : {
             AND: [
