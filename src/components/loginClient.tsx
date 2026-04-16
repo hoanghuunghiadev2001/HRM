@@ -50,8 +50,9 @@ export default function LoginClient() {
           department: data.department,
           position: data.position,
           departmentID: data.departmentID,
-        })
+        }),
       );
+      console.log("Dữ liệu thực tế từ API Login:", data);
       dispatch(setUserRole(data.role)); // nên là URL
       router.push("/dashboard"); // thay vì redirect từ server
     } else {

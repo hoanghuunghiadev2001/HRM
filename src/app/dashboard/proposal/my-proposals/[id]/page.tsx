@@ -40,6 +40,7 @@ import {
   EyeOutlined,
   FilePdfOutlined,
   FileUnknownOutlined,
+  BellOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
 import dayjs, { Dayjs } from "dayjs";
@@ -79,10 +80,32 @@ export default function ProposalDetailTailwind() {
   const [editTimeRange, setEditTimeRange] = useState<[Dayjs, Dayjs] | null>(
     null,
   );
+  const [remindLoading, setRemindLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
   }, [proposalId]);
+
+  const handleRemind = async () => {
+    setRemindLoading(true);
+    try {
+      // Gọi đến API nhắc nhở (Giả sử bạn đặt tại /api/proposals/[id]/remind)
+      const res = await axios.post(`/api/proposals/${proposalId}/remind`);
+
+      if (res.data.success) {
+        const names = res.data.remindedTo?.map((r: any) => r.name).join(", ");
+        message.success(`Đã gửi nhắc nhở đến: ${names}`);
+      } else {
+        message.error(res.data.error || "Không thể gửi nhắc nhở");
+      }
+    } catch (e: any) {
+      const errorMsg =
+        e.response?.data?.error || "Có lỗi xảy ra khi gửi nhắc nhở";
+      message.error(errorMsg);
+    } finally {
+      setRemindLoading(false);
+    }
+  };
 
   const fetchData = async () => {
     setLoading(true);
@@ -362,6 +385,21 @@ export default function ProposalDetailTailwind() {
               <Progress percent={progress.percent} status={progress.status} />
             </div>
           </div>
+
+          {proposal.proposerId === id &&
+            ["pending_signatures", "waiting_approval"].includes(
+              proposal.status,
+            ) && (
+              <Button
+                icon={<BellOutlined />}
+                onClick={handleRemind}
+                loading={remindLoading}
+                className="border-orange-400 text-orange-500 hover:text-orange-600 hover:border-orange-600"
+              >
+                Nhắc duyệt
+              </Button>
+            )}
+
           {(proposal.statusSign || proposal.statusApprove) && (
             <Space>
               <Button
