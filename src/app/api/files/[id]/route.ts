@@ -340,7 +340,7 @@ export async function GET(
           y: 20,
           size: 7,
           font: fontRegular,
-          color: rgb(1, 1, 1),
+          color: rgb(0, 0, 0),
         },
       );
 
@@ -351,7 +351,7 @@ export async function GET(
         y: 20,
         size: 7,
         font: fontRegular,
-        color: rgb(1, 1, 1),
+        color: rgb(0, 0, 0),
       });
     });
 
