@@ -463,6 +463,17 @@ exports.Prisma.SalaryBatchScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.SalaryViewPermissionScalarFieldEnum = {
+  id: 'id',
+  viewerId: 'viewerId',
+  targetId: 'targetId',
+  grantedById: 'grantedById',
+  isActive: 'isActive',
+  note: 'note',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -601,6 +612,10 @@ exports.Prisma.SalaryBatchOrderByRelevanceFieldEnum = {
   filename: 'filename',
   status: 'status'
 };
+
+exports.Prisma.SalaryViewPermissionOrderByRelevanceFieldEnum = {
+  note: 'note'
+};
 exports.Sex = exports.$Enums.Sex = {
   MALE: 'MALE',
   FEMALE: 'FEMALE'
@@ -677,7 +692,8 @@ exports.Prisma.ModelName = {
   CompensatoryLeave: 'CompensatoryLeave',
   LunchMenu: 'LunchMenu',
   Salary: 'Salary',
-  SalaryBatch: 'SalaryBatch'
+  SalaryBatch: 'SalaryBatch',
+  SalaryViewPermission: 'SalaryViewPermission'
 };
 
 /**

@@ -74,11 +74,14 @@ model Employee {
   workInfo             WorkInfo?
   Attendance           Attendance[]
 
-  assetsReceived     AssetAssignment[]   @relation("EmployeeAsset")
-  assetsIssued       AssetAssignment[]   @relation("IssuedAssets")
-  compensatoryLeaves CompensatoryLeave[]
-  salaries           Salary[]
-  salaryBatches      SalaryBatch[]
+  assetsReceived                AssetAssignment[]      @relation("EmployeeAsset")
+  assetsIssued                  AssetAssignment[]      @relation("IssuedAssets")
+  compensatoryLeaves            CompensatoryLeave[]
+  salaries                      Salary[]
+  salaryBatches                 SalaryBatch[]
+  salaryViewPermissionsAsViewer SalaryViewPermission[] @relation("SalaryViewer")
+  salaryViewPermissionsAsTarget SalaryViewPermission[] @relation("SalaryTarget")
+  salaryViewPermissions         SalaryViewPermission[] @relation("SalaryGranter")
 
   @@index([employeeCode])
   @@index([managerId])
@@ -573,4 +576,24 @@ model SalaryBatch {
   createdBy Employee @relation(fields: [createdById], references: [id])
 
   @@index([month, year])
+}
+
+model SalaryViewPermission {
+  id          Int      @id @default(autoincrement())
+  viewerId    Int // Người được phép xem lương
+  targetId    Int // Nhân viên bị xem lương
+  grantedById Int // Admin/người cấp quyền
+  isActive    Boolean  @default(true)
+  note        String?  @db.VarChar(255)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  viewer    Employee @relation("SalaryViewer", fields: [viewerId], references: [id], onDelete: Cascade)
+  target    Employee @relation("SalaryTarget", fields: [targetId], references: [id], onDelete: Cascade)
+  grantedBy Employee @relation("SalaryGranter", fields: [grantedById], references: [id])
+
+  @@unique([viewerId, targetId])
+  @@index([viewerId])
+  @@index([targetId])
+  @@index([isActive])
 }

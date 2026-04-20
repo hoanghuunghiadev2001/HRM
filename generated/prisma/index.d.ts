@@ -143,6 +143,11 @@ export type Salary = $Result.DefaultSelection<Prisma.$SalaryPayload>
  * 
  */
 export type SalaryBatch = $Result.DefaultSelection<Prisma.$SalaryBatchPayload>
+/**
+ * Model SalaryViewPermission
+ * 
+ */
+export type SalaryViewPermission = $Result.DefaultSelection<Prisma.$SalaryViewPermissionPayload>
 
 /**
  * Enums
@@ -638,6 +643,16 @@ export class PrismaClient<
     * ```
     */
   get salaryBatch(): Prisma.SalaryBatchDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.salaryViewPermission`: Exposes CRUD operations for the **SalaryViewPermission** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SalaryViewPermissions
+    * const salaryViewPermissions = await prisma.salaryViewPermission.findMany()
+    * ```
+    */
+  get salaryViewPermission(): Prisma.SalaryViewPermissionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1104,7 +1119,8 @@ export namespace Prisma {
     CompensatoryLeave: 'CompensatoryLeave',
     LunchMenu: 'LunchMenu',
     Salary: 'Salary',
-    SalaryBatch: 'SalaryBatch'
+    SalaryBatch: 'SalaryBatch',
+    SalaryViewPermission: 'SalaryViewPermission'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1123,7 +1139,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "file" | "vehicle" | "employee" | "department" | "position" | "workInfo" | "contactInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover" | "emailActionToken" | "asset" | "assetAssignment" | "notification" | "compensatoryLeave" | "lunchMenu" | "salary" | "salaryBatch"
+      modelProps: "file" | "vehicle" | "employee" | "department" | "position" | "workInfo" | "contactInfo" | "leaveRequest" | "leaveApprovalStep" | "leaveApprovalStepApprover" | "attendanceImportLog" | "attendance" | "kPI" | "kPIEmployee" | "kPIEntry" | "proposal" | "proposalSigner" | "proposalApprover" | "emailActionToken" | "asset" | "assetAssignment" | "notification" | "compensatoryLeave" | "lunchMenu" | "salary" | "salaryBatch" | "salaryViewPermission"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2843,6 +2859,72 @@ export namespace Prisma {
           }
         }
       }
+      SalaryViewPermission: {
+        payload: Prisma.$SalaryViewPermissionPayload<ExtArgs>
+        fields: Prisma.SalaryViewPermissionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SalaryViewPermissionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SalaryViewPermissionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SalaryViewPermissionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SalaryViewPermissionPayload>
+          }
+          findFirst: {
+            args: Prisma.SalaryViewPermissionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SalaryViewPermissionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SalaryViewPermissionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SalaryViewPermissionPayload>
+          }
+          findMany: {
+            args: Prisma.SalaryViewPermissionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SalaryViewPermissionPayload>[]
+          }
+          create: {
+            args: Prisma.SalaryViewPermissionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SalaryViewPermissionPayload>
+          }
+          createMany: {
+            args: Prisma.SalaryViewPermissionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.SalaryViewPermissionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SalaryViewPermissionPayload>
+          }
+          update: {
+            args: Prisma.SalaryViewPermissionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SalaryViewPermissionPayload>
+          }
+          deleteMany: {
+            args: Prisma.SalaryViewPermissionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SalaryViewPermissionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SalaryViewPermissionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SalaryViewPermissionPayload>
+          }
+          aggregate: {
+            args: Prisma.SalaryViewPermissionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSalaryViewPermission>
+          }
+          groupBy: {
+            args: Prisma.SalaryViewPermissionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SalaryViewPermissionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SalaryViewPermissionCountArgs<ExtArgs>
+            result: $Utils.Optional<SalaryViewPermissionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2965,6 +3047,7 @@ export namespace Prisma {
     lunchMenu?: LunchMenuOmit
     salary?: SalaryOmit
     salaryBatch?: SalaryBatchOmit
+    salaryViewPermission?: SalaryViewPermissionOmit
   }
 
   /* Types for Logging */
@@ -3122,6 +3205,9 @@ export namespace Prisma {
     compensatoryLeaves: number
     salaries: number
     salaryBatches: number
+    salaryViewPermissionsAsViewer: number
+    salaryViewPermissionsAsTarget: number
+    salaryViewPermissions: number
   }
 
   export type EmployeeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3140,6 +3226,9 @@ export namespace Prisma {
     compensatoryLeaves?: boolean | EmployeeCountOutputTypeCountCompensatoryLeavesArgs
     salaries?: boolean | EmployeeCountOutputTypeCountSalariesArgs
     salaryBatches?: boolean | EmployeeCountOutputTypeCountSalaryBatchesArgs
+    salaryViewPermissionsAsViewer?: boolean | EmployeeCountOutputTypeCountSalaryViewPermissionsAsViewerArgs
+    salaryViewPermissionsAsTarget?: boolean | EmployeeCountOutputTypeCountSalaryViewPermissionsAsTargetArgs
+    salaryViewPermissions?: boolean | EmployeeCountOutputTypeCountSalaryViewPermissionsArgs
   }
 
   // Custom InputTypes
@@ -3256,6 +3345,27 @@ export namespace Prisma {
    */
   export type EmployeeCountOutputTypeCountSalaryBatchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SalaryBatchWhereInput
+  }
+
+  /**
+   * EmployeeCountOutputType without action
+   */
+  export type EmployeeCountOutputTypeCountSalaryViewPermissionsAsViewerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SalaryViewPermissionWhereInput
+  }
+
+  /**
+   * EmployeeCountOutputType without action
+   */
+  export type EmployeeCountOutputTypeCountSalaryViewPermissionsAsTargetArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SalaryViewPermissionWhereInput
+  }
+
+  /**
+   * EmployeeCountOutputType without action
+   */
+  export type EmployeeCountOutputTypeCountSalaryViewPermissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SalaryViewPermissionWhereInput
   }
 
 
@@ -5942,6 +6052,9 @@ export namespace Prisma {
     compensatoryLeaves?: boolean | Employee$compensatoryLeavesArgs<ExtArgs>
     salaries?: boolean | Employee$salariesArgs<ExtArgs>
     salaryBatches?: boolean | Employee$salaryBatchesArgs<ExtArgs>
+    salaryViewPermissionsAsViewer?: boolean | Employee$salaryViewPermissionsAsViewerArgs<ExtArgs>
+    salaryViewPermissionsAsTarget?: boolean | Employee$salaryViewPermissionsAsTargetArgs<ExtArgs>
+    salaryViewPermissions?: boolean | Employee$salaryViewPermissionsArgs<ExtArgs>
     _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["employee"]>
 
@@ -5984,6 +6097,9 @@ export namespace Prisma {
     compensatoryLeaves?: boolean | Employee$compensatoryLeavesArgs<ExtArgs>
     salaries?: boolean | Employee$salariesArgs<ExtArgs>
     salaryBatches?: boolean | Employee$salaryBatchesArgs<ExtArgs>
+    salaryViewPermissionsAsViewer?: boolean | Employee$salaryViewPermissionsAsViewerArgs<ExtArgs>
+    salaryViewPermissionsAsTarget?: boolean | Employee$salaryViewPermissionsAsTargetArgs<ExtArgs>
+    salaryViewPermissions?: boolean | Employee$salaryViewPermissionsArgs<ExtArgs>
     _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -6010,6 +6126,9 @@ export namespace Prisma {
       compensatoryLeaves: Prisma.$CompensatoryLeavePayload<ExtArgs>[]
       salaries: Prisma.$SalaryPayload<ExtArgs>[]
       salaryBatches: Prisma.$SalaryBatchPayload<ExtArgs>[]
+      salaryViewPermissionsAsViewer: Prisma.$SalaryViewPermissionPayload<ExtArgs>[]
+      salaryViewPermissionsAsTarget: Prisma.$SalaryViewPermissionPayload<ExtArgs>[]
+      salaryViewPermissions: Prisma.$SalaryViewPermissionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -6384,6 +6503,9 @@ export namespace Prisma {
     compensatoryLeaves<T extends Employee$compensatoryLeavesArgs<ExtArgs> = {}>(args?: Subset<T, Employee$compensatoryLeavesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CompensatoryLeavePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     salaries<T extends Employee$salariesArgs<ExtArgs> = {}>(args?: Subset<T, Employee$salariesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SalaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     salaryBatches<T extends Employee$salaryBatchesArgs<ExtArgs> = {}>(args?: Subset<T, Employee$salaryBatchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SalaryBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    salaryViewPermissionsAsViewer<T extends Employee$salaryViewPermissionsAsViewerArgs<ExtArgs> = {}>(args?: Subset<T, Employee$salaryViewPermissionsAsViewerArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SalaryViewPermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    salaryViewPermissionsAsTarget<T extends Employee$salaryViewPermissionsAsTargetArgs<ExtArgs> = {}>(args?: Subset<T, Employee$salaryViewPermissionsAsTargetArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SalaryViewPermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    salaryViewPermissions<T extends Employee$salaryViewPermissionsArgs<ExtArgs> = {}>(args?: Subset<T, Employee$salaryViewPermissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SalaryViewPermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7220,6 +7342,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SalaryBatchScalarFieldEnum | SalaryBatchScalarFieldEnum[]
+  }
+
+  /**
+   * Employee.salaryViewPermissionsAsViewer
+   */
+  export type Employee$salaryViewPermissionsAsViewerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SalaryViewPermission
+     */
+    select?: SalaryViewPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SalaryViewPermission
+     */
+    omit?: SalaryViewPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SalaryViewPermissionInclude<ExtArgs> | null
+    where?: SalaryViewPermissionWhereInput
+    orderBy?: SalaryViewPermissionOrderByWithRelationInput | SalaryViewPermissionOrderByWithRelationInput[]
+    cursor?: SalaryViewPermissionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SalaryViewPermissionScalarFieldEnum | SalaryViewPermissionScalarFieldEnum[]
+  }
+
+  /**
+   * Employee.salaryViewPermissionsAsTarget
+   */
+  export type Employee$salaryViewPermissionsAsTargetArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SalaryViewPermission
+     */
+    select?: SalaryViewPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SalaryViewPermission
+     */
+    omit?: SalaryViewPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SalaryViewPermissionInclude<ExtArgs> | null
+    where?: SalaryViewPermissionWhereInput
+    orderBy?: SalaryViewPermissionOrderByWithRelationInput | SalaryViewPermissionOrderByWithRelationInput[]
+    cursor?: SalaryViewPermissionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SalaryViewPermissionScalarFieldEnum | SalaryViewPermissionScalarFieldEnum[]
+  }
+
+  /**
+   * Employee.salaryViewPermissions
+   */
+  export type Employee$salaryViewPermissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SalaryViewPermission
+     */
+    select?: SalaryViewPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SalaryViewPermission
+     */
+    omit?: SalaryViewPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SalaryViewPermissionInclude<ExtArgs> | null
+    where?: SalaryViewPermissionWhereInput
+    orderBy?: SalaryViewPermissionOrderByWithRelationInput | SalaryViewPermissionOrderByWithRelationInput[]
+    cursor?: SalaryViewPermissionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SalaryViewPermissionScalarFieldEnum | SalaryViewPermissionScalarFieldEnum[]
   }
 
   /**
@@ -31582,6 +31776,1022 @@ export namespace Prisma {
 
 
   /**
+   * Model SalaryViewPermission
+   */
+
+  export type AggregateSalaryViewPermission = {
+    _count: SalaryViewPermissionCountAggregateOutputType | null
+    _avg: SalaryViewPermissionAvgAggregateOutputType | null
+    _sum: SalaryViewPermissionSumAggregateOutputType | null
+    _min: SalaryViewPermissionMinAggregateOutputType | null
+    _max: SalaryViewPermissionMaxAggregateOutputType | null
+  }
+
+  export type SalaryViewPermissionAvgAggregateOutputType = {
+    id: number | null
+    viewerId: number | null
+    targetId: number | null
+    grantedById: number | null
+  }
+
+  export type SalaryViewPermissionSumAggregateOutputType = {
+    id: number | null
+    viewerId: number | null
+    targetId: number | null
+    grantedById: number | null
+  }
+
+  export type SalaryViewPermissionMinAggregateOutputType = {
+    id: number | null
+    viewerId: number | null
+    targetId: number | null
+    grantedById: number | null
+    isActive: boolean | null
+    note: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SalaryViewPermissionMaxAggregateOutputType = {
+    id: number | null
+    viewerId: number | null
+    targetId: number | null
+    grantedById: number | null
+    isActive: boolean | null
+    note: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SalaryViewPermissionCountAggregateOutputType = {
+    id: number
+    viewerId: number
+    targetId: number
+    grantedById: number
+    isActive: number
+    note: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SalaryViewPermissionAvgAggregateInputType = {
+    id?: true
+    viewerId?: true
+    targetId?: true
+    grantedById?: true
+  }
+
+  export type SalaryViewPermissionSumAggregateInputType = {
+    id?: true
+    viewerId?: true
+    targetId?: true
+    grantedById?: true
+  }
+
+  export type SalaryViewPermissionMinAggregateInputType = {
+    id?: true
+    viewerId?: true
+    targetId?: true
+    grantedById?: true
+    isActive?: true
+    note?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SalaryViewPermissionMaxAggregateInputType = {
+    id?: true
+    viewerId?: true
+    targetId?: true
+    grantedById?: true
+    isActive?: true
+    note?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SalaryViewPermissionCountAggregateInputType = {
+    id?: true
+    viewerId?: true
+    targetId?: true
+    grantedById?: true
+    isActive?: true
+    note?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SalaryViewPermissionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SalaryViewPermission to aggregate.
+     */
+    where?: SalaryViewPermissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SalaryViewPermissions to fetch.
+     */
+    orderBy?: SalaryViewPermissionOrderByWithRelationInput | SalaryViewPermissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SalaryViewPermissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SalaryViewPermissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SalaryViewPermissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SalaryViewPermissions
+    **/
+    _count?: true | SalaryViewPermissionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SalaryViewPermissionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SalaryViewPermissionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SalaryViewPermissionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SalaryViewPermissionMaxAggregateInputType
+  }
+
+  export type GetSalaryViewPermissionAggregateType<T extends SalaryViewPermissionAggregateArgs> = {
+        [P in keyof T & keyof AggregateSalaryViewPermission]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSalaryViewPermission[P]>
+      : GetScalarType<T[P], AggregateSalaryViewPermission[P]>
+  }
+
+
+
+
+  export type SalaryViewPermissionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SalaryViewPermissionWhereInput
+    orderBy?: SalaryViewPermissionOrderByWithAggregationInput | SalaryViewPermissionOrderByWithAggregationInput[]
+    by: SalaryViewPermissionScalarFieldEnum[] | SalaryViewPermissionScalarFieldEnum
+    having?: SalaryViewPermissionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SalaryViewPermissionCountAggregateInputType | true
+    _avg?: SalaryViewPermissionAvgAggregateInputType
+    _sum?: SalaryViewPermissionSumAggregateInputType
+    _min?: SalaryViewPermissionMinAggregateInputType
+    _max?: SalaryViewPermissionMaxAggregateInputType
+  }
+
+  export type SalaryViewPermissionGroupByOutputType = {
+    id: number
+    viewerId: number
+    targetId: number
+    grantedById: number
+    isActive: boolean
+    note: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: SalaryViewPermissionCountAggregateOutputType | null
+    _avg: SalaryViewPermissionAvgAggregateOutputType | null
+    _sum: SalaryViewPermissionSumAggregateOutputType | null
+    _min: SalaryViewPermissionMinAggregateOutputType | null
+    _max: SalaryViewPermissionMaxAggregateOutputType | null
+  }
+
+  type GetSalaryViewPermissionGroupByPayload<T extends SalaryViewPermissionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SalaryViewPermissionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SalaryViewPermissionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SalaryViewPermissionGroupByOutputType[P]>
+            : GetScalarType<T[P], SalaryViewPermissionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SalaryViewPermissionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    viewerId?: boolean
+    targetId?: boolean
+    grantedById?: boolean
+    isActive?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    viewer?: boolean | EmployeeDefaultArgs<ExtArgs>
+    target?: boolean | EmployeeDefaultArgs<ExtArgs>
+    grantedBy?: boolean | EmployeeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["salaryViewPermission"]>
+
+
+
+  export type SalaryViewPermissionSelectScalar = {
+    id?: boolean
+    viewerId?: boolean
+    targetId?: boolean
+    grantedById?: boolean
+    isActive?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SalaryViewPermissionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "viewerId" | "targetId" | "grantedById" | "isActive" | "note" | "createdAt" | "updatedAt", ExtArgs["result"]["salaryViewPermission"]>
+  export type SalaryViewPermissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    viewer?: boolean | EmployeeDefaultArgs<ExtArgs>
+    target?: boolean | EmployeeDefaultArgs<ExtArgs>
+    grantedBy?: boolean | EmployeeDefaultArgs<ExtArgs>
+  }
+
+  export type $SalaryViewPermissionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SalaryViewPermission"
+    objects: {
+      viewer: Prisma.$EmployeePayload<ExtArgs>
+      target: Prisma.$EmployeePayload<ExtArgs>
+      grantedBy: Prisma.$EmployeePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      viewerId: number
+      targetId: number
+      grantedById: number
+      isActive: boolean
+      note: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["salaryViewPermission"]>
+    composites: {}
+  }
+
+  type SalaryViewPermissionGetPayload<S extends boolean | null | undefined | SalaryViewPermissionDefaultArgs> = $Result.GetResult<Prisma.$SalaryViewPermissionPayload, S>
+
+  type SalaryViewPermissionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SalaryViewPermissionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SalaryViewPermissionCountAggregateInputType | true
+    }
+
+  export interface SalaryViewPermissionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SalaryViewPermission'], meta: { name: 'SalaryViewPermission' } }
+    /**
+     * Find zero or one SalaryViewPermission that matches the filter.
+     * @param {SalaryViewPermissionFindUniqueArgs} args - Arguments to find a SalaryViewPermission
+     * @example
+     * // Get one SalaryViewPermission
+     * const salaryViewPermission = await prisma.salaryViewPermission.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SalaryViewPermissionFindUniqueArgs>(args: SelectSubset<T, SalaryViewPermissionFindUniqueArgs<ExtArgs>>): Prisma__SalaryViewPermissionClient<$Result.GetResult<Prisma.$SalaryViewPermissionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SalaryViewPermission that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SalaryViewPermissionFindUniqueOrThrowArgs} args - Arguments to find a SalaryViewPermission
+     * @example
+     * // Get one SalaryViewPermission
+     * const salaryViewPermission = await prisma.salaryViewPermission.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SalaryViewPermissionFindUniqueOrThrowArgs>(args: SelectSubset<T, SalaryViewPermissionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SalaryViewPermissionClient<$Result.GetResult<Prisma.$SalaryViewPermissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SalaryViewPermission that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SalaryViewPermissionFindFirstArgs} args - Arguments to find a SalaryViewPermission
+     * @example
+     * // Get one SalaryViewPermission
+     * const salaryViewPermission = await prisma.salaryViewPermission.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SalaryViewPermissionFindFirstArgs>(args?: SelectSubset<T, SalaryViewPermissionFindFirstArgs<ExtArgs>>): Prisma__SalaryViewPermissionClient<$Result.GetResult<Prisma.$SalaryViewPermissionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SalaryViewPermission that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SalaryViewPermissionFindFirstOrThrowArgs} args - Arguments to find a SalaryViewPermission
+     * @example
+     * // Get one SalaryViewPermission
+     * const salaryViewPermission = await prisma.salaryViewPermission.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SalaryViewPermissionFindFirstOrThrowArgs>(args?: SelectSubset<T, SalaryViewPermissionFindFirstOrThrowArgs<ExtArgs>>): Prisma__SalaryViewPermissionClient<$Result.GetResult<Prisma.$SalaryViewPermissionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SalaryViewPermissions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SalaryViewPermissionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SalaryViewPermissions
+     * const salaryViewPermissions = await prisma.salaryViewPermission.findMany()
+     * 
+     * // Get first 10 SalaryViewPermissions
+     * const salaryViewPermissions = await prisma.salaryViewPermission.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const salaryViewPermissionWithIdOnly = await prisma.salaryViewPermission.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SalaryViewPermissionFindManyArgs>(args?: SelectSubset<T, SalaryViewPermissionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SalaryViewPermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SalaryViewPermission.
+     * @param {SalaryViewPermissionCreateArgs} args - Arguments to create a SalaryViewPermission.
+     * @example
+     * // Create one SalaryViewPermission
+     * const SalaryViewPermission = await prisma.salaryViewPermission.create({
+     *   data: {
+     *     // ... data to create a SalaryViewPermission
+     *   }
+     * })
+     * 
+     */
+    create<T extends SalaryViewPermissionCreateArgs>(args: SelectSubset<T, SalaryViewPermissionCreateArgs<ExtArgs>>): Prisma__SalaryViewPermissionClient<$Result.GetResult<Prisma.$SalaryViewPermissionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SalaryViewPermissions.
+     * @param {SalaryViewPermissionCreateManyArgs} args - Arguments to create many SalaryViewPermissions.
+     * @example
+     * // Create many SalaryViewPermissions
+     * const salaryViewPermission = await prisma.salaryViewPermission.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SalaryViewPermissionCreateManyArgs>(args?: SelectSubset<T, SalaryViewPermissionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a SalaryViewPermission.
+     * @param {SalaryViewPermissionDeleteArgs} args - Arguments to delete one SalaryViewPermission.
+     * @example
+     * // Delete one SalaryViewPermission
+     * const SalaryViewPermission = await prisma.salaryViewPermission.delete({
+     *   where: {
+     *     // ... filter to delete one SalaryViewPermission
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SalaryViewPermissionDeleteArgs>(args: SelectSubset<T, SalaryViewPermissionDeleteArgs<ExtArgs>>): Prisma__SalaryViewPermissionClient<$Result.GetResult<Prisma.$SalaryViewPermissionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SalaryViewPermission.
+     * @param {SalaryViewPermissionUpdateArgs} args - Arguments to update one SalaryViewPermission.
+     * @example
+     * // Update one SalaryViewPermission
+     * const salaryViewPermission = await prisma.salaryViewPermission.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SalaryViewPermissionUpdateArgs>(args: SelectSubset<T, SalaryViewPermissionUpdateArgs<ExtArgs>>): Prisma__SalaryViewPermissionClient<$Result.GetResult<Prisma.$SalaryViewPermissionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SalaryViewPermissions.
+     * @param {SalaryViewPermissionDeleteManyArgs} args - Arguments to filter SalaryViewPermissions to delete.
+     * @example
+     * // Delete a few SalaryViewPermissions
+     * const { count } = await prisma.salaryViewPermission.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SalaryViewPermissionDeleteManyArgs>(args?: SelectSubset<T, SalaryViewPermissionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SalaryViewPermissions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SalaryViewPermissionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SalaryViewPermissions
+     * const salaryViewPermission = await prisma.salaryViewPermission.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SalaryViewPermissionUpdateManyArgs>(args: SelectSubset<T, SalaryViewPermissionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SalaryViewPermission.
+     * @param {SalaryViewPermissionUpsertArgs} args - Arguments to update or create a SalaryViewPermission.
+     * @example
+     * // Update or create a SalaryViewPermission
+     * const salaryViewPermission = await prisma.salaryViewPermission.upsert({
+     *   create: {
+     *     // ... data to create a SalaryViewPermission
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SalaryViewPermission we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SalaryViewPermissionUpsertArgs>(args: SelectSubset<T, SalaryViewPermissionUpsertArgs<ExtArgs>>): Prisma__SalaryViewPermissionClient<$Result.GetResult<Prisma.$SalaryViewPermissionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SalaryViewPermissions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SalaryViewPermissionCountArgs} args - Arguments to filter SalaryViewPermissions to count.
+     * @example
+     * // Count the number of SalaryViewPermissions
+     * const count = await prisma.salaryViewPermission.count({
+     *   where: {
+     *     // ... the filter for the SalaryViewPermissions we want to count
+     *   }
+     * })
+    **/
+    count<T extends SalaryViewPermissionCountArgs>(
+      args?: Subset<T, SalaryViewPermissionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SalaryViewPermissionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SalaryViewPermission.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SalaryViewPermissionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SalaryViewPermissionAggregateArgs>(args: Subset<T, SalaryViewPermissionAggregateArgs>): Prisma.PrismaPromise<GetSalaryViewPermissionAggregateType<T>>
+
+    /**
+     * Group by SalaryViewPermission.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SalaryViewPermissionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SalaryViewPermissionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SalaryViewPermissionGroupByArgs['orderBy'] }
+        : { orderBy?: SalaryViewPermissionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SalaryViewPermissionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSalaryViewPermissionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SalaryViewPermission model
+   */
+  readonly fields: SalaryViewPermissionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SalaryViewPermission.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SalaryViewPermissionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    viewer<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    target<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    grantedBy<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SalaryViewPermission model
+   */
+  interface SalaryViewPermissionFieldRefs {
+    readonly id: FieldRef<"SalaryViewPermission", 'Int'>
+    readonly viewerId: FieldRef<"SalaryViewPermission", 'Int'>
+    readonly targetId: FieldRef<"SalaryViewPermission", 'Int'>
+    readonly grantedById: FieldRef<"SalaryViewPermission", 'Int'>
+    readonly isActive: FieldRef<"SalaryViewPermission", 'Boolean'>
+    readonly note: FieldRef<"SalaryViewPermission", 'String'>
+    readonly createdAt: FieldRef<"SalaryViewPermission", 'DateTime'>
+    readonly updatedAt: FieldRef<"SalaryViewPermission", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SalaryViewPermission findUnique
+   */
+  export type SalaryViewPermissionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SalaryViewPermission
+     */
+    select?: SalaryViewPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SalaryViewPermission
+     */
+    omit?: SalaryViewPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SalaryViewPermissionInclude<ExtArgs> | null
+    /**
+     * Filter, which SalaryViewPermission to fetch.
+     */
+    where: SalaryViewPermissionWhereUniqueInput
+  }
+
+  /**
+   * SalaryViewPermission findUniqueOrThrow
+   */
+  export type SalaryViewPermissionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SalaryViewPermission
+     */
+    select?: SalaryViewPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SalaryViewPermission
+     */
+    omit?: SalaryViewPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SalaryViewPermissionInclude<ExtArgs> | null
+    /**
+     * Filter, which SalaryViewPermission to fetch.
+     */
+    where: SalaryViewPermissionWhereUniqueInput
+  }
+
+  /**
+   * SalaryViewPermission findFirst
+   */
+  export type SalaryViewPermissionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SalaryViewPermission
+     */
+    select?: SalaryViewPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SalaryViewPermission
+     */
+    omit?: SalaryViewPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SalaryViewPermissionInclude<ExtArgs> | null
+    /**
+     * Filter, which SalaryViewPermission to fetch.
+     */
+    where?: SalaryViewPermissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SalaryViewPermissions to fetch.
+     */
+    orderBy?: SalaryViewPermissionOrderByWithRelationInput | SalaryViewPermissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SalaryViewPermissions.
+     */
+    cursor?: SalaryViewPermissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SalaryViewPermissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SalaryViewPermissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SalaryViewPermissions.
+     */
+    distinct?: SalaryViewPermissionScalarFieldEnum | SalaryViewPermissionScalarFieldEnum[]
+  }
+
+  /**
+   * SalaryViewPermission findFirstOrThrow
+   */
+  export type SalaryViewPermissionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SalaryViewPermission
+     */
+    select?: SalaryViewPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SalaryViewPermission
+     */
+    omit?: SalaryViewPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SalaryViewPermissionInclude<ExtArgs> | null
+    /**
+     * Filter, which SalaryViewPermission to fetch.
+     */
+    where?: SalaryViewPermissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SalaryViewPermissions to fetch.
+     */
+    orderBy?: SalaryViewPermissionOrderByWithRelationInput | SalaryViewPermissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SalaryViewPermissions.
+     */
+    cursor?: SalaryViewPermissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SalaryViewPermissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SalaryViewPermissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SalaryViewPermissions.
+     */
+    distinct?: SalaryViewPermissionScalarFieldEnum | SalaryViewPermissionScalarFieldEnum[]
+  }
+
+  /**
+   * SalaryViewPermission findMany
+   */
+  export type SalaryViewPermissionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SalaryViewPermission
+     */
+    select?: SalaryViewPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SalaryViewPermission
+     */
+    omit?: SalaryViewPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SalaryViewPermissionInclude<ExtArgs> | null
+    /**
+     * Filter, which SalaryViewPermissions to fetch.
+     */
+    where?: SalaryViewPermissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SalaryViewPermissions to fetch.
+     */
+    orderBy?: SalaryViewPermissionOrderByWithRelationInput | SalaryViewPermissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SalaryViewPermissions.
+     */
+    cursor?: SalaryViewPermissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SalaryViewPermissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SalaryViewPermissions.
+     */
+    skip?: number
+    distinct?: SalaryViewPermissionScalarFieldEnum | SalaryViewPermissionScalarFieldEnum[]
+  }
+
+  /**
+   * SalaryViewPermission create
+   */
+  export type SalaryViewPermissionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SalaryViewPermission
+     */
+    select?: SalaryViewPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SalaryViewPermission
+     */
+    omit?: SalaryViewPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SalaryViewPermissionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SalaryViewPermission.
+     */
+    data: XOR<SalaryViewPermissionCreateInput, SalaryViewPermissionUncheckedCreateInput>
+  }
+
+  /**
+   * SalaryViewPermission createMany
+   */
+  export type SalaryViewPermissionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SalaryViewPermissions.
+     */
+    data: SalaryViewPermissionCreateManyInput | SalaryViewPermissionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SalaryViewPermission update
+   */
+  export type SalaryViewPermissionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SalaryViewPermission
+     */
+    select?: SalaryViewPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SalaryViewPermission
+     */
+    omit?: SalaryViewPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SalaryViewPermissionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SalaryViewPermission.
+     */
+    data: XOR<SalaryViewPermissionUpdateInput, SalaryViewPermissionUncheckedUpdateInput>
+    /**
+     * Choose, which SalaryViewPermission to update.
+     */
+    where: SalaryViewPermissionWhereUniqueInput
+  }
+
+  /**
+   * SalaryViewPermission updateMany
+   */
+  export type SalaryViewPermissionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SalaryViewPermissions.
+     */
+    data: XOR<SalaryViewPermissionUpdateManyMutationInput, SalaryViewPermissionUncheckedUpdateManyInput>
+    /**
+     * Filter which SalaryViewPermissions to update
+     */
+    where?: SalaryViewPermissionWhereInput
+    /**
+     * Limit how many SalaryViewPermissions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SalaryViewPermission upsert
+   */
+  export type SalaryViewPermissionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SalaryViewPermission
+     */
+    select?: SalaryViewPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SalaryViewPermission
+     */
+    omit?: SalaryViewPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SalaryViewPermissionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SalaryViewPermission to update in case it exists.
+     */
+    where: SalaryViewPermissionWhereUniqueInput
+    /**
+     * In case the SalaryViewPermission found by the `where` argument doesn't exist, create a new SalaryViewPermission with this data.
+     */
+    create: XOR<SalaryViewPermissionCreateInput, SalaryViewPermissionUncheckedCreateInput>
+    /**
+     * In case the SalaryViewPermission was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SalaryViewPermissionUpdateInput, SalaryViewPermissionUncheckedUpdateInput>
+  }
+
+  /**
+   * SalaryViewPermission delete
+   */
+  export type SalaryViewPermissionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SalaryViewPermission
+     */
+    select?: SalaryViewPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SalaryViewPermission
+     */
+    omit?: SalaryViewPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SalaryViewPermissionInclude<ExtArgs> | null
+    /**
+     * Filter which SalaryViewPermission to delete.
+     */
+    where: SalaryViewPermissionWhereUniqueInput
+  }
+
+  /**
+   * SalaryViewPermission deleteMany
+   */
+  export type SalaryViewPermissionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SalaryViewPermissions to delete
+     */
+    where?: SalaryViewPermissionWhereInput
+    /**
+     * Limit how many SalaryViewPermissions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SalaryViewPermission without action
+   */
+  export type SalaryViewPermissionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SalaryViewPermission
+     */
+    select?: SalaryViewPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SalaryViewPermission
+     */
+    omit?: SalaryViewPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SalaryViewPermissionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -32015,6 +33225,20 @@ export namespace Prisma {
   export type SalaryBatchScalarFieldEnum = (typeof SalaryBatchScalarFieldEnum)[keyof typeof SalaryBatchScalarFieldEnum]
 
 
+  export const SalaryViewPermissionScalarFieldEnum: {
+    id: 'id',
+    viewerId: 'viewerId',
+    targetId: 'targetId',
+    grantedById: 'grantedById',
+    isActive: 'isActive',
+    note: 'note',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SalaryViewPermissionScalarFieldEnum = (typeof SalaryViewPermissionScalarFieldEnum)[keyof typeof SalaryViewPermissionScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -32224,6 +33448,13 @@ export namespace Prisma {
   };
 
   export type SalaryBatchOrderByRelevanceFieldEnum = (typeof SalaryBatchOrderByRelevanceFieldEnum)[keyof typeof SalaryBatchOrderByRelevanceFieldEnum]
+
+
+  export const SalaryViewPermissionOrderByRelevanceFieldEnum: {
+    note: 'note'
+  };
+
+  export type SalaryViewPermissionOrderByRelevanceFieldEnum = (typeof SalaryViewPermissionOrderByRelevanceFieldEnum)[keyof typeof SalaryViewPermissionOrderByRelevanceFieldEnum]
 
 
   /**
@@ -32505,6 +33736,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveListRelationFilter
     salaries?: SalaryListRelationFilter
     salaryBatches?: SalaryBatchListRelationFilter
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionListRelationFilter
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionListRelationFilter
+    salaryViewPermissions?: SalaryViewPermissionListRelationFilter
   }
 
   export type EmployeeOrderByWithRelationInput = {
@@ -32540,6 +33774,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveOrderByRelationAggregateInput
     salaries?: SalaryOrderByRelationAggregateInput
     salaryBatches?: SalaryBatchOrderByRelationAggregateInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionOrderByRelationAggregateInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionOrderByRelationAggregateInput
+    salaryViewPermissions?: SalaryViewPermissionOrderByRelationAggregateInput
     _relevance?: EmployeeOrderByRelevanceInput
   }
 
@@ -32579,6 +33816,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveListRelationFilter
     salaries?: SalaryListRelationFilter
     salaryBatches?: SalaryBatchListRelationFilter
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionListRelationFilter
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionListRelationFilter
+    salaryViewPermissions?: SalaryViewPermissionListRelationFilter
   }, "id" | "employeeCode">
 
   export type EmployeeOrderByWithAggregationInput = {
@@ -34634,6 +35874,86 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"SalaryBatch"> | Date | string
   }
 
+  export type SalaryViewPermissionWhereInput = {
+    AND?: SalaryViewPermissionWhereInput | SalaryViewPermissionWhereInput[]
+    OR?: SalaryViewPermissionWhereInput[]
+    NOT?: SalaryViewPermissionWhereInput | SalaryViewPermissionWhereInput[]
+    id?: IntFilter<"SalaryViewPermission"> | number
+    viewerId?: IntFilter<"SalaryViewPermission"> | number
+    targetId?: IntFilter<"SalaryViewPermission"> | number
+    grantedById?: IntFilter<"SalaryViewPermission"> | number
+    isActive?: BoolFilter<"SalaryViewPermission"> | boolean
+    note?: StringNullableFilter<"SalaryViewPermission"> | string | null
+    createdAt?: DateTimeFilter<"SalaryViewPermission"> | Date | string
+    updatedAt?: DateTimeFilter<"SalaryViewPermission"> | Date | string
+    viewer?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    target?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    grantedBy?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+  }
+
+  export type SalaryViewPermissionOrderByWithRelationInput = {
+    id?: SortOrder
+    viewerId?: SortOrder
+    targetId?: SortOrder
+    grantedById?: SortOrder
+    isActive?: SortOrder
+    note?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    viewer?: EmployeeOrderByWithRelationInput
+    target?: EmployeeOrderByWithRelationInput
+    grantedBy?: EmployeeOrderByWithRelationInput
+    _relevance?: SalaryViewPermissionOrderByRelevanceInput
+  }
+
+  export type SalaryViewPermissionWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    viewerId_targetId?: SalaryViewPermissionViewerIdTargetIdCompoundUniqueInput
+    AND?: SalaryViewPermissionWhereInput | SalaryViewPermissionWhereInput[]
+    OR?: SalaryViewPermissionWhereInput[]
+    NOT?: SalaryViewPermissionWhereInput | SalaryViewPermissionWhereInput[]
+    viewerId?: IntFilter<"SalaryViewPermission"> | number
+    targetId?: IntFilter<"SalaryViewPermission"> | number
+    grantedById?: IntFilter<"SalaryViewPermission"> | number
+    isActive?: BoolFilter<"SalaryViewPermission"> | boolean
+    note?: StringNullableFilter<"SalaryViewPermission"> | string | null
+    createdAt?: DateTimeFilter<"SalaryViewPermission"> | Date | string
+    updatedAt?: DateTimeFilter<"SalaryViewPermission"> | Date | string
+    viewer?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    target?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    grantedBy?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+  }, "id" | "viewerId_targetId">
+
+  export type SalaryViewPermissionOrderByWithAggregationInput = {
+    id?: SortOrder
+    viewerId?: SortOrder
+    targetId?: SortOrder
+    grantedById?: SortOrder
+    isActive?: SortOrder
+    note?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SalaryViewPermissionCountOrderByAggregateInput
+    _avg?: SalaryViewPermissionAvgOrderByAggregateInput
+    _max?: SalaryViewPermissionMaxOrderByAggregateInput
+    _min?: SalaryViewPermissionMinOrderByAggregateInput
+    _sum?: SalaryViewPermissionSumOrderByAggregateInput
+  }
+
+  export type SalaryViewPermissionScalarWhereWithAggregatesInput = {
+    AND?: SalaryViewPermissionScalarWhereWithAggregatesInput | SalaryViewPermissionScalarWhereWithAggregatesInput[]
+    OR?: SalaryViewPermissionScalarWhereWithAggregatesInput[]
+    NOT?: SalaryViewPermissionScalarWhereWithAggregatesInput | SalaryViewPermissionScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"SalaryViewPermission"> | number
+    viewerId?: IntWithAggregatesFilter<"SalaryViewPermission"> | number
+    targetId?: IntWithAggregatesFilter<"SalaryViewPermission"> | number
+    grantedById?: IntWithAggregatesFilter<"SalaryViewPermission"> | number
+    isActive?: BoolWithAggregatesFilter<"SalaryViewPermission"> | boolean
+    note?: StringNullableWithAggregatesFilter<"SalaryViewPermission"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SalaryViewPermission"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SalaryViewPermission"> | Date | string
+  }
+
   export type FileCreateInput = {
     filename: string
     mimeType: string
@@ -34813,6 +36133,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateInput = {
@@ -34847,6 +36170,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUpdateInput = {
@@ -34880,6 +36206,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateInput = {
@@ -34914,6 +36243,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeCreateManyInput = {
@@ -37052,6 +38384,77 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SalaryViewPermissionCreateInput = {
+    isActive?: boolean
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    viewer: EmployeeCreateNestedOneWithoutSalaryViewPermissionsAsViewerInput
+    target: EmployeeCreateNestedOneWithoutSalaryViewPermissionsAsTargetInput
+    grantedBy: EmployeeCreateNestedOneWithoutSalaryViewPermissionsInput
+  }
+
+  export type SalaryViewPermissionUncheckedCreateInput = {
+    id?: number
+    viewerId: number
+    targetId: number
+    grantedById: number
+    isActive?: boolean
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SalaryViewPermissionUpdateInput = {
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    viewer?: EmployeeUpdateOneRequiredWithoutSalaryViewPermissionsAsViewerNestedInput
+    target?: EmployeeUpdateOneRequiredWithoutSalaryViewPermissionsAsTargetNestedInput
+    grantedBy?: EmployeeUpdateOneRequiredWithoutSalaryViewPermissionsNestedInput
+  }
+
+  export type SalaryViewPermissionUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    viewerId?: IntFieldUpdateOperationsInput | number
+    targetId?: IntFieldUpdateOperationsInput | number
+    grantedById?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SalaryViewPermissionCreateManyInput = {
+    id?: number
+    viewerId: number
+    targetId: number
+    grantedById: number
+    isActive?: boolean
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SalaryViewPermissionUpdateManyMutationInput = {
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SalaryViewPermissionUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    viewerId?: IntFieldUpdateOperationsInput | number
+    targetId?: IntFieldUpdateOperationsInput | number
+    grantedById?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -37463,6 +38866,12 @@ export namespace Prisma {
     none?: SalaryBatchWhereInput
   }
 
+  export type SalaryViewPermissionListRelationFilter = {
+    every?: SalaryViewPermissionWhereInput
+    some?: SalaryViewPermissionWhereInput
+    none?: SalaryViewPermissionWhereInput
+  }
+
   export type AttendanceImportLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -37504,6 +38913,10 @@ export namespace Prisma {
   }
 
   export type SalaryBatchOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SalaryViewPermissionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -39303,6 +40716,64 @@ export namespace Prisma {
     createdById?: SortOrder
   }
 
+  export type SalaryViewPermissionOrderByRelevanceInput = {
+    fields: SalaryViewPermissionOrderByRelevanceFieldEnum | SalaryViewPermissionOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type SalaryViewPermissionViewerIdTargetIdCompoundUniqueInput = {
+    viewerId: number
+    targetId: number
+  }
+
+  export type SalaryViewPermissionCountOrderByAggregateInput = {
+    id?: SortOrder
+    viewerId?: SortOrder
+    targetId?: SortOrder
+    grantedById?: SortOrder
+    isActive?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SalaryViewPermissionAvgOrderByAggregateInput = {
+    id?: SortOrder
+    viewerId?: SortOrder
+    targetId?: SortOrder
+    grantedById?: SortOrder
+  }
+
+  export type SalaryViewPermissionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    viewerId?: SortOrder
+    targetId?: SortOrder
+    grantedById?: SortOrder
+    isActive?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SalaryViewPermissionMinOrderByAggregateInput = {
+    id?: SortOrder
+    viewerId?: SortOrder
+    targetId?: SortOrder
+    grantedById?: SortOrder
+    isActive?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SalaryViewPermissionSumOrderByAggregateInput = {
+    id?: SortOrder
+    viewerId?: SortOrder
+    targetId?: SortOrder
+    grantedById?: SortOrder
+  }
+
   export type ProposalCreateNestedOneWithoutFilesInput = {
     create?: XOR<ProposalCreateWithoutFilesInput, ProposalUncheckedCreateWithoutFilesInput>
     connectOrCreate?: ProposalCreateOrConnectWithoutFilesInput
@@ -39574,6 +41045,27 @@ export namespace Prisma {
     connect?: SalaryBatchWhereUniqueInput | SalaryBatchWhereUniqueInput[]
   }
 
+  export type SalaryViewPermissionCreateNestedManyWithoutViewerInput = {
+    create?: XOR<SalaryViewPermissionCreateWithoutViewerInput, SalaryViewPermissionUncheckedCreateWithoutViewerInput> | SalaryViewPermissionCreateWithoutViewerInput[] | SalaryViewPermissionUncheckedCreateWithoutViewerInput[]
+    connectOrCreate?: SalaryViewPermissionCreateOrConnectWithoutViewerInput | SalaryViewPermissionCreateOrConnectWithoutViewerInput[]
+    createMany?: SalaryViewPermissionCreateManyViewerInputEnvelope
+    connect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+  }
+
+  export type SalaryViewPermissionCreateNestedManyWithoutTargetInput = {
+    create?: XOR<SalaryViewPermissionCreateWithoutTargetInput, SalaryViewPermissionUncheckedCreateWithoutTargetInput> | SalaryViewPermissionCreateWithoutTargetInput[] | SalaryViewPermissionUncheckedCreateWithoutTargetInput[]
+    connectOrCreate?: SalaryViewPermissionCreateOrConnectWithoutTargetInput | SalaryViewPermissionCreateOrConnectWithoutTargetInput[]
+    createMany?: SalaryViewPermissionCreateManyTargetInputEnvelope
+    connect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+  }
+
+  export type SalaryViewPermissionCreateNestedManyWithoutGrantedByInput = {
+    create?: XOR<SalaryViewPermissionCreateWithoutGrantedByInput, SalaryViewPermissionUncheckedCreateWithoutGrantedByInput> | SalaryViewPermissionCreateWithoutGrantedByInput[] | SalaryViewPermissionUncheckedCreateWithoutGrantedByInput[]
+    connectOrCreate?: SalaryViewPermissionCreateOrConnectWithoutGrantedByInput | SalaryViewPermissionCreateOrConnectWithoutGrantedByInput[]
+    createMany?: SalaryViewPermissionCreateManyGrantedByInputEnvelope
+    connect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+  }
+
   export type AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput = {
     create?: XOR<AttendanceImportLogCreateWithoutImportedByInput, AttendanceImportLogUncheckedCreateWithoutImportedByInput> | AttendanceImportLogCreateWithoutImportedByInput[] | AttendanceImportLogUncheckedCreateWithoutImportedByInput[]
     connectOrCreate?: AttendanceImportLogCreateOrConnectWithoutImportedByInput | AttendanceImportLogCreateOrConnectWithoutImportedByInput[]
@@ -39701,6 +41193,27 @@ export namespace Prisma {
     connectOrCreate?: SalaryBatchCreateOrConnectWithoutCreatedByInput | SalaryBatchCreateOrConnectWithoutCreatedByInput[]
     createMany?: SalaryBatchCreateManyCreatedByInputEnvelope
     connect?: SalaryBatchWhereUniqueInput | SalaryBatchWhereUniqueInput[]
+  }
+
+  export type SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput = {
+    create?: XOR<SalaryViewPermissionCreateWithoutViewerInput, SalaryViewPermissionUncheckedCreateWithoutViewerInput> | SalaryViewPermissionCreateWithoutViewerInput[] | SalaryViewPermissionUncheckedCreateWithoutViewerInput[]
+    connectOrCreate?: SalaryViewPermissionCreateOrConnectWithoutViewerInput | SalaryViewPermissionCreateOrConnectWithoutViewerInput[]
+    createMany?: SalaryViewPermissionCreateManyViewerInputEnvelope
+    connect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+  }
+
+  export type SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput = {
+    create?: XOR<SalaryViewPermissionCreateWithoutTargetInput, SalaryViewPermissionUncheckedCreateWithoutTargetInput> | SalaryViewPermissionCreateWithoutTargetInput[] | SalaryViewPermissionUncheckedCreateWithoutTargetInput[]
+    connectOrCreate?: SalaryViewPermissionCreateOrConnectWithoutTargetInput | SalaryViewPermissionCreateOrConnectWithoutTargetInput[]
+    createMany?: SalaryViewPermissionCreateManyTargetInputEnvelope
+    connect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+  }
+
+  export type SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput = {
+    create?: XOR<SalaryViewPermissionCreateWithoutGrantedByInput, SalaryViewPermissionUncheckedCreateWithoutGrantedByInput> | SalaryViewPermissionCreateWithoutGrantedByInput[] | SalaryViewPermissionUncheckedCreateWithoutGrantedByInput[]
+    connectOrCreate?: SalaryViewPermissionCreateOrConnectWithoutGrantedByInput | SalaryViewPermissionCreateOrConnectWithoutGrantedByInput[]
+    createMany?: SalaryViewPermissionCreateManyGrantedByInputEnvelope
+    connect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
   }
 
   export type EnumSexFieldUpdateOperationsInput = {
@@ -39975,6 +41488,48 @@ export namespace Prisma {
     deleteMany?: SalaryBatchScalarWhereInput | SalaryBatchScalarWhereInput[]
   }
 
+  export type SalaryViewPermissionUpdateManyWithoutViewerNestedInput = {
+    create?: XOR<SalaryViewPermissionCreateWithoutViewerInput, SalaryViewPermissionUncheckedCreateWithoutViewerInput> | SalaryViewPermissionCreateWithoutViewerInput[] | SalaryViewPermissionUncheckedCreateWithoutViewerInput[]
+    connectOrCreate?: SalaryViewPermissionCreateOrConnectWithoutViewerInput | SalaryViewPermissionCreateOrConnectWithoutViewerInput[]
+    upsert?: SalaryViewPermissionUpsertWithWhereUniqueWithoutViewerInput | SalaryViewPermissionUpsertWithWhereUniqueWithoutViewerInput[]
+    createMany?: SalaryViewPermissionCreateManyViewerInputEnvelope
+    set?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    disconnect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    delete?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    connect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    update?: SalaryViewPermissionUpdateWithWhereUniqueWithoutViewerInput | SalaryViewPermissionUpdateWithWhereUniqueWithoutViewerInput[]
+    updateMany?: SalaryViewPermissionUpdateManyWithWhereWithoutViewerInput | SalaryViewPermissionUpdateManyWithWhereWithoutViewerInput[]
+    deleteMany?: SalaryViewPermissionScalarWhereInput | SalaryViewPermissionScalarWhereInput[]
+  }
+
+  export type SalaryViewPermissionUpdateManyWithoutTargetNestedInput = {
+    create?: XOR<SalaryViewPermissionCreateWithoutTargetInput, SalaryViewPermissionUncheckedCreateWithoutTargetInput> | SalaryViewPermissionCreateWithoutTargetInput[] | SalaryViewPermissionUncheckedCreateWithoutTargetInput[]
+    connectOrCreate?: SalaryViewPermissionCreateOrConnectWithoutTargetInput | SalaryViewPermissionCreateOrConnectWithoutTargetInput[]
+    upsert?: SalaryViewPermissionUpsertWithWhereUniqueWithoutTargetInput | SalaryViewPermissionUpsertWithWhereUniqueWithoutTargetInput[]
+    createMany?: SalaryViewPermissionCreateManyTargetInputEnvelope
+    set?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    disconnect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    delete?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    connect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    update?: SalaryViewPermissionUpdateWithWhereUniqueWithoutTargetInput | SalaryViewPermissionUpdateWithWhereUniqueWithoutTargetInput[]
+    updateMany?: SalaryViewPermissionUpdateManyWithWhereWithoutTargetInput | SalaryViewPermissionUpdateManyWithWhereWithoutTargetInput[]
+    deleteMany?: SalaryViewPermissionScalarWhereInput | SalaryViewPermissionScalarWhereInput[]
+  }
+
+  export type SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput = {
+    create?: XOR<SalaryViewPermissionCreateWithoutGrantedByInput, SalaryViewPermissionUncheckedCreateWithoutGrantedByInput> | SalaryViewPermissionCreateWithoutGrantedByInput[] | SalaryViewPermissionUncheckedCreateWithoutGrantedByInput[]
+    connectOrCreate?: SalaryViewPermissionCreateOrConnectWithoutGrantedByInput | SalaryViewPermissionCreateOrConnectWithoutGrantedByInput[]
+    upsert?: SalaryViewPermissionUpsertWithWhereUniqueWithoutGrantedByInput | SalaryViewPermissionUpsertWithWhereUniqueWithoutGrantedByInput[]
+    createMany?: SalaryViewPermissionCreateManyGrantedByInputEnvelope
+    set?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    disconnect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    delete?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    connect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    update?: SalaryViewPermissionUpdateWithWhereUniqueWithoutGrantedByInput | SalaryViewPermissionUpdateWithWhereUniqueWithoutGrantedByInput[]
+    updateMany?: SalaryViewPermissionUpdateManyWithWhereWithoutGrantedByInput | SalaryViewPermissionUpdateManyWithWhereWithoutGrantedByInput[]
+    deleteMany?: SalaryViewPermissionScalarWhereInput | SalaryViewPermissionScalarWhereInput[]
+  }
+
   export type AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput = {
     create?: XOR<AttendanceImportLogCreateWithoutImportedByInput, AttendanceImportLogUncheckedCreateWithoutImportedByInput> | AttendanceImportLogCreateWithoutImportedByInput[] | AttendanceImportLogUncheckedCreateWithoutImportedByInput[]
     connectOrCreate?: AttendanceImportLogCreateOrConnectWithoutImportedByInput | AttendanceImportLogCreateOrConnectWithoutImportedByInput[]
@@ -40223,6 +41778,48 @@ export namespace Prisma {
     update?: SalaryBatchUpdateWithWhereUniqueWithoutCreatedByInput | SalaryBatchUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: SalaryBatchUpdateManyWithWhereWithoutCreatedByInput | SalaryBatchUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: SalaryBatchScalarWhereInput | SalaryBatchScalarWhereInput[]
+  }
+
+  export type SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput = {
+    create?: XOR<SalaryViewPermissionCreateWithoutViewerInput, SalaryViewPermissionUncheckedCreateWithoutViewerInput> | SalaryViewPermissionCreateWithoutViewerInput[] | SalaryViewPermissionUncheckedCreateWithoutViewerInput[]
+    connectOrCreate?: SalaryViewPermissionCreateOrConnectWithoutViewerInput | SalaryViewPermissionCreateOrConnectWithoutViewerInput[]
+    upsert?: SalaryViewPermissionUpsertWithWhereUniqueWithoutViewerInput | SalaryViewPermissionUpsertWithWhereUniqueWithoutViewerInput[]
+    createMany?: SalaryViewPermissionCreateManyViewerInputEnvelope
+    set?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    disconnect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    delete?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    connect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    update?: SalaryViewPermissionUpdateWithWhereUniqueWithoutViewerInput | SalaryViewPermissionUpdateWithWhereUniqueWithoutViewerInput[]
+    updateMany?: SalaryViewPermissionUpdateManyWithWhereWithoutViewerInput | SalaryViewPermissionUpdateManyWithWhereWithoutViewerInput[]
+    deleteMany?: SalaryViewPermissionScalarWhereInput | SalaryViewPermissionScalarWhereInput[]
+  }
+
+  export type SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput = {
+    create?: XOR<SalaryViewPermissionCreateWithoutTargetInput, SalaryViewPermissionUncheckedCreateWithoutTargetInput> | SalaryViewPermissionCreateWithoutTargetInput[] | SalaryViewPermissionUncheckedCreateWithoutTargetInput[]
+    connectOrCreate?: SalaryViewPermissionCreateOrConnectWithoutTargetInput | SalaryViewPermissionCreateOrConnectWithoutTargetInput[]
+    upsert?: SalaryViewPermissionUpsertWithWhereUniqueWithoutTargetInput | SalaryViewPermissionUpsertWithWhereUniqueWithoutTargetInput[]
+    createMany?: SalaryViewPermissionCreateManyTargetInputEnvelope
+    set?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    disconnect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    delete?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    connect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    update?: SalaryViewPermissionUpdateWithWhereUniqueWithoutTargetInput | SalaryViewPermissionUpdateWithWhereUniqueWithoutTargetInput[]
+    updateMany?: SalaryViewPermissionUpdateManyWithWhereWithoutTargetInput | SalaryViewPermissionUpdateManyWithWhereWithoutTargetInput[]
+    deleteMany?: SalaryViewPermissionScalarWhereInput | SalaryViewPermissionScalarWhereInput[]
+  }
+
+  export type SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput = {
+    create?: XOR<SalaryViewPermissionCreateWithoutGrantedByInput, SalaryViewPermissionUncheckedCreateWithoutGrantedByInput> | SalaryViewPermissionCreateWithoutGrantedByInput[] | SalaryViewPermissionUncheckedCreateWithoutGrantedByInput[]
+    connectOrCreate?: SalaryViewPermissionCreateOrConnectWithoutGrantedByInput | SalaryViewPermissionCreateOrConnectWithoutGrantedByInput[]
+    upsert?: SalaryViewPermissionUpsertWithWhereUniqueWithoutGrantedByInput | SalaryViewPermissionUpsertWithWhereUniqueWithoutGrantedByInput[]
+    createMany?: SalaryViewPermissionCreateManyGrantedByInputEnvelope
+    set?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    disconnect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    delete?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    connect?: SalaryViewPermissionWhereUniqueInput | SalaryViewPermissionWhereUniqueInput[]
+    update?: SalaryViewPermissionUpdateWithWhereUniqueWithoutGrantedByInput | SalaryViewPermissionUpdateWithWhereUniqueWithoutGrantedByInput[]
+    updateMany?: SalaryViewPermissionUpdateManyWithWhereWithoutGrantedByInput | SalaryViewPermissionUpdateManyWithWhereWithoutGrantedByInput[]
+    deleteMany?: SalaryViewPermissionScalarWhereInput | SalaryViewPermissionScalarWhereInput[]
   }
 
   export type EmployeeCreateNestedOneWithoutDepartmentDirectorOfInput = {
@@ -41275,6 +42872,48 @@ export namespace Prisma {
     deleteMany?: SalaryScalarWhereInput | SalaryScalarWhereInput[]
   }
 
+  export type EmployeeCreateNestedOneWithoutSalaryViewPermissionsAsViewerInput = {
+    create?: XOR<EmployeeCreateWithoutSalaryViewPermissionsAsViewerInput, EmployeeUncheckedCreateWithoutSalaryViewPermissionsAsViewerInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutSalaryViewPermissionsAsViewerInput
+    connect?: EmployeeWhereUniqueInput
+  }
+
+  export type EmployeeCreateNestedOneWithoutSalaryViewPermissionsAsTargetInput = {
+    create?: XOR<EmployeeCreateWithoutSalaryViewPermissionsAsTargetInput, EmployeeUncheckedCreateWithoutSalaryViewPermissionsAsTargetInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutSalaryViewPermissionsAsTargetInput
+    connect?: EmployeeWhereUniqueInput
+  }
+
+  export type EmployeeCreateNestedOneWithoutSalaryViewPermissionsInput = {
+    create?: XOR<EmployeeCreateWithoutSalaryViewPermissionsInput, EmployeeUncheckedCreateWithoutSalaryViewPermissionsInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutSalaryViewPermissionsInput
+    connect?: EmployeeWhereUniqueInput
+  }
+
+  export type EmployeeUpdateOneRequiredWithoutSalaryViewPermissionsAsViewerNestedInput = {
+    create?: XOR<EmployeeCreateWithoutSalaryViewPermissionsAsViewerInput, EmployeeUncheckedCreateWithoutSalaryViewPermissionsAsViewerInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutSalaryViewPermissionsAsViewerInput
+    upsert?: EmployeeUpsertWithoutSalaryViewPermissionsAsViewerInput
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutSalaryViewPermissionsAsViewerInput, EmployeeUpdateWithoutSalaryViewPermissionsAsViewerInput>, EmployeeUncheckedUpdateWithoutSalaryViewPermissionsAsViewerInput>
+  }
+
+  export type EmployeeUpdateOneRequiredWithoutSalaryViewPermissionsAsTargetNestedInput = {
+    create?: XOR<EmployeeCreateWithoutSalaryViewPermissionsAsTargetInput, EmployeeUncheckedCreateWithoutSalaryViewPermissionsAsTargetInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutSalaryViewPermissionsAsTargetInput
+    upsert?: EmployeeUpsertWithoutSalaryViewPermissionsAsTargetInput
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutSalaryViewPermissionsAsTargetInput, EmployeeUpdateWithoutSalaryViewPermissionsAsTargetInput>, EmployeeUncheckedUpdateWithoutSalaryViewPermissionsAsTargetInput>
+  }
+
+  export type EmployeeUpdateOneRequiredWithoutSalaryViewPermissionsNestedInput = {
+    create?: XOR<EmployeeCreateWithoutSalaryViewPermissionsInput, EmployeeUncheckedCreateWithoutSalaryViewPermissionsInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutSalaryViewPermissionsInput
+    upsert?: EmployeeUpsertWithoutSalaryViewPermissionsInput
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutSalaryViewPermissionsInput, EmployeeUpdateWithoutSalaryViewPermissionsInput>, EmployeeUncheckedUpdateWithoutSalaryViewPermissionsInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -42035,6 +43674,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutSubordinatesInput = {
@@ -42068,6 +43710,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutSubordinatesInput = {
@@ -42105,6 +43750,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutManagerInput = {
@@ -42138,6 +43786,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutManagerInput = {
@@ -42687,6 +44338,93 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SalaryViewPermissionCreateWithoutViewerInput = {
+    isActive?: boolean
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    target: EmployeeCreateNestedOneWithoutSalaryViewPermissionsAsTargetInput
+    grantedBy: EmployeeCreateNestedOneWithoutSalaryViewPermissionsInput
+  }
+
+  export type SalaryViewPermissionUncheckedCreateWithoutViewerInput = {
+    id?: number
+    targetId: number
+    grantedById: number
+    isActive?: boolean
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SalaryViewPermissionCreateOrConnectWithoutViewerInput = {
+    where: SalaryViewPermissionWhereUniqueInput
+    create: XOR<SalaryViewPermissionCreateWithoutViewerInput, SalaryViewPermissionUncheckedCreateWithoutViewerInput>
+  }
+
+  export type SalaryViewPermissionCreateManyViewerInputEnvelope = {
+    data: SalaryViewPermissionCreateManyViewerInput | SalaryViewPermissionCreateManyViewerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SalaryViewPermissionCreateWithoutTargetInput = {
+    isActive?: boolean
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    viewer: EmployeeCreateNestedOneWithoutSalaryViewPermissionsAsViewerInput
+    grantedBy: EmployeeCreateNestedOneWithoutSalaryViewPermissionsInput
+  }
+
+  export type SalaryViewPermissionUncheckedCreateWithoutTargetInput = {
+    id?: number
+    viewerId: number
+    grantedById: number
+    isActive?: boolean
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SalaryViewPermissionCreateOrConnectWithoutTargetInput = {
+    where: SalaryViewPermissionWhereUniqueInput
+    create: XOR<SalaryViewPermissionCreateWithoutTargetInput, SalaryViewPermissionUncheckedCreateWithoutTargetInput>
+  }
+
+  export type SalaryViewPermissionCreateManyTargetInputEnvelope = {
+    data: SalaryViewPermissionCreateManyTargetInput | SalaryViewPermissionCreateManyTargetInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SalaryViewPermissionCreateWithoutGrantedByInput = {
+    isActive?: boolean
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    viewer: EmployeeCreateNestedOneWithoutSalaryViewPermissionsAsViewerInput
+    target: EmployeeCreateNestedOneWithoutSalaryViewPermissionsAsTargetInput
+  }
+
+  export type SalaryViewPermissionUncheckedCreateWithoutGrantedByInput = {
+    id?: number
+    viewerId: number
+    targetId: number
+    isActive?: boolean
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SalaryViewPermissionCreateOrConnectWithoutGrantedByInput = {
+    where: SalaryViewPermissionWhereUniqueInput
+    create: XOR<SalaryViewPermissionCreateWithoutGrantedByInput, SalaryViewPermissionUncheckedCreateWithoutGrantedByInput>
+  }
+
+  export type SalaryViewPermissionCreateManyGrantedByInputEnvelope = {
+    data: SalaryViewPermissionCreateManyGrantedByInput | SalaryViewPermissionCreateManyGrantedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AttendanceImportLogUpsertWithWhereUniqueWithoutImportedByInput = {
     where: AttendanceImportLogWhereUniqueInput
     update: XOR<AttendanceImportLogUpdateWithoutImportedByInput, AttendanceImportLogUncheckedUpdateWithoutImportedByInput>
@@ -42850,6 +44588,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutSubordinatesInput = {
@@ -42883,6 +44624,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUpsertWithWhereUniqueWithoutManagerInput = {
@@ -43329,6 +45073,68 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SalaryBatch"> | Date | string
   }
 
+  export type SalaryViewPermissionUpsertWithWhereUniqueWithoutViewerInput = {
+    where: SalaryViewPermissionWhereUniqueInput
+    update: XOR<SalaryViewPermissionUpdateWithoutViewerInput, SalaryViewPermissionUncheckedUpdateWithoutViewerInput>
+    create: XOR<SalaryViewPermissionCreateWithoutViewerInput, SalaryViewPermissionUncheckedCreateWithoutViewerInput>
+  }
+
+  export type SalaryViewPermissionUpdateWithWhereUniqueWithoutViewerInput = {
+    where: SalaryViewPermissionWhereUniqueInput
+    data: XOR<SalaryViewPermissionUpdateWithoutViewerInput, SalaryViewPermissionUncheckedUpdateWithoutViewerInput>
+  }
+
+  export type SalaryViewPermissionUpdateManyWithWhereWithoutViewerInput = {
+    where: SalaryViewPermissionScalarWhereInput
+    data: XOR<SalaryViewPermissionUpdateManyMutationInput, SalaryViewPermissionUncheckedUpdateManyWithoutViewerInput>
+  }
+
+  export type SalaryViewPermissionScalarWhereInput = {
+    AND?: SalaryViewPermissionScalarWhereInput | SalaryViewPermissionScalarWhereInput[]
+    OR?: SalaryViewPermissionScalarWhereInput[]
+    NOT?: SalaryViewPermissionScalarWhereInput | SalaryViewPermissionScalarWhereInput[]
+    id?: IntFilter<"SalaryViewPermission"> | number
+    viewerId?: IntFilter<"SalaryViewPermission"> | number
+    targetId?: IntFilter<"SalaryViewPermission"> | number
+    grantedById?: IntFilter<"SalaryViewPermission"> | number
+    isActive?: BoolFilter<"SalaryViewPermission"> | boolean
+    note?: StringNullableFilter<"SalaryViewPermission"> | string | null
+    createdAt?: DateTimeFilter<"SalaryViewPermission"> | Date | string
+    updatedAt?: DateTimeFilter<"SalaryViewPermission"> | Date | string
+  }
+
+  export type SalaryViewPermissionUpsertWithWhereUniqueWithoutTargetInput = {
+    where: SalaryViewPermissionWhereUniqueInput
+    update: XOR<SalaryViewPermissionUpdateWithoutTargetInput, SalaryViewPermissionUncheckedUpdateWithoutTargetInput>
+    create: XOR<SalaryViewPermissionCreateWithoutTargetInput, SalaryViewPermissionUncheckedCreateWithoutTargetInput>
+  }
+
+  export type SalaryViewPermissionUpdateWithWhereUniqueWithoutTargetInput = {
+    where: SalaryViewPermissionWhereUniqueInput
+    data: XOR<SalaryViewPermissionUpdateWithoutTargetInput, SalaryViewPermissionUncheckedUpdateWithoutTargetInput>
+  }
+
+  export type SalaryViewPermissionUpdateManyWithWhereWithoutTargetInput = {
+    where: SalaryViewPermissionScalarWhereInput
+    data: XOR<SalaryViewPermissionUpdateManyMutationInput, SalaryViewPermissionUncheckedUpdateManyWithoutTargetInput>
+  }
+
+  export type SalaryViewPermissionUpsertWithWhereUniqueWithoutGrantedByInput = {
+    where: SalaryViewPermissionWhereUniqueInput
+    update: XOR<SalaryViewPermissionUpdateWithoutGrantedByInput, SalaryViewPermissionUncheckedUpdateWithoutGrantedByInput>
+    create: XOR<SalaryViewPermissionCreateWithoutGrantedByInput, SalaryViewPermissionUncheckedCreateWithoutGrantedByInput>
+  }
+
+  export type SalaryViewPermissionUpdateWithWhereUniqueWithoutGrantedByInput = {
+    where: SalaryViewPermissionWhereUniqueInput
+    data: XOR<SalaryViewPermissionUpdateWithoutGrantedByInput, SalaryViewPermissionUncheckedUpdateWithoutGrantedByInput>
+  }
+
+  export type SalaryViewPermissionUpdateManyWithWhereWithoutGrantedByInput = {
+    where: SalaryViewPermissionScalarWhereInput
+    data: XOR<SalaryViewPermissionUpdateManyMutationInput, SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByInput>
+  }
+
   export type EmployeeCreateWithoutDepartmentDirectorOfInput = {
     employeeCode: string
     name: string
@@ -43359,6 +45165,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutDepartmentDirectorOfInput = {
@@ -43392,6 +45201,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutDepartmentDirectorOfInput = {
@@ -43429,6 +45241,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutDepartmentHeadOfInput = {
@@ -43462,6 +45277,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutDepartmentHeadOfInput = {
@@ -43578,6 +45396,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutDepartmentDirectorOfInput = {
@@ -43611,6 +45432,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUpsertWithoutDepartmentHeadOfInput = {
@@ -43654,6 +45478,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutDepartmentHeadOfInput = {
@@ -43687,6 +45514,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type PositionUpsertWithWhereUniqueWithoutDepartmentInput = {
@@ -43928,6 +45758,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutWorkInfoInput = {
@@ -43961,6 +45794,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutWorkInfoInput = {
@@ -44067,6 +45903,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutWorkInfoInput = {
@@ -44100,6 +45939,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type PositionUpsertWithoutEmployeesInput = {
@@ -44162,6 +46004,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutContactInfoInput = {
@@ -44195,6 +46040,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutContactInfoInput = {
@@ -44243,6 +46091,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutContactInfoInput = {
@@ -44276,6 +46127,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type LeaveApprovalStepCreateWithoutLeaveRequestInput = {
@@ -44333,6 +46187,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutLeaveRequestInput = {
@@ -44366,6 +46223,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutLeaveRequestInput = {
@@ -44467,6 +46327,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutLeaveRequestInput = {
@@ -44500,6 +46363,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type FileUpsertWithoutLeaveRequestsInput = {
@@ -44681,6 +46547,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutLeaveApprovalStepsInput = {
@@ -44714,6 +46583,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutLeaveApprovalStepsInput = {
@@ -44782,6 +46654,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutLeaveApprovalStepsInput = {
@@ -44815,6 +46690,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type LeaveApprovalStepUpsertWithoutApproversInput = {
@@ -44900,6 +46778,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutAttendanceImportLogInput = {
@@ -44933,6 +46814,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutAttendanceImportLogInput = {
@@ -44997,6 +46881,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutAttendanceImportLogInput = {
@@ -45030,6 +46917,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type AttendanceImportLogCreateWithoutAttendancesInput = {
@@ -45080,6 +46970,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutAttendanceInput = {
@@ -45113,6 +47006,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutAttendanceInput = {
@@ -45185,6 +47081,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutAttendanceInput = {
@@ -45218,6 +47117,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type KPIEmployeeCreateWithoutKpiInput = {
@@ -45291,6 +47193,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutKPIEmployeeInput = {
@@ -45324,6 +47229,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutKPIEmployeeInput = {
@@ -45427,6 +47335,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutKPIEmployeeInput = {
@@ -45460,6 +47371,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type KPIUpsertWithoutKpiEmployeesInput = {
@@ -45623,6 +47537,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalsCreatedInput = {
@@ -45656,6 +47573,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalsCreatedInput = {
@@ -45693,6 +47613,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalsProposedInput = {
@@ -45726,6 +47649,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalsProposedInput = {
@@ -45889,6 +47815,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalsCreatedInput = {
@@ -45922,6 +47851,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUpsertWithoutProposalsProposedInput = {
@@ -45965,6 +47897,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalsProposedInput = {
@@ -45998,6 +47933,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type ProposalApproverUpsertWithWhereUniqueWithoutProposalInput = {
@@ -46136,6 +48074,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalSignaturesInput = {
@@ -46169,6 +48110,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalSignaturesInput = {
@@ -46267,6 +48211,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalSignaturesInput = {
@@ -46300,6 +48247,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeCreateWithoutProposalApprovalsInput = {
@@ -46332,6 +48282,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutProposalApprovalsInput = {
@@ -46365,6 +48318,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutProposalApprovalsInput = {
@@ -46457,6 +48413,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutProposalApprovalsInput = {
@@ -46490,6 +48449,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type ProposalUpsertWithoutApproversInput = {
@@ -46637,6 +48599,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutAssetsReceivedInput = {
@@ -46670,6 +48635,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutAssetsReceivedInput = {
@@ -46707,6 +48675,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutAssetsIssuedInput = {
@@ -46740,6 +48711,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutAssetsIssuedInput = {
@@ -46816,6 +48790,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutAssetsReceivedInput = {
@@ -46849,6 +48826,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUpsertWithoutAssetsIssuedInput = {
@@ -46892,6 +48872,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutAssetsIssuedInput = {
@@ -46925,6 +48908,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeCreateWithoutCompensatoryLeavesInput = {
@@ -46957,6 +48943,9 @@ export namespace Prisma {
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutCompensatoryLeavesInput = {
@@ -46990,6 +48979,9 @@ export namespace Prisma {
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutCompensatoryLeavesInput = {
@@ -47038,6 +49030,9 @@ export namespace Prisma {
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutCompensatoryLeavesInput = {
@@ -47071,6 +49066,9 @@ export namespace Prisma {
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeCreateWithoutSalariesInput = {
@@ -47103,6 +49101,9 @@ export namespace Prisma {
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutSalariesInput = {
@@ -47136,6 +49137,9 @@ export namespace Prisma {
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutSalariesInput = {
@@ -47210,6 +49214,9 @@ export namespace Prisma {
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutSalariesInput = {
@@ -47243,6 +49250,9 @@ export namespace Prisma {
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type SalaryBatchUpsertWithoutSalariesInput = {
@@ -47430,6 +49440,9 @@ export namespace Prisma {
     assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
     compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryCreateNestedManyWithoutEmployeeInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeUncheckedCreateWithoutSalaryBatchesInput = {
@@ -47463,6 +49476,9 @@ export namespace Prisma {
     assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
     compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
     salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
   }
 
   export type EmployeeCreateOrConnectWithoutSalaryBatchesInput = {
@@ -47527,6 +49543,9 @@ export namespace Prisma {
     assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutSalaryBatchesInput = {
@@ -47560,6 +49579,483 @@ export namespace Prisma {
     assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
+  }
+
+  export type EmployeeCreateWithoutSalaryViewPermissionsAsViewerInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
+    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
+    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
+    salaries?: SalaryCreateNestedManyWithoutEmployeeInput
+    salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutSalaryViewPermissionsAsViewerInput = {
+    id?: number
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
+    salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
+    salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutSalaryViewPermissionsAsViewerInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutSalaryViewPermissionsAsViewerInput, EmployeeUncheckedCreateWithoutSalaryViewPermissionsAsViewerInput>
+  }
+
+  export type EmployeeCreateWithoutSalaryViewPermissionsAsTargetInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
+    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
+    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
+    salaries?: SalaryCreateNestedManyWithoutEmployeeInput
+    salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissions?: SalaryViewPermissionCreateNestedManyWithoutGrantedByInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutSalaryViewPermissionsAsTargetInput = {
+    id?: number
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
+    salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
+    salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedCreateNestedManyWithoutGrantedByInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutSalaryViewPermissionsAsTargetInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutSalaryViewPermissionsAsTargetInput, EmployeeUncheckedCreateWithoutSalaryViewPermissionsAsTargetInput>
+  }
+
+  export type EmployeeCreateWithoutSalaryViewPermissionsInput = {
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
+    contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
+    manager?: EmployeeCreateNestedOneWithoutSubordinatesInput
+    subordinates?: EmployeeCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestCreateNestedManyWithoutEmployeeInput
+    proposalsCreated?: ProposalCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoCreateNestedOneWithoutEmployeeInput
+    Attendance?: AttendanceCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveCreateNestedManyWithoutEmployeeInput
+    salaries?: SalaryCreateNestedManyWithoutEmployeeInput
+    salaryBatches?: SalaryBatchCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionCreateNestedManyWithoutTargetInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutSalaryViewPermissionsInput = {
+    id?: number
+    employeeCode: string
+    name: string
+    gender?: $Enums.Sex
+    birthDate?: Date | string | null
+    password: string
+    role?: $Enums.Role
+    avatar?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
+    contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
+    departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
+    subordinates?: EmployeeUncheckedCreateNestedManyWithoutManagerInput
+    KPIEmployee?: KPIEmployeeUncheckedCreateNestedManyWithoutEmployeeInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedCreateNestedManyWithoutApproverInput
+    LeaveRequest?: LeaveRequestUncheckedCreateNestedManyWithoutEmployeeInput
+    proposalsCreated?: ProposalUncheckedCreateNestedManyWithoutCreatedByInput
+    proposalsProposed?: ProposalUncheckedCreateNestedManyWithoutProposerInput
+    proposalApprovals?: ProposalApproverUncheckedCreateNestedManyWithoutApproverInput
+    proposalSignatures?: ProposalSignerUncheckedCreateNestedManyWithoutSignerInput
+    workInfo?: WorkInfoUncheckedCreateNestedOneWithoutEmployeeInput
+    Attendance?: AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsReceived?: AssetAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    assetsIssued?: AssetAssignmentUncheckedCreateNestedManyWithoutIssuedByInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedCreateNestedManyWithoutEmployeeInput
+    salaries?: SalaryUncheckedCreateNestedManyWithoutEmployeeInput
+    salaryBatches?: SalaryBatchUncheckedCreateNestedManyWithoutCreatedByInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedCreateNestedManyWithoutViewerInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedCreateNestedManyWithoutTargetInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutSalaryViewPermissionsInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutSalaryViewPermissionsInput, EmployeeUncheckedCreateWithoutSalaryViewPermissionsInput>
+  }
+
+  export type EmployeeUpsertWithoutSalaryViewPermissionsAsViewerInput = {
+    update: XOR<EmployeeUpdateWithoutSalaryViewPermissionsAsViewerInput, EmployeeUncheckedUpdateWithoutSalaryViewPermissionsAsViewerInput>
+    create: XOR<EmployeeCreateWithoutSalaryViewPermissionsAsViewerInput, EmployeeUncheckedCreateWithoutSalaryViewPermissionsAsViewerInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutSalaryViewPermissionsAsViewerInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutSalaryViewPermissionsAsViewerInput, EmployeeUncheckedUpdateWithoutSalaryViewPermissionsAsViewerInput>
+  }
+
+  export type EmployeeUpdateWithoutSalaryViewPermissionsAsViewerInput = {
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
+    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
+    salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
+    salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutSalaryViewPermissionsAsViewerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
+    salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
+    salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
+  }
+
+  export type EmployeeUpsertWithoutSalaryViewPermissionsAsTargetInput = {
+    update: XOR<EmployeeUpdateWithoutSalaryViewPermissionsAsTargetInput, EmployeeUncheckedUpdateWithoutSalaryViewPermissionsAsTargetInput>
+    create: XOR<EmployeeCreateWithoutSalaryViewPermissionsAsTargetInput, EmployeeUncheckedCreateWithoutSalaryViewPermissionsAsTargetInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutSalaryViewPermissionsAsTargetInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutSalaryViewPermissionsAsTargetInput, EmployeeUncheckedUpdateWithoutSalaryViewPermissionsAsTargetInput>
+  }
+
+  export type EmployeeUpdateWithoutSalaryViewPermissionsAsTargetInput = {
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
+    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
+    salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
+    salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutSalaryViewPermissionsAsTargetInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
+    salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
+    salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
+  }
+
+  export type EmployeeUpsertWithoutSalaryViewPermissionsInput = {
+    update: XOR<EmployeeUpdateWithoutSalaryViewPermissionsInput, EmployeeUncheckedUpdateWithoutSalaryViewPermissionsInput>
+    create: XOR<EmployeeCreateWithoutSalaryViewPermissionsInput, EmployeeUncheckedCreateWithoutSalaryViewPermissionsInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutSalaryViewPermissionsInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutSalaryViewPermissionsInput, EmployeeUncheckedUpdateWithoutSalaryViewPermissionsInput>
+  }
+
+  export type EmployeeUpdateWithoutSalaryViewPermissionsInput = {
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
+    contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
+    manager?: EmployeeUpdateOneWithoutSubordinatesNestedInput
+    subordinates?: EmployeeUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUpdateManyWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUpdateOneWithoutEmployeeNestedInput
+    Attendance?: AttendanceUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
+    salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
+    salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutSalaryViewPermissionsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    gender?: EnumSexFieldUpdateOperationsInput | $Enums.Sex
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
+    contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
+    departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
+    subordinates?: EmployeeUncheckedUpdateManyWithoutManagerNestedInput
+    KPIEmployee?: KPIEmployeeUncheckedUpdateManyWithoutEmployeeNestedInput
+    LeaveApprovalSteps?: LeaveApprovalStepApproverUncheckedUpdateManyWithoutApproverNestedInput
+    LeaveRequest?: LeaveRequestUncheckedUpdateManyWithoutEmployeeNestedInput
+    proposalsCreated?: ProposalUncheckedUpdateManyWithoutCreatedByNestedInput
+    proposalsProposed?: ProposalUncheckedUpdateManyWithoutProposerNestedInput
+    proposalApprovals?: ProposalApproverUncheckedUpdateManyWithoutApproverNestedInput
+    proposalSignatures?: ProposalSignerUncheckedUpdateManyWithoutSignerNestedInput
+    workInfo?: WorkInfoUncheckedUpdateOneWithoutEmployeeNestedInput
+    Attendance?: AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsReceived?: AssetAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    assetsIssued?: AssetAssignmentUncheckedUpdateManyWithoutIssuedByNestedInput
+    compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
+    salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
+    salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
   }
 
   export type LeaveRequestCreateManyHandoverFileInput = {
@@ -47900,6 +50396,36 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type SalaryViewPermissionCreateManyViewerInput = {
+    id?: number
+    targetId: number
+    grantedById: number
+    isActive?: boolean
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SalaryViewPermissionCreateManyTargetInput = {
+    id?: number
+    viewerId: number
+    grantedById: number
+    isActive?: boolean
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SalaryViewPermissionCreateManyGrantedByInput = {
+    id?: number
+    viewerId: number
+    targetId: number
+    isActive?: boolean
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type AttendanceImportLogUpdateWithoutImportedByInput = {
     filename?: StringFieldUpdateOperationsInput | string
     importedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47949,6 +50475,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateWithoutManagerInput = {
@@ -47982,6 +50511,9 @@ export namespace Prisma {
     compensatoryLeaves?: CompensatoryLeaveUncheckedUpdateManyWithoutEmployeeNestedInput
     salaries?: SalaryUncheckedUpdateManyWithoutEmployeeNestedInput
     salaryBatches?: SalaryBatchUncheckedUpdateManyWithoutCreatedByNestedInput
+    salaryViewPermissionsAsViewer?: SalaryViewPermissionUncheckedUpdateManyWithoutViewerNestedInput
+    salaryViewPermissionsAsTarget?: SalaryViewPermissionUncheckedUpdateManyWithoutTargetNestedInput
+    salaryViewPermissions?: SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByNestedInput
   }
 
   export type EmployeeUncheckedUpdateManyWithoutManagerInput = {
@@ -48553,6 +51085,93 @@ export namespace Prisma {
     totalRows?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SalaryViewPermissionUpdateWithoutViewerInput = {
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    target?: EmployeeUpdateOneRequiredWithoutSalaryViewPermissionsAsTargetNestedInput
+    grantedBy?: EmployeeUpdateOneRequiredWithoutSalaryViewPermissionsNestedInput
+  }
+
+  export type SalaryViewPermissionUncheckedUpdateWithoutViewerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    targetId?: IntFieldUpdateOperationsInput | number
+    grantedById?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SalaryViewPermissionUncheckedUpdateManyWithoutViewerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    targetId?: IntFieldUpdateOperationsInput | number
+    grantedById?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SalaryViewPermissionUpdateWithoutTargetInput = {
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    viewer?: EmployeeUpdateOneRequiredWithoutSalaryViewPermissionsAsViewerNestedInput
+    grantedBy?: EmployeeUpdateOneRequiredWithoutSalaryViewPermissionsNestedInput
+  }
+
+  export type SalaryViewPermissionUncheckedUpdateWithoutTargetInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    viewerId?: IntFieldUpdateOperationsInput | number
+    grantedById?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SalaryViewPermissionUncheckedUpdateManyWithoutTargetInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    viewerId?: IntFieldUpdateOperationsInput | number
+    grantedById?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SalaryViewPermissionUpdateWithoutGrantedByInput = {
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    viewer?: EmployeeUpdateOneRequiredWithoutSalaryViewPermissionsAsViewerNestedInput
+    target?: EmployeeUpdateOneRequiredWithoutSalaryViewPermissionsAsTargetNestedInput
+  }
+
+  export type SalaryViewPermissionUncheckedUpdateWithoutGrantedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    viewerId?: IntFieldUpdateOperationsInput | number
+    targetId?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SalaryViewPermissionUncheckedUpdateManyWithoutGrantedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    viewerId?: IntFieldUpdateOperationsInput | number
+    targetId?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PositionCreateManyDepartmentInput = {

@@ -143,7 +143,9 @@ export default function ClientDashboard({
       icon: <FileStack size={20} />,
       label: "Quản lý lương",
       children: [
-        ...(employeeCode === "01375" || employeeCode === "00939"
+        ...(employeeCode === "01375" ||
+        employeeCode === "00939" ||
+        employeeCode === "00019"
           ? [
               {
                 key: "/dashboard/salary",
@@ -154,6 +156,32 @@ export default function ClientDashboard({
               },
             ]
           : []),
+        ...(employeeCode === "01375" || employeeCode === "00019"
+          ? [
+              {
+                key: "/dashboard/salary/permissions",
+                icon: <ShieldCheck size={18} />, // Icon bảo mật/quản trị cho Admin
+                label: (
+                  <Link href="/dashboard/salary/permissions">
+                    Phân quyền xem lương
+                  </Link>
+                ),
+              },
+            ]
+          : []),
+
+        ...(isAdmin !== "USER"
+          ? [
+              {
+                key: "/dashboard/salary/view",
+                icon: <History size={20} />,
+                label: (
+                  <Link href="/dashboard/salary/view">QL lương bộ phận</Link>
+                ),
+              },
+            ]
+          : []),
+
         {
           key: "/dashboard/my-salary",
           icon: <Wallet size={18} />, // Icon ví tiền cá nhân
