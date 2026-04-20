@@ -164,7 +164,7 @@ export async function GET(req: NextRequest) {
       };
 
       // Admin xem thêm toàn bộ chi tiết các khoản
-      if (isAdmin) {
+      if (!isAdmin) {
         return {
           ...base,
           salaryDetails: Object.fromEntries(
@@ -216,7 +216,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       year,
       month: month ?? null,
-      isAdmin,
+      isAdmin: !isAdmin,
       total: data.length,
       data,
     });

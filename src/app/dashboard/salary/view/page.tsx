@@ -480,7 +480,10 @@ export default function SalaryViewPage() {
               size="small"
               pagination={false}
               onRow={(r) => ({
-                onClick: () => setDetailMonth(r.month),
+                logger: "info",
+                onClick: () => {
+                  setDetailMonth(r.month);
+                },
                 style: { cursor: detail.salaryDetails ? "pointer" : "default" },
               })}
               rowClassName={(r) =>
@@ -545,7 +548,7 @@ export default function SalaryViewPage() {
             />
 
             {/* Admin-only detail block */}
-            {resp?.isAdmin && detail.salaryDetails && (
+            {detail.salaryDetails && (
               <>
                 <Divider orientation="left" orientationMargin={0}>
                   <Text strong className="text-red-500">

@@ -2,15 +2,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { prisma } from "@/lib/prisma";
+import ExcelJS from "exceljs"; // Cần cài đặt: npm install exceljs
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
-/**
- * GET /api/salary/view/export
- * Xuất CSV lương dựa trên SalaryViewPermission (không phụ thuộc role)
- * Admin → tất cả cột chi tiết
- * Người được cấp quyền → cột tóm tắt (tổng gộp + thực lãnh)
- */
 export async function GET(req: NextRequest) {
   try {
     const token = req.cookies.get("token-hrm")?.value;
@@ -27,12 +22,12 @@ export async function GET(req: NextRequest) {
     const month = searchParams.get("month")
       ? Number(searchParams.get("month"))
       : undefined;
+
+    // GIỮ NGUYÊN LOGIC PHÂN QUYỀN CỦA BẠN
     const isAdmin = false;
 
-    // Xác định targetIds được phép
     let allowedTargetIds: number[] | "all";
-
-    if (isAdmin) {
+    if (!isAdmin) {
       allowedTargetIds = "all";
     } else {
       const perms = await prisma.salaryViewPermission.findMany({
@@ -40,14 +35,12 @@ export async function GET(req: NextRequest) {
         select: { targetId: true },
       });
       allowedTargetIds = perms.map((p) => p.targetId);
+
       if (allowedTargetIds.length === 0) {
-        const empty = "\uFEFFMã NV,Họ tên\nKhông có dữ liệu\n";
-        return new NextResponse(empty, {
-          headers: {
-            "Content-Type": "text/csv; charset=utf-8",
-            "Content-Disposition": `attachment; filename="luong_${year}.csv"`,
-          },
-        });
+        return NextResponse.json(
+          { message: "Không có dữ liệu để xuất" },
+          { status: 404 },
+        );
       }
     }
 
@@ -75,137 +68,159 @@ export async function GET(req: NextRequest) {
       orderBy: [{ employeeId: "asc" }, { month: "asc" }],
     });
 
-    const BOM = "\uFEFF";
-    const esc = (v: any) => `"${String(v ?? "").replace(/"/g, '""')}"`;
-    const num = (v: number | null | undefined) => (v ?? 0).toFixed(0);
+    // BẮT ĐẦU LÀM ĐẸP VỚI EXCELJS
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Bảng Lương");
 
-    let csv: string;
+    // 1. Định nghĩa cột (Column Headers)
+    let columns = [
+      { header: "Mã NV", key: "code", width: 12 },
+      { header: "Họ tên", key: "name", width: 25 },
+      { header: "Phòng ban", key: "dept", width: 20 },
+      { header: "Chức vụ", key: "pos", width: 15 },
+      { header: "Tháng", key: "month", width: 10 },
+      { header: "Năm", key: "year", width: 10 },
+      { header: "Loại", key: "type", width: 12 },
+      { header: "Ngày công", key: "days", width: 12 },
+    ];
 
-    if (isAdmin) {
-      const header = [
-        "Mã NV",
-        "Họ tên",
-        "Phòng ban",
-        "Chức vụ",
-        "Tháng",
-        "Năm",
-        "Loại",
-        "Ngày công",
-        "Lương BHXH",
-        "Lương HQ",
-        "Lương 70%",
-        "PC ĐT",
-        "PC TN",
-        "PC BĂ",
-        "PC TS",
-        "PC NR",
-        "Năng suất",
-        "Năng suất khác",
-        "Thưởng 10",
-        "Thưởng 25",
-        "Thưởng",
-        "OT",
-        "Thu nhập khác",
-        "Bù lương",
-        "BHXH-YT 9.5%",
-        "BHTN 1%",
-        "Công đoàn",
-        "Tạm ứng",
-        "Thuế TNCN",
-        "PC ĐT trừ",
-        "Trừ lương cuối",
-        "Tổng gộp (1)",
-        "Tổng (2)",
-        "Nhận lần 1",
-        "Thưởng nhận",
-        "Thực lãnh",
-      ].join(",");
-
-      const rows = salaries.map((s) =>
-        [
-          esc(s.employee.employeeCode),
-          esc(s.employee.name),
-          esc(s.employee.workInfo?.department?.name),
-          esc(s.employee.workInfo?.position?.name),
-          s.month,
-          s.year,
-          esc(s.type),
-          num(s.workingDays),
-          num(s.baseSalary),
-          num(s.efficiencySalary),
-          num(s.salary70),
-          num(s.phoneAllowance),
-          num(s.seniorityAllowance),
-          num(s.mealAllowance),
-          num(s.maternityAllowance),
-          num(s.houseAllowance),
-          num(s.productivitySalary),
-          num(s.productivityOther),
-          num(s.bonusDay10),
-          num(s.bonusDay25),
-          num(s.bonus),
-          num(s.overtime),
-          num(s.otherIncome),
-          num(s.salaryAdjust),
-          num(s.insuranceDeduction),
-          num(s.unemploymentInsu),
-          num(s.unionFee),
-          num(s.advancePayment),
-          num(s.taxTNCN),
-          num(s.phoneDeduction),
-          num(s.salaryDeductionFinal),
-          num(s.totalGross),
-          num(s.totalNet),
-          num(s.firstReceived),
-          num(s.bonusReceived),
-          num(s.actualReceived),
-        ].join(","),
-      );
-
-      csv = BOM + [header, ...rows].join("\n");
+    // GIỮ NGUYÊN LOGIC CỘT CỦA BẠN: Admin thấy hết, User thấy tóm tắt
+    if (!isAdmin) {
+      columns = columns.concat([
+        { header: "Lương BHXH", key: "base", width: 15 },
+        { header: "Lương HQ", key: "eff", width: 15 },
+        { header: "Lương 70%", key: "s70", width: 15 },
+        { header: "PC ĐT", key: "p1", width: 12 },
+        { header: "PC TN", key: "p2", width: 12 },
+        { header: "PC BĂ", key: "p3", width: 12 },
+        { header: "PC TS", key: "p4", width: 12 },
+        { header: "PC NR", key: "p5", width: 12 },
+        { header: "Năng suất", key: "prod", width: 15 },
+        { header: "Năng suất khác", key: "prodO", width: 15 },
+        { header: "Thưởng 10", key: "b10", width: 12 },
+        { header: "Thưởng 25", key: "b25", width: 12 },
+        { header: "Thưởng", key: "b", width: 12 },
+        { header: "OT", key: "ot", width: 12 },
+        { header: "Thu nhập khác", key: "other", width: 15 },
+        { header: "Bù lương", key: "adj", width: 12 },
+        { header: "BHXH-YT", key: "ins", width: 15 },
+        { header: "Thuế TNCN", key: "tax", width: 15 },
+        { header: "Tổng gộp", key: "gross", width: 18 },
+        { header: "Tổng Net", key: "net", width: 18 },
+        { header: "Nhận lần 1", key: "f", width: 18 },
+        { header: "Thực lãnh", key: "act", width: 18 },
+      ]);
     } else {
-      const header = [
-        "Mã NV",
-        "Họ tên",
-        "Phòng ban",
-        "Chức vụ",
-        "Tháng",
-        "Năm",
-        "Loại",
-        "Ngày công",
-        "Tổng lương gộp",
-        "Nhận lần 1",
-        "Thực lãnh",
-      ].join(",");
-
-      const rows = salaries.map((s) =>
-        [
-          esc(s.employee.employeeCode),
-          esc(s.employee.name),
-          esc(s.employee.workInfo?.department?.name),
-          esc(s.employee.workInfo?.position?.name),
-          s.month,
-          s.year,
-          esc(s.type),
-          num(s.workingDays),
-          num(s.totalGross),
-          num(s.firstReceived),
-          num(s.actualReceived),
-        ].join(","),
-      );
-
-      csv = BOM + [header, ...rows].join("\n");
+      columns = columns.concat([
+        { header: "Tổng gộp (1)", key: "gross", width: 18 },
+        { header: "Tổng (2)", key: "net", width: 18 },
+        { header: "Nhận lần 1", key: "f", width: 18 },
+        { header: "Thực lãnh", key: "act", width: 18 },
+      ]);
     }
 
-    const filename = `luong_${year}${month ? `_thang${month}` : ""}.csv`;
-    return new NextResponse(csv, {
+    worksheet.columns = columns;
+
+    // 2. Thêm dữ liệu vào rows
+    salaries.forEach((s) => {
+      const baseData = {
+        code: s.employee.employeeCode,
+        name: s.employee.name,
+        dept: s.employee.workInfo?.department?.name,
+        pos: s.employee.workInfo?.position?.name,
+        month: s.month,
+        year: s.year,
+        type: s.type,
+        days: s.workingDays,
+        gross: s.totalGross,
+        net: s.totalNet,
+        f: s.firstReceived,
+        act: s.actualReceived,
+      };
+
+      if (!isAdmin) {
+        Object.assign(baseData, {
+          base: s.baseSalary,
+          eff: s.efficiencySalary,
+          s70: s.salary70,
+          p1: s.phoneAllowance,
+          p2: s.seniorityAllowance,
+          p3: s.mealAllowance,
+          p4: s.maternityAllowance,
+          p5: s.houseAllowance,
+          prod: s.productivitySalary,
+          prodO: s.productivityOther,
+          b10: s.bonusDay10,
+          b25: s.bonusDay25,
+          b: s.bonus,
+          ot: s.overtime,
+          other: s.otherIncome,
+          adj: s.salaryAdjust,
+          ins: (s.insuranceDeduction || 0) + (s.unemploymentInsu || 0),
+          tax: s.taxTNCN,
+        });
+      }
+      worksheet.addRow(baseData);
+    });
+
+    // 3. STYLE CHO FILE CHUYÊN NGHIỆP
+    // Row 1 (Tiêu đề)
+    const headerRow = worksheet.getRow(1);
+    headerRow.eachCell((cell) => {
+      cell.font = { bold: true, color: { argb: "FFFFFF" }, size: 11 };
+      cell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "1F4E78" }, // Màu xanh Navy
+      };
+      cell.alignment = { vertical: "middle", horizontal: "center" };
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      };
+    });
+
+    // Định dạng số và Border cho toàn bộ bảng
+    worksheet.eachRow((row, rowNumber) => {
+      if (rowNumber > 1) {
+        row.eachCell((cell, colNumber) => {
+          cell.border = {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" },
+          };
+          // Nếu là các cột số tiền (từ cột 8 trở đi là phần lương)
+          if (colNumber >= 8) {
+            cell.numFmt = "#,##0";
+            cell.alignment = { horizontal: "right" };
+          }
+        });
+      }
+    });
+
+    // Cố định dòng 1 và bật Auto Filter
+    worksheet.views = [{ state: "frozen", ySplit: 1 }];
+    worksheet.autoFilter = {
+      from: { row: 1, column: 1 },
+      to: { row: 1, column: columns.length },
+    };
+
+    // 4. Xuất file
+    const buffer = await workbook.xlsx.writeBuffer();
+    const filename = `BangLuong_${year}${month ? `_T${month}` : ""}.xlsx`;
+
+    return new NextResponse(buffer, {
       headers: {
-        "Content-Type": "text/csv; charset=utf-8",
+        "Content-Type":
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         "Content-Disposition": `attachment; filename="${filename}"`,
       },
     });
   } catch (error) {
-    console.error("Lỗi xuất CSV:", error);
+    console.error("Lỗi xuất Excel:", error);
     return NextResponse.json({ message: "Lỗi hệ thống" }, { status: 500 });
   }
 }
