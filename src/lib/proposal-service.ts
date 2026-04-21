@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { waitUntil } from "@vercel/functions";
 import type { CreateProposalFormData } from "@/components/api";
 import { FileService } from "./file-service";
 import { EmailService } from "./email-prososal-service";
@@ -22,8 +22,8 @@ const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 async function sendWithRetry(
   label: string,
   fn: () => Promise<any>,
-  retries = 4,
-  baseDelay = 1000,
+  retries = 3,
+  baseDelay = 500,
 ): Promise<void> {
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
@@ -76,12 +76,22 @@ async function persistFailedEmail(
 //  - Nếu dùng Node.js standalone: Promise tự chạy, process không bị kill.
 // ─────────────────────────────────────────────────────────────────────────────
 function runBackground(label: string, task: () => Promise<void>): void {
+  // Thực thi task và bắt lỗi để không làm sập process chính
   const promise = task().catch((err) =>
     console.error(`[Background] Tác vụ "${label}" thất bại hoàn toàn:`, err),
   );
 
-  // Nếu dùng Vercel — uncomment dòng dưới:
-  // waitUntil(promise);
+  // Kiểm tra nếu đang chạy trên môi trường Vercel thì mới dùng waitUntil
+  // Vercel tự động set VERCEL=1 khi bạn deploy
+  if (process.env.VERCEL || process.env.NEXT_PUBLIC_VERCEL_ENV) {
+    try {
+      waitUntil(promise);
+    } catch (e) {
+      console.warn(`[Background] Không thể gọi waitUntil:`, e);
+    }
+  }
+
+  // Ở Local, Promise vẫn sẽ tiếp tục chạy trong event loop của Node.js
 }
 
 function sleep(ms: number): Promise<void> {
