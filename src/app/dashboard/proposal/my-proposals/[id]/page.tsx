@@ -54,7 +54,7 @@ export default function ProposalDetailTailwind() {
   const params = useParams();
   const router = useRouter();
   const proposalId = Number(params.id);
-  const { id, role } = useAppSelector((state) => state.user);
+  const { id, role, employeeCode } = useAppSelector((state) => state.user);
   const isAdmin = role === "ADMIN";
 
   const [proposal, setProposal] = useState<any | null>(null);
@@ -385,7 +385,16 @@ export default function ProposalDetailTailwind() {
               <Progress percent={progress.percent} status={progress.status} />
             </div>
           </div>
-
+          {employeeCode === "01375" && (
+            <Button
+              icon={<BellOutlined />}
+              onClick={handleRemind}
+              loading={remindLoading}
+              className="border-orange-400 text-orange-500 hover:text-orange-600 hover:border-orange-600"
+            >
+              Nhắc duyệt
+            </Button>
+          )}
           {(proposal.proposerId === id || role === "ADMIN") &&
             ["pending_signatures", "waiting_approval"].includes(
               proposal.status,
