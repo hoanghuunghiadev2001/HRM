@@ -179,7 +179,7 @@ export class ProposalReminderService {
     }
 
     // 2. Chỉ proposer mới được nhắc
-    if (proposal.proposerId !== callerId && proposal.proposerId !== 201) {
+    if (proposal.proposerId !== callerId && callerId !== 201) {
       return {
         success: false,
         error: "Bạn không phải người tạo đề xuất này.",
