@@ -386,7 +386,7 @@ export default function ProposalDetailTailwind() {
             </div>
           </div>
 
-          {proposal.proposerId === id &&
+          {(proposal.proposerId === id || role === "ADMIN") &&
             ["pending_signatures", "waiting_approval"].includes(
               proposal.status,
             ) && (
