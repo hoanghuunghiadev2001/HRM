@@ -29056,6 +29056,9 @@ export namespace Prisma {
     bonusDay25: number | null
     otherWork: number | null
     bonus: number | null
+    overtime15: number | null
+    overtime2: number | null
+    overtime3: number | null
     overtime: number | null
     otherIncome: number | null
     salaryDeduction: number | null
@@ -29105,6 +29108,9 @@ export namespace Prisma {
     bonusDay25: number | null
     otherWork: number | null
     bonus: number | null
+    overtime15: number | null
+    overtime2: number | null
+    overtime3: number | null
     overtime: number | null
     otherIncome: number | null
     salaryDeduction: number | null
@@ -29161,6 +29167,9 @@ export namespace Prisma {
     bonusDay25: number | null
     otherWork: number | null
     bonus: number | null
+    overtime15: number | null
+    overtime2: number | null
+    overtime3: number | null
     overtime: number | null
     otherIncome: number | null
     salaryDeduction: number | null
@@ -29219,6 +29228,9 @@ export namespace Prisma {
     bonusDay25: number | null
     otherWork: number | null
     bonus: number | null
+    overtime15: number | null
+    overtime2: number | null
+    overtime3: number | null
     overtime: number | null
     otherIncome: number | null
     salaryDeduction: number | null
@@ -29277,6 +29289,9 @@ export namespace Prisma {
     bonusDay25: number
     otherWork: number
     bonus: number
+    overtime15: number
+    overtime2: number
+    overtime3: number
     overtime: number
     otherIncome: number
     salaryDeduction: number
@@ -29330,6 +29345,9 @@ export namespace Prisma {
     bonusDay25?: true
     otherWork?: true
     bonus?: true
+    overtime15?: true
+    overtime2?: true
+    overtime3?: true
     overtime?: true
     otherIncome?: true
     salaryDeduction?: true
@@ -29379,6 +29397,9 @@ export namespace Prisma {
     bonusDay25?: true
     otherWork?: true
     bonus?: true
+    overtime15?: true
+    overtime2?: true
+    overtime3?: true
     overtime?: true
     otherIncome?: true
     salaryDeduction?: true
@@ -29435,6 +29456,9 @@ export namespace Prisma {
     bonusDay25?: true
     otherWork?: true
     bonus?: true
+    overtime15?: true
+    overtime2?: true
+    overtime3?: true
     overtime?: true
     otherIncome?: true
     salaryDeduction?: true
@@ -29493,6 +29517,9 @@ export namespace Prisma {
     bonusDay25?: true
     otherWork?: true
     bonus?: true
+    overtime15?: true
+    overtime2?: true
+    overtime3?: true
     overtime?: true
     otherIncome?: true
     salaryDeduction?: true
@@ -29551,6 +29578,9 @@ export namespace Prisma {
     bonusDay25?: true
     otherWork?: true
     bonus?: true
+    overtime15?: true
+    overtime2?: true
+    overtime3?: true
     overtime?: true
     otherIncome?: true
     salaryDeduction?: true
@@ -29696,6 +29726,9 @@ export namespace Prisma {
     bonusDay25: number
     otherWork: number
     bonus: number
+    overtime15: number
+    overtime2: number
+    overtime3: number
     overtime: number
     otherIncome: number
     salaryDeduction: number
@@ -29773,6 +29806,9 @@ export namespace Prisma {
     bonusDay25?: boolean
     otherWork?: boolean
     bonus?: boolean
+    overtime15?: boolean
+    overtime2?: boolean
+    overtime3?: boolean
     overtime?: boolean
     otherIncome?: boolean
     salaryDeduction?: boolean
@@ -29835,6 +29871,9 @@ export namespace Prisma {
     bonusDay25?: boolean
     otherWork?: boolean
     bonus?: boolean
+    overtime15?: boolean
+    overtime2?: boolean
+    overtime3?: boolean
     overtime?: boolean
     otherIncome?: boolean
     salaryDeduction?: boolean
@@ -29859,7 +29898,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type SalaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchId" | "employeeId" | "month" | "year" | "type" | "employeeCode" | "fullName" | "position" | "grade" | "insuranceLevel" | "contractDate" | "workingDays" | "notOfficial" | "baseSalary" | "efficiencySalary" | "salary70" | "phoneAllowance" | "seniorityAllowance" | "mealAllowance" | "maternityAllowance" | "houseAllowance" | "productivitySalary" | "productivityOther" | "productivitySCC" | "productivityPaint" | "productivityAccessory" | "productivityParts" | "bonusDay10" | "salaryAdjust" | "bonusDay25" | "otherWork" | "bonus" | "overtime" | "otherIncome" | "salaryDeduction" | "insuranceDeduction" | "unemploymentInsu" | "unionFee" | "advancePayment" | "socialWorkDeduction" | "healthCardDeduction" | "insuranceArrears" | "taxCompensation" | "taxTNCN" | "phoneDeduction" | "taxRefund" | "salaryDeductionFinal" | "totalGross" | "totalNet" | "firstReceived" | "bonusReceived" | "actualReceived" | "createdAt" | "updatedAt", ExtArgs["result"]["salary"]>
+  export type SalaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchId" | "employeeId" | "month" | "year" | "type" | "employeeCode" | "fullName" | "position" | "grade" | "insuranceLevel" | "contractDate" | "workingDays" | "notOfficial" | "baseSalary" | "efficiencySalary" | "salary70" | "phoneAllowance" | "seniorityAllowance" | "mealAllowance" | "maternityAllowance" | "houseAllowance" | "productivitySalary" | "productivityOther" | "productivitySCC" | "productivityPaint" | "productivityAccessory" | "productivityParts" | "bonusDay10" | "salaryAdjust" | "bonusDay25" | "otherWork" | "bonus" | "overtime15" | "overtime2" | "overtime3" | "overtime" | "otherIncome" | "salaryDeduction" | "insuranceDeduction" | "unemploymentInsu" | "unionFee" | "advancePayment" | "socialWorkDeduction" | "healthCardDeduction" | "insuranceArrears" | "taxCompensation" | "taxTNCN" | "phoneDeduction" | "taxRefund" | "salaryDeductionFinal" | "totalGross" | "totalNet" | "firstReceived" | "bonusReceived" | "actualReceived" | "createdAt" | "updatedAt", ExtArgs["result"]["salary"]>
   export type SalaryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
     batch?: boolean | Salary$batchArgs<ExtArgs>
@@ -29905,6 +29944,9 @@ export namespace Prisma {
       bonusDay25: number
       otherWork: number
       bonus: number
+      overtime15: number
+      overtime2: number
+      overtime3: number
       overtime: number
       otherIncome: number
       salaryDeduction: number
@@ -30331,6 +30373,9 @@ export namespace Prisma {
     readonly bonusDay25: FieldRef<"Salary", 'Float'>
     readonly otherWork: FieldRef<"Salary", 'Float'>
     readonly bonus: FieldRef<"Salary", 'Float'>
+    readonly overtime15: FieldRef<"Salary", 'Float'>
+    readonly overtime2: FieldRef<"Salary", 'Float'>
+    readonly overtime3: FieldRef<"Salary", 'Float'>
     readonly overtime: FieldRef<"Salary", 'Float'>
     readonly otherIncome: FieldRef<"Salary", 'Float'>
     readonly salaryDeduction: FieldRef<"Salary", 'Float'>
@@ -33184,6 +33229,9 @@ export namespace Prisma {
     bonusDay25: 'bonusDay25',
     otherWork: 'otherWork',
     bonus: 'bonus',
+    overtime15: 'overtime15',
+    overtime2: 'overtime2',
+    overtime3: 'overtime3',
     overtime: 'overtime',
     otherIncome: 'otherIncome',
     salaryDeduction: 'salaryDeduction',
@@ -35523,6 +35571,9 @@ export namespace Prisma {
     bonusDay25?: FloatFilter<"Salary"> | number
     otherWork?: FloatFilter<"Salary"> | number
     bonus?: FloatFilter<"Salary"> | number
+    overtime15?: FloatFilter<"Salary"> | number
+    overtime2?: FloatFilter<"Salary"> | number
+    overtime3?: FloatFilter<"Salary"> | number
     overtime?: FloatFilter<"Salary"> | number
     otherIncome?: FloatFilter<"Salary"> | number
     salaryDeduction?: FloatFilter<"Salary"> | number
@@ -35583,6 +35634,9 @@ export namespace Prisma {
     bonusDay25?: SortOrder
     otherWork?: SortOrder
     bonus?: SortOrder
+    overtime15?: SortOrder
+    overtime2?: SortOrder
+    overtime3?: SortOrder
     overtime?: SortOrder
     otherIncome?: SortOrder
     salaryDeduction?: SortOrder
@@ -35648,6 +35702,9 @@ export namespace Prisma {
     bonusDay25?: FloatFilter<"Salary"> | number
     otherWork?: FloatFilter<"Salary"> | number
     bonus?: FloatFilter<"Salary"> | number
+    overtime15?: FloatFilter<"Salary"> | number
+    overtime2?: FloatFilter<"Salary"> | number
+    overtime3?: FloatFilter<"Salary"> | number
     overtime?: FloatFilter<"Salary"> | number
     otherIncome?: FloatFilter<"Salary"> | number
     salaryDeduction?: FloatFilter<"Salary"> | number
@@ -35708,6 +35765,9 @@ export namespace Prisma {
     bonusDay25?: SortOrder
     otherWork?: SortOrder
     bonus?: SortOrder
+    overtime15?: SortOrder
+    overtime2?: SortOrder
+    overtime3?: SortOrder
     overtime?: SortOrder
     otherIncome?: SortOrder
     salaryDeduction?: SortOrder
@@ -35774,6 +35834,9 @@ export namespace Prisma {
     bonusDay25?: FloatWithAggregatesFilter<"Salary"> | number
     otherWork?: FloatWithAggregatesFilter<"Salary"> | number
     bonus?: FloatWithAggregatesFilter<"Salary"> | number
+    overtime15?: FloatWithAggregatesFilter<"Salary"> | number
+    overtime2?: FloatWithAggregatesFilter<"Salary"> | number
+    overtime3?: FloatWithAggregatesFilter<"Salary"> | number
     overtime?: FloatWithAggregatesFilter<"Salary"> | number
     otherIncome?: FloatWithAggregatesFilter<"Salary"> | number
     salaryDeduction?: FloatWithAggregatesFilter<"Salary"> | number
@@ -37937,6 +38000,9 @@ export namespace Prisma {
     bonusDay25?: number
     otherWork?: number
     bonus?: number
+    overtime15?: number
+    overtime2?: number
+    overtime3?: number
     overtime?: number
     otherIncome?: number
     salaryDeduction?: number
@@ -37997,6 +38063,9 @@ export namespace Prisma {
     bonusDay25?: number
     otherWork?: number
     bonus?: number
+    overtime15?: number
+    overtime2?: number
+    overtime3?: number
     overtime?: number
     otherIncome?: number
     salaryDeduction?: number
@@ -38052,6 +38121,9 @@ export namespace Prisma {
     bonusDay25?: FloatFieldUpdateOperationsInput | number
     otherWork?: FloatFieldUpdateOperationsInput | number
     bonus?: FloatFieldUpdateOperationsInput | number
+    overtime15?: FloatFieldUpdateOperationsInput | number
+    overtime2?: FloatFieldUpdateOperationsInput | number
+    overtime3?: FloatFieldUpdateOperationsInput | number
     overtime?: FloatFieldUpdateOperationsInput | number
     otherIncome?: FloatFieldUpdateOperationsInput | number
     salaryDeduction?: FloatFieldUpdateOperationsInput | number
@@ -38112,6 +38184,9 @@ export namespace Prisma {
     bonusDay25?: FloatFieldUpdateOperationsInput | number
     otherWork?: FloatFieldUpdateOperationsInput | number
     bonus?: FloatFieldUpdateOperationsInput | number
+    overtime15?: FloatFieldUpdateOperationsInput | number
+    overtime2?: FloatFieldUpdateOperationsInput | number
+    overtime3?: FloatFieldUpdateOperationsInput | number
     overtime?: FloatFieldUpdateOperationsInput | number
     otherIncome?: FloatFieldUpdateOperationsInput | number
     salaryDeduction?: FloatFieldUpdateOperationsInput | number
@@ -38170,6 +38245,9 @@ export namespace Prisma {
     bonusDay25?: number
     otherWork?: number
     bonus?: number
+    overtime15?: number
+    overtime2?: number
+    overtime3?: number
     overtime?: number
     otherIncome?: number
     salaryDeduction?: number
@@ -38225,6 +38303,9 @@ export namespace Prisma {
     bonusDay25?: FloatFieldUpdateOperationsInput | number
     otherWork?: FloatFieldUpdateOperationsInput | number
     bonus?: FloatFieldUpdateOperationsInput | number
+    overtime15?: FloatFieldUpdateOperationsInput | number
+    overtime2?: FloatFieldUpdateOperationsInput | number
+    overtime3?: FloatFieldUpdateOperationsInput | number
     overtime?: FloatFieldUpdateOperationsInput | number
     otherIncome?: FloatFieldUpdateOperationsInput | number
     salaryDeduction?: FloatFieldUpdateOperationsInput | number
@@ -38283,6 +38364,9 @@ export namespace Prisma {
     bonusDay25?: FloatFieldUpdateOperationsInput | number
     otherWork?: FloatFieldUpdateOperationsInput | number
     bonus?: FloatFieldUpdateOperationsInput | number
+    overtime15?: FloatFieldUpdateOperationsInput | number
+    overtime2?: FloatFieldUpdateOperationsInput | number
+    overtime3?: FloatFieldUpdateOperationsInput | number
     overtime?: FloatFieldUpdateOperationsInput | number
     otherIncome?: FloatFieldUpdateOperationsInput | number
     salaryDeduction?: FloatFieldUpdateOperationsInput | number
@@ -40423,6 +40507,9 @@ export namespace Prisma {
     bonusDay25?: SortOrder
     otherWork?: SortOrder
     bonus?: SortOrder
+    overtime15?: SortOrder
+    overtime2?: SortOrder
+    overtime3?: SortOrder
     overtime?: SortOrder
     otherIncome?: SortOrder
     salaryDeduction?: SortOrder
@@ -40474,6 +40561,9 @@ export namespace Prisma {
     bonusDay25?: SortOrder
     otherWork?: SortOrder
     bonus?: SortOrder
+    overtime15?: SortOrder
+    overtime2?: SortOrder
+    overtime3?: SortOrder
     overtime?: SortOrder
     otherIncome?: SortOrder
     salaryDeduction?: SortOrder
@@ -40530,6 +40620,9 @@ export namespace Prisma {
     bonusDay25?: SortOrder
     otherWork?: SortOrder
     bonus?: SortOrder
+    overtime15?: SortOrder
+    overtime2?: SortOrder
+    overtime3?: SortOrder
     overtime?: SortOrder
     otherIncome?: SortOrder
     salaryDeduction?: SortOrder
@@ -40588,6 +40681,9 @@ export namespace Prisma {
     bonusDay25?: SortOrder
     otherWork?: SortOrder
     bonus?: SortOrder
+    overtime15?: SortOrder
+    overtime2?: SortOrder
+    overtime3?: SortOrder
     overtime?: SortOrder
     otherIncome?: SortOrder
     salaryDeduction?: SortOrder
@@ -40639,6 +40735,9 @@ export namespace Prisma {
     bonusDay25?: SortOrder
     otherWork?: SortOrder
     bonus?: SortOrder
+    overtime15?: SortOrder
+    overtime2?: SortOrder
+    overtime3?: SortOrder
     overtime?: SortOrder
     otherIncome?: SortOrder
     salaryDeduction?: SortOrder
@@ -44215,6 +44314,9 @@ export namespace Prisma {
     bonusDay25?: number
     otherWork?: number
     bonus?: number
+    overtime15?: number
+    overtime2?: number
+    overtime3?: number
     overtime?: number
     otherIncome?: number
     salaryDeduction?: number
@@ -44273,6 +44375,9 @@ export namespace Prisma {
     bonusDay25?: number
     otherWork?: number
     bonus?: number
+    overtime15?: number
+    overtime2?: number
+    overtime3?: number
     overtime?: number
     otherIncome?: number
     salaryDeduction?: number
@@ -45019,6 +45124,9 @@ export namespace Prisma {
     bonusDay25?: FloatFilter<"Salary"> | number
     otherWork?: FloatFilter<"Salary"> | number
     bonus?: FloatFilter<"Salary"> | number
+    overtime15?: FloatFilter<"Salary"> | number
+    overtime2?: FloatFilter<"Salary"> | number
+    overtime3?: FloatFilter<"Salary"> | number
     overtime?: FloatFilter<"Salary"> | number
     otherIncome?: FloatFilter<"Salary"> | number
     salaryDeduction?: FloatFilter<"Salary"> | number
@@ -49318,6 +49426,9 @@ export namespace Prisma {
     bonusDay25?: number
     otherWork?: number
     bonus?: number
+    overtime15?: number
+    overtime2?: number
+    overtime3?: number
     overtime?: number
     otherIncome?: number
     salaryDeduction?: number
@@ -49376,6 +49487,9 @@ export namespace Prisma {
     bonusDay25?: number
     otherWork?: number
     bonus?: number
+    overtime15?: number
+    overtime2?: number
+    overtime3?: number
     overtime?: number
     otherIncome?: number
     salaryDeduction?: number
@@ -50362,6 +50476,9 @@ export namespace Prisma {
     bonusDay25?: number
     otherWork?: number
     bonus?: number
+    overtime15?: number
+    overtime2?: number
+    overtime3?: number
     overtime?: number
     otherIncome?: number
     salaryDeduction?: number
@@ -50917,6 +51034,9 @@ export namespace Prisma {
     bonusDay25?: FloatFieldUpdateOperationsInput | number
     otherWork?: FloatFieldUpdateOperationsInput | number
     bonus?: FloatFieldUpdateOperationsInput | number
+    overtime15?: FloatFieldUpdateOperationsInput | number
+    overtime2?: FloatFieldUpdateOperationsInput | number
+    overtime3?: FloatFieldUpdateOperationsInput | number
     overtime?: FloatFieldUpdateOperationsInput | number
     otherIncome?: FloatFieldUpdateOperationsInput | number
     salaryDeduction?: FloatFieldUpdateOperationsInput | number
@@ -50975,6 +51095,9 @@ export namespace Prisma {
     bonusDay25?: FloatFieldUpdateOperationsInput | number
     otherWork?: FloatFieldUpdateOperationsInput | number
     bonus?: FloatFieldUpdateOperationsInput | number
+    overtime15?: FloatFieldUpdateOperationsInput | number
+    overtime2?: FloatFieldUpdateOperationsInput | number
+    overtime3?: FloatFieldUpdateOperationsInput | number
     overtime?: FloatFieldUpdateOperationsInput | number
     otherIncome?: FloatFieldUpdateOperationsInput | number
     salaryDeduction?: FloatFieldUpdateOperationsInput | number
@@ -51032,6 +51155,9 @@ export namespace Prisma {
     bonusDay25?: FloatFieldUpdateOperationsInput | number
     otherWork?: FloatFieldUpdateOperationsInput | number
     bonus?: FloatFieldUpdateOperationsInput | number
+    overtime15?: FloatFieldUpdateOperationsInput | number
+    overtime2?: FloatFieldUpdateOperationsInput | number
+    overtime3?: FloatFieldUpdateOperationsInput | number
     overtime?: FloatFieldUpdateOperationsInput | number
     otherIncome?: FloatFieldUpdateOperationsInput | number
     salaryDeduction?: FloatFieldUpdateOperationsInput | number
@@ -51671,6 +51797,9 @@ export namespace Prisma {
     bonusDay25?: number
     otherWork?: number
     bonus?: number
+    overtime15?: number
+    overtime2?: number
+    overtime3?: number
     overtime?: number
     otherIncome?: number
     salaryDeduction?: number
@@ -51726,6 +51855,9 @@ export namespace Prisma {
     bonusDay25?: FloatFieldUpdateOperationsInput | number
     otherWork?: FloatFieldUpdateOperationsInput | number
     bonus?: FloatFieldUpdateOperationsInput | number
+    overtime15?: FloatFieldUpdateOperationsInput | number
+    overtime2?: FloatFieldUpdateOperationsInput | number
+    overtime3?: FloatFieldUpdateOperationsInput | number
     overtime?: FloatFieldUpdateOperationsInput | number
     otherIncome?: FloatFieldUpdateOperationsInput | number
     salaryDeduction?: FloatFieldUpdateOperationsInput | number
@@ -51784,6 +51916,9 @@ export namespace Prisma {
     bonusDay25?: FloatFieldUpdateOperationsInput | number
     otherWork?: FloatFieldUpdateOperationsInput | number
     bonus?: FloatFieldUpdateOperationsInput | number
+    overtime15?: FloatFieldUpdateOperationsInput | number
+    overtime2?: FloatFieldUpdateOperationsInput | number
+    overtime3?: FloatFieldUpdateOperationsInput | number
     overtime?: FloatFieldUpdateOperationsInput | number
     otherIncome?: FloatFieldUpdateOperationsInput | number
     salaryDeduction?: FloatFieldUpdateOperationsInput | number
@@ -51841,6 +51976,9 @@ export namespace Prisma {
     bonusDay25?: FloatFieldUpdateOperationsInput | number
     otherWork?: FloatFieldUpdateOperationsInput | number
     bonus?: FloatFieldUpdateOperationsInput | number
+    overtime15?: FloatFieldUpdateOperationsInput | number
+    overtime2?: FloatFieldUpdateOperationsInput | number
+    overtime3?: FloatFieldUpdateOperationsInput | number
     overtime?: FloatFieldUpdateOperationsInput | number
     otherIncome?: FloatFieldUpdateOperationsInput | number
     salaryDeduction?: FloatFieldUpdateOperationsInput | number

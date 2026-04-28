@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
     const isAdmin = false;
 
     let allowedTargetIds: number[] | "all";
-    if (!isAdmin) {
+    if (isAdmin) {
       allowedTargetIds = "all";
     } else {
       const perms = await prisma.salaryViewPermission.findMany({
@@ -90,24 +90,28 @@ export async function GET(req: NextRequest) {
         { header: "Lương BHXH", key: "base", width: 15 },
         { header: "Lương HQ", key: "eff", width: 15 },
         { header: "Lương 70%", key: "s70", width: 15 },
-        { header: "PC ĐT", key: "p1", width: 12 },
-        { header: "PC TN", key: "p2", width: 12 },
-        { header: "PC BĂ", key: "p3", width: 12 },
+        { header: "PC Điện thoại", key: "p1", width: 12 },
+        { header: "PC Thâm niên", key: "p2", width: 12 },
+        { header: "Tiền Cơm", key: "p3", width: 12 },
         { header: "PC TS", key: "p4", width: 12 },
         { header: "PC NR", key: "p5", width: 12 },
-        { header: "Năng suất", key: "prod", width: 15 },
+        { header: "Lương Năng suất", key: "prod", width: 15 },
         { header: "Năng suất khác", key: "prodO", width: 15 },
         { header: "Thưởng 10", key: "b10", width: 12 },
         { header: "Thưởng 25", key: "b25", width: 12 },
-        { header: "Thưởng", key: "b", width: 12 },
-        { header: "OT", key: "ot", width: 12 },
+        { header: "Giờ tăng ca 1.5", key: "ot1.5", width: 12 },
+        { header: "Giờ tăng ca 2", key: "ot2", width: 12 },
+        { header: "Giờ tăng ca 3", key: "ot3", width: 12 },
+        { header: "Tiền tăng ca", key: "ot", width: 12 },
+
         { header: "Thu nhập khác", key: "other", width: 15 },
         { header: "Bù lương", key: "adj", width: 12 },
         { header: "BHXH-YT", key: "ins", width: 15 },
         { header: "Thuế TNCN", key: "tax", width: 15 },
         { header: "Tổng gộp", key: "gross", width: 18 },
         { header: "Tổng Net", key: "net", width: 18 },
-        { header: "Nhận lần 1", key: "f", width: 18 },
+        { header: "Tạm ứng", key: "f", width: 18 },
+        { header: "Thưởng đã nhận", key: "b", width: 12 },
         { header: "Thực lãnh", key: "act", width: 18 },
       ]);
     } else {
@@ -135,7 +139,7 @@ export async function GET(req: NextRequest) {
         gross: s.totalGross,
         net: s.totalNet,
         f: s.firstReceived,
-        act: s.actualReceived,
+        act: s.actualReceived + s.firstReceived + s.bonus,
       };
 
       if (!isAdmin) {

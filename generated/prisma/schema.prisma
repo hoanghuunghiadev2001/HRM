@@ -524,8 +524,12 @@ model Salary {
   bonusDay25   Float @default(0)
   otherWork    Float @default(0)
   bonus        Float @default(0)
-  overtime     Float @default(0)
-  otherIncome  Float @default(0)
+  overtime15   Float @default(0)
+  overtime2    Float @default(0)
+  overtime3    Float @default(0)
+
+  overtime    Float @default(0)
+  otherIncome Float @default(0)
 
   // ===== KHẤU TRỪ =====
   salaryDeduction      Float @default(0) // Trừ lương (đầu sheet)

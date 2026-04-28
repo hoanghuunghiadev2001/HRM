@@ -138,6 +138,9 @@ export async function POST(req: NextRequest) {
           baseSalary: Number(row[9]) || 0,
           efficiencySalary: Number(row[10]) || 0,
           salary70: Number(row[11]) || 0,
+          overtime15: Number(row[25]) || 0,
+          overtime2: Number(row[26]) || 0,
+          overtime3: Number(row[27]) || 0,
           // PHỤ CẤP
           phoneAllowance: Number(row[12]) || 0,
           seniorityAllowance: Number(row[13]) || 0,
