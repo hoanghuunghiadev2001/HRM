@@ -171,6 +171,12 @@ export default function SalaryPermissionsPage() {
       const json = await res.json();
       if (!res.ok) throw new Error(json.message);
       message.success("Cấp quyền thành công");
+
+      // 2. Reset toàn bộ dữ liệu nhập liệu về trạng thái ban đầu
+      setGrantViewer(null);
+      setGrantTargetKeys([]);
+      setGrantNote("");
+      setGrantSaving(false);
       setGrantModal(false);
       await fetchData();
     } catch (e: any) {
@@ -410,14 +416,23 @@ export default function SalaryPermissionsPage() {
         title={<b>CẤP QUYỀN XEM LƯƠNG</b>}
         open={grantModal}
         onCancel={() => {
+          // 1. Đóng modal
           setGrantModal(false);
-          setGrantTargetKeys([]);
+
+          // 2. Reset toàn bộ dữ liệu nhập liệu về trạng thái ban đầu
           setGrantViewer(null);
+          setGrantTargetKeys([]);
+          setGrantNote("");
+          setGrantSaving(false);
+
+          // Lưu ý: Nếu bạn có dùng search input bên trong các Select
+          // thì destroyOnClose bên dưới sẽ tự lo phần đó.
         }}
         onOk={handleGrant}
         width={900}
         confirmLoading={grantSaving}
         okText="Xác nhận cấp quyền"
+        // Thuộc tính này cực kỳ quan trọng để clear các input search tạm thời của Antd
         destroyOnClose
       >
         <div className="space-y-6 py-2">
