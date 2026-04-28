@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Avatar,
   Badge,
@@ -18,9 +18,10 @@ import {
   Switch,
   Table,
   Tag,
-  Tooltip,
-  Transfer,
+  Divider,
   Typography,
+  Transfer,
+  Tooltip,
 } from "antd";
 import {
   DeleteOutlined,
@@ -30,11 +31,14 @@ import {
   SearchOutlined,
   UnlockOutlined,
   UserOutlined,
+  FilterOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
-const { Option } = Select;
+const { Option, OptGroup } = Select;
 
+// --- Interfaces ---
 interface EmpInfo {
   id: number;
   employeeCode: string;
@@ -80,26 +84,53 @@ export default function SalaryPermissionsPage() {
   // Modal xem chi tiết viewer
   const [detailViewer, setDetailViewer] = useState<ViewerGroup | null>(null);
 
+  // --- Logic xử lý dữ liệu nhân viên ---
+  const employeesByDept = useMemo(() => {
+    const groups: Record<string, EmpInfo[]> = {};
+    allEmployees.forEach((emp) => {
+      const dept = emp.department || "Phòng ban khác";
+      if (!groups[dept]) groups[dept] = [];
+      groups[dept].push(emp);
+    });
+    return groups;
+  }, [allEmployees]);
+
+  const departments = useMemo(
+    () => Object.keys(employeesByDept).sort(),
+    [employeesByDept],
+  );
+
+  const transferSource = useMemo(() => {
+    return allEmployees
+      .filter((e) => e.id !== grantViewer)
+      .map((e) => ({
+        key: String(e.id),
+        title: e.name,
+        code: e.employeeCode,
+        position: e.position ?? "Nhân viên",
+        dept: e.department ?? "N/A",
+      }));
+  }, [allEmployees, grantViewer]);
+
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const [permRes, empRes] = await Promise.all([
         fetch("/api/salary/permissions"),
-        fetch("/api/salary/permissions?viewerId=0"), // chỉ cần allEmployees — dùng endpoint khác nếu có
+        fetch("/api/employees/allStaff"), // Giả định endpoint lấy toàn bộ NV của bạn
       ]);
 
-      if (!permRes.ok) throw new Error();
-      const json: AllData = await permRes.json();
-      setData(json);
+      if (permRes.ok) {
+        const json: AllData = await permRes.json();
+        setData(json);
+      }
 
-      // Lấy tất cả employee để dùng cho Transfer và Select
-      // (Dùng API employees nội bộ của bạn — thay bằng endpoint thực tế)
-      const empJson = await fetch("/api/employees/allStaff").then((r) =>
-        r.ok ? r.json() : { data: [] },
-      );
-      setAllEmployees(empJson.data || []);
+      if (empRes.ok) {
+        const empJson = await empRes.json();
+        setAllEmployees(empJson.data || []);
+      }
     } catch {
-      message.error("Không thể tải dữ liệu");
+      message.error("Không thể tải dữ liệu hệ thống");
     } finally {
       setLoading(false);
     }
@@ -109,10 +140,21 @@ export default function SalaryPermissionsPage() {
     fetchData();
   }, [fetchData]);
 
-  // ── Cấp quyền ──────────────────────────────────────────────────────────
+  // --- Actions ---
+  const handleSelectDept = (deptName: string) => {
+    const deptEmpKeys = (employeesByDept[deptName] || [])
+      .filter((e) => e.id !== grantViewer)
+      .map((e) => String(e.id));
+    const newKeys = Array.from(new Set([...grantTargetKeys, ...deptEmpKeys]));
+    setGrantTargetKeys(newKeys);
+    message.success(`Đã thêm nhân viên ${deptName}`);
+  };
+
   const handleGrant = async () => {
     if (!grantViewer || grantTargetKeys.length === 0) {
-      message.warning("Chọn người xem và ít nhất 1 nhân viên");
+      message.warning(
+        "Vui lòng chọn người xem và ít nhất 1 nhân viên mục tiêu",
+      );
       return;
     }
     setGrantSaving(true);
@@ -128,11 +170,8 @@ export default function SalaryPermissionsPage() {
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.message);
-      message.success(json.message);
+      message.success("Cấp quyền thành công");
       setGrantModal(false);
-      setGrantViewer(null);
-      setGrantTargetKeys([]);
-      setGrantNote("");
       await fetchData();
     } catch (e: any) {
       message.error(e.message || "Lỗi cấp quyền");
@@ -141,7 +180,6 @@ export default function SalaryPermissionsPage() {
     }
   };
 
-  // ── Toggle active ────────────────────────────────────────────────────────
   const handleToggle = async (permissionId: number, isActive: boolean) => {
     try {
       const res = await fetch("/api/salary/permissions", {
@@ -157,7 +195,6 @@ export default function SalaryPermissionsPage() {
     }
   };
 
-  // ── Xóa quyền ────────────────────────────────────────────────────────────
   const handleDelete = async (permissionIds: number[]) => {
     try {
       const res = await fetch("/api/salary/permissions", {
@@ -181,43 +218,35 @@ export default function SalaryPermissionsPage() {
       }
       await fetchData();
     } catch {
-      message.error("Thao tác thất bại");
+      message.error("Xóa quyền thất bại");
     }
   };
 
-  // ── Transfer datasource ─────────────────────────────────────────────────
-  const transferSource = allEmployees
-    .filter((e) => e.id !== grantViewer)
-    .map((e) => ({
-      key: String(e.id),
-      title: `${e.employeeCode} – ${e.name}`,
-      description: `${e.department ?? ""} | ${e.position ?? ""}`,
-    }));
-
-  const filtered = (data?.viewers ?? []).filter(
+  const filteredViewers = (data?.viewers ?? []).filter(
     (v) =>
       !search ||
       v.viewer.name.toLowerCase().includes(search.toLowerCase()) ||
       v.viewer.employeeCode.toLowerCase().includes(search.toLowerCase()),
   );
 
-  // ── Columns ──────────────────────────────────────────────────────────────
-  const columns = [
+  // --- Table Columns ---
+  const mainColumns = [
     {
       title: "Người được cấp quyền",
       key: "viewer",
-      width: 240,
+      width: 300,
       render: (_: any, r: ViewerGroup) => (
         <Space>
-          <Avatar
-            size="small"
-            icon={<UserOutlined />}
-            style={{ background: "#1677ff" }}
-          />
+          <Avatar icon={<UserOutlined />} className="bg-indigo-600" />
           <div>
-            <div className="font-semibold text-sm">{r.viewer.name}</div>
-            <Text type="secondary" className="text-xs">
-              {r.viewer.employeeCode} · {r.viewer.department ?? "—"}
+            <div className="font-semibold text-sm">
+              {r.viewer.name}{" "}
+              <Text type="secondary" className="font-normal">
+                ({r.viewer.position || "N/A"})
+              </Text>
+            </div>
+            <Text type="secondary" style={{ fontSize: 11 }}>
+              {r.viewer.employeeCode} · {r.viewer.department || "—"}
             </Text>
           </div>
         </Space>
@@ -225,47 +254,37 @@ export default function SalaryPermissionsPage() {
     },
     {
       title: "Role",
+      dataIndex: ["viewer", "role"],
       key: "role",
       width: 100,
-      render: (_: any, r: ViewerGroup) => {
-        const color: Record<string, string> = {
-          ADMIN: "red",
-          MANAGER: "blue",
-          USER: "default",
-        };
-        return (
-          <Tag color={color[r.viewer.role] ?? "default"}>{r.viewer.role}</Tag>
-        );
-      },
+      render: (role: string) => (
+        <Tag
+          color={
+            role === "ADMIN" ? "red" : role === "MANAGER" ? "blue" : "default"
+          }
+        >
+          {role}
+        </Tag>
+      ),
     },
     {
       title: "Được xem lương của",
       key: "targets",
       render: (_: any, r: ViewerGroup) => {
         const active = r.targets.filter((t) => t.isActive);
-        const inactive = r.targets.filter((t) => !t.isActive);
         return (
           <div className="flex flex-wrap gap-1">
-            {active.slice(0, 4).map((t) => (
+            {active.slice(0, 3).map((t) => (
               <Tag key={t.permissionId} color="green" className="text-xs">
-                {t.target.name}
+                {t.target.name} ({t.target.position})
               </Tag>
             ))}
-            {inactive.slice(0, 2).map((t) => (
-              <Tag
-                key={t.permissionId}
-                color="default"
-                className="text-xs line-through opacity-50"
-              >
-                {t.target.name}
-              </Tag>
-            ))}
-            {r.targets.length > 6 && (
-              <Tag color="processing">+{r.targets.length - 6} khác</Tag>
+            {active.length > 3 && (
+              <Tag color="processing">+{active.length - 3} khác</Tag>
             )}
-            {r.targets.length === 0 && (
-              <Text type="secondary" className="text-xs italic">
-                Chưa có quyền nào
+            {active.length === 0 && (
+              <Text type="secondary" className="italic text-xs">
+                Chưa có quyền
               </Text>
             )}
           </div>
@@ -273,245 +292,261 @@ export default function SalaryPermissionsPage() {
       },
     },
     {
-      title: "Đang hoạt động",
-      key: "activeCount",
-      width: 120,
+      title: "Hoạt động",
+      key: "active",
+      width: 100,
+      align: "center" as const,
       render: (_: any, r: ViewerGroup) => (
-        <Badge
-          count={r.activeCount}
-          showZero
-          color={r.activeCount > 0 ? "#52c41a" : "#d9d9d9"}
-        />
+        <Badge count={r.activeCount} showZero color="#52c41a" />
       ),
     },
     {
       title: "Thao tác",
       key: "action",
-      width: 120,
+      width: 110,
       render: (_: any, r: ViewerGroup) => (
         <Space>
-          <Tooltip title="Xem & quản lý chi tiết">
-            <Button
-              size="small"
-              icon={<EyeOutlined />}
-              onClick={() => setDetailViewer(r)}
-            />
-          </Tooltip>
-          <Tooltip title="Cấp thêm quyền cho người này">
-            <Button
-              size="small"
-              type="primary"
-              ghost
-              icon={<PlusOutlined />}
-              onClick={() => {
-                setGrantViewer(r.viewer.id);
-                const existing = r.targets
-                  .filter((t) => t.isActive)
-                  .map((t) => String(t.target.id));
-                setGrantTargetKeys(existing);
-                setGrantModal(true);
-              }}
-            />
-          </Tooltip>
+          <Button
+            size="small"
+            icon={<EyeOutlined />}
+            onClick={() => setDetailViewer(r)}
+          />
+          <Button
+            size="small"
+            type="primary"
+            ghost
+            icon={<PlusOutlined />}
+            onClick={() => {
+              setGrantViewer(r.viewer.id);
+              setGrantModal(true);
+            }}
+          />
         </Space>
       ),
     },
   ];
 
-  // ── Render ─────────────────────────────────────────────────────────────
   return (
     <div className="p-6 min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center">
-              <LockOutlined className="text-white text-lg" />
+        <div className="flex justify-between items-center mb-6">
+          <Space size="middle">
+            <div className="p-2 bg-indigo-600 rounded-lg">
+              <LockOutlined className="text-white text-xl" />
             </div>
             <div>
-              <Title level={4} className="!mb-0">
+              <Title level={4} style={{ margin: 0 }}>
                 Phân quyền Xem Lương
               </Title>
-              <Text type="secondary" className="text-sm">
-                Cấp quyền độc lập với role — bất kỳ nhân viên nào cũng có thể
-                được cấp quyền xem lương người khác
+              <Text type="secondary">
+                Quản lý quyền truy cập dữ liệu lương độc lập theo từng cá nhân
               </Text>
             </div>
-          </div>
+          </Space>
           <Button
             type="primary"
+            size="large"
             icon={<PlusOutlined />}
-            onClick={() => {
-              setGrantViewer(null);
-              setGrantTargetKeys([]);
-              setGrantNote("");
-              setGrantModal(true);
-            }}
+            onClick={() => setGrantModal(true)}
           >
             Cấp quyền mới
           </Button>
         </div>
 
-        {/* Stats */}
-        {data && (
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            <Card size="small" className="border-indigo-100 text-center">
-              <div className="text-2xl font-bold text-indigo-600">
-                {data.viewers.length}
-              </div>
-              <div className="text-xs text-gray-400 mt-1">
-                Người có quyền xem
-              </div>
-            </Card>
-            <Card size="small" className="border-green-100 text-center">
-              <div className="text-2xl font-bold text-green-600">
-                {data.viewers.reduce((s, v) => s + v.activeCount, 0)}
-              </div>
-              <div className="text-xs text-gray-400 mt-1">
-                Quyền đang hoạt động
-              </div>
-            </Card>
-            <Card size="small" className="border-gray-100 text-center">
-              <div className="text-2xl font-bold text-gray-500">
-                {data.total}
-              </div>
-              <div className="text-xs text-gray-400 mt-1">
-                Tổng số quyền (kể cả tắt)
-              </div>
-            </Card>
-          </div>
-        )}
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <Card size="small" bordered={false} className="shadow-sm">
+            <Text type="secondary" className="text-xs uppercase font-bold">
+              Người có quyền
+            </Text>
+            <div className="text-2xl font-bold text-indigo-600">
+              {data?.viewers.length || 0}
+            </div>
+          </Card>
+          <Card size="small" bordered={false} className="shadow-sm">
+            <Text type="secondary" className="text-xs uppercase font-bold">
+              Quyền đang bật
+            </Text>
+            <div className="text-2xl font-bold text-green-600">
+              {data?.viewers.reduce((a, b) => a + b.activeCount, 0) || 0}
+            </div>
+          </Card>
+          <Card size="small" bordered={false} className="shadow-sm">
+            <Text type="secondary" className="text-xs uppercase font-bold">
+              Tổng số bản ghi
+            </Text>
+            <div className="text-2xl font-bold text-gray-400">
+              {data?.total || 0}
+            </div>
+          </Card>
+        </div>
 
         {/* Search */}
-        <div className="mb-4">
+        <div className="mb-4 flex justify-between">
           <Input
-            placeholder="Tìm người được cấp quyền..."
+            placeholder="Tìm theo tên hoặc mã nhân viên..."
             prefix={<SearchOutlined />}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            className="w-80 shadow-sm"
             allowClear
-            className="w-72"
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
 
-        {/* Table */}
-        <Card className="shadow-sm">
-          <Spin spinning={loading}>
-            <Table
-              dataSource={filtered}
-              columns={columns}
-              rowKey={(r) => r.viewer.id}
-              size="middle"
-              pagination={{ pageSize: 10, showTotal: (t) => `Tổng ${t} người` }}
-            />
-          </Spin>
+        {/* Main Table */}
+        <Card bodyStyle={{ padding: 0 }} className="shadow-sm overflow-hidden">
+          <Table
+            dataSource={filteredViewers}
+            columns={mainColumns}
+            rowKey={(r) => r.viewer.id}
+            loading={loading}
+            pagination={{ pageSize: 10 }}
+          />
         </Card>
       </div>
 
-      {/* Modal: Cấp quyền */}
+      {/* Modal: Grant Permissions */}
       <Modal
-        title={
-          <>
-            <PlusOutlined className="mr-2 text-indigo-500" />
-            Cấp quyền xem lương
-          </>
-        }
+        title={<b>CẤP QUYỀN XEM LƯƠNG</b>}
         open={grantModal}
-        onCancel={() => setGrantModal(false)}
+        onCancel={() => {
+          setGrantModal(false);
+          setGrantTargetKeys([]);
+          setGrantViewer(null);
+        }}
         onOk={handleGrant}
-        okText="Cấp quyền"
-        cancelText="Hủy"
+        width={900}
         confirmLoading={grantSaving}
-        width={800}
+        okText="Xác nhận cấp quyền"
         destroyOnClose
       >
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">
-            Người được cấp quyền xem
-          </label>
-          <Select
-            showSearch
-            className="w-full"
-            placeholder="Chọn nhân viên..."
-            optionFilterProp="label"
-            value={grantViewer}
-            onChange={setGrantViewer}
-          >
-            {allEmployees.map((e) => (
-              <Option
-                key={e.id}
-                value={e.id}
-                label={`${e.employeeCode} ${e.name}`}
-              >
-                <span className="font-medium">{e.name}</span>
-                <Text type="secondary" className="text-xs ml-2">
-                  {e.employeeCode} · {e.department} · <Tag>{e.role}</Tag>
-                </Text>
-              </Option>
-            ))}
-          </Select>
-          <Text type="secondary" className="text-xs mt-1 block">
-            Không giới hạn role — USER, MANAGER hay ADMIN đều có thể được cấp
-            quyền.
-          </Text>
-        </div>
+        <div className="space-y-6 py-2">
+          {/* Người xem */}
+          <section>
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-2">
+              1. Người được cấp quyền
+            </label>
+            <Select
+              showSearch
+              className="w-full"
+              size="large"
+              placeholder="Tìm nhân viên (tên, mã, chức vụ...)"
+              value={grantViewer}
+              onChange={setGrantViewer}
+              // Thay đổi ở đây:
+              filterOption={(input, option) => {
+                // Tìm kiếm trong thuộc tính 'label' của Option
+                const label = (option?.label ?? "").toString().toLowerCase();
+                return label.includes(input.toLowerCase());
+              }}
+            >
+              {Object.entries(employeesByDept).map(([dept, emps]) => (
+                <OptGroup label={dept} key={dept}>
+                  {emps.map((e) => (
+                    <Option
+                      key={e.id}
+                      value={e.id}
+                      // Thêm thuộc tính label chứa text thuần để search
+                      label={`${e.name} ${e.employeeCode} ${e.position} ${dept}`}
+                    >
+                      <Space
+                        style={{
+                          width: "100%",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <span>
+                          <b>{e.name}</b>{" "}
+                          <Text type="secondary">({e.position})</Text>
+                        </span>
+                        <Tag style={{ margin: 0 }}>{e.employeeCode}</Tag>
+                      </Space>
+                    </Option>
+                  ))}
+                </OptGroup>
+              ))}
+            </Select>
+          </section>
 
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">
-            Được phép xem lương của ai
-          </label>
-          <Transfer
-            dataSource={transferSource}
-            titles={["Tất cả nhân viên", "Được xem lương"]}
-            targetKeys={grantTargetKeys}
-            onChange={(keys) => setGrantTargetKeys(keys as string[])}
-            render={(item) => (
-              <span>
-                <span className="font-medium text-xs">{item.title}</span>
-                <span className="text-gray-400 text-xs ml-2">
-                  {item.description}
-                </span>
-              </span>
-            )}
-            listStyle={{ width: 320, height: 360 }}
-            showSearch
-            filterOption={(input, item) =>
-              (item.title ?? "").toLowerCase().includes(input.toLowerCase()) ||
-              (item.description ?? "")
-                .toLowerCase()
-                .includes(input.toLowerCase())
-            }
-          />
-        </div>
+          {/* Đối tượng xem */}
+          <section>
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-xs font-bold text-gray-500 uppercase">
+                2. Phạm vi được xem lương
+              </label>
+              <Space>
+                <FilterOutlined className="text-gray-400" />
+                <Select
+                  placeholder="Chọn nhanh theo phòng ban"
+                  style={{ width: 250 }}
+                  size="small"
+                  onChange={handleSelectDept}
+                >
+                  {departments.map((d) => (
+                    <Option key={d} value={d}>
+                      {d}
+                    </Option>
+                  ))}
+                </Select>
+              </Space>
+            </div>
+            <Transfer
+              dataSource={transferSource}
+              titles={["Nhân viên hệ thống", "Đã chọn"]}
+              targetKeys={grantTargetKeys}
+              onChange={(keys) => setGrantTargetKeys(keys as string[])}
+              showSearch
+              listStyle={{ width: "100%", height: 350 }}
+              render={(item: any) => (
+                <div className="flex flex-col line-tight py-1">
+                  <span className="font-medium text-sm">
+                    {item.title}{" "}
+                    <Text type="secondary" style={{ fontSize: 11 }}>
+                      ({item.position})
+                    </Text>
+                  </span>
+                  <span className="text-gray-400" style={{ fontSize: 10 }}>
+                    {item.code} · {item.dept}
+                  </span>
+                </div>
+              )}
+              filterOption={(input, item) =>
+                item.title.toLowerCase().includes(input.toLowerCase()) ||
+                item.code.toLowerCase().includes(input.toLowerCase()) ||
+                item.dept.toLowerCase().includes(input.toLowerCase())
+              }
+            />
+          </section>
 
-        <div>
-          <label className="block text-sm font-medium mb-1">
-            Ghi chú (tuỳ chọn)
-          </label>
-          <Input
-            placeholder="VD: Trưởng phòng kế toán phụ trách tổ 3"
-            value={grantNote}
-            onChange={(e) => setGrantNote(e.target.value)}
-            maxLength={200}
-          />
+          {/* Ghi chú */}
+          <section>
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-2">
+              3. Ghi chú
+            </label>
+            <Input
+              placeholder="VD: Quản lý xem lương tổ kỹ thuật..."
+              value={grantNote}
+              onChange={(e) => setGrantNote(e.target.value)}
+            />
+          </section>
         </div>
       </Modal>
 
-      {/* Modal: Chi tiết quyền của 1 viewer */}
+      {/* Modal: Detail Table */}
       <Modal
         title={
           <Space>
-            <EyeOutlined className="text-indigo-500" />
+            <TeamOutlined className="text-indigo-600" />
             <span>
-              Quyền của: <strong>{detailViewer?.viewer.name}</strong>
+              Chi tiết quyền: <b>{detailViewer?.viewer.name}</b>
             </span>
-            <Tag>{detailViewer?.viewer.role}</Tag>
+            <Tag color="blue">{detailViewer?.viewer.position}</Tag>
           </Space>
         }
         open={!!detailViewer}
         onCancel={() => setDetailViewer(null)}
         footer={null}
-        width={700}
+        width={800}
       >
         {detailViewer && (
           <Table
@@ -522,15 +557,20 @@ export default function SalaryPermissionsPage() {
             scroll={{ y: 400 }}
             columns={[
               {
-                title: "Nhân viên được xem",
+                title: "Nhân viên",
                 key: "target",
                 render: (_: any, t: TargetEntry) => (
                   <Space>
                     <Avatar size="small" icon={<UserOutlined />} />
                     <div>
-                      <div className="text-sm font-medium">{t.target.name}</div>
-                      <Text type="secondary" className="text-xs">
-                        {t.target.employeeCode} · {t.target.department ?? "—"}
+                      <div className="text-sm font-medium">
+                        {t.target.name}{" "}
+                        <Text type="secondary" className="font-normal">
+                          ({t.target.position})
+                        </Text>
+                      </div>
+                      <Text type="secondary" style={{ fontSize: 10 }}>
+                        {t.target.employeeCode}
                       </Text>
                     </div>
                   </Space>
@@ -538,50 +578,36 @@ export default function SalaryPermissionsPage() {
               },
               {
                 title: "Trạng thái",
-                key: "isActive",
-                width: 110,
+                key: "status",
+                width: 100,
                 render: (_: any, t: TargetEntry) => (
                   <Switch
                     size="small"
                     checked={t.isActive}
-                    checkedChildren={<UnlockOutlined />}
-                    unCheckedChildren={<LockOutlined />}
-                    onChange={(v) => handleToggle(t.permissionId, v)}
+                    onChange={(val) => handleToggle(t.permissionId, val)}
                   />
                 ),
               },
               {
-                title: "Cấp bởi",
-                key: "grantedBy",
-                width: 140,
-                render: (_: any, t: TargetEntry) => (
-                  <Text className="text-xs">{t.grantedBy.name}</Text>
-                ),
+                title: "Người cấp",
+                dataIndex: ["grantedBy", "name"],
+                width: 150,
               },
               {
-                title: "Ghi chú",
-                dataIndex: "note",
-                key: "note",
-                render: (v: string) => (
-                  <Text type="secondary" className="text-xs">
-                    {v ?? "—"}
-                  </Text>
-                ),
-              },
-              {
-                title: "",
+                title: "Thao tác",
                 key: "del",
-                width: 50,
+                width: 60,
                 render: (_: any, t: TargetEntry) => (
                   <Popconfirm
                     title="Xóa quyền này?"
-                    description="Không thể hoàn tác. Cân nhắc dùng tắt tạm thay thế."
                     onConfirm={() => handleDelete([t.permissionId])}
-                    okText="Xóa"
-                    cancelText="Hủy"
-                    okButtonProps={{ danger: true }}
                   >
-                    <Button size="small" danger icon={<DeleteOutlined />} />
+                    <Button
+                      type="text"
+                      danger
+                      icon={<DeleteOutlined />}
+                      size="small"
+                    />
                   </Popconfirm>
                 ),
               },

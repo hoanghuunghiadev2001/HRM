@@ -20,8 +20,7 @@ export async function GET(req: NextRequest) {
       id: number;
     };
 
-    // 3. Phân quyền (Nếu bạn muốn chỉ ADMIN và MANAGER mới được xem danh sách)
-    // Nếu muốn mọi user đều xem được thì có thể bỏ qua check role này
+    // 3. Phân quyền: Thường trang phân quyền này chỉ dành cho ADMIN hoặc HR/MANAGER
     if (decoded.role !== "ADMIN" && decoded.role !== "MANAGER") {
       return NextResponse.json(
         { message: "Không có quyền truy cập" },
@@ -29,7 +28,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 4. Truy vấn danh sách nhân viên đang active
+    // 4. Truy vấn danh sách nhân viên
     const employees = await prisma.employee.findMany({
       where: {
         isActive: true,
@@ -38,16 +37,14 @@ export async function GET(req: NextRequest) {
         id: true,
         employeeCode: true,
         name: true,
-        gender: true,
         role: true,
         avatar: true,
-        // Lấy thêm thông tin phòng ban và chức vụ từ bảng WorkInfo
+        // Lấy thông tin phòng ban và chức vụ
         workInfo: {
           select: {
             department: {
               select: {
                 name: true,
-                abbreviation: true,
               },
             },
             position: {
@@ -57,28 +54,32 @@ export async function GET(req: NextRequest) {
             },
           },
         },
-        // Lấy thông tin liên hệ nếu cần
-        contactInfo: {
-          select: {
-            phoneNumber: true,
-            email: true,
-          },
-        },
       },
       orderBy: {
-        employeeCode: "asc", // Sắp xếp theo mã nhân viên
+        name: "asc", // Sắp xếp theo tên để dễ tìm trong Select/Transfer
       },
     });
 
+    // 5. Làm phẳng dữ liệu (Flatten) để khớp với Interface EmpInfo ở Frontend
+    // Biến đổi từ { workInfo: { department: { name: '...' } } } thành { department: '...' }
+    const formattedEmployees = employees.map((emp) => ({
+      id: emp.id,
+      employeeCode: emp.employeeCode,
+      name: emp.name,
+      role: emp.role,
+      avatar: emp.avatar,
+      department: emp.workInfo?.department?.name || "Chưa xác định",
+      position: emp.workInfo?.position?.name || "Nhân viên",
+    }));
+
     return NextResponse.json({
       success: true,
-      count: employees.length,
-      data: employees,
+      count: formattedEmployees.length,
+      data: formattedEmployees,
     });
   } catch (error: any) {
     console.error("Fetch Employees Error:", error);
 
-    // Xử lý lỗi Token hết hạn hoặc không hợp lệ
     if (
       error.name === "JsonWebTokenError" ||
       error.name === "TokenExpiredError"
@@ -90,7 +91,7 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json(
-      { success: false, error: error.message },
+      { success: false, error: "Lỗi hệ thống khi lấy danh sách nhân viên" },
       { status: 500 },
     );
   }
