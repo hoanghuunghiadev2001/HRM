@@ -190,7 +190,8 @@ export default function MyProposalsPolished() {
   };
 
   const handleViewDetail = (proposalId: number) => {
-    router.push(`/dashboard/proposal/my-proposals/${proposalId}`);
+    const url = `/dashboard/proposal/my-proposals/${proposalId}`;
+    window.open(url, "_blank", "noopener,noreferrer");
   };
   const onChangeSelectDepartment = (newValue: string) => {
     setDepartment(newValue);
@@ -309,6 +310,8 @@ export default function MyProposalsPolished() {
               icon={<EyeOutlined />}
               size="small"
               onClick={() => handleViewDetail(record.id)}
+              target="_blank"
+              rel="noopener noreferrer" // Bảo mật khi mở tab mới
             >
               Xem
             </Button>
@@ -364,6 +367,8 @@ export default function MyProposalsPolished() {
           icon={<EyeOutlined />}
           size="small"
           onClick={() => handleViewDetail(record.id)}
+          target="_blank"
+          rel="noopener noreferrer" // Bảo mật khi mở tab mới
         >
           Xem
         </Button>
