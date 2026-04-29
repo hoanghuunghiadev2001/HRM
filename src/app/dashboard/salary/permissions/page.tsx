@@ -44,8 +44,8 @@ interface EmpInfo {
   employeeCode: string;
   name: string;
   role: string;
-  department?: string | null;
-  position?: string | null;
+  department: string | null;
+  position: string | null;
 }
 
 interface TargetEntry {
@@ -53,7 +53,13 @@ interface TargetEntry {
   isActive: boolean;
   note?: string | null;
   createdAt: string;
-  grantedBy: { id: number; name: string; employeeCode: string };
+  grantedBy: {
+    id: number;
+    name: string;
+    employeeCode: string;
+    department: string | null;
+    position: string | null;
+  };
   target: EmpInfo;
 }
 
@@ -123,6 +129,7 @@ export default function SalaryPermissionsPage() {
       if (permRes.ok) {
         const json: AllData = await permRes.json();
         setData(json);
+        console.log(json);
       }
 
       if (empRes.ok) {
@@ -241,22 +248,26 @@ export default function SalaryPermissionsPage() {
       title: "Người được cấp quyền",
       key: "viewer",
       width: 300,
-      render: (_: any, r: ViewerGroup) => (
-        <Space>
-          <Avatar icon={<UserOutlined />} className="bg-indigo-600" />
-          <div>
-            <div className="font-semibold text-sm">
-              {r.viewer.name}{" "}
-              <Text type="secondary" className="font-normal">
-                ({r.viewer.position || "N/A"})
+      render: (_: any, r: ViewerGroup) => {
+        console.log(r);
+
+        return (
+          <Space>
+            <Avatar icon={<UserOutlined />} className="bg-indigo-600" />
+            <div>
+              <div className="font-semibold text-sm">
+                {r.viewer.name}{" "}
+                <Text type="secondary" className="font-normal">
+                  ({r.viewer.position || "N/A"})
+                </Text>
+              </div>
+              <Text type="secondary" style={{ fontSize: 11 }}>
+                {r.viewer.employeeCode} · {r.viewer.department || "—"}
               </Text>
             </div>
-            <Text type="secondary" style={{ fontSize: 11 }}>
-              {r.viewer.employeeCode} · {r.viewer.department || "—"}
-            </Text>
-          </div>
-        </Space>
-      ),
+          </Space>
+        );
+      },
     },
     {
       title: "Role",
@@ -277,6 +288,8 @@ export default function SalaryPermissionsPage() {
       title: "Được xem lương của",
       key: "targets",
       render: (_: any, r: ViewerGroup) => {
+        console.log(r);
+
         const active = r.targets.filter((t) => t.isActive);
         return (
           <div className="flex flex-wrap gap-1">

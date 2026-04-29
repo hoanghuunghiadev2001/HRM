@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import "server-only";
@@ -7,17 +8,20 @@ import { Prisma } from "../../../../generated/prisma";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import jwt from "jsonwebtoken";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault("Asia/Ho_Chi_Minh");
+
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 // ⚙️ Hàm chuyển đổi ngày tìm kiếm theo múi giờ VN → UTC tương ứng
 function getUtcRange(dateStr?: string, endOfDay = false): Date | undefined {
   if (!dateStr) return undefined;
   const d = dayjs.tz(
     `${dateStr} ${endOfDay ? "23:59:59" : "00:00:00"}`,
-    "Asia/Ho_Chi_Minh"
+    "Asia/Ho_Chi_Minh",
   );
   return d.utc().toDate();
 }
@@ -25,14 +29,34 @@ function getUtcRange(dateStr?: string, endOfDay = false): Date | undefined {
 function calcHours(checkIn: Date | null, checkOut: Date | null): number {
   if (!checkIn || !checkOut) return 0;
   return +((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60)).toFixed(
-    2
+    2,
   );
 }
 
 export async function GET(req: NextRequest) {
   try {
+    // --- 🛡️ BƯỚC 1: XÁC THỰC TOKEN ---
+    const token = req.cookies.get("token-hrm")?.value;
+    if (!token) {
+      return NextResponse.json(
+        { message: "Không tìm thấy token" },
+        { status: 401 },
+      );
+    }
+
+    let decoded: { id: number; role: string };
+    try {
+      decoded = jwt.verify(token, JWT_SECRET) as any;
+    } catch (err) {
+      return NextResponse.json(
+        { message: "Token không hợp lệ" },
+        { status: 401 },
+      );
+    }
+
     const { searchParams } = new URL(req.url);
 
+    // Các tham số lọc từ URL
     const msnv = searchParams.get("msnv") ?? undefined;
     const name = searchParams.get("name") ?? undefined;
     const department = searchParams.get("department") ?? undefined;
@@ -45,18 +69,27 @@ export async function GET(req: NextRequest) {
     const fromUtc = fromDate ? getUtcRange(fromDate, false) : undefined;
     const toUtc = toDate ? getUtcRange(toDate, true) : undefined;
 
-    // 1️⃣ Lấy danh sách nhân viên theo bộ lọc
+    // --- 🛡️ BƯỚC 2: THIẾT LẬP WHERE CLAUSE THEO ROLE ---
     const employeeWhere: Prisma.EmployeeWhereInput = {};
-    if (msnv) employeeWhere.employeeCode = { contains: msnv };
-    if (name) employeeWhere.name = { contains: name };
-    if (department) {
-      const [deptId, posId] = department.split("-").map(Number);
-      employeeWhere.workInfo = {
-        ...(deptId ? { departmentId: deptId } : {}),
-        ...(posId ? { positionId: posId } : {}),
-      };
+
+    if (decoded.role === "ADMIN") {
+      // Admin: Được phép lọc theo bất kỳ ai qua URL
+      if (msnv) employeeWhere.employeeCode = { contains: msnv };
+      if (name) employeeWhere.name = { contains: name };
+      if (department) {
+        const [deptId, posId] = department.split("-").map(Number);
+        employeeWhere.workInfo = {
+          ...(deptId ? { departmentId: deptId } : {}),
+          ...(posId ? { positionId: posId } : {}),
+        };
+      }
+    } else {
+      // User thường: BẮT BUỘC chỉ lấy ID của chính họ từ Token
+      // Mọi tham số msnv/name từ URL truyền lên sẽ bị lờ đi để bảo mật
+      employeeWhere.id = decoded.id;
     }
 
+    // 1️⃣ Lấy danh sách nhân viên thỏa mãn điều kiện
     const employees = await prisma.employee.findMany({
       where: employeeWhere,
       select: {
@@ -80,15 +113,16 @@ export async function GET(req: NextRequest) {
     const employeeMap = new Map(employees.map((e) => [e.id, e]));
     const employeeIds = employees.map((e) => e.id);
 
-    // 2️⃣ Lọc Attendance theo employeeId + ngày UTC
+    // 2️⃣ Lọc Attendance theo danh sách ID đã lọc + ngày UTC
     const attendanceWhere: Prisma.AttendanceWhereInput = {
       employeeId: { in: employeeIds },
-      ...(fromUtc && toUtc
-        ? { date: { gte: fromUtc, lte: toUtc } }
-        : fromUtc
-        ? { date: { gte: fromUtc } }
-        : toUtc
-        ? { date: { lte: toUtc } }
+      ...(fromUtc || toUtc
+        ? {
+            date: {
+              ...(fromUtc ? { gte: fromUtc } : {}),
+              ...(toUtc ? { lte: toUtc } : {}),
+            },
+          }
         : {}),
     };
 
@@ -98,25 +132,10 @@ export async function GET(req: NextRequest) {
     });
 
     // 3️⃣ Gom nhóm theo employeeId + ngày (theo giờ VN)
-    const grouped = new Map<
-      string,
-      {
-        employeeId: number;
-        employeeCode: string;
-        avatar?: string | null;
-        employeeName: string;
-        department?: string;
-        position?: string;
-        date: string;
-        firstCheckIn: Date | null;
-        lastCheckOut: Date | null;
-        totalMs: number;
-      }
-    >();
+    const grouped = new Map<string, any>();
 
     attendances.forEach((att) => {
       const emp = employeeMap.get(att.employeeId)!;
-      // Lấy ngày theo giờ VN
       const dateVN = dayjs(att.date)
         .tz("Asia/Ho_Chi_Minh")
         .format("YYYY-MM-DD");
@@ -157,13 +176,7 @@ export async function GET(req: NextRequest) {
 
     // 4️⃣ Kết quả cuối cùng
     const summary = Array.from(grouped.values()).map((g) => ({
-      employeeId: g.employeeId,
-      employeeCode: g.employeeCode,
-      avatar: g.avatar,
-      employeeName: g.employeeName,
-      department: g.department,
-      position: g.position,
-      date: g.date,
+      ...g,
       firstCheckIn: g.firstCheckIn
         ? dayjs(g.firstCheckIn)
             .tz("Asia/Ho_Chi_Minh")
@@ -177,6 +190,7 @@ export async function GET(req: NextRequest) {
       totalHours: calcHours(g.firstCheckIn, g.lastCheckOut),
     }));
 
+    // Phân trang trên kết quả đã gom nhóm
     const total = summary.length;
     const start = (page - 1) * pageSize;
     const pagedSummary = summary.slice(start, start + pageSize);

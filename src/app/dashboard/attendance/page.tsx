@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
-import "../../globals.css";
 
 import React from "react";
 import {
@@ -98,7 +97,7 @@ function getTodayVNDateString() {
 
 export default function AttendancePage() {
   const { role, department, departmentID, name, id } = useAppSelector(
-    (state) => state.user
+    (state) => state.user,
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState(10);
@@ -208,13 +207,13 @@ export default function AttendancePage() {
 
   const handleFetchAttendances = async (
     pageTable: number,
-    pageSize: number
+    pageSize: number,
   ) => {
     setLoading(true);
     const res = await fetchAttendances({
       msnv: filterMSNV,
-      name: role === "USER" ? name ?? "" : filterName,
-      department: role === "ADMIN" ? filterDepartment : departmentID ?? "",
+      name: role === "USER" ? (name ?? "") : filterName,
+      department: role === "ADMIN" ? filterDepartment : (departmentID ?? ""),
       fromDate: timeStart,
       toDate: timeEnd,
       page: pageTable,
@@ -336,7 +335,7 @@ export default function AttendancePage() {
       method: "POST",
       body: JSON.stringify({
         week: todayVN,
-        department: role ? "" : department ?? "",
+        department: role ? "" : (department ?? ""),
       }),
       headers: { "Content-Type": "application/json" },
     });
