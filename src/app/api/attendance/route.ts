@@ -83,13 +83,44 @@ export async function GET(req: NextRequest) {
           ...(posId ? { positionId: posId } : {}),
         };
       }
+    } else if (decoded.role === "MANAGER") {
+      // Manager: Chỉ xem được nhân viên trong phòng ban của họ và LEVEL thấp hơn
+      const managerWorkInfo = await prisma.workInfo.findUnique({
+        where: { employeeId: decoded.id },
+        select: {
+          departmentId: true,
+          position: {
+            select: { level: true },
+          },
+        },
+      });
+
+      // Nếu quản lý không có phòng ban hoặc chức vụ được cấu hình level -> Trả về danh sách trống
+      if (!managerWorkInfo?.departmentId || !managerWorkInfo?.position?.level) {
+        return NextResponse.json({ total: 0, page, pageSize, data: [] });
+      }
+
+      const managerDeptId = managerWorkInfo.departmentId;
+      const managerLevel = managerWorkInfo.position.level;
+
+      // Ép điều kiện lọc theo phòng ban của manager và level thấp hơn (lt: less than)
+      employeeWhere.workInfo = {
+        departmentId: managerDeptId,
+        position: {
+          level: { lt: managerLevel },
+        },
+      };
+
+      // Vẫn hỗ trợ manager tìm kiếm đích danh cấp dưới dựa trên query params từ URL
+      if (msnv) employeeWhere.employeeCode = { contains: msnv };
+      if (name) employeeWhere.name = { contains: name };
     } else {
       // User thường: BẮT BUỘC chỉ lấy ID của chính họ từ Token
       // Mọi tham số msnv/name từ URL truyền lên sẽ bị lờ đi để bảo mật
       employeeWhere.id = decoded.id;
     }
 
-    // 1️⃣ Lấy danh sách nhân viên thỏa mãn điều kiện
+    // 1️⃣ Lấy danh sách nhân viên thỏa mãn điều kiện phân quyền ở trên
     const employees = await prisma.employee.findMany({
       where: employeeWhere,
       select: {
