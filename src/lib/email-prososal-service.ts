@@ -11,7 +11,7 @@ export class EmailService {
         employee.contactInfo?.email || employee.employeeCode
       }@company.com for proposal ${
         proposal.title
-      }. File link: ${fileLink.substring(0, 100)}...`
+      }. File link: ${fileLink.substring(0, 100)}...`,
     );
     const emailData = {
       to: [
@@ -45,7 +45,7 @@ export class EmailService {
                 proposal.proposer.name
               }</p>
               <p style="margin: 0; font-size: 14px; color: #555;"><strong>Ngày tạo:</strong> ${new Date(
-                proposal.createdAt
+                proposal.createdAt,
               ).toLocaleDateString("vi-VN")}</p>
             </div>
             
@@ -91,8 +91,8 @@ export class EmailService {
 </div>
             <div style="text-align: center; margin: 30px 0;">
               <a href="${process.env.detailUrlRequest}/proposal/my-proposals/${
-        proposal.id
-      }" 
+                proposal.id
+              }" 
                 style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                 Xem đề xuất
               </a>
@@ -150,7 +150,7 @@ export class EmailService {
                 proposal.proposer.name
               }</p>
               <p style="margin: 0; font-size: 14px; color: #555;"><strong>Ngày tạo:</strong> ${new Date(
-                proposal.createdAt
+                proposal.createdAt,
               ).toLocaleDateString("vi-VN")}</p>
             </div>
             
@@ -200,8 +200,8 @@ export class EmailService {
 </div>
             <div style="text-align: center; margin: 30px 0;">
               <a href="${process.env.detailUrlRequest}/proposal/my-proposals/${
-        proposal.id
-      }" 
+                proposal.id
+              }" 
                 style="background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                Xem chi tiết 
               </a>
@@ -226,7 +226,7 @@ export class EmailService {
     employee: any,
     proposal: any,
     status: string,
-    reason?: string
+    reason?: string,
   ) {
     const statusConfig = {
       approved: {
@@ -251,7 +251,7 @@ export class EmailService {
     console.log(
       `[EmailService] Sending status update to ${
         employee.contactInfo?.email || employee.employeeCode
-      }@company.com for proposal ${proposal.title}. Status: ${status}`
+      }@company.com for proposal ${proposal.title}. Status: ${status}`,
     );
 
     const emailData = {
@@ -276,14 +276,14 @@ export class EmailService {
           }</strong>,</p>
           
           <div style="background: ${config.bgColor}; border: 1px solid ${
-        config.borderColor
-      }; padding: 15px; border-radius: 5px; margin: 20px 0;">
+            config.borderColor
+          }; padding: 15px; border-radius: 5px; margin: 20px 0;">
             <p style="margin: 0; color: ${
               config.color
             }; font-size: 16px; font-weight: bold;">
               ${config.icon} Đề xuất <strong>${proposal.title}</strong> ${
-        config.text
-      }.
+                config.text
+              }.
             </p>
             ${
               status === "rejected" && reason
@@ -302,14 +302,14 @@ export class EmailService {
               proposal.proposer.name
             }</p>
             <p style="margin: 0; font-size: 14px; color: #555;"><strong>Ngày cập nhật:</strong> ${new Date().toLocaleDateString(
-              "vi-VN"
+              "vi-VN",
             )}</p>
           </div>
           
           <div style="text-align: center; margin: 30px 0;">
             <a href="${process.env.detailUrlRequest}/proposal/my-proposals/${
-        proposal.id
-      }" 
+              proposal.id
+            }" 
               style="background: ${
                 config.color
               }; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
@@ -342,7 +342,7 @@ export class EmailService {
         employee.contactInfo?.email || employee.employeeCode
       }@company.com for proposal ${
         proposal.title
-      }. File link: ${fileLink.substring(0, 100)}...`
+      }. File link: ${fileLink.substring(0, 100)}...`,
     );
     const emailData = {
       to: [
@@ -379,7 +379,7 @@ export class EmailService {
                 proposal.description || "Không có mô tả"
               }</p>
               <p style="margin: 0 0 8px; font-size: 14px; color: #555;"><strong>Ngày tạo:</strong> ${new Date(
-                proposal.createdAt
+                proposal.createdAt,
               ).toLocaleDateString("vi-VN")}</p>
               <p style="margin: 0; font-size: 14px; color: #555;"><strong>Trạng thái:</strong> Đang chờ đồng ý</p>
             </div>
@@ -394,8 +394,8 @@ export class EmailService {
             
             <div style="text-align: center; margin: 30px 0;">
               <a href="${process.env.detailUrlRequest}/proposal/my-proposals/${
-        proposal.id
-      }" 
+                proposal.id
+              }" 
                 style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                 Theo dõi đề xuất
               </a>
@@ -420,7 +420,7 @@ export class EmailService {
     proposer: any,
     proposal: any,
     signer: any,
-    action: string
+    action: string,
   ) {
     const actionConfig = {
       approved: { text: "đã đồng ý", color: "#28a745", icon: "✅" },
@@ -434,7 +434,7 @@ export class EmailService {
         proposer.contactInfo?.email || proposer.employeeCode
       }@company.com for proposal ${proposal.title}. Signer: ${
         signer.name
-      }, Action: ${action}`
+      }, Action: ${action}`,
     );
     const emailData = {
       to: [
@@ -462,15 +462,15 @@ export class EmailService {
                 config.color
               }; font-size: 15px; font-weight: bold;">
                 ${config.icon} <strong>${signer.name}</strong> ${
-        config.text
-      } đề xuất <strong>${proposal.title}</strong>
+                  config.text
+                } đề xuất <strong>${proposal.title}</strong>
               </p>
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
               <a href="${process.env.detailUrlRequest}/proposal/my-proposals/${
-        proposal.id
-      }" 
+                proposal.id
+              }" 
                 style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; font-size: 16px;">
                 Xem chi tiết đề xuất
               </a>
@@ -495,7 +495,7 @@ export class EmailService {
     proposer: any,
     proposal: any,
     signer: any,
-    reason: string
+    reason: string,
   ) {
     const fileLink = proposal.fileUrl
       ? `<p style="margin-top: 15px; font-size: 14px;"><a href="${proposal.fileUrl}" target="_blank" style="color: #dc3545; text-decoration: none; font-weight: bold;"><span style="vertical-align: middle; margin-right: 5px;">📎</span> Xem file đính kèm</a></p>`
@@ -547,8 +547,8 @@ export class EmailService {
           
           <div style="text-align: center; margin: 30px 0;">
             <a href="${process.env.detailUrlRequest}/proposal/my-proposals/${
-        proposal.id
-      }" 
+              proposal.id
+            }" 
               style="background-color: #dc3545; color: white; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 16px;">
               🔍 Xem chi tiết đề xuất
             </a>
@@ -568,5 +568,70 @@ export class EmailService {
     };
 
     return sendEmail(emailData);
+  }
+
+  static async sendVehicleRequest(employee: any, proposal: any) {
+    const isGrab = proposal.proposalType === "VEHICLE_GRAB";
+    const titleText = isGrab
+      ? "Yêu cầu đặt xe dịch vụ (Grab/Taxi)"
+      : "Yêu cầu điều xe nội bộ";
+    const statusColor = isGrab ? "#f59f00" : "#7950f2"; // Màu thương hiệu Grab (vàng) hoặc Tím nội bộ
+
+    const emailData = {
+      to: [employee.contactInfo?.email],
+      subject: `[${titleText}] ${proposal.title}`,
+      html: `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f4f7f6; padding: 20px;">
+          <div style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+            
+            <div style="background-color: ${statusColor}; padding: 25px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: 600;">${titleText}</h1>
+            </div>
+
+            <div style="padding: 30px;">
+              <p style="font-size: 16px; color: #333; margin-bottom: 20px;">Chào <strong>${employee.name}</strong>,</p>
+              <p style="color: #555; line-height: 1.6; margin-bottom: 25px;">Bạn có một yêu cầu mới cần phê duyệt. Vui lòng kiểm tra chi tiết bên dưới:</p>
+
+              <div style="background: #fcfcfc; border: 1px solid #eee; border-left: 4px solid ${statusColor}; padding: 20px; border-radius: 4px;">
+                <h3 style="margin: 0 0 15px; font-size: 16px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 10px;">📋 Thông tin chi tiết</h3>
+                <table style="width: 100%; border-collapse: collapse; font-size: 14px; color: #444;">
+                  ${this.renderRow("Tiêu đề", proposal.title)}
+                  ${this.renderRow("Người đề xuất", proposal.proposer?.name || "---")}
+                  ${this.renderRow("Lộ trình", `<strong>${proposal.pickupPlace || "---"}</strong> ➔ <strong>${proposal.dropoffPlace || "---"}</strong>`)}
+                   ${this.renderRow("Số KM", proposal.vehicleKm || "---")}
+                   ${this.renderRow("Số Tiền", proposal.vehicleAmount || "---")}
+                   ${this.renderRow("Số RO", proposal.roNumber || "---")}
+
+                  ${
+                    isGrab
+                      ? `${this.renderRow("Khách hàng", proposal.customerName || "---")} ${this.renderRow("Mã RO", proposal.roNumber || "---")}`
+                      : `${this.renderRow("Phương tiện", proposal.vehicle?.name || "<em>Đang chờ điều phối</em>")}`
+                  }
+                </table>
+              </div>
+
+              <div style="text-align: center; margin-top: 35px;">
+                <a href="${proposal.approveLink}" style="background-color: #2b8a3e; color: #ffffff; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-right: 10px; display: inline-block;">Phê duyệt</a>
+                <a href="${proposal.rejectLink}" style="background-color: #c92a2a; color: #ffffff; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Từ chối</a>
+              </div>
+            </div>
+
+            <div style="background-color: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #eee;">
+              <a href="${process.env.detailUrlRequest}/proposal/my-proposals/${proposal.id}" style="color: #666; font-size: 13px; text-decoration: underline;">Xem chi tiết yêu cầu</a>
+              <p style="font-size: 11px; color: #aaa; margin-top: 10px;">© ${new Date().getFullYear()} Toyota Bình Dương. Đây là email tự động từ hệ thống HRM.</p>
+            </div>
+          </div>
+        </div>
+      `,
+    };
+    return sendEmail(emailData);
+  }
+
+  // Helper function để tạo dòng bảng đẹp hơn
+  private static renderRow(label: string, value: string) {
+    return `<tr>
+      <td style="padding: 6px 0; color: #888; width: 120px; vertical-align: top;">${label}:</td>
+      <td style="padding: 6px 0; color: #333; font-weight: 500;">${value}</td>
+    </tr>`;
   }
 }

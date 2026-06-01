@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     if (decoded.role !== "ADMIN") {
       return NextResponse.json(
         { message: "Không có quyền truy cập" },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -37,8 +37,6 @@ export async function POST(req: NextRequest) {
 
     if (existing) {
       if (quantity === 0) {
-        console.log("vào hàm xóa nè");
-
         // 🗑️ Nếu số lượng = 0 → XÓA tài sản đã cấp
         await prisma.assetAssignment.delete({
           where: { id: existing.id },
@@ -77,7 +75,7 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

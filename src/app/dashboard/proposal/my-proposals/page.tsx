@@ -138,7 +138,6 @@ export default function MyProposalsPolished() {
         `/api/proposals/my-proposals?${params.toString()}`,
       );
       const data = await response.json();
-      console.log(data);
 
       if (response.ok) {
         setCreatedProposals(data.created || { data: [], total: 0 });
@@ -218,7 +217,7 @@ export default function MyProposalsPolished() {
       const data = await res.json();
       if (res.ok) {
         msg.success(data.message || "Xóa đề xuất thành công");
-        fetchProposals();
+        fetchProposals(page, pageSize);
       } else {
         msg.error(data.error || "Xóa thất bại");
       }
@@ -483,6 +482,7 @@ export default function MyProposalsPolished() {
             >
               <Select.Option value="REGULAR">Đề xuất chung</Select.Option>
               <Select.Option value="VEHICLE">Đề xuất xe</Select.Option>
+              <Select.Option value="VEHICLE_GRAB">Đề xuất đặt xe</Select.Option>
             </Select>
           </Col>
 

@@ -89,7 +89,6 @@ export default function ProposalDetailTailwind() {
   const handleRemind = async () => {
     setRemindLoading(true);
     try {
-      // Gọi đến API nhắc nhở (Giả sử bạn đặt tại /api/proposals/[id]/remind)
       const res = await axios.post(`/api/proposals/${proposalId}/remind`);
 
       if (res.data.success) {
@@ -118,7 +117,6 @@ export default function ProposalDetailTailwind() {
       const vJson = await vRes.json();
       if (pRes.ok) {
         setProposal(pJson);
-        console.log(pJson);
 
         if (pJson.vehicle) setEditVehicleId(pJson.vehicle.id);
         if (pJson.startAt && pJson.endAt)
@@ -449,35 +447,43 @@ export default function ProposalDetailTailwind() {
               </Descriptions.Item>
 
               <Descriptions.Item label="Loại">
-                {proposal.proposalType === "REGULAR"
-                  ? "Đề xuất chung"
-                  : "Đề xuất xe"}
+                {proposal.proposalType === "VEHICLE_GRAB"
+                  ? "Đặt xe dịch vụ (Grab/Taxi)"
+                  : proposal.proposalType === "VEHICLE"
+                    ? "Điều xe nội bộ"
+                    : "Đề xuất chung"}
               </Descriptions.Item>
-              <Descriptions.Item label="Trạng thái">
-                <Tag color={statusCfg.color}>
-                  {statusCfg.icon}{" "}
-                  <span className="ml-2">{statusCfg.text}</span>
-                </Tag>
+
+              {/* Hiển thị chi tiết cho Đặt xe */}
+              {(proposal.proposalType === "VEHICLE_GRAB" ||
+                proposal.proposalType === "VEHICLE") && (
+                <>
+                  <Descriptions.Item label="Lộ trình">
+                    {proposal.pickupPlace || "..."} ➔{" "}
+                    {proposal.dropoffPlace || "..."}
+                  </Descriptions.Item>
+                  {proposal.proposalType === "VEHICLE_GRAB" ? (
+                    <>
+                      <Descriptions.Item label="Khách hàng">
+                        {proposal.customerName || "N/A"}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Mã RO">
+                        {proposal.roNumber || "N/A"}
+                      </Descriptions.Item>
+                    </>
+                  ) : (
+                    <Descriptions.Item label="Xe">
+                      {proposal.vehicle?.name || "Đang chờ điều phối"} (
+                      {proposal.vehicle?.plateNumber || "..."})
+                    </Descriptions.Item>
+                  )}
+                </>
+              )}
+
+              <Descriptions.Item label="Thời gian">
+                {toVietnamTime(proposal.startAt)} →{" "}
+                {toVietnamTime(proposal.endAt)}
               </Descriptions.Item>
-              <Descriptions.Item label="NV đề xuất">
-                {proposal.proposer.name} - {proposal.proposer.employeeCode}
-              </Descriptions.Item>
-              {proposal.vehicle && (
-                <Descriptions.Item label="Xe">
-                  {proposal.vehicle.name} ({proposal.vehicle.plateNumber})
-                </Descriptions.Item>
-              )}
-              {proposal.vehicle && (
-                <Descriptions.Item label="Điểm đến">
-                  {proposal.dropoffPlace}
-                </Descriptions.Item>
-              )}
-              {proposal.startAt && (
-                <Descriptions.Item label="Thời gian">
-                  {toVietnamTime(proposal.startAt)} →{" "}
-                  {toVietnamTime(proposal.endAt)}
-                </Descriptions.Item>
-              )}
             </Descriptions>
           </Card>
 

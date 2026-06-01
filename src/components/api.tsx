@@ -200,11 +200,18 @@ export interface CreateProposalFormData {
   approverIds: number[];
 
   // Các field mới cho proposal loại xe
-  proposalType?: "REGULAR" | "VEHICLE"; // Loại đề xuất
+  proposalType?: "REGULAR" | "VEHICLE" | "VEHICLE_GRAB"; // Loại đề xuất
   vehicleId?: number; // Nếu là đề xuất xe, id của xe
   startAt?: Date | string; // Giờ bắt đầu sử dụng xe
   endAt?: Date | string; // Giờ kết thúc sử dụng xe
   dropoffPlace?: string; // Điểm trả (tùy chọn)
+
+  // Các field mới cho loại xe đưa đón khách
+  customerName?: string; // Tên khách hàng (nếu là xe đưa đón)
+  roNumber?: string; // Số RO hoặc mã yêu cầu dịch vụ
+  vehicleKm?: number; // Số km dự kiến hoặc thực tế
+  vehicleAmount?: number; // Số tiền (cước phí)
+  pickupPlace?: string; // Điểm đón (nếu là xe đưa đón)
 }
 
 export interface ProposalResponse {
@@ -345,7 +352,7 @@ export async function fetchLeaveRequests(
     status: "",
     startDate: "",
     endDate: "",
-  }
+  },
 ) {
   const queryParams = new URLSearchParams();
 
@@ -375,7 +382,7 @@ export async function fetchLeaveRequests(
 }
 
 export async function getApiAllRequestsNeedApprove(
-  filters: LeavePendingFilters
+  filters: LeavePendingFilters,
 ) {
   const queryParams = new URLSearchParams();
 
@@ -385,7 +392,7 @@ export async function getApiAllRequestsNeedApprove(
   if (filters.employeeCode) queryParams.append("userId", filters.employeeCode);
 
   const res = await fetch(
-    `/api/leave/all-requests-need-approve?${queryParams.toString()}`
+    `/api/leave/all-requests-need-approve?${queryParams.toString()}`,
   );
 
   if (!res.ok) {
@@ -426,7 +433,7 @@ export async function fetchEmployeeSummary(
     employeeCode: "",
     page: 1,
     pageSize: undefined,
-  }
+  },
 ) {
   const queryParams = new URLSearchParams();
   if (filters.workStatus)

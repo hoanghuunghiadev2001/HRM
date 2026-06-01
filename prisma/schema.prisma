@@ -12,6 +12,7 @@ datasource db {
 enum ProposalType {
   REGULAR
   VEHICLE
+  VEHICLE_GRAB // Đặt xe Grab
 }
 
 model File {
@@ -279,9 +280,16 @@ model Proposal {
   updatedAt   DateTime       @updatedAt
 
   proposalType ProposalType @default(REGULAR)
+
+  vehicleKm     Float? // Số km dự kiến hoặc thực tế
+  vehicleAmount Float? // Số tiền (cước phí)
+  roNumber      String? // Số RO (Repair Order) hoặc mã yêu cầu dịch vụ
+  customerName  String? // Tên khách hàng (nếu là xe đưa đón khách)
+
   vehicleId    Int?
   startAt      DateTime?
   endAt        DateTime?
+  pickupPlace  String? // Thêm mới: Điểm đón
   dropoffPlace String?
 
   vehicle   Vehicle?           @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
@@ -297,6 +305,7 @@ model Proposal {
   @@index([fileId])
   @@index([proposalType])
   @@index([vehicleId])
+  @@index([roNumber])
 }
 
 model ProposalSigner {

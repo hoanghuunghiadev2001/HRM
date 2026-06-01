@@ -42,6 +42,7 @@ import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import ModalLoading from "@/components/modalLoading";
 import { useAppSelector } from "@/store/hook";
+import { logger } from "@/lib/logger";
 
 const { RangePicker } = DatePicker;
 const { Title, Text } = Typography;
@@ -65,9 +66,9 @@ export default function ProposalCreatorProfessional() {
   const [employees, setEmployees] = useState<any[]>([]);
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [vehicleBookings, setVehicleBookings] = useState<any>({});
-  const [proposalType, setProposalType] = useState<"REGULAR" | "VEHICLE">(
-    "REGULAR",
-  );
+  const [proposalType, setProposalType] = useState<
+    "REGULAR" | "VEHICLE" | "VEHICLE_GRAB"
+  >("REGULAR");
   const [selectedVehicle, setSelectedVehicle] = useState<number | null>(null);
   const [rangeTime, setRangeTime] = useState<any>(null);
   const [managerIds, setManagerIds] = useState<number[]>([]);
@@ -209,6 +210,14 @@ export default function ProposalCreatorProfessional() {
       formData.append("approverIds", JSON.stringify(values.approvers));
       formData.append("proposalType", proposalType);
 
+      if (proposalType === "VEHICLE_GRAB") {
+        formData.append("customerName", values.customerName || "");
+        formData.append("roNumber", values.roNumber || "");
+        formData.append("vehicleKm", String(values.vehicleKm || 0));
+        formData.append("vehicleAmount", String(values.vehicleAmount || 0));
+        formData.append("pickupPlace", values.pickupPlace || "");
+        formData.append("dropoffPlace", values.dropoffPlace || "");
+      }
       if (proposalType === "VEHICLE") {
         formData.append("vehicleId", String(selectedVehicle));
         formData.append("startAt", rangeTime[0].toISOString());
@@ -265,7 +274,7 @@ export default function ProposalCreatorProfessional() {
               Trình Ký Đề Xuất
             </Title>
             <Text type="secondary" className="text-xs hidden sm:block">
-              Toyota Binh Duong System
+              Toyota Binh Duong System 2
             </Text>
           </div>
         </Space>
@@ -325,6 +334,9 @@ export default function ProposalCreatorProfessional() {
                         Văn bản (Đa file)
                       </Select.Option>
                       <Select.Option value="VEHICLE">Sử dụng xe</Select.Option>
+                      <Select.Option value="VEHICLE_GRAB">
+                        Đặt xe GSM
+                      </Select.Option>
                     </Select>
                   </Form.Item>
                 </Col>
@@ -447,7 +459,84 @@ export default function ProposalCreatorProfessional() {
                   </Row>
                 </div>
               )}
-
+              {proposalType === "VEHICLE_GRAB" && (
+                <div className="bg-green-50/50 p-4 rounded-xl border border-green-100 mb-6">
+                  <Row gutter={16}>
+                    <Col xs={24} md={12}>
+                      <Form.Item
+                        name="customerName"
+                        label={<Text strong>Tên khách hàng</Text>}
+                        rules={[{ required: true }]}
+                      >
+                        <Input placeholder="Tên khách..." size="large" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} md={12}>
+                      <Form.Item
+                        name="roNumber"
+                        label={<Text strong>Số RO (Dịch vụ)</Text>}
+                      >
+                        <Input placeholder="Nhập mã RO..." size="large" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} md={12}>
+                      <Form.Item
+                        name="vehicleKm"
+                        label={<Text strong>Số KM dự kiến</Text>}
+                      >
+                        <Input
+                          type="number"
+                          placeholder="Số KM..."
+                          size="large"
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} md={12}>
+                      <Form.Item
+                        name="vehicleAmount"
+                        label={<Text strong>Số tiền dự kiến</Text>}
+                      >
+                        <Input
+                          type="number"
+                          prefix="₫"
+                          placeholder="Số tiền..."
+                          size="large"
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row gutter={16}>
+                    <Col xs={24} md={12}>
+                      <Form.Item
+                        name="pickupPlace"
+                        label={<Text strong>Điểm bắt đầu</Text>}
+                      >
+                        <Input
+                          prefix={
+                            <EnvironmentOutlined className="text-blue-500" />
+                          }
+                          placeholder="Nhập điểm đón..."
+                          size="large"
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} md={12}>
+                      <Form.Item
+                        name="dropoffPlace"
+                        label={<Text strong>Điểm kết thúc</Text>}
+                      >
+                        <Input
+                          prefix={
+                            <EnvironmentOutlined className="text-red-500" />
+                          }
+                          placeholder="Nhập điểm đến..."
+                          size="large"
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </div>
+              )}
               <Divider orientation="left">
                 <Tag color="blue" className="rounded-full px-4">
                   Luồng phê duyệt

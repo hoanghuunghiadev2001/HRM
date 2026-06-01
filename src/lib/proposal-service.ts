@@ -223,6 +223,11 @@ export class ProposalService {
           startAt: proposalData.startAt || null,
           endAt: proposalData.endAt || null,
           dropoffPlace: proposalData.dropoffPlace || null,
+          pickupPlace: proposalData.pickupPlace || null,
+          customerName: proposalData.customerName || null,
+          roNumber: proposalData.roNumber || null,
+          vehicleKm: proposalData.vehicleKm || null,
+          vehicleAmount: proposalData.vehicleAmount || null,
           files: { connect: uploadedFileIds.map((id) => ({ id })) },
           signers: {
             create: proposalData.signerIds.map((id, idx) => ({
@@ -280,15 +285,26 @@ export class ProposalService {
               signerInfo.id,
               "signer",
             );
-            await sendWithRetry(
-              `signature-request signer[${signerInfo.id}] proposal[${newProposal.id}]`,
-              () =>
-                EmailService.sendSignatureRequest(signerInfo, {
-                  ...newProposal,
-                  ...filePayload,
-                  ...links,
-                }),
+
+            const isVehicle = ["VEHICLE_GRAB"].includes(
+              newProposal.proposalType,
             );
+            if (isVehicle) {
+              await sendWithRetry(
+                `vehicle-request signer[${signerInfo.id}] proposal[${newProposal.id}]`,
+                () => EmailService.sendVehicleRequest(signerInfo, newProposal),
+              );
+            } else {
+              await sendWithRetry(
+                `signature-request signer[${signerInfo.id}] proposal[${newProposal.id}]`,
+                () =>
+                  EmailService.sendSignatureRequest(signerInfo, {
+                    ...newProposal,
+                    ...filePayload,
+                    ...links,
+                  }),
+              );
+            }
           }
         }
       });

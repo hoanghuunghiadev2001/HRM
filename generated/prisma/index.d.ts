@@ -155,7 +155,8 @@ export type SalaryViewPermission = $Result.DefaultSelection<Prisma.$SalaryViewPe
 export namespace $Enums {
   export const ProposalType: {
   REGULAR: 'REGULAR',
-  VEHICLE: 'VEHICLE'
+  VEHICLE: 'VEHICLE',
+  VEHICLE_GRAB: 'VEHICLE_GRAB'
 };
 
 export type ProposalType = (typeof ProposalType)[keyof typeof ProposalType]
@@ -19833,6 +19834,8 @@ export namespace Prisma {
     fileId: number | null
     proposerId: number | null
     createdById: number | null
+    vehicleKm: number | null
+    vehicleAmount: number | null
     vehicleId: number | null
   }
 
@@ -19841,6 +19844,8 @@ export namespace Prisma {
     fileId: number | null
     proposerId: number | null
     createdById: number | null
+    vehicleKm: number | null
+    vehicleAmount: number | null
     vehicleId: number | null
   }
 
@@ -19856,9 +19861,14 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     proposalType: $Enums.ProposalType | null
+    vehicleKm: number | null
+    vehicleAmount: number | null
+    roNumber: string | null
+    customerName: string | null
     vehicleId: number | null
     startAt: Date | null
     endAt: Date | null
+    pickupPlace: string | null
     dropoffPlace: string | null
   }
 
@@ -19874,9 +19884,14 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     proposalType: $Enums.ProposalType | null
+    vehicleKm: number | null
+    vehicleAmount: number | null
+    roNumber: string | null
+    customerName: string | null
     vehicleId: number | null
     startAt: Date | null
     endAt: Date | null
+    pickupPlace: string | null
     dropoffPlace: string | null
   }
 
@@ -19892,9 +19907,14 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     proposalType: number
+    vehicleKm: number
+    vehicleAmount: number
+    roNumber: number
+    customerName: number
     vehicleId: number
     startAt: number
     endAt: number
+    pickupPlace: number
     dropoffPlace: number
     _all: number
   }
@@ -19905,6 +19925,8 @@ export namespace Prisma {
     fileId?: true
     proposerId?: true
     createdById?: true
+    vehicleKm?: true
+    vehicleAmount?: true
     vehicleId?: true
   }
 
@@ -19913,6 +19935,8 @@ export namespace Prisma {
     fileId?: true
     proposerId?: true
     createdById?: true
+    vehicleKm?: true
+    vehicleAmount?: true
     vehicleId?: true
   }
 
@@ -19928,9 +19952,14 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     proposalType?: true
+    vehicleKm?: true
+    vehicleAmount?: true
+    roNumber?: true
+    customerName?: true
     vehicleId?: true
     startAt?: true
     endAt?: true
+    pickupPlace?: true
     dropoffPlace?: true
   }
 
@@ -19946,9 +19975,14 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     proposalType?: true
+    vehicleKm?: true
+    vehicleAmount?: true
+    roNumber?: true
+    customerName?: true
     vehicleId?: true
     startAt?: true
     endAt?: true
+    pickupPlace?: true
     dropoffPlace?: true
   }
 
@@ -19964,9 +19998,14 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     proposalType?: true
+    vehicleKm?: true
+    vehicleAmount?: true
+    roNumber?: true
+    customerName?: true
     vehicleId?: true
     startAt?: true
     endAt?: true
+    pickupPlace?: true
     dropoffPlace?: true
     _all?: true
   }
@@ -20069,9 +20108,14 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     proposalType: $Enums.ProposalType
+    vehicleKm: number | null
+    vehicleAmount: number | null
+    roNumber: string | null
+    customerName: string | null
     vehicleId: number | null
     startAt: Date | null
     endAt: Date | null
+    pickupPlace: string | null
     dropoffPlace: string | null
     _count: ProposalCountAggregateOutputType | null
     _avg: ProposalAvgAggregateOutputType | null
@@ -20106,9 +20150,14 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     proposalType?: boolean
+    vehicleKm?: boolean
+    vehicleAmount?: boolean
+    roNumber?: boolean
+    customerName?: boolean
     vehicleId?: boolean
     startAt?: boolean
     endAt?: boolean
+    pickupPlace?: boolean
     dropoffPlace?: boolean
     vehicle?: boolean | Proposal$vehicleArgs<ExtArgs>
     createdBy?: boolean | EmployeeDefaultArgs<ExtArgs>
@@ -20133,13 +20182,18 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     proposalType?: boolean
+    vehicleKm?: boolean
+    vehicleAmount?: boolean
+    roNumber?: boolean
+    customerName?: boolean
     vehicleId?: boolean
     startAt?: boolean
     endAt?: boolean
+    pickupPlace?: boolean
     dropoffPlace?: boolean
   }
 
-  export type ProposalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "title" | "description" | "fileId" | "status" | "proposerId" | "createdById" | "createdAt" | "updatedAt" | "proposalType" | "vehicleId" | "startAt" | "endAt" | "dropoffPlace", ExtArgs["result"]["proposal"]>
+  export type ProposalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "title" | "description" | "fileId" | "status" | "proposerId" | "createdById" | "createdAt" | "updatedAt" | "proposalType" | "vehicleKm" | "vehicleAmount" | "roNumber" | "customerName" | "vehicleId" | "startAt" | "endAt" | "pickupPlace" | "dropoffPlace", ExtArgs["result"]["proposal"]>
   export type ProposalInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     vehicle?: boolean | Proposal$vehicleArgs<ExtArgs>
     createdBy?: boolean | EmployeeDefaultArgs<ExtArgs>
@@ -20172,9 +20226,14 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       proposalType: $Enums.ProposalType
+      vehicleKm: number | null
+      vehicleAmount: number | null
+      roNumber: string | null
+      customerName: string | null
       vehicleId: number | null
       startAt: Date | null
       endAt: Date | null
+      pickupPlace: string | null
       dropoffPlace: string | null
     }, ExtArgs["result"]["proposal"]>
     composites: {}
@@ -20562,9 +20621,14 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Proposal", 'DateTime'>
     readonly updatedAt: FieldRef<"Proposal", 'DateTime'>
     readonly proposalType: FieldRef<"Proposal", 'ProposalType'>
+    readonly vehicleKm: FieldRef<"Proposal", 'Float'>
+    readonly vehicleAmount: FieldRef<"Proposal", 'Float'>
+    readonly roNumber: FieldRef<"Proposal", 'String'>
+    readonly customerName: FieldRef<"Proposal", 'String'>
     readonly vehicleId: FieldRef<"Proposal", 'Int'>
     readonly startAt: FieldRef<"Proposal", 'DateTime'>
     readonly endAt: FieldRef<"Proposal", 'DateTime'>
+    readonly pickupPlace: FieldRef<"Proposal", 'String'>
     readonly dropoffPlace: FieldRef<"Proposal", 'String'>
   }
     
@@ -33069,9 +33133,14 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     proposalType: 'proposalType',
+    vehicleKm: 'vehicleKm',
+    vehicleAmount: 'vehicleAmount',
+    roNumber: 'roNumber',
+    customerName: 'customerName',
     vehicleId: 'vehicleId',
     startAt: 'startAt',
     endAt: 'endAt',
+    pickupPlace: 'pickupPlace',
     dropoffPlace: 'dropoffPlace'
   };
 
@@ -33402,6 +33471,9 @@ export namespace Prisma {
     name: 'name',
     title: 'title',
     description: 'description',
+    roNumber: 'roNumber',
+    customerName: 'customerName',
+    pickupPlace: 'pickupPlace',
     dropoffPlace: 'dropoffPlace'
   };
 
@@ -34811,9 +34883,14 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Proposal"> | Date | string
     updatedAt?: DateTimeFilter<"Proposal"> | Date | string
     proposalType?: EnumProposalTypeFilter<"Proposal"> | $Enums.ProposalType
+    vehicleKm?: FloatNullableFilter<"Proposal"> | number | null
+    vehicleAmount?: FloatNullableFilter<"Proposal"> | number | null
+    roNumber?: StringNullableFilter<"Proposal"> | string | null
+    customerName?: StringNullableFilter<"Proposal"> | string | null
     vehicleId?: IntNullableFilter<"Proposal"> | number | null
     startAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
     endAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
+    pickupPlace?: StringNullableFilter<"Proposal"> | string | null
     dropoffPlace?: StringNullableFilter<"Proposal"> | string | null
     vehicle?: XOR<VehicleNullableScalarRelationFilter, VehicleWhereInput> | null
     createdBy?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
@@ -34835,9 +34912,14 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     proposalType?: SortOrder
+    vehicleKm?: SortOrderInput | SortOrder
+    vehicleAmount?: SortOrderInput | SortOrder
+    roNumber?: SortOrderInput | SortOrder
+    customerName?: SortOrderInput | SortOrder
     vehicleId?: SortOrderInput | SortOrder
     startAt?: SortOrderInput | SortOrder
     endAt?: SortOrderInput | SortOrder
+    pickupPlace?: SortOrderInput | SortOrder
     dropoffPlace?: SortOrderInput | SortOrder
     vehicle?: VehicleOrderByWithRelationInput
     createdBy?: EmployeeOrderByWithRelationInput
@@ -34863,9 +34945,14 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Proposal"> | Date | string
     updatedAt?: DateTimeFilter<"Proposal"> | Date | string
     proposalType?: EnumProposalTypeFilter<"Proposal"> | $Enums.ProposalType
+    vehicleKm?: FloatNullableFilter<"Proposal"> | number | null
+    vehicleAmount?: FloatNullableFilter<"Proposal"> | number | null
+    roNumber?: StringNullableFilter<"Proposal"> | string | null
+    customerName?: StringNullableFilter<"Proposal"> | string | null
     vehicleId?: IntNullableFilter<"Proposal"> | number | null
     startAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
     endAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
+    pickupPlace?: StringNullableFilter<"Proposal"> | string | null
     dropoffPlace?: StringNullableFilter<"Proposal"> | string | null
     vehicle?: XOR<VehicleNullableScalarRelationFilter, VehicleWhereInput> | null
     createdBy?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
@@ -34887,9 +34974,14 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     proposalType?: SortOrder
+    vehicleKm?: SortOrderInput | SortOrder
+    vehicleAmount?: SortOrderInput | SortOrder
+    roNumber?: SortOrderInput | SortOrder
+    customerName?: SortOrderInput | SortOrder
     vehicleId?: SortOrderInput | SortOrder
     startAt?: SortOrderInput | SortOrder
     endAt?: SortOrderInput | SortOrder
+    pickupPlace?: SortOrderInput | SortOrder
     dropoffPlace?: SortOrderInput | SortOrder
     _count?: ProposalCountOrderByAggregateInput
     _avg?: ProposalAvgOrderByAggregateInput
@@ -34913,9 +35005,14 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Proposal"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Proposal"> | Date | string
     proposalType?: EnumProposalTypeWithAggregatesFilter<"Proposal"> | $Enums.ProposalType
+    vehicleKm?: FloatNullableWithAggregatesFilter<"Proposal"> | number | null
+    vehicleAmount?: FloatNullableWithAggregatesFilter<"Proposal"> | number | null
+    roNumber?: StringNullableWithAggregatesFilter<"Proposal"> | string | null
+    customerName?: StringNullableWithAggregatesFilter<"Proposal"> | string | null
     vehicleId?: IntNullableWithAggregatesFilter<"Proposal"> | number | null
     startAt?: DateTimeNullableWithAggregatesFilter<"Proposal"> | Date | string | null
     endAt?: DateTimeNullableWithAggregatesFilter<"Proposal"> | Date | string | null
+    pickupPlace?: StringNullableWithAggregatesFilter<"Proposal"> | string | null
     dropoffPlace?: StringNullableWithAggregatesFilter<"Proposal"> | string | null
   }
 
@@ -37223,8 +37320,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
     vehicle?: VehicleCreateNestedOneWithoutProposalsInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
@@ -37246,9 +37348,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     vehicleId?: number | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
@@ -37264,8 +37371,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
@@ -37287,9 +37399,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
@@ -37308,9 +37425,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     vehicleId?: number | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
   }
 
@@ -37323,8 +37445,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -37340,9 +37467,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -39916,9 +40048,14 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     proposalType?: SortOrder
+    vehicleKm?: SortOrder
+    vehicleAmount?: SortOrder
+    roNumber?: SortOrder
+    customerName?: SortOrder
     vehicleId?: SortOrder
     startAt?: SortOrder
     endAt?: SortOrder
+    pickupPlace?: SortOrder
     dropoffPlace?: SortOrder
   }
 
@@ -39927,6 +40064,8 @@ export namespace Prisma {
     fileId?: SortOrder
     proposerId?: SortOrder
     createdById?: SortOrder
+    vehicleKm?: SortOrder
+    vehicleAmount?: SortOrder
     vehicleId?: SortOrder
   }
 
@@ -39942,9 +40081,14 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     proposalType?: SortOrder
+    vehicleKm?: SortOrder
+    vehicleAmount?: SortOrder
+    roNumber?: SortOrder
+    customerName?: SortOrder
     vehicleId?: SortOrder
     startAt?: SortOrder
     endAt?: SortOrder
+    pickupPlace?: SortOrder
     dropoffPlace?: SortOrder
   }
 
@@ -39960,9 +40104,14 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     proposalType?: SortOrder
+    vehicleKm?: SortOrder
+    vehicleAmount?: SortOrder
+    roNumber?: SortOrder
+    customerName?: SortOrder
     vehicleId?: SortOrder
     startAt?: SortOrder
     endAt?: SortOrder
+    pickupPlace?: SortOrder
     dropoffPlace?: SortOrder
   }
 
@@ -39971,6 +40120,8 @@ export namespace Prisma {
     fileId?: SortOrder
     proposerId?: SortOrder
     createdById?: SortOrder
+    vehicleKm?: SortOrder
+    vehicleAmount?: SortOrder
     vehicleId?: SortOrder
   }
 
@@ -43395,8 +43546,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
     vehicle?: VehicleCreateNestedOneWithoutProposalsInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
@@ -43417,9 +43573,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     vehicleId?: number | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
@@ -43491,8 +43652,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
@@ -43513,9 +43679,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
@@ -43565,8 +43736,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
     proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
@@ -43587,8 +43763,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
@@ -43636,9 +43817,14 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Proposal"> | Date | string
     updatedAt?: DateTimeFilter<"Proposal"> | Date | string
     proposalType?: EnumProposalTypeFilter<"Proposal"> | $Enums.ProposalType
+    vehicleKm?: FloatNullableFilter<"Proposal"> | number | null
+    vehicleAmount?: FloatNullableFilter<"Proposal"> | number | null
+    roNumber?: StringNullableFilter<"Proposal"> | string | null
+    customerName?: StringNullableFilter<"Proposal"> | string | null
     vehicleId?: IntNullableFilter<"Proposal"> | number | null
     startAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
     endAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
+    pickupPlace?: StringNullableFilter<"Proposal"> | string | null
     dropoffPlace?: StringNullableFilter<"Proposal"> | string | null
   }
 
@@ -43998,8 +44184,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
     vehicle?: VehicleCreateNestedOneWithoutProposalsInput
     proposer: EmployeeCreateNestedOneWithoutProposalsProposedInput
@@ -44019,9 +44210,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     vehicleId?: number | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
@@ -44047,8 +44243,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
     vehicle?: VehicleCreateNestedOneWithoutProposalsInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
@@ -44068,9 +44269,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     vehicleId?: number | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
@@ -48117,8 +48323,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
     vehicle?: VehicleCreateNestedOneWithoutProposalsInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
@@ -48139,9 +48350,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     vehicleId?: number | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
     approvers?: ProposalApproverUncheckedCreateNestedManyWithoutProposalInput
     files?: FileUncheckedCreateNestedManyWithoutProposalInput
@@ -48248,8 +48464,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
@@ -48270,9 +48491,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
     files?: FileUncheckedUpdateManyWithoutProposalNestedInput
@@ -48445,8 +48671,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
     vehicle?: VehicleCreateNestedOneWithoutProposalsInput
     createdBy: EmployeeCreateNestedOneWithoutProposalsCreatedInput
@@ -48467,9 +48698,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     vehicleId?: number | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
     signers?: ProposalSignerUncheckedCreateNestedManyWithoutProposalInput
     files?: FileUncheckedCreateNestedManyWithoutProposalInput
@@ -48582,8 +48818,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
@@ -48604,9 +48845,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
     files?: FileUncheckedUpdateManyWithoutProposalNestedInput
@@ -50245,8 +50491,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
   }
 
@@ -50259,8 +50510,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
     proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
@@ -50281,8 +50537,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
@@ -50301,8 +50562,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -50366,9 +50632,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     vehicleId?: number | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
   }
 
@@ -50383,9 +50654,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     proposalType?: $Enums.ProposalType
+    vehicleKm?: number | null
+    vehicleAmount?: number | null
+    roNumber?: string | null
+    customerName?: string | null
     vehicleId?: number | null
     startAt?: Date | string | null
     endAt?: Date | string | null
+    pickupPlace?: string | null
     dropoffPlace?: string | null
   }
 
@@ -50744,8 +51020,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
     proposer?: EmployeeUpdateOneRequiredWithoutProposalsProposedNestedInput
@@ -50765,9 +51046,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
@@ -50785,9 +51071,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -50800,8 +51091,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     vehicle?: VehicleUpdateOneWithoutProposalsNestedInput
     createdBy?: EmployeeUpdateOneRequiredWithoutProposalsCreatedNestedInput
@@ -50821,9 +51117,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
     approvers?: ProposalApproverUncheckedUpdateManyWithoutProposalNestedInput
     signers?: ProposalSignerUncheckedUpdateManyWithoutProposalNestedInput
@@ -50841,9 +51142,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
+    vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
+    vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupPlace?: NullableStringFieldUpdateOperationsInput | string | null
     dropoffPlace?: NullableStringFieldUpdateOperationsInput | string | null
   }
 

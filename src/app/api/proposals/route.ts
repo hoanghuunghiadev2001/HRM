@@ -18,7 +18,15 @@ export async function POST(request: NextRequest) {
     // Nếu frontend gửi 'name' mà logic cũ dùng 'title', ta lấy name làm title
     const title = (formData.get("title") as string) || name;
     const description = (formData.get("description") as string) || "";
-
+    // Thêm vào sau phần lấy dropoffPlace
+    const customerName = formData.get("customerName") as string | null;
+    const roNumber = formData.get("roNumber") as string | null;
+    const vehicleKm = formData.get("vehicleKm")
+      ? Number(formData.get("vehicleKm"))
+      : null;
+    const vehicleAmount = formData.get("vehicleAmount")
+      ? Number(formData.get("vehicleAmount"))
+      : null;
     // 2. Parse Signers & Approvers
     const signerIds = JSON.parse((formData.get("signerIds") as string) || "[]");
     const approverIds = JSON.parse(
@@ -27,8 +35,12 @@ export async function POST(request: NextRequest) {
 
     // 3. Xử lý loại Proposal & Thông tin xe
     const rawProposalType = formData.get("proposalType") as string | null;
-    const proposalType: "REGULAR" | "VEHICLE" =
-      rawProposalType === "VEHICLE" ? "VEHICLE" : "REGULAR";
+
+    // Chấp nhận cả 3 loại
+    const proposalType =
+      rawProposalType === "VEHICLE" || rawProposalType === "VEHICLE_GRAB"
+        ? rawProposalType
+        : "REGULAR";
 
     const vehicleId = formData.get("vehicleId")
       ? Number(formData.get("vehicleId"))
@@ -39,13 +51,14 @@ export async function POST(request: NextRequest) {
     const endAt = formData.get("endAt")
       ? new Date(formData.get("endAt") as string)
       : undefined;
+    const pickupPlace =
+      (formData.get("pickupPlace") as string | null) ?? undefined;
     const dropoffPlace =
       (formData.get("dropoffPlace") as string | null) ?? undefined;
 
     // 4. XỬ LÝ ĐA FILE (Quan trọng)
     // Frontend dùng formData.append("files", ...), nên ta dùng getAll
     const files = formData.getAll("files") as File[];
-
     // 5. Xác thực User từ Token
     const token = request.cookies.get("token-hrm")?.value;
     if (!token) {
@@ -88,6 +101,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Sửa lại đoạn số 6: Validation
+    if (proposalType === "VEHICLE" && (!vehicleId || !startAt || !endAt)) {
+      return NextResponse.json(
+        { error: "Thiếu thông tin lịch trình xe" },
+        { status: 400 },
+      );
+    }
+
+    if (proposalType === "VEHICLE_GRAB" && (!customerName || !roNumber)) {
+      return NextResponse.json(
+        { error: "Thiếu thông tin khách hàng hoặc mã RO" },
+        { status: 400 },
+      );
+    }
+
     // 7. Gọi Service để lưu DB
     // Lưu ý: Bạn cần cập nhật ProposalService.createProposal để nhận mảng files[]
     // thay vì 1 file đơn lẻ nếu muốn lưu nhiều tài liệu.
@@ -103,9 +131,15 @@ export async function POST(request: NextRequest) {
       startAt,
       endAt,
       dropoffPlace,
+      customerName: customerName ?? undefined,
+      roNumber: roNumber ?? undefined,
+      vehicleKm: vehicleKm ?? undefined,
+      vehicleAmount: vehicleAmount ?? undefined,
+      pickupPlace: pickupPlace ?? undefined,
     };
 
     // Nếu Service của bạn chưa hỗ trợ mảng, hãy lấy file đầu tiên: files[0]
+
     const result = await ProposalService.createProposal(
       proposalData,
       files, // Truyền cả mảng file xuống service

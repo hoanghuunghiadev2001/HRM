@@ -129,7 +129,7 @@ export default function EmployeesPage() {
         department:
           role === "ADMIN" || role === "MANAGER"
             ? filterDepartment
-            : department ?? "",
+            : (department ?? ""),
         name: filterName,
         employeeCode: filterMSNV,
         page: page,
@@ -284,7 +284,7 @@ export default function EmployeesPage() {
   //cập nhật nhân viên
   const handleUpdateEmployee = async (
     employeeCode: string,
-    infoEmployee: any
+    infoEmployee: any,
   ) => {
     setLoading(true);
     const res = await updateEmployee(employeeCode, infoEmployee);
@@ -565,14 +565,14 @@ export default function EmployeesPage() {
               cell &&
               typeof cell === "string" &&
               cell.length > 2 &&
-              isNaN(Number(cell))
+              isNaN(Number(cell)),
           );
 
           if (hasText && !row.every((cell) => !isNaN(Number(cell)))) {
             headerRowIndex = i;
             console.log(
               `Using row ${headerRowIndex} as header row (fallback):`,
-              row
+              row,
             );
             break;
           }
@@ -582,7 +582,7 @@ export default function EmployeesPage() {
 
     if (headerRowIndex === -1) {
       throw new Error(
-        "Could not identify header row in Excel file. Please ensure your file has proper column headers."
+        "Could not identify header row in Excel file. Please ensure your file has proper column headers.",
       );
     }
 
@@ -620,8 +620,6 @@ export default function EmployeesPage() {
   };
 
   useEffect(() => {
-    console.log(workStatus);
-
     getEmployeeSumary(1, 10);
   }, [workStatus]);
 

@@ -295,9 +295,14 @@ exports.Prisma.ProposalScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   proposalType: 'proposalType',
+  vehicleKm: 'vehicleKm',
+  vehicleAmount: 'vehicleAmount',
+  roNumber: 'roNumber',
+  customerName: 'customerName',
   vehicleId: 'vehicleId',
   startAt: 'startAt',
   endAt: 'endAt',
+  pickupPlace: 'pickupPlace',
   dropoffPlace: 'dropoffPlace'
 };
 
@@ -553,6 +558,9 @@ exports.Prisma.ProposalOrderByRelevanceFieldEnum = {
   name: 'name',
   title: 'title',
   description: 'description',
+  roNumber: 'roNumber',
+  customerName: 'customerName',
+  pickupPlace: 'pickupPlace',
   dropoffPlace: 'dropoffPlace'
 };
 
@@ -657,7 +665,8 @@ exports.ProposalStatus = exports.$Enums.ProposalStatus = {
 
 exports.ProposalType = exports.$Enums.ProposalType = {
   REGULAR: 'REGULAR',
-  VEHICLE: 'VEHICLE'
+  VEHICLE: 'VEHICLE',
+  VEHICLE_GRAB: 'VEHICLE_GRAB'
 };
 
 exports.NotificationType = exports.$Enums.NotificationType = {

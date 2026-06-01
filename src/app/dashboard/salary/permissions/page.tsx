@@ -249,8 +249,6 @@ export default function SalaryPermissionsPage() {
       key: "viewer",
       width: 300,
       render: (_: any, r: ViewerGroup) => {
-        console.log(r);
-
         return (
           <Space>
             <Avatar icon={<UserOutlined />} className="bg-indigo-600" />
@@ -288,8 +286,6 @@ export default function SalaryPermissionsPage() {
       title: "Được xem lương của",
       key: "targets",
       render: (_: any, r: ViewerGroup) => {
-        console.log(r);
-
         const active = r.targets.filter((t) => t.isActive);
         return (
           <div className="flex flex-wrap gap-1">
