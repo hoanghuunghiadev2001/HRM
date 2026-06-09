@@ -145,7 +145,8 @@ export default function ClientDashboard({
       children: [
         ...(employeeCode === "01375" ||
         employeeCode === "00939" ||
-        employeeCode === "00019"
+        employeeCode === "00019" ||
+        employeeCode === "00016"
           ? [
               {
                 key: "/dashboard/salary",
