@@ -20,6 +20,8 @@ export async function getAuthUser() {
       employeeCode: decoded.employeeCode,
       role: decoded.role,
       departmentId: decoded.departmentId,
+      isActive: decoded.isActive,
+      brand: decoded.brand,
     };
   } catch (error) {
     console.error("Auth helper error:", error);

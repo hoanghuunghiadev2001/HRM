@@ -85,7 +85,7 @@ const ModalEditEmployee = ({
       setAssetLoading(true);
       const res = await fetch(
         `/api/assets/by-employee?employeeId=${employeeId}`,
-        { credentials: "include" }
+        { credentials: "include" },
       );
       if (!res.ok) throw new Error("Không lấy được tài sản");
       const data = await res.json();
@@ -127,6 +127,7 @@ const ModalEditEmployee = ({
       birthDate: formData.birthDate,
       role: formData.role,
       avatar: imageUrl ?? null,
+      brand: formData.brand, // <-- THÊM CHI NHÁNH VÀO PAYLOAD GỬI ĐI API
 
       workInfo: {
         department: formData.department,
@@ -151,7 +152,6 @@ const ModalEditEmployee = ({
     };
 
     //   Gửi API
-
     if (employeeInfo?.employeeCode) {
       handleUpdateEmployee(employeeInfo?.employeeCode, payload);
     }
@@ -182,7 +182,6 @@ const ModalEditEmployee = ({
       return;
     }
     if (info.file.status === "done") {
-      // Get this url from response in real world.
       getBase64(info.file.originFileObj as FileType, (url) => {
         setLoading(false);
         setImageUrl(url);
@@ -227,6 +226,7 @@ const ModalEditEmployee = ({
       avatarBase64: data.avatar ?? null,
 
       // workInfo
+      brand: (data as any)?.brand ?? "", // <-- THÊM ĐỂ ĐỔ DỮ LIỆU CŨ LÊN FORM (NẾU CÓ)
       department: data.workInfo?.department?.id ?? "",
       position: data.workInfo?.position?.id ?? "",
 
@@ -238,18 +238,10 @@ const ModalEditEmployee = ({
     };
   }
 
-  //lấy danh sách bộ phận
-  // const listDepartment = async () => {
-  //   const res = await fetch("/api/departments");
-  //   if (!res.ok) throw new Error("Lấy dữ liệu thất bại");
-  //   const departmentsData = await res.json(); //
-  //   setDepartments(departmentsData);
-  // };
-
   const listPosition = async () => {
     const res = await fetch(`/api/departments/${selectedDepartmentId}`);
     if (!res.ok) throw new Error("Lấy dữ liệu thất bại");
-    const departmentsData = await res.json(); //
+    const departmentsData = await res.json();
     setPositions(departmentsData.positions);
   };
 
@@ -265,7 +257,7 @@ const ModalEditEmployee = ({
       const [positionsData] = await Promise.all([
         selectedDepartmentId
           ? fetch(`/api/departments/${selectedDepartmentId}`).then((res) =>
-              res.json()
+              res.json(),
             )
           : Promise.resolve({ positions: [] }),
       ]);
@@ -277,7 +269,7 @@ const ModalEditEmployee = ({
 
   useEffect(() => {
     fetchData();
-    setIsMounted(true); // Đánh dấu đã mount client
+    setIsMounted(true);
   }, []);
 
   useEffect(() => {
@@ -335,7 +327,6 @@ const ModalEditEmployee = ({
       <Drawer
         title={<p className="text-2xl">Chỉnh Sửa Nhân Sự </p>}
         placement="right"
-        // size={"large"}
         onClose={onClose}
         width={900}
         open={open}
@@ -353,8 +344,6 @@ const ModalEditEmployee = ({
               labelAlign="left"
               labelWrap
               validateMessages={validateMessages}
-
-              //   style={{ maxWidth: 600 }}
             >
               <div className="flex justify-center">
                 <Form.Item
@@ -367,7 +356,6 @@ const ModalEditEmployee = ({
                     listType="picture-circle"
                     className="avatar-uploader w-[155px] h-[155px] flex justify-center items-center"
                     showUploadList={false}
-                    // action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
                     beforeUpload={beforeUpload}
                     onChange={handleChange}
                   >
@@ -380,7 +368,7 @@ const ModalEditEmployee = ({
                         className="rounded-[50%] h-[145px] object-cover"
                         width={145}
                         height={145}
-                        quality={70} // giảm chất lượng xuống chút để nhẹ hơn
+                        quality={70}
                         priority={false}
                       />
                     ) : (
@@ -412,10 +400,10 @@ const ModalEditEmployee = ({
                 </Form.Item>
                 <Form.Item
                   name="role"
-                  label="Vài trò"
+                  label="Vai trò"
                   rules={[{ required: true }]}
                 >
-                  <Select placeholder="Vài trò" allowClear>
+                  <Select placeholder="Vai trò" allowClear>
                     {role === "ADMIN" ? (
                       <Option value="ADMIN">ADMIN</Option>
                     ) : (
@@ -451,25 +439,13 @@ const ModalEditEmployee = ({
                 <p className="text-xl ">2. Thông Tin Liên Hệ:</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <Form.Item
-                  name="phoneNumber"
-                  label="Số DT"
-                  //   rules={[{ required: true }]}
-                >
+                <Form.Item name="phoneNumber" label="Số DT">
                   <Input type="number" />
                 </Form.Item>
-                <Form.Item
-                  name="relativePhone"
-                  label="SĐT người thân"
-                  //   rules={[{ required: true }]}
-                >
+                <Form.Item name="relativePhone" label="SĐT người thân">
                   <Input type="number" />
                 </Form.Item>
-                <Form.Item
-                  name="companyPhone"
-                  label="SĐT Cty"
-                  //   rules={[{ required: true }]}
-                >
+                <Form.Item name="companyPhone" label="SĐT Cty">
                   <Input type="number" />
                 </Form.Item>
                 <Form.Item
@@ -480,10 +456,25 @@ const ModalEditEmployee = ({
                   <Input />
                 </Form.Item>
               </div>
+
+              {/* PHẦN 3: THÔNG TIN CÔNG VIỆC (ĐÃ SỬA THÀNH GRID 3 CỘT ĐỂ THÊM CHI NHÁNH) */}
               <div className="mb-2 mt-4">
                 <p className="text-xl ">3. Thông Tin Công việc:</p>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
+                <Form.Item
+                  name="brand"
+                  label="Chi nhánh"
+                  rules={[
+                    { required: true, message: "Vui lòng chọn chi nhánh" },
+                  ]}
+                >
+                  <Select placeholder="Chọn chi nhánh" allowClear>
+                    <Option value="TBD">Toyota Bình Dương (TBD)</Option>
+                    <Option value="TMP">Toyota Mỹ Phước (TMP)</Option>
+                  </Select>
+                </Form.Item>
+
                 <Form.Item
                   name="department"
                   label="Bộ phận"
@@ -503,6 +494,7 @@ const ModalEditEmployee = ({
                     }))}
                   ></Select>
                 </Form.Item>
+
                 <Form.Item
                   name="position"
                   label="Chức vụ"
@@ -519,6 +511,7 @@ const ModalEditEmployee = ({
                   ></Select>
                 </Form.Item>
               </div>
+
               <div className="mb-2 mt-8">
                 <p className="text-xl">4. Tài sản đang sử dụng:</p>
               </div>
@@ -532,26 +525,14 @@ const ModalEditEmployee = ({
                 bordered
                 locale={{ emptyText: "Nhân viên chưa được cấp tài sản" }}
               />
-              {/* <Form.Item {...tailLayout}>
-                <Space>
-                  <Button type="primary" htmlType="submit">
-                    Submit
-                  </Button>
-                  <Button htmlType="button" onClick={onReset}>
-                    Reset
-                  </Button>
-                  <Button type="link" htmlType="button" onClick={onFill}>
-                    Fill form
-                  </Button>
-                </Space>
-              </Form.Item> */}
+
               <Form.Item
                 label={null}
                 className="w-full flex justify-center mt-4"
               >
                 <Button
                   htmlType="submit"
-                  className="flex mt-4 relative  gap-2 items-center !h-10 !px-4 rounded-lg !bg-gradient-to-r from-[#c72929] to-[#350000] !text-lg cursor-pointer !text-white !font-semibold"
+                  className="flex mt-4 relative gap-2 items-center !h-10 !px-4 rounded-lg !bg-gradient-to-r from-[#c72929] to-[#350000] !text-lg cursor-pointer !text-white !font-semibold"
                 >
                   Cập nhật nhân sự
                 </Button>

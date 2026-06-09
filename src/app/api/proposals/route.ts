@@ -27,6 +27,9 @@ export async function POST(request: NextRequest) {
     const vehicleAmount = formData.get("vehicleAmount")
       ? Number(formData.get("vehicleAmount"))
       : null;
+    const roAmount = formData.get("roAmount")
+      ? Number(formData.get("roAmount"))
+      : null;
     // 2. Parse Signers & Approvers
     const signerIds = JSON.parse((formData.get("signerIds") as string) || "[]");
     const approverIds = JSON.parse(
@@ -135,6 +138,7 @@ export async function POST(request: NextRequest) {
       roNumber: roNumber ?? undefined,
       vehicleKm: vehicleKm ?? undefined,
       vehicleAmount: vehicleAmount ?? undefined,
+      roAmount: roAmount ?? undefined,
       pickupPlace: pickupPlace ?? undefined,
     };
 

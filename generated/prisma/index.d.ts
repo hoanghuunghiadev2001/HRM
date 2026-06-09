@@ -162,6 +162,14 @@ export namespace $Enums {
 export type ProposalType = (typeof ProposalType)[keyof typeof ProposalType]
 
 
+export const BrandType: {
+  TBD: 'TBD',
+  TMP: 'TMP'
+};
+
+export type BrandType = (typeof BrandType)[keyof typeof BrandType]
+
+
 export const Role: {
   USER: 'USER',
   MANAGER: 'MANAGER',
@@ -238,6 +246,10 @@ export type NotificationType = (typeof NotificationType)[keyof typeof Notificati
 export type ProposalType = $Enums.ProposalType
 
 export const ProposalType: typeof $Enums.ProposalType
+
+export type BrandType = $Enums.BrandType
+
+export const BrandType: typeof $Enums.BrandType
 
 export type Role = $Enums.Role
 
@@ -5810,6 +5822,7 @@ export namespace Prisma {
     managerId: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    brand: $Enums.BrandType | null
   }
 
   export type EmployeeMaxAggregateOutputType = {
@@ -5825,6 +5838,7 @@ export namespace Prisma {
     managerId: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    brand: $Enums.BrandType | null
   }
 
   export type EmployeeCountAggregateOutputType = {
@@ -5840,6 +5854,7 @@ export namespace Prisma {
     managerId: number
     createdAt: number
     updatedAt: number
+    brand: number
     _all: number
   }
 
@@ -5867,6 +5882,7 @@ export namespace Prisma {
     managerId?: true
     createdAt?: true
     updatedAt?: true
+    brand?: true
   }
 
   export type EmployeeMaxAggregateInputType = {
@@ -5882,6 +5898,7 @@ export namespace Prisma {
     managerId?: true
     createdAt?: true
     updatedAt?: true
+    brand?: true
   }
 
   export type EmployeeCountAggregateInputType = {
@@ -5897,6 +5914,7 @@ export namespace Prisma {
     managerId?: true
     createdAt?: true
     updatedAt?: true
+    brand?: true
     _all?: true
   }
 
@@ -5999,6 +6017,7 @@ export namespace Prisma {
     managerId: number | null
     createdAt: Date
     updatedAt: Date
+    brand: $Enums.BrandType | null
     _count: EmployeeCountAggregateOutputType | null
     _avg: EmployeeAvgAggregateOutputType | null
     _sum: EmployeeSumAggregateOutputType | null
@@ -6033,6 +6052,7 @@ export namespace Prisma {
     managerId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    brand?: boolean
     AttendanceImportLog?: boolean | Employee$AttendanceImportLogArgs<ExtArgs>
     contactInfo?: boolean | Employee$contactInfoArgs<ExtArgs>
     departmentDirectorOf?: boolean | Employee$departmentDirectorOfArgs<ExtArgs>
@@ -6074,9 +6094,10 @@ export namespace Prisma {
     managerId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    brand?: boolean
   }
 
-  export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeCode" | "name" | "gender" | "birthDate" | "password" | "role" | "avatar" | "isActive" | "managerId" | "createdAt" | "updatedAt", ExtArgs["result"]["employee"]>
+  export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeCode" | "name" | "gender" | "birthDate" | "password" | "role" | "avatar" | "isActive" | "managerId" | "createdAt" | "updatedAt" | "brand", ExtArgs["result"]["employee"]>
   export type EmployeeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     AttendanceImportLog?: boolean | Employee$AttendanceImportLogArgs<ExtArgs>
     contactInfo?: boolean | Employee$contactInfoArgs<ExtArgs>
@@ -6144,6 +6165,7 @@ export namespace Prisma {
       managerId: number | null
       createdAt: Date
       updatedAt: Date
+      brand: $Enums.BrandType | null
     }, ExtArgs["result"]["employee"]>
     composites: {}
   }
@@ -6548,6 +6570,7 @@ export namespace Prisma {
     readonly managerId: FieldRef<"Employee", 'Int'>
     readonly createdAt: FieldRef<"Employee", 'DateTime'>
     readonly updatedAt: FieldRef<"Employee", 'DateTime'>
+    readonly brand: FieldRef<"Employee", 'BrandType'>
   }
     
 
@@ -19836,6 +19859,7 @@ export namespace Prisma {
     createdById: number | null
     vehicleKm: number | null
     vehicleAmount: number | null
+    roAmount: number | null
     vehicleId: number | null
   }
 
@@ -19846,6 +19870,7 @@ export namespace Prisma {
     createdById: number | null
     vehicleKm: number | null
     vehicleAmount: number | null
+    roAmount: number | null
     vehicleId: number | null
   }
 
@@ -19863,6 +19888,7 @@ export namespace Prisma {
     proposalType: $Enums.ProposalType | null
     vehicleKm: number | null
     vehicleAmount: number | null
+    roAmount: number | null
     roNumber: string | null
     customerName: string | null
     vehicleId: number | null
@@ -19886,6 +19912,7 @@ export namespace Prisma {
     proposalType: $Enums.ProposalType | null
     vehicleKm: number | null
     vehicleAmount: number | null
+    roAmount: number | null
     roNumber: string | null
     customerName: string | null
     vehicleId: number | null
@@ -19909,6 +19936,7 @@ export namespace Prisma {
     proposalType: number
     vehicleKm: number
     vehicleAmount: number
+    roAmount: number
     roNumber: number
     customerName: number
     vehicleId: number
@@ -19927,6 +19955,7 @@ export namespace Prisma {
     createdById?: true
     vehicleKm?: true
     vehicleAmount?: true
+    roAmount?: true
     vehicleId?: true
   }
 
@@ -19937,6 +19966,7 @@ export namespace Prisma {
     createdById?: true
     vehicleKm?: true
     vehicleAmount?: true
+    roAmount?: true
     vehicleId?: true
   }
 
@@ -19954,6 +19984,7 @@ export namespace Prisma {
     proposalType?: true
     vehicleKm?: true
     vehicleAmount?: true
+    roAmount?: true
     roNumber?: true
     customerName?: true
     vehicleId?: true
@@ -19977,6 +20008,7 @@ export namespace Prisma {
     proposalType?: true
     vehicleKm?: true
     vehicleAmount?: true
+    roAmount?: true
     roNumber?: true
     customerName?: true
     vehicleId?: true
@@ -20000,6 +20032,7 @@ export namespace Prisma {
     proposalType?: true
     vehicleKm?: true
     vehicleAmount?: true
+    roAmount?: true
     roNumber?: true
     customerName?: true
     vehicleId?: true
@@ -20110,6 +20143,7 @@ export namespace Prisma {
     proposalType: $Enums.ProposalType
     vehicleKm: number | null
     vehicleAmount: number | null
+    roAmount: number | null
     roNumber: string | null
     customerName: string | null
     vehicleId: number | null
@@ -20152,6 +20186,7 @@ export namespace Prisma {
     proposalType?: boolean
     vehicleKm?: boolean
     vehicleAmount?: boolean
+    roAmount?: boolean
     roNumber?: boolean
     customerName?: boolean
     vehicleId?: boolean
@@ -20184,6 +20219,7 @@ export namespace Prisma {
     proposalType?: boolean
     vehicleKm?: boolean
     vehicleAmount?: boolean
+    roAmount?: boolean
     roNumber?: boolean
     customerName?: boolean
     vehicleId?: boolean
@@ -20193,7 +20229,7 @@ export namespace Prisma {
     dropoffPlace?: boolean
   }
 
-  export type ProposalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "title" | "description" | "fileId" | "status" | "proposerId" | "createdById" | "createdAt" | "updatedAt" | "proposalType" | "vehicleKm" | "vehicleAmount" | "roNumber" | "customerName" | "vehicleId" | "startAt" | "endAt" | "pickupPlace" | "dropoffPlace", ExtArgs["result"]["proposal"]>
+  export type ProposalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "title" | "description" | "fileId" | "status" | "proposerId" | "createdById" | "createdAt" | "updatedAt" | "proposalType" | "vehicleKm" | "vehicleAmount" | "roAmount" | "roNumber" | "customerName" | "vehicleId" | "startAt" | "endAt" | "pickupPlace" | "dropoffPlace", ExtArgs["result"]["proposal"]>
   export type ProposalInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     vehicle?: boolean | Proposal$vehicleArgs<ExtArgs>
     createdBy?: boolean | EmployeeDefaultArgs<ExtArgs>
@@ -20228,6 +20264,7 @@ export namespace Prisma {
       proposalType: $Enums.ProposalType
       vehicleKm: number | null
       vehicleAmount: number | null
+      roAmount: number | null
       roNumber: string | null
       customerName: string | null
       vehicleId: number | null
@@ -20623,6 +20660,7 @@ export namespace Prisma {
     readonly proposalType: FieldRef<"Proposal", 'ProposalType'>
     readonly vehicleKm: FieldRef<"Proposal", 'Float'>
     readonly vehicleAmount: FieldRef<"Proposal", 'Float'>
+    readonly roAmount: FieldRef<"Proposal", 'Float'>
     readonly roNumber: FieldRef<"Proposal", 'String'>
     readonly customerName: FieldRef<"Proposal", 'String'>
     readonly vehicleId: FieldRef<"Proposal", 'Int'>
@@ -32953,7 +32991,8 @@ export namespace Prisma {
     isActive: 'isActive',
     managerId: 'managerId',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    brand: 'brand'
   };
 
   export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
@@ -33135,6 +33174,7 @@ export namespace Prisma {
     proposalType: 'proposalType',
     vehicleKm: 'vehicleKm',
     vehicleAmount: 'vehicleAmount',
+    roAmount: 'roAmount',
     roNumber: 'roNumber',
     customerName: 'customerName',
     vehicleId: 'vehicleId',
@@ -33632,6 +33672,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'BrandType'
+   */
+  export type EnumBrandTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BrandType'>
+    
+
+
+  /**
    * Reference to a field of type 'LeaveTypeEnum'
    */
   export type EnumLeaveTypeEnumFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeaveTypeEnum'>
@@ -33836,6 +33883,7 @@ export namespace Prisma {
     managerId?: IntNullableFilter<"Employee"> | number | null
     createdAt?: DateTimeFilter<"Employee"> | Date | string
     updatedAt?: DateTimeFilter<"Employee"> | Date | string
+    brand?: EnumBrandTypeNullableFilter<"Employee"> | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogListRelationFilter
     contactInfo?: XOR<ContactInfoNullableScalarRelationFilter, ContactInfoWhereInput> | null
     departmentDirectorOf?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
@@ -33874,6 +33922,7 @@ export namespace Prisma {
     managerId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    brand?: SortOrderInput | SortOrder
     AttendanceImportLog?: AttendanceImportLogOrderByRelationAggregateInput
     contactInfo?: ContactInfoOrderByWithRelationInput
     departmentDirectorOf?: DepartmentOrderByWithRelationInput
@@ -33916,6 +33965,7 @@ export namespace Prisma {
     managerId?: IntNullableFilter<"Employee"> | number | null
     createdAt?: DateTimeFilter<"Employee"> | Date | string
     updatedAt?: DateTimeFilter<"Employee"> | Date | string
+    brand?: EnumBrandTypeNullableFilter<"Employee"> | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogListRelationFilter
     contactInfo?: XOR<ContactInfoNullableScalarRelationFilter, ContactInfoWhereInput> | null
     departmentDirectorOf?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
@@ -33954,6 +34004,7 @@ export namespace Prisma {
     managerId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    brand?: SortOrderInput | SortOrder
     _count?: EmployeeCountOrderByAggregateInput
     _avg?: EmployeeAvgOrderByAggregateInput
     _max?: EmployeeMaxOrderByAggregateInput
@@ -33977,6 +34028,7 @@ export namespace Prisma {
     managerId?: IntNullableWithAggregatesFilter<"Employee"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Employee"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Employee"> | Date | string
+    brand?: EnumBrandTypeNullableWithAggregatesFilter<"Employee"> | $Enums.BrandType | null
   }
 
   export type DepartmentWhereInput = {
@@ -34885,6 +34937,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFilter<"Proposal"> | $Enums.ProposalType
     vehicleKm?: FloatNullableFilter<"Proposal"> | number | null
     vehicleAmount?: FloatNullableFilter<"Proposal"> | number | null
+    roAmount?: FloatNullableFilter<"Proposal"> | number | null
     roNumber?: StringNullableFilter<"Proposal"> | string | null
     customerName?: StringNullableFilter<"Proposal"> | string | null
     vehicleId?: IntNullableFilter<"Proposal"> | number | null
@@ -34914,6 +34967,7 @@ export namespace Prisma {
     proposalType?: SortOrder
     vehicleKm?: SortOrderInput | SortOrder
     vehicleAmount?: SortOrderInput | SortOrder
+    roAmount?: SortOrderInput | SortOrder
     roNumber?: SortOrderInput | SortOrder
     customerName?: SortOrderInput | SortOrder
     vehicleId?: SortOrderInput | SortOrder
@@ -34947,6 +35001,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFilter<"Proposal"> | $Enums.ProposalType
     vehicleKm?: FloatNullableFilter<"Proposal"> | number | null
     vehicleAmount?: FloatNullableFilter<"Proposal"> | number | null
+    roAmount?: FloatNullableFilter<"Proposal"> | number | null
     roNumber?: StringNullableFilter<"Proposal"> | string | null
     customerName?: StringNullableFilter<"Proposal"> | string | null
     vehicleId?: IntNullableFilter<"Proposal"> | number | null
@@ -34976,6 +35031,7 @@ export namespace Prisma {
     proposalType?: SortOrder
     vehicleKm?: SortOrderInput | SortOrder
     vehicleAmount?: SortOrderInput | SortOrder
+    roAmount?: SortOrderInput | SortOrder
     roNumber?: SortOrderInput | SortOrder
     customerName?: SortOrderInput | SortOrder
     vehicleId?: SortOrderInput | SortOrder
@@ -35007,6 +35063,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeWithAggregatesFilter<"Proposal"> | $Enums.ProposalType
     vehicleKm?: FloatNullableWithAggregatesFilter<"Proposal"> | number | null
     vehicleAmount?: FloatNullableWithAggregatesFilter<"Proposal"> | number | null
+    roAmount?: FloatNullableWithAggregatesFilter<"Proposal"> | number | null
     roNumber?: StringNullableWithAggregatesFilter<"Proposal"> | string | null
     customerName?: StringNullableWithAggregatesFilter<"Proposal"> | string | null
     vehicleId?: IntNullableWithAggregatesFilter<"Proposal"> | number | null
@@ -36273,6 +36330,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -36311,6 +36369,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -36346,6 +36405,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -36384,6 +36444,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -36421,6 +36482,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
   }
 
   export type EmployeeUpdateManyMutationInput = {
@@ -36434,6 +36496,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
   }
 
   export type EmployeeUncheckedUpdateManyInput = {
@@ -36449,6 +36512,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
   }
 
   export type DepartmentCreateInput = {
@@ -37322,6 +37386,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     startAt?: Date | string | null
@@ -37350,6 +37415,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     vehicleId?: number | null
@@ -37373,6 +37439,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -37401,6 +37468,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -37427,6 +37495,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     vehicleId?: number | null
@@ -37447,6 +37516,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -37469,6 +37539,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -38996,6 +39067,13 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
+  export type EnumBrandTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.BrandType | EnumBrandTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.BrandType[] | null
+    notIn?: $Enums.BrandType[] | null
+    not?: NestedEnumBrandTypeNullableFilter<$PrismaModel> | $Enums.BrandType | null
+  }
+
   export type AttendanceImportLogListRelationFilter = {
     every?: AttendanceImportLogWhereInput
     some?: AttendanceImportLogWhereInput
@@ -39155,6 +39233,7 @@ export namespace Prisma {
     managerId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    brand?: SortOrder
   }
 
   export type EmployeeAvgOrderByAggregateInput = {
@@ -39175,6 +39254,7 @@ export namespace Prisma {
     managerId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    brand?: SortOrder
   }
 
   export type EmployeeMinOrderByAggregateInput = {
@@ -39190,6 +39270,7 @@ export namespace Prisma {
     managerId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    brand?: SortOrder
   }
 
   export type EmployeeSumOrderByAggregateInput = {
@@ -39229,6 +39310,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
+  export type EnumBrandTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BrandType | EnumBrandTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.BrandType[] | null
+    notIn?: $Enums.BrandType[] | null
+    not?: NestedEnumBrandTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.BrandType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumBrandTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumBrandTypeNullableFilter<$PrismaModel>
   }
 
   export type PositionListRelationFilter = {
@@ -40050,6 +40141,7 @@ export namespace Prisma {
     proposalType?: SortOrder
     vehicleKm?: SortOrder
     vehicleAmount?: SortOrder
+    roAmount?: SortOrder
     roNumber?: SortOrder
     customerName?: SortOrder
     vehicleId?: SortOrder
@@ -40066,6 +40158,7 @@ export namespace Prisma {
     createdById?: SortOrder
     vehicleKm?: SortOrder
     vehicleAmount?: SortOrder
+    roAmount?: SortOrder
     vehicleId?: SortOrder
   }
 
@@ -40083,6 +40176,7 @@ export namespace Prisma {
     proposalType?: SortOrder
     vehicleKm?: SortOrder
     vehicleAmount?: SortOrder
+    roAmount?: SortOrder
     roNumber?: SortOrder
     customerName?: SortOrder
     vehicleId?: SortOrder
@@ -40106,6 +40200,7 @@ export namespace Prisma {
     proposalType?: SortOrder
     vehicleKm?: SortOrder
     vehicleAmount?: SortOrder
+    roAmount?: SortOrder
     roNumber?: SortOrder
     customerName?: SortOrder
     vehicleId?: SortOrder
@@ -40122,6 +40217,7 @@ export namespace Prisma {
     createdById?: SortOrder
     vehicleKm?: SortOrder
     vehicleAmount?: SortOrder
+    roAmount?: SortOrder
     vehicleId?: SortOrder
   }
 
@@ -41476,6 +41572,10 @@ export namespace Prisma {
 
   export type EnumRoleFieldUpdateOperationsInput = {
     set?: $Enums.Role
+  }
+
+  export type NullableEnumBrandTypeFieldUpdateOperationsInput = {
+    set?: $Enums.BrandType | null
   }
 
   export type AttendanceImportLogUpdateManyWithoutImportedByNestedInput = {
@@ -43386,6 +43486,13 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
+  export type NestedEnumBrandTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.BrandType | EnumBrandTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.BrandType[] | null
+    notIn?: $Enums.BrandType[] | null
+    not?: NestedEnumBrandTypeNullableFilter<$PrismaModel> | $Enums.BrandType | null
+  }
+
   export type NestedEnumSexWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.Sex | EnumSexFieldRefInput<$PrismaModel>
     in?: $Enums.Sex[]
@@ -43418,6 +43525,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBrandTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BrandType | EnumBrandTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.BrandType[] | null
+    notIn?: $Enums.BrandType[] | null
+    not?: NestedEnumBrandTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.BrandType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumBrandTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumBrandTypeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumLeaveTypeEnumFilter<$PrismaModel = never> = {
@@ -43548,6 +43665,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     startAt?: Date | string | null
@@ -43575,6 +43693,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     vehicleId?: number | null
@@ -43654,6 +43773,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -43681,6 +43801,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -43738,6 +43859,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     startAt?: Date | string | null
@@ -43765,6 +43887,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     startAt?: Date | string | null
@@ -43819,6 +43942,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFilter<"Proposal"> | $Enums.ProposalType
     vehicleKm?: FloatNullableFilter<"Proposal"> | number | null
     vehicleAmount?: FloatNullableFilter<"Proposal"> | number | null
+    roAmount?: FloatNullableFilter<"Proposal"> | number | null
     roNumber?: StringNullableFilter<"Proposal"> | string | null
     customerName?: StringNullableFilter<"Proposal"> | string | null
     vehicleId?: IntNullableFilter<"Proposal"> | number | null
@@ -43940,6 +44064,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -43977,6 +44102,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -44016,6 +44142,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -44052,6 +44179,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -44186,6 +44314,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     startAt?: Date | string | null
@@ -44212,6 +44341,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     vehicleId?: number | null
@@ -44245,6 +44375,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     startAt?: Date | string | null
@@ -44271,6 +44402,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     vehicleId?: number | null
@@ -44880,6 +45012,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -44917,6 +45050,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -44972,6 +45106,7 @@ export namespace Prisma {
     managerId?: IntNullableFilter<"Employee"> | number | null
     createdAt?: DateTimeFilter<"Employee"> | Date | string
     updatedAt?: DateTimeFilter<"Employee"> | Date | string
+    brand?: EnumBrandTypeNullableFilter<"Employee"> | $Enums.BrandType | null
   }
 
   export type KPIEmployeeUpsertWithWhereUniqueWithoutEmployeeInput = {
@@ -45460,6 +45595,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
@@ -45497,6 +45633,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
@@ -45536,6 +45673,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -45573,6 +45711,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -45691,6 +45830,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
@@ -45728,6 +45868,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
@@ -45773,6 +45914,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -45810,6 +45952,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -46053,6 +46196,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -46090,6 +46234,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -46198,6 +46343,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -46235,6 +46381,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -46299,6 +46446,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
     departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
@@ -46336,6 +46484,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
     departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
@@ -46386,6 +46535,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
     departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
@@ -46423,6 +46573,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
     departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
@@ -46482,6 +46633,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -46519,6 +46671,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -46622,6 +46775,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -46659,6 +46813,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -46842,6 +46997,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -46879,6 +47035,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -46949,6 +47106,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -46986,6 +47144,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -47073,6 +47232,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
     departmentHeadOf?: DepartmentCreateNestedOneWithoutHeadInput
@@ -47110,6 +47270,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
     departmentHeadOf?: DepartmentUncheckedCreateNestedOneWithoutHeadInput
@@ -47176,6 +47337,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
     departmentHeadOf?: DepartmentUpdateOneWithoutHeadNestedInput
@@ -47213,6 +47375,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
     departmentHeadOf?: DepartmentUncheckedUpdateOneWithoutHeadNestedInput
@@ -47265,6 +47428,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -47302,6 +47466,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -47376,6 +47541,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -47413,6 +47579,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -47488,6 +47655,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -47525,6 +47693,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -47630,6 +47799,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -47667,6 +47837,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -47832,6 +48003,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -47869,6 +48041,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -47908,6 +48081,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -47945,6 +48119,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -48110,6 +48285,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -48147,6 +48323,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -48192,6 +48369,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -48229,6 +48407,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -48325,6 +48504,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     startAt?: Date | string | null
@@ -48352,6 +48532,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     vehicleId?: number | null
@@ -48379,6 +48560,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -48416,6 +48598,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -48466,6 +48649,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -48493,6 +48677,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -48526,6 +48711,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -48563,6 +48749,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -48597,6 +48784,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -48634,6 +48822,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -48673,6 +48862,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     startAt?: Date | string | null
@@ -48700,6 +48890,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     vehicleId?: number | null
@@ -48738,6 +48929,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -48775,6 +48967,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -48820,6 +49013,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -48847,6 +49041,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -48934,6 +49129,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -48971,6 +49167,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -49010,6 +49207,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -49047,6 +49245,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -49125,6 +49324,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -49162,6 +49362,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -49207,6 +49408,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -49244,6 +49446,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -49278,6 +49481,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -49315,6 +49519,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -49365,6 +49570,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -49402,6 +49608,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -49436,6 +49643,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -49473,6 +49681,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -49549,6 +49758,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -49586,6 +49796,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -49781,6 +49992,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -49818,6 +50030,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -49884,6 +50097,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -49921,6 +50135,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -49955,6 +50170,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -49992,6 +50208,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -50031,6 +50248,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -50068,6 +50286,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -50107,6 +50326,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentCreateNestedOneWithoutDirectorInput
@@ -50144,6 +50364,7 @@ export namespace Prisma {
     managerId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedCreateNestedManyWithoutImportedByInput
     contactInfo?: ContactInfoUncheckedCreateNestedOneWithoutEmployeeInput
     departmentDirectorOf?: DepartmentUncheckedCreateNestedOneWithoutDirectorInput
@@ -50194,6 +50415,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -50231,6 +50453,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -50276,6 +50499,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -50313,6 +50537,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -50358,6 +50583,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -50395,6 +50621,7 @@ export namespace Prisma {
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -50493,6 +50720,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     startAt?: Date | string | null
@@ -50512,6 +50740,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -50539,6 +50768,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -50564,6 +50794,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -50590,6 +50821,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    brand?: $Enums.BrandType | null
   }
 
   export type KPIEmployeeCreateManyEmployeeInput = {
@@ -50634,6 +50866,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     vehicleId?: number | null
@@ -50656,6 +50889,7 @@ export namespace Prisma {
     proposalType?: $Enums.ProposalType
     vehicleKm?: number | null
     vehicleAmount?: number | null
+    roAmount?: number | null
     roNumber?: string | null
     customerName?: string | null
     vehicleId?: number | null
@@ -50849,6 +51083,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUpdateOneWithoutDirectorNestedInput
@@ -50885,6 +51120,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
     AttendanceImportLog?: AttendanceImportLogUncheckedUpdateManyWithoutImportedByNestedInput
     contactInfo?: ContactInfoUncheckedUpdateOneWithoutEmployeeNestedInput
     departmentDirectorOf?: DepartmentUncheckedUpdateOneWithoutDirectorNestedInput
@@ -50921,6 +51157,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    brand?: NullableEnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType | null
   }
 
   export type KPIEmployeeUpdateWithoutEmployeeInput = {
@@ -51022,6 +51259,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -51048,6 +51286,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -51073,6 +51312,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -51093,6 +51333,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     startAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -51119,6 +51360,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -51144,6 +51386,7 @@ export namespace Prisma {
     proposalType?: EnumProposalTypeFieldUpdateOperationsInput | $Enums.ProposalType
     vehicleKm?: NullableFloatFieldUpdateOperationsInput | number | null
     vehicleAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roAmount?: NullableFloatFieldUpdateOperationsInput | number | null
     roNumber?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     vehicleId?: NullableIntFieldUpdateOperationsInput | number | null

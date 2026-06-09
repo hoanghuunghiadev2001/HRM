@@ -211,6 +211,7 @@ export interface CreateProposalFormData {
   roNumber?: string; // Số RO hoặc mã yêu cầu dịch vụ
   vehicleKm?: number; // Số km dự kiến hoặc thực tế
   vehicleAmount?: number; // Số tiền (cước phí)
+  roAmount?: number; // Số tiền (cước phí) thực tế
   pickupPlace?: string; // Điểm đón (nếu là xe đưa đón)
 }
 

@@ -24,6 +24,7 @@ import {
   Timeline,
   Space,
   List,
+  InputNumber,
 } from "antd";
 import {
   FileTextOutlined,
@@ -46,6 +47,7 @@ import axios from "axios";
 import dayjs, { Dayjs } from "dayjs";
 import { useAppSelector } from "@/store/hook";
 import TextArea from "antd/es/input/TextArea";
+import { formatCurrency } from "@/components/function";
 
 const { Title, Text, Paragraph } = Typography;
 const { RangePicker } = DatePicker;
@@ -82,10 +84,29 @@ export default function ProposalDetailTailwind() {
   );
   const [remindLoading, setRemindLoading] = useState(false);
 
+  const [editGrabModalVisible, setEditGrabModalVisible] = useState(false);
+  const [editGrabAmount, setEditGrabAmount] = useState<number | null>(null);
+  const [editGrabKm, setEditGrabKm] = useState<number | null>(null);
+  const [addSignerLoading, setAddSignerLoading] = useState(false);
+
   useEffect(() => {
     fetchData();
   }, [proposalId]);
 
+  const handleAddDirectorSigner = async () => {
+    setAddSignerLoading(true);
+    try {
+      const res = await axios.post(`/api/proposals/${proposalId}/add-signer`, {
+        signerId: 18,
+      });
+      message.success("Đã thêm Giám đốc Dịch vụ vào danh sách ký");
+      await fetchData();
+    } catch (e: any) {
+      message.error(e.response?.data?.error || "Không thể thêm người ký");
+    } finally {
+      setAddSignerLoading(false);
+    }
+  };
   const handleRemind = async () => {
     setRemindLoading(true);
     try {
@@ -106,6 +127,25 @@ export default function ProposalDetailTailwind() {
     }
   };
 
+  const handleUpdateGrab = async () => {
+    if (editGrabAmount === null || editGrabKm === null)
+      return message.error("Vui lòng nhập đầy đủ thông tin");
+    setActionLoading(true);
+    try {
+      await axios.patch(`/api/proposals/${proposal?.id}/update`, {
+        vehicleAmount: editGrabAmount,
+        vehicleKm: editGrabKm,
+      });
+      message.success("Cập nhật thành công");
+      setEditGrabModalVisible(false);
+      await fetchData();
+    } catch (e) {
+      message.error("Cập nhật thất bại");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -121,6 +161,10 @@ export default function ProposalDetailTailwind() {
         if (pJson.vehicle) setEditVehicleId(pJson.vehicle.id);
         if (pJson.startAt && pJson.endAt)
           setEditTimeRange([dayjs(pJson.startAt), dayjs(pJson.endAt)]);
+
+        if (pJson.vehicleAmount !== undefined)
+          setEditGrabAmount(pJson.vehicleAmount);
+        if (pJson.vehicleKm !== undefined) setEditGrabKm(pJson.vehicleKm);
       } else {
         message.error(pJson.error || "Không thể tải đề xuất");
       }
@@ -376,6 +420,30 @@ export default function ProposalDetailTailwind() {
                 Chỉnh sửa
               </Button>
             )}
+
+            {[201, 317, 318].includes(Number(id)) &&
+              proposal.proposalType === "VEHICLE_GRAB" && (
+                <Button
+                  icon={<EditOutlined />}
+                  onClick={() => setEditGrabModalVisible(true)}
+                >
+                  Chỉnh sửa GSM
+                </Button>
+              )}
+
+            {[201, 317, 318].includes(Number(id)) &&
+              proposal.proposalType === "VEHICLE_GRAB" &&
+              // Chỉ hiện nếu GĐ DV (id=18) chưa có trong danh sách ký
+              !proposal.signers?.some((s: any) => s.signer?.id === 18) && (
+                <Button
+                  icon={<UserOutlined />}
+                  onClick={handleAddDirectorSigner}
+                  loading={addSignerLoading}
+                  className="border-purple-400 text-purple-500 hover:text-purple-600 hover:border-purple-600"
+                >
+                  Thêm GĐ DV ký
+                </Button>
+              )}
           </div>
           <div className="w-full flex items-center justify-end gap-3">
             <span className="text-sm font-medium">Tiến độ</span>
@@ -470,20 +538,42 @@ export default function ProposalDetailTailwind() {
                       <Descriptions.Item label="Mã RO">
                         {proposal.roNumber || "N/A"}
                       </Descriptions.Item>
+                      <Descriptions.Item label="Tiền RO">
+                        {proposal.roAmount
+                          ? formatCurrency(proposal.roAmount)
+                          : "N/A"}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Km dự kiến">
+                        {proposal.vehicleKm !== undefined
+                          ? `${proposal.vehicleKm} km`
+                          : "N/A"}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Tiền dự kiến">
+                        {proposal.vehicleAmount
+                          ? formatCurrency(proposal.vehicleAmount)
+                          : "N/A"}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="% tiền thực tế so với RO">
+                        {proposal.roAmount &&
+                        proposal.vehicleAmount !== undefined
+                          ? `${((proposal.vehicleAmount / proposal.roAmount) * 100).toFixed(2)}%`
+                          : "N/A"}
+                      </Descriptions.Item>
                     </>
                   ) : (
-                    <Descriptions.Item label="Xe">
-                      {proposal.vehicle?.name || "Đang chờ điều phối"} (
-                      {proposal.vehicle?.plateNumber || "..."})
-                    </Descriptions.Item>
+                    <>
+                      <Descriptions.Item label="Thời gian">
+                        {toVietnamTime(proposal.startAt)} →{" "}
+                        {toVietnamTime(proposal.endAt)}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Xe">
+                        {proposal.vehicle?.name || "Đang chờ điều phối"} (
+                        {proposal.vehicle?.plateNumber || "..."})
+                      </Descriptions.Item>
+                    </>
                   )}
                 </>
               )}
-
-              <Descriptions.Item label="Thời gian">
-                {toVietnamTime(proposal.startAt)} →{" "}
-                {toVietnamTime(proposal.endAt)}
-              </Descriptions.Item>
             </Descriptions>
           </Card>
 
@@ -738,6 +828,48 @@ export default function ProposalDetailTailwind() {
           </Form>
         </Modal>
       )}
+
+      <Modal
+        title="Chỉnh sửa thông tin đặt xe GSM"
+        open={editGrabModalVisible}
+        onCancel={() => setEditGrabModalVisible(false)}
+        onOk={handleUpdateGrab}
+        okText="Lưu"
+        cancelText="Hủy"
+        confirmLoading={actionLoading}
+      >
+        <Form layout="vertical">
+          <Form.Item label="Số km thực tế" required>
+            <InputNumber
+              className="w-full"
+              min={0}
+              value={editGrabKm ?? undefined}
+              onChange={(v) => setEditGrabKm(v)}
+              addonAfter="km"
+            />
+          </Form.Item>
+          <Form.Item label="Tiền thực tế" required>
+            <InputNumber
+              className="w-full"
+              min={0}
+              value={editGrabAmount ?? undefined}
+              onChange={(v) => setEditGrabAmount(v)}
+              formatter={(v) => `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              parser={(v) => v?.replace(/,/g, "") as any}
+              addonAfter="₫"
+            />
+          </Form.Item>
+          {/* Preview tỷ lệ so với RO */}
+          {proposal?.roAmount && editGrabAmount !== null && (
+            <div className="text-sm text-gray-500 bg-gray-50 p-2 rounded">
+              Tỷ lệ so với tiền RO:{" "}
+              <span className="font-medium text-blue-600">
+                {((editGrabAmount / proposal.roAmount) * 100).toFixed(2)}%
+              </span>
+            </div>
+          )}
+        </Form>
+      </Modal>
     </div>
   );
 }

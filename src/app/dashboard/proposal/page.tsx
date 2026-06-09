@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   DatePicker,
   Space,
@@ -23,6 +23,9 @@ import {
   Statistic,
   Empty,
   Tooltip,
+  Switch,
+  Alert,
+  InputNumber,
 } from "antd";
 import {
   FileTextOutlined,
@@ -36,6 +39,10 @@ import {
   DeleteOutlined,
   PaperClipOutlined,
   EyeOutlined,
+  UserOutlined,
+  TeamOutlined,
+  InfoCircleOutlined,
+  WarningOutlined,
 } from "@ant-design/icons";
 import type { UploadFile, RcFile } from "antd/es/upload/interface";
 import dayjs from "dayjs";
@@ -50,33 +57,65 @@ const { TextArea } = Input;
 
 dayjs.extend(isBetween);
 
+// ─── Cấu hình người ký/duyệt theo chi nhánh ───────────────────────────────────
+const BRANCH_APPROVER_CONFIG = {
+  TBD: {
+    signerIds: [59],
+    signerIdsWithException: [59, 18],
+    approverIds: [317],
+  },
+  TMP: {
+    signerIds: [36],
+    signerIdsWithException: [36, 18],
+    approverIds: [318],
+  },
+} as const;
+
+// ─── Ngưỡng % ngoại lệ ────────────────────────────────────────────────────────
+const EXCEPTION_THRESHOLD_PERCENT = 5;
+
+type ProposalTypeValue = "REGULAR" | "VEHICLE" | "VEHICLE_GRAB";
+type GrabSubType = "PERSONAL" | "CUSTOMER";
+type BrandType = "TBD" | "TMP";
+
 export default function ProposalCreatorProfessional() {
   const [form] = Form.useForm();
 
-  // State Quản lý file
+  // ── State: File ──────────────────────────────────────────────────────────────
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [previewFiles, setPreviewFiles] = useState<
     { url: string; name: string; type: string }[]
   >([]);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
-  // State Dữ liệu hệ thống
+  // ── State: Dữ liệu hệ thống ──────────────────────────────────────────────────
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [employees, setEmployees] = useState<any[]>([]);
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [vehicleBookings, setVehicleBookings] = useState<any>({});
-  const [proposalType, setProposalType] = useState<
-    "REGULAR" | "VEHICLE" | "VEHICLE_GRAB"
-  >("REGULAR");
-  const [selectedVehicle, setSelectedVehicle] = useState<number | null>(null);
-  const [rangeTime, setRangeTime] = useState<any>(null);
   const [managerIds, setManagerIds] = useState<number[]>([]);
 
+  // ── State: Loại đề xuất ──────────────────────────────────────────────────────
+  const [proposalType, setProposalType] =
+    useState<ProposalTypeValue>("REGULAR");
+
+  // ── State: VEHICLE ────────────────────────────────────────────────────────────
+  const [selectedVehicle, setSelectedVehicle] = useState<number | null>(null);
+  const [rangeTime, setRangeTime] = useState<any>(null);
+
+  // ── State: VEHICLE_GRAB ───────────────────────────────────────────────────────
+  const [grabSubType, setGrabSubType] = useState<GrabSubType>("PERSONAL");
+  const [isException, setIsException] = useState(false);
+  const [roPercent, setRoPercent] = useState<number | null>(null);
+  const [autoException, setAutoException] = useState(false);
+
   const user = useAppSelector((s: any) => s.user);
+  const userBrand = user?.brand as BrandType | undefined;
+
   const [modal, contextHolder] = Modal.useModal();
 
-  // 1. FETCH DỮ LIỆU
+  // ── 1. FETCH DỮ LIỆU ─────────────────────────────────────────────────────────
   useEffect(() => {
     const fetchInitialData = async () => {
       setLoading(true);
@@ -118,16 +157,96 @@ export default function ProposalCreatorProfessional() {
     fetchInitialData();
   }, []);
 
-  // 2. KIỂM TRA TRÙNG LỊCH
+  // ── 2. AUTO-FILL LUỒNG PHÊ DUYỆT ─────────────────────────────────────────────
+  useEffect(() => {
+    console.log(userBrand);
+
+    if (proposalType === "VEHICLE") {
+      // Xe nội bộ: manager ký, id 6 duyệt
+      form.setFieldsValue({ signers: managerIds, approvers: [6] });
+      return;
+    }
+
+    if (proposalType === "VEHICLE_GRAB") {
+      if (grabSubType === "PERSONAL") {
+        // Cá nhân: giống xe nội bộ
+        form.setFieldsValue({ signers: managerIds, approvers: [6] });
+        return;
+      }
+
+      // Khách hàng: lấy theo chi nhánh của user
+      if (!userBrand || !BRANCH_APPROVER_CONFIG[userBrand]) {
+        form.setFieldsValue({ signers: [], approvers: [] });
+        return;
+      }
+
+      const cfg = BRANCH_APPROVER_CONFIG[userBrand];
+      const effectiveException = isException || autoException;
+      form.setFieldsValue({
+        signers: effectiveException
+          ? cfg.signerIdsWithException
+          : cfg.signerIds,
+        approvers: cfg.approverIds,
+      });
+      return;
+    }
+
+    // REGULAR
+    form.setFieldsValue({ signers: [], approvers: [] });
+  }, [
+    proposalType,
+    grabSubType,
+    isException,
+    autoException,
+    managerIds,
+    userBrand,
+    form,
+  ]);
+
+  // ── 3. TÍNH % TIỀN TRÊN RO VÀ TỰ ĐỘNG NGOẠI LỆ ──────────────────────────────
+  const handleAmountChange = useCallback(
+    (value: number | null) => {
+      // 1. Lấy giá trị của cả 2 ô một cách chính xác
+      // Sử dụng form.getFieldsValue() để gom toàn bộ data hiện tại của form
+      const currentFields = form.getFieldsValue();
+
+      const vehicleAmount = currentFields.vehicleAmount;
+      const roAmount = currentFields.roAmount;
+
+      if (
+        vehicleAmount &&
+        roAmount &&
+        Number(roAmount) > 0 &&
+        Number(vehicleAmount) > 0
+      ) {
+        const percent = (Number(vehicleAmount) / Number(roAmount)) * 100;
+        setRoPercent(percent);
+
+        if (percent > EXCEPTION_THRESHOLD_PERCENT && !autoException) {
+          setAutoException(true);
+          message.warning(
+            `Số tiền xe chiếm ${percent.toFixed(1)}% giá trị RO (> ${EXCEPTION_THRESHOLD_PERCENT}%) — tự động thêm ngoại lệ.`,
+          );
+        } else if (percent <= EXCEPTION_THRESHOLD_PERCENT && autoException) {
+          setAutoException(false);
+        }
+      } else {
+        setRoPercent(null);
+        if (autoException) setAutoException(false);
+      }
+    },
+    [form, autoException],
+  ); // Nhớ thêm 'form' vào dependency nhé
+
+  // ── 4. KIỂM TRA TRÙNG LỊCH XE ────────────────────────────────────────────────
   const isRangeOverlap = (
     start: dayjs.Dayjs,
     end: dayjs.Dayjs,
     bookings: any[],
-  ) => {
-    return bookings.some(
+  ) =>
+    bookings.some(
       (b) => start.isBefore(dayjs(b.endAt)) && end.isAfter(dayjs(b.startAt)),
     );
-  };
 
   const onVehicleTimeChange = (dates: any) => {
     if (!dates || !dates[0] || !dates[1]) {
@@ -148,19 +267,7 @@ export default function ProposalCreatorProfessional() {
     }
   };
 
-  // 3. Auto-fill người duyệt
-  useEffect(() => {
-    if (proposalType === "VEHICLE") {
-      form.setFieldsValue({ signers: managerIds, approvers: [6] });
-    } else {
-      form.setFieldsValue({ signers: [], approvers: [] });
-    }
-  }, [proposalType, managerIds, form]);
-
-  const signersWatch = Form.useWatch("signers", form) || [];
-  const approversWatch = Form.useWatch("approvers", form) || [];
-
-  // 4. Xử lý File
+  // ── 5. XỬ LÝ FILE ─────────────────────────────────────────────────────────────
   const handleBeforeUpload = (file: RcFile) => {
     const isAllowed =
       file.type === "application/pdf" || file.type.startsWith("image/");
@@ -174,7 +281,7 @@ export default function ProposalCreatorProfessional() {
       name: file.name,
       status: "done" as const,
       originFileObj: file,
-      url: url,
+      url,
     };
     setFileList((prev) => [...prev, newFileItem]);
     setPreviewFiles((prev) => [
@@ -194,11 +301,18 @@ export default function ProposalCreatorProfessional() {
       setActiveIndex(Math.max(0, updatedPreviews.length - 2));
   };
 
+  // ── 6. SUBMIT ─────────────────────────────────────────────────────────────────
   const handleSubmit = async (values: any) => {
     if (proposalType === "REGULAR" && fileList.length === 0)
       return message.warning("Vui lòng đính kèm tài liệu!");
     if (proposalType === "VEHICLE" && !rangeTime)
       return message.warning("Vui lòng chọn thời gian sử dụng xe!");
+    if (
+      proposalType === "VEHICLE_GRAB" &&
+      grabSubType === "CUSTOMER" &&
+      !userBrand
+    )
+      return message.warning("Không xác định được chi nhánh của bạn!");
 
     setSubmitting(true);
     try {
@@ -206,24 +320,36 @@ export default function ProposalCreatorProfessional() {
       formData.append("name", values.name);
       formData.append("description", values.description || "");
       formData.append("proposerId", String(user.id || 0));
-      formData.append("signerIds", JSON.stringify(values.signers));
-      formData.append("approverIds", JSON.stringify(values.approvers));
+      formData.append("signerIds", JSON.stringify(values.signers || []));
+      formData.append("approverIds", JSON.stringify(values.approvers || []));
       formData.append("proposalType", proposalType);
 
       if (proposalType === "VEHICLE_GRAB") {
-        formData.append("customerName", values.customerName || "");
-        formData.append("roNumber", values.roNumber || "");
-        formData.append("vehicleKm", String(values.vehicleKm || 0));
-        formData.append("vehicleAmount", String(values.vehicleAmount || 0));
+        formData.append("grabSubType", grabSubType);
         formData.append("pickupPlace", values.pickupPlace || "");
         formData.append("dropoffPlace", values.dropoffPlace || "");
+        formData.append("vehicleKm", String(values.vehicleKm || 0));
+        formData.append("vehicleAmount", String(values.vehicleAmount || 0));
+        formData.append("roAmount", String(values.roAmount || 0));
+
+        if (grabSubType === "CUSTOMER") {
+          formData.append("customerName", values.customerName || "");
+          formData.append("roNumber", values.roNumber || "");
+          formData.append("roAmount", String(values.roAmount || 0));
+          formData.append("roPercent", String(roPercent?.toFixed(2) || "0"));
+          formData.append("isException", String(isException || autoException));
+          formData.append("branch", userBrand || "");
+        }
       }
+
       if (proposalType === "VEHICLE") {
         formData.append("vehicleId", String(selectedVehicle));
         formData.append("startAt", rangeTime[0].toISOString());
         formData.append("endAt", rangeTime[1].toISOString());
         formData.append("dropoffPlace", values.dropoffPlace || "");
-      } else {
+      }
+
+      if (proposalType === "REGULAR") {
         fileList.forEach(
           (file) =>
             file.originFileObj && formData.append("files", file.originFileObj),
@@ -234,6 +360,7 @@ export default function ProposalCreatorProfessional() {
         method: "POST",
         body: formData,
       });
+
       if (res.ok) {
         modal.success({ title: "Gửi đề xuất thành công!" });
         handleReset();
@@ -248,6 +375,7 @@ export default function ProposalCreatorProfessional() {
     }
   };
 
+  // ── 7. RESET ──────────────────────────────────────────────────────────────────
   const handleReset = () => {
     form.resetFields();
     previewFiles.forEach((f) => URL.revokeObjectURL(f.url));
@@ -256,14 +384,24 @@ export default function ProposalCreatorProfessional() {
     setRangeTime(null);
     setSelectedVehicle(null);
     setProposalType("REGULAR");
+    setGrabSubType("PERSONAL");
+    setIsException(false);
+    setAutoException(false);
+    setRoPercent(null);
   };
 
+  const signersWatch = Form.useWatch("signers", form) || [];
+  const approversWatch = Form.useWatch("approvers", form) || [];
+
+  const effectiveException = isException || autoException;
+
+  // ── RENDER ────────────────────────────────────────────────────────────────────
   return (
     <div className="max-w-[1600px] mx-auto p-3 sm:p-6 bg-[#f0f2f5] min-h-screen font-sans">
       <ModalLoading isOpen={loading || submitting} />
       {contextHolder}
 
-      {/* Responsive Header */}
+      {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 bg-white p-4 rounded-xl shadow-sm gap-4">
         <Space align="center" size="middle">
           <div className="bg-blue-600 p-2 sm:p-3 rounded-lg shadow-lg">
@@ -299,7 +437,7 @@ export default function ProposalCreatorProfessional() {
       </div>
 
       <Row gutter={[20, 20]}>
-        {/* CỘT TRÁI: FORM */}
+        {/* ── CỘT TRÁI: FORM ────────────────────────────────────────────────── */}
         <Col xs={24} lg={14} xl={15}>
           <Card className="rounded-xl border-none shadow-sm overflow-hidden">
             <Form
@@ -308,6 +446,7 @@ export default function ProposalCreatorProfessional() {
               onFinish={handleSubmit}
               requiredMark={false}
             >
+              {/* Tiêu đề & Loại hình */}
               <Row gutter={16}>
                 <Col xs={24} md={16}>
                   <Form.Item
@@ -326,7 +465,13 @@ export default function ProposalCreatorProfessional() {
                   <Form.Item label={<Text strong>Loại hình</Text>}>
                     <Select
                       value={proposalType}
-                      onChange={setProposalType}
+                      onChange={(v) => {
+                        setProposalType(v);
+                        setGrabSubType("PERSONAL");
+                        setIsException(false);
+                        setAutoException(false);
+                        setRoPercent(null);
+                      }}
                       size="large"
                       className="w-full"
                     >
@@ -342,6 +487,7 @@ export default function ProposalCreatorProfessional() {
                 </Col>
               </Row>
 
+              {/* Mô tả */}
               <Form.Item
                 name="description"
                 label={<Text strong>Nội dung tóm tắt</Text>}
@@ -353,7 +499,7 @@ export default function ProposalCreatorProfessional() {
                 />
               </Form.Item>
 
-              {/* Upload Files Section */}
+              {/* ── REGULAR: Upload files ─────────────────────────────────── */}
               {proposalType === "REGULAR" && (
                 <div className="mb-6">
                   <Text strong className="block mb-2">
@@ -377,7 +523,11 @@ export default function ProposalCreatorProfessional() {
                       <div
                         key={idx}
                         onClick={() => setActiveIndex(idx)}
-                        className={`flex items-center justify-between p-2 border rounded-lg cursor-pointer transition-all ${activeIndex === idx ? "border-blue-500 bg-blue-50" : "bg-white"}`}
+                        className={`flex items-center justify-between p-2 border rounded-lg cursor-pointer transition-all ${
+                          activeIndex === idx
+                            ? "border-blue-500 bg-blue-50"
+                            : "bg-white"
+                        }`}
                       >
                         <Space className="overflow-hidden">
                           {file.type === "application/pdf" ? (
@@ -405,7 +555,7 @@ export default function ProposalCreatorProfessional() {
                 </div>
               )}
 
-              {/* Vehicle Section */}
+              {/* ── VEHICLE: Xe nội bộ ───────────────────────────────────── */}
               {proposalType === "VEHICLE" && (
                 <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 mb-6">
                   <Row gutter={16}>
@@ -422,7 +572,7 @@ export default function ProposalCreatorProfessional() {
                         >
                           {vehicles.map((v) => (
                             <Select.Option key={v.id} value={v.id}>
-                              <CarOutlined className="mr-2 text-blue-500" />{" "}
+                              <CarOutlined className="mr-2 text-blue-500" />
                               {v.plateNumber} - {v.name}
                             </Select.Option>
                           ))}
@@ -459,84 +609,354 @@ export default function ProposalCreatorProfessional() {
                   </Row>
                 </div>
               )}
+
+              {/* ── VEHICLE_GRAB: Đặt xe GSM ─────────────────────────────── */}
               {proposalType === "VEHICLE_GRAB" && (
-                <div className="bg-green-50/50 p-4 rounded-xl border border-green-100 mb-6">
-                  <Row gutter={16}>
-                    <Col xs={24} md={12}>
-                      <Form.Item
-                        name="customerName"
-                        label={<Text strong>Tên khách hàng</Text>}
-                        rules={[{ required: true }]}
-                      >
-                        <Input placeholder="Tên khách..." size="large" />
-                      </Form.Item>
-                    </Col>
-                    <Col xs={24} md={12}>
-                      <Form.Item
-                        name="roNumber"
-                        label={<Text strong>Số RO (Dịch vụ)</Text>}
-                      >
-                        <Input placeholder="Nhập mã RO..." size="large" />
-                      </Form.Item>
-                    </Col>
-                    <Col xs={24} md={12}>
-                      <Form.Item
-                        name="vehicleKm"
-                        label={<Text strong>Số KM dự kiến</Text>}
-                      >
-                        <Input
-                          type="number"
-                          placeholder="Số KM..."
-                          size="large"
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col xs={24} md={12}>
-                      <Form.Item
-                        name="vehicleAmount"
-                        label={<Text strong>Số tiền dự kiến</Text>}
-                      >
-                        <Input
-                          type="number"
-                          prefix="₫"
-                          placeholder="Số tiền..."
-                          size="large"
-                        />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={16}>
-                    <Col xs={24} md={12}>
-                      <Form.Item
-                        name="pickupPlace"
-                        label={<Text strong>Điểm bắt đầu</Text>}
-                      >
-                        <Input
-                          prefix={
-                            <EnvironmentOutlined className="text-blue-500" />
+                <div className="mb-6">
+                  {/* Toggle Cá nhân / Khách hàng */}
+                  <div className="flex rounded-lg overflow-hidden border border-gray-200 mb-4">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setGrabSubType("PERSONAL");
+                        setIsException(false);
+                        setAutoException(false);
+                        setRoPercent(null);
+                      }}
+                      className={`flex-1 py-2.5 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
+                        grabSubType === "PERSONAL"
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-50 text-gray-500 hover:bg-gray-100"
+                      }`}
+                    >
+                      <UserOutlined />
+                      Cá nhân
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setGrabSubType("CUSTOMER");
+                        setIsException(false);
+                        setAutoException(false);
+                        setRoPercent(null);
+                      }}
+                      className={`flex-1 py-2.5 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
+                        grabSubType === "CUSTOMER"
+                          ? "bg-green-600 text-white"
+                          : "bg-gray-50 text-gray-500 hover:bg-gray-100"
+                      }`}
+                    >
+                      <TeamOutlined />
+                      Khách hàng
+                    </button>
+                  </div>
+
+                  {/* ── Sub-form: Cá nhân ──────────────────────────────────── */}
+                  {grabSubType === "PERSONAL" && (
+                    <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+                      <Row gutter={16}>
+                        <Col xs={24} md={12}>
+                          <Form.Item
+                            name="pickupPlace"
+                            label={<Text strong>Điểm bắt đầu</Text>}
+                            rules={[
+                              { required: true, message: "Nhập điểm đón" },
+                            ]}
+                          >
+                            <Input
+                              prefix={
+                                <EnvironmentOutlined className="text-blue-500" />
+                              }
+                              placeholder="Nhập điểm đón..."
+                              size="large"
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col xs={24} md={12}>
+                          <Form.Item
+                            name="dropoffPlace"
+                            label={<Text strong>Điểm kết thúc</Text>}
+                            rules={[
+                              { required: true, message: "Nhập điểm đến" },
+                            ]}
+                          >
+                            <Input
+                              prefix={
+                                <EnvironmentOutlined className="text-red-500" />
+                              }
+                              placeholder="Nhập điểm đến..."
+                              size="large"
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col xs={24} md={12}>
+                          <Form.Item
+                            name="vehicleKm"
+                            label={<Text strong>Số KM ước tính</Text>}
+                          >
+                            <Input
+                              type="number"
+                              suffix="km"
+                              placeholder="0"
+                              size="large"
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col xs={24} md={12}>
+                          <Form.Item
+                            name="vehicleAmount"
+                            label={<Text strong>Số tiền ước tính</Text>}
+                          >
+                            <Input
+                              type="number"
+                              prefix="₫"
+                              placeholder="0"
+                              size="large"
+                            />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                    </div>
+                  )}
+
+                  {/* ── Sub-form: Khách hàng ───────────────────────────────── */}
+                  {grabSubType === "CUSTOMER" && (
+                    <div className="bg-green-50/50 p-4 rounded-xl border border-green-100">
+                      {/* Badge chi nhánh */}
+                      {userBrand && (
+                        <div className="mb-4">
+                          <Tag
+                            color={userBrand === "TBD" ? "blue" : "purple"}
+                            className="rounded-full px-3 py-0.5 text-xs"
+                          >
+                            Chi nhánh: {userBrand}
+                          </Tag>
+                        </div>
+                      )}
+
+                      <Row gutter={16}>
+                        {/* Thông tin khách & RO */}
+                        <Col xs={24} md={12}>
+                          <Form.Item
+                            name="customerName"
+                            label={<Text strong>Tên khách hàng</Text>}
+                            rules={[
+                              {
+                                required: true,
+                                message: "Nhập tên khách hàng",
+                              },
+                            ]}
+                          >
+                            <Input placeholder="Tên khách..." size="large" />
+                          </Form.Item>
+                        </Col>
+                        <Col xs={24} md={12}>
+                          <Form.Item
+                            name="roNumber"
+                            label={<Text strong>Số RO (Dịch vụ)</Text>}
+                          >
+                            <Input placeholder="Nhập mã RO..." size="large" />
+                          </Form.Item>
+                        </Col>
+
+                        {/* Điểm đi / đến */}
+                        <Col xs={24} md={12}>
+                          <Form.Item
+                            name="pickupPlace"
+                            label={<Text strong>Điểm bắt đầu</Text>}
+                            rules={[
+                              { required: true, message: "Nhập điểm đón" },
+                            ]}
+                          >
+                            <Input
+                              prefix={
+                                <EnvironmentOutlined className="text-blue-500" />
+                              }
+                              placeholder="Nhập điểm đón..."
+                              size="large"
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col xs={24} md={12}>
+                          <Form.Item
+                            name="dropoffPlace"
+                            label={<Text strong>Điểm kết thúc</Text>}
+                            rules={[
+                              { required: true, message: "Nhập điểm đến" },
+                            ]}
+                          >
+                            <Input
+                              prefix={
+                                <EnvironmentOutlined className="text-red-500" />
+                              }
+                              placeholder="Nhập điểm đến..."
+                              size="large"
+                            />
+                          </Form.Item>
+                        </Col>
+
+                        {/* KM & tiền xe */}
+                        <Col xs={24} md={12}>
+                          <Form.Item
+                            name="vehicleKm"
+                            label={<Text strong>Số KM ước tính</Text>}
+                          >
+                            <Input
+                              type="number"
+                              suffix="km"
+                              placeholder="0"
+                              size="large"
+                            />
+                          </Form.Item>
+                        </Col>
+                        {/* Ô số tiền xe */}
+                        <Col xs={24} md={12}>
+                          <Form.Item
+                            name="vehicleAmount"
+                            label={<Text strong>Số tiền xe ước tính</Text>}
+                          >
+                            <InputNumber
+                              prefix="₫"
+                              placeholder="0"
+                              size="large"
+                              style={{ width: "100%" }}
+                              formatter={(value) =>
+                                value
+                                  ? `${value}`.replace(
+                                      /\B(?=(\d{3})+(?!\d))/g,
+                                      ",",
+                                    )
+                                  : ""
+                              }
+                              // 🔹 Sửa parser: Chuyển chuỗi sau khi xóa dấu phẩy thành kiểu số (number)
+                              parser={(value) =>
+                                value ? Number(value.replace(/,/g, "")) : 0
+                              }
+                              onChange={handleAmountChange}
+                            />
+                          </Form.Item>
+                        </Col>
+
+                        {/* Ô số tiền RO */}
+                        <Col xs={24} md={12}>
+                          <Form.Item
+                            name="roAmount"
+                            label={<Text strong>Số tiền RO</Text>}
+                          >
+                            <InputNumber
+                              prefix="₫"
+                              placeholder="0"
+                              size="large"
+                              style={{ width: "100%" }}
+                              formatter={(value) =>
+                                value
+                                  ? `${value}`.replace(
+                                      /\B(?=(\d{3})+(?!\d))/g,
+                                      ",",
+                                    )
+                                  : ""
+                              }
+                              // 🔹 Sửa parser ở đây tương tự để xóa sạch lỗi TS
+                              parser={(value) =>
+                                value ? Number(value.replace(/,/g, "")) : 0
+                              }
+                              onChange={handleAmountChange}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col xs={24} md={12}>
+                          <Form.Item
+                            label={
+                              <Space size={4}>
+                                <Text strong>% tiền xe / RO</Text>
+                                <Tooltip title="Tự động tính từ (Tiền xe / Tiền RO) × 100. Nếu > 5% sẽ tự động thêm ngoại lệ.">
+                                  <InfoCircleOutlined className="text-gray-400 text-xs" />
+                                </Tooltip>
+                              </Space>
+                            }
+                          >
+                            <div
+                              className={`h-10 flex items-center px-3 rounded-md border text-sm font-medium ${
+                                roPercent === null
+                                  ? "bg-gray-50 text-gray-400 border-gray-200"
+                                  : roPercent > EXCEPTION_THRESHOLD_PERCENT
+                                    ? "bg-red-50 text-red-600 border-red-200"
+                                    : "bg-green-50 text-green-700 border-green-200"
+                              }`}
+                            >
+                              {roPercent === null
+                                ? "— Nhập tiền xe & tiền RO"
+                                : `${roPercent.toFixed(2)}%`}
+                            </div>
+                          </Form.Item>
+                        </Col>
+                      </Row>
+
+                      {/* Alert ngoại lệ tự động */}
+                      {autoException && (
+                        <Alert
+                          type="warning"
+                          showIcon
+                          icon={<WarningOutlined />}
+                          className="mb-4 rounded-lg"
+                          message={
+                            <span className="text-sm">
+                              Tỷ lệ <strong>{roPercent?.toFixed(2)}%</strong>{" "}
+                              vượt ngưỡng {EXCEPTION_THRESHOLD_PERCENT}% — ngoại
+                              lệ được thêm tự động.
+                            </span>
                           }
-                          placeholder="Nhập điểm đón..."
-                          size="large"
                         />
-                      </Form.Item>
-                    </Col>
-                    <Col xs={24} md={12}>
-                      <Form.Item
-                        name="dropoffPlace"
-                        label={<Text strong>Điểm kết thúc</Text>}
+                      )}
+
+                      {/* Toggle ngoại lệ thủ công */}
+                      <div
+                        className={`flex items-center justify-between p-3 rounded-lg border ${
+                          effectiveException
+                            ? "bg-amber-50 border-amber-200"
+                            : "bg-white border-gray-200"
+                        }`}
                       >
-                        <Input
-                          prefix={
-                            <EnvironmentOutlined className="text-red-500" />
-                          }
-                          placeholder="Nhập điểm đến..."
-                          size="large"
+                        <Space>
+                          <WarningOutlined
+                            className={
+                              effectiveException
+                                ? "text-amber-500"
+                                : "text-gray-400"
+                            }
+                          />
+                          <div>
+                            <Text strong className="text-sm block">
+                              Ngoại lệ
+                            </Text>
+                            <Text type="secondary" className="text-xs">
+                              {userBrand
+                                ? `Thêm ID 18 vào luồng ký (${userBrand})`
+                                : "Thêm người ký bổ sung"}
+                            </Text>
+                          </div>
+                        </Space>
+                        <Switch
+                          checked={effectiveException}
+                          onChange={(checked) => {
+                            // Chỉ cho tắt thủ công nếu không phải auto
+                            if (autoException && !checked) {
+                              message.info(
+                                "Ngoại lệ tự động do tỷ lệ > 5%. Giảm số tiền để tắt.",
+                              );
+                              return;
+                            }
+                            setIsException(checked);
+                          }}
+                          className={effectiveException ? "bg-amber-500" : ""}
                         />
-                      </Form.Item>
-                    </Col>
-                  </Row>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
+
+              {/* ── LUỒNG PHÊ DUYỆT ─────────────────────────────────────── */}
               <Divider orientation="left">
                 <Tag color="blue" className="rounded-full px-4">
                   Luồng phê duyệt
@@ -546,7 +966,13 @@ export default function ProposalCreatorProfessional() {
                 <Col xs={24} md={12}>
                   <Form.Item
                     name="signers"
-                    label={<Text strong>Kiểm duyệt</Text>}
+                    label={
+                      <Text strong>
+                        {proposalType === "VEHICLE_GRAB"
+                          ? "Kiểm duyệt"
+                          : "Kiểm duyệt"}
+                      </Text>
+                    }
                     required
                   >
                     <Select
@@ -561,7 +987,11 @@ export default function ProposalCreatorProfessional() {
                       }
                       options={employees.map((e) => ({
                         value: e.id,
-                        label: `${e.name} ${e.workInfo?.position?.name ? `(${e.workInfo.position.name})` : ""}`,
+                        label: `${e.name}${
+                          e.workInfo?.position?.name
+                            ? ` (${e.workInfo.position.name})`
+                            : ""
+                        }`,
                       }))}
                     />
                   </Form.Item>
@@ -569,7 +999,14 @@ export default function ProposalCreatorProfessional() {
                 <Col xs={24} md={12}>
                   <Form.Item
                     name="approvers"
-                    label={<Text strong>Phê duyệt cuối</Text>}
+                    label={
+                      <Text strong>
+                        {" "}
+                        {proposalType === "VEHICLE_GRAB"
+                          ? "Người thực hiện"
+                          : "Phê duyệt"}
+                      </Text>
+                    }
                     required
                   >
                     <Select
@@ -584,7 +1021,9 @@ export default function ProposalCreatorProfessional() {
                       }
                       options={employees.map((e) => ({
                         value: e.id,
-                        label: `${e.name} ${e.position ? `(${e.position})` : ""}`,
+                        label: `${e.name}${
+                          e.position ? ` (${e.position})` : ""
+                        }`,
                       }))}
                     />
                   </Form.Item>
@@ -594,7 +1033,7 @@ export default function ProposalCreatorProfessional() {
           </Card>
         </Col>
 
-        {/* CỘT PHẢI: PREVIEW (Tự động xuống dưới trên Mobile) */}
+        {/* ── CỘT PHẢI: PREVIEW ───────────────────────────────────────────── */}
         <Col xs={24} lg={10} xl={9}>
           <Space direction="vertical" className="w-full" size="large">
             <Card
@@ -639,7 +1078,7 @@ export default function ProposalCreatorProfessional() {
                     <Empty description="Chưa có tệp đính kèm" />
                   </div>
                 )
-              ) : (
+              ) : proposalType === "VEHICLE" ? (
                 <div className="p-6">
                   <Text strong className="block mb-4">
                     Lịch xe hiện tại:
@@ -668,6 +1107,84 @@ export default function ProposalCreatorProfessional() {
                       description="Xe trống lịch"
                       image={Empty.PRESENTED_IMAGE_SIMPLE}
                     />
+                  )}
+                </div>
+              ) : (
+                /* VEHICLE_GRAB preview: tóm tắt thông tin */
+                <div className="p-6 space-y-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Tag color={grabSubType === "PERSONAL" ? "blue" : "green"}>
+                      {grabSubType === "PERSONAL" ? "Cá nhân" : "Khách hàng"}
+                    </Tag>
+                    {grabSubType === "CUSTOMER" && userBrand && (
+                      <Tag color={userBrand === "TBD" ? "geekblue" : "purple"}>
+                        {userBrand}
+                      </Tag>
+                    )}
+                    {effectiveException && (
+                      <Tag color="warning" icon={<WarningOutlined />}>
+                        Ngoại lệ
+                      </Tag>
+                    )}
+                  </div>
+
+                  {grabSubType === "CUSTOMER" && roPercent !== null && (
+                    <div
+                      className={`p-3 rounded-lg text-center ${
+                        roPercent > EXCEPTION_THRESHOLD_PERCENT
+                          ? "bg-red-50 border border-red-200"
+                          : "bg-green-50 border border-green-200"
+                      }`}
+                    >
+                      <div
+                        className={`text-2xl font-semibold ${
+                          roPercent > EXCEPTION_THRESHOLD_PERCENT
+                            ? "text-red-600"
+                            : "text-green-700"
+                        }`}
+                      >
+                        {roPercent.toFixed(2)}%
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        Tỷ lệ tiền xe / RO
+                      </div>
+                    </div>
+                  )}
+
+                  {grabSubType === "CUSTOMER" && userBrand && (
+                    <div className="text-xs space-y-2 bg-gray-50 p-3 rounded-lg">
+                      <div className="font-medium text-gray-600 mb-1">
+                        Luồng duyệt ({userBrand}):
+                      </div>
+                      <div className="flex gap-1 flex-wrap">
+                        <span className="text-gray-400">Ký:</span>
+                        {(effectiveException
+                          ? BRANCH_APPROVER_CONFIG[userBrand]
+                              .signerIdsWithException
+                          : BRANCH_APPROVER_CONFIG[userBrand].signerIds
+                        ).map((id) => (
+                          <Tag key={id} color="blue" className="text-xs m-0">
+                            #{id}
+                          </Tag>
+                        ))}
+                      </div>
+                      <div className="flex gap-1 flex-wrap">
+                        <span className="text-gray-400">Duyệt:</span>
+                        {BRANCH_APPROVER_CONFIG[userBrand].approverIds.map(
+                          (id) => (
+                            <Tag key={id} color="green" className="text-xs m-0">
+                              #{id}
+                            </Tag>
+                          ),
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {grabSubType === "PERSONAL" && (
+                    <div className="text-xs bg-blue-50 p-3 rounded-lg text-blue-700">
+                      Luồng duyệt giống xe nội bộ (theo manager)
+                    </div>
                   )}
                 </div>
               )}

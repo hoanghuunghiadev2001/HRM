@@ -53,12 +53,12 @@ export async function GET(req: NextRequest) {
   if (!user)
     return NextResponse.json(
       { message: "Token không hợp lệ" },
-      { status: 401 }
+      { status: 401 },
     );
   if (user.role !== "ADMIN" && user.role !== "MANAGER") {
     return NextResponse.json(
       { message: "Không có quyền truy cập" },
-      { status: 403 }
+      { status: 403 },
     );
   }
 
@@ -75,7 +75,7 @@ export async function GET(req: NextRequest) {
     if (!employee)
       return NextResponse.json(
         { message: "Không tìm thấy nhân viên" },
-        { status: 404 }
+        { status: 404 },
       );
 
     const formattedEmployee = {
@@ -110,7 +110,7 @@ export async function PATCH(req: NextRequest) {
   if (!user)
     return NextResponse.json(
       { message: "Token không hợp lệ" },
-      { status: 401 }
+      { status: 401 },
     );
 
   try {
@@ -120,12 +120,12 @@ export async function PATCH(req: NextRequest) {
     if (!employee)
       return NextResponse.json(
         { message: "Không tìm thấy nhân viên" },
-        { status: 404 }
+        { status: 404 },
       );
     if (user.role !== "ADMIN" && employee.id !== user.id) {
       return NextResponse.json(
         { message: "Không có quyền sửa nhân viên này" },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -155,6 +155,7 @@ export async function PATCH(req: NextRequest) {
         role: body.role,
         gender: body.gender,
         employeeCode: body.employeeCode,
+        brand: body.brand,
       },
     });
 

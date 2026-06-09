@@ -228,6 +228,7 @@ export class ProposalService {
           roNumber: proposalData.roNumber || null,
           vehicleKm: proposalData.vehicleKm || null,
           vehicleAmount: proposalData.vehicleAmount || null,
+          roAmount: proposalData.roAmount || null,
           files: { connect: uploadedFileIds.map((id) => ({ id })) },
           signers: {
             create: proposalData.signerIds.map((id, idx) => ({

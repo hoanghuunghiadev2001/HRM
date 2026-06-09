@@ -15,6 +15,11 @@ enum ProposalType {
   VEHICLE_GRAB // Đặt xe Grab
 }
 
+enum BrandType {
+  TBD
+  TMP
+}
+
 model File {
   id        Int      @id @default(autoincrement())
   filename  String
@@ -47,42 +52,42 @@ model Vehicle {
 }
 
 model Employee {
-  id                   Int                         @id @default(autoincrement())
-  employeeCode         String                      @unique
-  name                 String
-  gender               Sex                         @default(MALE)
-  birthDate            DateTime?
-  password             String
-  role                 Role                        @default(USER)
-  avatar               String?
-  isActive             Boolean                     @default(true)
-  managerId            Int?
-  createdAt            DateTime                    @default(now())
-  updatedAt            DateTime                    @updatedAt
-  AttendanceImportLog  AttendanceImportLog[]       @relation("EmployeeImportLogs")
-  contactInfo          ContactInfo?
-  departmentDirectorOf Department?                 @relation("DepartmentDirector")
-  departmentHeadOf     Department?                 @relation("DepartmentHead")
-  manager              Employee?                   @relation("EmployeeManager", fields: [managerId], references: [id])
-  subordinates         Employee[]                  @relation("EmployeeManager")
-  KPIEmployee          KPIEmployee[]
-  LeaveApprovalSteps   LeaveApprovalStepApprover[] @relation("ApproverSteps")
-  LeaveRequest         LeaveRequest[]
-  proposalsCreated     Proposal[]                  @relation("ProposalCreatedBy")
-  proposalsProposed    Proposal[]                  @relation("ProposalProposer")
-  proposalApprovals    ProposalApprover[]
-  proposalSignatures   ProposalSigner[]
-  workInfo             WorkInfo?
-  Attendance           Attendance[]
-
-  assetsReceived                AssetAssignment[]      @relation("EmployeeAsset")
-  assetsIssued                  AssetAssignment[]      @relation("IssuedAssets")
+  id                            Int                         @id @default(autoincrement())
+  employeeCode                  String                      @unique
+  name                          String
+  gender                        Sex                         @default(MALE)
+  birthDate                     DateTime?
+  password                      String
+  role                          Role                        @default(USER)
+  avatar                        String?
+  isActive                      Boolean                     @default(true)
+  managerId                     Int?
+  createdAt                     DateTime                    @default(now())
+  updatedAt                     DateTime                    @updatedAt
+  AttendanceImportLog           AttendanceImportLog[]       @relation("EmployeeImportLogs")
+  contactInfo                   ContactInfo?
+  departmentDirectorOf          Department?                 @relation("DepartmentDirector")
+  departmentHeadOf              Department?                 @relation("DepartmentHead")
+  manager                       Employee?                   @relation("EmployeeManager", fields: [managerId], references: [id])
+  subordinates                  Employee[]                  @relation("EmployeeManager")
+  KPIEmployee                   KPIEmployee[]
+  LeaveApprovalSteps            LeaveApprovalStepApprover[] @relation("ApproverSteps")
+  LeaveRequest                  LeaveRequest[]
+  proposalsCreated              Proposal[]                  @relation("ProposalCreatedBy")
+  proposalsProposed             Proposal[]                  @relation("ProposalProposer")
+  proposalApprovals             ProposalApprover[]
+  proposalSignatures            ProposalSigner[]
+  workInfo                      WorkInfo?
+  Attendance                    Attendance[]
+  brand                         BrandType?                  @default(TBD)
+  assetsReceived                AssetAssignment[]           @relation("EmployeeAsset")
+  assetsIssued                  AssetAssignment[]           @relation("IssuedAssets")
   compensatoryLeaves            CompensatoryLeave[]
   salaries                      Salary[]
   salaryBatches                 SalaryBatch[]
-  salaryViewPermissionsAsViewer SalaryViewPermission[] @relation("SalaryViewer")
-  salaryViewPermissionsAsTarget SalaryViewPermission[] @relation("SalaryTarget")
-  salaryViewPermissions         SalaryViewPermission[] @relation("SalaryGranter")
+  salaryViewPermissionsAsViewer SalaryViewPermission[]      @relation("SalaryViewer")
+  salaryViewPermissionsAsTarget SalaryViewPermission[]      @relation("SalaryTarget")
+  salaryViewPermissions         SalaryViewPermission[]      @relation("SalaryGranter")
 
   @@index([employeeCode])
   @@index([managerId])
@@ -283,6 +288,7 @@ model Proposal {
 
   vehicleKm     Float? // Số km dự kiến hoặc thực tế
   vehicleAmount Float? // Số tiền (cước phí)
+  roAmount      Float? // Số tiền (cước phí) thực tế
   roNumber      String? // Số RO (Repair Order) hoặc mã yêu cầu dịch vụ
   customerName  String? // Tên khách hàng (nếu là xe đưa đón khách)
 

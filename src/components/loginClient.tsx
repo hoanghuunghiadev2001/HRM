@@ -50,6 +50,8 @@ export default function LoginClient() {
           department: data.department,
           position: data.position,
           departmentID: data.departmentID,
+          brand: data.brand,
+          role: data.role,
         }),
       );
       console.log("Dữ liệu thực tế từ API Login:", data);

@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     if (!employeeCode || !password) {
       return NextResponse.json(
         { message: "Vui lòng nhập đầy đủ" },
-        { status: 400, headers: CORS_HEADERS }
+        { status: 400, headers: CORS_HEADERS },
       );
     }
 
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     ) {
       return NextResponse.json(
         { message: "Tài khoản không chính xác" },
-        { status: 401, headers: CORS_HEADERS }
+        { status: 401, headers: CORS_HEADERS },
       );
     }
 
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
         {
           message: "Tài khoản chưa được kích hoạt. Vui lòng liên hệ quản trị.",
         },
-        { status: 403, headers: CORS_HEADERS }
+        { status: 403, headers: CORS_HEADERS },
       );
     }
 
@@ -66,6 +66,7 @@ export async function POST(req: NextRequest) {
       role: employee.role,
       departmentId: employee.workInfo?.departmentId || null,
       isActive: employee.isActive,
+      brand: employee.brand,
     };
 
     const expiresIn = "3650d";
@@ -92,15 +93,16 @@ export async function POST(req: NextRequest) {
         department: employee.workInfo?.department?.name,
         position: employee.workInfo?.position?.name,
         departmentID: employee.workInfo?.departmentId,
+        brand: employee.brand,
         token,
       },
-      { headers: CORS_HEADERS }
+      { headers: CORS_HEADERS },
     );
   } catch (err) {
     console.error("Login error:", err);
     return NextResponse.json(
       { message: "Không thể kết nối server" },
-      { status: 500, headers: CORS_HEADERS }
+      { status: 500, headers: CORS_HEADERS },
     );
   }
 }

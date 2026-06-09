@@ -154,7 +154,8 @@ exports.Prisma.EmployeeScalarFieldEnum = {
   isActive: 'isActive',
   managerId: 'managerId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  brand: 'brand'
 };
 
 exports.Prisma.DepartmentScalarFieldEnum = {
@@ -297,6 +298,7 @@ exports.Prisma.ProposalScalarFieldEnum = {
   proposalType: 'proposalType',
   vehicleKm: 'vehicleKm',
   vehicleAmount: 'vehicleAmount',
+  roAmount: 'roAmount',
   roNumber: 'roNumber',
   customerName: 'customerName',
   vehicleId: 'vehicleId',
@@ -636,6 +638,11 @@ exports.Role = exports.$Enums.Role = {
   USER: 'USER',
   MANAGER: 'MANAGER',
   ADMIN: 'ADMIN'
+};
+
+exports.BrandType = exports.$Enums.BrandType = {
+  TBD: 'TBD',
+  TMP: 'TMP'
 };
 
 exports.LeaveTypeEnum = exports.$Enums.LeaveTypeEnum = {
