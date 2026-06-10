@@ -190,6 +190,17 @@ export default function ClientDashboard({
         },
       ],
     },
+    ...(employeeCode === "01375" ||
+    employeeCode === "CSKHTBD" ||
+    employeeCode === "CSKHTMP"
+      ? [
+          {
+            key: "/dashboard/report/GSM",
+            icon: <ShieldCheck size={18} />, // Icon bảo mật/quản trị cho Admin
+            label: <Link href="/dashboard/report/GSM">Báo cáo GSM</Link>,
+          },
+        ]
+      : []),
     {
       key: "/dashboard/attendance",
       icon: <Fingerprint size={20} />,
