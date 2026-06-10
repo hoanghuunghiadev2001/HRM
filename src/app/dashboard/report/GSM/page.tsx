@@ -481,7 +481,7 @@ export default function GSMReportPage() {
     setLoading(true);
     try {
       const res = await fetch(
-        `/api/proposals/GSM-report?month=${selectedMonth.month() + 1}&year=${selectedMonth.year()}`,
+        `/api/proposals/grab-report?month=${selectedMonth.month() + 1}&year=${selectedMonth.year()}`,
       );
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Lỗi tải dữ liệu");
