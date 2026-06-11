@@ -141,6 +141,7 @@ export async function POST(req: NextRequest) {
           overtime15: Number(row[25]) || 0,
           overtime2: Number(row[26]) || 0,
           overtime3: Number(row[27]) || 0,
+          overtime: Number(row[28] || 0),
           // PHỤ CẤP
           phoneAllowance: Number(row[12]) || 0,
           seniorityAllowance: Number(row[13]) || 0,

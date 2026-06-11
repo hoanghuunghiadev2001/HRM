@@ -584,9 +584,6 @@ export default function SalaryDashboard() {
         const res = await fetch(`/api/my-salary/report?year=${selectedYear}`);
         const json = await res.json();
 
-        // 👉 THÊM DÒNG NÀY ĐỂ KIỂM TRA DỮ LIỆU TRÊN TRÌNH DUYỆT
-        console.log("Dữ liệu lương thô từ API:", json);
-
         setData(json.sort((a: any, b: any) => a.month - b.month));
       } catch (e) {
         console.error(e);
