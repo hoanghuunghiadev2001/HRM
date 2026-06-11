@@ -848,7 +848,7 @@ export default function ProposalDetailTailwind() {
               addonAfter="km"
             />
           </Form.Item>
-          <Form.Item label="Tiền thực tế" required>
+          <Form.Item label="Tiền trên app" required>
             <InputNumber
               className="w-full"
               min={0}

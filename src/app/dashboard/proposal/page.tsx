@@ -754,6 +754,12 @@ export default function ProposalCreatorProfessional() {
                           <Form.Item
                             name="roNumber"
                             label={<Text strong>Số RO (Dịch vụ)</Text>}
+                            rules={[
+                              {
+                                required: true,
+                                message: "Nhập Số RO (Dịch vụ)",
+                              },
+                            ]}
                           >
                             <Input placeholder="Nhập mã RO..." size="large" />
                           </Form.Item>
@@ -842,6 +848,12 @@ export default function ProposalCreatorProfessional() {
                           <Form.Item
                             name="roAmount"
                             label={<Text strong>Số tiền RO</Text>}
+                            rules={[
+                              {
+                                required: true,
+                                message: "Nhập Số tiền RO",
+                              },
+                            ]}
                           >
                             <InputNumber
                               prefix="₫"
@@ -931,7 +943,7 @@ export default function ProposalCreatorProfessional() {
                             </Text>
                             <Text type="secondary" className="text-xs">
                               {userBrand
-                                ? `Thêm ID 18 vào luồng ký (${userBrand})`
+                                ? `Thêm giám đốc dịch vụ (Anh Sơn Lênh) (${userBrand})`
                                 : "Thêm người ký bổ sung"}
                             </Text>
                           </div>

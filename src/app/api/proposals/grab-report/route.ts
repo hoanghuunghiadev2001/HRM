@@ -22,17 +22,20 @@ export async function GET(request: NextRequest) {
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
     employeeId = decoded.id;
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       { error: "Token không hợp lệ hoặc đã hết hạn" },
       { status: 401 },
     );
   }
 
-  // 2. Validate query params
+  // 2. Validate query params — mặc định tháng hiện tại nếu không truyền
   const { searchParams } = new URL(request.url);
-  const month = parseInt(searchParams.get("month") ?? "");
-  const year = parseInt(searchParams.get("year") ?? "");
+  const now = new Date();
+  const month = parseInt(
+    searchParams.get("month") ?? String(now.getMonth() + 1),
+  );
+  const year = parseInt(searchParams.get("year") ?? String(now.getFullYear()));
 
   if (!month || !year || month < 1 || month > 12 || year < 2000) {
     return NextResponse.json(
@@ -43,21 +46,18 @@ export async function GET(request: NextRequest) {
 
   // 3. Khoảng thời gian trong tháng
   const from = new Date(year, month - 1, 1, 0, 0, 0);
-  const to = new Date(year, month, 0, 23, 59, 59); // ngày cuối tháng
+  const to = new Date(year, month, 0, 23, 59, 59);
 
   try {
     const proposals = await prisma.proposal.findMany({
       where: {
         proposalType: "VEHICLE_GRAB",
+        status: "approved", // ← Chỉ lấy đã duyệt
         createdAt: { gte: from, lte: to },
       },
       include: {
         proposer: {
-          select: {
-            id: true,
-            name: true,
-            employeeCode: true,
-          },
+          select: { id: true, name: true, employeeCode: true },
         },
         createdBy: {
           select: { id: true, name: true },
@@ -65,7 +65,6 @@ export async function GET(request: NextRequest) {
         vehicle: {
           select: { id: true, name: true, plateNumber: true },
         },
-        // Chỉ lấy signers (người ký), KHÔNG lấy approvers theo yêu cầu
         signers: {
           orderBy: { level: "asc" },
           include: {
@@ -76,15 +75,13 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: "asc" },
     });
 
-    // 4. Tính summary
     const totalVehicleAmount = proposals.reduce(
       (s, p) => s + (p.vehicleAmount ?? 0),
       0,
     );
     const totalRoAmount = proposals.reduce((s, p) => s + (p.roAmount ?? 0), 0);
-    const approvedCount = proposals.filter(
-      (p) => p.status === "approved",
-    ).length;
+    // approvedCount = proposals.length vì đã filter status=approved ở query
+    const approvedCount = proposals.length;
 
     return NextResponse.json({
       month,
