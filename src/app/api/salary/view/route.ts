@@ -35,15 +35,14 @@ export async function GET(req: NextRequest) {
       ? Number(searchParams.get("targetId"))
       : undefined;
 
-    const isAdmin = false; // Tạm hardcode, sau này có thể dùng decoded.role === "ADMIN" nếu muốn admin xem tất cả mà không cần cấp permission
+    // isAdmin = true → thấy toàn bộ + chi tiết đầy đủ mọi khoản
+    const isAdmin = decoded.role === "ADMIN";
 
-    // -----------------------------------------------------------------------
-    // Xác định danh sách targetId được phép xem
-    // -----------------------------------------------------------------------
+    // ── Xác định allowedTargetIds ────────────────────────────────────────────
     let allowedTargetIds: number[] | "all";
 
     if (isAdmin) {
-      allowedTargetIds = "all"; // Admin thấy tất cả, không cần check permission
+      allowedTargetIds = "all";
     } else {
       const perms = await prisma.salaryViewPermission.findMany({
         where: { viewerId: decoded.id, isActive: true },
@@ -57,11 +56,12 @@ export async function GET(req: NextRequest) {
           total: 0,
           year,
           month: month ?? null,
+          isAdmin: false,
         });
       }
     }
 
-    // Nếu filter theo 1 target, kiểm tra quyền trước
+    // Kiểm tra quyền khi filter theo 1 target
     if (filterTargetId) {
       if (
         allowedTargetIds !== "all" &&
@@ -74,9 +74,7 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // -----------------------------------------------------------------------
-    // Build where clause cho Salary
-    // -----------------------------------------------------------------------
+    // ── Build where clause ───────────────────────────────────────────────────
     const salaryWhere: any = { year };
     if (month) salaryWhere.month = month;
 
@@ -86,9 +84,7 @@ export async function GET(req: NextRequest) {
       salaryWhere.employeeId = { in: allowedTargetIds };
     }
 
-    // -----------------------------------------------------------------------
-    // Lấy dữ liệu lương kèm thông tin nhân viên
-    // -----------------------------------------------------------------------
+    // ── Query ────────────────────────────────────────────────────────────────
     const salaries = await prisma.salary.findMany({
       where: salaryWhere,
       include: {
@@ -110,9 +106,7 @@ export async function GET(req: NextRequest) {
       orderBy: [{ employeeId: "asc" }, { month: "asc" }],
     });
 
-    // -----------------------------------------------------------------------
-    // Nhóm theo nhân viên
-    // -----------------------------------------------------------------------
+    // ── Group by employee ────────────────────────────────────────────────────
     const grouped: Record<
       number,
       {
@@ -138,6 +132,7 @@ export async function GET(req: NextRequest) {
         (s.firstReceived ?? 0) + (s.actualReceived ?? 0);
     }
 
+    // ── Build response ───────────────────────────────────────────────────────
     const data = Object.values(grouped).map((g) => {
       const base = {
         employee: {
@@ -163,18 +158,19 @@ export async function GET(req: NextRequest) {
         })),
       };
 
-      // Admin xem thêm toàn bộ chi tiết các khoản
-      if (!isAdmin) {
+      // Admin → trả toàn bộ chi tiết mọi khoản khớp với Salary model
+      if (isAdmin) {
         return {
           ...base,
           salaryDetails: Object.fromEntries(
             g.months.map((s) => [
               s.month,
               {
-                // Phụ cấp
+                // Lương cố định
                 baseSalary: s.baseSalary,
                 efficiencySalary: s.efficiencySalary,
                 salary70: s.salary70,
+                // Phụ cấp
                 phoneAllowance: s.phoneAllowance,
                 seniorityAllowance: s.seniorityAllowance,
                 mealAllowance: s.mealAllowance,
@@ -183,22 +179,37 @@ export async function GET(req: NextRequest) {
                 // Năng suất
                 productivitySalary: s.productivitySalary,
                 productivityOther: s.productivityOther,
-                // Thưởng
+                productivitySCC: s.productivitySCC,
+                productivityPaint: s.productivityPaint,
+                productivityAccessory: s.productivityAccessory,
+                productivityParts: s.productivityParts,
+                // Thưởng & cộng thêm
                 bonusDay10: s.bonusDay10,
                 bonusDay25: s.bonusDay25,
                 bonus: s.bonus,
-                overtime: s.overtime,
-                otherIncome: s.otherIncome,
+                otherWork: s.otherWork,
                 salaryAdjust: s.salaryAdjust,
+                otherIncome: s.otherIncome,
+                // Tăng ca
+                overtime15: s.overtime15,
+                overtime2: s.overtime2,
+                overtime3: s.overtime3,
+                overtime: s.overtime,
                 // Khấu trừ
+                salaryDeduction: s.salaryDeduction,
                 insuranceDeduction: s.insuranceDeduction,
                 unemploymentInsu: s.unemploymentInsu,
                 unionFee: s.unionFee,
                 advancePayment: s.advancePayment,
+                socialWorkDeduction: s.socialWorkDeduction,
+                healthCardDeduction: s.healthCardDeduction,
+                insuranceArrears: s.insuranceArrears,
+                taxCompensation: s.taxCompensation,
                 taxTNCN: s.taxTNCN,
                 phoneDeduction: s.phoneDeduction,
+                taxRefund: s.taxRefund,
                 salaryDeductionFinal: s.salaryDeductionFinal,
-                // Tổng
+                // Tổng & thực nhận
                 totalGross: s.totalGross,
                 totalNet: s.totalNet,
                 firstReceived: s.firstReceived,
@@ -210,13 +221,14 @@ export async function GET(req: NextRequest) {
         };
       }
 
+      // Non-admin → chỉ trả summary, không có salaryDetails
       return base;
     });
 
     return NextResponse.json({
       year,
       month: month ?? null,
-      isAdmin: !isAdmin,
+      isAdmin,
       total: data.length,
       data,
     });
