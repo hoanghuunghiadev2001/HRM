@@ -7,16 +7,17 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 /**
  * GET /api/salary/view
- * Trả về danh sách lương mà người dùng hiện tại được phép xem,
- * dựa hoàn toàn vào SalaryViewPermission — không phụ thuộc vào role.
+ * Trả về danh sách lương dựa HOÀN TOÀN vào bảng phân quyền SalaryViewPermission.
+ * Không phân biệt role ADMIN hay USER, cứ có trong permission là được xem đầy đủ chi tiết.
  *
  * Query:
- *   year      (required)
- *   month     (optional)
- *   targetId  (optional – lọc 1 nhân viên, phải có permission)
+ * year      (required)
+ * month     (optional)
+ * targetId  (optional – lọc riêng 1 nhân viên)
  */
 export async function GET(req: NextRequest) {
   try {
+    // 1. Xác thực người dùng qua Token
     const token = req.cookies.get("token-hrm")?.value;
     if (!token)
       return NextResponse.json({ message: "Chưa xác thực" }, { status: 401 });
@@ -35,38 +36,27 @@ export async function GET(req: NextRequest) {
       ? Number(searchParams.get("targetId"))
       : undefined;
 
-    // isAdmin = true → thấy toàn bộ + chi tiết đầy đủ mọi khoản
-    const isAdmin = decoded.role === "ADMIN";
+    // 2. Lấy danh sách ID nhân viên mà tài khoản này ĐƯỢC PHÉP XEM
+    const perms = await prisma.salaryViewPermission.findMany({
+      where: { viewerId: decoded.id, isActive: true },
+      select: { targetId: true },
+    });
 
-    // ── Xác định allowedTargetIds ────────────────────────────────────────────
-    let allowedTargetIds: number[] | "all";
+    const allowedTargetIds = perms.map((p) => p.targetId);
 
-    if (isAdmin) {
-      allowedTargetIds = "all";
-    } else {
-      const perms = await prisma.salaryViewPermission.findMany({
-        where: { viewerId: decoded.id, isActive: true },
-        select: { targetId: true },
+    // Nếu không cấu hình quyền cho ai, trả về mảng rỗng ngay lập tức
+    if (allowedTargetIds.length === 0) {
+      return NextResponse.json({
+        year,
+        month: month ?? null,
+        total: 0,
+        data: [],
       });
-      allowedTargetIds = perms.map((p) => p.targetId);
-
-      if (allowedTargetIds.length === 0) {
-        return NextResponse.json({
-          data: [],
-          total: 0,
-          year,
-          month: month ?? null,
-          isAdmin: false,
-        });
-      }
     }
 
-    // Kiểm tra quyền khi filter theo 1 target
+    // 3. Kiểm tra quyền riêng tư nếu người dùng truyền filterTargetId cụ thể
     if (filterTargetId) {
-      if (
-        allowedTargetIds !== "all" &&
-        !allowedTargetIds.includes(filterTargetId)
-      ) {
+      if (!allowedTargetIds.includes(filterTargetId)) {
         return NextResponse.json(
           { message: "Bạn không có quyền xem lương nhân viên này" },
           { status: 403 },
@@ -74,17 +64,17 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // ── Build where clause ───────────────────────────────────────────────────
+    // 4. Xây dựng điều kiện truy vấn database (Where clause)
     const salaryWhere: any = { year };
     if (month) salaryWhere.month = month;
 
     if (filterTargetId) {
       salaryWhere.employeeId = filterTargetId;
-    } else if (allowedTargetIds !== "all") {
+    } else {
       salaryWhere.employeeId = { in: allowedTargetIds };
     }
 
-    // ── Query ────────────────────────────────────────────────────────────────
+    // 5. Query lấy dữ liệu bảng lương kèm thông tin phòng ban, chức vụ
     const salaries = await prisma.salary.findMany({
       where: salaryWhere,
       include: {
@@ -106,7 +96,7 @@ export async function GET(req: NextRequest) {
       orderBy: [{ employeeId: "asc" }, { month: "asc" }],
     });
 
-    // ── Group by employee ────────────────────────────────────────────────────
+    // 6. Group dữ liệu theo từng nhân viên (để gộp dữ liệu 12 tháng của họ lại)
     const grouped: Record<
       number,
       {
@@ -128,13 +118,14 @@ export async function GET(req: NextRequest) {
       }
       grouped[s.employeeId].months.push(s);
       grouped[s.employeeId].totalGross += s.totalGross;
+      // Tính tổng thực nhận net dựa trên 2 đợt thanh toán lương
       grouped[s.employeeId].totalNet +=
         (s.firstReceived ?? 0) + (s.actualReceived ?? 0);
     }
 
-    // ── Build response ───────────────────────────────────────────────────────
+    // 7. Render cấu trúc JSON phản hồi chứa TOÀN BỘ CHI TIẾT
     const data = Object.values(grouped).map((g) => {
-      const base = {
+      return {
         employee: {
           id: g.employee.id,
           employeeCode: g.employee.employeeCode,
@@ -156,79 +147,70 @@ export async function GET(req: NextRequest) {
           firstReceived: s.firstReceived,
           actualReceived: s.actualReceived,
         })),
+        // Tất cả những ai đi qua được vòng kiểm duyệt permission đều xem được object chi tiết này
+        salaryDetails: Object.fromEntries(
+          g.months.map((s) => [
+            s.month,
+            {
+              // Lương cố định
+              baseSalary: s.baseSalary,
+              efficiencySalary: s.efficiencySalary,
+              salary70: s.salary70,
+              // Phụ cấp
+              phoneAllowance: s.phoneAllowance,
+              seniorityAllowance: s.seniorityAllowance,
+              mealAllowance: s.mealAllowance,
+              maternityAllowance: s.maternityAllowance,
+              houseAllowance: s.houseAllowance,
+              // Năng suất
+              productivitySalary: s.productivitySalary,
+              productivityOther: s.productivityOther,
+              productivitySCC: s.productivitySCC,
+              productivityPaint: s.productivityPaint,
+              productivityAccessory: s.productivityAccessory,
+              productivityParts: s.productivityParts,
+              // Thưởng & cộng thêm
+              bonusDay10: s.bonusDay10,
+              bonusDay25: s.bonusDay25,
+              bonus: s.bonus,
+              otherWork: s.otherWork,
+              salaryAdjust: s.salaryAdjust,
+              otherIncome: s.otherIncome,
+              // Tăng ca
+              overtime15: s.overtime15,
+              overtime2: s.overtime2,
+              overtime3: s.overtime3,
+              overtime: s.overtime,
+              // Khấu trừ
+              salaryDeduction: s.salaryDeduction,
+              insuranceDeduction: s.insuranceDeduction,
+              unemploymentInsu: s.unemploymentInsu,
+              unionFee: s.unionFee,
+              advancePayment: s.advancePayment,
+              socialWorkDeduction: s.socialWorkDeduction,
+              healthCardDeduction: s.healthCardDeduction,
+              insuranceArrears: s.insuranceArrears,
+              taxCompensation: s.taxCompensation,
+              taxTNCN: s.taxTNCN,
+              phoneDeduction: s.phoneDeduction,
+              taxRefund: s.taxRefund,
+              salaryDeductionFinal: s.salaryDeductionFinal,
+              // Tổng & thực nhận cuối kỳ
+              totalGross: s.totalGross,
+              totalNet: s.totalNet,
+              firstReceived: s.firstReceived,
+              bonusReceived: s.bonusReceived,
+              actualReceived: s.actualReceived,
+            },
+          ]),
+        ),
       };
-
-      // Admin → trả toàn bộ chi tiết mọi khoản khớp với Salary model
-      if (isAdmin) {
-        return {
-          ...base,
-          salaryDetails: Object.fromEntries(
-            g.months.map((s) => [
-              s.month,
-              {
-                // Lương cố định
-                baseSalary: s.baseSalary,
-                efficiencySalary: s.efficiencySalary,
-                salary70: s.salary70,
-                // Phụ cấp
-                phoneAllowance: s.phoneAllowance,
-                seniorityAllowance: s.seniorityAllowance,
-                mealAllowance: s.mealAllowance,
-                maternityAllowance: s.maternityAllowance,
-                houseAllowance: s.houseAllowance,
-                // Năng suất
-                productivitySalary: s.productivitySalary,
-                productivityOther: s.productivityOther,
-                productivitySCC: s.productivitySCC,
-                productivityPaint: s.productivityPaint,
-                productivityAccessory: s.productivityAccessory,
-                productivityParts: s.productivityParts,
-                // Thưởng & cộng thêm
-                bonusDay10: s.bonusDay10,
-                bonusDay25: s.bonusDay25,
-                bonus: s.bonus,
-                otherWork: s.otherWork,
-                salaryAdjust: s.salaryAdjust,
-                otherIncome: s.otherIncome,
-                // Tăng ca
-                overtime15: s.overtime15,
-                overtime2: s.overtime2,
-                overtime3: s.overtime3,
-                overtime: s.overtime,
-                // Khấu trừ
-                salaryDeduction: s.salaryDeduction,
-                insuranceDeduction: s.insuranceDeduction,
-                unemploymentInsu: s.unemploymentInsu,
-                unionFee: s.unionFee,
-                advancePayment: s.advancePayment,
-                socialWorkDeduction: s.socialWorkDeduction,
-                healthCardDeduction: s.healthCardDeduction,
-                insuranceArrears: s.insuranceArrears,
-                taxCompensation: s.taxCompensation,
-                taxTNCN: s.taxTNCN,
-                phoneDeduction: s.phoneDeduction,
-                taxRefund: s.taxRefund,
-                salaryDeductionFinal: s.salaryDeductionFinal,
-                // Tổng & thực nhận
-                totalGross: s.totalGross,
-                totalNet: s.totalNet,
-                firstReceived: s.firstReceived,
-                bonusReceived: s.bonusReceived,
-                actualReceived: s.actualReceived,
-              },
-            ]),
-          ),
-        };
-      }
-
-      // Non-admin → chỉ trả summary, không có salaryDetails
-      return base;
     });
 
+    // 8. Trả kết quả về Client
     return NextResponse.json({
       year,
       month: month ?? null,
-      isAdmin,
       total: data.length,
       data,
     });
