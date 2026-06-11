@@ -1,5 +1,5 @@
 // lib/grab-report-utils.ts
-// ⚠️ File này KHÔNG có "use client" — dùng được cả ở server route lẫn client
+// ⚠️ KHÔNG có "use client" — dùng được ở cả server route lẫn client
 import { createHmac } from "crypto";
 
 const HMAC_SECRET =
@@ -16,8 +16,8 @@ export function makeDocId(month: number, year: number, total: number): string {
 
 /**
  * HMAC-SHA256 của nội dung báo cáo.
- * Payload: docId|MM/YYYY|total|totalAmount (rounded)
- * Dùng chung cho cả page.tsx (xuất PDF) và verify/route.ts (xác thực QR).
+ * Payload: docId|MM/YYYY|total|totalAmount|deptFilter
+ * deptFilter = "ALL" hoặc departmentId (string) — đảm bảo hash khác nhau giữa các bộ phận
  */
 export function makeDocHash(
   docId: string,
@@ -25,8 +25,9 @@ export function makeDocHash(
   year: number,
   total: number,
   totalAmount: number,
+  deptFilter = "ALL",
 ): string {
-  const payload = `${docId}|${String(month).padStart(2, "0")}/${year}|${total}|${Math.round(totalAmount)}`;
+  const payload = `${docId}|${String(month).padStart(2, "0")}/${year}|${total}|${Math.round(totalAmount)}|${deptFilter}`;
   return createHmac("sha256", HMAC_SECRET)
     .update(payload)
     .digest("hex")

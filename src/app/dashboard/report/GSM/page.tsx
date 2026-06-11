@@ -19,89 +19,39 @@ import {
   Empty,
   message,
   ConfigProvider,
+  Select,
+  Divider,
 } from "antd";
 import {
   DownloadOutlined,
   SearchOutlined,
   CarOutlined,
-  FileTextOutlined,
-  DollarOutlined,
-  CheckCircleOutlined,
   EnvironmentOutlined,
   UserOutlined,
+  ApartmentOutlined,
 } from "@ant-design/icons";
 import "dayjs/locale/vi";
 import locale from "antd/locale/vi_VN";
 import dayjs, { Dayjs } from "dayjs";
-import QRCode from "qrcode";
-// ✅ Import từ lib — không tự định nghĩa makeDocHash ở đây nữa
-import { makeDocId, makeDocHash, APP_BASE_URL } from "@/lib/grab-report-utils";
-import { ROBOTO_BOLD_B64, ROBOTO_REGULAR_B64 } from "@/lib/var";
 import { exportSecureGrabPDF } from "@/lib/exportPDFGSM";
+import type { ReportData, DeptBreakdown, Proposal } from "@/lib/exportPDFGSM";
 
 dayjs.locale("vi");
 const { Title, Text } = Typography;
 
-// ─── Font base64 (Roboto — hỗ trợ tiếng Việt đầy đủ) ────────────────────────
-// Nhúng thẳng vào source để tránh phụ thuộc file tĩnh khi build
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-interface Signer {
-  id: number;
-  signerId: number;
-  status: string;
-  signedAt: string | null;
-  level: number;
-  signer: { id: number; name: string };
-}
-interface Proposal {
-  id: number;
-  name: string;
-  title: string;
-  description: string | null;
-  status: string;
-  customerName: string | null;
-  roNumber: string | null;
-  vehicleAmount: number | null;
-  roAmount: number | null;
-  vehicleKm: number | null;
-  pickupPlace: string | null;
-  dropoffPlace: string | null;
-  startAt: string | null;
-  endAt: string | null;
-  createdAt: string;
-  proposer: { id: number; name: string; employeeCode: string };
-  vehicle: { id: number; name: string; plateNumber: string | null } | null;
-  signers: Signer[];
-}
-interface ReportData {
-  month: number;
-  year: number;
-  total: number;
-  approvedCount: number;
-  totalVehicleAmount: number;
-  totalRoAmount: number;
-  proposals: Proposal[];
-}
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// ─── Status map ───────────────────────────────────────────────────────────────
 const STATUS_MAP: Record<string, { label: string; color: string }> = {
   approved: { label: "Đã duyệt", color: "success" },
   rejected: { label: "Từ chối", color: "error" },
   pending_signatures: { label: "Chờ ký", color: "warning" },
   waiting_approval: { label: "Chờ duyệt", color: "processing" },
 };
-const STATUS_LABEL: Record<string, string> = {
-  approved: "Đã duyệt",
-  rejected: "Từ chối",
-  pending_signatures: "Chờ ký",
-  waiting_approval: "Chờ duyệt",
-};
 
 function fmtMoney(val: number | null | undefined): string {
   if (!val) return "—";
   return val.toLocaleString("vi-VN") + " đ";
 }
+
 function fmtDt(
   val: string | null | undefined,
   fmt = "DD/MM/YYYY HH:mm",
@@ -112,20 +62,22 @@ function fmtDt(
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function GSMReportPage() {
   const [selectedMonth, setSelectedMonth] = useState<Dayjs | null>(dayjs());
+  const [selectedDept, setSelectedDept] = useState<string>("ALL");
   const [reportData, setReportData] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(false);
   const [exporting, setExporting] = useState(false);
 
-  const fetchReport = useCallback(async (month: Dayjs | null) => {
+  // ── Fetch ──────────────────────────────────────────────────────────────────
+  const fetchReport = useCallback(async (month: Dayjs | null, dept: string) => {
     if (!month) return message.warning("Vui lòng chọn tháng");
     setLoading(true);
     try {
       const res = await fetch(
-        `/api/proposals/grab-report?month=${month.month() + 1}&year=${month.year()}`,
+        `/api/proposals/grab-report?month=${month.month() + 1}&year=${month.year()}&dept=${dept}`,
       );
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Lỗi tải dữ liệu");
-      setReportData(json);
+      setReportData(json as ReportData);
     } catch (e: any) {
       message.error(e.message);
     } finally {
@@ -135,8 +87,16 @@ export default function GSMReportPage() {
 
   // Auto-load tháng hiện tại khi mount
   useEffect(() => {
-    fetchReport(dayjs());
+    fetchReport(dayjs(), "ALL");
   }, [fetchReport]);
+
+  // ── Handlers ───────────────────────────────────────────────────────────────
+  const handleSearch = () => fetchReport(selectedMonth, selectedDept);
+
+  const handleDeptChange = (val: string) => {
+    setSelectedDept(val);
+    fetchReport(selectedMonth, val);
+  };
 
   const handleExport = async () => {
     if (!reportData) return;
@@ -151,13 +111,14 @@ export default function GSMReportPage() {
     }
   };
 
+  // ── Columns ────────────────────────────────────────────────────────────────
   const columns = [
     {
       title: "STT",
       key: "stt",
       width: 50,
       align: "center" as const,
-      render: (_: any, __: any, idx: number) => idx + 1,
+      render: (_: any, __: Proposal, idx: number) => idx + 1,
     },
     {
       title: "Ngày đặt",
@@ -169,13 +130,26 @@ export default function GSMReportPage() {
     {
       title: "Người đặt",
       key: "proposer",
-      width: 140,
+      width: 160,
       render: (_: any, r: Proposal) => (
         <Space direction="vertical" size={0}>
           <Text strong>{r.proposer.name}</Text>
           <Text type="secondary" style={{ fontSize: 11 }}>
             {r.proposer.employeeCode}
           </Text>
+          {r.proposer.department && (
+            <Tag
+              color="blue"
+              style={{
+                fontSize: 10,
+                margin: 0,
+                marginTop: 2,
+                lineHeight: "16px",
+              }}
+            >
+              {r.proposer.department.abbreviation}
+            </Tag>
+          )}
         </Space>
       ),
     },
@@ -230,21 +204,21 @@ export default function GSMReportPage() {
       ),
     },
     {
-      title: "Tiền dự tính",
+      title: "Tiền trên app",
       dataIndex: "vehicleAmount",
       key: "vehicleAmount",
       align: "right" as const,
-      width: 110,
+      width: 115,
       render: (v: number) => (
         <Text style={{ color: "#1677ff" }}>{fmtMoney(v)}</Text>
       ),
     },
     {
-      title: "tiền trên app",
+      title: "Tiền trên RO",
       dataIndex: "roAmount",
       key: "roAmount",
       align: "right" as const,
-      width: 110,
+      width: 115,
       render: (v: number) => (
         <Text strong style={{ color: "#389e0d" }}>
           {fmtMoney(v)}
@@ -291,9 +265,70 @@ export default function GSMReportPage() {
     },
   ];
 
+  // ── Breakdown dept columns ─────────────────────────────────────────────────
+  const deptColumns = [
+    {
+      title: "Bộ phận",
+      dataIndex: "name",
+      key: "name",
+      render: (v: string) => <Text strong>{v}</Text>,
+    },
+    {
+      title: "Số phiếu",
+      dataIndex: "count",
+      key: "count",
+      align: "center" as const,
+      width: 90,
+      render: (v: number) => (
+        <Tag color="blue" style={{ fontWeight: 700 }}>
+          {v} phiếu
+        </Tag>
+      ),
+    },
+    {
+      title: "Tiền trên app",
+      dataIndex: "vehicleAmount",
+      key: "vehicleAmount",
+      align: "right" as const,
+      width: 160,
+      render: (v: number) => (
+        <Text style={{ color: "#1565c0", fontWeight: 600 }}>{fmtMoney(v)}</Text>
+      ),
+    },
+    {
+      title: "Tiền trên RO",
+      dataIndex: "roAmount",
+      key: "roAmount",
+      align: "right" as const,
+      width: 160,
+      render: (v: number) => (
+        <Text strong style={{ color: "#2e7d32" }}>
+          {fmtMoney(v)}
+        </Text>
+      ),
+    },
+  ];
+
+  const deptBreakdownRows = reportData?.deptBreakdown
+    ? Object.entries(reportData.deptBreakdown)
+        .map(([key, d]) => ({ key, ...d }))
+        .sort((a, b) => a.name.localeCompare(b.name, "vi"))
+    : [];
+
+  // ── Dept select options ────────────────────────────────────────────────────
+  const deptOptions = [
+    { value: "ALL", label: "Tất cả bộ phận" },
+    ...(reportData?.departments ?? []).map((d) => ({
+      value: String(d.id),
+      label: d.name,
+    })),
+  ];
+
+  // ─── Render ────────────────────────────────────────────────────────────────
   return (
     <ConfigProvider locale={locale} componentSize="small">
       <div style={{ padding: 16, background: "#f0f2f5", minHeight: "100vh" }}>
+        {/* ── Toolbar ── */}
         <Card
           bordered={false}
           style={{
@@ -330,8 +365,10 @@ export default function GSMReportPage() {
                 </Tag>
               </Space>
             </Col>
+
             <Col xs={24} md={14} style={{ textAlign: "right" }}>
               <Space wrap>
+                {/* Chọn tháng */}
                 <DatePicker
                   picker="month"
                   value={selectedMonth}
@@ -339,17 +376,32 @@ export default function GSMReportPage() {
                   format="MM/YYYY"
                   placeholder="Chọn tháng"
                   allowClear={false}
-                  style={{ width: 130 }}
+                  style={{ width: 120 }}
                 />
+
+                {/* Chọn bộ phận */}
+                <Select
+                  style={{ width: 200 }}
+                  value={selectedDept}
+                  onChange={handleDeptChange}
+                  loading={loading}
+                  suffixIcon={<ApartmentOutlined />}
+                  options={deptOptions}
+                  placeholder="Chọn bộ phận"
+                />
+
+                {/* Xem báo cáo */}
                 <Button
                   type="primary"
                   icon={<SearchOutlined />}
-                  onClick={() => fetchReport(selectedMonth)}
+                  onClick={handleSearch}
                   loading={loading}
                   style={{ background: "#C62828", borderColor: "#C62828" }}
                 >
                   Xem báo cáo
                 </Button>
+
+                {/* Xuất PDF */}
                 <Tooltip title={!reportData ? "Tải dữ liệu trước" : ""}>
                   <Button
                     icon={<DownloadOutlined />}
@@ -365,30 +417,34 @@ export default function GSMReportPage() {
           </Row>
         </Card>
 
+        {/* ── KPI cards ── */}
         {reportData && (
           <Row gutter={[10, 10]} style={{ marginBottom: 12 }}>
             {[
               {
-                title: "Tổng phiếu đã duyệt",
+                title:
+                  selectedDept === "ALL"
+                    ? "Tổng phiếu đã duyệt"
+                    : "Phiếu đã duyệt (bộ phận)",
                 value: reportData.total,
                 color: "#1677ff",
                 suffix: "phiếu",
               },
               {
-                title: "Đã duyệt",
-                value: reportData.approvedCount,
+                title: "Có tiền trên app",
+                value: reportData.proposals.filter((p) => p.roAmount).length,
                 color: "#52c41a",
                 suffix: "phiếu",
               },
               {
-                title: "Tổng tiền dự tính",
+                title: "Tổng tiền trên app",
                 value: reportData.totalVehicleAmount,
                 color: "#1677ff",
                 suffix: "₫",
                 formatter: (v: any) => Number(v).toLocaleString("vi-VN"),
               },
               {
-                title: "Tổng tiền trên app",
+                title: "Tổng tiền trên RO",
                 value: reportData.totalRoAmount,
                 color: "#389e0d",
                 suffix: "₫",
@@ -423,6 +479,68 @@ export default function GSMReportPage() {
           </Row>
         )}
 
+        {/* ── Bảng tổng hợp bộ phận (chỉ hiện khi xem ALL) ── */}
+        {reportData &&
+          selectedDept === "ALL" &&
+          deptBreakdownRows.length > 0 && (
+            <Card
+              bordered={false}
+              style={{
+                borderRadius: 8,
+                marginBottom: 12,
+                boxShadow: "0 1px 4px rgba(0,0,0,.08)",
+              }}
+              title={
+                <Space>
+                  <ApartmentOutlined style={{ color: "#C62828" }} />
+                  <Text strong style={{ fontSize: 13 }}>
+                    Tổng hợp theo bộ phận
+                  </Text>
+                </Space>
+              }
+              size="small"
+            >
+              <Table
+                size="small"
+                dataSource={deptBreakdownRows}
+                columns={deptColumns}
+                pagination={false}
+                bordered
+                summary={(rows) => {
+                  const totalCount = rows.reduce((s, r) => s + r.count, 0);
+                  const totalVeh = rows.reduce(
+                    (s, r) => s + r.vehicleAmount,
+                    0,
+                  );
+                  const totalRo = rows.reduce((s, r) => s + r.roAmount, 0);
+                  return (
+                    <Table.Summary.Row style={{ background: "#fff3e0" }}>
+                      <Table.Summary.Cell index={0}>
+                        <Text strong>Tổng cộng</Text>
+                      </Table.Summary.Cell>
+                      <Table.Summary.Cell index={1} align="center">
+                        <Text strong style={{ color: "#1677ff" }}>
+                          {totalCount} phiếu
+                        </Text>
+                      </Table.Summary.Cell>
+                      <Table.Summary.Cell index={2} align="right">
+                        <Text strong style={{ color: "#1565c0" }}>
+                          {fmtMoney(totalVeh)}
+                        </Text>
+                      </Table.Summary.Cell>
+                      <Table.Summary.Cell index={3} align="right">
+                        <Text strong style={{ color: "#2e7d32" }}>
+                          {fmtMoney(totalRo)}
+                        </Text>
+                      </Table.Summary.Cell>
+                    </Table.Summary.Row>
+                  );
+                }}
+              />
+            </Card>
+          )}
+
+        {/* ── Bảng proposals ── */}
         <Card
           bordered={false}
           style={{ borderRadius: 8, boxShadow: "0 1px 4px rgba(0,0,0,.08)" }}
@@ -435,12 +553,21 @@ export default function GSMReportPage() {
             rowKey="id"
             size="small"
             bordered
-            scroll={{ x: 1400, y: "calc(100vh - 340px)" }}
+            scroll={{ x: 1400, y: "calc(100vh - 380px)" }}
             pagination={{
               pageSize: 50,
               showSizeChanger: true,
               pageSizeOptions: ["20", "50", "100"],
-              showTotal: (t) => `Tổng: ${t} phiếu đã duyệt`,
+              showTotal: (t) =>
+                `Tổng: ${t} phiếu đã duyệt${
+                  selectedDept !== "ALL"
+                    ? ` · Bộ phận: ${
+                        reportData?.departments.find(
+                          (d) => String(d.id) === selectedDept,
+                        )?.name ?? selectedDept
+                      }`
+                    : ""
+                }`,
               size: "small",
             }}
             locale={{
@@ -449,7 +576,7 @@ export default function GSMReportPage() {
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                   description={
                     reportData
-                      ? "Không có phiếu đã duyệt nào trong tháng này"
+                      ? "Không có phiếu đã duyệt nào trong tháng / bộ phận này"
                       : "Đang tải..."
                   }
                 />

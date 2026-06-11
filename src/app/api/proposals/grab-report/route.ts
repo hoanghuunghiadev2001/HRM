@@ -1,99 +1,164 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 import { type NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import { prisma } from "@/lib/prisma";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
-
 export async function GET(request: NextRequest) {
-  // 1. Xác thực token
-  const token = request.cookies.get("token-hrm")?.value;
-  if (!token) {
-    return NextResponse.json(
-      { error: "Thiếu token xác thực" },
-      { status: 401 },
-    );
-  }
-
-  let employeeId: number;
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
-    employeeId = decoded.id;
-  } catch {
-    return NextResponse.json(
-      { error: "Token không hợp lệ hoặc đã hết hạn" },
-      { status: 401 },
-    );
-  }
-
-  // 2. Validate query params — mặc định tháng hiện tại nếu không truyền
   const { searchParams } = new URL(request.url);
-  const now = new Date();
-  const month = parseInt(
-    searchParams.get("month") ?? String(now.getMonth() + 1),
-  );
-  const year = parseInt(searchParams.get("year") ?? String(now.getFullYear()));
+  const month = parseInt(searchParams.get("month") ?? "0");
+  const year = parseInt(searchParams.get("year") ?? "0");
+  // "ALL" = tất cả bộ phận, hoặc departmentId dạng string
+  const deptFilter = searchParams.get("dept") ?? "ALL";
 
-  if (!month || !year || month < 1 || month > 12 || year < 2000) {
+  if (!month || !year) {
     return NextResponse.json(
-      { error: "Tham số month/year không hợp lệ" },
+      { error: "Thiếu tham số month/year" },
       { status: 400 },
     );
   }
 
-  // 3. Khoảng thời gian trong tháng
   const from = new Date(year, month - 1, 1, 0, 0, 0);
   const to = new Date(year, month, 0, 23, 59, 59);
 
-  try {
-    const proposals = await prisma.proposal.findMany({
-      where: {
-        proposalType: "VEHICLE_GRAB",
-        status: "approved", // ← Chỉ lấy đã duyệt
-        createdAt: { gte: from, lte: to },
-      },
-      include: {
-        proposer: {
-          select: { id: true, name: true, employeeCode: true },
-        },
-        createdBy: {
-          select: { id: true, name: true },
-        },
-        vehicle: {
-          select: { id: true, name: true, plateNumber: true },
-        },
-        signers: {
-          orderBy: { level: "asc" },
-          include: {
-            signer: { select: { id: true, name: true } },
+  // Fetch tất cả proposals approved trong tháng, join proposer → workInfo → department
+  const proposals = await prisma.proposal.findMany({
+    where: {
+      proposalType: "VEHICLE_GRAB",
+      status: "approved",
+      createdAt: { gte: from, lte: to },
+    },
+    include: {
+      proposer: {
+        select: {
+          id: true,
+          name: true,
+          employeeCode: true,
+          workInfo: {
+            select: {
+              department: {
+                select: { id: true, name: true, abbreviation: true },
+              },
+            },
           },
         },
       },
-      orderBy: { createdAt: "asc" },
-    });
+      vehicle: {
+        select: { id: true, name: true, plateNumber: true },
+      },
+      signers: {
+        include: {
+          signer: { select: { id: true, name: true } },
+        },
+      },
+    },
+    orderBy: { createdAt: "asc" },
+  });
 
-    const totalVehicleAmount = proposals.reduce(
-      (s, p) => s + (p.vehicleAmount ?? 0),
-      0,
-    );
-    const totalRoAmount = proposals.reduce((s, p) => s + (p.roAmount ?? 0), 0);
-    // approvedCount = proposals.length vì đã filter status=approved ở query
-    const approvedCount = proposals.length;
-
-    return NextResponse.json({
-      month,
-      year,
-      total: proposals.length,
-      approvedCount,
-      totalVehicleAmount,
-      totalRoAmount,
-      proposals,
-    });
-  } catch (error) {
-    console.error("API Error [grab-report]:", error);
-    return NextResponse.json({ error: "Lỗi server nội bộ" }, { status: 500 });
+  // Build danh sách departments duy nhất (xuất hiện trong tháng này) để làm dropdown
+  const deptMap = new Map<
+    string,
+    { id: number; name: string; abbreviation: string }
+  >();
+  for (const p of proposals) {
+    const dept = p.proposer.workInfo?.department;
+    if (dept) deptMap.set(String(dept.id), dept);
   }
+  const departments = Array.from(deptMap.values()).sort((a, b) =>
+    a.name.localeCompare(b.name, "vi"),
+  );
+
+  // Lọc proposals theo dept nếu không phải ALL
+  const filtered =
+    deptFilter === "ALL"
+      ? proposals
+      : proposals.filter(
+          (p) =>
+            String(p.proposer.workInfo?.department?.id ?? "") === deptFilter,
+        );
+
+  const totalVehicleAmount = filtered.reduce(
+    (s, p) => s + (Number(p.vehicleAmount) || 0),
+    0,
+  );
+  const totalRoAmount = filtered.reduce(
+    (s, p) => s + (Number(p.roAmount) || 0),
+    0,
+  );
+
+  // Breakdown theo từng bộ phận (luôn tính từ toàn bộ proposals, không phụ thuộc deptFilter)
+  const deptBreakdown: Record<
+    string,
+    {
+      name: string;
+      abbreviation: string;
+      count: number;
+      vehicleAmount: number;
+      roAmount: number;
+    }
+  > = {};
+  for (const p of proposals) {
+    const dept = p.proposer.workInfo?.department;
+    const key = dept ? String(dept.id) : "__none__";
+    const label = dept?.name ?? "Không xác định";
+    const abbr = dept?.abbreviation ?? "—";
+    if (!deptBreakdown[key]) {
+      deptBreakdown[key] = {
+        name: label,
+        abbreviation: abbr,
+        count: 0,
+        vehicleAmount: 0,
+        roAmount: 0,
+      };
+    }
+    deptBreakdown[key].count++;
+    deptBreakdown[key].vehicleAmount += Number(p.vehicleAmount) || 0;
+    deptBreakdown[key].roAmount += Number(p.roAmount) || 0;
+  }
+
+  return NextResponse.json({
+    month,
+    year,
+    deptFilter,
+    total: filtered.length,
+    approvedCount: filtered.length,
+    totalVehicleAmount,
+    totalRoAmount,
+    departments, // danh sách bộ phận duy nhất để build dropdown trên UI
+    deptBreakdown, // breakdown tất cả bộ phận (dùng để hiển thị bảng tổng hợp)
+    proposals: filtered.map((p) => ({
+      id: p.id,
+      name: p.name,
+      title: p.title,
+      description: p.description,
+      status: p.status,
+      customerName: p.customerName,
+      roNumber: p.roNumber,
+      vehicleAmount: p.vehicleAmount,
+      roAmount: p.roAmount,
+      vehicleKm: p.vehicleKm,
+      pickupPlace: p.pickupPlace,
+      dropoffPlace: p.dropoffPlace,
+      startAt: p.startAt,
+      endAt: p.endAt,
+      createdAt: p.createdAt,
+      proposer: {
+        id: p.proposer.id,
+        name: p.proposer.name,
+        employeeCode: p.proposer.employeeCode,
+        // Flatten department ra ngoài để dùng tiện trên client/PDF
+        department: p.proposer.workInfo?.department ?? null,
+      },
+      vehicle: p.vehicle,
+      signers: p.signers.map((s) => ({
+        id: s.id,
+        signerId: s.signerId,
+        status: s.status,
+        signedAt: s.signedAt,
+        level: s.level,
+        signer: s.signer,
+      })),
+    })),
+  });
 }
