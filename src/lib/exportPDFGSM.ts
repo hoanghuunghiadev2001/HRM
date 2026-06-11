@@ -59,8 +59,8 @@ export interface DeptBreakdown {
 }
 
 export interface ReportData {
-  month: number;
-  year: number;
+  dateFrom: string | Date; // Nhận ngày bắt đầu từ UI (VD: "2026-06-01" hoặc đối tượng Date)
+  dateTo: string | Date; // Nhận ngày kết thúc từ UI (VD: "2026-06-15" hoặc đối tượng Date)
   total: number;
   approvedCount: number;
   totalVehicleAmount: number;
@@ -98,8 +98,8 @@ export async function exportSecureGrabPDF(data: ReportData): Promise<void> {
   const { default: autoTable } = await import("jspdf-autotable");
 
   const {
-    month,
-    year,
+    dateFrom,
+    dateTo,
     proposals,
     totalVehicleAmount,
     totalRoAmount,
@@ -110,16 +110,26 @@ export async function exportSecureGrabPDF(data: ReportData): Promise<void> {
 
   const isAll = deptFilter === "ALL";
 
-  // ── Security tokens ────────────────────────────────────────────────────────
-  const docId = makeDocId(month, year, proposals.length);
+  // ── Định dạng mốc thời gian lọc thực tế ─────────────────────────────────────
+  const fromDay = dayjs(dateFrom);
+  const toDay = dayjs(dateTo);
+
+  const dateFromStr = fromDay.format("YYYYMMDD"); // Chuỗi cho hàm hash mã hóa
+  const dateToStr = toDay.format("YYYYMMDD"); // Chuỗi cho hàm hash mã hóa
+
+  const displayFormatRange = `${fromDay.format("DD/MM/YYYY")} - ${toDay.format("DD/MM/YYYY")}`;
+
+  // ── Security tokens (Chuyển sang băm theo dải ngày chính xác) ────────────────
+  const docId = makeDocId(dateFromStr, dateToStr, proposals.length);
   const docHash = makeDocHash(
     docId,
-    month,
-    year,
+    dateFromStr,
+    dateToStr,
     proposals.length,
     totalVehicleAmount,
     deptFilter,
   );
+
   const verifyUrl = `${APP_BASE_URL}/api/proposals/grab-report/verify?id=${docId}&hash=${docHash}&dept=${encodeURIComponent(deptFilter)}`;
   const issuedAt = new Date();
 
@@ -156,16 +166,13 @@ export async function exportSecureGrabPDF(data: ReportData): Promise<void> {
   // ── Layout constants ───────────────────────────────────────────────────────
   const MARGIN = 8;
   const QR_SIZE = 28;
-  const QR_X = PW - QR_SIZE - MARGIN - 2; // vị trí X của QR
-  const QR_Y = 23; // vị trí Y của QR (ngay dưới header)
+  const QR_X = PW - QR_SIZE - MARGIN - 2;
+  const QR_Y = 23;
   const HEADER_H = 22;
   const FOOTER_H = 7;
-  const CONTENT_W = QR_X - MARGIN - 2; // chiều rộng vùng nội dung trái, tránh QR
+  const CONTENT_W = QR_X - MARGIN - 2;
 
   // ── Watermark helper ───────────────────────────────────────────────────────
-  // Vẽ watermark rất mờ. Vì jsPDF không có z-index thực sự,
-  // watermark phải được vẽ ĐẦU TIÊN trên mỗi trang, trước mọi nội dung.
-  // Khu vực QR sẽ được "phủ lại" bằng nền trắng sau đó.
   function drawWatermark() {
     doc.setTextColor(244, 244, 244);
     doc.setFont("Roboto", "bold");
@@ -206,15 +213,11 @@ export async function exportSecureGrabPDF(data: ReportData): Promise<void> {
     });
   }
 
-  // ── QR block helper — vẽ nền trắng rồi mới đặt QR ────────────────────────
-  // Gọi sau watermark để nền trắng "xóa" watermark trong vùng QR
+  // ── QR block helper ────────────────────────────────────────────────────────
   function drawQRBlock() {
-    // Nền trắng phủ vùng QR + caption
     doc.setFillColor(255, 255, 255);
     doc.rect(QR_X - 1, QR_Y - 1, QR_SIZE + 3, QR_SIZE + 8, "F");
-    // QR image
     doc.addImage(qrDataUrl, "PNG", QR_X, QR_Y, QR_SIZE, QR_SIZE);
-    // Caption
     doc.setTextColor(...DGRAY_RGB);
     doc.setFont("Roboto", "normal");
     doc.setFontSize(5.5);
@@ -225,7 +228,6 @@ export async function exportSecureGrabPDF(data: ReportData): Promise<void> {
 
   // ── Header bar (trang đầu) ─────────────────────────────────────────────────
   function drawPageOneHeader() {
-    // Red header
     doc.setFillColor(...RED_RGB);
     doc.rect(0, 0, PW, HEADER_H, "F");
 
@@ -242,11 +244,11 @@ export async function exportSecureGrabPDF(data: ReportData): Promise<void> {
     doc.text("BÁO CÁO ĐỀ XUẤT ĐẶT XE GSM", PW / 2, 9, { align: "center" });
     doc.setFont("Roboto", "normal");
     doc.setFontSize(8.5);
-    doc.text(`Tháng ${String(month).padStart(2, "0")}/${year}`, PW / 2, 16, {
+    // Tiêu đề phụ hiển thị trực tiếp khoảng ngày động được chọn
+    doc.text(`Thời gian lọc: ${displayFormatRange}`, PW / 2, 16, {
       align: "center",
     });
 
-    // Ngày xuất + docId — góc phải header (tránh vùng QR bên dưới)
     doc.setFontSize(6.5);
     doc.text(
       `Ngày xuất: ${dayjs(issuedAt).format("HH:mm DD/MM/YYYY")}`,
@@ -317,7 +319,6 @@ export async function exportSecureGrabPDF(data: ReportData): Promise<void> {
     );
     if (!entries.length) return startY;
 
-    // Tiêu đề bảng
     doc.setFont("Roboto", "bold");
     doc.setFontSize(8);
     doc.setTextColor(...RED_RGB);
@@ -349,7 +350,6 @@ export async function exportSecureGrabPDF(data: ReportData): Promise<void> {
         3: { halign: "right", cellWidth: 40 },
       },
       margin: { left: MARGIN, right: MARGIN },
-      // didDrawPage không cần vì bảng tổng hợp nhỏ, thường không xuống trang
     });
 
     return (doc as any).lastAutoTable?.finalY ?? startY + 40;
@@ -361,7 +361,6 @@ export async function exportSecureGrabPDF(data: ReportData): Promise<void> {
     startY: number,
     sectionLabel?: string,
   ): number {
-    // Section header nếu có (chỉ khi chia theo bộ phận)
     if (sectionLabel) {
       doc.setFillColor(...BLUE_RGB);
       doc.rect(MARGIN, startY, PW - MARGIN * 2, 7, "F");
@@ -391,7 +390,6 @@ export async function exportSecureGrabPDF(data: ReportData): Promise<void> {
 
       const desc =
         [p.customerName, p.description].filter(Boolean).join("\n") || "—";
-
       const route =
         [
           p.pickupPlace ? `Đón: ${p.pickupPlace}` : "",
@@ -461,8 +459,6 @@ export async function exportSecureGrabPDF(data: ReportData): Promise<void> {
       },
       margin: { left: MARGIN, right: MARGIN },
       didDrawPage: () => {
-        // Mỗi trang mới do autoTable tạo ra: vẽ watermark + footer
-        // Trang đầu đã được vẽ header bên ngoài nên không cần vẽ lại
         drawWatermark();
         drawFooter();
       },
@@ -472,23 +468,16 @@ export async function exportSecureGrabPDF(data: ReportData): Promise<void> {
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  //  BUILD DOCUMENT — trang đầu
+  //  VẼ NỘI DUNG TÀI LIỆU
   // ══════════════════════════════════════════════════════════════════════════
 
-  // 1. Watermark trước (nền), vẽ đầu tiên
   drawWatermark();
-
-  // 2. Header đỏ
   drawPageOneHeader();
-
-  // 3. QR — vẽ nền trắng phủ watermark trong vùng QR, sau đó đặt ảnh
   drawQRBlock();
 
-  // 4. Hash badge ngay dưới header, bên trái (tránh cột QR)
   const BADGE_Y = HEADER_H + 1;
   drawHashBadge(BADGE_Y);
 
-  // 5. KPI bar — ngay dưới badge
   const KPI_Y = BADGE_Y + 12;
   const kpiItems = [
     {
@@ -504,21 +493,16 @@ export async function exportSecureGrabPDF(data: ReportData): Promise<void> {
   ];
   let cursorY = drawKpiBar(KPI_Y, kpiItems) + 3;
 
-  // 6. Bảng tổng hợp bộ phận — chỉ khi xem ALL
   if (isAll && Object.keys(deptBreakdown).length > 0) {
     cursorY = drawDeptSummaryTable(cursorY) + 5;
   }
 
-  // 7. Bảng proposals — phân section theo bộ phận nếu ALL
   if (isAll) {
-    // Nhóm proposals theo bộ phận, giữ đúng thứ tự sort của departments
     const grouped = new Map<string, { label: string; items: Proposal[] }>();
 
-    // Init theo thứ tự departments đã sort
     for (const dept of departments) {
       grouped.set(String(dept.id), { label: dept.name, items: [] });
     }
-    // Proposals không có bộ phận
     grouped.set("__none__", { label: "Không xác định bộ phận", items: [] });
 
     for (const p of proposals) {
@@ -533,11 +517,9 @@ export async function exportSecureGrabPDF(data: ReportData): Promise<void> {
       cursorY = drawProposalTable(items, cursorY, label) + 5;
     }
   } else {
-    // Xem 1 bộ phận — không cần section header
     cursorY = drawProposalTable(proposals, cursorY);
   }
 
-  // 8. Security note cuối tài liệu
   const finalY = (doc as any).lastAutoTable?.finalY ?? cursorY;
   if (finalY + 16 < PH - FOOTER_H) {
     doc.setDrawColor(...DGRAY_RGB);
@@ -554,12 +536,11 @@ export async function exportSecureGrabPDF(data: ReportData): Promise<void> {
     );
   }
 
-  // 9. Footer trang đầu (drawFooter chỉ được gọi trong didDrawPage cho trang tiếp)
   drawFooter();
 
-  // 10. Lưu file
   const safeDeptLabel = deptLabelShort.replace(/[\s/\\:*?"<>|]/g, "_");
+  // Thay đổi tên file PDF tải xuống phản ánh chính xác dải ngày bắt đầu -> ngày kết thúc
   doc.save(
-    `BaoCao_GSM_T${String(month).padStart(2, "0")}_${year}_${safeDeptLabel}_${docId}.pdf`,
+    `BaoCao_GSM_${dateFromStr}_To_${dateToStr}_${safeDeptLabel}_${docId}.pdf`,
   );
 }

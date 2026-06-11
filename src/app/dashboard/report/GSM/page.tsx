@@ -1,7 +1,6 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// app/(main)/proposals/GSM-report/page.tsx
 
 import React, { useState, useCallback, useEffect } from "react";
 import {
@@ -20,7 +19,6 @@ import {
   message,
   ConfigProvider,
   Select,
-  Divider,
 } from "antd";
 import {
   DownloadOutlined,
@@ -34,10 +32,11 @@ import "dayjs/locale/vi";
 import locale from "antd/locale/vi_VN";
 import dayjs, { Dayjs } from "dayjs";
 import { exportSecureGrabPDF } from "@/lib/exportPDFGSM";
-import type { ReportData, DeptBreakdown, Proposal } from "@/lib/exportPDFGSM";
+import type { ReportData, Proposal } from "@/lib/exportPDFGSM";
 
 dayjs.locale("vi");
 const { Title, Text } = Typography;
+const { RangePicker } = DatePicker;
 
 // ─── Status map ───────────────────────────────────────────────────────────────
 const STATUS_MAP: Record<string, { label: string; color: string }> = {
@@ -61,48 +60,72 @@ function fmtDt(
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function GSMReportPage() {
-  const [selectedMonth, setSelectedMonth] = useState<Dayjs | null>(dayjs());
+  // Mặc định khoảng ngày: 23 tháng trước -> 22 tháng này dựa theo chu kỳ lương
+  const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
+    dayjs().subtract(1, "month").date(23),
+    dayjs().date(22),
+  ]);
   const [selectedDept, setSelectedDept] = useState<string>("ALL");
   const [reportData, setReportData] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(false);
   const [exporting, setExporting] = useState(false);
 
   // ── Fetch ──────────────────────────────────────────────────────────────────
-  const fetchReport = useCallback(async (month: Dayjs | null, dept: string) => {
-    if (!month) return message.warning("Vui lòng chọn tháng");
-    setLoading(true);
-    try {
-      const res = await fetch(
-        `/api/proposals/grab-report?month=${month.month() + 1}&year=${month.year()}&dept=${dept}`,
-      );
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || "Lỗi tải dữ liệu");
-      setReportData(json as ReportData);
-    } catch (e: any) {
-      message.error(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const fetchReport = useCallback(
+    async (range: [Dayjs | null, Dayjs | null], dept: string) => {
+      const [start, end] = range;
+      if (!start || !end)
+        return message.warning("Vui lòng chọn đầy đủ khoảng ngày lọc");
 
-  // Auto-load tháng hiện tại khi mount
+      setLoading(true);
+      try {
+        const fromDateStr = start.format("YYYY-MM-DD");
+        const toDateStr = end.format("YYYY-MM-DD");
+
+        // Chuyển API endpoint nhận tham số lọc theo ngày (đảm bảo Backend route khớp tên query này)
+        const res = await fetch(
+          `/api/proposals/grab-report?fromDate=${fromDateStr}&toDate=${toDateStr}&dept=${dept}`,
+        );
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || "Lỗi tải dữ liệu");
+
+        setReportData(json as ReportData);
+      } catch (e: any) {
+        message.error(e.message);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [],
+  );
+
+  // Auto-load khoảng ngày mặc định khi mount ứng dụng
   useEffect(() => {
-    fetchReport(dayjs(), "ALL");
+    const defaultRange: [Dayjs, Dayjs] = [
+      dayjs().subtract(1, "month").date(23),
+      dayjs().date(22),
+    ];
+    fetchReport(defaultRange, "ALL");
   }, [fetchReport]);
 
   // ── Handlers ───────────────────────────────────────────────────────────────
-  const handleSearch = () => fetchReport(selectedMonth, selectedDept);
+  const handleSearch = () => fetchReport(dateRange, selectedDept);
 
   const handleDeptChange = (val: string) => {
     setSelectedDept(val);
-    fetchReport(selectedMonth, val);
+    fetchReport(dateRange, val);
   };
 
   const handleExport = async () => {
-    if (!reportData) return;
+    if (!reportData || !dateRange[0] || !dateRange[1]) return;
     setExporting(true);
     try {
-      await exportSecureGrabPDF(reportData);
+      // Đính kèm trực tiếp dateFrom và dateTo vào object trước khi truyền qua hàm in PDF bảo mật
+      await exportSecureGrabPDF({
+        ...reportData,
+        dateFrom: dateRange[0].format("YYYY-MM-DD"),
+        dateTo: dateRange[1].format("YYYY-MM-DD"),
+      });
       message.success("Xuất PDF thành công!");
     } catch (e: any) {
       message.error("Lỗi xuất PDF: " + e.message);
@@ -338,7 +361,7 @@ export default function GSMReportPage() {
           }}
         >
           <Row gutter={[12, 8]} align="middle">
-            <Col xs={24} md={10}>
+            <Col xs={24} md={8}>
               <Space align="center">
                 <div
                   style={{
@@ -366,22 +389,23 @@ export default function GSMReportPage() {
               </Space>
             </Col>
 
-            <Col xs={24} md={14} style={{ textAlign: "right" }}>
+            <Col xs={24} md={16} style={{ textAlign: "right" }}>
               <Space wrap>
-                {/* Chọn tháng */}
-                <DatePicker
-                  picker="month"
-                  value={selectedMonth}
-                  onChange={setSelectedMonth}
-                  format="MM/YYYY"
-                  placeholder="Chọn tháng"
+                {/* Thay thế Bộ chọn tháng thành bộ chọn RangePicker từ ngày -> đến ngày */}
+                <RangePicker
+                  value={dateRange}
+                  onChange={(val) =>
+                    setDateRange(val ? [val[0], val[1]] : [null, null])
+                  }
+                  format="DD/MM/YYYY"
+                  placeholder={["Từ ngày", "Đến ngày"]}
                   allowClear={false}
-                  style={{ width: 120 }}
+                  style={{ width: 230 }}
                 />
 
                 {/* Chọn bộ phận */}
                 <Select
-                  style={{ width: 200 }}
+                  style={{ width: 180 }}
                   value={selectedDept}
                   onChange={handleDeptChange}
                   loading={loading}
@@ -576,7 +600,7 @@ export default function GSMReportPage() {
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                   description={
                     reportData
-                      ? "Không có phiếu đã duyệt nào trong tháng / bộ phận này"
+                      ? "Không có phiếu đã duyệt nào trong khoảng thời gian / bộ phận này"
                       : "Đang tải..."
                   }
                 />

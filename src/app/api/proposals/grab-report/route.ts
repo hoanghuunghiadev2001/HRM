@@ -4,30 +4,59 @@ export const dynamic = "force-dynamic";
 
 import { type NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getDefaultDateRange } from "@/lib/grab-report-utils";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+// Kích hoạt plugin xử lý múi giờ của dayjs
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+const TZ_VN = "Asia/Ho_Chi_Minh";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const month = parseInt(searchParams.get("month") ?? "0");
-  const year = parseInt(searchParams.get("year") ?? "0");
-  // "ALL" = tất cả bộ phận, hoặc departmentId dạng string
-  const deptFilter = searchParams.get("dept") ?? "ALL";
 
-  if (!month || !year) {
+  let from: Date;
+  let to: Date;
+
+  const rawFrom = searchParams.get("fromDate");
+  const rawTo = searchParams.get("toDate");
+
+  if (rawFrom && rawTo) {
+    // Ép chuẩn chuỗi ngày về đúng 00:00 và 23:59 theo múi giờ Việt Nam, sau đó xuất ra dạng Date object cho Prisma
+    from = dayjs.tz(`${rawFrom} 00:00:00`, TZ_VN).toDate();
+    to = dayjs.tz(`${rawTo} 23:59:59.999`, TZ_VN).toDate();
+  } else {
+    const def = getDefaultDateRange();
+    from = def.from;
+    to = def.to;
+  }
+
+  if (isNaN(from.getTime()) || isNaN(to.getTime())) {
     return NextResponse.json(
-      { error: "Thiếu tham số month/year" },
+      { error: "Ngày không hợp lệ. Định dạng: YYYY-MM-DD" },
       { status: 400 },
     );
   }
 
-  const from = new Date(year, month - 1, 1, 0, 0, 0);
-  const to = new Date(year, month, 0, 23, 59, 59);
+  if (from > to) {
+    return NextResponse.json(
+      { error: "Ngày bắt đầu phải trước ngày kết thúc" },
+      { status: 400 },
+    );
+  }
 
-  // Fetch tất cả proposals approved trong tháng, join proposer → workInfo → department
+  // "ALL" = tất cả bộ phận, hoặc departmentId dạng string
+  const deptFilter = searchParams.get("dept") ?? "ALL";
+
+  // ── Query DB ───────────────────────────────────────────────────────────────
   const proposals = await prisma.proposal.findMany({
     where: {
       proposalType: "VEHICLE_GRAB",
       status: "approved",
-      createdAt: { gte: from, lte: to },
+      createdAt: { gte: from, lte: to }, // Lúc này Prisma nhận Date chuẩn UTC tương ứng với giờ VN
     },
     include: {
       proposer: {
@@ -56,7 +85,7 @@ export async function GET(request: NextRequest) {
     orderBy: { createdAt: "asc" },
   });
 
-  // Build danh sách departments duy nhất (xuất hiện trong tháng này) để làm dropdown
+  // ── Build danh sách departments duy nhất ──────────────────────────────────
   const deptMap = new Map<
     string,
     { id: number; name: string; abbreviation: string }
@@ -69,7 +98,7 @@ export async function GET(request: NextRequest) {
     a.name.localeCompare(b.name, "vi"),
   );
 
-  // Lọc proposals theo dept nếu không phải ALL
+  // ── Lọc theo dept ──────────────────────────────────────────────────────────
   const filtered =
     deptFilter === "ALL"
       ? proposals
@@ -87,7 +116,7 @@ export async function GET(request: NextRequest) {
     0,
   );
 
-  // Breakdown theo từng bộ phận (luôn tính từ toàn bộ proposals, không phụ thuộc deptFilter)
+  // ── Breakdown theo bộ phận (luôn tính từ toàn bộ) ────────────────────────
   const deptBreakdown: Record<
     string,
     {
@@ -118,15 +147,16 @@ export async function GET(request: NextRequest) {
   }
 
   return NextResponse.json({
-    month,
-    year,
+    // Thay vì .toISOString().slice(0,10) bị lùi ngày, hãy dùng dayjs ép hiển thị đúng format YYYY-MM-DD theo giờ VN
+    dateFrom: dayjs(from).tz(TZ_VN).format("YYYY-MM-DD"),
+    dateTo: dayjs(to).tz(TZ_VN).format("YYYY-MM-DD"),
     deptFilter,
     total: filtered.length,
     approvedCount: filtered.length,
     totalVehicleAmount,
     totalRoAmount,
-    departments, // danh sách bộ phận duy nhất để build dropdown trên UI
-    deptBreakdown, // breakdown tất cả bộ phận (dùng để hiển thị bảng tổng hợp)
+    departments,
+    deptBreakdown,
     proposals: filtered.map((p) => ({
       id: p.id,
       name: p.name,
@@ -147,7 +177,6 @@ export async function GET(request: NextRequest) {
         id: p.proposer.id,
         name: p.proposer.name,
         employeeCode: p.proposer.employeeCode,
-        // Flatten department ra ngoài để dùng tiện trên client/PDF
         department: p.proposer.workInfo?.department ?? null,
       },
       vehicle: p.vehicle,

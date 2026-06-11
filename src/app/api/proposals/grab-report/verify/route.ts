@@ -16,23 +16,33 @@ export async function GET(request: NextRequest) {
     return verifyPage(false, "Thiếu tham số xác thực", null);
   }
 
-  // ── Parse docId: GR-202506-0042 ───────────────────────────────────────────
-  const match = docId.match(/^GR-(\d{4})(\d{2})-(\d+)$/);
+  // ── Parse docId: GR-YYYYMMDD-YYYYMMDD-XXXX ────────────────────────────────
+  const match = docId.match(/^GR-(\d{8})-(\d{8})-(\d+)$/);
   if (!match) {
     return verifyPage(false, "Mã tài liệu không đúng định dạng", null);
   }
-  const year = parseInt(match[1]);
-  const month = parseInt(match[2]);
 
-  const from = new Date(year, month - 1, 1, 0, 0, 0);
-  const to = new Date(year, month, 0, 23, 59, 59);
+  const rawFrom = match[1]; // "YYYYMMDD"
+  const rawTo = match[2]; // "YYYYMMDD"
 
-  // ── Query DB — join proposer → workInfo → department ─────────────────────
+  // Parse sang Date
+  const fromDate = new Date(
+    `${rawFrom.slice(0, 4)}-${rawFrom.slice(4, 6)}-${rawFrom.slice(6, 8)}T00:00:00`,
+  );
+  const toDate = new Date(
+    `${rawTo.slice(0, 4)}-${rawTo.slice(4, 6)}-${rawTo.slice(6, 8)}T23:59:59`,
+  );
+
+  if (isNaN(fromDate.getTime()) || isNaN(toDate.getTime())) {
+    return verifyPage(false, "Mã tài liệu chứa ngày không hợp lệ", null);
+  }
+
+  // ── Query DB ───────────────────────────────────────────────────────────────
   const allProposals = await prisma.proposal.findMany({
     where: {
       proposalType: "VEHICLE_GRAB",
       status: "approved",
-      createdAt: { gte: from, lte: to },
+      createdAt: { gte: fromDate, lte: toDate },
     },
     include: {
       proposer: {
@@ -64,7 +74,7 @@ export async function GET(request: NextRequest) {
     0,
   );
 
-  // ── Tính breakdown theo từng bộ phận (luôn từ toàn bộ, để hiển thị đầy đủ)
+  // ── Breakdown theo bộ phận (từ toàn bộ) ──────────────────────────────────
   const deptBreakdown: Record<
     string,
     { name: string; count: number; vehicleAmount: number; roAmount: number }
@@ -86,24 +96,26 @@ export async function GET(request: NextRequest) {
     deptBreakdown[key].roAmount += Number((p as any).roAmount) || 0;
   }
 
-  // ── Tính lại hash với đúng deptFilter ────────────────────────────────────
+  // ── Tính lại hash ─────────────────────────────────────────────────────────
   const expectedHash = makeDocHash(
     docId,
-    month,
-    year,
+    rawFrom,
+    rawTo,
     actualTotal,
     totalVehicleAmount,
     deptFilter,
   );
   const isValid = expectedHash === hashParam.toUpperCase();
 
-  // Tìm tên bộ phận để hiển thị
+  // Tên bộ phận để hiển thị
   const deptName =
     deptFilter === "ALL"
       ? "Tất cả bộ phận"
-      : (Object.values(deptBreakdown).find((_, i) => {
-          return Object.keys(deptBreakdown)[i] === deptFilter;
-        })?.name ?? deptFilter);
+      : (deptBreakdown[deptFilter]?.name ?? deptFilter);
+
+  // Format ngày hiển thị dd/MM/yyyy
+  const fmtDate = (raw: string) =>
+    `${raw.slice(6, 8)}/${raw.slice(4, 6)}/${raw.slice(0, 4)}`;
 
   return verifyPage(
     isValid,
@@ -112,8 +124,8 @@ export async function GET(request: NextRequest) {
       : "Hash không khớp — tài liệu có thể đã bị chỉnh sửa hoặc giả mạo",
     {
       docId,
-      month,
-      year,
+      dateFrom: fmtDate(rawFrom),
+      dateTo: fmtDate(rawTo),
       deptFilter,
       deptName,
       total: actualTotal,
@@ -158,8 +170,8 @@ function verifyPage(
     ? `
     <div class="info-box">
       <div class="info-row">
-        <span>Tháng báo cáo</span>
-        <strong>${String(info.month).padStart(2, "0")}/${info.year}</strong>
+        <span>Khoảng thời gian</span>
+        <strong>${info.dateFrom} — ${info.dateTo}</strong>
       </div>
       <div class="info-row">
         <span>Mã tài liệu</span>
@@ -178,21 +190,20 @@ function verifyPage(
         <strong style="color:#1565c0">${fmtVND(info.totalAmount)}</strong>
       </div>
     </div>
-
     ${
       breakdownRows
         ? `<div class="section-title">Chi tiết theo từng bộ phận</div>
-        <table class="dept-table">
-          <thead>
-            <tr>
-              <th>Bộ phận</th>
-              <th style="text-align:right">Phiếu</th>
-              <th style="text-align:right">Tiền dự tính</th>
-              <th style="text-align:right">Tiền thực tế</th>
-            </tr>
-          </thead>
-          <tbody>${breakdownRows}</tbody>
-        </table>`
+          <table class="dept-table">
+            <thead>
+              <tr>
+                <th>Bộ phận</th>
+                <th style="text-align:right">Phiếu</th>
+                <th style="text-align:right">Tiền dự tính</th>
+                <th style="text-align:right">Tiền thực tế</th>
+              </tr>
+            </thead>
+            <tbody>${breakdownRows}</tbody>
+          </table>`
         : ""
     }`
     : "";
@@ -222,12 +233,7 @@ function verifyPage(
       width: 100%;
       overflow: hidden;
     }
-    .header {
-      background: #c62828;
-      color: white;
-      padding: 20px 24px;
-      text-align: center;
-    }
+    .header { background: #c62828; color: white; padding: 20px 24px; text-align: center; }
     .header .logo  { font-size: 13px; opacity: .85; margin-bottom: 4px; }
     .header .brand { font-size: 18px; font-weight: 700; letter-spacing: .5px; }
     .body { padding: 28px 24px; }
@@ -259,15 +265,10 @@ function verifyPage(
       border-bottom: 1px solid #f0f0f0;
       gap: 12px;
     }
-    .info-row.last { border-bottom: none; }
-    .info-row span { color: #757575; white-space: nowrap; }
+    .info-row.last  { border-bottom: none; }
+    .info-row span  { color: #757575; white-space: nowrap; }
     .info-row strong { text-align: right; }
-    .section-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #424242;
-      margin-bottom: 8px;
-    }
+    .section-title  { font-size: 13px; font-weight: 600; color: #424242; margin-bottom: 8px; }
     .dept-table {
       width: 100%;
       border-collapse: collapse;
