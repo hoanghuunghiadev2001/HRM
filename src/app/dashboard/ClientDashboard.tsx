@@ -192,6 +192,8 @@ export default function ClientDashboard({
     },
     ...(employeeCode === "01375" ||
     employeeCode === "CSKHTBD" ||
+    employeeCode === "00016" ||
+    employeeCode === "00019" ||
     employeeCode === "CSKHTMP"
       ? [
           {
