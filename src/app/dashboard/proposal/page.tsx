@@ -171,6 +171,16 @@ export default function ProposalCreatorProfessional() {
       if (grabSubType === "PERSONAL") {
         // Cá nhân: giống xe nội bộ
         form.setFieldsValue({ signers: managerIds, approvers: [6] });
+        // Cá nhân: manager ký, người thực hiện theo chi nhánh
+        if (!userBrand || !BRANCH_APPROVER_CONFIG[userBrand]) {
+          form.setFieldsValue({ signers: managerIds, approvers: [] });
+          return;
+        }
+        const cfg = BRANCH_APPROVER_CONFIG[userBrand];
+        form.setFieldsValue({
+          signers: managerIds,
+          approvers: cfg.approverIds, // 317 (TBD) hoặc 318 (TMP)
+        });
         return;
       }
 

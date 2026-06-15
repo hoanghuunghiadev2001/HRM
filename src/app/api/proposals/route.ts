@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     const approverIds = JSON.parse(
       (formData.get("approverIds") as string) || "[]",
     );
-
+    const grabSubType = formData.get("grabSubType") as string | null;
     // 3. Xử lý loại Proposal & Thông tin xe
     const rawProposalType = formData.get("proposalType") as string | null;
 
@@ -112,7 +112,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (proposalType === "VEHICLE_GRAB" && (!customerName || !roNumber)) {
+    if (
+      proposalType === "VEHICLE_GRAB" &&
+      grabSubType === "CUSTOMER" &&
+      (!customerName || !roNumber)
+    ) {
       return NextResponse.json(
         { error: "Thiếu thông tin khách hàng hoặc mã RO" },
         { status: 400 },
