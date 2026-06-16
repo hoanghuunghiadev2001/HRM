@@ -293,7 +293,11 @@ export class ProposalService {
             if (isVehicle) {
               await sendWithRetry(
                 `vehicle-request signer[${signerInfo.id}] proposal[${newProposal.id}]`,
-                () => EmailService.sendVehicleRequest(signerInfo, newProposal),
+                () =>
+                  EmailService.sendVehicleRequest(signerInfo, {
+                    ...newProposal,
+                    ...links,
+                  }),
               );
             } else {
               await sendWithRetry(
