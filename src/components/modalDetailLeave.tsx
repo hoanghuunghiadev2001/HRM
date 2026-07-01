@@ -72,22 +72,22 @@ const ModalDetailLeave = ({
 }: ModalDetailLeaveProps) => {
   const { employeeCode } = useAppSelector((state) => state.user);
   const [leaveType, setLeaveType] = useState<string>(
-    infoRequetLeave?.leaveType || "PN"
+    infoRequetLeave?.leaveType || "PN",
   );
   const [startDate, setStartDate] = useState<Dayjs | null>(
     infoRequetLeave
       ? dayjs.utc(infoRequetLeave.startDate).tz("Asia/Ho_Chi_Minh")
-      : null
+      : null,
   );
   const [endDate, setEndDate] = useState<Dayjs | null>(
     infoRequetLeave
       ? dayjs.utc(infoRequetLeave.endDate).tz("Asia/Ho_Chi_Minh")
-      : null
+      : null,
   );
   const [createdAt, setcreatedAt] = useState<Dayjs | null>();
   const [loading, setLoading] = useState(false);
   const [totalHours, setTotalHours] = useState<number>(
-    infoRequetLeave?.totalHours || 0
+    infoRequetLeave?.totalHours || 0,
   );
 
   // const { employeeCode } = useAppSelector((state) => state.user);
@@ -172,7 +172,7 @@ const ModalDetailLeave = ({
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
       const result: ApiResponse<any> = await response.json();
       if (!response.ok) throw new Error(result.message || "Xóa đơn thất bại");
@@ -228,7 +228,9 @@ const ModalDetailLeave = ({
             </button>
           )}
           {/* Nút cập nhật và rút/xóa đơn */}
-          {(employeeCode === "01375" || employeeCode === "00898") && (
+          {(employeeCode === "01375" ||
+            employeeCode === "00898" ||
+            employeeCode === "01558") && (
             <div className="mt-4 flex  gap-2">
               <button
                 onClick={handleUpdate}
@@ -482,15 +484,15 @@ const ModalDetailLeave = ({
                             step.status === "approved"
                               ? "text-green-600"
                               : step.status === "rejected"
-                              ? "text-red-600"
-                              : "text-orange-500"
+                                ? "text-red-600"
+                                : "text-orange-500"
                           }`}
                         >
                           {statusMap[step.status]}
                         </span>
                       </li>
                     );
-                  }
+                  },
                 )}
               </ul>
             </div>
