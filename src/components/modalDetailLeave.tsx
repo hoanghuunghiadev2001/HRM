@@ -191,7 +191,6 @@ const ModalDetailLeave = ({
   const start = infoRequetLeave
     ? dayjs.utc(infoRequetLeave.startDate).tz("Asia/Ho_Chi_Minh")
     : null;
-  console.log(infoRequetLeave);
 
   const isOwner = employeeCode === infoRequetLeave?.employee?.employeeCode;
 
@@ -295,7 +294,9 @@ const ModalDetailLeave = ({
         {/* Chi tiết đơn nghỉ */}
         <p className="text-xl font-bold mt-4">Chi tiết:</p>
         <div className="pl-4 mt-1">
-          {employeeCode === "01375" || employeeCode === "00898" ? (
+          {employeeCode === "01375" ||
+          employeeCode === "00898" ||
+          employeeCode === "01558" ? (
             <>
               <Form.Item label="Loại phép">
                 <Select
