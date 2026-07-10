@@ -1,19 +1,75 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers"; // Thêm import cookies nếu chưa có
 import { sendEmail } from "@/lib/mail";
+import { verifyToken } from "@/lib/auth"; // Giả định đường dẫn verifyToken của bạn
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    // 1. Kiểm tra Token authentication trước
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token-hrm")?.value;
 
-    // Lấy thông tin cơ bản
-    const employeeName = body.employeeName || "Nhân viên hệ thống";
-    const employeeCode = body.employeeCode || "Chưa cập nhật";
+    if (!token) {
+      return NextResponse.json(
+        { error: "Thiếu token xác thực" },
+        { status: 401 },
+      );
+    }
+
+    // Xác thực token và lấy thông tin user
+    const user = verifyToken(token);
+    if (!user) {
+      return NextResponse.json(
+        { error: "Token không hợp lệ hoặc hết hạn" },
+        { status: 401 },
+      );
+    }
+
+    // 2. Lấy thông tin từ body (chỉ lấy các thông tin nhập từ form)
+    const body = await req.json();
     const month = body.month || "N/A";
     const year = body.year || "N/A";
-    const position = body.position || "Chưa cập nhật";
     const reason = body.reason || "Không có nội dung chi tiết";
 
+    // 3. Lấy thông tin nhân viên trực tiếp từ Token đã verify
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Token không hợp lệ" },
+        { status: 401 },
+      );
+    }
+
+    // 1. Tìm thông tin nhân viên trong DB bằng user.id lấy từ token
+    const employee = await prisma.employee.findUnique({
+      // Thay bằng hàm query DB thực tế của bạn (Prisma, Mongoose, SQL...)
+      where: { id: user.id },
+      select: {
+        name: true,
+        employeeCode: true,
+        workInfo: {
+          select: {
+            position: true,
+          },
+        },
+      },
+    });
+
+    if (!employee) {
+      return NextResponse.json(
+        { error: "Không tìm thấy nhân viên" },
+        { status: 404 },
+      );
+    }
+
+    // 2. Lấy thông tin từ DB để gửi mail
+    const employeeName = employee.name || "Nhân viên hệ thống";
+    const employeeCode = employee.employeeCode || "Chưa cập nhật";
+    const position = employee.workInfo?.position?.name || "Chưa cập nhật";
+
+    // 4. Tiến hành gửi mail
     await sendEmail({
       to: ["dao.tta@toyotabinhduong.com.vn"],
       subject: `[HRM] YÊU CẦU RÀ SOÁT LƯƠNG - ${employeeName.toUpperCase()}`,
