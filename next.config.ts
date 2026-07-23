@@ -29,7 +29,7 @@ const nextConfig = {
     ];
   },
   // --------------------------------
-
+  compress: false,
   experimental: {
     serverActions: {
       bodySizeLimit: 100 * 1024 * 1024,
