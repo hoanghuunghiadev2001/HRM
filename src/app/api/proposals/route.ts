@@ -207,7 +207,15 @@ export async function GET(request: NextRequest) {
     );
 
     if (result.success) {
-      return NextResponse.json(result.data);
+      // 🟢 BỔ SUNG: Ép response không dùng bất kỳ nén nào ở tầng Next.js/Nginx
+      return new NextResponse(JSON.stringify(result.data), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-store, max-age=0",
+          "Content-Encoding": "identity", // Bắt buộc truyền Plain Text, cấm gzip/br
+        },
+      });
     } else {
       return NextResponse.json({ error: result.error }, { status: 404 });
     }
