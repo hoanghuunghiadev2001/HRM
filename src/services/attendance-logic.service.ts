@@ -43,10 +43,6 @@ export class AttendanceLogicService {
       masterMap.get(key)!.push(recordDate.toDate());
     }
 
-    console.log(
-      `🚀 [Attendance] Đã gom nhóm thành ${masterMap.size} ca làm việc.`,
-    );
-
     // Xử lý từng nhóm dữ liệu
     for (const [key, times] of masterMap.entries()) {
       try {
@@ -129,9 +125,5 @@ export class AttendanceLogicService {
         checkOutTime = VALUES(checkOutTime),
         workingHours = VALUES(workingHours);
     `;
-
-    console.log(
-      `✅ [${dateStr}] ${emp.name}: ${dayjs(finalIn).tz(VN_TZ).format("HH:mm")} -> ${finalOut ? dayjs(finalOut).tz(VN_TZ).format("HH:mm") : "--"}`,
-    );
   }
 }
