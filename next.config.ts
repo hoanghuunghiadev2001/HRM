@@ -32,7 +32,7 @@ const nextConfig = {
 
   experimental: {
     serverActions: {
-      bodySizeLimit: 10 * 1024 * 1024,
+      bodySizeLimit: 100 * 1024 * 1024,
     },
   },
   reactStrictMode: false,
@@ -52,7 +52,7 @@ const nextConfig = {
   },
   webpack(config: { module: { rules: any[] } }) {
     const lessRule = config.module.rules.find(
-      (rule: any) => rule.test && rule.test.toString().includes("less")
+      (rule: any) => rule.test && rule.test.toString().includes("less"),
     );
     if (lessRule) {
       lessRule.use.push({
@@ -83,5 +83,5 @@ export default withAnalyzer(
     register: true,
     skipWaiting: true,
     disable: process.env.NODE_ENV === "development",
-  })(nextConfig)
+  })(nextConfig),
 );
