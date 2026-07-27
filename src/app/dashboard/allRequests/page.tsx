@@ -30,6 +30,57 @@ import ModalCalendarLeave from "@/components/modalCalendarLeave";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+// ⬇️ Thêm vào file app/dashboard/allRequests/page.tsx
+// (chỉ phần interface, KHÔNG thay cả file — bạn chỉ cần chèn/sửa như bên dưới)
+
+export interface ApproverInfo {
+  name: string | null;
+  employeeCode: string | null;
+  departmentName: string | null;
+  positionName: string | null;
+  stepLevel: number;
+  approvedAt: string | null; // ISO string
+}
+
+// 🆕 Một người duyệt trong 1 cấp (kèm trạng thái pending/approved/rejected/revoked)
+export interface ApprovalChainApprover {
+  name: string | null;
+  employeeCode: string | null;
+  departmentName: string | null;
+  positionName: string | null;
+  status: "pending" | "approved" | "rejected" | "revoked";
+  approvedAt: string | null;
+}
+
+// 🆕 Một cấp duyệt (level) trong chuỗi phê duyệt, gồm nhiều người duyệt song song
+export interface ApprovalChainStep {
+  stepId: number;
+  level: number;
+  status: "pending" | "approved" | "rejected" | "revoked";
+  approvedAt: string | null;
+  approvers: ApprovalChainApprover[];
+}
+
+export interface PendingApprovalItem {
+  stepId: number; // ID của step hiện tại
+  leaveRequestId: number; // ID đơn nghỉ phép
+  employeeId: number; // ID nhân viên gửi đơn
+  employeeName: string | null; // Tên nhân viên
+  employeeCode: string | null; // Mã nhân viên
+  leaveType: string; // Loại phép
+  startDate: string; // ISO string
+  endDate: string; // ISO string
+  totalHours: number;
+  reason: string | null;
+  status: string; // Trạng thái step hiện tại
+  department: string | null; // Tên phòng ban
+  position: string | null; // Tên chức vụ
+  currentStepLevel: number; // Level step hiện tại
+  handoverFileId: string | null;
+  approversWhoApproved?: ApproverInfo[]; // (giữ lại để tương thích ngược)
+  approvalChain?: ApprovalChainStep[]; // 🆕 toàn bộ chuỗi phê duyệt, mọi cấp
+}
+
 export interface dataNeedApprove {
   leaveRequest: LeaveRequestNeedApprove;
   approversWhoApproved: ApproversWhoApproved[];
@@ -182,7 +233,7 @@ export default function AllRequestPage() {
     PendingApprovalItem[]
   >([]);
   const { role, id, department, departmentID } = useAppSelector(
-    (state) => state.user
+    (state) => state.user,
   );
 
   const [departments, setDepartments] = useState<Department[]>([]);
@@ -199,7 +250,7 @@ export default function AllRequestPage() {
   };
 
   const getPendingApprovals = async (
-    userId: number
+    userId: number,
   ): Promise<PendingApprovalItem[]> => {
     try {
       const res = await fetch(`/api/leave/all-requests-need-approve`);
@@ -236,7 +287,7 @@ export default function AllRequestPage() {
         pageSize: pageSize,
         role: role,
         department:
-          role === "ADMIN" ? filterDepartment : String(departmentID) ?? "",
+          role === "ADMIN" ? filterDepartment : (String(departmentID) ?? ""),
         employeeCode: filterMSNV,
         name: filterName,
         status: "",

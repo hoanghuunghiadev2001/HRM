@@ -1,22 +1,89 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
-import { Button, Calendar, DatePicker, Drawer, Form, Select, Spin } from "antd";
+import {
+  Avatar,
+  Button,
+  Calendar,
+  DatePicker,
+  Drawer,
+  Spin,
+  Tag,
+  Timeline,
+} from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import TextArea from "antd/es/input/TextArea";
-import { NumericInput } from "./function";
 
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { PendingApprovalItem } from "@/app/dashboard/allRequests/page";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import { DownloadOutlined } from "@ant-design/icons";
+import {
+  CalendarOutlined,
+  CheckCircleFilled,
+  ClockCircleFilled,
+  CloseCircleFilled,
+  DownloadOutlined,
+  FileTextOutlined,
+  IdcardOutlined,
+  TeamOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
-
-// Kích hoạt plugin
 dayjs.extend(utc);
 dayjs.extend(timezone);
+
+// ⬇️ Thêm vào file app/dashboard/allRequests/page.tsx
+// (chỉ phần interface, KHÔNG thay cả file — bạn chỉ cần chèn/sửa như bên dưới)
+
+export interface ApproverInfo {
+  name: string | null;
+  employeeCode: string | null;
+  departmentName: string | null;
+  positionName: string | null;
+  stepLevel: number;
+  approvedAt: string | null; // ISO string
+}
+
+// 🆕 Một người duyệt trong 1 cấp (kèm trạng thái pending/approved/rejected/revoked)
+export interface ApprovalChainApprover {
+  name: string | null;
+  employeeCode: string | null;
+  departmentName: string | null;
+  positionName: string | null;
+  status: "pending" | "approved" | "rejected" | "revoked";
+  approvedAt: string | null;
+}
+
+// 🆕 Một cấp duyệt (level) trong chuỗi phê duyệt, gồm nhiều người duyệt song song
+export interface ApprovalChainStep {
+  stepId: number;
+  level: number;
+  status: "pending" | "approved" | "rejected" | "revoked";
+  approvedAt: string | null;
+  approvers: ApprovalChainApprover[];
+}
+
+export interface PendingApprovalItem {
+  stepId: number; // ID của step hiện tại
+  leaveRequestId: number; // ID đơn nghỉ phép
+  employeeId: number; // ID nhân viên gửi đơn
+  employeeName: string | null; // Tên nhân viên
+  employeeCode: string | null; // Mã nhân viên
+  leaveType: string; // Loại phép
+  startDate: string; // ISO string
+  endDate: string; // ISO string
+  totalHours: number;
+  reason: string | null;
+  status: string; // Trạng thái step hiện tại
+  department: string | null; // Tên phòng ban
+  position: string | null; // Tên chức vụ
+  currentStepLevel: number; // Level step hiện tại
+  handoverFileId: string | null;
+  approversWhoApproved?: ApproverInfo[]; // (giữ lại để tương thích ngược)
+  approvalChain?: ApprovalChainStep[]; // 🆕 toàn bộ chuỗi phê duyệt, mọi cấp
+}
 
 interface ModalApproveRequestProps {
   open: boolean;
@@ -24,13 +91,100 @@ interface ModalApproveRequestProps {
   requestApprove?: PendingApprovalItem;
   putApprovedRequest: (
     decision: "approved" | "rejected",
-    comment?: string
+    comment?: string,
   ) => void;
 }
+
 interface LeaveCount {
   date: string;
   count: number;
 }
+
+// ===== Cấu hình hiển thị =====
+const LEAVE_TYPE_LABELS: Record<string, string> = {
+  PN: "Phép năm",
+  NB: "Nghỉ bù",
+  PC: "Phép cưới",
+  Cgt: "Công tác",
+  PB: "Phép bệnh",
+  TS: "Thai sản",
+  PR: "Phép riêng",
+  PT: "Phép tang",
+};
+
+const APPROVER_STATUS_CONFIG: Record<
+  string,
+  { color: string; text: string; icon: React.ReactNode }
+> = {
+  approved: {
+    color: "#52c41a",
+    text: "Đã duyệt",
+    icon: <CheckCircleFilled />,
+  },
+  pending: {
+    color: "#d4b106",
+    text: "Đang chờ",
+    icon: <ClockCircleFilled />,
+  },
+  rejected: {
+    color: "#ff4d4f",
+    text: "Từ chối",
+    icon: <CloseCircleFilled />,
+  },
+  revoked: {
+    color: "#8c8c8c",
+    text: "Thu hồi",
+    icon: <ClockCircleFilled />,
+  },
+};
+
+const InfoField = ({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value?: string | null;
+}) => (
+  <div className="flex items-start gap-2.5">
+    <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#eef3f7] text-[#4c809e]">
+      {icon}
+    </div>
+    <div className="min-w-0">
+      <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
+        {label}
+      </p>
+      <p className="truncate text-sm font-semibold text-[#242424]">
+        {value || "—"}
+      </p>
+    </div>
+  </div>
+);
+
+const SectionCard = ({
+  title,
+  icon,
+  children,
+  className = "",
+}: {
+  title: string;
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+}) => (
+  <div
+    className={`rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5 ${className}`}
+  >
+    <div className="mb-3 flex items-center gap-2">
+      {icon}
+      <h3 className="text-sm font-bold uppercase tracking-wide text-[#4a4a6a]">
+        {title}
+      </h3>
+    </div>
+    {children}
+  </div>
+);
 
 const ModalApproveRequest = ({
   open,
@@ -42,7 +196,6 @@ const ModalApproveRequest = ({
   const [rejectedReason, setRejectedReason] = useState("");
 
   const disabledDate = (currentDate: dayjs.Dayjs) => {
-    // Không cho chọn ngày trước hôm nay (chỉ chọn hôm nay trở đi)
     return currentDate && currentDate.isBefore(dayjs().startOf("day"));
   };
 
@@ -55,7 +208,10 @@ const ModalApproveRequest = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!open) return;
+    setRejectedReason("");
     const fetchCalendarData = async () => {
+      setLoading(true);
       try {
         const res = await fetch("/api/leave/calendar", {
           credentials: "include",
@@ -76,7 +232,6 @@ const ModalApproveRequest = ({
     const dateStr = value.format("YYYY-MM-DD");
     const found = data.find((item) => item.date === dateStr);
 
-    // Kiểm tra ngày trong khoảng rangeValue
     const inRange =
       rangeValue &&
       value.isSameOrAfter(rangeValue[0].startOf("day")) &&
@@ -84,126 +239,123 @@ const ModalApproveRequest = ({
 
     return (
       <div
-        className={`relative h-full flex items-end justify-end p-1 rounded-md ${
+        className={`relative flex h-full items-end justify-end rounded-md p-1 ${
           inRange ? "bg-yellow-500" : ""
         }`}
       >
         {found && (
-          <div className="text-red-600 font-bold text-sm">{found.count}</div>
+          <div className="text-sm font-bold text-red-600">{found.count}</div>
         )}
       </div>
     );
   };
 
-  return (
-    <>
-      <Drawer
-        style={{ top: 20 }}
-        title={
-          <p className="text-2xl font-bold text-center">
-            Phê duyệt phiếu yêu cầu
-          </p>
-        }
-        width={600}
-        // loading={loading}
-        open={open}
-        onClose={onClose}
-        closable={{ "aria-label": "Close Button" }}
-        footer={
-          <div className="flex gap-6 justify-end">
-            <Button
-              key="reject"
-              type="dashed"
-              color="danger"
-              className="!bg-red-500 !text-white"
-              onClick={() => putApprovedRequest("rejected", rejectedReason)}
-            >
-              Từ chối
-            </Button>
-            <Button
-              key="approve"
-              type="primary"
-              onClick={() => putApprovedRequest("approved")}
-            >
-              Chấp nhận
-            </Button>
-          </div>
-        }
-      >
-        {loading ? (
-          <Spin size="large" className="flex justify-center mt-10" fullscreen />
-        ) : (
-          <div className="p-4 bg-white rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">
-              📅 Lịch nghỉ phép đã duyệt
-            </h2>
-            <Calendar
-              dateCellRender={dateCellRender}
-              className="!p-0 antd-calendar"
-            />
-          </div>
-        )}
+  // Ưu tiên chuỗi phê duyệt đầy đủ (approvalChain); nếu API cũ chưa trả về,
+  // fallback dựng từ approversWhoApproved để không vỡ giao diện.
+  const approvalChain =
+    requestApprove?.approvalChain ??
+    (requestApprove?.approversWhoApproved?.length
+      ? [
+          {
+            stepId: 0,
+            level: requestApprove.approversWhoApproved[0].stepLevel,
+            status: "approved" as const,
+            approvedAt: null,
+            approvers: requestApprove.approversWhoApproved.map((a) => ({
+              name: a.name,
+              employeeCode: a.employeeCode,
+              departmentName: a.departmentName,
+              positionName: a.positionName,
+              status: "approved" as const,
+              approvedAt: a.approvedAt,
+            })),
+          },
+        ]
+      : []);
 
-        {/* <ModalLoading isOpen={loading} /> */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 mt-4 gap-4 sm:mt-2">
-          <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
-            <p className="shrink-0">Họ và tên:</p>
-            <p className="inline font-medium text-[#3a3a3a]">
-              {requestApprove?.employeeName}
-            </p>
-          </div>
-          <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
-            <p className="shrink-0">MSNV:</p>
-            <p className="inline font-medium text-[#3a3a3a]">
-              {requestApprove?.employeeCode}
-            </p>
-          </div>
-          <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
-            <p className="shrink-0">Bộ phận:</p>
-            <p className="inline font-medium text-[#3a3a3a]">
-              {requestApprove?.department}
-            </p>
-          </div>
-          <div className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
-            <p className="shrink-0">Chức vụ:</p>
-            <p className="inline font-medium text-[#3a3a3a]">
-              {requestApprove?.position}
-            </p>
-          </div>
-        </div>
-        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Form.Item
-            label={<p className="font-bold text-[#242424]">Loại Phép</p>}
-            rules={[{ required: true, message: "Vui lòng chọn loại phép" }]}
+  const employeeInitial = requestApprove?.employeeName?.charAt(0) ?? "?";
+
+  return (
+    <Drawer
+      title={
+        <p className="text-xl font-bold text-[#242424]">
+          Chi tiết phiếu yêu cầu nghỉ phép
+        </p>
+      }
+      width={640}
+      open={open}
+      onClose={onClose}
+      closable={{ "aria-label": "Close Button" }}
+      styles={{ body: { background: "#f7f8fa", padding: 16 } }}
+      footer={
+        <div className="flex justify-end gap-3">
+          <Button
+            danger
+            size="large"
+            onClick={() => putApprovedRequest("rejected", rejectedReason)}
           >
-            <Select
-              value={requestApprove?.leaveType}
-              disabled
-              options={[
-                { value: "PN", label: "PN-Phép năm" },
-                { value: "NB", label: "NB-Nghỉ bù" },
-                { value: "PC", label: "PC-Phép cưới" },
-                { value: "Cgt", label: "CGT-Công tác" },
-                { value: "PB", label: "PB-Phép bệnh" },
-                { value: "TS", label: "TS-Thai sản" },
-                { value: "PR", label: "PR-Phép riêng" },
-                { value: "PT", label: "PT-Phép tang" },
-              ]}
+            Từ chối
+          </Button>
+          <Button
+            type="primary"
+            size="large"
+            className="!bg-gradient-to-r !from-[#4c809e] !to-[#001935]"
+            onClick={() => putApprovedRequest("approved")}
+          >
+            Chấp nhận
+          </Button>
+        </div>
+      }
+    >
+      <div className="flex flex-col gap-4">
+        {/* ===== Thông tin nhân viên ===== */}
+        <SectionCard title="Người yêu cầu" icon={<UserOutlined />}>
+          <div className="mb-4 flex items-center gap-3">
+            <Avatar
+              size={48}
+              style={{
+                background: "linear-gradient(135deg, #4c809e 0%, #001935 100%)",
+                fontWeight: 700,
+              }}
+            >
+              {employeeInitial}
+            </Avatar>
+            <div className="min-w-0">
+              <p className="truncate text-base font-bold text-[#242424]">
+                {requestApprove?.employeeName || "—"}
+              </p>
+              <p className="text-sm text-gray-500">
+                MSNV: {requestApprove?.employeeCode || "—"}
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <InfoField
+              icon={<TeamOutlined />}
+              label="Bộ phận"
+              value={requestApprove?.department}
             />
-          </Form.Item>
-          <div className="flex gap-2 items-center">
-            <p className="font-bold text-[#242424]">Tổng giờ:</p>
-            <NumericInput
-              style={{ width: 60 }}
-              value={String(requestApprove?.totalHours)}
-              onChange={() => {}}
-              disable
+            <InfoField
+              icon={<IdcardOutlined />}
+              label="Chức vụ"
+              value={requestApprove?.position}
             />
           </div>
-        </div>
-        <div className="flex gap-2 items-center mt-3 flex-wrap">
-          <p className="font-bold text-[#242424] shrink-0">Thời gian</p>
+        </SectionCard>
+
+        {/* ===== Thông tin nghỉ phép ===== */}
+        <SectionCard title="Thông tin nghỉ phép" icon={<CalendarOutlined />}>
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <Tag color="blue" className="!rounded-full !px-3 !py-1 !text-sm">
+              {LEAVE_TYPE_LABELS[requestApprove?.leaveType ?? ""] ??
+                requestApprove?.leaveType}
+            </Tag>
+            <Tag color="purple" className="!rounded-full !px-3 !py-1 !text-sm">
+              {requestApprove?.totalHours ?? 0} giờ
+            </Tag>
+          </div>
           <RangePicker
+            className="w-full"
             disabledDate={disabledDate}
             placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
             showTime={{
@@ -214,84 +366,162 @@ const ModalApproveRequest = ({
             value={rangeValue}
             disabled
           />
-        </div>
 
-        <div className="mt-4">
+          <div className="mt-4">
+            <p className="mb-1 text-xs font-medium uppercase tracking-wide text-gray-400">
+              Lý do
+            </p>
+            <p className="rounded-lg bg-gray-50 p-3 text-sm text-[#3a3a3a]">
+              {requestApprove?.reason || "Không có lý do"}
+            </p>
+          </div>
+        </SectionCard>
+
+        {/* ===== Danh sách người duyệt ===== */}
+        <SectionCard title="Danh sách người duyệt" icon={<TeamOutlined />}>
+          {approvalChain.length === 0 ? (
+            <p className="text-sm text-gray-400">
+              Chưa có dữ liệu chuỗi phê duyệt.
+            </p>
+          ) : (
+            <Timeline
+              items={approvalChain
+                .sort(
+                  (a: { level: number }, b: { level: number }) =>
+                    a.level - b.level,
+                )
+                .map((step: any) => {
+                  const stepConfig =
+                    APPROVER_STATUS_CONFIG[step.status] ??
+                    APPROVER_STATUS_CONFIG.pending;
+                  return {
+                    color: stepConfig.color,
+                    dot: (
+                      <span style={{ color: stepConfig.color }}>
+                        {stepConfig.icon}
+                      </span>
+                    ),
+                    children: (
+                      <div className="pb-1">
+                        <p className="text-xs font-bold uppercase tracking-wide text-gray-400">
+                          Cấp {step.level}
+                        </p>
+                        <div className="mt-1.5 flex flex-col gap-2">
+                          {step.approvers.map(
+                            (
+                              approver: any,
+                              idx: React.Key | null | undefined,
+                            ) => {
+                              const config =
+                                APPROVER_STATUS_CONFIG[approver.status] ??
+                                APPROVER_STATUS_CONFIG.pending;
+                              return (
+                                <div
+                                  key={idx}
+                                  className="flex items-center justify-between gap-3 rounded-xl border border-gray-100 bg-gray-50/60 px-3 py-2"
+                                >
+                                  <div className="min-w-0">
+                                    <p className="truncate text-sm font-semibold text-[#242424]">
+                                      {approver.name || "—"}
+                                    </p>
+                                    <p className="truncate text-xs text-gray-500">
+                                      {[
+                                        approver.positionName,
+                                        approver.departmentName,
+                                      ]
+                                        .filter(Boolean)
+                                        .join(" · ")}
+                                    </p>
+                                  </div>
+                                  <div className="flex shrink-0 flex-col items-end gap-0.5">
+                                    <Tag
+                                      color={config.color}
+                                      className="!m-0 !rounded-full !text-xs"
+                                    >
+                                      {config.text}
+                                    </Tag>
+                                    {approver.approvedAt && (
+                                      <span className="text-[11px] text-gray-400">
+                                        {dayjs(approver.approvedAt).format(
+                                          "DD/MM/YYYY HH:mm",
+                                        )}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            },
+                          )}
+                        </div>
+                      </div>
+                    ),
+                  };
+                })}
+            />
+          )}
+        </SectionCard>
+
+        {/* ===== Lịch nghỉ phép đã duyệt ===== */}
+        <SectionCard
+          title="Lịch nghỉ phép đã duyệt"
+          icon={<CalendarOutlined />}
+        >
+          {loading ? (
+            <div className="flex justify-center py-10">
+              <Spin size="large" />
+            </div>
+          ) : (
+            <Calendar
+              fullscreen={false}
+              dateCellRender={dateCellRender}
+              className="!p-0"
+            />
+          )}
+        </SectionCard>
+
+        {/* ===== Biên bản bàn giao ===== */}
+        <SectionCard title="Biên bản bàn giao" icon={<FileTextOutlined />}>
           {requestApprove?.handoverFileId ? (
             (() => {
               const fileId = requestApprove?.handoverFileId ?? null;
-
-              // URL để tải / xem — endpoint bạn đã có: /api/files/:id
               const fileUrl = fileId ? `/api/files/${fileId}` : null;
-
-              // helper: là ảnh?
-
               return (
-                <div className="mt-2">
-                  <div className="flex justify-between items-center">
-                    <p className="font-bold">Biên bản bàn giao:</p>
+                <div>
+                  <div className="mb-2 flex items-center justify-end">
                     <a href={fileUrl ?? ""} target="_blank" rel="noreferrer">
-                      <Button icon={<DownloadOutlined />}>Tải xuống</Button>
+                      <Button icon={<DownloadOutlined />} size="small">
+                        Tải xuống
+                      </Button>
                     </a>
                   </div>
-                  <div className="">
-                    {fileUrl ? (
-                      <>
-                        <div style={{ marginTop: 12 }}>
-                          <iframe
-                            src={`/api/files/view/${fileId}`}
-                            style={{
-                              width: "100%",
-                              height: "50vh",
-                              border: "none",
-                            }}
-                          />
-                        </div>
-                      </>
-                    ) : (
-                      <span className="text-xs text-gray-500">
-                        Không có link file
-                      </span>
-                    )}
-                  </div>
+                  {fileUrl && (
+                    <iframe
+                      src={`/api/files/view/${fileId}`}
+                      className="w-full rounded-lg border border-gray-100"
+                      style={{ height: "40vh" }}
+                    />
+                  )}
                 </div>
               );
             })()
           ) : (
-            <div className="text-sm text-gray-500 mt-2">
+            <p className="text-sm text-gray-400">
               Không có biên bản bàn giao đính kèm.
-            </div>
+            </p>
           )}
-        </div>
-        <div>
-          <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
-            Lý do:
-          </p>
-          <div className="pl-4">{requestApprove?.reason ?? ""}</div>
-          <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center">
-            Lý do từ chối:
-          </p>
+        </SectionCard>
+
+        {/* ===== Lý do từ chối ===== */}
+        <SectionCard title="Lý do từ chối (nếu có)" icon={<FileTextOutlined />}>
           <TextArea
-            rows={4}
-            placeholder="Nhập lý do"
+            rows={3}
+            placeholder="Nhập lý do từ chối..."
             value={rejectedReason}
             onChange={(e) => setRejectedReason(e.target.value)}
           />
-        </div>
-        <div>
-          <p className="font-bold text-[#242424] flex shrink-0 gap-2 items-center mt-3">
-            Nhũng người phê duyệt trước:{" "}
-          </p>
-          <div className="font-medium text-[#242424] px-4 ">
-            {requestApprove?.approversWhoApproved?.map((item, index) => (
-              <div className="" key={index}>
-                - {item.name}({item.positionName})
-              </div>
-            ))}
-          </div>
-        </div>
-      </Drawer>
-    </>
+        </SectionCard>
+      </div>
+    </Drawer>
   );
 };
 

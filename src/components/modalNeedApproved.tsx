@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { Drawer, Space, Table, TableProps } from "antd";
+import { Avatar, Drawer, Empty, Space, Table, Tag, TableProps } from "antd";
 import { createStyles } from "antd-style";
 import ModalApproveRequest from "./modalApproveRequest";
 import ModalLoading from "./modalLoading";
@@ -10,14 +10,24 @@ import timezone from "dayjs/plugin/timezone";
 import { PendingApprovalItem } from "@/app/dashboard/allRequests/page";
 import { useAppSelector } from "@/store/hook";
 
-// Extend plugin
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+const LEAVE_TYPE_LABELS: Record<string, string> = {
+  PN: "Phép năm",
+  NB: "Nghỉ bù",
+  PC: "Phép cưới",
+  Cgt: "Công tác",
+  PB: "Phép bệnh",
+  TS: "Thai sản",
+  PR: "Phép riêng",
+  PT: "Phép tang",
+};
+
 export interface ApproveRequestPayload {
-  stepId: number; // ID của step hiện tại
-  approverId: number; // ID của người đang phê duyệt
-  decision: "approved" | "rejected"; // trạng thái phê duyệt
+  stepId: number;
+  approverId: number;
+  decision: "approved" | "rejected";
   comment?: string;
 }
 
@@ -49,6 +59,13 @@ const useStyle = createStyles((utils) => {
   return {
     customTable: css`
       ${antCls}-table {
+        border-radius: 12px;
+        overflow: hidden;
+        ${antCls}-table-thead > tr > th {
+          background: #f7f8fa;
+          font-weight: 700;
+          color: #4a4a6a;
+        }
         ${antCls}-table-container {
           ${antCls}-table-body,
           ${antCls}-table-content {
@@ -96,53 +113,77 @@ const ModalNeedApproved = ({
     })) || [];
 
   const columns: TableProps<DataType>["columns"] = [
-    { title: "STT", dataIndex: "key", rowScope: "row", width: "60px" },
-    { title: "MSNV", dataIndex: "MSNV", width: "80px" },
     {
-      title: "Tên NV",
+      title: "Nhân viên",
       dataIndex: "name",
       key: "name",
-      width: "170px",
-      render: (text) => <a>{text}</a>,
+      width: 220,
+      render: (text, record) => (
+        <div className="flex min-w-0 items-center gap-2.5">
+          <Avatar
+            size={36}
+            style={{
+              background: "linear-gradient(135deg, #4c809e 0%, #001935 100%)",
+              flexShrink: 0,
+            }}
+          >
+            {text?.charAt(0) ?? "?"}
+          </Avatar>
+          <div className="min-w-0">
+            <p
+              className="cursor-pointer truncate font-semibold text-[#242424] hover:text-[#4c809e]"
+              onClick={() => handleOpenRequest(record.leaveRequestId)}
+            >
+              {text}
+            </p>
+            <p className="truncate text-xs text-gray-400">{record.MSNV}</p>
+          </div>
+        </div>
+      ),
     },
     {
       title: "Phòng ban",
       dataIndex: "department",
       key: "department",
-      width: "80px",
+      width: 130,
+      responsive: ["md"],
     },
     {
       title: "Ngày nghỉ",
       dataIndex: "startDate",
       key: "startDate",
-      width: "170px",
+      width: 170,
     },
     {
       title: "Loại phép",
       dataIndex: "leaveType",
       key: "leaveType",
-      width: "80px",
+      width: 120,
+      render: (type: string) => (
+        <Tag color="blue" className="!rounded-full">
+          {LEAVE_TYPE_LABELS[type] ?? type}
+        </Tag>
+      ),
     },
     {
       title: "",
       key: "action",
-      width: "100px",
+      width: 90,
       render: (_, record) => (
         <Space
           size="middle"
+          className="cursor-pointer font-semibold text-[#4c809e]"
           onClick={() => handleOpenRequest(record.leaveRequestId)}
         >
-          <a>Chi tiết</a>
+          Chi tiết
         </Space>
       ),
     },
   ];
 
   const handleOpenRequest = (id: number) => {
-    console.log(allRequestsApproved);
-
     const requests = allRequestsApproved.find(
-      (emp) => emp.leaveRequestId === id
+      (emp) => emp.leaveRequestId === id,
     );
     setRequestApprove(requests);
     setApproveRequest(true);
@@ -150,7 +191,7 @@ const ModalNeedApproved = ({
 
   const handlePutApprovedRequest = async (
     decision: "approved" | "rejected",
-    comment?: string
+    comment?: string,
   ) => {
     if (!requestApprove) return;
 
@@ -171,30 +212,41 @@ const ModalNeedApproved = ({
   };
 
   return (
-    <>
-      <Drawer
-        title={<p className="text-2xl">Phê duyệt</p>}
-        placement="right"
-        onClose={onClose}
-        width={1000}
-        open={open}
-      >
-        <ModalLoading isOpen={loading} />
-        <ModalApproveRequest
-          onClose={() => setApproveRequest(false)}
-          open={approvedRequest}
-          requestApprove={requestApprove}
-          putApprovedRequest={handlePutApprovedRequest}
-        />
-        <Table<DataType>
-          className={styles.customTable}
-          columns={columns}
-          dataSource={formatted}
-          pagination={{ pageSize: 12 }}
-          scroll={{ y: "calc(100vh - 225px)" }}
-        />
-      </Drawer>
-    </>
+    <Drawer
+      title={
+        <div className="flex items-center gap-2">
+          <p className="text-xl font-bold text-[#242424]">
+            Phiếu chờ phê duyệt
+          </p>
+          <Tag color="volcano" className="!rounded-full">
+            {allRequestsApproved.length}
+          </Tag>
+        </div>
+      }
+      placement="right"
+      onClose={onClose}
+      width={900}
+      styles={{ body: { background: "#f7f8fa" } }}
+      open={open}
+    >
+      <ModalLoading isOpen={loading} />
+      <ModalApproveRequest
+        onClose={() => setApproveRequest(false)}
+        open={approvedRequest}
+        requestApprove={requestApprove}
+        putApprovedRequest={handlePutApprovedRequest}
+      />
+      <Table<DataType>
+        className={styles.customTable}
+        columns={columns}
+        dataSource={formatted}
+        pagination={{ pageSize: 12 }}
+        scroll={{ x: 700, y: "calc(100vh - 225px)" }}
+        locale={{
+          emptyText: <Empty description="Không có phiếu nào cần phê duyệt" />,
+        }}
+      />
+    </Drawer>
   );
 };
 

@@ -83,7 +83,7 @@ export async function GET(req: NextRequest) {
       .filter((step) => {
         const leaveReq = step.leaveRequest;
         const activeStep = leaveReq.approvalSteps.find(
-          (s) => s.status === LeaveStatus.pending
+          (s) => s.status === LeaveStatus.pending,
         );
         return activeStep?.id === step.id;
       })
@@ -100,8 +100,26 @@ export async function GET(req: NextRequest) {
               approvedAt: a.approvedAt,
               departmentName: a.approver?.workInfo?.department?.name,
               positionName: a.approver?.workInfo?.position?.name,
-            }))
+            })),
           );
+
+        // 🔹 MỚI: toàn bộ chuỗi phê duyệt (mọi cấp, mọi người duyệt, kèm trạng thái)
+        // giúp UI hiển thị đầy đủ "ai đã duyệt / ai đang chờ / ai từ chối" chứ
+        // không chỉ những người đã duyệt xong.
+        const approvalChain = leaveReq.approvalSteps.map((s) => ({
+          stepId: s.id,
+          level: s.level,
+          status: s.status,
+          approvedAt: s.approvedAt,
+          approvers: s.approvers.map((a) => ({
+            name: a.approver?.name ?? null,
+            employeeCode: a.approver?.employeeCode ?? null,
+            departmentName: a.approver?.workInfo?.department?.name ?? null,
+            positionName: a.approver?.workInfo?.position?.name ?? null,
+            status: a.status,
+            approvedAt: a.approvedAt,
+          })),
+        }));
 
         return {
           stepId: step.id,
@@ -120,6 +138,7 @@ export async function GET(req: NextRequest) {
           status: leaveReq.status,
           handoverFileId: leaveReq.handoverFileId,
           approversWhoApproved,
+          approvalChain,
         };
       });
 
