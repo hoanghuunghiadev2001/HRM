@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 
-// ✅ 1. Bổ sung hàm giải mã JWT này vào đầu file (dưới các dòng import)
 function decodeJwt(token: string) {
   try {
     const base64Url = token.split(".")[1];
@@ -23,8 +22,19 @@ function decodeJwt(token: string) {
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // 👉 Cho phép static files & maintenance page
-  if (pathname.startsWith("/_next") || pathname.startsWith("/images")) {
+  // 👉 1. Bỏ qua hoàn toàn các request gọi vào thư mục /api (để các route tự xác thực)
+  // và các file tĩnh, trang login, maintenance
+  if (
+    pathname.startsWith("/api") ||
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/images") ||
+    pathname.startsWith("/favicon") ||
+    pathname.startsWith("/icons") ||
+    pathname.startsWith("/storage") ||
+    pathname.startsWith("/manifest") ||
+    pathname.startsWith("/robots")
+  ) {
     return NextResponse.next();
   }
 
@@ -32,27 +42,9 @@ export function middleware(req: NextRequest) {
     return NextResponse.rewrite(new URL("/maintenance", req.url));
   }
 
-  // ✅ Bỏ qua middleware cho file tĩnh hoặc public routes
-  if (
-    pathname.startsWith("/login") ||
-    pathname.startsWith("/api/auth") ||
-    pathname.startsWith("/app/lib") ||
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/favicon") ||
-    pathname.startsWith("/icons") ||
-    pathname.startsWith("/storage") ||
-    pathname.startsWith("/images") ||
-    pathname.startsWith("/api") ||
-    pathname.startsWith("/manifest") ||
-    pathname.startsWith("/robots")
-  ) {
-    return NextResponse.next();
-  }
-
-  // Kiểm tra token
+  // Kiểm tra token cho các trang giao diện (UI routes)
   const token = req.cookies.get("token-hrm")?.value;
 
-  // Hàm xóa token và đẩy ra trang login
   const clearTokenAndLogin = () => {
     const response = NextResponse.redirect(new URL("/login", req.url));
     response.cookies.set("token-hrm", "", { maxAge: 0, path: "/" });
@@ -63,11 +55,8 @@ export function middleware(req: NextRequest) {
     return clearTokenAndLogin();
   }
 
-  // ✅ 2. Gọi hàm decodeJwt đã được định nghĩa ở trên
   const payload = decodeJwt(token);
   const user = payload?.user || payload;
-
-  // Kiểm tra thông tin brand trong token của user
   const userBrand = user?.brand;
 
   if (!userBrand) {
@@ -80,9 +69,9 @@ export function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 
-// ✅ Matcher
+// ✅ Matcher loại trừ tuyệt đối /api ra khỏi tầm quét của middleware
 export const config = {
   matcher: [
-    "/((?!_next|api|api/auth|login|favicon|icons|storage|manifest|robots).*)",
+    "/((?!api|_next|login|favicon|icons|storage|manifest|robots|images).*)",
   ],
 };
