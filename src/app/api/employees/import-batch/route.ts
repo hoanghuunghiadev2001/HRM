@@ -22,13 +22,13 @@ export async function POST(request: NextRequest) {
     const batchJson = formData.get("batch") as string;
     const headerRowIndex = Number.parseInt(
       formData.get("headerRowIndex") as string,
-      10
+      10,
     );
 
     if (!batchJson) {
       return NextResponse.json(
         { error: "No batch data provided" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -145,15 +145,15 @@ export async function POST(request: NextRequest) {
         const birthDate = parseAndValidateDate(row["Ngày sinh"]);
 
         const joinedTBD = parseAndValidateDate(
-          row["Ngày vào\n Tbd"] || row["Ngày vào Tbd"]
+          row["Ngày vào\n Tbd"] || row["Ngày vào Tbd"],
         );
 
         const joinedTeSCC = parseAndValidateDate(
-          row["Ngày vào\n TeSCC"] || row["Ngày vào TeSCC"]
+          row["Ngày vào\n TeSCC"] || row["Ngày vào TeSCC"],
         );
 
         const seniorityStart = parseAndValidateDate(
-          row["Ngày bắt đâu tính thâm niên"]
+          row["Ngày bắt đâu tính thâm niên"],
         );
 
         const contractDate = parseAndValidateDate(row["Ngày kí HĐ"]);
@@ -174,7 +174,7 @@ export async function POST(request: NextRequest) {
 
         // Parse salary
         const insuranceSalary = parseSalary(
-          row[" Lương \nđóng BH "] || row["Lương đóng BH"]
+          row[" Lương \nđóng BH "] || row["Lương đóng BH"],
         );
 
         // Map gender
@@ -185,8 +185,8 @@ export async function POST(request: NextRequest) {
           row["Chính thức"] === "Chính thức"
             ? WorkStatus.OFFICIAL
             : row["Chính thức"] === "Thử việc"
-            ? WorkStatus.PROBATION
-            : WorkStatus.RESIGNED;
+              ? WorkStatus.PROBATION
+              : WorkStatus.RESIGNED;
 
         // Prepare data objects
         const employeeData = {
@@ -336,7 +336,7 @@ export async function POST(request: NextRequest) {
         error: "Failed to import employees batch",
         message: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

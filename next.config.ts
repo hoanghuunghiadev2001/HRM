@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import path from "path";
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import withPWA from "next-pwa";
 
@@ -7,6 +8,9 @@ const withAnalyzer = withBundleAnalyzer({
 });
 
 const nextConfig = {
+  // Cố định thư mục gốc để tránh Next.js quét nhầm package-lock.json ở thư mục cha
+  outputFileTracingRoot: path.join(__dirname),
+
   // --- PHẦN THÊM MỚI ĐỂ TRỊ CORS ---
   async headers() {
     return [
@@ -48,11 +52,18 @@ const nextConfig = {
     "rc-table",
   ],
   images: {
-    domains: ["res.cloudinary.com"],
+    // Đã chuyển sang remotePatterns theo khuyến nghị mới của Next.js
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+    ],
   },
   webpack(config: { module: { rules: any[] } }) {
     const lessRule = config.module.rules.find(
-      (rule: any) => rule.test && rule.test.toString().includes("less"),
+      (rule: { test: { toString: () => string | string[] } }) =>
+        rule.test && rule.test.toString().includes("less"),
     );
     if (lessRule) {
       lessRule.use.push({
@@ -83,5 +94,5 @@ export default withAnalyzer(
     register: true,
     skipWaiting: true,
     disable: process.env.NODE_ENV === "development",
-  })(nextConfig),
+  })(nextConfig as any),
 );
