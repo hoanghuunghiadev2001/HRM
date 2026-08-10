@@ -430,6 +430,14 @@ export async function POST(req: Request) {
 }
 export async function PUT(req: Request) {
   try {
+    const user = await getAuthUser();
+    if (!user) {
+      return NextResponse.json(
+        { error: "Phiên đăng nhập hết hạn hoặc không hợp lệ" },
+        { status: 401 },
+      );
+    }
+
     const { stepId, approverId, decision, comment } = await req.json();
 
     // 1️⃣ Cập nhật trạng thái người duyệt hiện tại
