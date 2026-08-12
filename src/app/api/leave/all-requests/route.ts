@@ -38,7 +38,9 @@ export async function GET(req: NextRequest) {
     const departmentIdParam = url.searchParams.get("department");
     const status = url.searchParams.get("status") as LeaveStatus | undefined;
     const startDate = url.searchParams.get("startDate");
+    const brandParam = url.searchParams.get("brand"); // 🆕 "TBD" | "TMP" | null
 
+    // --------------------------
     // --------------------------
     // 🔹 FILTER EMPLOYEE
     // --------------------------
@@ -85,6 +87,11 @@ export async function GET(req: NextRequest) {
     } else if (decoded.role === "USER") {
       // USER chỉ thấy đơn của chính mình
       employeeFilter.id = decoded.id;
+    }
+
+    // 🆕 Lọc theo chi nhánh — áp dụng cho mọi role có quyền xem nhiều người
+    if (brandParam && (brandParam === "TBD" || brandParam === "TMP")) {
+      employeeFilter.brand = brandParam;
     }
 
     // --------------------------

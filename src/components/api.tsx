@@ -323,6 +323,7 @@ export interface LeaveFilters {
   status?: string;
   startDate?: string; // thêm ngày bắt đầu
   endDate?: string; // thêm ngày kết thúc
+  brand?: string; // 🆕 Thêm brand
 }
 
 type LeavePendingFilters = {
@@ -353,6 +354,7 @@ export async function fetchLeaveRequests(
     status: "",
     startDate: "",
     endDate: "",
+    brand: "", // 🆕
   },
 ) {
   const queryParams = new URLSearchParams();
@@ -366,14 +368,14 @@ export async function fetchLeaveRequests(
     queryParams.append("employeeCode", filters.employeeCode);
   if (filters.department) queryParams.append("department", filters.department);
   if (filters.status) queryParams.append("status", filters.status);
+  if (filters.brand) queryParams.append("brand", filters.brand); // 🆕
 
-  // Thêm ngày bắt đầu & kết thúc
   if (filters.startDate) queryParams.append("startDate", filters.startDate);
   if (filters.endDate) queryParams.append("endDate", filters.endDate);
 
   const res = await fetch(`/api/leave/all-requests?${queryParams.toString()}`, {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`, // frontend chỉ gửi token
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
   if (!res.ok) {

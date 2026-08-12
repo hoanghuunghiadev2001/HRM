@@ -4,8 +4,33 @@
 import { useEffect, useState } from "react";
 
 import React from "react";
-import { Button, Form, Input, message, Pagination, Space, Table } from "antd";
+import {
+  Badge,
+  Button,
+  Card,
+  Col,
+  Form,
+  Input,
+  message,
+  Pagination,
+  Row,
+  Select,
+  Space,
+  Table,
+} from "antd";
 import type { TableProps, TreeSelectProps } from "antd";
+import {
+  CalendarOutlined,
+  CheckCircleFilled,
+  EyeOutlined,
+  FilterOutlined,
+  IdcardOutlined,
+  ReloadOutlined,
+  ScheduleOutlined,
+  SearchOutlined,
+  ShopOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import {
   AllRequests,
   fetchLeaveRequests,
@@ -29,9 +54,6 @@ import ModalCalendarLeave from "@/components/modalCalendarLeave";
 // Extend plugin
 dayjs.extend(utc);
 dayjs.extend(timezone);
-
-// ⬇️ Thêm vào file app/dashboard/allRequests/page.tsx
-// (chỉ phần interface, KHÔNG thay cả file — bạn chỉ cần chèn/sửa như bên dưới)
 
 export interface ApproverInfo {
   name: string | null;
@@ -170,46 +192,53 @@ const useStyle = createStyles((utils) => {
   return {
     customTable: css`
       ${antCls}-table {
+        border-radius: 0 !important;
+
+        ${antCls}-table-thead > tr > th {
+          background: #f8fafc !important;
+          color: #475569;
+          font-weight: 600;
+          font-size: 13px;
+          border-bottom: 1px solid #eef0f3 !important;
+        }
+
+        ${antCls}-table-thead
+        > tr
+          > th:not(:last-child):not(${antCls}-table-selection-column)::before {
+          display: none;
+        }
+
+        ${antCls}-table-tbody > tr > td {
+          font-size: 13.5px;
+          color: #1f2937;
+        }
+
+        ${antCls}-table-tbody > tr:hover > td {
+          background: #f6f9fc !important;
+        }
+
         ${antCls}-table-container {
           ${antCls}-table-body,
           ${antCls}-table-content {
             scrollbar-width: thin;
-            scrollbar-color: #eaeaea transparent;
+            scrollbar-color: #d9dee5 transparent;
             scrollbar-gutter: stable;
           }
         }
       }
     `,
+    filterCard: css`
+      ${antCls}-card-body {
+        padding: 20px 24px;
+      }
+      ${antCls}-form-item-label > label {
+        font-weight: 600;
+        color: #374151;
+        font-size: 13px;
+      }
+    `,
   };
 });
-
-export interface ApproverInfo {
-  name: string | null;
-  employeeCode: string | null;
-  departmentName: string | null;
-  positionName: string | null;
-  stepLevel: number;
-  approvedAt: string | null; // ISO string
-}
-
-export interface PendingApprovalItem {
-  stepId: number; // ID của step hiện tại
-  leaveRequestId: number; // ID đơn nghỉ phép
-  employeeId: number; // ID nhân viên gửi đơn
-  employeeName: string | null; // Tên nhân viên
-  employeeCode: string | null; // Mã nhân viên
-  leaveType: string; // Loại phép
-  startDate: string; // ISO string
-  endDate: string; // ISO string
-  totalHours: number;
-  reason: string | null;
-  status: string; // Trạng thái step hiện tại
-  department: string | null; // Tên phòng ban
-  position: string | null; // Tên chức vụ
-  currentStepLevel: number; // Level step hiện tại
-  handoverFileId: string | null;
-  approversWhoApproved?: ApproverInfo[]; // Danh sách những người đã duyệt trước đó
-}
 
 export interface ApproveRequestPayload {
   stepId: number; // ID của step hiện tại
@@ -217,6 +246,14 @@ export interface ApproveRequestPayload {
   decision: "approved" | "rejected"; // trạng thái phê duyệt
   comment?: string;
 }
+
+// 🆕 Danh sách chi nhánh — khớp enum BrandType trong schema.prisma
+const BRAND_OPTIONS = [
+  { value: "TBD", label: "TBD — Bình Dương" },
+  { value: "TMP", label: "TMP — Mỹ Phước" },
+];
+
+const BRAND_GRADIENT = "linear-gradient(135deg, #4c809e 0%, #001935 100%)";
 
 export default function AllRequestPage() {
   const [allRequestsApproved, setAllRequestsApproved] = useState<AllRequests>();
@@ -242,11 +279,16 @@ export default function AllRequestPage() {
   const [filterName, setFilterName] = useState("");
   const [filterMSNV, setFilterMSNV] = useState("");
   const [filterDepartment, setDepartment] = useState<string>();
-
+  const [filterBrand, setFilterBrand] = useState<string>(""); // 🆕 chi nhánh
   const [filterDate, setFilterDate] = useState<string>("");
+  const [datePickerKey, setDatePickerKey] = useState(0); // reset DatePicker visually
 
   const onChangeSelectDepartment = (newValue: string) => {
     setDepartment(newValue);
+  };
+
+  const onChangeSelectBrand = (newValue: string) => {
+    setFilterBrand(newValue ?? "");
   };
 
   const getPendingApprovals = async (
@@ -293,6 +335,7 @@ export default function AllRequestPage() {
         status: "",
         startDate: filterDate,
         endDate: filterDate,
+        brand: filterBrand, // 🆕
       });
       setAllRequestsApproved(res);
       setTotalTable(res.total);
@@ -302,26 +345,6 @@ export default function AllRequestPage() {
       console.error("Lỗi:", err);
     }
   };
-
-  // const getApiAllRequestsNeed = async () => {
-
-  //   setLoading(true);
-  //   try {
-  //     const res = await getApiAllRequestsNeedApprove({
-  //       role: role,
-  //       department:
-  //         role === "ADMIN" ? "" : localUser.workInfo.department,
-  //       name: "",
-  //       employeeCode: localUser.id,
-  //     });
-
-  //     setLoading(false);
-  //   } catch (err) {
-  //     console.error("Lỗi:", err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const { styles } = useStyle();
 
@@ -352,20 +375,26 @@ export default function AllRequestPage() {
       title: "STT",
       dataIndex: "key",
       rowScope: "row",
-      width: "60px",
-      render: (_) => <p>{_}</p>,
+      width: "56px",
+      align: "center",
+      render: (_) => <span className="text-[#94a3b8]">{_}</span>,
     },
     {
       title: "MSNV",
       dataIndex: "MSNV",
-      width: "80px",
+      width: "90px",
+      render: (text) => <span className="font-medium">{text}</span>,
     },
     {
       title: "Tên NV",
       dataIndex: "name",
       key: "name",
       width: "170px",
-      render: (text) => <a>{text}</a>,
+      render: (text) => (
+        <a className="font-medium text-[#1e4f6e] hover:text-[#4c809e]">
+          {text}
+        </a>
+      ),
     },
     {
       title: "Ngày nghỉ",
@@ -386,21 +415,29 @@ export default function AllRequestPage() {
       width: "120px",
       render: (status) => <StatusLeave status={status} />,
     },
-
     {
       title: "Người phê duyệt",
       dataIndex: "approvedBy",
       key: "approvedBy",
       width: "170px",
+      render: (text) => <span className="text-[#6b7280]">{text || "—"}</span>,
     },
-
     {
       title: "Chi tiết",
       key: "action",
-      width: "80px",
+      width: "90px",
+      align: "center",
       render: (_, record) => (
         <Space size="middle">
-          <a onClick={() => DetailRequetsLeave(record.id)}>chi tiết</a>
+          <Button
+            type="text"
+            size="small"
+            icon={<EyeOutlined />}
+            className="!text-[#4c809e] hover:!text-[#001935] hover:!bg-[#eef4f8]"
+            onClick={() => DetailRequetsLeave(record.id)}
+          >
+            Chi tiết
+          </Button>
         </Space>
       ),
     },
@@ -456,6 +493,19 @@ export default function AllRequestPage() {
     setDepartments(departmentsData);
   };
 
+  // 🆕 Xóa toàn bộ điều kiện lọc và tìm lại
+  const handleResetFilters = () => {
+    setFilterMSNV("");
+    setFilterName("");
+    setDepartment(undefined);
+    setFilterBrand("");
+    setFilterDate("");
+    setDatePickerKey((k) => k + 1);
+    setPageTable(1);
+    // Gọi API ngay với state đã reset ở lần render tiếp theo
+    setTimeout(() => getApiAllRequestsApproved(1, pageSize), 0);
+  };
+
   useEffect(() => {
     getPendingApprovals(Number(id) ?? 0);
     getApiAllRequestsApproved(pageTable, pageSize);
@@ -463,10 +513,15 @@ export default function AllRequestPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  //style table scroll
+  const hasActiveFilters =
+    !!filterMSNV ||
+    !!filterName ||
+    !!filterDepartment ||
+    !!filterBrand ||
+    !!filterDate;
 
   return (
-    <div>
+    <div className="min-h-full bg-[#f7f8fa] -m-4 p-4 md:-m-6 md:p-6">
       <ModalNeedApproved
         onClose={() => {
           getPendingApprovals(Number(id) ?? 0);
@@ -494,43 +549,62 @@ export default function AllRequestPage() {
       />
       <ModalLoading isOpen={loading} />
       {contextHolder}
-      <div className="w-full">
-        <p className="font-bold  text-2xl text-[#4a4a6a]">
-          Danh sách phiếu yêu cầu:
-        </p>
-      </div>
-      <div className="w-full">
-        <div className="flex justify-end mb-3  w-full">
-          <button
-            className="flex mt-4 relative  gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold"
-            onClick={() => {
-              setModalNeedApproved(true);
-            }}
+
+      {/* ===== Page header ===== */}
+      <div className="flex items-start justify-between flex-wrap gap-4 mb-5">
+        <div>
+          <span className="inline-block text-[11px] font-bold tracking-wider text-[#4c809e] uppercase mb-1">
+            Quản lý nghỉ phép
+          </span>
+          <h1 className="text-[22px] leading-tight font-bold text-[#1f2937] m-0">
+            Danh sách phiếu yêu cầu
+          </h1>
+        </div>
+
+        <Badge
+          count={requestsNeedApprove.length}
+          overflowCount={99}
+          offset={[-4, 4]}
+          color="#dc2626"
+        >
+          <Button
+            type="primary"
+            size="large"
+            icon={<CheckCircleFilled />}
+            className="!border-none !font-semibold !shadow-[0_4px_10px_rgba(0,25,53,0.25)] !h-10 !px-5 !rounded-lg"
+            style={{ background: BRAND_GRADIENT }}
+            onClick={() => setModalNeedApproved(true)}
           >
             Phê duyệt
-            <div
-              className={`h-8 right-[-15px] top-[-20px] flex justify-center items-center w-8 rounded-[50%] bg-red-600 text-white font-semibold absolute ${
-                requestsNeedApprove.length < 1 ? "hidden" : ""
-              }`}
-            >
-              {requestsNeedApprove.length > 99
-                ? "99+"
-                : requestsNeedApprove.length}
-            </div>
-          </button>
+          </Button>
+        </Badge>
+      </div>
+
+      {/* ===== Filter bar ===== */}
+      <Card
+        bordered={false}
+        className={`!mb-5 !rounded-2xl !shadow-[0_1px_2px_rgba(16,24,40,0.06)] !border !border-[#e8eaee] ${styles.filterCard}`}
+      >
+        <div className="flex items-center gap-2 mb-4">
+          <FilterOutlined className="text-[#4c809e] text-[15px]" />
+          <span className="font-semibold text-[#1f2937] text-[15px]">
+            Bộ lọc tìm kiếm
+          </span>
+          {hasActiveFilters && (
+            <span className="ml-1 text-[11px] font-medium text-white bg-[#4c809e] rounded-full px-2 py-[1px]">
+              đang áp dụng
+            </span>
+          )}
         </div>
-        <div className="grid grid-cols-2 md:flex flex-wrap items-center gap-4 mb-4 w-full">
-          <p className="font-bold  text-2xl text-[#4a4a6a] hidden md:block">
-            Lọc:
-          </p>
-          <div className="flex gap-2 items-center shrink-0">
-            <Form.Item
-              layout="horizontal"
-              label={<p className="font-bold text-[#242424]">MSNV</p>}
-            >
+
+        <Row gutter={[16, 12]} align="bottom">
+          <Col xs={24} sm={12} md={4}>
+            <Form.Item label="MSNV" className="!mb-0">
               <Input
-                className="!w-[80px]"
-                placeholder="MSNV"
+                prefix={<IdcardOutlined className="text-[#9aa4b2]" />}
+                placeholder="Mã số NV"
+                allowClear
+                value={filterMSNV}
                 onChange={(e) => setFilterMSNV(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -539,16 +613,15 @@ export default function AllRequestPage() {
                 }}
               />
             </Form.Item>
-          </div>
-          <div className="flex gap-2 items-center shrink-0">
-            {/* <p className="text-sm text-[#4a4a6a] shrink-0">Tên NV:</p> */}
-            <Form.Item
-              layout="horizontal"
-              label={<p className="font-bold text-[#242424]">Tên NV</p>}
-            >
+          </Col>
+
+          <Col xs={24} sm={12} md={5}>
+            <Form.Item label="Tên NV" className="!mb-0">
               <Input
-                className="!w-[100%]"
-                placeholder="Tên NV"
+                prefix={<UserOutlined className="text-[#9aa4b2]" />}
+                placeholder="Tên nhân viên"
+                allowClear
+                value={filterName}
                 onChange={(e) => setFilterName(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -557,103 +630,148 @@ export default function AllRequestPage() {
                 }}
               />
             </Form.Item>
-          </div>
-          <div className="flex gap-2 items-center shrink-0">
-            <Form.Item
-              layout="horizontal"
-              label={<p className="font-bold text-[#242424]">Ngày nghỉ</p>}
-            >
+          </Col>
+
+          <Col xs={24} sm={12} md={4}>
+            <Form.Item label="Ngày nghỉ" className="!mb-0">
               <DatePicker
+                key={datePickerKey}
+                className="!w-full"
                 placeholder="Chọn ngày"
+                suffixIcon={<CalendarOutlined className="text-[#9aa4b2]" />}
                 onChange={(date) => {
                   if (date) setFilterDate(dayjs(date).format("YYYY-MM-DD"));
                   else setFilterDate("");
                 }}
               />
             </Form.Item>
-          </div>
-          {role === "MANAGER" && (
-            <Button
-              type="primary"
-              onClick={() => {
-                setModalCalendarLeave(true);
-              }}
-              loading={loading}
-            >
-              xem ds nghỉ
-            </Button>
-          )}
+          </Col>
+
+          {/* 🆕 Lọc theo chi nhánh */}
+          <Col xs={24} sm={12} md={4}>
+            <Form.Item label="Chi nhánh" className="!mb-0">
+              <Select
+                className="!w-full"
+                placeholder="Tất cả"
+                allowClear
+                suffixIcon={<ShopOutlined className="text-[#9aa4b2]" />}
+                value={filterBrand || undefined}
+                onChange={onChangeSelectBrand}
+                options={BRAND_OPTIONS}
+              />
+            </Form.Item>
+          </Col>
 
           {role === "ADMIN" && (
-            <>
-              <div className="!flex gap-2 items-center ">
-                <Form.Item
-                  layout="horizontal"
-                  className=""
-                  label={
-                    <p className="font-bold text-[#242424] hidden sm:block">
-                      Bộ phận
-                    </p>
-                  }
-                >
-                  <TreeSelect
-                    showSearch
-                    style={{ minWidth: "150px", maxWidth: "200px" }}
-                    value={filterDepartment}
-                    styles={{
-                      popup: { root: { maxHeight: 400, overflow: "auto" } },
-                    }}
-                    placeholder="Phòng ban"
-                    allowClear
-                    listItemScrollOffset={200}
-                    treeDefaultExpandAll={false}
-                    onChange={onChangeSelectDepartment}
-                    showCheckedStrategy="SHOW_ALL"
-                    treeData={treeData}
-                    onPopupScroll={onPopupScroll}
-                  />
-                </Form.Item>
-              </div>
-
-              <ExportLeaveRequests />
-              <Button
-                type="primary"
-                onClick={() => {
-                  setModalCalendarLeave(true);
-                }}
-                loading={loading}
-              >
-                xem ds nghỉ
-              </Button>
-            </>
+            <Col xs={24} sm={12} md={5}>
+              <Form.Item label="Bộ phận" className="!mb-0">
+                <TreeSelect
+                  showSearch
+                  className="!w-full"
+                  value={filterDepartment}
+                  styles={{
+                    popup: { root: { maxHeight: 400, overflow: "auto" } },
+                  }}
+                  placeholder="Phòng ban"
+                  allowClear
+                  listItemScrollOffset={200}
+                  treeDefaultExpandAll={false}
+                  onChange={onChangeSelectDepartment}
+                  showCheckedStrategy="SHOW_ALL"
+                  treeData={treeData}
+                  onPopupScroll={onPopupScroll}
+                />
+              </Form.Item>
+            </Col>
           )}
 
-          <button
-            className="flex w-fit justify-center gap-2 items-center h-8 px-4 rounded-lg bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer text-white font-semibold shrink-0"
-            onClick={() => getApiAllRequestsApproved(pageTable, pageSize)}
+          <Col
+            xs={24}
+            md={role === "ADMIN" ? 24 : 6}
+            className={role === "ADMIN" ? "flex justify-end" : ""}
           >
-            Tìm kiếm
-          </button>
+            <Form.Item className="!mb-0 w-full">
+              <Space wrap className="w-full flex justify-end">
+                <Button
+                  icon={<ReloadOutlined />}
+                  disabled={!hasActiveFilters}
+                  onClick={handleResetFilters}
+                >
+                  Xóa lọc
+                </Button>
+
+                {role === "MANAGER" && (
+                  <Button
+                    icon={<ScheduleOutlined />}
+                    onClick={() => setModalCalendarLeave(true)}
+                    loading={loading}
+                  >
+                    Xem DS nghỉ
+                  </Button>
+                )}
+                {role === "ADMIN" && (
+                  <>
+                    <ExportLeaveRequests />
+                    <Button
+                      icon={<ScheduleOutlined />}
+                      onClick={() => setModalCalendarLeave(true)}
+                      loading={loading}
+                    >
+                      Xem DS nghỉ
+                    </Button>
+                  </>
+                )}
+                <Button
+                  type="primary"
+                  icon={<SearchOutlined />}
+                  className="!border-none !font-semibold !shadow-[0_2px_6px_rgba(0,25,53,0.2)]"
+                  style={{ background: BRAND_GRADIENT }}
+                  onClick={() => getApiAllRequestsApproved(pageTable, pageSize)}
+                >
+                  Tìm kiếm
+                </Button>
+              </Space>
+            </Form.Item>
+          </Col>
+        </Row>
+      </Card>
+
+      {/* ===== Data table ===== */}
+      <Card
+        bordered={false}
+        className="!rounded-2xl !shadow-[0_1px_2px_rgba(16,24,40,0.06)] !border !border-[#e8eaee] !overflow-hidden"
+        styles={{ body: { padding: 0 } }}
+      >
+        <div className="flex items-center justify-between px-5 py-3 border-b border-[#eef0f3] bg-white">
+          <span className="text-[13px] text-[#6b7280]">
+            Tổng cộng{" "}
+            <span className="font-semibold text-[#1f2937]">
+              {totalTable ?? 0}
+            </span>{" "}
+            phiếu yêu cầu
+          </span>
         </div>
+
         <Table<DataType>
           className={styles.customTable}
           columns={columns}
           dataSource={formatted ?? []}
-          scroll={{ y: "calc(100vh - 335px)", x: "100%" }}
+          scroll={{ y: "calc(100vh - 400px)", x: "100%" }}
           pagination={false}
           size="small"
         />
-        <Pagination
-          align="center"
-          // current={pageTable}
-          pageSize={pageSize}
-          total={totalTable}
-          onChange={onPageChange}
-          showSizeChanger
-          onShowSizeChange={onPageChange}
-          className="!mt-3"
-        />
-      </div>
+
+        <div className="px-5 py-3 border-t border-[#eef0f3] bg-white">
+          <Pagination
+            align="end"
+            pageSize={pageSize}
+            total={totalTable}
+            onChange={onPageChange}
+            showSizeChanger
+            onShowSizeChange={onPageChange}
+          />
+        </div>
+      </Card>
     </div>
   );
 }
