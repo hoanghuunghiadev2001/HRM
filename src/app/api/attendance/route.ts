@@ -56,16 +56,24 @@ export async function GET(req: NextRequest) {
 
     const { searchParams } = new URL(req.url);
 
-    // Các tham số lọc từ URL
     const msnv = searchParams.get("msnv") ?? undefined;
     const name = searchParams.get("name") ?? undefined;
     const department = searchParams.get("department") ?? undefined;
-    const fromDate = searchParams.get("fromDate") ?? undefined;
-    const toDate = searchParams.get("toDate") ?? undefined;
-    const page = parseInt(searchParams.get("page") ?? "1", 10);
-    const pageSize = parseInt(searchParams.get("pageSize") ?? "20", 10);
+    let fromDate = searchParams.get("fromDate") ?? undefined;
+    let toDate = searchParams.get("toDate") ?? undefined;
+    const page = Math.max(parseInt(searchParams.get("page") ?? "1", 10), 1);
+    const pageSize = Math.min(
+      Math.max(parseInt(searchParams.get("pageSize") ?? "20", 10), 1),
+      200, // 🆕 chặn client truyền pageSize quá lớn gây nặng server
+    );
 
-    // Tạo range UTC tương ứng với ngày ở VN
+    // 🆕 Nếu không chọn khoảng ngày → mặc định tháng hiện tại, tránh quét toàn bộ lịch sử
+    if (!fromDate && !toDate) {
+      const now = dayjs().tz("Asia/Ho_Chi_Minh");
+      fromDate = now.startOf("month").format("YYYY-MM-DD");
+      toDate = now.format("YYYY-MM-DD");
+    }
+
     const fromUtc = fromDate ? getUtcRange(fromDate, false) : undefined;
     const toUtc = toDate ? getUtcRange(toDate, true) : undefined;
 
@@ -73,7 +81,6 @@ export async function GET(req: NextRequest) {
     const employeeWhere: Prisma.EmployeeWhereInput = {};
 
     if (decoded.role === "ADMIN") {
-      // Admin: Được phép lọc theo bất kỳ ai qua URL
       if (msnv) employeeWhere.employeeCode = { contains: msnv };
       if (name) employeeWhere.name = { contains: name };
       if (department) {
@@ -84,14 +91,11 @@ export async function GET(req: NextRequest) {
         };
       }
     } else if (decoded.role === "MANAGER") {
-      // Manager: Xem được chính mình HOẶC nhân viên cấp dưới trong cùng phòng ban
       const managerWorkInfo = await prisma.workInfo.findUnique({
         where: { employeeId: decoded.id },
         select: {
           departmentId: true,
-          position: {
-            select: { level: true },
-          },
+          position: { select: { level: true } },
         },
       });
 
@@ -102,22 +106,16 @@ export async function GET(req: NextRequest) {
       const managerDeptId = managerWorkInfo.departmentId;
       const managerLevel = managerWorkInfo.position.level;
 
-      // Sử dụng toán tử OR để gộp: Chính họ HOẶC cấp dưới trong phòng
       employeeWhere.OR = [
-        { id: decoded.id }, // Điều kiện 1: Chính là Manager
+        { id: decoded.id },
         {
-          // Điều kiện 2: Cấp dưới trong cùng phòng ban
           workInfo: {
             departmentId: managerDeptId,
-            position: {
-              level: { lt: managerLevel },
-            },
+            position: { level: { lt: managerLevel } },
           },
         },
       ];
 
-      // Nếu manager nhập ô tìm kiếm trên giao diện (URL query params),
-      // chúng ta áp dụng thêm bộ lọc lồng vào điều kiện trên để tránh rò rỉ dữ liệu ngoài phạm vi quản lý
       if (msnv || name) {
         employeeWhere.AND = [
           ...(msnv ? [{ employeeCode: { contains: msnv } }] : []),
@@ -125,35 +123,21 @@ export async function GET(req: NextRequest) {
         ];
       }
     } else {
-      // User thường: BẮT BUỘC chỉ lấy ID của chính họ từ Token
       employeeWhere.id = decoded.id;
     }
 
-    // 1️⃣ Lấy danh sách nhân viên thỏa mãn điều kiện phân quyền ở trên
-    const employees = await prisma.employee.findMany({
+    // 1️⃣ Chỉ lấy ID nhân viên thỏa điều kiện phân quyền — nhẹ, không kéo dữ liệu thừa
+    const matchedEmployees = await prisma.employee.findMany({
       where: employeeWhere,
-      select: {
-        id: true,
-        employeeCode: true,
-        name: true,
-        avatar: true,
-        workInfo: {
-          select: {
-            department: { select: { name: true } },
-            position: { select: { name: true } },
-          },
-        },
-      },
+      select: { id: true },
     });
 
-    if (employees.length === 0) {
+    if (matchedEmployees.length === 0) {
       return NextResponse.json({ total: 0, page, pageSize, data: [] });
     }
 
-    const employeeMap = new Map(employees.map((e) => [e.id, e]));
-    const employeeIds = employees.map((e) => e.id);
+    const employeeIds = matchedEmployees.map((e) => e.id);
 
-    // 2️⃣ Lọc Attendance theo danh sách ID đã lọc + ngày UTC
     const attendanceWhere: Prisma.AttendanceWhereInput = {
       employeeId: { in: employeeIds },
       ...(fromUtc || toUtc
@@ -166,81 +150,57 @@ export async function GET(req: NextRequest) {
         : {}),
     };
 
-    const attendances = await prisma.attendance.findMany({
-      where: attendanceWhere,
-      orderBy: { date: "desc" },
-    });
+    // 2️⃣ Đếm + lấy đúng 1 trang dữ liệu tại DB (KHÔNG group ở JS nữa —
+    // mỗi nhân viên/ngày vốn đã là 1 dòng duy nhất theo @@unique([employeeId, date]))
+    const [total, attendances] = await Promise.all([
+      prisma.attendance.count({ where: attendanceWhere }),
+      prisma.attendance.findMany({
+        where: attendanceWhere,
+        orderBy: { date: "desc" },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        include: {
+          employee: {
+            select: {
+              employeeCode: true,
+              name: true,
+              avatar: true,
+              workInfo: {
+                select: {
+                  department: { select: { name: true } },
+                  position: { select: { name: true } },
+                },
+              },
+            },
+          },
+        },
+      }),
+    ]);
 
-    // 3️⃣ Gom nhóm theo employeeId + ngày (theo giờ VN)
-    const grouped = new Map<string, any>();
-
-    attendances.forEach((att) => {
-      const emp = employeeMap.get(att.employeeId)!;
-      const dateVN = dayjs(att.date)
-        .tz("Asia/Ho_Chi_Minh")
-        .format("YYYY-MM-DD");
-      const key = `${att.employeeId}-${dateVN}`;
-
-      if (!grouped.has(key)) {
-        grouped.set(key, {
-          employeeId: att.employeeId,
-          employeeCode: emp.employeeCode,
-          avatar: emp.avatar,
-          employeeName: emp.name,
-          department: emp.workInfo?.department?.name,
-          position: emp.workInfo?.position?.name,
-          date: dateVN,
-          firstCheckIn: att.checkInTime ?? null,
-          lastCheckOut: att.checkOutTime ?? null,
-          totalMs: 0,
-        });
-      }
-
-      const g = grouped.get(key)!;
-      if (
-        att.checkInTime &&
-        (!g.firstCheckIn || att.checkInTime < g.firstCheckIn)
-      ) {
-        g.firstCheckIn = att.checkInTime;
-      }
-      if (
-        att.checkOutTime &&
-        (!g.lastCheckOut || att.checkOutTime > g.lastCheckOut)
-      ) {
-        g.lastCheckOut = att.checkOutTime;
-      }
-      if (att.checkInTime && att.checkOutTime) {
-        g.totalMs += att.checkOutTime.getTime() - att.checkInTime.getTime();
-      }
-    });
-
-    // 4️⃣ Kết quả cuối cùng
-    const summary = Array.from(grouped.values()).map((g) => ({
-      ...g,
-      firstCheckIn: g.firstCheckIn
-        ? dayjs(g.firstCheckIn)
+    // 3️⃣ Map thẳng ra response — không còn vòng lặp gom nhóm nặng nề
+    const data = attendances.map((att) => ({
+      employeeId: att.employeeId,
+      employeeCode: att.employee.employeeCode,
+      avatar: att.employee.avatar,
+      employeeName: att.employee.name,
+      department: att.employee.workInfo?.department?.name ?? "",
+      position: att.employee.workInfo?.position?.name ?? "",
+      date: dayjs(att.date).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD"),
+      firstCheckIn: att.checkInTime
+        ? dayjs(att.checkInTime)
             .tz("Asia/Ho_Chi_Minh")
             .format("YYYY-MM-DD HH:mm:ss")
         : null,
-      lastCheckOut: g.lastCheckOut
-        ? dayjs(g.lastCheckOut)
+      lastCheckOut: att.checkOutTime
+        ? dayjs(att.checkOutTime)
             .tz("Asia/Ho_Chi_Minh")
             .format("YYYY-MM-DD HH:mm:ss")
         : null,
-      totalHours: calcHours(g.firstCheckIn, g.lastCheckOut),
+      totalHours:
+        att.workingHours ?? calcHours(att.checkInTime, att.checkOutTime),
     }));
 
-    // Phân trang trên kết quả đã gom nhóm
-    const total = summary.length;
-    const start = (page - 1) * pageSize;
-    const pagedSummary = summary.slice(start, start + pageSize);
-
-    return NextResponse.json({
-      total,
-      page,
-      pageSize,
-      data: pagedSummary,
-    });
+    return NextResponse.json({ total, page, pageSize, data });
   } catch (error) {
     console.error("❌ Error fetching attendance summary:", error);
     return NextResponse.json({ message: "Lỗi máy chủ" }, { status: 500 });
