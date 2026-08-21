@@ -196,8 +196,7 @@ export async function GET(req: NextRequest) {
             .tz("Asia/Ho_Chi_Minh")
             .format("YYYY-MM-DD HH:mm:ss")
         : null,
-      totalHours:
-        att.workingHours ?? calcHours(att.checkInTime, att.checkOutTime),
+      totalHours: calcHours(att.checkInTime, att.checkOutTime),
     }));
 
     return NextResponse.json({ total, page, pageSize, data });

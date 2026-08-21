@@ -255,7 +255,16 @@ export default function AttendancePage() {
       dataIndex: "date",
       key: "date",
       width: "110px",
-      render: (date: string) => dayjs(date).format("DD/MM/YYYY"),
+      render: (date: string) => {
+        if (!date) return "-";
+
+        // Truyền định dạng gốc của API vào tham số thứ 2
+        const parsedDate = dayjs(date, "HH:mm DD-MM-YYYY");
+
+        return parsedDate.isValid()
+          ? parsedDate.format("DD/MM/YYYY")
+          : "Invalid Date";
+      },
     },
     {
       title: "Giờ vào",
