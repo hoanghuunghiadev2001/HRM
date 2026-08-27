@@ -374,13 +374,7 @@ const ModalAddNewEmployee = ({
                     <Option value="TMP">Toyota Mỹ Phước (TMP)</Option>
                   </Select>
                 </Form.Item>
-                <Form.Item
-                  name="global"
-                  label="Toàn hệ thống"
-                  valuePropName="checked"
-                >
-                  <Switch checkedChildren="GLOBAL" unCheckedChildren="CN" />
-                </Form.Item>
+
                 <Form.Item
                   name="department"
                   label="Bộ phận"
