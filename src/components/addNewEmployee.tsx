@@ -363,6 +363,25 @@ const ModalAddNewEmployee = ({
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <Form.Item
+                  name="brand"
+                  label="Chi nhánh"
+                  rules={[
+                    { required: true, message: "Vui lòng chọn chi nhánh" },
+                  ]}
+                >
+                  <Select placeholder="Chọn chi nhánh" allowClear>
+                    <Option value="TBD">Toyota Bình Dương (TBD)</Option>
+                    <Option value="TMP">Toyota Mỹ Phước (TMP)</Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  name="global"
+                  label="Toàn hệ thống"
+                  valuePropName="checked"
+                >
+                  <Switch checkedChildren="GLOBAL" unCheckedChildren="CN" />
+                </Form.Item>
+                <Form.Item
                   name="department"
                   label="Bộ phận"
                   rules={[
