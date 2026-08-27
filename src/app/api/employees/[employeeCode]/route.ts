@@ -44,12 +44,48 @@ function formatDate(date: Date | null | undefined): string | null {
   return dayjs(date).tz(TZ).format("DD/MM/YYYY");
 }
 
-function parseDateToDB(date: string | null | undefined): Date | null {
-  if (!date) return null;
+function parseDateToDB(value: unknown): Date | null {
+  if (!value) return null;
 
-  const parsed = dayjs(date, "DD/MM/YYYY", true);
+  // Nếu đã là Date
+  if (value instanceof Date) {
+    return isNaN(value.getTime()) ? null : value;
+  }
 
-  return parsed.isValid() ? parsed.tz(TZ).toDate() : null;
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const valueTrimmed = value.trim();
+
+  if (!valueTrimmed) return null;
+
+  // ISO date
+  if (valueTrimmed.includes("T")) {
+    const date = new Date(valueTrimmed);
+
+    return isNaN(date.getTime()) ? null : date;
+  }
+
+  // YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}$/.test(valueTrimmed)) {
+    const date = new Date(`${valueTrimmed}T00:00:00.000Z`);
+
+    return isNaN(date.getTime()) ? null : date;
+  }
+
+  // DD/MM/YYYY
+  const match = valueTrimmed.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+
+  if (match) {
+    const [, day, month, year] = match;
+
+    const date = new Date(`${year}-${month}-${day}T00:00:00.000Z`);
+
+    return isNaN(date.getTime()) ? null : date;
+  }
+
+  return null;
 }
 
 function isBase64Image(str: string): boolean {
