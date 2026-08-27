@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
 // app/api/leaveRequests/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
@@ -16,7 +17,11 @@ interface JWTPayload {
 
 export async function GET(req: NextRequest) {
   try {
+    // ============================================================
+    // 1. CHECK TOKEN
+    // ============================================================
     const token = req.cookies.get("token-hrm")?.value;
+
     if (!token) {
       return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
     }
@@ -30,100 +35,217 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    // ============================================================
+    // 2. GET QUERY PARAMS
+    // ============================================================
     const url = new URL(req.url);
-    const page = parseInt(url.searchParams.get("page") || "1", 10);
-    const pageSize = parseInt(url.searchParams.get("pageSize") || "10", 10);
-    const name = url.searchParams.get("name");
-    const employeeCode = url.searchParams.get("employeeCode");
-    const departmentIdParam = url.searchParams.get("department");
-    const status = url.searchParams.get("status") as LeaveStatus | undefined;
-    const startDate = url.searchParams.get("startDate");
-    const brandParam = url.searchParams.get("brand"); // 🆕 "TBD" | "TMP" | null
 
-    // --------------------------
-    // --------------------------
-    // 🔹 FILTER EMPLOYEE
-    // --------------------------
-    const employeeFilter: Prisma.EmployeeWhereInput = {};
+    const page = Math.max(parseInt(url.searchParams.get("page") || "1", 10), 1);
 
+    const pageSize = Math.min(
+      Math.max(parseInt(url.searchParams.get("pageSize") || "10", 10), 1),
+      100,
+    );
+
+    const name = url.searchParams.get("name")?.trim() || "";
+    const employeeCode = url.searchParams.get("employeeCode")?.trim() || "";
+
+    const departmentIdParam = url.searchParams.get("department")?.trim() || "";
+
+    const statusParam = url.searchParams.get("status")?.trim() || "";
+
+    const startDate = url.searchParams.get("startDate")?.trim() || "";
+
+    const brandParam = url.searchParams.get("brand")?.trim() || "";
+
+    // ============================================================
+    // 3. GET CURRENT USER
+    // ============================================================
     const currentUser = await prisma.employee.findUnique({
-      where: { id: decoded.id },
+      where: {
+        id: decoded.id,
+      },
       include: {
         workInfo: {
-          include: { position: true },
+          include: {
+            position: true,
+          },
         },
       },
     });
 
-    const userLevel = currentUser?.workInfo?.position?.level || 0;
+    if (!currentUser) {
+      return NextResponse.json(
+        { message: "Không tìm thấy nhân viên" },
+        { status: 404 },
+      );
+    }
 
+    const userLevel = currentUser.workInfo?.position?.level || 0;
+
+    // ============================================================
+    // 4. FILTER EMPLOYEE
+    // ============================================================
+    const employeeFilter: Prisma.EmployeeWhereInput = {};
+
+    // ------------------------------------------------------------
+    // ADMIN
+    // ------------------------------------------------------------
     if (decoded.role === "ADMIN") {
-      if (name) employeeFilter.name = { contains: name };
-      if (employeeCode)
-        employeeFilter.employeeCode = { contains: employeeCode };
+      if (name) {
+        employeeFilter.name = {
+          contains: name,
+        };
+      }
+
+      if (employeeCode) {
+        employeeFilter.employeeCode = {
+          contains: employeeCode,
+        };
+      }
+
+      // Lọc phòng ban nếu ADMIN chọn
       if (departmentIdParam) {
-        const departmentIdNum = parseInt(departmentIdParam, 10);
-        if (!isNaN(departmentIdNum)) {
-          employeeFilter.workInfo = { is: { departmentId: departmentIdNum } };
+        const departmentIdNum = Number(departmentIdParam);
+
+        if (!Number.isNaN(departmentIdNum)) {
+          employeeFilter.workInfo = {
+            is: {
+              departmentId: departmentIdNum,
+            },
+          };
         }
       }
-    } else if (decoded.role === "MANAGER") {
+
+      // ==========================================================
+      // ⭐ LỌC CHI NHÁNH CHO ADMIN
+      // ==========================================================
+      //
+      // Không chọn:
+      // brand = ""
+      // => ADMIN xem tất cả chi nhánh
+      //
+      // Chọn TBD:
+      // brand = "TBD"
+      // => chỉ lấy nhân viên TBD
+      //
+      // Chọn TMP:
+      // brand = "TMP"
+      // => chỉ lấy nhân viên TMP
+      //
+      if (brandParam === "TBD" || brandParam === "TMP") {
+        employeeFilter.brand = brandParam;
+      }
+    }
+
+    // ------------------------------------------------------------
+    // MANAGER
+    // ------------------------------------------------------------
+    else if (decoded.role === "MANAGER") {
       if (userLevel === 8) {
-        // Nếu là Level 8, lấy dữ liệu của các phòng ban 1, 3, 5
         employeeFilter.workInfo = {
           is: {
-            departmentId: { in: [2, 10, 11, 14, 13, 15] },
+            departmentId: {
+              in: [2, 10, 11, 14, 13, 15],
+            },
           },
         };
       } else {
-        // Các Manager khác chỉ thấy phòng ban của mình
         employeeFilter.workInfo = {
-          is: { departmentId: decoded.departmentId },
+          is: {
+            departmentId: decoded.departmentId,
+          },
         };
       }
-      if (name) employeeFilter.name = { contains: name };
-      if (employeeCode)
-        employeeFilter.employeeCode = { contains: employeeCode };
-    } else if (decoded.role === "USER") {
-      // USER chỉ thấy đơn của chính mình
+
+      if (name) {
+        employeeFilter.name = {
+          contains: name,
+        };
+      }
+
+      if (employeeCode) {
+        employeeFilter.employeeCode = {
+          contains: employeeCode,
+        };
+      }
+
+      // Manager cũng có thể lọc chi nhánh
+      if (brandParam === "TBD" || brandParam === "TMP") {
+        employeeFilter.brand = brandParam;
+      }
+    }
+
+    // ------------------------------------------------------------
+    // USER
+    // ------------------------------------------------------------
+    else if (decoded.role === "USER") {
+      // USER chỉ được xem đơn của chính mình
       employeeFilter.id = decoded.id;
     }
 
-    // 🆕 Lọc theo chi nhánh — áp dụng cho mọi role có quyền xem nhiều người
-    if (brandParam && (brandParam === "TBD" || brandParam === "TMP")) {
-      employeeFilter.brand = brandParam;
+    // ============================================================
+    // 5. FILTER LEAVE REQUEST
+    // ============================================================
+    const leaveFilter: Prisma.LeaveRequestWhereInput = {};
+
+    // ------------------------------------------------------------
+    // STATUS
+    // ------------------------------------------------------------
+    if (statusParam) {
+      leaveFilter.status = statusParam as LeaveStatus;
     }
 
-    // --------------------------
-    // 🔹 FILTER LEAVE REQUEST
-    // --------------------------
-    const filterDate = startDate ? new Date(startDate) : undefined;
+    // ------------------------------------------------------------
+    // NGÀY NGHỈ
+    // ------------------------------------------------------------
+    if (startDate) {
+      const filterDate = new Date(startDate);
 
-    const leaveFilter: Prisma.LeaveRequestWhereInput = {
-      status: status ? status : undefined,
-      ...(filterDate
-        ? {
-            AND: [
-              { startDate: { lte: endOfDay(filterDate) } },
-              { endDate: { gte: startOfDay(filterDate) } },
-            ],
-          }
-        : {}),
-    };
+      if (!Number.isNaN(filterDate.getTime())) {
+        leaveFilter.AND = [
+          {
+            startDate: {
+              lte: endOfDay(filterDate),
+            },
+          },
+          {
+            endDate: {
+              gte: startOfDay(filterDate),
+            },
+          },
+        ];
+      }
+    }
 
-    // ADMIN + MANAGER → xem theo employeeFilter
-    if (decoded.role !== "USER") {
+    // ============================================================
+    // 6. PHÂN QUYỀN XEM DỮ LIỆU
+    // ============================================================
+
+    // ------------------------------------------------------------
+    // ADMIN + MANAGER
+    // ------------------------------------------------------------
+    if (decoded.role === "ADMIN" || decoded.role === "MANAGER") {
       leaveFilter.employee = employeeFilter;
-    } else {
-      // USER → thấy đơn của mình + đơn mình là người duyệt
+    }
+
+    // ------------------------------------------------------------
+    // USER
+    // ------------------------------------------------------------
+    else if (decoded.role === "USER") {
       leaveFilter.OR = [
-        { employeeId: decoded.id },
+        // Đơn của chính mình
+        {
+          employeeId: decoded.id,
+        },
+
+        // Hoặc mình là người phê duyệt
         {
           approvalSteps: {
             some: {
               approvers: {
                 some: {
-                  approverId: decoded.id, // mình là người ký duyệt
+                  approverId: decoded.id,
                 },
               },
             },
@@ -132,21 +254,32 @@ export async function GET(req: NextRequest) {
       ];
     }
 
-    // --------------------------
-    // 🔹 QUERY DATABASE
-    // --------------------------
+    // ============================================================
+    // 7. QUERY DATABASE
+    // ============================================================
     const [data, total] = await Promise.all([
       prisma.leaveRequest.findMany({
         where: leaveFilter,
+
         skip: (page - 1) * pageSize,
         take: pageSize,
-        orderBy: { createdAt: "desc" },
+
+        orderBy: {
+          createdAt: "desc",
+        },
+
         include: {
           employee: {
             include: {
-              workInfo: { include: { department: true, position: true } },
+              workInfo: {
+                include: {
+                  department: true,
+                  position: true,
+                },
+              },
             },
           },
+
           approvalSteps: {
             include: {
               approvers: {
@@ -154,8 +287,13 @@ export async function GET(req: NextRequest) {
                   id: true,
                   status: true,
                   approvedAt: true,
+
                   approver: {
-                    select: { id: true, name: true, employeeCode: true },
+                    select: {
+                      id: true,
+                      name: true,
+                      employeeCode: true,
+                    },
                   },
                 },
               },
@@ -163,162 +301,75 @@ export async function GET(req: NextRequest) {
           },
         },
       }),
-      prisma.leaveRequest.count({ where: leaveFilter }),
+
+      prisma.leaveRequest.count({
+        where: leaveFilter,
+      }),
     ]);
 
+    // ============================================================
+    // 8. STATUS MAP
+    // ============================================================
     const statusMap: Record<string, string> = {
       approved: "Đã duyệt",
       rejected: "Từ chối",
       pending: "Đang chờ",
+      revoked: "Đã thu hồi",
     };
 
-    // --------------------------
-    // 🔹 MAP KẾT QUẢ
-    // --------------------------
-    const processedData = data.map((req) => {
-      const approvalHistory = req.approvalSteps.flatMap((step) =>
-        step.approvers.map((a) => ({
-          approverId: a.approver?.id,
-          name: a.approver?.name,
-          employeeCode: a.approver?.employeeCode,
+    // ============================================================
+    // 9. MAP RESULT
+    // ============================================================
+    const processedData = data.map((request) => {
+      const approvalHistory = request.approvalSteps.flatMap((step) =>
+        step.approvers.map((approver) => ({
+          approverId: approver.approver?.id ?? null,
+          name: approver.approver?.name ?? null,
+          employeeCode: approver.approver?.employeeCode ?? null,
+
           level: step.level,
-          status: a.status,
-          approvedAt: a.approvedAt,
+
+          status: approver.status,
+
+          approvedAt: approver.approvedAt,
         })),
       );
 
       return {
-        ...req,
+        ...request,
+
         approvalHistory,
+
         approversSummary: approvalHistory
           .map(
-            (a) =>
-              `${a.name || ""} (${a.employeeCode || ""}) - ${
-                statusMap[a.status] || a.status
+            (approver) =>
+              `${approver.name || ""} (${approver.employeeCode || ""}) - ${
+                statusMap[approver.status] || approver.status
               }`,
           )
           .join("; "),
       };
     });
 
-    return NextResponse.json({ data: processedData, total, page, pageSize });
-  } catch (err) {
-    console.error("❌ Lỗi API leave:", err);
-    return NextResponse.json(
-      { message: "Lấy danh sách thất bại" },
-      { status: 500 },
-    );
-  }
-}
-
-export async function PUT(req: NextRequest) {
-  try {
-    const token = req.cookies.get("token-hrm")?.value;
-    if (!token) {
-      return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
-    if (decoded.role !== "ADMIN") {
-      return NextResponse.json(
-        { message: "Bạn không có quyền" },
-        { status: 403 },
-      );
-    }
-
-    const body = await req.json();
-    const { id, leaveType, startDate, endDate, totalHours } = body;
-
-    if (!id) {
-      return NextResponse.json(
-        { message: "Thiếu ID đơn nghỉ phép" },
-        { status: 400 },
-      );
-    }
-
-    const leaveRequest = await prisma.leaveRequest.findUnique({
-      where: { id },
-    });
-
-    if (!leaveRequest) {
-      return NextResponse.json(
-        { message: "Không tìm thấy đơn nghỉ phép" },
-        { status: 404 },
-      );
-    }
-
-    const dataToUpdate: Prisma.LeaveRequestUpdateInput = {};
-    if (leaveType) dataToUpdate.leaveType = leaveType;
-    if (startDate) dataToUpdate.startDate = new Date(startDate);
-    if (endDate) dataToUpdate.endDate = new Date(endDate);
-    if (typeof totalHours === "number") dataToUpdate.totalHours = totalHours;
-
-    if (dataToUpdate.startDate && dataToUpdate.endDate) {
-      if (dataToUpdate.startDate > dataToUpdate.endDate) {
-        return NextResponse.json(
-          { message: "Ngày bắt đầu không được lớn hơn ngày kết thúc" },
-          { status: 400 },
-        );
-      }
-    }
-
-    const updatedLeave = await prisma.leaveRequest.update({
-      where: { id },
-      data: dataToUpdate,
-    });
-
+    // ============================================================
+    // 10. RESPONSE
+    // ============================================================
     return NextResponse.json({
-      message: "Cập nhật đơn nghỉ thành công",
-      data: updatedLeave,
+      data: processedData,
+      total,
+      page,
+      pageSize,
     });
   } catch (error) {
-    console.error("❌ Lỗi khi cập nhật đơn nghỉ:", error);
-    return NextResponse.json({ message: "Cập nhật thất bại" }, { status: 500 });
-  }
-}
+    console.error("❌ Lỗi API danh sách yêu cầu nghỉ phép:", error);
 
-export async function DELETE(req: NextRequest) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const id = searchParams.get("id");
-
-    if (!id) {
-      return NextResponse.json(
-        { message: "Thiếu ID đơn nghỉ phép" },
-        { status: 400 },
-      );
-    }
-
-    const token = req.cookies.get("token-hrm")?.value;
-    if (!token)
-      return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
-    if (decoded.role !== "ADMIN") {
-      return NextResponse.json(
-        { message: "Bạn không có quyền" },
-        { status: 403 },
-      );
-    }
-
-    const leaveRequest = await prisma.leaveRequest.findUnique({
-      where: { id: Number(id) },
-    });
-
-    if (!leaveRequest) {
-      return NextResponse.json(
-        { message: "Không tìm thấy đơn nghỉ phép" },
-        { status: 404 },
-      );
-    }
-
-    await prisma.leaveRequest.delete({
-      where: { id: Number(id) },
-    });
-
-    return NextResponse.json({ message: "Xóa đơn nghỉ thành công" });
-  } catch (error) {
-    console.error("❌ Lỗi khi xóa đơn nghỉ:", error);
-    return NextResponse.json({ message: "Xóa đơn thất bại" }, { status: 500 });
+    return NextResponse.json(
+      {
+        message: "Lấy danh sách thất bại",
+      },
+      {
+        status: 500,
+      },
+    );
   }
 }

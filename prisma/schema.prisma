@@ -59,6 +59,7 @@ model Employee {
   birthDate                     DateTime?
   password                      String
   role                          Role                        @default(USER)
+  global                        Boolean                     @default(false)
   avatar                        String?
   isActive                      Boolean                     @default(true)
   managerId                     Int?

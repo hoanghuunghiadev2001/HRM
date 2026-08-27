@@ -45,11 +45,19 @@ type Employee = {
   isActive: boolean;
   department: string | null;
   position: string | null;
-};
 
+  // ⭐ mới
+  brand: "TBD" | "TMP" | null;
+  global: boolean;
+};
 export default function EmployeeList() {
   const [isActiveFilter, setIsActiveFilter] = useState(true);
   const [employees, setEmployees] = useState<Employee[]>([]);
+  const [currentUser, setCurrentUser] = useState<{
+    role: string;
+    global: boolean;
+    brand: "TBD" | "TMP" | null;
+  } | null>(null);
   const [loading, setLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [filterName, setFilterName] = useState("");
@@ -157,6 +165,10 @@ export default function EmployeeList() {
 
       const json = await res.json();
 
+      if (json.permission) {
+        setCurrentUser(json.permission);
+      }
+
       // Ví dụ phản hồi: { data: Employee[], total: number, page: number, pageSize: number }
       setEmployees(json.data);
       setTotalTable(json.total); // Nếu bạn cần hiển thị phân trang
@@ -239,6 +251,23 @@ export default function EmployeeList() {
       dataIndex: "id",
       key: "id",
       width: 60,
+    },
+    {
+      title: "Chi nhánh",
+      dataIndex: "brand",
+      key: "brand",
+      width: 150,
+      render: (brand: "TBD" | "TMP" | null) => {
+        if (brand === "TBD") {
+          return "Toyota Bình Dương";
+        }
+
+        if (brand === "TMP") {
+          return "Toyota Mỹ Phước";
+        }
+
+        return "-";
+      },
     },
     {
       title: "MSNV",
@@ -335,7 +364,7 @@ export default function EmployeeList() {
 
   const handleUpdateEmployee = async (
     employeeCode: string,
-    infoEmployee: any
+    infoEmployee: any,
   ) => {
     setLoading(true);
     const res = await updateEmployee(employeeCode, infoEmployee);

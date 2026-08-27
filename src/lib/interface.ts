@@ -12,6 +12,7 @@ export interface InfoEmployee {
   contactInfo: ContactInfo;
   otherInfo: OtherInfo;
   LeaveRequest: LeaveRequest[];
+  global: boolean;
   brand: string;
 }
 

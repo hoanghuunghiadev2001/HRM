@@ -9,6 +9,7 @@ import {
   Input,
   message,
   Select,
+  Switch,
   Table,
   Upload,
   UploadProps,
@@ -126,27 +127,44 @@ const ModalEditEmployee = ({
       gender: formData.gender,
       birthDate: formData.birthDate,
       role: formData.role,
+
       avatar: imageUrl ?? null,
-      brand: formData.brand, // <-- THÊM CHI NHÁNH VÀO PAYLOAD GỬI ĐI API
+
+      brand: formData.brand,
+
+      global: formData.global ?? false,
 
       workInfo: {
         department: formData.department,
+
         position: formData.position,
+
         specialization: formData.specialization,
+
         joinedTBD: formData.joinedTBD,
+
         joinedTeSCC: formData.joinedTeSCC,
+
         seniorityStart: formData.seniorityStart,
+
         seniority: formData.seniority,
+
         contractNumber: formData.contractNumber,
+
         contractDate: formData.contractDate,
+
         contractType: formData.contractType,
+
         contractEndDate: formData.contractEndDate,
       },
 
       contactInfo: {
         phoneNumber: formData.phoneNumber,
+
         relativePhone: formData.relativePhone,
+
         companyPhone: formData.companyPhone,
+
         email: formData.email,
       },
     };
@@ -218,22 +236,34 @@ const ModalEditEmployee = ({
   function transformEmployeeDataToFormData(data: InfoEmployee) {
     return {
       employeeCode: data.employeeCode,
+
       name: data.name,
+
       gender: data.gender,
+
       birthDate: data.birthDate ? dayjs(data.birthDate, "DD/MM/YYYY") : null,
-      password: data.password, // luôn mặc định
+
+      password: data.password,
+
       role: data.role,
+
+      // ⭐ GLOBAL
+      global: data.global ?? false,
+
       avatarBase64: data.avatar ?? null,
 
-      // workInfo
-      brand: (data as any)?.brand ?? "", // <-- THÊM ĐỂ ĐỔ DỮ LIỆU CŨ LÊN FORM (NẾU CÓ)
+      brand: (data as any)?.brand ?? "",
+
       department: data.workInfo?.department?.id ?? "",
+
       position: data.workInfo?.position?.id ?? "",
 
-      // contactInfo
       phoneNumber: data.contactInfo?.phoneNumber ?? "",
+
       relativePhone: data.contactInfo?.relativePhone ?? "",
+
       companyPhone: data.contactInfo?.companyPhone ?? "",
+
       email: data.contactInfo?.email ?? "it@toyota.binhduong.vn",
     };
   }
@@ -473,6 +503,13 @@ const ModalEditEmployee = ({
                     <Option value="TBD">Toyota Bình Dương (TBD)</Option>
                     <Option value="TMP">Toyota Mỹ Phước (TMP)</Option>
                   </Select>
+                </Form.Item>
+                <Form.Item
+                  name="global"
+                  label="Toàn hệ thống"
+                  valuePropName="checked"
+                >
+                  <Switch checkedChildren="GLOBAL" unCheckedChildren="CN" />
                 </Form.Item>
 
                 <Form.Item

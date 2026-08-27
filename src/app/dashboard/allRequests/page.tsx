@@ -383,7 +383,11 @@ export default function AllRequestPage() {
       title: "MSNV",
       dataIndex: "MSNV",
       width: "90px",
-      render: (text) => <span className="font-medium">{text}</span>,
+      render: (text, record) => (
+        <span className="font-medium">
+          {text} - ({record.id})
+        </span>
+      ),
     },
     {
       title: "Tên NV",

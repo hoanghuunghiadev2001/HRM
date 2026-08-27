@@ -5817,6 +5817,7 @@ export namespace Prisma {
     birthDate: Date | null
     password: string | null
     role: $Enums.Role | null
+    global: boolean | null
     avatar: string | null
     isActive: boolean | null
     managerId: number | null
@@ -5833,6 +5834,7 @@ export namespace Prisma {
     birthDate: Date | null
     password: string | null
     role: $Enums.Role | null
+    global: boolean | null
     avatar: string | null
     isActive: boolean | null
     managerId: number | null
@@ -5849,6 +5851,7 @@ export namespace Prisma {
     birthDate: number
     password: number
     role: number
+    global: number
     avatar: number
     isActive: number
     managerId: number
@@ -5877,6 +5880,7 @@ export namespace Prisma {
     birthDate?: true
     password?: true
     role?: true
+    global?: true
     avatar?: true
     isActive?: true
     managerId?: true
@@ -5893,6 +5897,7 @@ export namespace Prisma {
     birthDate?: true
     password?: true
     role?: true
+    global?: true
     avatar?: true
     isActive?: true
     managerId?: true
@@ -5909,6 +5914,7 @@ export namespace Prisma {
     birthDate?: true
     password?: true
     role?: true
+    global?: true
     avatar?: true
     isActive?: true
     managerId?: true
@@ -6012,6 +6018,7 @@ export namespace Prisma {
     birthDate: Date | null
     password: string
     role: $Enums.Role
+    global: boolean
     avatar: string | null
     isActive: boolean
     managerId: number | null
@@ -6047,6 +6054,7 @@ export namespace Prisma {
     birthDate?: boolean
     password?: boolean
     role?: boolean
+    global?: boolean
     avatar?: boolean
     isActive?: boolean
     managerId?: boolean
@@ -6089,6 +6097,7 @@ export namespace Prisma {
     birthDate?: boolean
     password?: boolean
     role?: boolean
+    global?: boolean
     avatar?: boolean
     isActive?: boolean
     managerId?: boolean
@@ -6097,7 +6106,7 @@ export namespace Prisma {
     brand?: boolean
   }
 
-  export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeCode" | "name" | "gender" | "birthDate" | "password" | "role" | "avatar" | "isActive" | "managerId" | "createdAt" | "updatedAt" | "brand", ExtArgs["result"]["employee"]>
+  export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeCode" | "name" | "gender" | "birthDate" | "password" | "role" | "global" | "avatar" | "isActive" | "managerId" | "createdAt" | "updatedAt" | "brand", ExtArgs["result"]["employee"]>
   export type EmployeeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     AttendanceImportLog?: boolean | Employee$AttendanceImportLogArgs<ExtArgs>
     contactInfo?: boolean | Employee$contactInfoArgs<ExtArgs>
@@ -6160,6 +6169,7 @@ export namespace Prisma {
       birthDate: Date | null
       password: string
       role: $Enums.Role
+      global: boolean
       avatar: string | null
       isActive: boolean
       managerId: number | null
@@ -6565,6 +6575,7 @@ export namespace Prisma {
     readonly birthDate: FieldRef<"Employee", 'DateTime'>
     readonly password: FieldRef<"Employee", 'String'>
     readonly role: FieldRef<"Employee", 'Role'>
+    readonly global: FieldRef<"Employee", 'Boolean'>
     readonly avatar: FieldRef<"Employee", 'String'>
     readonly isActive: FieldRef<"Employee", 'Boolean'>
     readonly managerId: FieldRef<"Employee", 'Int'>
@@ -32987,6 +32998,7 @@ export namespace Prisma {
     birthDate: 'birthDate',
     password: 'password',
     role: 'role',
+    global: 'global',
     avatar: 'avatar',
     isActive: 'isActive',
     managerId: 'managerId',
@@ -33878,6 +33890,7 @@ export namespace Prisma {
     birthDate?: DateTimeNullableFilter<"Employee"> | Date | string | null
     password?: StringFilter<"Employee"> | string
     role?: EnumRoleFilter<"Employee"> | $Enums.Role
+    global?: BoolFilter<"Employee"> | boolean
     avatar?: StringNullableFilter<"Employee"> | string | null
     isActive?: BoolFilter<"Employee"> | boolean
     managerId?: IntNullableFilter<"Employee"> | number | null
@@ -33917,6 +33930,7 @@ export namespace Prisma {
     birthDate?: SortOrderInput | SortOrder
     password?: SortOrder
     role?: SortOrder
+    global?: SortOrder
     avatar?: SortOrderInput | SortOrder
     isActive?: SortOrder
     managerId?: SortOrderInput | SortOrder
@@ -33960,6 +33974,7 @@ export namespace Prisma {
     birthDate?: DateTimeNullableFilter<"Employee"> | Date | string | null
     password?: StringFilter<"Employee"> | string
     role?: EnumRoleFilter<"Employee"> | $Enums.Role
+    global?: BoolFilter<"Employee"> | boolean
     avatar?: StringNullableFilter<"Employee"> | string | null
     isActive?: BoolFilter<"Employee"> | boolean
     managerId?: IntNullableFilter<"Employee"> | number | null
@@ -33999,6 +34014,7 @@ export namespace Prisma {
     birthDate?: SortOrderInput | SortOrder
     password?: SortOrder
     role?: SortOrder
+    global?: SortOrder
     avatar?: SortOrderInput | SortOrder
     isActive?: SortOrder
     managerId?: SortOrderInput | SortOrder
@@ -34023,6 +34039,7 @@ export namespace Prisma {
     birthDate?: DateTimeNullableWithAggregatesFilter<"Employee"> | Date | string | null
     password?: StringWithAggregatesFilter<"Employee"> | string
     role?: EnumRoleWithAggregatesFilter<"Employee"> | $Enums.Role
+    global?: BoolWithAggregatesFilter<"Employee"> | boolean
     avatar?: StringNullableWithAggregatesFilter<"Employee"> | string | null
     isActive?: BoolWithAggregatesFilter<"Employee"> | boolean
     managerId?: IntNullableWithAggregatesFilter<"Employee"> | number | null
@@ -36326,6 +36343,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -36364,6 +36382,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -36401,6 +36420,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -36439,6 +36459,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -36477,6 +36498,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -36492,6 +36514,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -36507,6 +36530,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -39228,6 +39252,7 @@ export namespace Prisma {
     birthDate?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    global?: SortOrder
     avatar?: SortOrder
     isActive?: SortOrder
     managerId?: SortOrder
@@ -39249,6 +39274,7 @@ export namespace Prisma {
     birthDate?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    global?: SortOrder
     avatar?: SortOrder
     isActive?: SortOrder
     managerId?: SortOrder
@@ -39265,6 +39291,7 @@ export namespace Prisma {
     birthDate?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    global?: SortOrder
     avatar?: SortOrder
     isActive?: SortOrder
     managerId?: SortOrder
@@ -44060,6 +44087,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -44097,6 +44125,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -44138,6 +44167,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -44175,6 +44205,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -45008,6 +45039,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45045,6 +45077,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -45101,6 +45134,7 @@ export namespace Prisma {
     birthDate?: DateTimeNullableFilter<"Employee"> | Date | string | null
     password?: StringFilter<"Employee"> | string
     role?: EnumRoleFilter<"Employee"> | $Enums.Role
+    global?: BoolFilter<"Employee"> | boolean
     avatar?: StringNullableFilter<"Employee"> | string | null
     isActive?: BoolFilter<"Employee"> | boolean
     managerId?: IntNullableFilter<"Employee"> | number | null
@@ -45591,6 +45625,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -45628,6 +45663,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -45669,6 +45705,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -45706,6 +45743,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -45826,6 +45864,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45863,6 +45902,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -45910,6 +45950,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45947,6 +45988,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -46192,6 +46234,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -46229,6 +46272,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -46339,6 +46383,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46376,6 +46421,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -46442,6 +46488,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -46479,6 +46526,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -46531,6 +46579,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46568,6 +46617,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -46629,6 +46679,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -46666,6 +46717,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -46771,6 +46823,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46808,6 +46861,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -46993,6 +47047,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -47030,6 +47085,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -47102,6 +47158,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47139,6 +47196,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -47228,6 +47286,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -47265,6 +47324,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -47333,6 +47393,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47370,6 +47431,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -47424,6 +47486,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -47461,6 +47524,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -47537,6 +47601,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47574,6 +47639,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -47651,6 +47717,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -47688,6 +47755,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -47795,6 +47863,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47832,6 +47901,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -47999,6 +48069,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -48036,6 +48107,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -48077,6 +48149,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -48114,6 +48187,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -48281,6 +48355,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48318,6 +48393,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -48365,6 +48441,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48402,6 +48479,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -48556,6 +48634,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -48593,6 +48672,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -48707,6 +48787,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48744,6 +48825,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -48780,6 +48862,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -48817,6 +48900,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -48925,6 +49009,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -48962,6 +49047,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -49125,6 +49211,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -49162,6 +49249,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -49203,6 +49291,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -49240,6 +49329,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -49320,6 +49410,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49357,6 +49448,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -49404,6 +49496,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49441,6 +49534,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -49477,6 +49571,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -49514,6 +49609,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -49566,6 +49662,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49603,6 +49700,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -49639,6 +49737,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -49676,6 +49775,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -49754,6 +49854,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49791,6 +49892,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -49988,6 +50090,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -50025,6 +50128,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -50093,6 +50197,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50130,6 +50235,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -50166,6 +50272,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -50203,6 +50310,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -50244,6 +50352,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -50281,6 +50390,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -50322,6 +50432,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -50359,6 +50470,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     managerId?: number | null
@@ -50411,6 +50523,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50448,6 +50561,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -50495,6 +50609,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50532,6 +50647,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -50579,6 +50695,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50616,6 +50733,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     managerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -50817,6 +50935,7 @@ export namespace Prisma {
     birthDate?: Date | string | null
     password: string
     role?: $Enums.Role
+    global?: boolean
     avatar?: string | null
     isActive?: boolean
     createdAt?: Date | string
@@ -51079,6 +51198,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51116,6 +51236,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51153,6 +51274,7 @@ export namespace Prisma {
     birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    global?: BoolFieldUpdateOperationsInput | boolean
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
