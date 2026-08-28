@@ -83,6 +83,7 @@ const ModalAddNewEmployee = ({
         password: "123456",
         role: formData.role,
         avatar: imageUrl ?? null,
+        brand: formData.brand,
 
         workInfo: {
           departmentId: formData.department,

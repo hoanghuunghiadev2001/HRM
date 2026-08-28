@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
       password,
       role,
       avatar,
-
+      brand,
       workInfo,
       contactInfo,
     } = body;
@@ -74,11 +74,12 @@ export async function POST(req: NextRequest) {
       !gender ||
       !birthDate ||
       !password ||
+      !brand ||
       typeof password !== "string"
     ) {
       return NextResponse.json(
         { message: "Missing or invalid required fields" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -89,7 +90,7 @@ export async function POST(req: NextRequest) {
     if (existingEmployee) {
       return NextResponse.json(
         { message: "EmployeeCode already exists" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -103,7 +104,7 @@ export async function POST(req: NextRequest) {
       if (!matches) {
         return NextResponse.json(
           { message: "Invalid base64 format for image" },
-          { status: 400 }
+          { status: 400 },
         );
       }
       try {
@@ -189,6 +190,7 @@ export async function POST(req: NextRequest) {
         role,
         isActive: false,
         avatar: avatarPath,
+        brand: brand, // Lưu brand vào cơ sở dữ liệu
 
         workInfo: workInfoData ? { create: workInfoData } : undefined,
 
@@ -205,7 +207,7 @@ export async function POST(req: NextRequest) {
     console.error("❌ Internal Error:", error);
     return NextResponse.json(
       { message: "Failed to create employee" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

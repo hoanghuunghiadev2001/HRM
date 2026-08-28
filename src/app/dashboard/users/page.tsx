@@ -19,7 +19,7 @@ import {
 } from "antd";
 import { MenuProps } from "antd/lib";
 import { DeleteOutlined, InfoCircleOutlined } from "@ant-design/icons";
-import { ListCollapse } from "lucide-react";
+import { ListCollapse, PlusIcon } from "lucide-react";
 import {
   deleteEmployeeApi,
   fetchEmployeeByCode,
@@ -30,6 +30,7 @@ import { Department, InfoEmployee } from "@/lib/interface";
 import ModalEditEmployee from "@/components/modalEditEmployee";
 import { setUser } from "@/store/slices/userSlice";
 import { useAppDispatch } from "@/store/hook";
+import ModalAddNewEmployee from "@/components/addNewEmployee";
 
 message.config({
   top: 80,
@@ -53,6 +54,7 @@ type Employee = {
 export default function EmployeeList() {
   const [isActiveFilter, setIsActiveFilter] = useState(true);
   const [employees, setEmployees] = useState<Employee[]>([]);
+  const [modalAddEmployee, setModalAddEmployee] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<{
     role: string;
     global: boolean;
@@ -388,6 +390,14 @@ export default function EmployeeList() {
         }}
         open={modalEditEmployee}
       />
+      <ModalAddNewEmployee
+        department={departments ?? []}
+        onClose={() => {
+          setModalAddEmployee(false);
+          fetchEmployees(pageSize, pageTable);
+        }}
+        open={modalAddEmployee}
+      />
       <ModalLoading isOpen={loading} />
       {contextHolder}
       <div className="flex justify-between items-center flex-wrap">
@@ -395,13 +405,24 @@ export default function EmployeeList() {
           Danh sách nhân viên{" "}
           {isActiveFilter ? "đã kích hoạt" : " chưa kích hoạt"}
         </Title>
-        <Button
+        <div
+          className="flex gap-3 items-center"
           style={{ marginBottom: 16, marginLeft: 16 }}
-          onClick={() => setIsActiveFilter((prev) => !prev)}
         >
-          Hiển thị nhân viên{" "}
-          {isActiveFilter ? "chưa kích hoạt" : "đã kích hoạt"}
-        </Button>
+          <Button
+            className="flex relative  gap-2 items-center h-8 px-4 rounded-lg !bg-gradient-to-r from-[#4c809e] to-[#001935] cursor-pointer !text-white font-semibold"
+            onClick={() => {
+              setModalAddEmployee(true);
+            }}
+          >
+            <PlusIcon />
+            <p className="hidden sm:block">Thêm nhân sự</p>
+          </Button>
+          <Button onClick={() => setIsActiveFilter((prev) => !prev)}>
+            Hiển thị nhân viên{" "}
+            {isActiveFilter ? "chưa kích hoạt" : "đã kích hoạt"}
+          </Button>
+        </div>
       </div>
       <div className="grid grid-cols-2 md:flex md:items-center gap-4 mb-4 w-full flex-wrap">
         <p className="font-bold  text-2xl text-[#4a4a6a] hidden md:block">
