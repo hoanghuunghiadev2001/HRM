@@ -75,10 +75,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!currentUser) {
-      return NextResponse.json(
-        { message: "Không tìm thấy nhân viên" },
-        { status: 404 },
-      );
+      return NextResponse.json({ message: "Không tìm thấy nhân viên" });
     }
 
     const userLevel = currentUser.workInfo?.position?.level || 0;
@@ -371,5 +368,117 @@ export async function GET(req: NextRequest) {
         status: 500,
       },
     );
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  try {
+    const token = req.cookies.get("token-hrm")?.value;
+    if (!token) {
+      return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
+    if (decoded.role !== "ADMIN") {
+      return NextResponse.json(
+        { message: "Bạn không có quyền" },
+        { status: 403 },
+      );
+    }
+
+    const body = await req.json();
+    const { id, leaveType, startDate, endDate, totalHours } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { message: "Thiếu ID đơn nghỉ phép" },
+        { status: 400 },
+      );
+    }
+
+    const leaveRequest = await prisma.leaveRequest.findUnique({
+      where: { id },
+    });
+
+    if (!leaveRequest) {
+      return NextResponse.json(
+        { message: "Không tìm thấy đơn nghỉ phép" },
+        { status: 404 },
+      );
+    }
+
+    const dataToUpdate: Prisma.LeaveRequestUpdateInput = {};
+    if (leaveType) dataToUpdate.leaveType = leaveType;
+    if (startDate) dataToUpdate.startDate = new Date(startDate);
+    if (endDate) dataToUpdate.endDate = new Date(endDate);
+    if (typeof totalHours === "number") dataToUpdate.totalHours = totalHours;
+
+    if (dataToUpdate.startDate && dataToUpdate.endDate) {
+      if (dataToUpdate.startDate > dataToUpdate.endDate) {
+        return NextResponse.json(
+          { message: "Ngày bắt đầu không được lớn hơn ngày kết thúc" },
+          { status: 400 },
+        );
+      }
+    }
+
+    const updatedLeave = await prisma.leaveRequest.update({
+      where: { id },
+      data: dataToUpdate,
+    });
+
+    return NextResponse.json({
+      message: "Cập nhật đơn nghỉ thành công",
+      data: updatedLeave,
+    });
+  } catch (error) {
+    console.error("❌ Lỗi khi cập nhật đơn nghỉ:", error);
+    return NextResponse.json({ message: "Cập nhật thất bại" }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json(
+        { message: "Thiếu ID đơn nghỉ phép" },
+        { status: 400 },
+      );
+    }
+
+    const token = req.cookies.get("token-hrm")?.value;
+    if (!token)
+      return NextResponse.json({ message: "Thiếu token" }, { status: 401 });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
+    if (decoded.role !== "ADMIN") {
+      return NextResponse.json(
+        { message: "Bạn không có quyền" },
+        { status: 403 },
+      );
+    }
+
+    const leaveRequest = await prisma.leaveRequest.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!leaveRequest) {
+      return NextResponse.json(
+        { message: "Không tìm thấy đơn nghỉ phép" },
+        { status: 404 },
+      );
+    }
+
+    await prisma.leaveRequest.delete({
+      where: { id: Number(id) },
+    });
+
+    return NextResponse.json({ message: "Xóa đơn nghỉ thành công" });
+  } catch (error) {
+    console.error("❌ Lỗi khi xóa đơn nghỉ:", error);
+    return NextResponse.json({ message: "Xóa đơn thất bại" }, { status: 500 });
   }
 }
