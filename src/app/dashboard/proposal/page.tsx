@@ -78,6 +78,38 @@ type ProposalTypeValue = "REGULAR" | "VEHICLE" | "VEHICLE_GRAB";
 type GrabSubType = "PERSONAL" | "CUSTOMER";
 type BrandType = "TBD" | "TMP";
 
+// ─── Trạng thái đề xuất (khớp enum ProposalStatus trong schema) ───────────────
+type BookingStatus = "pending_signatures" | "waiting_approval" | "approved";
+
+interface VehicleBooking {
+  startAt: dayjs.Dayjs;
+  endAt: dayjs.Dayjs;
+  status: BookingStatus;
+  proposerName?: string;
+}
+
+// Nhãn hiển thị & màu sắc theo từng trạng thái đề xuất
+const BOOKING_STATUS_META: Record<
+  BookingStatus,
+  { label: string; color: string; dotColor: string }
+> = {
+  approved: {
+    label: "Đã duyệt",
+    color: "red",
+    dotColor: "#ff4d4f",
+  },
+  waiting_approval: {
+    label: "Chờ phê duyệt",
+    color: "orange",
+    dotColor: "#faad14",
+  },
+  pending_signatures: {
+    label: "Chờ ký duyệt",
+    color: "gold",
+    dotColor: "#fadb14",
+  },
+};
+
 export default function ProposalCreatorProfessional() {
   const [form] = Form.useForm();
 
@@ -93,7 +125,9 @@ export default function ProposalCreatorProfessional() {
   const [submitting, setSubmitting] = useState(false);
   const [employees, setEmployees] = useState<any[]>([]);
   const [vehicles, setVehicles] = useState<any[]>([]);
-  const [vehicleBookings, setVehicleBookings] = useState<any>({});
+  const [vehicleBookings, setVehicleBookings] = useState<
+    Record<number, VehicleBooking[]>
+  >({});
   const [managerIds, setManagerIds] = useState<number[]>([]);
 
   // ── State: Loại đề xuất ──────────────────────────────────────────────────────
@@ -134,12 +168,15 @@ export default function ProposalCreatorProfessional() {
         setVehicles((vehJson.vehicles || []).filter((v: any) => !v.isBusy));
 
         const schedJson = schedResp.ok ? await schedResp.json() : {};
-        const mapBookings: any = {};
+        const mapBookings: Record<number, VehicleBooking[]> = {};
         (schedJson.proposals || []).forEach((p: any) => {
+          if (!p.vehicleId || !p.startAt || !p.endAt) return;
           if (!mapBookings[p.vehicleId]) mapBookings[p.vehicleId] = [];
           mapBookings[p.vehicleId].push({
             startAt: dayjs(p.startAt),
             endAt: dayjs(p.endAt),
+            status: (p.status as BookingStatus) || "approved",
+            proposerName: p.proposer?.name,
           });
         });
         setVehicleBookings(mapBookings);
@@ -159,8 +196,6 @@ export default function ProposalCreatorProfessional() {
 
   // ── 2. AUTO-FILL LUỒNG PHÊ DUYỆT ─────────────────────────────────────────────
   useEffect(() => {
-    console.log(userBrand);
-
     if (proposalType === "VEHICLE") {
       // Xe nội bộ: manager ký, id 6 duyệt
       form.setFieldsValue({ signers: managerIds, approvers: [6] });
@@ -169,8 +204,6 @@ export default function ProposalCreatorProfessional() {
 
     if (proposalType === "VEHICLE_GRAB") {
       if (grabSubType === "PERSONAL") {
-        // Cá nhân: giống xe nội bộ
-        form.setFieldsValue({ signers: managerIds, approvers: [6] });
         // Cá nhân: manager ký, người thực hiện theo chi nhánh
         if (!userBrand || !BRANCH_APPROVER_CONFIG[userBrand]) {
           form.setFieldsValue({ signers: managerIds, approvers: [] });
@@ -216,8 +249,6 @@ export default function ProposalCreatorProfessional() {
   // ── 3. TÍNH % TIỀN TRÊN RO VÀ TỰ ĐỘNG NGOẠI LỆ ──────────────────────────────
   const handleAmountChange = useCallback(
     (value: number | null) => {
-      // 1. Lấy giá trị của cả 2 ô một cách chính xác
-      // Sử dụng form.getFieldsValue() để gom toàn bộ data hiện tại của form
       const currentFields = form.getFieldsValue();
 
       const vehicleAmount = currentFields.vehicleAmount;
@@ -246,17 +277,17 @@ export default function ProposalCreatorProfessional() {
       }
     },
     [form, autoException],
-  ); // Nhớ thêm 'form' vào dependency nhé
+  );
 
   // ── 4. KIỂM TRA TRÙNG LỊCH XE ────────────────────────────────────────────────
-  const isRangeOverlap = (
+  // Trả về booking bị trùng (kèm trạng thái, tên người đề xuất) thay vì chỉ boolean,
+  // để có thể hiển thị thông báo chi tiết cho người dùng.
+  const findOverlappingBooking = (
     start: dayjs.Dayjs,
     end: dayjs.Dayjs,
-    bookings: any[],
-  ) =>
-    bookings.some(
-      (b) => start.isBefore(dayjs(b.endAt)) && end.isAfter(dayjs(b.startAt)),
-    );
+    bookings: VehicleBooking[],
+  ): VehicleBooking | undefined =>
+    bookings.find((b) => start.isBefore(b.endAt) && end.isAfter(b.startAt));
 
   const onVehicleTimeChange = (dates: any) => {
     if (!dates || !dates[0] || !dates[1]) {
@@ -266,10 +297,26 @@ export default function ProposalCreatorProfessional() {
     const [start, end] = dates;
     const currentBookings = vehicleBookings[selectedVehicle!] || [];
 
-    if (isRangeOverlap(start, end, currentBookings)) {
+    const conflict = findOverlappingBooking(start, end, currentBookings);
+
+    if (conflict) {
+      const meta = BOOKING_STATUS_META[conflict.status];
       modal.error({
         title: "Trùng lịch xe!",
-        content: "Xe đã có người đăng ký. Vui lòng chọn khung giờ khác.",
+        content: (
+          <div>
+            <p>
+              Khung giờ này trùng với một đề xuất{" "}
+              <strong>{meta.label.toLowerCase()}</strong>
+              {conflict.proposerName ? ` của ${conflict.proposerName}` : ""}.
+            </p>
+            <p className="text-xs text-gray-500">
+              {conflict.startAt.format("DD/MM HH:mm")} -{" "}
+              {conflict.endAt.format("DD/MM HH:mm")}
+            </p>
+            <p>Vui lòng chọn khung giờ khác.</p>
+          </div>
+        ),
       });
       setRangeTime(null);
     } else {
@@ -294,7 +341,7 @@ export default function ProposalCreatorProfessional() {
       url,
     };
     setFileList((prev) => [...prev, newFileItem]);
-    setPreviewFiles((prev) => [
+    setPreviewFiles((prev: any[]) => [
       ...prev,
       { url, name: file.name, type: file.type },
     ]);
@@ -306,7 +353,7 @@ export default function ProposalCreatorProfessional() {
     const updatedPreviews = [...previewFiles];
     URL.revokeObjectURL(updatedPreviews[index].url);
     setFileList((prev) => prev.filter((_, i) => i !== index));
-    setPreviewFiles((prev) => prev.filter((_, i) => i !== index));
+    setPreviewFiles((prev: any[]) => prev.filter((_, i) => i !== index));
     if (activeIndex >= updatedPreviews.length - 1)
       setActiveIndex(Math.max(0, updatedPreviews.length - 2));
   };
@@ -323,6 +370,27 @@ export default function ProposalCreatorProfessional() {
       !userBrand
     )
       return message.warning("Không xác định được chi nhánh của bạn!");
+
+    // Kiểm tra lại lần cuối trước khi submit, phòng trường hợp dữ liệu
+    // đã thay đổi (người khác vừa đặt xe) kể từ lúc người dùng chọn giờ.
+    if (proposalType === "VEHICLE" && rangeTime && selectedVehicle) {
+      const currentBookings = vehicleBookings[selectedVehicle] || [];
+      const conflict = findOverlappingBooking(
+        rangeTime[0],
+        rangeTime[1],
+        currentBookings,
+      );
+      if (conflict) {
+        const meta = BOOKING_STATUS_META[conflict.status];
+        modal.error({
+          title: "Trùng lịch xe!",
+          content: `Khung giờ này vừa bị trùng với một đề xuất ${meta.label.toLowerCase()}${
+            conflict.proposerName ? ` của ${conflict.proposerName}` : ""
+          }. Vui lòng chọn lại.`,
+        });
+        return;
+      }
+    }
 
     setSubmitting(true);
     try {
@@ -388,7 +456,7 @@ export default function ProposalCreatorProfessional() {
   // ── 7. RESET ──────────────────────────────────────────────────────────────────
   const handleReset = () => {
     form.resetFields();
-    previewFiles.forEach((f) => URL.revokeObjectURL(f.url));
+    previewFiles.forEach((f: any) => URL.revokeObjectURL(f.url));
     setFileList([]);
     setPreviewFiles([]);
     setRangeTime(null);
@@ -529,7 +597,7 @@ export default function ProposalCreatorProfessional() {
                     </div>
                   </Upload.Dragger>
                   <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {previewFiles.map((file, idx) => (
+                    {previewFiles.map((file: any, idx: any) => (
                       <div
                         key={idx}
                         onClick={() => setActiveIndex(idx)}
@@ -844,7 +912,6 @@ export default function ProposalCreatorProfessional() {
                                     )
                                   : ""
                               }
-                              // 🔹 Sửa parser: Chuyển chuỗi sau khi xóa dấu phẩy thành kiểu số (number)
                               parser={(value) =>
                                 value ? Number(value.replace(/,/g, "")) : 0
                               }
@@ -878,7 +945,6 @@ export default function ProposalCreatorProfessional() {
                                     )
                                   : ""
                               }
-                              // 🔹 Sửa parser ở đây tương tự để xóa sạch lỗi TS
                               parser={(value) =>
                                 value ? Number(value.replace(/,/g, "")) : 0
                               }
@@ -961,7 +1027,6 @@ export default function ProposalCreatorProfessional() {
                         <Switch
                           checked={effectiveException}
                           onChange={(checked) => {
-                            // Chỉ cho tắt thủ công nếu không phải auto
                             if (autoException && !checked) {
                               message.info(
                                 "Ngoại lệ tự động do tỷ lệ > 5%. Giảm số tiền để tắt.",
@@ -988,13 +1053,7 @@ export default function ProposalCreatorProfessional() {
                 <Col xs={24} md={12}>
                   <Form.Item
                     name="signers"
-                    label={
-                      <Text strong>
-                        {proposalType === "VEHICLE_GRAB"
-                          ? "Kiểm duyệt"
-                          : "Kiểm duyệt"}
-                      </Text>
-                    }
+                    label={<Text strong>Kiểm duyệt</Text>}
                     required
                   >
                     <Select
@@ -1023,7 +1082,6 @@ export default function ProposalCreatorProfessional() {
                     name="approvers"
                     label={
                       <Text strong>
-                        {" "}
                         {proposalType === "VEHICLE_GRAB"
                           ? "Người thực hiện"
                           : "Phê duyệt"}
@@ -1102,26 +1160,66 @@ export default function ProposalCreatorProfessional() {
                 )
               ) : proposalType === "VEHICLE" ? (
                 <div className="p-6">
-                  <Text strong className="block mb-4">
-                    Lịch xe hiện tại:
-                  </Text>
+                  <div className="flex items-center justify-between mb-4">
+                    <Text strong>Lịch xe hiện tại:</Text>
+                    {/* Chú thích màu trạng thái */}
+                    <Space size={10} className="text-[10px] text-gray-500">
+                      {(
+                        Object.keys(BOOKING_STATUS_META) as BookingStatus[]
+                      ).map((key) => (
+                        <span key={key} className="flex items-center gap-1">
+                          <span
+                            className="w-2 h-2 rounded-full inline-block"
+                            style={{
+                              backgroundColor:
+                                BOOKING_STATUS_META[key].dotColor,
+                            }}
+                          />
+                          {BOOKING_STATUS_META[key].label}
+                        </span>
+                      ))}
+                    </Space>
+                  </div>
+
                   {selectedVehicle &&
                   (vehicleBookings[selectedVehicle] || []).length > 0 ? (
                     <Timeline mode="left">
                       {(vehicleBookings[selectedVehicle] || []).map(
-                        (b: any, i: number) => (
-                          <Timeline.Item
-                            key={i}
-                            color="red"
-                            dot={<ClockCircleTwoTone twoToneColor="#ff4d4f" />}
-                          >
-                            <div className="text-[10px] text-gray-400">
-                              {b.startAt.format("DD/MM HH:mm")} -{" "}
-                              {b.endAt.format("HH:mm")}
-                            </div>
-                            <div className="font-medium text-xs">Đã bận</div>
-                          </Timeline.Item>
-                        ),
+                        (b: VehicleBooking, i: number) => {
+                          const meta = BOOKING_STATUS_META[b.status];
+                          return (
+                            <Timeline.Item
+                              key={i}
+                              color={meta.color}
+                              dot={
+                                <ClockCircleTwoTone
+                                  twoToneColor={meta.dotColor}
+                                />
+                              }
+                            >
+                              <div className="text-[10px] text-gray-400">
+                                {b.startAt.format("DD/MM HH:mm")} -{" "}
+                                {b.endAt.format("HH:mm")}
+                              </div>
+                              <div className="font-medium text-xs flex items-center gap-1.5">
+                                {b.status === "approved"
+                                  ? "Đã bận"
+                                  : "Đã giữ chỗ"}
+                                <Tag
+                                  color={meta.color}
+                                  className="!m-0 !text-[9px] !leading-4 !px-1.5"
+                                >
+                                  {meta.label}
+                                </Tag>
+                              </div>
+                              {b.proposerName && (
+                                <div className="text-[10px] text-gray-400">
+                                  {b.proposerName}
+                                </div>
+                              )}
+                            </Timeline.Item>
+                          );
+                        },
                       )}
                     </Timeline>
                   ) : (
