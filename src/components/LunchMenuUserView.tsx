@@ -1,39 +1,80 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useEffect, useState } from "react";
-import { Typography, Skeleton, ConfigProvider, Tag, Button } from "antd";
-import {
-  CalendarOutlined,
-  ClockCircleOutlined,
-  EnvironmentOutlined,
-  LeftOutlined,
-  RightOutlined,
-} from "@ant-design/icons";
+import React, { useState } from "react";
+import { Skeleton, Tabs, ConfigProvider } from "antd";
 import dayjs from "dayjs";
 import weekOfYear from "dayjs/plugin/weekOfYear";
+import { useEffect } from "react";
 
 dayjs.extend(weekOfYear);
-const { Title, Text } = Typography;
 
-const DAY_THEMES: any = {
-  "Thứ 2": { bg: "#e6f4ff", primary: "#1677ff", accent: "#0050b3" },
-  "Thứ 3": { bg: "#f6ffed", primary: "#52c41a", accent: "#237804" },
-  "Thứ 4": { bg: "#fff7e6", primary: "#fa8c16", accent: "#ad4e00" },
-  "Thứ 5": { bg: "#fff1f0", primary: "#f5222d", accent: "#a8071a" },
-  "Thứ 6": { bg: "#f9f0ff", primary: "#722ed1", accent: "#391085" },
-  "Thứ 7": { bg: "#e6fffb", primary: "#13c2c2", accent: "#006d75" },
+const DAYS_OF_WEEK = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
+
+const FOOD_ITEMS = [
+  { key: "salty", label: "Món mặn" },
+  { key: "vegetarian", label: "Món chay" },
+  { key: "stir", label: "Món xào" },
+  { key: "soup", label: "Canh" },
+];
+
+const ACCENT = "#7A3B34";
+
+const formatWeekRange = (start: dayjs.Dayjs, end: dayjs.Dayjs) => {
+  if (start.month() === end.month()) {
+    return `${start.format("D")} – ${end.format("D")} tháng ${end.format("M")}, ${end.year()}`;
+  }
+  return `${start.format("D/M")} – ${end.format("D/M")}, ${end.year()}`;
+};
+
+// Nội dung 1 ngày — dùng chung cho cả cột desktop lẫn panel mobile
+const DayContent = ({ menu }: { menu: any }) => {
+  if (!menu) {
+    return (
+      <div className="text-center italic text-[13px] text-[#8A8577] opacity-75 py-10">
+        Chưa cập nhật
+      </div>
+    );
+  }
+  return (
+    <div className="space-y-4">
+      {FOOD_ITEMS.map(({ key, label }) => (
+        <div key={key}>
+          <span className="block italic text-[11.5px] text-[#8A8577]">
+            {label}
+          </span>
+          <span className="block text-[14px] leading-snug mt-0.5 text-[#262420]">
+            {menu[key] || "—"}
+          </span>
+        </div>
+      ))}
+      <div className="pt-4 mt-4 border-t border-[#D9D2BF]">
+        <span className="block italic text-[11.5px] text-[#8A8577]">
+          Tráng miệng
+        </span>
+        <span className="block text-[14px] leading-snug mt-0.5 text-[#262420]">
+          {menu.dessert || "Trái cây mùa"}
+        </span>
+      </div>
+    </div>
+  );
 };
 
 export const LunchMenuUserView = () => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
-  // Quản lý tuần và năm hiển thị bằng state
   const [viewDate, setViewDate] = useState(dayjs());
+
+  // Ngày đang chọn trên mobile — mặc định là hôm nay nếu đang xem tuần hiện tại
+  const [mobileDayIdx, setMobileDayIdx] = useState(() => {
+    const today = dayjs().day(); // 0 = CN, 1 = T2 ... 6 = T7
+    return today >= 1 && today <= 6 ? today - 1 : 0;
+  });
 
   const currentWeek = viewDate.week();
   const currentYear = viewDate.year();
-  const daysOfWeek = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
+  const isCurrentWeek = viewDate.isSame(dayjs(), "week");
+  const weekStart = viewDate.day(1);
+  const weekEnd = viewDate.day(6);
 
   useEffect(() => {
     setLoading(true);
@@ -46,282 +87,173 @@ export const LunchMenuUserView = () => {
       .catch(() => setLoading(false));
   }, [currentWeek, currentYear]);
 
-  // Hàm chuyển tuần
   const handlePrevWeek = () => setViewDate(viewDate.subtract(1, "week"));
   const handleNextWeek = () => setViewDate(viewDate.add(1, "week"));
   const handleCurrentWeek = () => setViewDate(dayjs());
 
-  const getMenuByDay = (dayName: string) => {
-    return data.find(
+  const getMenuByDay = (dayName: string) =>
+    data.find(
       (item) =>
-        item.dayOfWeek.includes(dayName) || dayName.includes(item.dayOfWeek)
+        item.dayOfWeek.includes(dayName) || dayName.includes(item.dayOfWeek),
     );
-  };
 
-  if (loading && data.length === 0)
+  if (loading && data.length === 0) {
     return (
-      <div style={{ padding: 60 }}>
-        <Skeleton active round paragraph={{ rows: 8 }} />
+      <div className="min-h-[calc(100vh-80px)] bg-[#EAE4D6] py-10 px-5">
+        <div className="max-w-[1180px] mx-auto bg-[#FDFBF6] border border-[#D9D2BF] rounded-sm p-10">
+          <Skeleton active round paragraph={{ rows: 8 }} />
+        </div>
       </div>
     );
+  }
 
   return (
-    <ConfigProvider
-      theme={{ token: { fontFamily: "'Segoe UI', Roboto, sans-serif" } }}
+    <div
+      className="min-h-[calc(100vh-80px)] bg-[#EAE4D6] text-[#262420]"
+      style={{ fontFamily: "'Lora', Georgia, serif" }}
     >
-      <div
-        style={{
-          minHeight: "calc(100vh - 80px)",
-          background: "#fafafa",
-          padding: "40px 16px",
-          backgroundImage: "linear-gradient(180deg, #ffffff 0%, #f0f2f5 100%)",
-        }}
-      >
-        {/* Header & Điều hướng */}
-        <div
-          style={{ maxWidth: 1200, margin: "0 auto 48px", textAlign: "center" }}
-        >
-          <Text
-            strong
-            style={{ color: "#8c8c8c", letterSpacing: 2, fontSize: 12 }}
-          >
-            EST. {dayjs().year()} • KITCHEN MENU
-          </Text>
+      {/* Chuyển vào layout.tsx / next/font nếu muốn dùng ổn định hơn */}
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap');`}</style>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 24,
-              marginTop: 12,
-            }}
-          >
-            <Button
-              shape="circle"
-              icon={<LeftOutlined />}
-              onClick={handlePrevWeek}
-              style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}
-            />
-
-            <Title
-              level={2}
-              style={{
-                margin: 0,
-                fontWeight: 800,
-                fontSize: 32,
-                minWidth: 280,
-              }}
-            >
-              Thực Đơn{" "}
-              <span style={{ color: "#1677ff" }}>Tuần {currentWeek}</span>
-            </Title>
-
-            <Button
-              shape="circle"
-              icon={<RightOutlined />}
-              onClick={handleNextWeek}
-              style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: 12,
-              marginTop: 16,
-              alignItems: "center",
-            }}
-          >
-            <Tag
-              icon={<CalendarOutlined />}
-              bordered={false}
-              color="orange-inverse"
-            >
-              Năm {currentYear}
-            </Tag>
-            <Tag icon={<EnvironmentOutlined />} bordered={false} color="blue">
-              TBD Phòng ăn tầng 2
-            </Tag>
-            {/* Nút về tuần hiện tại nếu đang xem tuần khác */}
-            {!viewDate.isSame(dayjs(), "week") && (
-              <Button type="link" size="small" onClick={handleCurrentWeek}>
-                Về tuần hiện tại
-              </Button>
-            )}
-          </div>
-        </div>
-
-        {/* Menu Grid */}
-        <div
-          style={{
-            maxWidth: 1300,
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))",
-            gap: "16px",
-            position: "relative",
-            opacity: loading ? 0.6 : 1, // Làm mờ nhẹ khi đang tải tuần mới
-            transition: "opacity 0.2s ease",
-          }}
-        >
-          {daysOfWeek.map((day) => {
-            const menu = getMenuByDay(day);
-            const theme = DAY_THEMES[day];
-
-            // Logic check Today dựa trên viewDate để chính xác khi xem tuần khác
-            const isToday =
-              dayjs().format("dddd") ===
-                dayjs()
-                  .day(daysOfWeek.indexOf(day) + 1)
-                  .format("dddd") && viewDate.isSame(dayjs(), "week");
-
-            return (
-              <div
-                key={day}
-                style={{
-                  background: "#fff",
-                  borderRadius: "20px",
-                  padding: "20px",
-                  border: isToday
-                    ? `2px solid ${theme.primary}`
-                    : "1px solid #f0f0f0",
-                  boxShadow: isToday
-                    ? `0 12px 24px ${theme.primary}20`
-                    : "0 4px 10px rgba(0,0,0,0.03)",
-                  display: "flex",
-                  flexDirection: "column",
-                  minHeight: "380px",
-                }}
+      <div className="max-w-[1180px] mx-auto px-4 md:px-5 py-10 pb-16">
+        <div className="bg-[#FDFBF6] border border-[#D9D2BF] rounded-sm shadow-[0_24px_46px_-30px_rgba(38,36,32,0.35)] px-5 pt-8 pb-8 md:px-10 md:pt-11">
+          {/* Header */}
+          <header className="text-center">
+            <div className="flex items-center justify-center gap-2">
+              <button
+                onClick={handlePrevWeek}
+                aria-label="Tuần trước"
+                className="w-9 h-9 flex items-center justify-center text-2xl leading-none text-[#8A8577] hover:bg-black/5 rounded-full transition-colors"
               >
-                <div
-                  style={{
-                    background: theme.bg,
-                    margin: "-20px -20px 20px -20px",
-                    padding: "16px",
-                    borderRadius: "20px 20px 0 0",
-                    textAlign: "center",
-                  }}
-                >
-                  <Text strong style={{ color: theme.accent, fontSize: 16 }}>
-                    {day}
-                  </Text>
-                  {isToday && (
-                    <div
-                      style={{
-                        width: 8,
-                        height: 8,
-                        borderRadius: "50%",
-                        background: "#ff4d4f",
-                        position: "absolute",
-                        top: 15,
-                        right: 15,
-                      }}
-                    />
-                  )}
-                </div>
+                ‹
+              </button>
+              <h1 className="text-xl md:text-[28px] font-semibold px-2">
+                Thực đơn tuần {currentWeek}
+              </h1>
+              <button
+                onClick={handleNextWeek}
+                aria-label="Tuần sau"
+                className="w-9 h-9 flex items-center justify-center text-2xl leading-none text-[#8A8577] hover:bg-black/5 rounded-full transition-colors"
+              >
+                ›
+              </button>
+            </div>
 
-                {menu ? (
-                  <>
-                    <div
-                      style={{
-                        flex: 1,
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 14,
-                      }}
-                    >
-                      <CompactFoodItem
-                        icon="🍖"
-                        label="Món mặn"
-                        value={menu.salty}
-                      />
-                      <CompactFoodItem
-                        icon="🥗"
-                        label="Món chay"
-                        value={menu.vegetarian}
-                      />
-                      <CompactFoodItem
-                        icon="🔥"
-                        label="Món xào"
-                        value={menu.stir}
-                      />
-                      <CompactFoodItem
-                        icon="🥣"
-                        label="Canh"
-                        value={menu.soup}
-                      />
-                    </div>
-                    <div style={{ marginTop: "auto", paddingTop: 16 }}>
-                      <div
-                        style={{
-                          background: "#f5f5f5",
-                          padding: "8px 12px",
-                          borderRadius: "12px",
-                          border: "1px dashed #d9d9d9",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Text strong style={{ fontSize: 12, color: "#595959" }}>
-                          {menu.dessert || "Trái cây mùa"}
-                        </Text>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <div
-                    style={{
-                      flex: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      opacity: 0.3,
-                    }}
+            <p className="italic text-[#8A8577] text-sm md:text-[15px] mt-1">
+              {formatWeekRange(weekStart, weekEnd)}
+            </p>
+
+            <p className="text-[12.5px] text-[#8A8577] mt-2">
+              Chi nhánh Toyota Bình Dương.
+              {!isCurrentWeek && (
+                <>
+                  {" · "}
+                  <button
+                    onClick={handleCurrentWeek}
+                    className="text-[#7A3B34] underline"
                   >
-                    <ClockCircleOutlined
-                      style={{ fontSize: 24, marginBottom: 8 }}
-                    />
-                    <Text style={{ fontSize: 12 }}>Chưa cập nhật</Text>
+                    về tuần này
+                  </button>
+                </>
+              )}
+            </p>
+            <p className="text-[12.5px] text-[#8A8577] mt-2">
+              (Chỉ áp dụng cho chi nhánh Toyota Bình Dương)
+            </p>
+          </header>
+
+          {/* ===== Desktop / tablet: lưới 6 cột ===== */}
+          <div
+            className={`hidden md:grid md:grid-cols-3 lg:grid-cols-6 mt-9 transition-opacity ${
+              loading ? "opacity-50" : "opacity-100"
+            }`}
+          >
+            {DAYS_OF_WEEK.map((day, idx) => {
+              const menu = getMenuByDay(day);
+              const date = viewDate.day(idx + 1);
+              const isToday = isCurrentWeek && dayjs().isSame(date, "day");
+
+              return (
+                <div
+                  key={day}
+                  className={`px-5 pb-2 border-t border-[#D9D2BF] md:border-t-0
+                    ${idx % 3 !== 0 ? "md:border-l md:border-[#D9D2BF]" : ""}
+                    lg:border-l lg:border-[#D9D2BF]
+                    ${idx === 0 ? "lg:border-l-0" : ""}
+                    ${idx >= 3 ? "mt-8 pt-8 border-t md:border-t md:border-[#D9D2BF] lg:mt-0 lg:pt-0 lg:border-t-0" : ""}
+                    ${isToday ? "bg-[#F2E7E2] -mt-px" : ""}
+                  `}
+                >
+                  <div
+                    className={`text-center pb-3 mb-4 border-b ${
+                      isToday ? "border-[#7A3B34]" : "border-[#D9D2BF]"
+                    }`}
+                  >
+                    <span
+                      className={`block font-semibold text-[15px] ${isToday ? "text-[#7A3B34]" : ""}`}
+                    >
+                      {day}
+                    </span>
+                    <span className="block text-xs text-[#8A8577] mt-0.5">
+                      {date.format("DD/MM")}
+                    </span>
+                    {isToday && (
+                      <span className="inline-block italic text-[11px] text-[#7A3B34] mt-1">
+                        hôm nay
+                      </span>
+                    )}
                   </div>
-                )}
-              </div>
-            );
-          })}
+                  <DayContent menu={menu} />
+                </div>
+              );
+            })}
+          </div>
+
+          {/* ===== Mobile: chọn ngày bằng Tabs ===== */}
+          <div className="md:hidden mt-6">
+            <ConfigProvider theme={{ token: { colorPrimary: ACCENT } }}>
+              <Tabs
+                centered
+                size="small"
+                activeKey={String(mobileDayIdx)}
+                onChange={(k) => setMobileDayIdx(Number(k))}
+                items={DAYS_OF_WEEK.map((day, idx) => ({
+                  key: String(idx),
+                  label: day,
+                }))}
+              />
+            </ConfigProvider>
+
+            {(() => {
+              const idx = mobileDayIdx;
+              const day = DAYS_OF_WEEK[idx];
+              const menu = getMenuByDay(day);
+              const date = viewDate.day(idx + 1);
+              const isToday = isCurrentWeek && dayjs().isSame(date, "day");
+
+              return (
+                <div
+                  className={`mt-2 px-3 py-4 rounded-sm ${isToday ? "bg-[#F2E7E2]" : ""}`}
+                >
+                  <div
+                    className={`text-center pb-3 mb-4 border-b ${isToday ? "border-[#7A3B34]" : "border-[#D9D2BF]"}`}
+                  >
+                    <span className="block text-xs text-[#8A8577]">
+                      {date.format("DD/MM")}
+                    </span>
+                    {isToday && (
+                      <span className="inline-block italic text-[11px] text-[#7A3B34] mt-1">
+                        hôm nay
+                      </span>
+                    )}
+                  </div>
+                  <DayContent menu={menu} />
+                </div>
+              );
+            })()}
+          </div>
         </div>
       </div>
-    </ConfigProvider>
+    </div>
   );
 };
-
-const CompactFoodItem = ({ icon, label, value }: any) => (
-  <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-    <span style={{ fontSize: 16, marginTop: 2 }}>{icon}</span>
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      <Text
-        style={{
-          fontSize: 9,
-          color: "#bfbfbf",
-          fontWeight: 700,
-          textTransform: "uppercase",
-          lineHeight: 1,
-        }}
-      >
-        {label}
-      </Text>
-      <Text
-        style={{
-          fontSize: 14,
-          color: "#262626",
-          fontWeight: 500,
-          lineHeight: 1.3,
-        }}
-      >
-        {value}
-      </Text>
-    </div>
-  </div>
-);

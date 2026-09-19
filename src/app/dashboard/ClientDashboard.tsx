@@ -209,11 +209,11 @@ export default function ClientDashboard({
       label: <Link href="/dashboard/attendance">Chấm công</Link>,
     },
 
-    // {
-    //   key: "/dashboard/LunchMenuModule",
-    //   icon: <Utensils size={20} />,
-    //   label: <Link href="/dashboard/LunchMenuModule">Thực đơn</Link>,
-    // },
+    {
+      key: "/dashboard/LunchMenuModule",
+      icon: <Utensils size={20} />,
+      label: <Link href="/dashboard/LunchMenuModule">Thực đơn</Link>,
+    },
 
     {
       key: "/dashboard/allRequests",
@@ -265,13 +265,13 @@ export default function ClientDashboard({
                   <Link href="/dashboard/maintenance">Thông Báo hệ thống</Link>
                 ),
               },
-              // {
-              //   key: "/dashboard/LunchMenuModuleAD",
-              //   icon: <Utensils size={18} />,
-              //   label: (
-              //     <Link href="/dashboard/LunchMenuModuleAD">QL Thực đơn</Link>
-              //   ),
-              // },
+              {
+                key: "/dashboard/LunchMenuModuleAD",
+                icon: <Utensils size={18} />,
+                label: (
+                  <Link href="/dashboard/LunchMenuModuleAD">QL Thực đơn</Link>
+                ),
+              },
             ],
           },
 
@@ -391,7 +391,9 @@ export default function ClientDashboard({
           }`}
         >
           {/* Sidebar */}
-          <div className="py-5 pl-4 flex shrink-0 h-full">
+          <div
+            className={`py-5   ${isMobile ? "" : "pl-4"} flex shrink-0 h-full`}
+          >
             <div
               className={`
                 ${isMobile ? "flex-col-reverse" : "flex-col"}
@@ -494,7 +496,7 @@ export default function ClientDashboard({
 
           {/* Main Content Area */}
           <div className="flex-1 h-full overflow-y-auto overflow-x-hidden">
-            <main className="p-4 min-h-full">{children}</main>
+            <main className="min-h-full">{children}</main>
           </div>
         </div>
       </div>
