@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import ZKLib from "node-zklib";
 
 const MACHINES = [
-  { ip: "192.168.48.49", port: 4370 },
+  // { ip: "192.168.48.49", port: 4370 },
   { ip: "192.168.48.48", port: 4370 },
   { ip: "192.168.50.199", port: 4370 },
 ];

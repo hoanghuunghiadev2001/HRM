@@ -22,8 +22,7 @@ function decodeJwt(token: string) {
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // 👉 1. Bỏ qua hoàn toàn các request gọi vào thư mục /api (để các route tự xác thực)
-  // và các file tĩnh, trang login, maintenance
+  // 👉 1. Bỏ qua hoàn toàn các request gọi vào thư mục /api
   if (
     pathname.startsWith("/api") ||
     pathname.startsWith("/login") ||
@@ -38,15 +37,25 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Bắt lấy domain thực tế từ Nginx (Tránh bị nhảy về localhost:3000)
+  const host =
+    req.headers.get("x-forwarded-host") ||
+    req.headers.get("host") ||
+    "hrm.toyotabinhduong.com.vn";
+  const protocol = req.headers.get("x-forwarded-proto") || "https";
+  const baseUrl = `${protocol}://${host}`;
+
   if (process.env.MAINTENANCE_MODE === "true") {
-    return NextResponse.rewrite(new URL("/maintenance", req.url));
+    return NextResponse.rewrite(new URL("/maintenance", baseUrl));
   }
 
   // Kiểm tra token cho các trang giao diện (UI routes)
   const token = req.cookies.get("token-hrm")?.value;
 
   const clearTokenAndLogin = () => {
-    const response = NextResponse.redirect(new URL("/login", req.url));
+    // Ép redirect về đúng URL Domain HTTPS thực tế thay vì req.url (localhost)
+    const loginUrl = new URL("/login", baseUrl);
+    const response = NextResponse.redirect(loginUrl);
     response.cookies.set("token-hrm", "", { maxAge: 0, path: "/" });
     return response;
   };
