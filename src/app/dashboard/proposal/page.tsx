@@ -490,7 +490,7 @@ export default function ProposalCreatorProfessional() {
               Trình Ký Đề Xuất
             </Title>
             <Text type="secondary" className="text-xs hidden sm:block">
-              Toyota Binh Duong System 2
+              Toyota Binh Duong
             </Text>
           </div>
         </Space>
@@ -1068,11 +1068,7 @@ export default function ProposalCreatorProfessional() {
                       }
                       options={employees.map((e) => ({
                         value: e.id,
-                        label: `${e.name}${
-                          e.workInfo?.position?.name
-                            ? ` (${e.workInfo.position.name})`
-                            : ""
-                        }`,
+                        label: `${e.name} (${e.position}) `,
                       }))}
                     />
                   </Form.Item>

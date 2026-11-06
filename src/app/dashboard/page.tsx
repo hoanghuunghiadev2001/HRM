@@ -29,6 +29,7 @@ import dayjs from "dayjs";
 import RoleTag from "@/components/RoleTag";
 import { UploadChangeParam } from "antd/es/upload";
 import ModalLoading from "@/components/modalLoading";
+import LunchMenuWidget from "@/components/lunchMenuWidget";
 
 const { Title, Text } = Typography;
 
@@ -85,7 +86,7 @@ const Profile = () => {
         `/api/assets/by-employee?employeeId=${employeeId}`,
         {
           credentials: "include",
-        }
+        },
       );
       if (!res.ok) throw new Error("Lỗi khi tải tài sản");
       const data = await res.json();
@@ -391,7 +392,9 @@ const Profile = () => {
             Quản lý thông tin cá nhân và tài sản đã cấp
           </p>
         </div>
-
+        <div className="mb-6">
+          <LunchMenuWidget href="/dashboard/LunchMenuModule" />
+        </div>
         {/* profile card */}
         <div className="bg-white rounded-xl shadow-md p-6 mb-6">
           <div className="flex flex-col md:flex-row gap-6">

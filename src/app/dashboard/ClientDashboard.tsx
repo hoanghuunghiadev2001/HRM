@@ -496,7 +496,7 @@ export default function ClientDashboard({
 
           {/* Main Content Area */}
           <div className="flex-1 h-full overflow-y-auto overflow-x-hidden">
-            <main className="min-h-full">{children}</main>
+            <main className="min-h-full p-4">{children}</main>
           </div>
         </div>
       </div>

@@ -144,7 +144,7 @@ export const LunchMenuUserView = () => {
             </p>
 
             <p className="text-[12.5px] text-[#8A8577] mt-2">
-              Chi nhánh Toyota Bình Dương.
+              Trụ sở chính Toyota Bình Dương.
               {!isCurrentWeek && (
                 <>
                   {" · "}
@@ -158,7 +158,7 @@ export const LunchMenuUserView = () => {
               )}
             </p>
             <p className="text-[12.5px] text-[#8A8577] mt-2">
-              (Chỉ áp dụng cho chi nhánh Toyota Bình Dương)
+              (Chỉ áp dụng cho Trụ sở chính Toyota Bình Dương)
             </p>
           </header>
 

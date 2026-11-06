@@ -1,15 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { useEffect, useState } from "react";
 
-import React from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Badge,
   Button,
   Card,
   Col,
-  Form,
+  DatePicker,
+  Empty,
+  Grid,
   Input,
   message,
   Pagination,
@@ -17,11 +24,13 @@ import {
   Select,
   Space,
   Table,
+  TreeSelect,
 } from "antd";
-import type { TableProps, TreeSelectProps } from "antd";
+import type { TableProps } from "antd";
 import {
   CalendarOutlined,
   CheckCircleFilled,
+  ClockCircleOutlined,
   EyeOutlined,
   FilterOutlined,
   IdcardOutlined,
@@ -31,6 +40,12 @@ import {
   ShopOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { createStyles } from "antd-style";
+import dayjs from "dayjs";
+import type { Dayjs } from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
 import {
   AllRequests,
   fetchLeaveRequests,
@@ -39,19 +54,14 @@ import {
 import ModalLoading from "@/components/modalLoading";
 import { StatusLeave } from "@/components/function";
 import ModalDetailLeave from "@/components/modalDetailLeave";
-import { createStyles } from "antd-style";
-import ModalNeedApproved from "@/components/modalNeedApproved";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-import { TreeSelect } from "antd/lib";
+import ModalNeedApproved, {
+  ApproveRequestPayload,
+} from "@/components/modalNeedApproved";
+import ModalCalendarLeave from "@/components/modalCalendarLeave";
+import ExportLeaveRequests from "@/components/exportLeave";
 import { Department } from "@/lib/interface";
 import { useAppSelector } from "@/store/hook";
-import ExportLeaveRequests from "@/components/exportLeave";
-import { DatePicker } from "antd";
-import ModalCalendarLeave from "@/components/modalCalendarLeave";
 
-// Extend plugin
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -184,54 +194,84 @@ interface DataType {
   status: string;
   approvers: string;
 }
+/* ------------------------------ Constants ------------------------------ */
 
-const useStyle = createStyles((utils) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { css, token } = utils as { css: any; token: { antCls?: string } };
-  const antCls = token.antCls || ".ant";
+const TZ = "Asia/Ho_Chi_Minh";
+const API_DATE_FORMAT = "YYYY-MM-DD";
+const DISPLAY_FORMAT = "DD/MM/YYYY HH:mm";
+
+const BRAND_OPTIONS = [
+  { value: "TBD", label: "TBD — Bình Dương" },
+  { value: "TMP", label: "TMP — Mỹ Phước" },
+];
+
+const BRAND_GRADIENT = "linear-gradient(135deg, #4c809e 0%, #001935 100%)";
+
+interface Filters {
+  msnv: string;
+  name: string;
+  department?: string;
+  brand?: string;
+  month: Dayjs | null;
+}
+
+const EMPTY_FILTERS: Filters = {
+  msnv: "",
+  name: "",
+  department: undefined,
+  brand: undefined,
+  month: null,
+};
+
+interface DataType {
+  key: string;
+  id: number;
+  MSNV: string;
+  name: string;
+  startDate: string;
+  endDate: string;
+  totalHours: string;
+  leaveType: string;
+  status: string;
+  approvers: string;
+}
+
+/* -------------------------------- Styles -------------------------------- */
+
+const useStyle = createStyles(({ css, token }) => {
+  const antCls = (token as { antCls?: string }).antCls || ".ant";
   return {
     customTable: css`
       ${antCls}-table {
-        border-radius: 0 !important;
-
         ${antCls}-table-thead > tr > th {
           background: #f8fafc !important;
           color: #475569;
           font-weight: 600;
           font-size: 13px;
           border-bottom: 1px solid #eef0f3 !important;
+          white-space: nowrap;
         }
-
         ${antCls}-table-thead
         > tr
           > th:not(:last-child):not(${antCls}-table-selection-column)::before {
           display: none;
         }
-
         ${antCls}-table-tbody > tr > td {
           font-size: 13.5px;
           color: #1f2937;
         }
-
         ${antCls}-table-tbody > tr:hover > td {
           background: #f6f9fc !important;
         }
-
-        ${antCls}-table-container {
-          ${antCls}-table-body,
-          ${antCls}-table-content {
-            scrollbar-width: thin;
-            scrollbar-color: #d9dee5 transparent;
-            scrollbar-gutter: stable;
-          }
+        ${antCls}-table-body {
+          scrollbar-width: thin;
+          scrollbar-color: #d9dee5 transparent;
         }
       }
     `,
     filterCard: css`
-      ${antCls}-card-body {
-        padding: 20px 24px;
-      }
-      ${antCls}-form-item-label > label {
+      ${antCls}-form-item-label > label,
+      .filter-label {
         font-weight: 600;
         color: #374151;
         font-size: 13px;
@@ -240,327 +280,484 @@ const useStyle = createStyles((utils) => {
   };
 });
 
-export interface ApproveRequestPayload {
-  stepId: number; // ID của step hiện tại
-  approverId: number; // ID của người đang phê duyệt
-  decision: "approved" | "rejected"; // trạng thái phê duyệt
-  comment?: string;
+/* ----------------------------- Small components ----------------------------- */
+
+function FilterField({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label className="filter-label">{label}</label>
+      {children}
+    </div>
+  );
 }
 
-// 🆕 Danh sách chi nhánh — khớp enum BrandType trong schema.prisma
-const BRAND_OPTIONS = [
-  { value: "TBD", label: "TBD — Bình Dương" },
-  { value: "TMP", label: "TMP — Mỹ Phước" },
-];
+function MobileRequestCard({
+  item,
+  onDetail,
+}: {
+  item: DataType;
+  onDetail: (id: number) => void;
+}) {
+  return (
+    <div
+      className="rounded-xl border border-[#e8eaee] bg-white p-3.5 shadow-[0_1px_2px_rgba(16,24,40,0.05)] active:bg-[#f6f9fc]"
+      onClick={() => onDetail(item.id)}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <div className="truncate font-semibold text-[#1e4f6e]">
+            {item.name}
+          </div>
+          <div className="text-xs text-[#94a3b8]">
+            {item.MSNV} · #{item.id}
+          </div>
+        </div>
+        <StatusLeave status={item.status} />
+      </div>
 
-const BRAND_GRADIENT = "linear-gradient(135deg, #4c809e 0%, #001935 100%)";
+      <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-[13px]">
+        <div className="col-span-2 flex items-center gap-2 text-[#1f2937]">
+          <CalendarOutlined className="text-[#4c809e]" />
+          <span>
+            {item.startDate} → {item.endDate}
+          </span>
+        </div>
+        <div className="flex items-center gap-2 text-[#475569]">
+          <ScheduleOutlined className="text-[#4c809e]" />
+          <span>{item.leaveType}</span>
+        </div>
+        <div className="flex items-center gap-2 text-[#475569]">
+          <ClockCircleOutlined className="text-[#4c809e]" />
+          <span>{item.totalHours} giờ</span>
+        </div>
+        <div className="col-span-2 flex items-center gap-2 text-[#6b7280]">
+          <UserOutlined className="text-[#4c809e]" />
+          <span className="truncate">{item.approvers || "—"}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* --------------------------------- Page --------------------------------- */
 
 export default function AllRequestPage() {
-  const [allRequestsApproved, setAllRequestsApproved] = useState<AllRequests>();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [modalDetailLeave, setModalDetailLeave] = useState<boolean>(false);
-  const [infoRequetLeave, setInfoRequestLeave] = useState<RequestLeave>();
-  const [modalNeedApproved, setModalNeedApproved] = useState<boolean>(false);
-  const [modalCalendarLeave, setModalCalendarLeave] = useState<boolean>(false);
+  const { styles } = useStyle();
+  const screens = Grid.useBreakpoint();
+  const isMobile = !screens.md;
 
-  const [pageSize, setPageSize] = useState(10);
-  const [pageTable, setPageTable] = useState(1);
-  const [totalTable, setTotalTable] = useState();
+  const { role, id, departmentID } = useAppSelector((state) => state.user);
+  const [messageApi, contextHolder] = message.useMessage();
+
+  // data
+  const [data, setData] = useState<AllRequests>();
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [departments, setDepartments] = useState<Department[]>([]);
   const [requestsNeedApprove, setRequestsNeedApprove] = useState<
     PendingApprovalItem[]
   >([]);
-  const { role, id, department, departmentID } = useAppSelector(
-    (state) => state.user,
+
+  // paging
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  // filters: `filters` = giá trị đang nhập, `appliedRef` = giá trị đã áp dụng
+  const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
+  const appliedRef = useRef<Filters>(EMPTY_FILTERS);
+  const [showFilters, setShowFilters] = useState(false); // chỉ dùng cho mobile
+
+  // modals
+  const [modalDetailLeave, setModalDetailLeave] = useState(false);
+  const [modalNeedApproved, setModalNeedApproved] = useState(false);
+  const [modalCalendarLeave, setModalCalendarLeave] = useState(false);
+  const [infoRequestLeave, setInfoRequestLeave] = useState<RequestLeave>();
+
+  const patchFilters = (patch: Partial<Filters>) =>
+    setFilters((prev) => ({ ...prev, ...patch }));
+
+  /* ------------------------------- API calls ------------------------------- */
+
+  const fetchData = useCallback(
+    async (nextPage: number, nextSize: number, f: Filters) => {
+      setLoading(true);
+      try {
+        const res = await fetchLeaveRequests({
+          page: nextPage,
+          pageSize: nextSize,
+          role,
+          department:
+            role === "ADMIN" ? f.department : String(departmentID ?? ""),
+          employeeCode: f.msnv.trim(),
+          name: f.name.trim(),
+          status: "",
+          // Lọc theo tháng: từ ngày đầu đến ngày cuối của tháng
+          startDate: f.month
+            ? f.month.startOf("month").format(API_DATE_FORMAT)
+            : "",
+          endDate: f.month
+            ? f.month.endOf("month").format(API_DATE_FORMAT)
+            : "",
+          brand: f.brand ?? "",
+        });
+        setData(res);
+        setTotal(res.total ?? 0);
+        setPage(nextPage);
+        setPageSize(nextSize);
+      } catch (err) {
+        console.error("Lỗi tải danh sách phiếu:", err);
+        messageApi.error("Không thể tải danh sách phiếu yêu cầu");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [role, departmentID, messageApi],
   );
 
-  const [departments, setDepartments] = useState<Department[]>([]);
-  const [messageApi, contextHolder] = message.useMessage();
-
-  const [filterName, setFilterName] = useState("");
-  const [filterMSNV, setFilterMSNV] = useState("");
-  const [filterDepartment, setDepartment] = useState<string>();
-  const [filterBrand, setFilterBrand] = useState<string>(""); // 🆕 chi nhánh
-  const [filterDate, setFilterDate] = useState<string>("");
-  const [datePickerKey, setDatePickerKey] = useState(0); // reset DatePicker visually
-
-  const onChangeSelectDepartment = (newValue: string) => {
-    setDepartment(newValue);
-  };
-
-  const onChangeSelectBrand = (newValue: string) => {
-    setFilterBrand(newValue ?? "");
-  };
-
-  const getPendingApprovals = async (
-    userId: number,
-  ): Promise<PendingApprovalItem[]> => {
+  const getPendingApprovals = useCallback(async () => {
     try {
-      const res = await fetch(`/api/leave/all-requests-need-approve`);
-      if (!res.ok) {
-        throw new Error("Lấy danh sách cần phê duyệt thất bại");
-      }
-      const data: PendingApprovalItem[] = await res.json();
-      setRequestsNeedApprove(data);
-      return data;
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
-  };
-
-  const treeData = departments.map((dept) => ({
-    value: dept.id.toString(),
-    title: dept.name.toString(),
-    key: dept.id,
-    children: dept.positions.map((pos: any) => ({
-      value: `${dept.id}-${pos.id}`,
-      title: ` ${pos.name}`,
-      key: `${dept.id}-${pos.id}`,
-    })),
-  }));
-
-  const onPopupScroll: TreeSelectProps["onPopupScroll"] = (e) => {};
-
-  const getApiAllRequestsApproved = async (page: number, pageSize: number) => {
-    setLoading(true);
-    try {
-      const res = await fetchLeaveRequests({
-        page: page,
-        pageSize: pageSize,
-        role: role,
-        department:
-          role === "ADMIN" ? filterDepartment : (String(departmentID) ?? ""),
-        employeeCode: filterMSNV,
-        name: filterName,
-        status: "",
-        startDate: filterDate,
-        endDate: filterDate,
-        brand: filterBrand, // 🆕
-      });
-      setAllRequestsApproved(res);
-      setTotalTable(res.total);
-      setLoading(false);
+      const res = await fetch("/api/leave/all-requests-need-approve");
+      if (!res.ok) throw new Error("Lấy danh sách cần phê duyệt thất bại");
+      setRequestsNeedApprove(await res.json());
     } catch (err) {
-      setLoading(false);
-      console.error("Lỗi:", err);
+      console.error(err);
     }
+  }, []);
+
+  const loadDepartments = useCallback(async () => {
+    try {
+      const res = await fetch("/api/departments");
+      if (!res.ok) throw new Error("Lấy dữ liệu thất bại");
+      setDepartments(await res.json());
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  const putApprovedRequest = async (payload: ApproveRequestPayload) => {
+    const res = await fetch("/api/leave/create-requests", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData?.error || "Phê duyệt thất bại");
+    }
+    getPendingApprovals();
+    return res.json();
   };
 
-  const { styles } = useStyle();
+  /* -------------------------------- Handlers -------------------------------- */
 
-  //format và đưa dữ liệu ra table
-  const formatted: DataType[] =
-    allRequestsApproved?.data?.map((item, index) => ({
-      key: (index + 1).toString(),
-      id: item.id,
-      MSNV: item.employee.employeeCode,
-      name: item.employee.name,
-      startDate: dayjs
-        .utc(item?.startDate)
-        .tz("Asia/Ho_Chi_Minh")
-        .format("DD/MM/YYYY HH:mm"),
-      endDate: dayjs
-        .utc(item?.endDate)
-        .tz("Asia/Ho_Chi_Minh")
-        .format("DD/MM/YYYY HH:mm"),
-      totalHours: item.totalHours.toString(),
-      leaveType: item.leaveType,
-      status: item.status,
-      approvedBy: item.approversSummary,
-      approvers: item.approversSummary ?? "",
-    })) || [];
+  const handleSearch = () => {
+    appliedRef.current = filters;
+    setShowFilters(false);
+    fetchData(1, pageSize, filters);
+  };
+
+  const handleReset = () => {
+    setFilters(EMPTY_FILTERS);
+    appliedRef.current = EMPTY_FILTERS;
+    fetchData(1, pageSize, EMPTY_FILTERS);
+  };
+
+  const handlePageChange = (nextPage: number, nextSize: number) => {
+    // đổi pageSize thì quay về trang 1
+    const targetPage = nextSize !== pageSize ? 1 : nextPage;
+    fetchData(targetPage, nextSize, appliedRef.current);
+  };
+
+  const handleOpenDetail = (requestId: number) => {
+    setInfoRequestLeave(data?.data?.find((item) => item.id === requestId));
+    setModalDetailLeave(true);
+  };
+
+  const refreshCurrent = () => fetchData(page, pageSize, appliedRef.current);
+
+  useEffect(() => {
+    getPendingApprovals();
+    loadDepartments();
+    fetchData(1, 10, EMPTY_FILTERS);
+  }, [getPendingApprovals, loadDepartments, fetchData]);
+
+  /* ------------------------------ Derived data ------------------------------ */
+
+  const activeFilterCount = useMemo(
+    () =>
+      [
+        filters.msnv,
+        filters.name,
+        filters.department,
+        filters.brand,
+        filters.month,
+      ].filter(Boolean).length,
+    [filters],
+  );
+
+  const treeData = useMemo(
+    () =>
+      departments.map((dept) => ({
+        value: dept.id.toString(),
+        title: dept.name.toString(),
+        key: dept.id,
+        children: dept.positions.map((pos: any) => ({
+          value: `${dept.id}-${pos.id}`,
+          title: pos.name,
+          key: `${dept.id}-${pos.id}`,
+        })),
+      })),
+    [departments],
+  );
+
+  const rows: DataType[] = useMemo(
+    () =>
+      data?.data?.map((item, index) => ({
+        key: String((page - 1) * pageSize + index + 1),
+        id: item.id,
+        MSNV: item.employee.employeeCode,
+        name: item.employee.name,
+        startDate: dayjs.utc(item.startDate).tz(TZ).format(DISPLAY_FORMAT),
+        endDate: dayjs.utc(item.endDate).tz(TZ).format(DISPLAY_FORMAT),
+        totalHours: String(item.totalHours),
+        leaveType: item.leaveType,
+        status: item.status,
+        approvers: item.approversSummary ?? "",
+      })) ?? [],
+    [data, page, pageSize],
+  );
 
   const columns: TableProps<DataType>["columns"] = [
     {
       title: "STT",
       dataIndex: "key",
-      rowScope: "row",
-      width: "56px",
+      width: 56,
       align: "center",
-      render: (_) => <span className="text-[#94a3b8]">{_}</span>,
+      render: (v) => <span className="text-[#94a3b8]">{v}</span>,
     },
     {
       title: "MSNV",
       dataIndex: "MSNV",
-      width: "90px",
+      width: 110,
       render: (text, record) => (
         <span className="font-medium">
-          {text} - ({record.id})
+          {text} <span className="text-[#94a3b8]">#{record.id}</span>
         </span>
       ),
     },
     {
       title: "Tên NV",
       dataIndex: "name",
-      key: "name",
-      width: "170px",
+      width: 170,
       render: (text) => (
-        <a className="font-medium text-[#1e4f6e] hover:text-[#4c809e]">
-          {text}
-        </a>
+        <span className="font-medium text-[#1e4f6e]">{text}</span>
       ),
     },
     {
-      title: "Ngày nghỉ",
-      dataIndex: "startDate",
-      key: "age",
-      width: "170px",
+      title: "Thời gian nghỉ",
+      key: "range",
+      width: 300,
+      render: (_, r) => (
+        <span>
+          {r.startDate} <span className="text-[#94a3b8]">→</span> {r.endDate}
+        </span>
+      ),
     },
     {
-      title: "Loại phép",
-      dataIndex: "leaveType",
-      key: "leaveType",
-      width: "100px",
+      title: "Số giờ",
+      dataIndex: "totalHours",
+      width: 80,
+      align: "center",
     },
+    { title: "Loại phép", dataIndex: "leaveType", width: 110 },
     {
       title: "Trạng thái",
       dataIndex: "status",
-      key: "status",
-      width: "120px",
+      width: 130,
       render: (status) => <StatusLeave status={status} />,
     },
     {
       title: "Người phê duyệt",
-      dataIndex: "approvedBy",
-      key: "approvedBy",
-      width: "170px",
+      dataIndex: "approvers",
+      width: 190,
       render: (text) => <span className="text-[#6b7280]">{text || "—"}</span>,
     },
     {
-      title: "Chi tiết",
+      title: "",
       key: "action",
-      width: "90px",
+      width: 100,
       align: "center",
+      fixed: "right",
       render: (_, record) => (
-        <Space size="middle">
-          <Button
-            type="text"
-            size="small"
-            icon={<EyeOutlined />}
-            className="!text-[#4c809e] hover:!text-[#001935] hover:!bg-[#eef4f8]"
-            onClick={() => DetailRequetsLeave(record.id)}
-          >
-            Chi tiết
-          </Button>
-        </Space>
+        <Button
+          type="text"
+          size="small"
+          icon={<EyeOutlined />}
+          className="!text-[#4c809e] hover:!text-[#001935] hover:!bg-[#eef4f8]"
+          onClick={() => handleOpenDetail(record.id)}
+        >
+          Chi tiết
+        </Button>
       ),
     },
   ];
 
-  //xem chi tiết đơn xin nghỉ
-  const DetailRequetsLeave = (id: number) => {
-    const item = allRequestsApproved?.data?.find((item) => item.id === id);
-    setInfoRequestLeave(item);
-    setModalDetailLeave(true);
-  };
+  /* ---------------------------------- Render ---------------------------------- */
 
-  // chức năng phê duyệt đơn xin nghỉ
-  const putApprovedRequest = async (payload: ApproveRequestPayload) => {
-    try {
-      const res = await fetch("/api/leave/create-requests", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+  const filterBody = (
+    <Row gutter={[12, 12]}>
+      <Col xs={24} sm={12} lg={4}>
+        <FilterField label="MSNV">
+          <Input
+            prefix={<IdcardOutlined className="text-[#9aa4b2]" />}
+            placeholder="Mã số NV"
+            allowClear
+            value={filters.msnv}
+            onChange={(e) => patchFilters({ msnv: e.target.value })}
+            onPressEnter={handleSearch}
+          />
+        </FilterField>
+      </Col>
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData?.error || "Phê duyệt thất bại");
-      } else {
-        getPendingApprovals(Number(id) ?? 0);
-      }
+      <Col xs={24} sm={12} lg={5}>
+        <FilterField label="Tên NV">
+          <Input
+            prefix={<UserOutlined className="text-[#9aa4b2]" />}
+            placeholder="Tên nhân viên"
+            allowClear
+            value={filters.name}
+            onChange={(e) => patchFilters({ name: e.target.value })}
+            onPressEnter={handleSearch}
+          />
+        </FilterField>
+      </Col>
 
-      return await res.json();
-    } catch (error) {
-      console.error("Lỗi khi phê duyệt đơn:", error);
-      throw error;
-    }
-  };
+      <Col xs={24} sm={12} lg={4}>
+        <FilterField label="Tháng nghỉ">
+          <DatePicker
+            picker="month"
+            className="!w-full"
+            placeholder="Chọn tháng"
+            format="MM/YYYY"
+            allowClear
+            value={filters.month}
+            suffixIcon={<CalendarOutlined className="text-[#9aa4b2]" />}
+            onChange={(month) => patchFilters({ month })}
+          />
+        </FilterField>
+      </Col>
 
-  const onPageChange = (page: number, pageSizeEnter?: number) => {
-    if (pageSizeEnter) {
-      setPageSize(pageSizeEnter);
-      getApiAllRequestsApproved(page, pageSizeEnter);
-    } else {
-      setPageTable(page);
-      getApiAllRequestsApproved(page, pageSize);
-    }
-  };
+      <Col xs={24} sm={12} lg={4}>
+        <FilterField label="Chi nhánh">
+          <Select
+            className="!w-full"
+            placeholder="Tất cả"
+            allowClear
+            suffixIcon={<ShopOutlined className="text-[#9aa4b2]" />}
+            value={filters.brand}
+            onChange={(brand) => patchFilters({ brand: brand ?? undefined })}
+            options={BRAND_OPTIONS}
+          />
+        </FilterField>
+      </Col>
 
-  // lấy danh sách bộ phận
-  const listDepartment = async () => {
-    const res = await fetch("/api/departments");
-    if (!res.ok) throw new Error("Lấy dữ liệu thất bại");
-    const departmentsData = await res.json(); //
-    setDepartments(departmentsData);
-  };
+      {role === "ADMIN" && (
+        <Col xs={24} sm={12} lg={5}>
+          <FilterField label="Bộ phận">
+            <TreeSelect
+              showSearch
+              allowClear
+              className="!w-full"
+              placeholder="Phòng ban"
+              value={filters.department}
+              treeData={treeData}
+              treeNodeFilterProp="title"
+              treeDefaultExpandAll={false}
+              styles={{ popup: { root: { maxHeight: 400, overflow: "auto" } } }}
+              onChange={(department) => patchFilters({ department })}
+            />
+          </FilterField>
+        </Col>
+      )}
+    </Row>
+  );
 
-  // 🆕 Xóa toàn bộ điều kiện lọc và tìm lại
-  const handleResetFilters = () => {
-    setFilterMSNV("");
-    setFilterName("");
-    setDepartment(undefined);
-    setFilterBrand("");
-    setFilterDate("");
-    setDatePickerKey((k) => k + 1);
-    setPageTable(1);
-    // Gọi API ngay với state đã reset ở lần render tiếp theo
-    setTimeout(() => getApiAllRequestsApproved(1, pageSize), 0);
-  };
+  const actionBar = (
+    <div className="mt-4 flex flex-wrap items-center justify-end gap-2">
+      <Button
+        icon={<ReloadOutlined />}
+        disabled={activeFilterCount === 0}
+        onClick={handleReset}
+        className="max-sm:flex-1"
+      >
+        Xóa lọc
+      </Button>
 
-  useEffect(() => {
-    getPendingApprovals(Number(id) ?? 0);
-    getApiAllRequestsApproved(pageTable, pageSize);
-    listDepartment();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      {(role === "ADMIN" || role === "MANAGER") && (
+        <Button
+          icon={<ScheduleOutlined />}
+          onClick={() => setModalCalendarLeave(true)}
+          className="max-sm:flex-1"
+        >
+          Xem DS nghỉ
+        </Button>
+      )}
 
-  const hasActiveFilters =
-    !!filterMSNV ||
-    !!filterName ||
-    !!filterDepartment ||
-    !!filterBrand ||
-    !!filterDate;
+      {role === "ADMIN" && <ExportLeaveRequests />}
+
+      <Button
+        type="primary"
+        icon={<SearchOutlined />}
+        className="!border-none !font-semibold !shadow-[0_2px_6px_rgba(0,25,53,0.2)] max-sm:!w-full"
+        style={{ background: BRAND_GRADIENT }}
+        onClick={handleSearch}
+      >
+        Tìm kiếm
+      </Button>
+    </div>
+  );
 
   return (
-    <div className="min-h-full bg-[#f7f8fa] -m-4 p-4 md:-m-6 md:p-6">
+    <div className="min-h-full bg-[#f7f8fa] -m-4 p-3 sm:p-4 md:-m-6 md:p-6">
       <ModalNeedApproved
-        onClose={() => {
-          getPendingApprovals(Number(id) ?? 0);
-          setModalNeedApproved(false);
-          getApiAllRequestsApproved(pageTable, pageSize);
-        }}
         open={modalNeedApproved}
         allRequestsApproved={requestsNeedApprove}
         putApprovedRequest={putApprovedRequest}
+        onClose={() => {
+          setModalNeedApproved(false);
+          getPendingApprovals();
+          refreshCurrent();
+        }}
       />
       <ModalCalendarLeave
-        onClose={() => {
-          setModalCalendarLeave(false);
-        }}
         open={modalCalendarLeave}
+        onClose={() => setModalCalendarLeave(false)}
       />
       <ModalDetailLeave
-        infoRequetLeave={infoRequetLeave}
+        open={modalDetailLeave}
+        infoRequetLeave={infoRequestLeave}
+        title="Chi Tiết Đơn Xin Phép"
         onClose={() => {
           setModalDetailLeave(false);
-          getApiAllRequestsApproved(pageTable, pageSize);
+          refreshCurrent();
         }}
-        open={modalDetailLeave}
-        title="Chi Tiết Đơn Xin Phép"
       />
       <ModalLoading isOpen={loading} />
       {contextHolder}
 
-      {/* ===== Page header ===== */}
-      <div className="flex items-start justify-between flex-wrap gap-4 mb-5">
+      {/* Header */}
+      <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <span className="inline-block text-[11px] font-bold tracking-wider text-[#4c809e] uppercase mb-1">
+          <span className="mb-1 inline-block text-[11px] font-bold uppercase tracking-wider text-[#4c809e]">
             Quản lý nghỉ phép
           </span>
-          <h1 className="text-[22px] leading-tight font-bold text-[#1f2937] m-0">
+          <h1 className="m-0 text-xl font-bold leading-tight text-[#1f2937] md:text-[22px]">
             Danh sách phiếu yêu cầu
           </h1>
         </div>
@@ -570,12 +767,13 @@ export default function AllRequestPage() {
           overflowCount={99}
           offset={[-4, 4]}
           color="#dc2626"
+          className="max-sm:w-full"
         >
           <Button
             type="primary"
             size="large"
             icon={<CheckCircleFilled />}
-            className="!border-none !font-semibold !shadow-[0_4px_10px_rgba(0,25,53,0.25)] !h-10 !px-5 !rounded-lg"
+            className="!h-10 !rounded-lg !border-none !px-5 !font-semibold !shadow-[0_4px_10px_rgba(0,25,53,0.25)] max-sm:!w-full"
             style={{ background: BRAND_GRADIENT }}
             onClick={() => setModalNeedApproved(true)}
           >
@@ -584,195 +782,119 @@ export default function AllRequestPage() {
         </Badge>
       </div>
 
-      {/* ===== Filter bar ===== */}
+      {/* Filters */}
       <Card
-        bordered={false}
-        className={`!mb-5 !rounded-2xl !shadow-[0_1px_2px_rgba(16,24,40,0.06)] !border !border-[#e8eaee] ${styles.filterCard}`}
+        className={`!mb-4 !rounded-2xl !border !border-[#e8eaee] !shadow-[0_1px_2px_rgba(16,24,40,0.06)] ${styles.filterCard}`}
+        styles={{ body: { padding: isMobile ? 14 : "20px 24px" } }}
       >
-        <div className="flex items-center gap-2 mb-4">
-          <FilterOutlined className="text-[#4c809e] text-[15px]" />
-          <span className="font-semibold text-[#1f2937] text-[15px]">
+        <div className="flex items-center gap-2">
+          <FilterOutlined className="text-[15px] text-[#4c809e]" />
+          <span className="text-[15px] font-semibold text-[#1f2937]">
             Bộ lọc tìm kiếm
           </span>
-          {hasActiveFilters && (
-            <span className="ml-1 text-[11px] font-medium text-white bg-[#4c809e] rounded-full px-2 py-[1px]">
-              đang áp dụng
+          {activeFilterCount > 0 && (
+            <span className="rounded-full bg-[#4c809e] px-2 py-px text-[11px] font-medium text-white">
+              {activeFilterCount} đang chọn
             </span>
+          )}
+          {isMobile && (
+            <Button
+              type="link"
+              size="small"
+              className="!ml-auto"
+              onClick={() => setShowFilters((v) => !v)}
+            >
+              {showFilters ? "Thu gọn" : "Mở rộng"}
+            </Button>
           )}
         </div>
 
-        <Row gutter={[16, 12]} align="bottom">
-          <Col xs={24} sm={12} md={4}>
-            <Form.Item label="MSNV" className="!mb-0">
-              <Input
-                prefix={<IdcardOutlined className="text-[#9aa4b2]" />}
-                placeholder="Mã số NV"
-                allowClear
-                value={filterMSNV}
-                onChange={(e) => setFilterMSNV(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    getApiAllRequestsApproved(pageTable, pageSize);
-                  }
-                }}
-              />
-            </Form.Item>
-          </Col>
+        {(!isMobile || showFilters) && (
+          <div className="mt-4">
+            {filterBody}
+            {actionBar}
+          </div>
+        )}
 
-          <Col xs={24} sm={12} md={5}>
-            <Form.Item label="Tên NV" className="!mb-0">
-              <Input
-                prefix={<UserOutlined className="text-[#9aa4b2]" />}
-                placeholder="Tên nhân viên"
-                allowClear
-                value={filterName}
-                onChange={(e) => setFilterName(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    getApiAllRequestsApproved(pageTable, pageSize);
-                  }
-                }}
-              />
-            </Form.Item>
-          </Col>
-
-          <Col xs={24} sm={12} md={4}>
-            <Form.Item label="Ngày nghỉ" className="!mb-0">
-              <DatePicker
-                key={datePickerKey}
-                className="!w-full"
-                placeholder="Chọn ngày"
-                suffixIcon={<CalendarOutlined className="text-[#9aa4b2]" />}
-                onChange={(date) => {
-                  if (date) setFilterDate(dayjs(date).format("YYYY-MM-DD"));
-                  else setFilterDate("");
-                }}
-              />
-            </Form.Item>
-          </Col>
-
-          {/* 🆕 Lọc theo chi nhánh */}
-          <Col xs={24} sm={12} md={4}>
-            <Form.Item label="Chi nhánh" className="!mb-0">
-              <Select
-                className="!w-full"
-                placeholder="Tất cả"
-                allowClear
-                suffixIcon={<ShopOutlined className="text-[#9aa4b2]" />}
-                value={filterBrand || undefined}
-                onChange={onChangeSelectBrand}
-                options={BRAND_OPTIONS}
-              />
-            </Form.Item>
-          </Col>
-
-          {role === "ADMIN" && (
-            <Col xs={24} sm={12} md={5}>
-              <Form.Item label="Bộ phận" className="!mb-0">
-                <TreeSelect
-                  showSearch
-                  className="!w-full"
-                  value={filterDepartment}
-                  styles={{
-                    popup: { root: { maxHeight: 400, overflow: "auto" } },
-                  }}
-                  placeholder="Phòng ban"
-                  allowClear
-                  listItemScrollOffset={200}
-                  treeDefaultExpandAll={false}
-                  onChange={onChangeSelectDepartment}
-                  showCheckedStrategy="SHOW_ALL"
-                  treeData={treeData}
-                  onPopupScroll={onPopupScroll}
-                />
-              </Form.Item>
-            </Col>
-          )}
-
-          <Col
-            xs={24}
-            md={role === "ADMIN" ? 24 : 6}
-            className={role === "ADMIN" ? "flex justify-end" : ""}
-          >
-            <Form.Item className="!mb-0 w-full">
-              <Space wrap className="w-full flex justify-end">
-                <Button
-                  icon={<ReloadOutlined />}
-                  disabled={!hasActiveFilters}
-                  onClick={handleResetFilters}
-                >
-                  Xóa lọc
-                </Button>
-
-                {role === "MANAGER" && (
-                  <Button
-                    icon={<ScheduleOutlined />}
-                    onClick={() => setModalCalendarLeave(true)}
-                    loading={loading}
-                  >
-                    Xem DS nghỉ
-                  </Button>
-                )}
-                {role === "ADMIN" && (
-                  <>
-                    <ExportLeaveRequests />
-                    <Button
-                      icon={<ScheduleOutlined />}
-                      onClick={() => setModalCalendarLeave(true)}
-                      loading={loading}
-                    >
-                      Xem DS nghỉ
-                    </Button>
-                  </>
-                )}
-                <Button
-                  type="primary"
-                  icon={<SearchOutlined />}
-                  className="!border-none !font-semibold !shadow-[0_2px_6px_rgba(0,25,53,0.2)]"
-                  style={{ background: BRAND_GRADIENT }}
-                  onClick={() => getApiAllRequestsApproved(pageTable, pageSize)}
-                >
-                  Tìm kiếm
-                </Button>
-              </Space>
-            </Form.Item>
-          </Col>
-        </Row>
+        {/* Mobile thu gọn: chỉ hiện nút tìm nhanh */}
+        {isMobile && !showFilters && (
+          <Space.Compact className="mt-3 w-full">
+            <Input
+              allowClear
+              placeholder="Tìm tên / MSNV..."
+              value={filters.name}
+              onChange={(e) => patchFilters({ name: e.target.value, msnv: "" })}
+              onPressEnter={handleSearch}
+            />
+            <Button
+              type="primary"
+              icon={<SearchOutlined />}
+              style={{ background: BRAND_GRADIENT }}
+              onClick={handleSearch}
+            />
+          </Space.Compact>
+        )}
       </Card>
 
-      {/* ===== Data table ===== */}
+      {/* Results */}
       <Card
-        bordered={false}
-        className="!rounded-2xl !shadow-[0_1px_2px_rgba(16,24,40,0.06)] !border !border-[#e8eaee] !overflow-hidden"
+        className="!overflow-hidden !rounded-2xl !border !border-[#e8eaee] !shadow-[0_1px_2px_rgba(16,24,40,0.06)]"
         styles={{ body: { padding: 0 } }}
       >
-        <div className="flex items-center justify-between px-5 py-3 border-b border-[#eef0f3] bg-white">
+        <div className="flex items-center justify-between border-b border-[#eef0f3] bg-white px-4 py-3 md:px-5">
           <span className="text-[13px] text-[#6b7280]">
             Tổng cộng{" "}
-            <span className="font-semibold text-[#1f2937]">
-              {totalTable ?? 0}
-            </span>{" "}
-            phiếu yêu cầu
+            <span className="font-semibold text-[#1f2937]">{total}</span> phiếu
+            {appliedRef.current.month && (
+              <>
+                {" "}
+                · tháng{" "}
+                <span className="font-semibold text-[#1f2937]">
+                  {appliedRef.current.month.format("MM/YYYY")}
+                </span>
+              </>
+            )}
           </span>
         </div>
 
-        <Table<DataType>
-          className={styles.customTable}
-          columns={columns}
-          dataSource={formatted ?? []}
-          scroll={{ y: "calc(100vh - 400px)", x: "100%" }}
-          pagination={false}
-          size="small"
-        />
+        {isMobile ? (
+          <div className="flex flex-col gap-3 bg-[#f7f8fa] p-3">
+            {rows.length === 0 ? (
+              <Empty description="Không có phiếu nào" className="!py-8" />
+            ) : (
+              rows.map((item) => (
+                <MobileRequestCard
+                  key={item.id}
+                  item={item}
+                  onDetail={handleOpenDetail}
+                />
+              ))
+            )}
+          </div>
+        ) : (
+          <Table<DataType>
+            rowKey="id"
+            size="small"
+            className={styles.customTable}
+            columns={columns}
+            dataSource={rows}
+            pagination={false}
+            scroll={{ x: 1100, y: "calc(100vh - 420px)" }}
+            locale={{ emptyText: <Empty description="Không có phiếu nào" /> }}
+          />
+        )}
 
-        <div className="px-5 py-3 border-t border-[#eef0f3] bg-white">
+        <div className="border-t border-[#eef0f3] bg-white px-4 py-3 md:px-5">
           <Pagination
-            align="end"
+            align={isMobile ? "center" : "end"}
+            size={isMobile ? "small" : "default"}
+            simple={isMobile}
+            current={page}
             pageSize={pageSize}
-            total={totalTable}
-            onChange={onPageChange}
-            showSizeChanger
-            onShowSizeChange={onPageChange}
+            total={total}
+            showSizeChanger={!isMobile}
+            showTotal={undefined}
+            onChange={handlePageChange}
           />
         </div>
       </Card>
