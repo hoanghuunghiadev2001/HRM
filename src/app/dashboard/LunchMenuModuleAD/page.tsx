@@ -21,6 +21,7 @@ import {
   Row,
   Col,
   Statistic,
+  Segmented,
 } from "antd";
 import {
   SearchOutlined,
@@ -41,33 +42,44 @@ dayjs.extend(weekOfYear);
 dayjs.extend(customParseFormat);
 
 const { Title, Text } = Typography;
+type Brand = "TBD" | "TMP";
 
+const BRAND_LABEL: Record<Brand, string> = {
+  TBD: "Bình Dương (TBD)",
+  TMP: "Mỹ Phước (TMP)",
+};
 export default function AdminLunchPage() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingRecord, setEditingRecord] = useState<any>(null);
-
+  const [brand, setBrand] = useState<Brand>("TBD");
   // State quản lý thời gian đang xem
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const currentWeek = selectedDate.week();
   const currentYear = selectedDate.year();
 
   const [form] = Form.useForm();
-
+  const DAYS = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
   // 1. Hàm lấy dữ liệu từ API
-  const fetchMenus = async (week: number, year: number) => {
+  const fetchMenus = async (week: number, year: number, b: Brand = brand) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/lunch-menu?week=${week}&year=${year}`);
+      const res = await fetch(
+        `/api/lunch-menu?week=${week}&year=${year}&brand=${b}`,
+      );
       const json = await res.json();
-      setData(json);
+      setData(Array.isArray(json) ? json : []);
     } catch (error) {
       message.error("Không thể tải dữ liệu thực đơn");
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchMenus(currentWeek, currentYear, brand);
+  }, [currentWeek, currentYear, brand]); // ⭐ thêm brand
 
   // Gọi fetch khi mount hoặc khi đổi tuần
   useEffect(() => {
@@ -89,15 +101,19 @@ export default function AdminLunchPage() {
           ...values,
           weekNumber: currentWeek,
           year: currentYear,
+          brand, // ⭐
         }),
       });
 
       if (res.ok) {
         message.success(
-          editingRecord ? "Cập nhật thành công" : "Đã thêm thực đơn mới"
+          editingRecord ? "Cập nhật thành công" : "Đã thêm thực đơn mới",
         );
         setIsModalOpen(false);
         fetchMenus(currentWeek, currentYear);
+      } else {
+        const err = await res.json().catch(() => null);
+        message.error(err?.error ?? "Lưu thất bại");
       }
     } catch (e) {
       message.error("Lỗi hệ thống");
@@ -224,11 +240,8 @@ export default function AdminLunchPage() {
           onClick={() => {
             setEditingRecord(null);
             form.resetFields();
-            // Gợi ý thứ dựa trên số lượng đã có
-            const nextDay =
-              data.length < 5
-                ? `Thứ ${data.length + 2}`
-                : `Thứ ${data.length + 2}`;
+            const used = new Set(data.map((d: any) => d.dayOfWeek));
+            const nextDay = DAYS.find((d) => !used.has(d)) ?? "";
             form.setFieldsValue({ dayOfWeek: nextDay });
             setIsModalOpen(true);
           }}
@@ -239,6 +252,21 @@ export default function AdminLunchPage() {
 
       {/* FILTER & STATS SECTION */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
+        <Col span={24} style={{ marginBottom: 16 }}>
+          <Space direction="vertical" size={0}>
+            <Text type="secondary">Chi nhánh:</Text>
+            <Segmented
+              value={brand}
+              onChange={(v) => setBrand(v as Brand)}
+              options={[
+                { label: BRAND_LABEL.TBD, value: "TBD" },
+                { label: BRAND_LABEL.TMP, value: "TMP" },
+              ]}
+            />
+          </Space>
+
+          <Divider type="vertical" style={{ height: "40px" }} />
+        </Col>
         <Col span={16}>
           <Card variant="outlined" styles={{ body: { padding: "16px" } }}>
             <Space size="large">
@@ -305,7 +333,9 @@ export default function AdminLunchPage() {
           loading={loading}
           rowKey="id"
           pagination={false}
-          locale={{ emptyText: `Chưa có dữ liệu cho Tuần ${currentWeek}` }}
+          locale={{
+            emptyText: `Chưa có dữ liệu Tuần ${currentWeek} - ${BRAND_LABEL[brand]}`,
+          }}
         />
       </Card>
 
@@ -313,8 +343,8 @@ export default function AdminLunchPage() {
       <Modal
         title={
           editingRecord
-            ? "Cập nhật món ăn"
-            : `Nhập món mới cho Tuần ${currentWeek}`
+            ? `Cập nhật món ăn (${brand})`
+            : `Nhập món mới - Tuần ${currentWeek} - ${BRAND_LABEL[brand]}`
         }
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}

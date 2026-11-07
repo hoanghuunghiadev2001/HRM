@@ -397,6 +397,7 @@ exports.Prisma.LunchMenuScalarFieldEnum = {
   dessert: 'dessert',
   weekNumber: 'weekNumber',
   year: 'year',
+  brand: 'brand',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

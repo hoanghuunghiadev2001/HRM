@@ -478,20 +478,21 @@ model CompensatoryLeave {
 }
 
 model LunchMenu {
-  id         Int      @id @default(autoincrement())
-  dayOfWeek  String // "Thứ 2", "Thứ 3", ... hoặc dùng Enum DayOfWeek
-  salty      String // Món mặn
-  vegetarian String // Món chay
-  stir       String // Món xào
-  soup       String // Món canh
-  dessert    String // Tráng miệng
-  weekNumber Int? // Tuần thứ mấy trong năm (để quản lý theo tuần)
-  year       Int? // Năm
-  isActive   Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id         Int       @id @default(autoincrement())
+  dayOfWeek  String
+  salty      String
+  vegetarian String
+  stir       String
+  soup       String
+  dessert    String
+  weekNumber Int?
+  year       Int?
+  brand      BrandType @default(TBD) // ⭐ Chi nhánh áp dụng
+  isActive   Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 
-  @@index([weekNumber, year])
+  @@index([weekNumber, year, brand])
 }
 
 model Salary {

@@ -9,7 +9,7 @@ import weekOfYear from "dayjs/plugin/weekOfYear";
 dayjs.extend(weekOfYear);
 
 const DAYS_OF_WEEK = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
-
+type Brand = "TBD" | "TMP";
 const FOOD_ITEMS = [
   { key: "salty", label: "Món mặn" },
   { key: "vegetarian", label: "Món chay" },
@@ -21,9 +21,14 @@ const FOOD_ITEMS = [
 interface Props {
   /** Đường dẫn tới trang thực đơn đầy đủ */
   href?: string;
+  /** Chi nhánh của nhân viên đang đăng nhập */
+  brand?: Brand;
 }
 
-export default function LunchMenuWidget({ href = "/lunch-menu" }: Props) {
+export default function LunchMenuWidget({
+  href = "/lunch-menu",
+  brand = "TBD",
+}: Props) {
   // Chủ nhật không có thực đơn -> hiển thị thứ 2 hôm sau
   const target = dayjs().day() === 0 ? dayjs().add(1, "day") : dayjs();
   const isToday = target.isSame(dayjs(), "day");
@@ -36,11 +41,13 @@ export default function LunchMenuWidget({ href = "/lunch-menu" }: Props) {
 
   useEffect(() => {
     let cancelled = false;
-    fetch(`/api/lunch-menu?week=${week}&year=${year}`)
+    setLoading(true); // ⭐ hiện skeleton khi đổi brand/ngày, tránh nháy dữ liệu cũ
+    fetch(`/api/lunch-menu?week=${week}&year=${year}&brand=${brand}`)
       .then((res) => res.json())
       .then((json: any[]) => {
         if (cancelled) return;
-        const found = json.find(
+        const list = Array.isArray(json) ? json : [];
+        const found = list.find(
           (item) =>
             item.dayOfWeek.includes(dayName) ||
             dayName.includes(item.dayOfWeek),
@@ -52,7 +59,7 @@ export default function LunchMenuWidget({ href = "/lunch-menu" }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [week, year, dayName]);
+  }, [week, year, dayName, brand]); // ⭐ thêm brand
 
   return (
     <section

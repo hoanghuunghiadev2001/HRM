@@ -28163,6 +28163,7 @@ export namespace Prisma {
     dessert: string | null
     weekNumber: number | null
     year: number | null
+    brand: $Enums.BrandType | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -28178,6 +28179,7 @@ export namespace Prisma {
     dessert: string | null
     weekNumber: number | null
     year: number | null
+    brand: $Enums.BrandType | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -28193,6 +28195,7 @@ export namespace Prisma {
     dessert: number
     weekNumber: number
     year: number
+    brand: number
     isActive: number
     createdAt: number
     updatedAt: number
@@ -28222,6 +28225,7 @@ export namespace Prisma {
     dessert?: true
     weekNumber?: true
     year?: true
+    brand?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -28237,6 +28241,7 @@ export namespace Prisma {
     dessert?: true
     weekNumber?: true
     year?: true
+    brand?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -28252,6 +28257,7 @@ export namespace Prisma {
     dessert?: true
     weekNumber?: true
     year?: true
+    brand?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -28354,6 +28360,7 @@ export namespace Prisma {
     dessert: string
     weekNumber: number | null
     year: number | null
+    brand: $Enums.BrandType
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -28388,6 +28395,7 @@ export namespace Prisma {
     dessert?: boolean
     weekNumber?: boolean
     year?: boolean
+    brand?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -28405,12 +28413,13 @@ export namespace Prisma {
     dessert?: boolean
     weekNumber?: boolean
     year?: boolean
+    brand?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type LunchMenuOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dayOfWeek" | "salty" | "vegetarian" | "stir" | "soup" | "dessert" | "weekNumber" | "year" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["lunchMenu"]>
+  export type LunchMenuOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dayOfWeek" | "salty" | "vegetarian" | "stir" | "soup" | "dessert" | "weekNumber" | "year" | "brand" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["lunchMenu"]>
 
   export type $LunchMenuPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "LunchMenu"
@@ -28425,6 +28434,7 @@ export namespace Prisma {
       dessert: string
       weekNumber: number | null
       year: number | null
+      brand: $Enums.BrandType
       isActive: boolean
       createdAt: Date
       updatedAt: Date
@@ -28806,6 +28816,7 @@ export namespace Prisma {
     readonly dessert: FieldRef<"LunchMenu", 'String'>
     readonly weekNumber: FieldRef<"LunchMenu", 'Int'>
     readonly year: FieldRef<"LunchMenu", 'Int'>
+    readonly brand: FieldRef<"LunchMenu", 'BrandType'>
     readonly isActive: FieldRef<"LunchMenu", 'Boolean'>
     readonly createdAt: FieldRef<"LunchMenu", 'DateTime'>
     readonly updatedAt: FieldRef<"LunchMenu", 'DateTime'>
@@ -33308,6 +33319,7 @@ export namespace Prisma {
     dessert: 'dessert',
     weekNumber: 'weekNumber',
     year: 'year',
+    brand: 'brand',
     isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -35628,6 +35640,7 @@ export namespace Prisma {
     dessert?: StringFilter<"LunchMenu"> | string
     weekNumber?: IntNullableFilter<"LunchMenu"> | number | null
     year?: IntNullableFilter<"LunchMenu"> | number | null
+    brand?: EnumBrandTypeFilter<"LunchMenu"> | $Enums.BrandType
     isActive?: BoolFilter<"LunchMenu"> | boolean
     createdAt?: DateTimeFilter<"LunchMenu"> | Date | string
     updatedAt?: DateTimeFilter<"LunchMenu"> | Date | string
@@ -35643,6 +35656,7 @@ export namespace Prisma {
     dessert?: SortOrder
     weekNumber?: SortOrderInput | SortOrder
     year?: SortOrderInput | SortOrder
+    brand?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -35662,6 +35676,7 @@ export namespace Prisma {
     dessert?: StringFilter<"LunchMenu"> | string
     weekNumber?: IntNullableFilter<"LunchMenu"> | number | null
     year?: IntNullableFilter<"LunchMenu"> | number | null
+    brand?: EnumBrandTypeFilter<"LunchMenu"> | $Enums.BrandType
     isActive?: BoolFilter<"LunchMenu"> | boolean
     createdAt?: DateTimeFilter<"LunchMenu"> | Date | string
     updatedAt?: DateTimeFilter<"LunchMenu"> | Date | string
@@ -35677,6 +35692,7 @@ export namespace Prisma {
     dessert?: SortOrder
     weekNumber?: SortOrderInput | SortOrder
     year?: SortOrderInput | SortOrder
+    brand?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -35700,6 +35716,7 @@ export namespace Prisma {
     dessert?: StringWithAggregatesFilter<"LunchMenu"> | string
     weekNumber?: IntNullableWithAggregatesFilter<"LunchMenu"> | number | null
     year?: IntNullableWithAggregatesFilter<"LunchMenu"> | number | null
+    brand?: EnumBrandTypeWithAggregatesFilter<"LunchMenu"> | $Enums.BrandType
     isActive?: BoolWithAggregatesFilter<"LunchMenu"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"LunchMenu"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"LunchMenu"> | Date | string
@@ -38103,6 +38120,7 @@ export namespace Prisma {
     dessert: string
     weekNumber?: number | null
     year?: number | null
+    brand?: $Enums.BrandType
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -38118,6 +38136,7 @@ export namespace Prisma {
     dessert: string
     weekNumber?: number | null
     year?: number | null
+    brand?: $Enums.BrandType
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -38132,6 +38151,7 @@ export namespace Prisma {
     dessert?: StringFieldUpdateOperationsInput | string
     weekNumber?: NullableIntFieldUpdateOperationsInput | number | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
+    brand?: EnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38147,6 +38167,7 @@ export namespace Prisma {
     dessert?: StringFieldUpdateOperationsInput | string
     weekNumber?: NullableIntFieldUpdateOperationsInput | number | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
+    brand?: EnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38162,6 +38183,7 @@ export namespace Prisma {
     dessert: string
     weekNumber?: number | null
     year?: number | null
+    brand?: $Enums.BrandType
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -38176,6 +38198,7 @@ export namespace Prisma {
     dessert?: StringFieldUpdateOperationsInput | string
     weekNumber?: NullableIntFieldUpdateOperationsInput | number | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
+    brand?: EnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38191,6 +38214,7 @@ export namespace Prisma {
     dessert?: StringFieldUpdateOperationsInput | string
     weekNumber?: NullableIntFieldUpdateOperationsInput | number | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
+    brand?: EnumBrandTypeFieldUpdateOperationsInput | $Enums.BrandType
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -40666,6 +40690,13 @@ export namespace Prisma {
     employeeId?: SortOrder
   }
 
+  export type EnumBrandTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BrandType | EnumBrandTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BrandType[]
+    notIn?: $Enums.BrandType[]
+    not?: NestedEnumBrandTypeFilter<$PrismaModel> | $Enums.BrandType
+  }
+
   export type LunchMenuOrderByRelevanceInput = {
     fields: LunchMenuOrderByRelevanceFieldEnum | LunchMenuOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -40682,6 +40713,7 @@ export namespace Prisma {
     dessert?: SortOrder
     weekNumber?: SortOrder
     year?: SortOrder
+    brand?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -40703,6 +40735,7 @@ export namespace Prisma {
     dessert?: SortOrder
     weekNumber?: SortOrder
     year?: SortOrder
+    brand?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -40718,6 +40751,7 @@ export namespace Prisma {
     dessert?: SortOrder
     weekNumber?: SortOrder
     year?: SortOrder
+    brand?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -40727,6 +40761,16 @@ export namespace Prisma {
     id?: SortOrder
     weekNumber?: SortOrder
     year?: SortOrder
+  }
+
+  export type EnumBrandTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BrandType | EnumBrandTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BrandType[]
+    notIn?: $Enums.BrandType[]
+    not?: NestedEnumBrandTypeWithAggregatesFilter<$PrismaModel> | $Enums.BrandType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBrandTypeFilter<$PrismaModel>
+    _max?: NestedEnumBrandTypeFilter<$PrismaModel>
   }
 
   export type SalaryBatchNullableScalarRelationFilter = {
@@ -43163,6 +43207,10 @@ export namespace Prisma {
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutCompensatoryLeavesInput, EmployeeUpdateWithoutCompensatoryLeavesInput>, EmployeeUncheckedUpdateWithoutCompensatoryLeavesInput>
   }
 
+  export type EnumBrandTypeFieldUpdateOperationsInput = {
+    set?: $Enums.BrandType
+  }
+
   export type EmployeeCreateNestedOneWithoutSalariesInput = {
     create?: XOR<EmployeeCreateWithoutSalariesInput, EmployeeUncheckedCreateWithoutSalariesInput>
     connectOrCreate?: EmployeeCreateOrConnectWithoutSalariesInput
@@ -43679,6 +43727,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumNotificationTypeFilter<$PrismaModel>
     _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBrandTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BrandType | EnumBrandTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BrandType[]
+    notIn?: $Enums.BrandType[]
+    not?: NestedEnumBrandTypeFilter<$PrismaModel> | $Enums.BrandType
+  }
+
+  export type NestedEnumBrandTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BrandType | EnumBrandTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BrandType[]
+    notIn?: $Enums.BrandType[]
+    not?: NestedEnumBrandTypeWithAggregatesFilter<$PrismaModel> | $Enums.BrandType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBrandTypeFilter<$PrismaModel>
+    _max?: NestedEnumBrandTypeFilter<$PrismaModel>
   }
 
   export type ProposalCreateWithoutFilesInput = {

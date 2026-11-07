@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState } from "react";
-import { Skeleton, Tabs, ConfigProvider } from "antd";
+import { Skeleton, Tabs, ConfigProvider, Segmented } from "antd";
+
 import dayjs from "dayjs";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import { useEffect } from "react";
@@ -9,7 +10,18 @@ import { useEffect } from "react";
 dayjs.extend(weekOfYear);
 
 const DAYS_OF_WEEK = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
+type Brand = "TBD" | "TMP";
 
+const BRAND_INFO: Record<Brand, { label: string; note: string }> = {
+  TBD: {
+    label: "Toyota Bình Dương",
+    note: "Chỉ áp dụng cho Trụ sở chính Toyota Bình Dương",
+  },
+  TMP: {
+    label: "Toyota Mỹ Phước",
+    note: "Chỉ áp dụng cho chi nhánh Toyota Mỹ Phước",
+  },
+};
 const FOOD_ITEMS = [
   { key: "salty", label: "Món mặn" },
   { key: "vegetarian", label: "Món chay" },
@@ -59,10 +71,16 @@ const DayContent = ({ menu }: { menu: any }) => {
   );
 };
 
-export const LunchMenuUserView = () => {
+export const LunchMenuUserView = ({
+  defaultBrand = "TBD",
+}: {
+  defaultBrand?: Brand;
+}) => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewDate, setViewDate] = useState(dayjs());
+  const [brand, setBrand] = useState<Brand>(defaultBrand);
+  console.log(defaultBrand);
 
   // Ngày đang chọn trên mobile — mặc định là hôm nay nếu đang xem tuần hiện tại
   const [mobileDayIdx, setMobileDayIdx] = useState(() => {
@@ -77,15 +95,22 @@ export const LunchMenuUserView = () => {
   const weekEnd = viewDate.day(6);
 
   useEffect(() => {
+    let cancelled = false; // tránh race khi đổi tuần/brand nhanh
     setLoading(true);
-    fetch(`/api/lunch-menu?week=${currentWeek}&year=${currentYear}`)
+    fetch(
+      `/api/lunch-menu?week=${currentWeek}&year=${currentYear}&brand=${brand}`,
+    )
       .then((res) => res.json())
       .then((json) => {
-        setData(json);
+        if (cancelled) return;
+        setData(Array.isArray(json) ? json : []);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
-  }, [currentWeek, currentYear]);
+      .catch(() => !cancelled && setLoading(false));
+    return () => {
+      cancelled = true;
+    };
+  }, [currentWeek, currentYear, brand]);
 
   const handlePrevWeek = () => setViewDate(viewDate.subtract(1, "week"));
   const handleNextWeek = () => setViewDate(viewDate.add(1, "week"));
@@ -142,9 +167,22 @@ export const LunchMenuUserView = () => {
             <p className="italic text-[#8A8577] text-sm md:text-[15px] mt-1">
               {formatWeekRange(weekStart, weekEnd)}
             </p>
+            <div className="mt-3 flex justify-center">
+              <ConfigProvider theme={{ token: { colorPrimary: ACCENT } }}>
+                <Segmented
+                  size="small"
+                  value={brand}
+                  onChange={(v) => setBrand(v as Brand)}
+                  options={[
+                    { label: "Bình Dương (TBD)", value: "TBD" },
+                    { label: "Mỹ Phước (TMP)", value: "TMP" },
+                  ]}
+                />
+              </ConfigProvider>
+            </div>
 
             <p className="text-[12.5px] text-[#8A8577] mt-2">
-              Trụ sở chính Toyota Bình Dương.
+              {BRAND_INFO[brand].note}
               {!isCurrentWeek && (
                 <>
                   {" · "}
@@ -156,9 +194,6 @@ export const LunchMenuUserView = () => {
                   </button>
                 </>
               )}
-            </p>
-            <p className="text-[12.5px] text-[#8A8577] mt-2">
-              (Chỉ áp dụng cho Trụ sở chính Toyota Bình Dương)
             </p>
           </header>
 

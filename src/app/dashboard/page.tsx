@@ -393,7 +393,10 @@ const Profile = () => {
           </p>
         </div>
         <div className="mb-6">
-          <LunchMenuWidget href="/dashboard/LunchMenuModule" />
+          <LunchMenuWidget
+            href="/dashboard/LunchMenuModule"
+            brand={dataProfile?.brand}
+          />
         </div>
         {/* profile card */}
         <div className="bg-white rounded-xl shadow-md p-6 mb-6">
