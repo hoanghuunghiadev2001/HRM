@@ -5,18 +5,12 @@ import Link from "next/link";
 import { Skeleton } from "antd";
 import dayjs from "dayjs";
 import weekOfYear from "dayjs/plugin/weekOfYear";
+import { buildMenuItems } from "@/lib/lunch-menu";
 
 dayjs.extend(weekOfYear);
 
 const DAYS_OF_WEEK = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
 type Brand = "TBD" | "TMP";
-const FOOD_ITEMS = [
-  { key: "salty", label: "Món mặn" },
-  { key: "vegetarian", label: "Món chay" },
-  { key: "stir", label: "Món xào" },
-  { key: "soup", label: "Canh" },
-  { key: "dessert", label: "Tráng miệng" },
-];
 
 interface Props {
   /** Đường dẫn tới trang thực đơn đầy đủ */
@@ -85,17 +79,17 @@ export default function LunchMenuWidget({
 
       {loading ? (
         <Skeleton active paragraph={{ rows: 3 }} title={false} />
-      ) : !menu ? (
+      ) : buildMenuItems(menu).length === 0 ? (
         <div className="py-6 text-center text-[13px] italic text-[#8A8577]">
           Chưa cập nhật
         </div>
       ) : (
         <dl className="m-0 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-          {FOOD_ITEMS.map(({ key, label }) => (
+          {buildMenuItems(menu).map(({ key, label, value }) => (
             <div key={key}>
               <dt className="text-[11.5px] italic text-[#8A8577]">{label}</dt>
               <dd className="m-0 mt-0.5 text-[14px] leading-snug text-[#262420]">
-                {menu[key] || (key === "dessert" ? "Trái cây mùa" : "—")}
+                {value}
               </dd>
             </div>
           ))}

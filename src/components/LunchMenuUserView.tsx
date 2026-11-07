@@ -6,6 +6,7 @@ import { Skeleton, Tabs, ConfigProvider, Segmented } from "antd";
 import dayjs from "dayjs";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import { useEffect } from "react";
+import { buildMenuItems } from "@/lib/lunch-menu";
 
 dayjs.extend(weekOfYear);
 
@@ -22,12 +23,6 @@ const BRAND_INFO: Record<Brand, { label: string; note: string }> = {
     note: "Chỉ áp dụng cho chi nhánh Toyota Mỹ Phước",
   },
 };
-const FOOD_ITEMS = [
-  { key: "salty", label: "Món mặn" },
-  { key: "vegetarian", label: "Món chay" },
-  { key: "stir", label: "Món xào" },
-  { key: "soup", label: "Canh" },
-];
 
 const ACCENT = "#7A3B34";
 
@@ -40,33 +35,44 @@ const formatWeekRange = (start: dayjs.Dayjs, end: dayjs.Dayjs) => {
 
 // Nội dung 1 ngày — dùng chung cho cả cột desktop lẫn panel mobile
 const DayContent = ({ menu }: { menu: any }) => {
-  if (!menu) {
+  const items = buildMenuItems(menu);
+
+  // Chưa có dòng nào, hoặc có dòng nhưng không nhập món nào
+  if (items.length === 0) {
     return (
       <div className="text-center italic text-[13px] text-[#8A8577] opacity-75 py-10">
         Chưa cập nhật
       </div>
     );
   }
+
+  const mains = items.filter((i) => i.key !== "dessert");
+  const dessert = items.find((i) => i.key === "dessert");
+
   return (
     <div className="space-y-4">
-      {FOOD_ITEMS.map(({ key, label }) => (
+      {mains.map(({ key, label, value }) => (
         <div key={key}>
           <span className="block italic text-[11.5px] text-[#8A8577]">
             {label}
           </span>
           <span className="block text-[14px] leading-snug mt-0.5 text-[#262420]">
-            {menu[key] || "—"}
+            {value}
           </span>
         </div>
       ))}
-      <div className="pt-4 mt-4 border-t border-[#D9D2BF]">
-        <span className="block italic text-[11.5px] text-[#8A8577]">
-          Tráng miệng
-        </span>
-        <span className="block text-[14px] leading-snug mt-0.5 text-[#262420]">
-          {menu.dessert || "Trái cây mùa"}
-        </span>
-      </div>
+      {dessert && (
+        <div
+          className={mains.length ? "pt-4 mt-4 border-t border-[#D9D2BF]" : ""}
+        >
+          <span className="block italic text-[11.5px] text-[#8A8577]">
+            {dessert.label}
+          </span>
+          <span className="block text-[14px] leading-snug mt-0.5 text-[#262420]">
+            {dessert.value}
+          </span>
+        </div>
+      )}
     </div>
   );
 };

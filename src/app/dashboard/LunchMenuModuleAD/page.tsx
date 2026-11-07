@@ -49,6 +49,15 @@ const BRAND_LABEL: Record<Brand, string> = {
   TMP: "Mỹ Phước (TMP)",
 };
 export default function AdminLunchPage() {
+  const DISH_KEYS = [
+    "salty",
+    "salty2",
+    "vegetarian",
+    "stir",
+    "soup",
+    "dessert",
+  ] as const;
+
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -92,16 +101,19 @@ export default function AdminLunchPage() {
       ? `/api/lunch-menu/${editingRecord.id}`
       : "/api/lunch-menu";
     const method = editingRecord ? "PATCH" : "POST";
-
+    const dishes = Object.fromEntries(
+      DISH_KEYS.map((k) => [k, (values[k] ?? "").trim()]),
+    );
     try {
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...values,
+          dayOfWeek: values.dayOfWeek,
+          ...dishes,
           weekNumber: currentWeek,
           year: currentYear,
-          brand, // ⭐
+          brand,
         }),
       });
 
@@ -147,15 +159,21 @@ export default function AdminLunchPage() {
         <Space direction="vertical" size={0}>
           <Text>
             <Text type="danger" strong>
-              Mặn:
+              Mặn 1:
             </Text>{" "}
-            {record.salty}
+            {record.salty || "—"}
+          </Text>
+          <Text>
+            <Text type="danger" strong>
+              Mặn 2:
+            </Text>{" "}
+            {record.salty2 || "—"}
           </Text>
           <Text>
             <Text type="success" strong>
               Chay:
             </Text>{" "}
-            {record.vegetarian}
+            {record.vegetarian || "—"}
           </Text>
         </Space>
       ),
@@ -169,13 +187,13 @@ export default function AdminLunchPage() {
             <Text type="warning" strong>
               Xào:
             </Text>{" "}
-            {record.stir}
+            {record.stir || "—"}
           </Text>
           <Text>
             <Text type="secondary" strong>
               Canh:
             </Text>{" "}
-            {record.soup}
+            {record.soup || "—"}
           </Text>
         </Space>
       ),
@@ -184,7 +202,9 @@ export default function AdminLunchPage() {
       title: "Tráng miệng",
       dataIndex: "dessert",
       key: "dessert",
+      render: (v: string) => v || "—",
     },
+
     {
       title: "Thao tác",
       key: "action",
@@ -396,39 +416,33 @@ export default function AdminLunchPage() {
 
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item
-                name="salty"
-                label="Món mặn"
-                rules={[{ required: true }]}
-              >
-                <Input placeholder="VD: Sườn kho" />
+              <Form.Item name="salty" label="Món mặn 1">
+                <Input placeholder="VD: Sườn kho" allowClear />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                name="vegetarian"
-                label="Món chay"
-                rules={[{ required: true }]}
-              >
-                <Input placeholder="VD: Nấm kho" />
+              <Form.Item name="salty2" label="Món mặn 2">
+                <Input placeholder="VD: Cá chiên" allowClear />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                name="stir"
-                label="Món xào"
-                rules={[{ required: true }]}
-              >
-                <Input placeholder="VD: Rau muống xào" />
+              <Form.Item name="vegetarian" label="Món chay">
+                <Input placeholder="VD: Nấm kho" allowClear />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                name="soup"
-                label="Món canh"
-                rules={[{ required: true }]}
-              >
-                <Input placeholder="VD: Canh rau dền" />
+              <Form.Item name="stir" label="Món xào">
+                <Input placeholder="VD: Rau muống xào" allowClear />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="soup" label="Món canh">
+                <Input placeholder="VD: Canh rau dền" allowClear />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="dessert" label="Tráng miệng">
+                <Input placeholder="VD: Dưa hấu, Chè đậu..." allowClear />
               </Form.Item>
             </Col>
           </Row>

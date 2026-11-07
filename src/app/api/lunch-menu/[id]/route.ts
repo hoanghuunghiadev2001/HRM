@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 const EDITABLE_FIELDS = [
   "dayOfWeek",
   "salty",
+  "salty2",
   "vegetarian",
   "stir",
   "soup",

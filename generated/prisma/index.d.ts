@@ -28157,6 +28157,7 @@ export namespace Prisma {
     id: number | null
     dayOfWeek: string | null
     salty: string | null
+    salty2: string | null
     vegetarian: string | null
     stir: string | null
     soup: string | null
@@ -28173,6 +28174,7 @@ export namespace Prisma {
     id: number | null
     dayOfWeek: string | null
     salty: string | null
+    salty2: string | null
     vegetarian: string | null
     stir: string | null
     soup: string | null
@@ -28189,6 +28191,7 @@ export namespace Prisma {
     id: number
     dayOfWeek: number
     salty: number
+    salty2: number
     vegetarian: number
     stir: number
     soup: number
@@ -28219,6 +28222,7 @@ export namespace Prisma {
     id?: true
     dayOfWeek?: true
     salty?: true
+    salty2?: true
     vegetarian?: true
     stir?: true
     soup?: true
@@ -28235,6 +28239,7 @@ export namespace Prisma {
     id?: true
     dayOfWeek?: true
     salty?: true
+    salty2?: true
     vegetarian?: true
     stir?: true
     soup?: true
@@ -28251,6 +28256,7 @@ export namespace Prisma {
     id?: true
     dayOfWeek?: true
     salty?: true
+    salty2?: true
     vegetarian?: true
     stir?: true
     soup?: true
@@ -28354,6 +28360,7 @@ export namespace Prisma {
     id: number
     dayOfWeek: string
     salty: string
+    salty2: string
     vegetarian: string
     stir: string
     soup: string
@@ -28389,6 +28396,7 @@ export namespace Prisma {
     id?: boolean
     dayOfWeek?: boolean
     salty?: boolean
+    salty2?: boolean
     vegetarian?: boolean
     stir?: boolean
     soup?: boolean
@@ -28407,6 +28415,7 @@ export namespace Prisma {
     id?: boolean
     dayOfWeek?: boolean
     salty?: boolean
+    salty2?: boolean
     vegetarian?: boolean
     stir?: boolean
     soup?: boolean
@@ -28419,7 +28428,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type LunchMenuOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dayOfWeek" | "salty" | "vegetarian" | "stir" | "soup" | "dessert" | "weekNumber" | "year" | "brand" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["lunchMenu"]>
+  export type LunchMenuOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dayOfWeek" | "salty" | "salty2" | "vegetarian" | "stir" | "soup" | "dessert" | "weekNumber" | "year" | "brand" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["lunchMenu"]>
 
   export type $LunchMenuPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "LunchMenu"
@@ -28428,6 +28437,7 @@ export namespace Prisma {
       id: number
       dayOfWeek: string
       salty: string
+      salty2: string
       vegetarian: string
       stir: string
       soup: string
@@ -28810,6 +28820,7 @@ export namespace Prisma {
     readonly id: FieldRef<"LunchMenu", 'Int'>
     readonly dayOfWeek: FieldRef<"LunchMenu", 'String'>
     readonly salty: FieldRef<"LunchMenu", 'String'>
+    readonly salty2: FieldRef<"LunchMenu", 'String'>
     readonly vegetarian: FieldRef<"LunchMenu", 'String'>
     readonly stir: FieldRef<"LunchMenu", 'String'>
     readonly soup: FieldRef<"LunchMenu", 'String'>
@@ -33313,6 +33324,7 @@ export namespace Prisma {
     id: 'id',
     dayOfWeek: 'dayOfWeek',
     salty: 'salty',
+    salty2: 'salty2',
     vegetarian: 'vegetarian',
     stir: 'stir',
     soup: 'soup',
@@ -33605,6 +33617,7 @@ export namespace Prisma {
   export const LunchMenuOrderByRelevanceFieldEnum: {
     dayOfWeek: 'dayOfWeek',
     salty: 'salty',
+    salty2: 'salty2',
     vegetarian: 'vegetarian',
     stir: 'stir',
     soup: 'soup',
@@ -35634,6 +35647,7 @@ export namespace Prisma {
     id?: IntFilter<"LunchMenu"> | number
     dayOfWeek?: StringFilter<"LunchMenu"> | string
     salty?: StringFilter<"LunchMenu"> | string
+    salty2?: StringFilter<"LunchMenu"> | string
     vegetarian?: StringFilter<"LunchMenu"> | string
     stir?: StringFilter<"LunchMenu"> | string
     soup?: StringFilter<"LunchMenu"> | string
@@ -35650,6 +35664,7 @@ export namespace Prisma {
     id?: SortOrder
     dayOfWeek?: SortOrder
     salty?: SortOrder
+    salty2?: SortOrder
     vegetarian?: SortOrder
     stir?: SortOrder
     soup?: SortOrder
@@ -35670,6 +35685,7 @@ export namespace Prisma {
     NOT?: LunchMenuWhereInput | LunchMenuWhereInput[]
     dayOfWeek?: StringFilter<"LunchMenu"> | string
     salty?: StringFilter<"LunchMenu"> | string
+    salty2?: StringFilter<"LunchMenu"> | string
     vegetarian?: StringFilter<"LunchMenu"> | string
     stir?: StringFilter<"LunchMenu"> | string
     soup?: StringFilter<"LunchMenu"> | string
@@ -35686,6 +35702,7 @@ export namespace Prisma {
     id?: SortOrder
     dayOfWeek?: SortOrder
     salty?: SortOrder
+    salty2?: SortOrder
     vegetarian?: SortOrder
     stir?: SortOrder
     soup?: SortOrder
@@ -35710,6 +35727,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"LunchMenu"> | number
     dayOfWeek?: StringWithAggregatesFilter<"LunchMenu"> | string
     salty?: StringWithAggregatesFilter<"LunchMenu"> | string
+    salty2?: StringWithAggregatesFilter<"LunchMenu"> | string
     vegetarian?: StringWithAggregatesFilter<"LunchMenu"> | string
     stir?: StringWithAggregatesFilter<"LunchMenu"> | string
     soup?: StringWithAggregatesFilter<"LunchMenu"> | string
@@ -38113,11 +38131,12 @@ export namespace Prisma {
 
   export type LunchMenuCreateInput = {
     dayOfWeek: string
-    salty: string
-    vegetarian: string
-    stir: string
-    soup: string
-    dessert: string
+    salty?: string
+    salty2?: string
+    vegetarian?: string
+    stir?: string
+    soup?: string
+    dessert?: string
     weekNumber?: number | null
     year?: number | null
     brand?: $Enums.BrandType
@@ -38129,11 +38148,12 @@ export namespace Prisma {
   export type LunchMenuUncheckedCreateInput = {
     id?: number
     dayOfWeek: string
-    salty: string
-    vegetarian: string
-    stir: string
-    soup: string
-    dessert: string
+    salty?: string
+    salty2?: string
+    vegetarian?: string
+    stir?: string
+    soup?: string
+    dessert?: string
     weekNumber?: number | null
     year?: number | null
     brand?: $Enums.BrandType
@@ -38145,6 +38165,7 @@ export namespace Prisma {
   export type LunchMenuUpdateInput = {
     dayOfWeek?: StringFieldUpdateOperationsInput | string
     salty?: StringFieldUpdateOperationsInput | string
+    salty2?: StringFieldUpdateOperationsInput | string
     vegetarian?: StringFieldUpdateOperationsInput | string
     stir?: StringFieldUpdateOperationsInput | string
     soup?: StringFieldUpdateOperationsInput | string
@@ -38161,6 +38182,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     dayOfWeek?: StringFieldUpdateOperationsInput | string
     salty?: StringFieldUpdateOperationsInput | string
+    salty2?: StringFieldUpdateOperationsInput | string
     vegetarian?: StringFieldUpdateOperationsInput | string
     stir?: StringFieldUpdateOperationsInput | string
     soup?: StringFieldUpdateOperationsInput | string
@@ -38176,11 +38198,12 @@ export namespace Prisma {
   export type LunchMenuCreateManyInput = {
     id?: number
     dayOfWeek: string
-    salty: string
-    vegetarian: string
-    stir: string
-    soup: string
-    dessert: string
+    salty?: string
+    salty2?: string
+    vegetarian?: string
+    stir?: string
+    soup?: string
+    dessert?: string
     weekNumber?: number | null
     year?: number | null
     brand?: $Enums.BrandType
@@ -38192,6 +38215,7 @@ export namespace Prisma {
   export type LunchMenuUpdateManyMutationInput = {
     dayOfWeek?: StringFieldUpdateOperationsInput | string
     salty?: StringFieldUpdateOperationsInput | string
+    salty2?: StringFieldUpdateOperationsInput | string
     vegetarian?: StringFieldUpdateOperationsInput | string
     stir?: StringFieldUpdateOperationsInput | string
     soup?: StringFieldUpdateOperationsInput | string
@@ -38208,6 +38232,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     dayOfWeek?: StringFieldUpdateOperationsInput | string
     salty?: StringFieldUpdateOperationsInput | string
+    salty2?: StringFieldUpdateOperationsInput | string
     vegetarian?: StringFieldUpdateOperationsInput | string
     stir?: StringFieldUpdateOperationsInput | string
     soup?: StringFieldUpdateOperationsInput | string
@@ -40707,6 +40732,7 @@ export namespace Prisma {
     id?: SortOrder
     dayOfWeek?: SortOrder
     salty?: SortOrder
+    salty2?: SortOrder
     vegetarian?: SortOrder
     stir?: SortOrder
     soup?: SortOrder
@@ -40729,6 +40755,7 @@ export namespace Prisma {
     id?: SortOrder
     dayOfWeek?: SortOrder
     salty?: SortOrder
+    salty2?: SortOrder
     vegetarian?: SortOrder
     stir?: SortOrder
     soup?: SortOrder
@@ -40745,6 +40772,7 @@ export namespace Prisma {
     id?: SortOrder
     dayOfWeek?: SortOrder
     salty?: SortOrder
+    salty2?: SortOrder
     vegetarian?: SortOrder
     stir?: SortOrder
     soup?: SortOrder

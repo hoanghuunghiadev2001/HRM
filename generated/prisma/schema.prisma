@@ -480,14 +480,15 @@ model CompensatoryLeave {
 model LunchMenu {
   id         Int       @id @default(autoincrement())
   dayOfWeek  String
-  salty      String
-  vegetarian String
-  stir       String
-  soup       String
-  dessert    String
+  salty      String    @default("") // Món mặn 1
+  salty2     String    @default("") // ⭐ Món mặn 2
+  vegetarian String    @default("")
+  stir       String    @default("")
+  soup       String    @default("")
+  dessert    String    @default("")
   weekNumber Int?
   year       Int?
-  brand      BrandType @default(TBD) // ⭐ Chi nhánh áp dụng
+  brand      BrandType @default(TBD)
   isActive   Boolean   @default(true)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt

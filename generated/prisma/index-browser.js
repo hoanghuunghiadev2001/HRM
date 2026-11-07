@@ -391,6 +391,7 @@ exports.Prisma.LunchMenuScalarFieldEnum = {
   id: 'id',
   dayOfWeek: 'dayOfWeek',
   salty: 'salty',
+  salty2: 'salty2',
   vegetarian: 'vegetarian',
   stir: 'stir',
   soup: 'soup',
@@ -608,6 +609,7 @@ exports.Prisma.CompensatoryLeaveOrderByRelevanceFieldEnum = {
 exports.Prisma.LunchMenuOrderByRelevanceFieldEnum = {
   dayOfWeek: 'dayOfWeek',
   salty: 'salty',
+  salty2: 'salty2',
   vegetarian: 'vegetarian',
   stir: 'stir',
   soup: 'soup',

@@ -41,17 +41,28 @@ export async function POST(request: Request) {
     const nextWeekNumber = nextWeekDate.week();
     const nextWeekYear = nextWeekDate.year();
 
+    const str = (v: unknown) => (typeof v === "string" ? v.trim() : "");
+
+    // trong POST
+    if (!str(body.dayOfWeek)) {
+      return NextResponse.json(
+        { error: "Thiếu ngày trong tuần" },
+        { status: 400 },
+      );
+    }
+
     const newItem = await prisma.lunchMenu.create({
       data: {
-        dayOfWeek: body.dayOfWeek,
-        salty: body.salty,
-        vegetarian: body.vegetarian,
-        stir: body.stir,
-        soup: body.soup,
-        dessert: body.dessert,
+        dayOfWeek: str(body.dayOfWeek),
+        salty: str(body.salty),
+        salty2: str(body.salty2), // ⭐
+        vegetarian: str(body.vegetarian),
+        stir: str(body.stir),
+        soup: str(body.soup),
+        dessert: str(body.dessert),
         weekNumber: body.weekNumber ?? nextWeekNumber,
         year: body.year ?? nextWeekYear,
-        brand: parseBrand(body.brand), // ⭐
+        brand: parseBrand(body.brand),
       },
     });
 
